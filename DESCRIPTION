@@ -1,0 +1,26 @@
+Package: exdyn
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1.0
+Author@R: c(
+            person("Vasilopoulos", "Kostas", email = "kostasvasilo91@gmail.com", role = c("cre", "aut")),
+            person("Pavlidis", "Eftymios", email = "e.pavlidis@lancaster.ac.uk", role = "aut"))
+Maintener: 
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Depends:
+Imports: foreach,
+    parallel,
+    doSNOW,
+    ggplot2,
+    tidyr,
+    readr
+Suggests: testthat,
+    knitr,
+    rmarkdown,
+    quantmod
+VignetteBuilder: knitr
