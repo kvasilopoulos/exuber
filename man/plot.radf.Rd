@@ -4,8 +4,9 @@
 \alias{plot.radf}
 \title{Plotting}
 \usage{
-\method{plot}{radf}(x, y, option = "badf", breaks_x, format = "\%m-\%Y",
-  breaks_y = 1, plot.type = "single")
+\method{plot}{radf}(x, y, option = c("badf", "bsadf"), breaks_x = waiver(),
+  format = "\%m-\%Y", breaks_y = waiver(), plot.type = c("single",
+  "multiple"))
 }
 \arguments{
 \item{x}{of class radf}

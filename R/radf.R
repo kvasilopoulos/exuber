@@ -1,12 +1,19 @@
 #' Recursive augmented dickey fuller
 #'
+#'\code(radf) returns the t-statistics from a recursive augmented dickey fuller test
+#'
 #' @param x a data.frame or matrix
 #' @param minw a positive integer
 #' @param lag a non-negative integer
-#' @param format default
+#' @param format they way your date will be read
 #'
 #' @return a list
 #'
+#' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:
+#' When Did Exuberance Escalate Asset Values?*. International Economic Review, 52(1), 201–226.
+#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for multiple bubbles:
+#' Historical episodes of exuberance and collapse in the S&P 500. International Economic Review, 5
+#' 6(4), 1043–1078.
 #' @importFrom readr parse_datetime
 #' @export
 radf <- function(x,
@@ -62,12 +69,12 @@ radf <- function(x,
   }
 
 
-  value <- list(adf   = adf,
-                badf  = badf[-c(1:(minw)), , drop = F],
+  value <- list(adf   = adf %>% as.data.frame(),
+                badf  = badf[-c(1:(minw)), , drop = F] %>% as.data.frame(),
                 sadf  = sadf,
-                bsadf = bsadf[-c(1:(minw)), , drop = F],
+                bsadf = bsadf[-c(1:(minw)), , drop = F] %>% as.data.frame(),
                 gsadf = gsadf,
-                info  =  list(lag = lag, minw = minw, names = colnames(x)))
+                info = list(lag = lag, minw = minw, names = colnames(x)))
 
 
   if (is.character(rownames(x))) {

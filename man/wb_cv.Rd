@@ -7,19 +7,27 @@
 wb_cv(y, nboot = 1000, minw, distribution_rad = FALSE, parallel = FALSE)
 }
 \arguments{
-\item{y}{a data.frame or matrix which contains the data}
+\item{y}{a data.frame or matrix containing the data.}
 
-\item{nboot}{a positive integer. The number of bootsraps.}
+\item{nboot}{a positive integer idicating the number of bootstraps.}
 
-\item{minw}{a non-negative integer. The minimum window, the default number is the rule of thumb propose by}
+\item{minw}{a non-negative integer indicating the minimum window.}
 
-\item{distribution_rad}{logical. If TRUE the Radstander distributions is applied for bootstraping.}
+\item{distribution_rad}{a logical alue indicating whether Radstander distributions should bapplied for bootstraping.}
 
-\item{parallel}{logical. If TRUE parallel programming}
+\item{parallel}{a logical value indicating whether parallel computing should be performd}
 }
 \value{
-\code{wb_cv} a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
+a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
 }
 \description{
-\code{wb_cv} is used to compute
+\code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling scheme which is asymptotically robust to
+non-stationary volatility.
+}
+\references{
+Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
+in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548–574.
+}
+\seealso{
+\code{\link{mc_cv}} for Monte Carlo simulation
 }

@@ -26,7 +26,7 @@ plot(ts, mc, plot.type = "multiple", breaks_x = "1 month") + ggtitle("Hello Ther
 
 # Testing variables
 x <- radf(dfrm, lag = 1)
-y <- mc_cv(NROW(dfrm), 200, parallel = T)
+y <- mc_cv(NROW(dfrm), 10, parallel = T)
 y <- wb_cv(dfrm, 100, parallel = T)
 
 

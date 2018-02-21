@@ -19,5 +19,13 @@ radf(x, minw, lag = 0, format = "\%m-\%Y")
 a list
 }
 \description{
-Recursive augmented dickey fuller
+\code(radf)
+}
+\references{
+Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:
+When Did Exuberance Escalate Asset Values?*. International Economic Review, 52(1), 201–226.
+
+Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for multiple bubbles:
+Historical episodes of exuberance and collapse in the S&P 500. International Economic Review, 5
+6(4), 1043–1078.
 }

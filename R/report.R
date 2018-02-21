@@ -217,14 +217,18 @@ date.stamp <- function(x, y, option = "badf"){
 #'
 #' @import ggplot2
 #' @import dplyr
-#' @import tidyr
+#' @importFrom  tidyr gather
+#' @importFrom  magrittr set_colnames
 #'
 plot.radf <- function(x, y,
-                      option = "badf",
-                      breaks_x,
-                      format = "%m-%Y",
+                      option = c("badf","bsadf"),
+                      breaks_x , ## check this one maybe date_breaks
+                      format = "%m-%Y", ### waiver() maybe date_labels
                       breaks_y = 1,
-                      plot.type = "single") {
+                      plot.type = c("multiple", "single")) {
+
+  option <- match.arg(option)
+  plot.type <- match.arg(plot.type)
 
   if (missing(breaks_x)) {
     if (class(x$info$date) == "Date") {
@@ -245,29 +249,31 @@ plot.radf <- function(x, y,
   dating <- x$info$date[-c(1:(x$info$minw + 1 + x$info$lag))]
   shade.temp <- date.stamp(x, y, option = option)
 
-  if (plot.type == "single") {
+  if (plot.type == "multiple") {
+
     dat <- vector("list", length(choice))
     for (i in iter) {
       if (option == "badf") {
         if (y$info$method == "Monte Carlo") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
-                                 cv =  head(y$badf_cv[, 2], -(x$info$lag), row.names = NULL))
+                       if (x$info$lag == 0) cv = y$badf_cv[,2] else cv =  head(y$badf_cv[, 2], -(x$info$lag), row.names = NULL))
         } else if (y$info$method == "Wild Bootstrap") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
-                                 cv =  head(y$badf_cv[, 2, i], -(x$info$lag), row.names = NULL))
-        }
+                       if (x$info$lag == 0) cv = y$badf_cv[,2, i] else cv =  head(y$badf_cv[, 2, i], -(x$info$lag), row.names = NULL))
+        } #does not work for lag =0
       }else if (option == "bsadf") {
         if (y$info$method == "Monte Carlo") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
-                                 cv =  head(y$bsadf_cv[, 2], -(x$info$lag), row.names = NULL))
+                       if (x$info$lag == 0) cv = y$bsadf_cv[,2] else  cv =  head(y$bsadf_cv[, 2], -(x$info$lag), row.names = NULL))
         } else if (y$info$method == "Wild Bootstrap") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
-                                 cv =  head(y$bsadf_cv[, 2, i], -(x$info$lag), row.names = NULL))
+                       if (x$info$lag == 0) cv = y$bsadf_cv[,2, i] else  cv =  head(y$bsadf_cv[, 2, i], -(x$info$lag), row.names = NULL))
         }
       }else{
         stop("Argument 'option' should be either 'badf' or 'bsadf' !")
       }
-   }
+    }
+
     h <- vector("list", length(choice))
     j <- 1
     for (i in iter)
@@ -283,28 +289,28 @@ plot.radf <- function(x, y,
                     fill = 'grey', alpha = 0.25)
           {if (class(x$info$date) == "Date") scale_x_date(date_breaks = breaks_x, date_labels = format) else
                       scale_x_continuous(breaks = seq(0, max(x$info$date), breaks_x))}
-        h[[j]] <<- p + opts(tittle = i)
+        h[[j]] <<- p
         j <<- j + 1
 
       })
-  }else if (plot.type == "multiple") {
+  }else if (plot.type == "single") {
 
-    plot.dummy.wout  <- dummy.plot(x, y, option = option)
-    plot.dummy <- plot.dummy.wout[, iter, drop = FALSE]
+    plot.dummy  <- dummy.plot(x, y, option = option) %>% as.data.frame() %>%  select(iter)
+
     shade.dummy <- shade(plot.dummy)
-    start.dummy <- shade.dummy$b
-    end.dummy <- shade.dummy$e
 
-    colnames(start.dummy) <- colnames(end.dummy) <- x$info$names[iter]
+    start.dummy <- shade.dummy$b %>% as.data.frame() %>% set_colnames(x$info$names[iter]) %>%
+      gather(value = "start", na.rm = TRUE)
 
-    g1 <- start.dummy %>% as.data.frame() %>% gather() %>% drop_na()
-    g2 <- end.dummy %>% as.data.frame() %>% gather() %>% drop_na()
+    end.dummy <- shade.dummy$e %>% as.data.frame() %>% set_colnames(x$info$names[iter]) %>%
+      gather(value = "end", na.rm = TRUE)
 
-    g <- bind_cols(g1, g2[2])
-    total <- bind_cols(key = g$key, start = dating[g$value], end = dating[g$value1]) %>% arrange(start)
+    total <- bind_cols(start.dummy, end.dummy) %>% select(-key1) %>%
+      mutate("start_date" = dating[start], "end_date" = dating[end])
+
 
     h <- ggplot(total, aes(colour = key)) +
-    geom_segment(aes(x = start, xend = end, y = key, yend = key), size = 7) +
+    geom_segment(aes(x = start_date, xend = end_date, y = key, yend = key), size = 7) +
     ylab("") + xlab("") + theme_bw() +
     theme(panel.grid.major.y = element_blank() ,legend.position = "none",
           plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold", size = 8, hjust = 0))

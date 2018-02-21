@@ -1,15 +1,20 @@
 #' Wild Bootstrapped Critical values
 #'
-#'\code{wb_cv} is used to compute
+#'\code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling scheme which is asymptotically robust to
+#'non-stationary volatility.
 #'
-#' @param y a data.frame or matrix which contains the data
-#' @param nboot a positive integer. The number of bootsraps.
-#' @param minw a non-negative integer. The minimum window, the default number is the rule of thumb propose by
-#' @param distribution_rad logical. If TRUE the Radstander distributions is applied for bootstraping.
-#' @param parallel logical. If TRUE parallel programming
+#' @param y a data.frame or matrix containing the data.
+#' @param nboot a positive integer idicating the number of bootstraps.
+#' @param minw a non-negative integer indicating the minimum window.
+#' @param distribution_rad a logical alue indicating whether Radstander distributions should bapplied for bootstraping.
+#' @param parallel a logical value indicating whether parallel computing should be performd
 #'
-#' @return \code{wb_cv} a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
+#' @return  a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
 #'
+#' @references Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
+#' in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548–574.
+#'
+#' @seealso \code{\link{mc_cv}} for Monte Carlo simulation
 #' @import foreach
 #' @import parallel
 #' @import doSNOW
