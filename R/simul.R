@@ -67,10 +67,10 @@ sim_ar <- function(n, ar = 1.02, drift = 0.05) {
 #' @export
 #'
 #' @examples
-dgp1 <- function(n, te, tf, ci = 1, alpha =0.6, sigma = 6.79) {
+sim_dgp1 <- function(n, te = 0.4*n, tf = 0.15*n + te, ci = 1, alpha =0.6, sigma = 6.79) {
 
-  te <-  0.4*n        # origin
-  tf <-  0.15*n + te # duration
+  # te <-  0.4*n        # origin
+  # tf <-  0.15*n + te # duration
   y <- 100
   delta <-  1 + ci*n^(-alpha)
   ind <- rep(0, n); ind[tf + 1] <- 1
@@ -103,15 +103,17 @@ dgp1 <- function(n, te, tf, ci = 1, alpha =0.6, sigma = 6.79) {
 #' @export
 #'
 #' @examples
-dgp2 <- function(n, te1, tf1, te2, tf2, ci =1, alpha = 0.6, sigma =6.79){
+sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n + te2,
+                     ci =1, alpha = 0.6, sigma =6.79){
 
-  te1 <- 0.2*n
-  tf1 <- 0.2*n + te1
-  te2 <- 0.6*n
-  tf2 <- 0.1*n + te2
+  # te1 <- 0.2*n
+  # tf1 <- 0.2*n + te1
+  # te2 <- 0.6*n
+  # tf2 <- 0.1*n + te2
   delta <-  1 + ci*n^(-alpha)
   y <- 100
 
+  ### make it everything inside a loop
   for (i in 1:(tf1 - 1)) {
     if (i < te1) {
       y[i + 1] <- y[i] + rnorm(1, sd = sigma)
@@ -173,7 +175,6 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, initval = 1){
 #' @param pi
 #' @param r
 #' @param alpha
-#' @param seed
 #'
 #' @return
 #' @export
@@ -218,17 +219,15 @@ sim_evans <- function(n, delta = 0.5, tau = 0.05, pi = 0.7,
 #'
 #' @examples
 sim_div <- function(n, drift, sigma, r = 0.05, initval = 1.3,
-                    log = FALSE, return = c("pf","d"), seed = 15){
+                    log = FALSE, return = c("pf","d")){
 
   return <- match.arg(return)
   # Values obtained from West(1988, p53)
   if (missing(drift)) if (log) drift = 0.013 else drift = 0.0373
   if (missing(sigma)) if (log) sigma = sqrt(0.16) else sigma = sqrt(0.1574)
 
-  d <- initval
-  set.seed(seed)
-  d <- append(d, stats::filter(drift + rnorm(n - 1 , 0, sigma),
-                               c(1), init = initval, method = "recursive"))
+  d <- stats::filter(drift + c(initval, rnorm(n - 1 , 0, sigma)),
+                               c(1), init = initval, method = "recursive")
 
   if (log) {
     g <- exp(drift + sigma^2/2) - 1

@@ -4,11 +4,10 @@
 \alias{sim_evans}
 \title{Title}
 \usage{
-sim_evans(n, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05, alpha = 1,
-  seed = 15)
+sim_evans(n, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05, alpha = 1)
 }
 \arguments{
-\item{seed}{}
+\item{alpha}{}
 }
 \description{
 Title

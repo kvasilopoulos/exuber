@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 sim_div(n, drift, sigma, r = 0.05, initval = 1.3, log = FALSE,
-  return = c("pf", "d"), seed = 15)
+  return = c("pf", "d"))
 }
 \arguments{
 \item{seed}{}

@@ -13,13 +13,10 @@ radf(x, minw, lag = 0, format = "\%m-\%Y")
 
 \item{lag}{a non-negative integer}
 
-\item{format}{default}
+\item{format}{they way your date will be read}
 }
 \value{
 a list
-}
-\description{
-\code(radf)
 }
 \references{
 Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:

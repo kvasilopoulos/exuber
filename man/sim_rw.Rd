@@ -4,7 +4,7 @@
 \alias{sim_rw}
 \title{Title}
 \usage{
-sim_rw(n, d = 1, eta = 1, seed = 15)
+sim_rw(n, d = 1, eta = 1)
 }
 \arguments{
 \item{seed}{}

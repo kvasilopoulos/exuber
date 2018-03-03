@@ -38,10 +38,10 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
 
-    results  <-  foreach(i = 1:nrep, .export = 'srls_gsadf', .combine = 'cbind',
+    results  <-  foreach(i = 1:nrep, .export = 'srls_gsadf_cpp', .combine = 'cbind',
                          .options.snow = opts) %dopar% {
                            y  <-  cumsum(rnorm(n))
-                           srls_gsadf(y[-1], y[-n], winm = minw)
+                           srls_gsadf_cpp(y[-1], y[-n], minw)
                          }
     stopCluster(cl)
   }else{
@@ -49,7 +49,7 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
     for (i in 1:nrep) {
       y <- cumsum(rnorm(n))
       setTxtProgressBar(pb, i)
-      results[, i] <- srls_gsadf(y[-1], y[-n], winm = minw)
+      results[, i] <- srls_gsadf_cpp(y[-1], y[-n], minw)
     }
   }
   close(pb)
@@ -76,7 +76,7 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
                  gsadf_cv = gsadf_critical,
                  badf_cv  = badf_critical,
                  bsadf_cv = bsadf_critical,
-                 info     = list( method = "Monte Carlo",
+                 info     = list(method = "Monte Carlo",
                                   iter = nrep, minw = minw))
   return(output)
 }

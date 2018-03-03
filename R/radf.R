@@ -1,6 +1,6 @@
 #' Recursive augmented dickey fuller
 #'
-#'\code(radf) returns the t-statistics from a recursive augmented dickey fuller test
+#'\code{radf] returns the t-statistics from a recursive augmented dickey fuller test
 #'
 #' @param x a data.frame or matrix
 #' @param minw a positive integer
@@ -69,10 +69,10 @@ radf <- function(x,
   }
 
 
-  value <- list(adf   = adf %>% as.data.frame(),
-                badf  = badf[-c(1:(minw)), , drop = F] %>% as.data.frame(),
+  value <- list(adf   = adf ,
+                badf  = badf[-c(1:(minw)), , drop = F] ,
                 sadf  = sadf,
-                bsadf = bsadf[-c(1:(minw)), , drop = F] %>% as.data.frame(),
+                bsadf = bsadf[-c(1:(minw)), , drop = F] ,
                 gsadf = gsadf,
                 info = list(lag = lag, minw = minw, names = colnames(x)))
 

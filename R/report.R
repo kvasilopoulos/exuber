@@ -221,7 +221,7 @@ date.stamp <- function(x, y, option = "badf"){
 #' @importFrom  magrittr set_colnames
 #'
 plot.radf <- function(x, y,
-                      option = c("badf","bsadf"),
+                      option = c("badf", "bsadf"),
                       breaks_x , ## check this one maybe date_breaks
                       format = "%m-%Y", ### waiver() maybe date_labels
                       breaks_y = 1,
@@ -284,6 +284,7 @@ plot.radf <- function(x, y,
           xlab("") + ylab("") + theme_bw() +
           theme(axis.line = element_line(colour = "black"), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), panel.background = element_blank()) +
+          ggtitle(x$info$names[j]) +
           scale_y_continuous(breaks = seq(floor(min(dat[[i]]$tstat)), ceiling(max(dat[[i]]$tstat)), breaks_y)) +
           geom_rect(data = shade.temp[[j]][1:2], aes(xmin = Peak, xmax = Trough, ymin = -Inf, ymax = +Inf),
                     fill = 'grey', alpha = 0.25)

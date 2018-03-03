@@ -12,15 +12,17 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Depends:
+Depends: 
 Imports: foreach,
     parallel,
     doSNOW,
     ggplot2,
     tidyr,
-    readr
+    readr,
+    Rcpp
 Suggests: testthat,
     knitr,
     rmarkdown,
     quantmod
 VignetteBuilder: knitr
+LinkingTo: Rcpp

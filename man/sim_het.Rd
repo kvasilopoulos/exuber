@@ -4,8 +4,7 @@
 \alias{sim_het}
 \title{Title}
 \usage{
-sim_het(n, d = 1, eta = 1, omega = 30.69, alpha = 0, beta = 0.61,
-  seed = 15)
+sim_het(n, d = 1, eta = 1, omega = 30.69, alpha = 0, beta = 0.61)
 }
 \arguments{
 \item{seed}{}

@@ -4,7 +4,7 @@
 \alias{sim_blan}
 \title{Title}
 \usage{
-sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, initval = 1, seed = 15)
+sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, initval = 1)
 }
 \arguments{
 \item{seed}{}

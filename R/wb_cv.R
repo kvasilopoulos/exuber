@@ -18,11 +18,12 @@
 #' @import foreach
 #' @import parallel
 #' @import doSNOW
+#' @import magrittr
 #' @export
 #'
 wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = FALSE){
 
-  y  <- as.matrix(y)
+  y  <- y %>% na.omit %>% as.matrix()
   nc <- NCOL(y)
   nr <- NROW(y)
 
@@ -61,7 +62,7 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
     opts <- list(progress = progress)
     for (j in 1:nc) {
       dy <- y[-1, j] - y[-nr, j]
-      results <- foreach(i = 1:nboot, .export = 'srls_gsadf', .combine = 'cbind',
+      results <- foreach(i = 1:nboot, .export = 'srls_gsadf_cpp', .combine = 'cbind',
                          .options.snow = opts) %dopar% {
                            ystar <- 0
                            if (distribution_rad) {
@@ -70,7 +71,7 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
                              w <- rnorm(nr - 1, 0, 1)
                            }
                            ystar <- c(0, cumsum(w * dy))
-                           srls_gsadf(ystar[-1], ystar[-nr], winm = minw)
+                           srls_gsadf_cpp(ystar[-1], ystar[-nr], minw)
                          }
 
       bsadf_critical[, , j] <- t(apply(results[(1 + minw):(nr - 1), ], 1, quantile,
@@ -94,7 +95,7 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
           w <- rnorm(nr - 1, 0, 1)
         }
         ystar <- c(0, cumsum(w*dy))
-        results[,i] <- srls_gsadf(ystar[-1] , ystar[-nr], winm = minw)
+        results[,i] <- srls_gsadf_cpp(ystar[-1] , ystar[-nr], minw)
         setTxtProgressBar(pb, i)
       }
       bsadf_critical[,,j] <-  t(apply(results[(1 + minw):(nr - 1), ], 1, quantile,
