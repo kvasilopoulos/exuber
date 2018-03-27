@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc_cv.R
 \name{mc_cv}
 \alias{mc_cv}
-\title{#' Monte Carlo Critical values}
+\title{#' Monte Carlo Critical Values}
 \usage{
 mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 }
@@ -11,13 +11,16 @@ mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 
 \item{nrep}{a positive integer, The number of simulations.}
 
-\item{minw}{a non-negative integer. The minimum window}
+\item{minw}{a non-negative integer, The minimum window}
 
-\item{parallel}{logical. If TRUE parallel programming}
+\item{parallel}{logical, idicating whether parallel programming should be used}
 }
 \value{
-\code{mc_cv} a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
+a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
 }
 \description{
 \code{mc_cv} is used to compute
+}
+\seealso{
+\code{\link{wb_cv}} for Wild Bootstrapped critical valuesst
 }

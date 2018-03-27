@@ -2,14 +2,65 @@
 % Please edit documentation in R/simul.R
 \name{sim_div}
 \alias{sim_div}
-\title{Title}
+\title{Simulation of dividends}
 \usage{
-sim_div(n, drift, sigma, r = 0.05, initval = 1.3, log = FALSE,
-  return = c("pf", "d"))
+sim_div(n, mu, sigma, r = 0.05, initval = 1.3, logd = FALSE,
+  output = c("pf", "d"))
 }
 \arguments{
-\item{seed}{}
+\item{n}{a positive integer indicating the number of simulations}
+
+\item{mu}{a value inidcating the drift}
+
+\item{sigma}{a positive value inidcating the standard deviation of the the white noise}
+
+\item{r}{a positive value indicationg the expansion of the bubble}
+
+\item{initval}{initial value}
+
+\item{output}{a character vector. Is set to either return fundamental price('pf') or dividend series('d')}
+
+\item{log}{a logical. If true dividends follow a lognormal distribution}
+}
+\value{
+a numeric vector of length n
 }
 \description{
-Title
+The follow data generating process assumes a random walk with drift. Dividens can follow either a
+normal or lognormal distribution.
+}
+\details{
+If log is set to FALSE (default value) the dividends follow:
+
+\deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t]}
+
+where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
+are set \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (initval). The above
+equation can be solved to yield the fundamental price:
+
+\deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r}
+
+If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow:
+
+\deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t]}
+
+where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The parameters
+\eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case:
+
+\deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
+
+where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}.
+
+All of the parameter values are obtained from West(1988).
+}
+\examples{
+# Price is the sum of bubble component and fundamental component
+# 20 is the scaling factor
+pf <- sim_div(100, r = 0.05, output = "pf")
+pb <- sim_evans(100, r = 0.05)
+p <- pf + 20*pb
+}
+\references{
+West, K. D. (1988). Dividend innovations and stock price volatility.
+Econometrica: Journal of the Econometric Society, 37-61.
 }

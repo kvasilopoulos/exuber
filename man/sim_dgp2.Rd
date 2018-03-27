@@ -2,28 +2,57 @@
 % Please edit documentation in R/simul.R
 \name{sim_dgp2}
 \alias{sim_dgp2}
-\title{Two Bubbles}
+\title{Simulation of a two-bubble proccess}
 \usage{
 sim_dgp2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n, tf2 = 0.1
-  * n + te2, ci = 1, alpha = 0.6, sigma = 6.79)
+  * n + te2, c = 1, alpha = 0.6, sigma = 6.79)
 }
 \arguments{
-\item{n}{a positive ingefer indicating the nubmer of simulations}
+\item{n}{a positive integer indicating the number of simulations}
 
-\item{te1}{a positive integer inidcating the origin of the first bubble}
+\item{te1}{a value dating the originatiopn of the first bubble epsiode}
 
-\item{tf1}{a positive integer inidcating the termination of the first bubble}
+\item{tf1}{a value dating the termination of the first bubble episode}
 
-\item{te2}{a positive integer inidcating the origin of the second bubble}
+\item{te2}{a value dating the origination of the second bubble episode}
 
-\item{tf2}{a positive integer inidcating the termination of the second bubble}
+\item{tf2}{a value dating the termination of the second bubble episode}
 
-\item{ci}{a positve integer determining the value of the constant}
+\item{c}{a positive numeric value determining the value of the constant in the autoregressive coeffcient}
 
-\item{alpha}{a positve integer determining the value of the constant}
+\item{alpha}{a positve number determining the value of the expansion rate in the autoregressive coefficient}
 
-\item{sigma}{a posiitve origin indicatin the standard deviation of the innovations}
+\item{sigma}{a posiitve number indicating the standard deviation of the innovations}
+}
+\value{
+a numeric vector of length n
 }
 \description{
-Two Bubbles
+The following generating process is simular to the simulation of the single-bubble process \code{\link{sim_dgp1}}.
+The generating process switches betweem a martingale mechanism, the first mildy explosive episode, collapse,
+renewal of martingale behavior, the second mildly explosive episode, another collapse and the subsequent renewal
+of martingale behavior.
+}
+\details{
+The data generating process can be described with the following equation:
+\deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
+\left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} \\
++ \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
+\epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{X[t] =X[t-1] 1{t in N[0]}+
+\delta[T] * X[t-1] 1{t in B[1] union B[2]} +
+(\sum[k=t1f+1]^t \epsilon[k] + X'[t1f]) 1{t in N[1]} +
+(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
+\epsilon[t] 1{t in N[0] union B[1] union B[2]}}
+
+where the he autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by the formula
+
+\deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
+
+with \eqn{c>0} and \eqn{\alpha \in (0,1)}{\alpha} in (0,1),
+\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}.
+}
+\examples{
+sim_dgp2(100)
+
+
 }

@@ -2,17 +2,18 @@ Package: exdyn
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author@R: c(
-            person("Vasilopoulos", "Kostas", email = "kostasvasilo91@gmail.com", role = c("cre", "aut")),
-            person("Pavlidis", "Eftymios", email = "e.pavlidis@lancaster.ac.uk", role = "aut"))
-Maintener: 
+Authors@R: c(
+            person("Vasilopoulos", "Kostas", ,email = "kostasvasilo91@gmail.com", c("cre", "aut")),
+            person("Pavlidis", "Eftymios", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
+            person("Simon", "Spavound", email = "sdfasdfa", role = "aut")
+            )
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Depends: 
+Depends: R(>= 3.4.4)
 Imports: foreach,
     parallel,
     doSNOW,

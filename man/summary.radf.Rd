@@ -2,14 +2,19 @@
 % Please edit documentation in R/report.R
 \name{summary.radf}
 \alias{summary.radf}
+\alias{diagnostics}
 \title{Title}
 \usage{
 \method{summary}{radf}(x, y)
+
+diagnostics(x, y, echo = TRUE)
 }
 \arguments{
 \item{x}{of class 'radf'.}
 
 \item{y}{the output of mc_cv or wb_cv}
+
+\item{echo}{logical. TRUE if you to print the results}
 }
 \description{
 Title

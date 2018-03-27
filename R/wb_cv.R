@@ -6,40 +6,37 @@
 #' @param y a data.frame or matrix containing the data.
 #' @param nboot a positive integer idicating the number of bootstraps.
 #' @param minw a non-negative integer indicating the minimum window.
-#' @param distribution_rad a logical alue indicating whether Radstander distributions should bapplied for bootstraping.
-#' @param parallel a logical value indicating whether parallel computing should be performd
+#' @param distribution_rad a logical value indicating whether Radstander distributions should be
+#' applied for bootstraping.
+#' @param parallel a logical value indicating whether parallel computing should be perfomed
 #'
 #' @return  a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
 #'
 #' @references Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
-#' in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548–574.
+#' in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 #'
-#' @seealso \code{\link{mc_cv}} for Monte Carlo simulation
+#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values
 #' @import foreach
 #' @import parallel
 #' @import doSNOW
-#' @import magrittr
 #' @export
 #'
 wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = FALSE){
 
-  y  <- y %>% na.omit %>% as.matrix()
+  y  <- as.matrix(y)
   nc <- NCOL(y)
   nr <- NROW(y)
 
   stopifnot(is.logical(parallel))
   stopifnot(is.logical(distribution_rad))
 
-  if (!nboot == round(nboot) | nboot <= 0) {
-    stop("'n' should be a positive integer")
-  }
+  stopifnot(is.positive(nboot))
 
   if (missing(minw)) {
     r0 = 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
-  } else if (!minw == round(minw) & minw >= 0) {
-    stop("Argument 'minw' should be an integer")
   }
+  stopifnot(is.positive(minw))
 
   adf_critical   <- matrix(NA, nrow = nc, ncol = 3,
                            dimnames = list(colnames(y), c("90%","95%","95%")))

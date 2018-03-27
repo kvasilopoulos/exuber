@@ -2,13 +2,29 @@
 % Please edit documentation in R/simul.R
 \name{sim_evans}
 \alias{sim_evans}
-\title{Title}
+\title{Simulation of Evans Bubble}
 \usage{
-sim_evans(n, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05, alpha = 1)
+sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 }
 \arguments{
-\item{alpha}{}
+\item{n}{a positive integer indicating the number of simulations}
+
+\item{alpha}{positive}
+
+\item{delta}{positive value}
+
+\item{tau}{the standard deviation of the innovations}
+
+\item{pi}{a positive value in (0, 1) indicating the probability of collapse}
+
+\item{r}{a positive value describing the exapnsion rate}
+}
+\value{
+a numeric vector of length n
 }
 \description{
-Title
+The following generating process simulates a rational bubble that is always positive and collapses periodically.
+}
+\details{
+
 }

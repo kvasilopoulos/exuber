@@ -13,9 +13,10 @@ wb_cv(y, nboot = 1000, minw, distribution_rad = FALSE, parallel = FALSE)
 
 \item{minw}{a non-negative integer indicating the minimum window.}
 
-\item{distribution_rad}{a logical alue indicating whether Radstander distributions should bapplied for bootstraping.}
+\item{distribution_rad}{a logical value indicating whether Radstander distributions should be
+applied for bootstraping.}
 
-\item{parallel}{a logical value indicating whether parallel computing should be performd}
+\item{parallel}{a logical value indicating whether parallel computing should be perfomed}
 }
 \value{
 a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
@@ -26,8 +27,8 @@ non-stationary volatility.
 }
 \references{
 Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
-in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548–574.
+in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 }
 \seealso{
-\code{\link{mc_cv}} for Monte Carlo simulation
+\code{\link{mc_cv}} for Monte Carlo critical values
 }

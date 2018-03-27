@@ -2,9 +2,9 @@
 % Please edit documentation in R/radf.R
 \name{radf}
 \alias{radf}
-\title{Recursive augmented dickey fuller}
+\title{Recursive Augmented Dickey Fuller test}
 \usage{
-radf(x, minw, lag = 0, format = "\%m-\%Y")
+radf(x, minw, lag = 0, format = "\%Y-\%m-\%d")
 }
 \arguments{
 \item{x}{a data.frame or matrix}
@@ -13,16 +13,19 @@ radf(x, minw, lag = 0, format = "\%m-\%Y")
 
 \item{lag}{a non-negative integer}
 
-\item{format}{they way your date will be read}
+\item{format}{a character string. If not specified, the default value will be}
 }
 \value{
 a list
 }
+\description{
+\code{radf} returns the t-statistics from a recursive augmented dickey fuller test
+}
 \references{
 Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:
-When Did Exuberance Escalate Asset Values?*. International Economic Review, 52(1), 201–226.
+When Did Exuberance Escalate Asset Values? International Economic Review, 52(1), 201-226.
 
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for multiple bubbles:
 Historical episodes of exuberance and collapse in the S&P 500. International Economic Review, 5
-6(4), 1043–1078.
+6(4), 1043-1078.
 }

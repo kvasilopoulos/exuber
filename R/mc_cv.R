@@ -1,13 +1,15 @@
-#' #' Monte Carlo Critical values
+#' #' Monte Carlo Critical Values
 #'
 #' \code{mc_cv} is used to compute
 #'
 #' @param n the number of simulated periods
 #' @param nrep a positive integer, The number of simulations.
-#' @param minw a non-negative integer. The minimum window
-#' @param parallel logical. If TRUE parallel programming
+#' @param minw a non-negative integer, The minimum window
+#' @param parallel logical, idicating whether parallel programming should be used
 #'
-#' @return \code{mc_cv} a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
+#' @return a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
+#'
+#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical valuesst
 #'
 #' @import foreach
 #' @import parallel
@@ -17,9 +19,11 @@
 mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
 
   if (!n == round(n) | n <= 0) {
-    stop("'n' should be a positive integer")
-  } else if (n < 7) {
-    stop("'n' is too small")
+    stop("Arguement 'n' should be a positive integer")
+  }
+
+  if (!nrep == round(nrep) | n <= 0) {
+    stop("Arguement 'nrep' should be a positive integer")
   }
 
   if (missing(minw)) {
@@ -27,9 +31,11 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
     minw = floor(r0 * n)
   } else if (!minw == round(minw) & minw >= 0) {
     stop("Argument 'minw' should be an integer")
+  } else if (minw < 3) {
+    stop( "Argument 'minw' is too small")
   }
 
-  stopifnot(is.logical(parallel))
+  if (!is.logical(parallel)) stop("Arguement 'parallel' should be a logical")
 
   pb <- txtProgressBar(max = nrep, style = 3)
   if (parallel) {

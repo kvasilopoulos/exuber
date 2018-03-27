@@ -6,6 +6,8 @@
 #' @export
 summary.radf <- function(x, y){
 
+  if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
+  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
   if (x$info$minw != y$info$minw) {
     stop("The critical values should have the same minumum window with the t-statistics!")
   }
@@ -42,16 +44,15 @@ summary.radf <- function(x, y){
   }
 }
 
-#' Title
-#'
-#' @param x of class radf
-#' @param y the output of wb_cv or mc_cv
-#' @param echo printed if TRUE
-#'
-#' @return the series that pass the 0.95 statistical signifigance test
+
+#' @param echo logical. TRUE if you to print the results
 #' @export
-#'
+#' @rdname summary.radf
 diagnostics <- function(x, y, echo = TRUE){
+
+  if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
+  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  stopifnot(is.logical(echo))
 
   nm <- x$info$names
   proceed <- NULL
@@ -117,7 +118,6 @@ diagnostics <- function(x, y, echo = TRUE){
   return(invisible(proceed))
 }
 
-#' @export
 dummy.plot <- function(x, y, option){
 
   dummy.plot <- matrix(0, nrow = NROW(x$badf), ncol = length(x$info$names))
@@ -137,14 +137,13 @@ dummy.plot <- function(x, y, option){
           if (x$bsadf[j, i] > y$bsadf_cv[j, 2, i]) dummy.plot[j, i] = 1
         }
       }else{
-        stop("Argument 'option' should be either 'badf' or 'bsadf' !")
+        stop("Argument 'option' should be either 'badf' or 'bsadf'")
       }
     }
   }
   return(dummy.plot)
 }
 
-#' @export
 shade <- function(x){
   b <- matrix(0, 100, NCOL(x))
   e <- matrix(0, 100, NCOL(x))
@@ -169,18 +168,23 @@ shade <- function(x){
 }
 
 
-#' Title
+#' Date stamping the bubble period(s)
 #'
-#' @param x of class radf
-#' @param y the output of mc_cv or wb_cv
-#' @param option c("bsadf", "badf") the default value is "bsadf"
+#' Compute the origination, termination and duration of the bubble episode(s)
 #'
-#' @return the periods the contain a bubble
+#' @inheritParams summary.radf
+#' @param option the default value is "badf"
+#'
+#' @return a list
 #'
 #' @import tidyr
 #' @export
 #'
-date.stamp <- function(x, y, option = "badf"){
+date_stamp <- function(x, y, option = c("badf", "bsadf")){
+
+  if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
+  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  option <- match.arg(option)
 
   dating <- x$info$date[-c(1:(x$info$minw + 1 + x$info$lag))]
   temp1 <- dummy.plot(x, y, option = option)
@@ -204,32 +208,31 @@ date.stamp <- function(x, y, option = "badf"){
 
 #' Plotting
 #'
-#' @param x of class radf
-#' @param y the output of wb_cv or mc_cv
-#' @param option c("bsadf", "badf")
+#' @inheritParams date_stamp
 #' @param breaks_x plotting option
-#' @param format plotiing option
+#' @param format_plot plotiing option
 #' @param breaks_y plotting option
-#' @param plot.type type gannt if true
+#' @param plot_type type gannt if true
 #'
 #' @return a list of ggplot
 #' @export
 #'
 #' @import ggplot2
 #' @import dplyr
-#' @importFrom  tidyr gather
+#' @import tidyr
 #' @importFrom  magrittr set_colnames
 #'
 plot.radf <- function(x, y,
                       option = c("badf", "bsadf"),
-                      breaks_x , ## check this one maybe date_breaks
-                      format = "%m-%Y", ### waiver() maybe date_labels
+                      breaks_x ,
+                      format_plot = "%m-%Y", # explain better like format_rep
                       breaks_y = 1,
-                      plot.type = c("multiple", "single")) {
+                      plot_type = c("multiple", "single")) {
 
   option <- match.arg(option)
-  plot.type <- match.arg(plot.type)
-
+  plot_type <- match.arg(plot_type)
+  if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
+  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
   if (missing(breaks_x)) {
     if (class(x$info$date) == "Date") {
       breaks_x = "3 months"
@@ -238,8 +241,8 @@ plot.radf <- function(x, y,
     }
   }
 
-  if (!missing(breaks_y) & plot.type == "multiple") {
-    warning("'breaks_y' does not need to be specified when plot.type is 'multiple'")
+  if (!missing(breaks_y) & plot_type == "single") {
+    warning("Arguement 'breaks_y' does not need to be specified when plot_type is 'multiple'")
   }
 
   choice <- diagnostics(x, y, echo = FALSE)
@@ -247,9 +250,9 @@ plot.radf <- function(x, y,
   if (is.null(iter)) stop("Plotting is only for the series that reject the Null Hypothesis")
 
   dating <- x$info$date[-c(1:(x$info$minw + 1 + x$info$lag))]
-  shade.temp <- date.stamp(x, y, option = option)
+  shade.temp <- date_stamp(x, y, option = option)
 
-  if (plot.type == "multiple") {
+  if (plot_type == "multiple") {
 
     dat <- vector("list", length(choice))
     for (i in iter) {
@@ -260,7 +263,6 @@ plot.radf <- function(x, y,
         } else if (y$info$method == "Wild Bootstrap") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
                        if (x$info$lag == 0) cv = y$badf_cv[,2, i] else cv =  head(y$badf_cv[, 2, i], -(x$info$lag), row.names = NULL))
-        } #does not work for lag =0
       }else if (option == "bsadf") {
         if (y$info$method == "Monte Carlo") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
@@ -269,8 +271,7 @@ plot.radf <- function(x, y,
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
                        if (x$info$lag == 0) cv = y$bsadf_cv[,2, i] else  cv =  head(y$bsadf_cv[, 2, i], -(x$info$lag), row.names = NULL))
         }
-      }else{
-        stop("Argument 'option' should be either 'badf' or 'bsadf' !")
+      }
       }
     }
 
@@ -287,14 +288,14 @@ plot.radf <- function(x, y,
           ggtitle(x$info$names[j]) +
           scale_y_continuous(breaks = seq(floor(min(dat[[i]]$tstat)), ceiling(max(dat[[i]]$tstat)), breaks_y)) +
           geom_rect(data = shade.temp[[j]][1:2], aes(xmin = Peak, xmax = Trough, ymin = -Inf, ymax = +Inf),
-                    fill = 'grey', alpha = 0.25)
-          {if (class(x$info$date) == "Date") scale_x_date(date_breaks = breaks_x, date_labels = format) else
+                    fill = 'grey', alpha = 0.25) +
+          {if (class(x$info$date) == "Date") scale_x_date(date_breaks = breaks_x, date_labels = format_plot) else
                       scale_x_continuous(breaks = seq(0, max(x$info$date), breaks_x))}
         h[[j]] <<- p
         j <<- j + 1
 
       })
-  }else if (plot.type == "single") {
+  }else if (plot_type == "single") {
 
     plot.dummy  <- dummy.plot(x, y, option = option) %>% as.data.frame() %>%  select(iter)
 
@@ -316,12 +317,10 @@ plot.radf <- function(x, y,
     theme(panel.grid.major.y = element_blank() ,legend.position = "none",
           plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
     if (class(x$info$date) == "Date") {
-      h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format)
+      h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_plot)
     }else{
       h <- h + scale_x_continuous(breaks = seq(0, max(x$info$date), breaks_x))
     }
-  }else{
-    stop("'plot.type' should take the value 'single' or 'multiple'")
   }
   return(h)
 }

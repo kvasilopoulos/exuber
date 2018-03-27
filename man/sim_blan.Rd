@@ -2,13 +2,22 @@
 % Please edit documentation in R/simul.R
 \name{sim_blan}
 \alias{sim_blan}
-\title{Title}
+\title{Simulation of Blanchard Bubble}
 \usage{
-sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, initval = 1)
+sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05)
 }
 \arguments{
-\item{seed}{}
+\item{n}{a positive integer indicating the number of simulations}
+
+\item{pi}{a positive value in (0, 1) indicating the probability of collapse}
+
+\item{sigma}{the standard deviation of the innovations}
+
+\item{r}{a positive value describing the exapnsion rate}
+}
+\value{
+a numeric vector of length n
 }
 \description{
-Title
+Simulation of Blanchard Bubble
 }

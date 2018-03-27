@@ -1,40 +1,39 @@
-#' Recursive augmented dickey fuller
+#' Recursive Augmented Dickey Fuller test
 #'
-#'\code{radf] returns the t-statistics from a recursive augmented dickey fuller test
+#' \code{radf} returns the t-statistics from a recursive augmented dickey fuller test
 #'
 #' @param x a data.frame or matrix
 #' @param minw a positive integer
 #' @param lag a non-negative integer
-#' @param format they way your date will be read
+#' @param format a character string. If not specified, the default value will be
 #'
 #' @return a list
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:
-#' When Did Exuberance Escalate Asset Values?*. International Economic Review, 52(1), 201–226.
+#' When Did Exuberance Escalate Asset Values? International Economic Review, 52(1), 201-226.
+#'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for multiple bubbles:
 #' Historical episodes of exuberance and collapse in the S&P 500. International Economic Review, 5
-#' 6(4), 1043–1078.
+#' 6(4), 1043-1078.
+#'
 #' @importFrom readr parse_datetime
 #' @export
-radf <- function(x,
-                 minw,
-                 lag = 0,
-                 format = "%m-%Y"){
+radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
 
   x  <- as.matrix(x)
   nc <- NCOL(x)
   nr <- NROW(x)
 
-  if (!lag == round(lag) | lag < 0) {
-    stop("'lag' should be a non-negative integer")
-  }
+  stopifnot(is.positive(minw))
+  stopifnot(is.nonnegeative(lag))
 
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
-  } else if (!minw == round(minw) | minw <= 0) {
-    stop("'minw' should be a positive integer")
+  } else if (minw < 3) {
+    stop( "Argument 'minw' is too small")
   }
+
 
   if (is.null(colnames(x))) {
     colnames(x) <- paste0("series", seq(1, nc, 1))
@@ -78,7 +77,7 @@ radf <- function(x,
 
 
   if (is.character(rownames(x))) {
-    value$info$date <- as.Date(parse_datetime(rownames(x)), format = format)
+    value$info$date <- as.Date(parse_datetime(rownames(x), format = format))
   } else if (is.numeric(rownames(x))) {
     value$info$date <- rownames(x)
   }else{
