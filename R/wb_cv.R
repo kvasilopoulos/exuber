@@ -12,6 +12,10 @@
 #'
 #' @return  a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
 #'
+#' @details This approach involves applying wild bootstrap re-sampling scheme to the first difference of the raw
+#' data and allow to construct bootstrap analogues of the PWY tst which are asymptotically robust to non-stationary
+#' volatility. The wild boostrap can replicate the pattern of heteroskedasticity present in the shocks.
+#'
 #' @references Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
 #' in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 #'
@@ -19,6 +23,7 @@
 #' @import foreach
 #' @import parallel
 #' @import doSNOW
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 #'
 wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = FALSE){
@@ -29,14 +34,13 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
 
   stopifnot(is.logical(parallel))
   stopifnot(is.logical(distribution_rad))
-
-  stopifnot(is.positive(nboot))
+  is.positive.int(nboot)
 
   if (missing(minw)) {
     r0 = 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
   }
-  stopifnot(is.positive(minw))
+  is.nonnegeative.int(minw)
 
   adf_critical   <- matrix(NA, nrow = nc, ncol = 3,
                            dimnames = list(colnames(y), c("90%","95%","95%")))

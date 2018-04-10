@@ -29,14 +29,15 @@ sim_ar <- function(n, ar = 1.02, drift = 0.05) {
 #' @param n a positive integer indicating the number of simulations
 #' @param te a value in (0,n) dating the origination of bubble expansion
 #' @param tf a value in (te,n) dating the termination of bubble collapse
-#' @param ci a positive  value determining the value of the constant in the autoregressive coeffcient
+#' @param c a positive  value determining the value of the constant in the autoregressive coeffcient
 #' @param alpha a positve value in (0,1) determining the value of the expansion rate in the autoregressive coefficient
 #' @param sigma a posiitve number indicating the standard deviation of the innovations
+#
 #'
 #' @details
 #' The data generating process can be described with the following equation:
 #' \deqn{X_t = X_{t-1}1\{t < \tau_e\}+ \delta_T X_{t-1}1\{\tau_e \leq t\leq \tau_f\} +
-#' \left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t < \leq \tau_f\}}{X[t] =
+#' \left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}}{X[t] =
 #' X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
 #' (\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf}}
 #'
@@ -107,12 +108,13 @@ sim_dgp1 <- function(n, te = 0.4*n, tf = 0.15*n + te, c = 1, alpha = 0.6, sigma 
 #' @details
 #' The data generating process can be described with the following equation:
 #' \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
-#' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} \\
-#' + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
-#' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{X[t] =X[t-1] 1{t in N[0]}+
-#' \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
+#' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
+#' 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
 #' (\sum[k=t1f+1]^t \epsilon[k] + X'[t1f]) 1{t in N[1]} +
-#' (\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
+#' }
+#'
+#' \deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
+#' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 #' \epsilon[t] 1{t in N[0] union B[1] union B[2]}}
 #'
 #' where the he autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by the formula
@@ -132,13 +134,13 @@ sim_dgp1 <- function(n, te = 0.4*n, tf = 0.15*n + te, c = 1, alpha = 0.6, sigma 
 sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n + te2,
                      c = 1, alpha = 0.6, sigma = 6.79){
 
-  is.positive(n)
+  is.positive.int(n)
   is.between(te1, 0, n)
   is.between(tf1, te1, n)
   is.between(te2, tf1, n)
   is.between(tf2, te2, n)
   is.between(alpha, 0, 1)
-  is.positive(sigma)
+  stopifnot(sigma>0)
 
   delta <-  1 + c*n^(-alpha)
   y <- 100
@@ -173,6 +175,26 @@ sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n
 #'
 #' @export
 #' @return a numeric vector of length n
+#'
+#' @details
+#' Blanchard's Bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
+#' In the first regime, the bubble grows expontentially at the rate \eqn{(1+r)\pi}, whereas in the
+#' second regime, the bubble collapses to a white noise.
+#'
+#' With probability \eqn{\pi}
+#' \deqn{B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}}{B[t+1]=(1+r)/\pi*B[t]+\epsilon[t+1]}
+#' With probability \eqn{\pi}
+#' \deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1]}
+#'
+#' where r is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+#' Taking expectations on both sides yields
+#'
+#' \deqn{E_t[B_{t+1}] = (1+r)B_t}{E[B[t+1]]= (1+r)*B[t]}
+#'
+#' where \eqn{E_t}{E} is the expectation operator. The expected growth rate of the bubble is (1+r).
+#'
+#' @references Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
+#' Economics letters, 3(4), 387-389.
 sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
   b <- 1
   theta <- rbinom(n, 1, pi)
@@ -207,11 +229,16 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
 #' @return a numeric vector of length n
 #'
 #' @details
+#' If \eqn{B_t \leq \alpha}{B[t] \le \alpha}
 #'
+#' \deqn{B_{t+1} =  (1+r) B_t u_{t+1}}{B[t+1]= (1+r)*B[t]*u[t+1]}
 #'
+#' If \eqn{B_t > \alpha}{B[t] > \alpha}
+#'
+#' \deqn{B_{t+1} =  \delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
+#' \delta*(1+r)/\pi* (B[t]-\delta/(1+r))*u[t+1]}
 #'
 #' @export
-#'
 sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05){
 
   stopifnot(alpha > 0)
@@ -242,7 +269,6 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 #' @param mu a value inidcating the drift
 #' @param sigma a positive value inidcating the standard deviation of the the white noise
 #' @param r a positive value indicationg the expansion of the bubble
-#' @param initval initial value
 #' @param log a logical. If true dividends follow a lognormal distribution
 #' @param output a character vector. Is set to either return fundamental price('pf') or dividend series('d')
 #'
@@ -270,9 +296,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 #'
 #'\deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
 #'
-#'where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}.
-#'
-#'All of the parameter values are obtained from West(1988).
+#'where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}. All of the parameter values are
+#'obtained from West(1988).
 #'
 #' @references West, K. D. (1988). Dividend innovations and stock price volatility.
 #' Econometrica: Journal of the Econometric Society, 37-61.
@@ -283,25 +308,24 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 #' pf <- sim_div(100, r = 0.05, output = "pf")
 #' pb <- sim_evans(100, r = 0.05)
 #' p <- pf + 20*pb
-sim_div <- function(n, mu, sigma, r = 0.05, initval = 1.3,
-                    logd = FALSE, output = c("pf","d")){
+sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf","d")){
 
 
-
+  initval <- 1.3
   # Values obtained from West(1988, p53)
-  if (missing(mu)) if (logd) mu = 0.013 else mu = 0.0373
-  if (missing(sigma)) if (logd) sigma = sqrt(0.16) else sigma = sqrt(0.1574)
+  if (missing(mu)) if (log) mu = 0.013 else mu = 0.0373
+  if (missing(sigma)) if (log) sigma = sqrt(0.16) else sigma = sqrt(0.1574)
 
   is.positive.int(n)
   stopifnot(sigma > 0)
   stopifnot(r > 0)
-  stopifnot(is.logical(logd))
+  stopifnot(is.logical(log))
   return <- match.arg(output)
 
   d <- stats::filter(mu + c(initval, rnorm(n - 1 , 0, sigma)),
-                               c(1), init = initval, method = "recursive")
+                               c(1), init = 1.3, method = "recursive")
 
-  if (logd) {
+  if (log) {
     g <- exp(mu + sigma^2/2) - 1
     pf <- (1 + g)*d/(r - g)
   }else{

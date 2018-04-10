@@ -36,12 +36,13 @@ of martingale behavior.
 \details{
 The data generating process can be described with the following equation:
 \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
-\left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} \\
-+ \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
-\epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{X[t] =X[t-1] 1{t in N[0]}+
-\delta[T] * X[t-1] 1{t in B[1] union B[2]} +
+\left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
+1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
 (\sum[k=t1f+1]^t \epsilon[k] + X'[t1f]) 1{t in N[1]} +
-(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
+}
+
+\deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
+\epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 \epsilon[t] 1{t in N[0] union B[1] union B[2]}}
 
 where the he autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by the formula

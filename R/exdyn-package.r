@@ -4,4 +4,4 @@
 #' @docType package
 #' @useDynLib exdyn
 #' @importFrom Rcpp sourceCpp
-NULL
+"_PACKAGE"

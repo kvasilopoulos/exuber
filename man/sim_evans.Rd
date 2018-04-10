@@ -26,5 +26,12 @@ a numeric vector of length n
 The following generating process simulates a rational bubble that is always positive and collapses periodically.
 }
 \details{
+If \eqn{B_t \leq \alpha}{B[t] \le \alpha}
 
+\deqn{B_{t+1} =  (1+r) B_t u_{t+1}}{B[t+1]= (1+r)*B[t]*u[t+1]}
+
+If \eqn{B_t > \alpha}{B[t] > \alpha}
+
+\deqn{B_{t+1} =  \delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
+\delta*(1+r)/\pi* (B[t]-\delta/(1+r))*u[t+1]}
 }

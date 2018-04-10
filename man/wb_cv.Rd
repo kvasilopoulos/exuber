@@ -25,6 +25,11 @@ a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistic
 \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling scheme which is asymptotically robust to
 non-stationary volatility.
 }
+\details{
+This approach involves applying wild bootstrap re-sampling scheme to the first difference of the raw
+data and allow to construct bootstrap analogues of the PWY tst which are asymptotically robust to non-stationary
+volatility. The wild boostrap can replicate the pattern of heteroskedasticity present in the shocks.
+}
 \references{
 Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
 in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.

@@ -14,11 +14,11 @@ sim_dgp1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
 
 \item{tf}{a value in (te,n) dating the termination of bubble collapse}
 
+\item{c}{a positive  value determining the value of the constant in the autoregressive coeffcient}
+
 \item{alpha}{a positve value in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
 
 \item{sigma}{a posiitve number indicating the standard deviation of the innovations}
-
-\item{ci}{a positive  value determining the value of the constant in the autoregressive coeffcient}
 }
 \value{
 a numeric vector of length n
@@ -30,7 +30,7 @@ mechanism, a single mildy explosive episode, collapse, and subsequent renewal of
 \details{
 The data generating process can be described with the following equation:
 \deqn{X_t = X_{t-1}1\{t < \tau_e\}+ \delta_T X_{t-1}1\{\tau_e \leq t\leq \tau_f\} +
-\left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t < \leq \tau_f\}}{X[t] =
+\left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}}{X[t] =
 X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
 (\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf}}
 

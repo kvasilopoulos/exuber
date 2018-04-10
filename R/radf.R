@@ -3,9 +3,9 @@
 #' \code{radf} returns the t-statistics from a recursive augmented dickey fuller test
 #'
 #' @param x a data.frame or matrix
-#' @param minw a positive integer
+#' @param minw a positive integer.
 #' @param lag a non-negative integer
-#' @param format a character string. If not specified, the default value will be
+#' @param format a character string.
 #'
 #' @return a list
 #'
@@ -23,17 +23,14 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
   x  <- as.matrix(x)
   nc <- NCOL(x)
   nr <- NROW(x)
-
-  stopifnot(is.positive(minw))
-  stopifnot(is.nonnegeative(lag))
-
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
   } else if (minw < 3) {
     stop( "Argument 'minw' is too small")
   }
-
+  is.positive.int(minw)
+  is.nonnegeative.int(lag)
 
   if (is.null(colnames(x))) {
     colnames(x) <- paste0("series", seq(1, nc, 1))

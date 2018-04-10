@@ -4,7 +4,26 @@
 \name{exdyn}
 \alias{exdyn}
 \alias{exdyn-package}
+\alias{exdyn-package}
 \title{exdyn.}
 \description{
 exdyn.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/kvasilopoulos/exdyn}
+  \item Report bugs at \url{https://github.com/kvasilopoulos/exdyn/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Vasilopoulos Kostas \email{kostasvasilo91@gmail.com}
+
+Authors:
+\itemize{
+  \item Pavlidis Eftymios \email{e.pavlidis@lancaster.ac.uk}
+  \item Simon Spavound \email{sdfasdfa}
+}
+
 }

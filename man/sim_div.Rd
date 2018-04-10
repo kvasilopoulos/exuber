@@ -4,8 +4,7 @@
 \alias{sim_div}
 \title{Simulation of dividends}
 \usage{
-sim_div(n, mu, sigma, r = 0.05, initval = 1.3, logd = FALSE,
-  output = c("pf", "d"))
+sim_div(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d"))
 }
 \arguments{
 \item{n}{a positive integer indicating the number of simulations}
@@ -16,11 +15,9 @@ sim_div(n, mu, sigma, r = 0.05, initval = 1.3, logd = FALSE,
 
 \item{r}{a positive value indicationg the expansion of the bubble}
 
-\item{initval}{initial value}
+\item{log}{a logical. If true dividends follow a lognormal distribution}
 
 \item{output}{a character vector. Is set to either return fundamental price('pf') or dividend series('d')}
-
-\item{log}{a logical. If true dividends follow a lognormal distribution}
 }
 \value{
 a numeric vector of length n
@@ -49,9 +46,8 @@ where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. T
 
 \deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
 
-where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}.
-
-All of the parameter values are obtained from West(1988).
+where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}. All of the parameter values are
+obtained from West(1988).
 }
 \examples{
 # Price is the sum of bubble component and fundamental component

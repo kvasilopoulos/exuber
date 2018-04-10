@@ -14,17 +14,13 @@
 #' @import foreach
 #' @import parallel
 #' @import doSNOW
+#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @export
 #'
 mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
 
-  if (!n == round(n) | n <= 0) {
-    stop("Arguement 'n' should be a positive integer")
-  }
-
-  if (!nrep == round(nrep) | n <= 0) {
-    stop("Arguement 'nrep' should be a positive integer")
-  }
+  is.positive.int(n)
+  is.positive.int(nrep)
 
   if (missing(minw)) {
     r0 = 0.01 + 1.8 / sqrt(n)
@@ -34,8 +30,8 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
   } else if (minw < 3) {
     stop( "Argument 'minw' is too small")
   }
-
-  if (!is.logical(parallel)) stop("Arguement 'parallel' should be a logical")
+  is.nonnegeative.int(minw)
+  stopifnot(is.logical(parallel))
 
   pb <- txtProgressBar(max = nrep, style = 3)
   if (parallel) {

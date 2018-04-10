@@ -9,11 +9,11 @@ radf(x, minw, lag = 0, format = "\%Y-\%m-\%d")
 \arguments{
 \item{x}{a data.frame or matrix}
 
-\item{minw}{a positive integer}
+\item{minw}{a positive integer.}
 
 \item{lag}{a non-negative integer}
 
-\item{format}{a character string. If not specified, the default value will be}
+\item{format}{a character string.}
 }
 \value{
 a list

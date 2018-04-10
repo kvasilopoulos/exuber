@@ -177,13 +177,14 @@ shade <- function(x){
 #'
 #' @return a list
 #'
-#' @import tidyr
+#' @importFrom tidyr %>% drop_na
 #' @export
 #'
-date_stamp <- function(x, y, option = c("badf", "bsadf")){
+datestamp <- function(x, y, option = c("badf", "bsadf")){
 
   if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv'
+                                                    or 'wb_cv'")
   option <- match.arg(option)
 
   dating <- x$info$date[-c(1:(x$info$minw + 1 + x$info$lag))]
@@ -208,7 +209,7 @@ date_stamp <- function(x, y, option = c("badf", "bsadf")){
 
 #' Plotting
 #'
-#' @inheritParams date_stamp
+#' @inheritParams datestamp
 #' @param breaks_x plotting option
 #' @param format_plot plotiing option
 #' @param breaks_y plotting option
@@ -232,7 +233,8 @@ plot.radf <- function(x, y,
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
   if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv'
+                                                    or 'wb_cv'")
   if (missing(breaks_x)) {
     if (class(x$info$date) == "Date") {
       breaks_x = "3 months"
@@ -244,13 +246,13 @@ plot.radf <- function(x, y,
   if (!missing(breaks_y) & plot_type == "single") {
     warning("Arguement 'breaks_y' does not need to be specified when plot_type is 'multiple'")
   }
-
   choice <- diagnostics(x, y, echo = FALSE)
   iter <- match(choice, x$info$names)
   if (is.null(iter)) stop("Plotting is only for the series that reject the Null Hypothesis")
-
+  if (length(choice) == 1 & plot_type == "multiple" )
+    warning("Argument 'plot_type' should be set to 'single' when there is only one series to plot")
   dating <- x$info$date[-c(1:(x$info$minw + 1 + x$info$lag))]
-  shade.temp <- date_stamp(x, y, option = option)
+  shade.temp <- datestamp(x, y, option = option)
 
   if (plot_type == "multiple") {
 
@@ -315,7 +317,8 @@ plot.radf <- function(x, y,
     geom_segment(aes(x = start_date, xend = end_date, y = key, yend = key), size = 7) +
     ylab("") + xlab("") + theme_bw() +
     theme(panel.grid.major.y = element_blank() ,legend.position = "none",
-          plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
+          plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold",
+                                                                         size = 8, hjust = 0))
     if (class(x$info$date) == "Date") {
       h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_plot)
     }else{
