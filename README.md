@@ -53,7 +53,7 @@ Report
 ``` r
 summary(tstats, mc_critical)
 diagnostics(tstats, mc_critical)
-date.stamp(tstats, mc_critical)
+datestamp(tstats, mc_critical)
 ```
 
 Plotting
