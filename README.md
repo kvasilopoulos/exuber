@@ -62,7 +62,7 @@ Plotting
 The output of plot will be a list
 
 ``` r
-p <- plot(tstats, mc_critical, break_x = "2 weeks", format = "%m-%Y")
+p <- plot(tstats, mc_critical, breaks_x = "2 weeks", format = "%m-%Y")
 
 library(gridExtra)
 library(grid)
