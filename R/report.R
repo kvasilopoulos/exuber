@@ -244,7 +244,7 @@ plot.radf <- function(x, y,
   }
 
   if (!missing(breaks_y) & plot_type == "single") {
-    warning("Arguement 'breaks_y' does not need to be specified when plot_type is 'multiple'")
+    warning("Argument 'breaks_y' does not need to be specified when plot_type is 'multiple'")
   }
   choice <- diagnostics(x, y, echo = FALSE)
   iter <- match(choice, x$info$names)
