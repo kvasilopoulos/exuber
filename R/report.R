@@ -1,7 +1,7 @@
 #' Title
 #'
 #' @param x of class 'radf'.
-#' @param y the output of mc_cv or wb_cv
+#' @param y the output of mc_cv or wb_cv.
 #'
 #' @export
 summary.radf <- function(x, y){
@@ -170,12 +170,15 @@ shade <- function(x){
 
 #' Date stamping the bubble period(s)
 #'
-#' Compute the origination, termination and duration of the bubble episode(s)
+#' \code{datestamp} computes the origination, termination and duration of the bubble episode(s) detected by
+#' \code{radf}. Setting \code{min.duration} allows temporary spikes above the critical value sequence to be removed.
 #'
 #' @inheritParams summary.radf
-#' @param option the default value is "badf"
+#' @param option the default value is "badf".
+#' @param min.duration the minimum duration of an explosive period for it to be reported. Defaults to log(T).
 #'
-#' @return a list
+#' @return Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.
+#' @references Add reference to Phillips paper here.
 #'
 #' @importFrom tidyr %>% drop_na
 #' @export

@@ -12,7 +12,7 @@ diagnostics(x, y, echo = TRUE)
 \arguments{
 \item{x}{of class 'radf'.}
 
-\item{y}{the output of mc_cv or wb_cv}
+\item{y}{the output of mc_cv or wb_cv.}
 
 \item{echo}{logical. TRUE if you to print the results}
 }

@@ -4,18 +4,25 @@
 \alias{datestamp}
 \title{Date stamping the bubble period(s)}
 \usage{
-datestamp(x, y, option = c("badf", "bsadf"))
+datestamp(x, y, option = c("badf", "bsadf"),
+  min.duration = log(NROW(x$info$date)))
 }
 \arguments{
 \item{x}{of class 'radf'.}
 
-\item{y}{the output of mc_cv or wb_cv}
+\item{y}{the output of mc_cv or wb_cv.}
 
-\item{option}{the default value is "badf"}
+\item{option}{the default value is "badf".}
+
+\item{min.duration}{the minimum duration of an explosive period for it to be reported. Defaults to log(T).}
 }
 \value{
-a list
+Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.
 }
 \description{
-Compute the origination, termination and duration of the bubble episode(s)
+\code{datestamp} computes the origination, termination and duration of the bubble episode(s) detected by
+\code{radf}. Setting \code{min.duration} allows temporary spikes above the critical value sequence to be removed.
+}
+\references{
+Add reference to Phillips paper here.
 }

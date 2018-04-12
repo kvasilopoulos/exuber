@@ -11,9 +11,9 @@
 \arguments{
 \item{x}{of class 'radf'.}
 
-\item{y}{the output of mc_cv or wb_cv}
+\item{y}{the output of mc_cv or wb_cv.}
 
-\item{option}{the default value is "badf"}
+\item{option}{the default value is "badf".}
 
 \item{breaks_x}{plotting option}
 
