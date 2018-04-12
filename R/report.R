@@ -233,7 +233,7 @@ plot.radf <- function(x, y,
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
   if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv'
+  if (is.list(y) & length(y$info$method) == 0) stop("Argument 'y' should be the result of 'mc_cv'
                                                     or 'wb_cv'")
   if (missing(breaks_x)) {
     if (class(x$info$date) == "Date") {
