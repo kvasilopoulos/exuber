@@ -180,11 +180,12 @@ shade <- function(x){
 #' @importFrom tidyr %>% drop_na
 #' @export
 #'
-datestamp <- function(x, y, option = c("badf", "bsadf")){
+datestamp <- function(x, y, option = c("badf", "bsadf"), min.duration = log(NROW(x$info$date))){
 
   if (any(class(x) != c("list","radf"))) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv'
+  if (is.list(y) & length(y$info$method) == 0) stop("Argument 'y' should be the result of 'mc_cv'
                                                     or 'wb_cv'")
+
   option <- match.arg(option)
 
   dating <- x$info$date[-c(1:(x$info$minw + 1 + x$info$lag))]
@@ -199,11 +200,14 @@ datestamp <- function(x, y, option = c("badf", "bsadf")){
     temp3 <- data.frame(dating[temp2$b[, i]],
                         dating[temp2$e[, i]],
                         temp2$e[, i] - temp2$b[, i]) %>% drop_na()
-    colnames(temp3) <- c("Peak", "Trough","Duration")
+    colnames(temp3) <- c("Peak", "Trough", "Duration")
     rect.regions[[j]] <- temp3
     j <- j + 1
   }
   names(rect.regions) <- x$info$names[iter]
+
+  rect.regions <- rect.regions[[1]][rect.regions[[1]][, 3] >= min.duration, ]
+
   return(rect.regions)
 }
 
