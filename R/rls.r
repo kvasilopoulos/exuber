@@ -1,5 +1,5 @@
 
-# Testing arguements ------------------------------------------------------
+# Testing arguments ------------------------------------------------------
 
 is.positive.int <- function(arg) {
   level <- deparse(substitute(arg))
