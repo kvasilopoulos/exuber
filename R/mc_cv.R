@@ -9,7 +9,7 @@
 #'
 #' @return a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
 #'
-#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical valuesst
+#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
 #' @import foreach
 #' @import parallel
@@ -78,8 +78,13 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
                  sadf_cv  = sadf_critical,
                  gsadf_cv = gsadf_critical,
                  badf_cv  = badf_critical,
-                 bsadf_cv = bsadf_critical,
-                 info     = list(method = "Monte Carlo",
-                                  iter = nrep, minw = minw))
+                 bsadf_cv = bsadf_critical)
+
+  attr(output, "class")  <- append(class(output), "cv")
+  attr(output, "iter")   <- nrep
+  attr(output, "method") <- "Monte Carlo"
+  attr(output, "minw")   <- minw
+  attr(output, "col_names") <- colnames(x)
+
   return(output)
 }

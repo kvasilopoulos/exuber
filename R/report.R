@@ -9,21 +9,21 @@ report <- function(x) UseMethod("report")
 report <- function(x, y){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
-  if (attributes(x)$minw != y$info$minw) {
+  if (is.list(y) & length(attributes(y)$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  if (attributes(x)$minw != attributes(y)$minw) {
     stop("The critical values should have the same minumum window with the t-statistics!")
   }
   ret <- list()
-  if (y$info$method == "Wild Bootstrap") {
+  if (attributes(y)$method == "Wild Bootstrap") {
     for (i in seq_along(attributes(x)$col_names)) {
       df1 <- c(x$adf[i], y$adf_cv[i, ])
       df2 <- c(x$sadf[i], y$sadf_cv[i, ])
       df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
       df <- data.frame( rbind(df1,df2,df3), row.names = c("ADF","SADF","GSADF"))
       colnames(df) <- c("t-stat", "90%", "95%", "95%")
-      df <- append(df,df)
+      ret[[i]] <- df
     }
-  }else if (y$info$method == "Monte Carlo") {
+  }else if (attributes(y)$method == "Monte Carlo") {
     for (i in seq_along(attributes(x)$col_names)) {
       df1 <- c(x$adf[i], y$adf_cv)
       df2 <- c(x$sadf[i], y$sadf_cv)
@@ -34,9 +34,9 @@ report <- function(x, y){
     }
   }
 
-  attr(ret, "minw") <- y$info$minw
+  attr(ret, "minw") <- attributes(y)$minw
   attr(ret, "lag") <- attributes(x)$lag
-  attr(ret, "method") <- y$info$method
+  attr(ret, "method") <- attributes(y)$method
 
   names(ret) <- attributes(x)$col_names
   class(ret) <- c("list","report")
@@ -72,7 +72,7 @@ diagnostics <- function(x) UseMethod("diagnostics")
 diagnostics <- function(x, y){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0)
+  if (is.list(y) & length(attributes(y)$method) == 0)
     stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
   # stopifnot(is.logical(echo))
 
@@ -81,7 +81,7 @@ diagnostics <- function(x, y){
   sig <- NULL
 
   for (i in seq_along(nm)) {
-    if (y$info$method == "Monte Carlo") {
+    if (attributes(y)$method == "Monte Carlo") {
       if (x$gsadf[i] > y$gsadf_cv[1]) {
         if (x$gsadf[i] > y$gsadf_cv[2]) {
           if (x$gsadf[i] > y$gsadf_cv[3]) {
@@ -152,15 +152,15 @@ dummy.plot <- function(x, y, option){
   for (i in seq_along(attributes(x)$col_names)) {
     for (j in 1:(NROW(x$bsadf))) {
       if (option == "badf") {
-        if (y$info$method == "Monte Carlo") {
+        if (attributes(y)$method == "Monte Carlo") {
           if (x$bsadf[j, i] > y$badf_cv[j, 2]) dummy.plot[j, i] = 1
-        }else if (y$info$method == "Wild Bootstrap") {
+        }else if (attributes(y)$method == "Wild Bootstrap") {
           if (x$bsadf[j, i] > y$badf_cv[j, 2, i]) dummy.plot[j, i] = 1
         }
       }else if (option == "bsadf") {
-        if (y$info$method == "Monte Carlo") {
+        if (attributes(y)$method == "Monte Carlo") {
           if (x$bsadf[j, i] > y$bsadf_cv[j, 2]) dummy.plot[j, i] = 1
-        }else if (y$info$method == "Wild Bootstrap") {
+        }else if (attributes(y)$method == "Wild Bootstrap") {
           if (x$bsadf[j, i] > y$bsadf_cv[j, 2, i]) dummy.plot[j, i] = 1
         }
       }
@@ -213,7 +213,7 @@ datestamp <- function(x, y, option = c("badf", "bsadf"),
                       min_duration = 0){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Argument 'y' should be the result of 'mc_cv'or 'wb_cv'")
+  if (is.list(y) & length(attributes(y)$method) == 0) stop("Argument 'y' should be the result of 'mc_cv'or 'wb_cv'")
   option <- match.arg(option)
   is.nonnegeative.int(min_duration)
 
@@ -251,7 +251,7 @@ datestamp <- function(x, y, option = c("badf", "bsadf"),
 #' @import tidyr
 #' @importFrom utils head
 #' @importFrom graphics plot
-#' @importFrom  magrittr set_colnames
+#' @importFrom magrittr set_colnames
 #' @importFrom rlang sym
 #'
 plot.radf <- function(x, y,
@@ -264,7 +264,7 @@ plot.radf <- function(x, y,
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(y$info$method) == 0) stop("Argument 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  if (is.list(y) & length(attributes(y)$method) == 0) stop("Argument 'y' should be the result of 'mc_cv' or 'wb_cv'")
   if (missing(breaks_x)) if (class(attributes(x)$date) == "Date") breaks_x = "3 months" else breaks_x = 10
   if (!missing(breaks_y) & plot_type == "single")
     warning("Argument 'breaks_y' does not need to be specified when plot_type is set to 'multiple'")
@@ -283,17 +283,17 @@ plot.radf <- function(x, y,
     dat <- vector("list", length(choice))
     for (i in iter) {
       if (option == "badf") {
-        if (y$info$method == "Monte Carlo") {
+        if (attributes(y)$method == "Monte Carlo") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
                        if (attributes(x)$lag == 0) cv = y$badf_cv[,2] else cv =  head(y$badf_cv[, 2], -(attributes(x)$lag), row.names = NULL))
-        } else if (y$info$method == "Wild Bootstrap") {
+        } else if (attributes(y)$method == "Wild Bootstrap") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
                        if (attributes(x)$lag == 0) cv = y$badf_cv[,2, i] else cv =  head(y$badf_cv[, 2, i], -(attributes(x)$lag), row.names = NULL))
       }else if (option == "bsadf") {
-        if (y$info$method == "Monte Carlo") {
+        if (attributes(y)$method == "Monte Carlo") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
                        if (attributes(x)$lag == 0) cv = y$bsadf_cv[,2] else  cv =  head(y$bsadf_cv[, 2], -(attributes(x)$lag), row.names = NULL))
-        } else if (y$info$method == "Wild Bootstrap") {
+        } else if (attributes(y)$method == "Wild Bootstrap") {
           dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
                        if (attributes(x)$lag == 0) cv = y$bsadf_cv[,2, i] else  cv =  head(y$bsadf_cv[, 2, i], -(attributes(x)$lag), row.names = NULL))
         }
@@ -349,6 +349,6 @@ plot.radf <- function(x, y,
       h <- h + scale_x_continuous(breaks = seq(0, max(attributes(x)$date), breaks_x))
     }
   }
-  print(h)
-  return(invisible(h))
+
+  return(h)
 }

@@ -1,7 +1,7 @@
 #' Explosive Dynamics
 #'
 #' @name exdyn
-#' @useDynLib exdyn, .registration = TRUE
+#' @useDynLib exdyn
 #' @importFrom Rcpp sourceCpp
 #' @docType package
 

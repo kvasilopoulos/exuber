@@ -18,3 +18,13 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_exdyn_srls_gsadf_cpp", (DL_FUNC) &_exdyn_srls_gsadf_cpp, 3},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_exdyn(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

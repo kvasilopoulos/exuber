@@ -117,8 +117,13 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
                  sadf_cv  = sadf_critical,
                  gsadf_cv = gsadf_critical,
                  badf_cv  = badf_critical,
-                 bsadf_cv = bsadf_critical,
-                 info     = list(method = "Wild Bootstrap",
-                                 iter = nboot, minw = minw))
+                 bsadf_cv = bsadf_critical)
+
+  attr(output, "class")  <- append(class(output), "cv")
+  attr(output, "iter")   <- nboot
+  attr(output, "method") <- "Wild Bootstrap"
+  attr(output, "minw")   <- minw
+  attr(output, "col_names") <- colnames(x)
+
   return(output)
 }

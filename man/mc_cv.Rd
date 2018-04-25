@@ -22,5 +22,5 @@ a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
 \code{mc_cv} is used to compute
 }
 \seealso{
-\code{\link{wb_cv}} for Wild Bootstrapped critical valuesst
+\code{\link{wb_cv}} for Wild Bootstrapped critical values
 }
