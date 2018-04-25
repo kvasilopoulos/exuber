@@ -47,7 +47,7 @@ Report
 ------
 
 ``` r
-summary(ts, mc)
+report(ts, mc)
 diagnostics(ts, mc)
 datestamp(ts, mc)
 ```

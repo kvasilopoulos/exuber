@@ -59,7 +59,7 @@ wb <- wb_cv(dfrm, nboot = 500, parallel = T)
 ##Report
 
 ```{r Report, eval = FALSE}
-summary(ts, mc)
+report(ts, mc)
 diagnostics(ts, mc)
 datestamp(ts, mc)
 

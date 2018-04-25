@@ -15,6 +15,3 @@ is.between <- function(x, arg1, arg2) {
   if (x < arg1 | x > arg2) stop(sprintf("Argument '%s' should be a be between '%d' and '%d'", level, arg1, arg2))
 }
 
-# .onUnload <- function(libpath) {
-#   library.dynam.unload("exdyn", libpath)
-# }
