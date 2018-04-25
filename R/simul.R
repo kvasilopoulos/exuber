@@ -176,6 +176,7 @@ sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n
 #' @export
 #' @return a numeric vector of length n
 #'
+#' @importFrom stats rbinom
 #' @details
 #' Blanchard's Bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
 #' In the first regime, the bubble grows expontentially at the rate \eqn{(1+r)\pi}, whereas in the
@@ -227,6 +228,8 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
 #' @param alpha positive
 #'
 #' @return a numeric vector of length n
+#'
+#' @importFrom stats rbinom
 #'
 #' @details
 #' If \eqn{B_t \leq \alpha}{B[t] \le \alpha}

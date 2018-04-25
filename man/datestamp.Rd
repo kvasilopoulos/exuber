@@ -4,8 +4,7 @@
 \alias{datestamp}
 \title{Date stamping the bubble period(s)}
 \usage{
-datestamp(x, y, option = c("badf", "bsadf"),
-  min.duration = log(NROW(x$info$date)))
+datestamp(x, y, option = c("badf", "bsadf"), min_duration = 0)
 }
 \arguments{
 \item{x}{of class 'radf'.}
@@ -14,7 +13,7 @@ datestamp(x, y, option = c("badf", "bsadf"),
 
 \item{option}{the default value is "badf".}
 
-\item{min.duration}{the minimum duration of an explosive period for it to be reported. Defaults to log(T).}
+\item{min_duration}{the minimum duration of an explosive period for it to be reported. Defaults to log(T).}
 }
 \value{
 Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.

@@ -1,21 +1,4 @@
 
-# Testing arguments ------------------------------------------------------
-
-is.positive.int <- function(arg) {
-  level <- deparse(substitute(arg))
-  if (arg != round(arg) || arg <= 0) stop(sprintf("Argument '%s' should be a positive integer", level))
-}
-
-is.nonnegeative.int <- function(arg) {
-  level <- deparse(substitute(arg))
-  if (arg != round(arg) | arg < 0) stop(sprintf("Argument '%s' should be a non-negative integer", level))
-}
-
-is.between <- function(x, arg1, arg2) {
-  level <- deparse(substitute(x))
-  if (x < arg1 | x > arg2) stop(sprintf("Argument '%s' should be a be between '%d' and '%d'", level, arg1, arg2))
-}
-
 # Multiple recursive linear regression  -----------------------------------
 
 
@@ -56,12 +39,13 @@ rls_gsadf <- function(yxmat, wmin){
     }
   }
   adf   <-  tstat[end, 1] # or badf[end]
+  radf  <-  diag(tstat)
   badf  <-  tstat[, 1]
   sadf  <-  max(tstat[, 1])
   bsadf <-  apply(tstat, 1, max) # or max(badf)
   gsadf <-  max(bsadf)
-  return(list(adf = adf, badf = badf, sadf = sadf,
-              bsadf = bsadf, gsadf = gsadf))
+  return(list(adf = adf, radf = radf, badf = badf,
+              sadf = sadf, bsadf = bsadf, gsadf = gsadf))
 }
 
 

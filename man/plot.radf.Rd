@@ -5,15 +5,15 @@
 \title{Plotting}
 \usage{
 \method{plot}{radf}(x, y, option = c("badf", "bsadf"), breaks_x,
-  format_plot = "\%m-\%Y", breaks_y = 1, plot_type = c("multiple",
-  "single"))
+  format_plot = "\%m-\%Y", breaks_y, plot_type = c("multiple", "single"),
+  ...)
 }
 \arguments{
 \item{x}{of class 'radf'.}
 
 \item{y}{the output of mc_cv or wb_cv.}
 
-\item{option}{the default value is "badf".}
+\item{option}{choose bertwsadfad}
 
 \item{breaks_x}{plotting option}
 
@@ -22,6 +22,8 @@
 \item{breaks_y}{plotting option}
 
 \item{plot_type}{type gannt if true}
+
+\item{...}{not used}
 }
 \value{
 a list of ggplot

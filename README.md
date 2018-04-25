@@ -23,37 +23,33 @@ This is a basic example which shows you how use exdyn:
 
 ``` r
 library(exdyn)
+set.seed(123)
+a1 <- sim_dgp1(200) # one bubble
+a2 <- sim_dgp2(200) # two bubbles
+a3 <- sim_blan(200) # blanchard model
+a4 <- sim_evans(200) # evans model
 
-## Simulate a random walk with 300 observations
-library(quantmod)
-getSymbols("AAPL")
-a1 <- AAPL[,"AAPL.Close"]
-set.seed(199)
-a2 <- sim_ar(200)
-set.seed(199)
-a3 <- sim_rw(200)
-data <- data.frame(a1[1:200], a2, a3)
-colnames(data) <- c("AAPL","ar1","rw")
 
-# Visualize the data
-plot.ts(data)
+dfrm <- data.frame(a1, a2, a3, a4)
+colnames(dfrm) <- c("oneb", "twob", "blan", "evans")
 
-# Compute the test-statistics
-tstats <- radf(data)
 
-# Simulate the critical values using Monte-Carlo
-# We use little repetitions for reproducible easing
-mc_critical <- mc_cv(NROW(data), 400, parallel = T)
-# wb_critical <- wb_cv(dfrm, 40, parallel = T) 
+
+ts <- radf(dfrm, lag = 1)
+
+# Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
+## Use 500 repetions(boostraps) for faster computation, default = 2000
+mc <- mc_cv(NROW(dfrm), nrep = 500, parallel = T)
+wb <- wb_cv(dfrm, nboot = 500, parallel = T)
 ```
 
 Report
 ------
 
 ``` r
-summary(tstats, mc_critical)
-diagnostics(tstats, mc_critical)
-datestamp(tstats, mc_critical)
+summary(ts, mc)
+diagnostics(ts, mc)
+datestamp(ts, mc)
 ```
 
 Plotting
@@ -62,15 +58,14 @@ Plotting
 The output of plot will be a list
 
 ``` r
-p <- plot(tstats, mc_critical, breaks_x = "2 weeks", format = "%m-%Y")
 
-library(gridExtra)
-library(grid)
+# All together
+plot(ts, mc, plot_type = "single", breaks_x = 20)
 
-do.call(grid.arrange, p)
+# Individually
+plot(ts, mc, plot_type = "multiple", breaks_x = 20)
 
-# Add ggtitles
-titlenames <- diagnostics(tsats, mc_critical, echo = FALSE)
-for (i in seq_along(d)) pnames[[i]] <- p[[i]]+ggtitle(titlenames[i])
-do.call(grid.arrange, pnames)
+library(grid);library(gridExtra)
+p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
+do.call(grid.arrange, c(p1, ncol = 2))
 ```

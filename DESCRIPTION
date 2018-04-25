@@ -12,7 +12,7 @@ Description: More about what it does (maybe more than one line)
 License: GPL-3 + file LICENSE
 URL: https://github.com/kvasilopoulos/exdyn
 BugReports: https://github.com/kvasilopoulos/exdyn/issues
-Depends: R(>= 3.4.2)
+Depends: R (>= 3.4.2)
 Imports: foreach,
     parallel,
     doSNOW,
@@ -21,8 +21,11 @@ Imports: foreach,
     magrittr,
     tidyr,
     readr,
-    Rcpp
-Suggests: 
+    Rcpp,
+    rlang
+Suggests:
+    knitr,
+    rmarkdown
 LinkingTo: Rcpp
 Encoding: UTF-8
 LazyData: true

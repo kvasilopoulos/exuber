@@ -17,6 +17,7 @@
 #' 6(4), 1043-1078.
 #'
 #' @importFrom readr parse_datetime
+#' @importFrom stats embed
 #' @export
 radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
 
@@ -69,19 +70,30 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
                 badf  = badf[-c(1:(minw)), , drop = F] ,
                 sadf  = sadf,
                 bsadf = bsadf[-c(1:(minw)), , drop = F] ,
-                gsadf = gsadf,
-                info = list(lag = lag, minw = minw, names = colnames(x)))
+                gsadf = gsadf)
+                #info = list(lag = lag, minw = minw, names = colnames(x)))
 
+
+  # if (is.character(rownames(x))) {
+  #   value$info$date <- as.Date(parse_datetime(rownames(x), format = format))
+  # } else if (is.numeric(rownames(x))) {
+  #   value$info$date <- rownames(x)
+  # }else{
+  #   value$info$date <- seq(1, nr, 1)
+  # }
 
   if (is.character(rownames(x))) {
-    value$info$date <- as.Date(parse_datetime(rownames(x), format = format))
+    attr(value, "date") <- as.Date(parse_datetime(rownames(x), format = format))
   } else if (is.numeric(rownames(x))) {
-    value$info$date <- rownames(x)
+    attr(value, "date") <- rownames(x)
   }else{
-    value$info$date <- seq(1, nr, 1)
+    attr(value, "date") <- seq(1, nr, 1)
   }
+  attr(value, "class") <- "radf"#append(class(value), "radf")
+  attr(value, "lag") <- lag
+  attr(value, "minw") <- minw
+  attr(value, "col_names") <- colnames(x)
 
-  attr(value, "class") <- append(class(value), "radf")
   return(value)
 }
 

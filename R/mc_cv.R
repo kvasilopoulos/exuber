@@ -15,6 +15,7 @@
 #' @import parallel
 #' @import doSNOW
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom stats quantile rnorm
 #' @export
 #'
 mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){

@@ -5,9 +5,9 @@
 \alias{exdyn}
 \alias{exdyn-package}
 \alias{exdyn-package}
-\title{exdyn.}
+\title{Explosive Dynamics}
 \description{
-exdyn.
+Explosive Dynamics
 }
 \seealso{
 Useful links:

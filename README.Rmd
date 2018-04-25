@@ -39,10 +39,10 @@ a1 <- sim_dgp1(200) # one bubble
 a2 <- sim_dgp2(200) # two bubbles
 a3 <- sim_blan(200) # blanchard model
 a4 <- sim_evans(200) # evans model
-a5 <- sim_div(200) # dividends
 
-dfrm <- data.frame(a1, a2, a3, a4, a5)
-colnames(dfrm) <- c("oneb", "twob", "blan", "evans", "div")
+
+dfrm <- data.frame(a1, a2, a3, a4)
+colnames(dfrm) <- c("oneb", "twob", "blan", "evans")
 
 
 
@@ -71,11 +71,14 @@ The output of plot will be a list
 
 ```{r plotting, echo=TRUE, eval = FALSE}
 
-plot(ts, mc, plot.type = "single", breaks_x = 20)
+# All together
+plot(ts, mc, plot_type = "single", breaks_x = 20)
 
+# Individually
+plot(ts, mc, plot_type = "multiple", breaks_x = 20)
 
 library(grid);library(gridExtra)
-p1 <- plot(ts, mc, breaks_x = 20)
-do.call(grid.arrange, c(p1, ncol = 3))
+p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
+do.call(grid.arrange, c(p1, ncol = 2))
 ```
 

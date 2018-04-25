@@ -24,6 +24,7 @@
 #' @import parallel
 #' @import doSNOW
 #' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom stats rnorm quantile
 #' @export
 #'
 wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = FALSE){

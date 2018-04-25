@@ -43,6 +43,7 @@ RcppExport SEXP srls_gsadf_cpp(SEXP ayy, SEXP axx, SEXP amin_win) {
       tstat(min_win + i - 1, j) = (beta - 1)/ sbeta;
     }
   }
+
   NumericVector adf_temp = tstat( n-1, _ );
   double adf = adf_temp(0);
   NumericVector badf = tstat( _, 0 );

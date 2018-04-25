@@ -5,6 +5,6 @@
 NULL
 
 srls_gsadf_cpp <- function(ayy, axx, amin_win) {
-    .Call('_exdyn_srls_gsadf_cpp', PACKAGE = 'exdyn', ayy, axx, amin_win)
+    .Call(`_exdyn_srls_gsadf_cpp`, ayy, axx, amin_win)
 }
 
