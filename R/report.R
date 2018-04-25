@@ -9,7 +9,7 @@ report <- function(x) UseMethod("report")
 report <- function(x, y){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(attributes(y)$method) == 0) stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  if (!inherits(y, "cv")) stop("Arguement 'y' should be of class 'cv'")
   if (attributes(x)$minw != attributes(y)$minw) {
     stop("The critical values should have the same minumum window with the t-statistics!")
   }
@@ -72,9 +72,7 @@ diagnostics <- function(x) UseMethod("diagnostics")
 diagnostics <- function(x, y){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(attributes(y)$method) == 0)
-    stop("Arguement 'y' should be the result of 'mc_cv' or 'wb_cv'")
-  # stopifnot(is.logical(echo))
+  if (!inherits(x, "cv")) stop("Arguement 'y' should be of class'cv'")
 
   nm <- attributes(x)$col_names
   proceed <- NULL
@@ -213,7 +211,7 @@ datestamp <- function(x, y, option = c("badf", "bsadf"),
                       min_duration = 0){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(attributes(y)$method) == 0) stop("Argument 'y' should be the result of 'mc_cv'or 'wb_cv'")
+  if (!inherits(y, "cv")) stop("Argument 'y' should be of class 'cv'")
   option <- match.arg(option)
   is.nonnegeative.int(min_duration)
 
@@ -264,7 +262,7 @@ plot.radf <- function(x, y,
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (is.list(y) & length(attributes(y)$method) == 0) stop("Argument 'y' should be the result of 'mc_cv' or 'wb_cv'")
+  if (!inherits(y, "cv")) stop("Argument 'y' should be of class 'cv'")
   if (missing(breaks_x)) if (class(attributes(x)$date) == "Date") breaks_x = "3 months" else breaks_x = 10
   if (!missing(breaks_y) & plot_type == "single")
     warning("Argument 'breaks_y' does not need to be specified when plot_type is set to 'multiple'")
