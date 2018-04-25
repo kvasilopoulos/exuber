@@ -84,7 +84,6 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
   attr(output, "iter")   <- nrep
   attr(output, "method") <- "Monte Carlo"
   attr(output, "minw")   <- minw
-  attr(output, "col_names") <- colnames(x)
 
   return(output)
 }

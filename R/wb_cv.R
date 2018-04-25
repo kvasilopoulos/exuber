@@ -123,7 +123,6 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
   attr(output, "iter")   <- nboot
   attr(output, "method") <- "Wild Bootstrap"
   attr(output, "minw")   <- minw
-  attr(output, "col_names") <- colnames(x)
 
   return(output)
 }
