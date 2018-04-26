@@ -72,8 +72,10 @@ diagnostics <- function(x) UseMethod("diagnostics")
 diagnostics <- function(x, y){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (!inherits(x, "cv")) stop("Arguement 'y' should be of class'cv'")
-
+  if (!inherits(y, "cv")) stop("Arguement 'y' should be of class 'cv'")
+  if (attributes(x)$minw != attributes(y)$minw) {
+    stop("The critical values should have the same minumum window with the t-statistics!")
+  }
   nm <- attributes(x)$col_names
   proceed <- NULL
   sig <- NULL
@@ -207,8 +209,7 @@ shade <- function(x){
 #' @importFrom rlang sym
 #' @export
 #'
-datestamp <- function(x, y, option = c("badf", "bsadf"),
-                      min_duration = 0){
+datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
   if (!inherits(y, "cv")) stop("Argument 'y' should be of class 'cv'")
