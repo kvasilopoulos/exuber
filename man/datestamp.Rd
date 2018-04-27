@@ -7,9 +7,9 @@
 datestamp(x, y, option = c("badf", "bsadf"), min_duration = 0)
 }
 \arguments{
-\item{x}{of class 'radf'.}
+\item{x}{a radf object}
 
-\item{y}{the output of mc_cv or wb_cv.}
+\item{y}{a cv oject}
 
 \item{option}{the default value is "badf".}
 

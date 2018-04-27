@@ -2,10 +2,10 @@
 #'
 #' \code{radf} returns the t-statistics from a recursive augmented dickey fuller test
 #'
-#' @param x a data.frame or matrix
+#' @param x a data.frame or matrix.
 #' @param minw a positive integer.
-#' @param lag a non-negative integer
-#' @param format a character string.
+#' @param lag a non-negative integer.
+#' @param format a character string. If not specified, it will try "\%Y-\%m-\%d".
 #'
 #' @return a list
 #'

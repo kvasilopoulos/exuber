@@ -7,13 +7,13 @@
 radf(x, minw, lag = 0, format = "\%Y-\%m-\%d")
 }
 \arguments{
-\item{x}{a data.frame or matrix}
+\item{x}{a data.frame or matrix.}
 
 \item{minw}{a positive integer.}
 
-\item{lag}{a non-negative integer}
+\item{lag}{a non-negative integer.}
 
-\item{format}{a character string.}
+\item{format}{a character string. If not specified, it will try "\%Y-\%m-\%d".}
 }
 \value{
 a list

@@ -2,8 +2,8 @@ report <- function(x) UseMethod("report")
 
 #' Title
 #'
-#' @param x of class 'radf'.
-#' @param y the output of mc_cv or wb_cv.
+#' @param x a radf object
+#' @param y a cv oject
 #'
 #' @export
 report <- function(x, y){
@@ -62,8 +62,9 @@ print.report <- function(x, ...) {
   }
 }
 
-diagnostics <- function(x) UseMethod("diagnostics")
 
+
+diagnostics <- function(x) UseMethod("diagnostics")
 
 
 #' @inheritParams report
@@ -117,10 +118,15 @@ diagnostics <- function(x, y){
       }
     }
   }
-  attr(proceed, "sig") <- sig
-  class(proceed) <- "diagnostics"
-  names(proceed) <- attributes(x)$col_names
-  proceed
+
+  if (is.null(proceed)) {
+  stop("Cannot reject H0, do not proceed for date stamping or plotting!")
+  }else{
+    attr(proceed, "significance") <- sig
+    class(proceed) <- "diagnostics"
+    names(proceed) <- attributes(x)$col_names
+    proceed
+  }
 }
 
 #' @export
@@ -212,7 +218,10 @@ shade <- function(x){
 datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0){
 
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (!inherits(y, "cv")) stop("Argument 'y' should be of class 'cv'")
+  if (!inherits(y, "cv")) stop("Arguement 'y' should be of class 'cv'")
+  if (attributes(x)$minw != attributes(y)$minw) {
+    stop("The critical values should have the same minumum window with the t-statistics!")
+  }
   option <- match.arg(option)
   is.nonnegeative.int(min_duration)
 
@@ -236,11 +245,13 @@ datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0){
 #'
 #' @inheritParams report
 #' @param breaks_x plotting option
-#' @param format_plot plotiing option
+#' @param format_plot a cv object
 #' @param breaks_y plotting option
 #' @param option choose bertwsadfad
-#' @param plot_type type gannt if true
-#' @param ... not used
+#' @param plot_type for multivariate radf objects, "multiple" plots the series on multiple
+#' plots and "single" superimposes them on a single plot datestamping only the period of
+#' explosiveness. Default is "multiple".
+#' @param ... additional graphical passed on in method dispatch. Currently not used
 #'
 #' @return a list of ggplot
 #' @export
@@ -263,7 +274,10 @@ plot.radf <- function(x, y,
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
-  if (!inherits(y, "cv")) stop("Argument 'y' should be of class 'cv'")
+  if (!inherits(y, "cv")) stop("Arguement 'y' should be of class 'cv'")
+  if (attributes(x)$minw != attributes(y)$minw) {
+    stop("The critical values should have the same minumum window with the t-statistics!")
+  }
   if (missing(breaks_x)) if (class(attributes(x)$date) == "Date") breaks_x = "3 months" else breaks_x = 10
   if (!missing(breaks_y) & plot_type == "single")
     warning("Argument 'breaks_y' does not need to be specified when plot_type is set to 'multiple'")
@@ -271,9 +285,9 @@ plot.radf <- function(x, y,
   choice <- diagnostics(x, y)
   iter <- match(choice, attributes(x)$col_names)
   if (is.null(iter)) stop("Plotting is only for the series that reject the Null Hypothesis")
-  if (length(choice) == 1 & plot_type == "multiple" )
-    warning("Argument 'plot_type' should be set to 'single' when there is only one series to plot")
-
+  if (length(choice) == 1 & plot_type == "single" ) {
+    warning("Argument 'plot_type' should be set to 'multiple' when there is only one series to plot")
+  }
   dating <- attributes(x)$date[-c(1:(attributes(x)$minw + 1 + attributes(x)$lag))]
   shade.temp <- datestamp(x, y, option = option)
 

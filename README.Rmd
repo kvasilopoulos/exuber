@@ -85,6 +85,6 @@ plot(ts, mc, plot_type = "multiple", breaks_x = 20)
 
 library(grid);library(gridExtra)
 p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
-do.call(grid.arrange, c(p1, ncol = 2))
+do.call("grid.arrange", c(p1, ncol = 2))
 ```
 

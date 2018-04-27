@@ -11,7 +11,36 @@ install:
   ps: Bootstrap
 
 cache:
-  - C:\RLibrary
+ # - C:\RLibrary
+
+matrix:
+  fast_finish: true
+
+environment:
+  global:
+    WARNINGS_ARE_ERRORS: 1
+
+  matrix:
+    - R_VERSION: devel
+      R_ARCH: x64
+
+    - R_VERSION: devel
+
+    - R_VERSION: patched
+      R_ARCH: x64
+
+    - R_VERSION: patched
+
+    - R_VERSION: release
+      R_ARCH: x64
+
+    - R_VERSION: release
+
+    - R_VERSION: oldrel
+      R_ARCH: x64
+
+    - R_VERSION: oldrel
+
 
 # Adapt as necessary starting from here
 

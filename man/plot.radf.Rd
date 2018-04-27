@@ -9,21 +9,23 @@
   ...)
 }
 \arguments{
-\item{x}{of class 'radf'.}
+\item{x}{a radf object}
 
-\item{y}{the output of mc_cv or wb_cv.}
+\item{y}{a cv oject}
 
 \item{option}{choose bertwsadfad}
 
 \item{breaks_x}{plotting option}
 
-\item{format_plot}{plotiing option}
+\item{format_plot}{a cv object}
 
 \item{breaks_y}{plotting option}
 
-\item{plot_type}{type gannt if true}
+\item{plot_type}{for multivariate radf objects, "multiple" plots the series on multiple
+plots and "single" superimposes them on a single plot datestamping only the period of
+explosiveness. Default is "multiple".}
 
-\item{...}{not used}
+\item{...}{additional graphical passed on in method dispatch. Currently not used}
 }
 \value{
 a list of ggplot

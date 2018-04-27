@@ -10,9 +10,9 @@ report(x, y)
 diagnostics(x, y)
 }
 \arguments{
-\item{x}{of class 'radf'.}
+\item{x}{a radf object}
 
-\item{y}{the output of mc_cv or wb_cv.}
+\item{y}{a cv oject}
 }
 \description{
 Title
