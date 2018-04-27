@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/kvasilopoulos/exdyn.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exdyn)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exdyn)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/exdyn)](http://cran.r-project.org/package=exdyn)
+[![codecov](https://codecov.io/gh/kvasilopoulos/exdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exdyn)
 
 The goal of exdyn is to ...
 

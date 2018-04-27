@@ -2,8 +2,7 @@
 exdyn
 =====
 
-[![Build Status](https://travis-ci.org/kvasilopoulos/exdyn.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exdyn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exdyn) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/exdyn)](http://cran.r-project.org/package=exdyn)
-[![codecov](https://codecov.io/gh/kvasilopoulos/exdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exdyn)
+[![Build Status](https://travis-ci.org/kvasilopoulos/exdyn.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exdyn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exdyn) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/exdyn)](http://cran.r-project.org/package=exdyn) [![codecov](https://codecov.io/gh/kvasilopoulos/exdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exdyn)
 
 The goal of exdyn is to ...
 
@@ -70,5 +69,5 @@ plot(ts, mc, plot_type = "multiple", breaks_x = 20)
 
 library(grid);library(gridExtra)
 p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
-do.call(grid.arrange, c(p1, ncol = 2))
+do.call("grid.arrange", c(p1, ncol = 2))
 ```
