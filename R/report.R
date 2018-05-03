@@ -10,7 +10,7 @@ report <- function(x, y){
 
   radf_check(x)
   cv_check(y)
-  minw_check_compare(x, y)
+  minw_check(x, y)
 
   ret <- list()
   if (method(y) == "Wild Bootstrap") {
@@ -75,7 +75,7 @@ diagnostics <- function(x, y) {
 
   radf_check(x)
   cv_check(y)
-  minw_check_compare(x, y)
+  minw_check(x, y)
 
   proceed <- sig <- NULL
 
@@ -216,7 +216,7 @@ datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0) {
 
   radf_check(x)
   cv_check(y)
-  minw_check_compare(x, y)
+  minw_check(x, y)
   is.nonnegeative.int(min_duration)
 
   option <- match.arg(option)
@@ -268,7 +268,7 @@ plot.radf <- function(x, y,
                       plot_type = c("multiple", "single"), ...) {
 
   cv_check(y)
-  minw_check_compare(x, y)
+  minw_check(x, y)
 
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)

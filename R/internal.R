@@ -31,29 +31,15 @@ is.between <- function(x, arg1, arg2)
 
 # radf and cv specific ----------------------------------------------------
 
-radf_check <- function(x)
-{
+radf_check <- function(x) {
   if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
 }
 
-cv_check <- function(y) if (!inherits(y, "cv"))
-{
-  stop("Arguement 'y' should be of class 'cv'")
+cv_check <- function(y) {
+  if (!inherits(y, "cv")) stop("Arguement 'y' should be of class 'cv'")
 }
 
-minw_check <- function(minw, n) {
-  if (missing(minw)) {
-    r0 = 0.01 + 1.8 / sqrt(n)
-    minw = floor(r0 * n)
-    return(minw)
-  } else if (!minw == round(minw) & minw >= 0) {
-    stop("Argument 'minw' should be a postive integer", call. = FALSE)
-  } else if (minw < 3) {
-    stop( "Argument 'minw' is too small", call. = FALSE)
-  }
-}
-
-minw_check_compare <- function(x, y) {
+minw_check <- function(x, y) {
   if (minw(x) != minw(y)) {
     stop("The critical values should have the same minumum window with the t-statistics!", call. = FALSE)
   }
