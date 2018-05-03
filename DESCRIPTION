@@ -26,9 +26,9 @@ Imports: foreach,
 Suggests:
     knitr,
     rmarkdown,
-    grid,
+    covr,
+    testthat,
     gridExtra,
-    covr
 LinkingTo: Rcpp
 Encoding: UTF-8
 LazyData: true

@@ -10,9 +10,9 @@ report(x, y)
 diagnostics(x, y)
 }
 \arguments{
-\item{x}{a radf object}
+\item{x}{a radf object.}
 
-\item{y}{a cv oject}
+\item{y}{a cv oject.}
 }
 \description{
 Title

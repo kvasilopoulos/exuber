@@ -27,21 +27,16 @@
 #' @importFrom stats rnorm quantile
 #' @export
 #'
-wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = FALSE){
+wb_cv <- function(y, nboot = 1000, minw , parallel = FALSE, distribution_rad = FALSE){
 
   y  <- as.matrix(y)
   nc <- NCOL(y)
   nr <- NROW(y)
 
+  minw <- minw_check(minw, nr)
+  is.positive.int(nboot)
   stopifnot(is.logical(parallel))
   stopifnot(is.logical(distribution_rad))
-  is.positive.int(nboot)
-
-  if (missing(minw)) {
-    r0 = 0.01 + 1.8 / sqrt(nr)
-    minw = floor(r0 * nr)
-  }
-  is.nonnegeative.int(minw)
 
   adf_critical   <- matrix(NA, nrow = nc, ncol = 3,
                            dimnames = list(colnames(y), c("90%","95%","95%")))
@@ -58,14 +53,14 @@ wb_cv <- function(y, nboot = 1000, minw , distribution_rad = FALSE, parallel = F
   pb  <- txtProgressBar(max = nboot, style = 3)
 
   if (parallel) {
-    cl <- makeCluster(detectCores(), type = "SOCK")
+    cl <- makePSOCKcluster(detectCores())
     registerDoSNOW(cl)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
     for (j in 1:nc) {
       dy <- y[-1, j] - y[-nr, j]
-      results <- foreach(i = 1:nboot, .export = 'srls_gsadf_cpp', .combine = 'cbind',
-                         .options.snow = opts) %dopar% {
+      results <- foreach(i = 1:nboot, .export = 'srls_gsadf_cpp',
+                         .combine = 'cbind', .options.snow = opts) %dopar% {
                            ystar <- 0
                            if (distribution_rad) {
                              w <- sample(c(-1, 1), nr - 1, replace = TRUE )

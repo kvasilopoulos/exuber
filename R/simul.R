@@ -1,26 +1,3 @@
-
-sim_rw <-  function(n, d = 1, eta = 1){
-  y <- matrix(cumsum(rnorm(n, mean = d*n^(-eta))))
-}
-
-sim_het <- function(n, d = 1, eta = 1, omega = 30.69,
-                    alpha = 0, beta = 0.61){
-  h <- y <-  0
-  for (i in 1:(n - 1)) {
-    h[i + 1] <- omega + alpha*rnorm(1) + beta*h[i]
-    y[i + 1]  <-  d*n^(-eta) + y[i] + exp(h[i + 1]/2)*rnorm(1)
-  }
-  return(y)
-}
-
-sim_ar <- function(n, ar = 1.02, drift = 0.05) {
-  p = 0
-  for (i in 1:(n - 1)) {
-    p[i + 1] <- drift + ar * p[i] + rnorm(1, 0, 1 - 0.1^2)
-  }
-  return(matrix(p))
-}
-
 #' Simulation of a single-bubble episode
 #'
 #' The following generating process is an effective reduced-form mechanism that switches betweem a martingale
@@ -197,6 +174,9 @@ sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n
 #' @references Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 #' Economics letters, 3(4), 387-389.
 sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
+
+  #checks here
+
   b <- 1
   theta <- rbinom(n, 1, pi)
   i <- 1
@@ -243,6 +223,8 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
 #'
 #' @export
 sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05){
+
+  #checks here
 
   stopifnot(alpha > 0)
   if (delta < 0 & delta > (1 + r)*alpha) stop("Arguemnt delta should be 0 < delta < (1+r)*alpha")
@@ -313,6 +295,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 #' p <- pf + 20*pb
 sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf","d")){
 
+  # checks here
 
   initval <- 1.3
   # Values obtained from West(1988, p53)

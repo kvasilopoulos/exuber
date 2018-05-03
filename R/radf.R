@@ -27,7 +27,7 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
-  } else if (minw < 3) {
+  } else if (minw > 0 & minw < 3) {
     stop( "Argument 'minw' is too small")
   }
   is.positive.int(minw)
@@ -35,15 +35,13 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
 
   if (is.null(colnames(x))) {
     colnames(x) <- paste0("series", seq(1, nc, 1))
-  }else{
-    colnames(x) <- colnames(x)
   }
-
   adf   <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   badf  <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
   sadf  <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   gsadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   bsadf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
+
 
   for (i in 1:nc) {
     if (lag == 0) {
@@ -71,25 +69,15 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
                 sadf  = sadf,
                 bsadf = bsadf[-c(1:(minw)), , drop = F] ,
                 gsadf = gsadf)
-                #info = list(lag = lag, minw = minw, names = colnames(x)))
 
-
-  # if (is.character(rownames(x))) {
-  #   value$info$date <- as.Date(parse_datetime(rownames(x), format = format))
-  # } else if (is.numeric(rownames(x))) {
-  #   value$info$date <- rownames(x)
-  # }else{
-  #   value$info$date <- seq(1, nr, 1)
-  # }
-
-  if (is.character(rownames(x))) {
-    attr(value, "date") <- as.Date(parse_datetime(rownames(x), format = format))
+   if (is.character(rownames(x))) { # maybe is date?
+    attr(value, "index") <- as.Date(parse_datetime(rownames(x), format = format))
   } else if (is.numeric(rownames(x))) {
-    attr(value, "date") <- rownames(x)
-  }else{
-    attr(value, "date") <- seq(1, nr, 1)
+    attr(value, "index") <- rownames(x)
+  } else {
+    attr(value, "index") <- seq(1, nr, 1)
   }
-  attr(value, "class") <- "radf"#append(class(value), "radf")
+  attr(value, "class") <- append(class(value), "radf")
   attr(value, "lag") <- lag
   attr(value, "minw") <- minw
   attr(value, "col_names") <- colnames(x)

@@ -7,13 +7,13 @@
 datestamp(x, y, option = c("badf", "bsadf"), min_duration = 0)
 }
 \arguments{
-\item{x}{a radf object}
+\item{x}{a radf object.}
 
-\item{y}{a cv oject}
+\item{y}{a cv oject.}
 
 \item{option}{the default value is "badf".}
 
-\item{min_duration}{the minimum duration of an explosive period for it to be reported. Defaults to log(T).}
+\item{min_duration}{the minimum duration of an explosive period for it to be reported. Defaults to 0.}
 }
 \value{
 Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.

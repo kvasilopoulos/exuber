@@ -4,12 +4,17 @@ exdyn
 
 [![Build Status](https://travis-ci.org/kvasilopoulos/exdyn.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exdyn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exdyn) [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/exdyn)](http://cran.r-project.org/package=exdyn) [![codecov](https://codecov.io/gh/kvasilopoulos/exdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exdyn)
 
-The goal of exdyn is to ...
+Overview
+--------
+
+exdyn is a
+
+-   -   -   
 
 Installation
 ------------
 
-The package is still under development, to install the development verison from GitHub:
+The package is still under development, to install the development version from GitHub:
 
 ``` r
 install.packages("devtools")
@@ -18,8 +23,8 @@ devtools::install_github("kvasilopoulos/exdyn")
 
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exdyn/issues).
 
-Example
--------
+Usage
+-----
 
 This is a basic example which shows you how use exdyn:
 
@@ -67,7 +72,9 @@ plot(ts, mc, plot_type = "single", breaks_x = 20)
 # Individually
 plot(ts, mc, plot_type = "multiple", breaks_x = 20)
 
-library(grid);library(gridExtra)
+library(gridExtra)
 p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
 do.call("grid.arrange", c(p1, ncol = 2))
 ```
+
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/kvasilopoulos/exdyn/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.

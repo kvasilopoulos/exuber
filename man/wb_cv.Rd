@@ -4,7 +4,7 @@
 \alias{wb_cv}
 \title{Wild Bootstrapped Critical values}
 \usage{
-wb_cv(y, nboot = 1000, minw, distribution_rad = FALSE, parallel = FALSE)
+wb_cv(y, nboot = 1000, minw, parallel = FALSE, distribution_rad = FALSE)
 }
 \arguments{
 \item{y}{a data.frame or matrix containing the data.}
@@ -13,10 +13,10 @@ wb_cv(y, nboot = 1000, minw, distribution_rad = FALSE, parallel = FALSE)
 
 \item{minw}{a non-negative integer indicating the minimum window.}
 
+\item{parallel}{a logical value indicating whether parallel computing should be perfomed}
+
 \item{distribution_rad}{a logical value indicating whether Radstander distributions should be
 applied for bootstraping.}
-
-\item{parallel}{a logical value indicating whether parallel computing should be perfomed}
 }
 \value{
 a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.

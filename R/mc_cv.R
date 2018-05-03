@@ -22,27 +22,19 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
 
   is.positive.int(n)
   is.positive.int(nrep)
-
-  if (missing(minw)) {
-    r0 = 0.01 + 1.8 / sqrt(n)
-    minw = floor(r0 * n)
-  } else if (!minw == round(minw) & minw >= 0) {
-    stop("Argument 'minw' should be an integer")
-  } else if (minw < 3) {
-    stop( "Argument 'minw' is too small")
-  }
-  is.nonnegeative.int(minw)
+  minw <- minw_check(minw, n)
   stopifnot(is.logical(parallel))
 
   pb <- txtProgressBar(max = nrep, style = 3)
+
   if (parallel) {
-    cl <- makeCluster(detectCores(), type = "SOCK")
+    cl <- makePSOCKcluster(detectCores())
     registerDoSNOW(cl)
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
 
-    results  <-  foreach(i = 1:nrep, .export = 'srls_gsadf_cpp', .combine = 'cbind',
-                         .options.snow = opts) %dopar% {
+    results  <-  foreach(i = 1:nrep, .export = 'srls_gsadf_cpp',
+                         .combine = 'cbind', .options.snow = opts) %dopar% {
                            y  <-  cumsum(rnorm(n))
                            srls_gsadf_cpp(y[-1], y[-n], minw)
                          }

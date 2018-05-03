@@ -4,20 +4,22 @@
 \alias{plot.radf}
 \title{Plotting}
 \usage{
-\method{plot}{radf}(x, y, option = c("badf", "bsadf"), breaks_x,
-  format_plot = "\%m-\%Y", breaks_y, plot_type = c("multiple", "single"),
-  ...)
+\method{plot}{radf}(x, y, option = c("badf", "bsadf"), min_duration = 0,
+  breaks_x, format_date = "\%m-\%Y", breaks_y, plot_type = c("multiple",
+  "single"), ...)
 }
 \arguments{
-\item{x}{a radf object}
+\item{x}{a radf object.}
 
-\item{y}{a cv oject}
+\item{y}{a cv oject.}
 
-\item{option}{choose bertwsadfad}
+\item{option}{the default value is "badf".}
+
+\item{min_duration}{the minimum duration of an explosive period for it to be reported. Defaults to 0.}
 
 \item{breaks_x}{plotting option}
 
-\item{format_plot}{a cv object}
+\item{format_date}{a cv object}
 
 \item{breaks_y}{plotting option}
 

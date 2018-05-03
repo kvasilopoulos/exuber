@@ -1,0 +1,19 @@
+
+citHeader("To cite exdyn in publications as:")
+
+citEntry(
+  entry="Manual",
+  title = "exdyn: Well-Formatted Regression and Summary Statistics Tables",
+  author       = personList(as.person("Kostas Vasilopoulos"),
+                   as.person("Themis Pavlidis"),
+                   as.person("Simon Spavound")),
+  year = "2018",
+  note = "R package version 5.2.1",
+  address = "Bratislava, Slovakia",
+
+  textVersion  =
+  paste("Garrett Grolemund, Hadley Wickham (2011).",
+        "Dates and Times Made Easy with lubridate.",
+        "Journal of Statistical Software, 40(3), 1-25.",
+        "URL http://www.jstatsoft.org/v40/i03/.")
+)
