@@ -302,25 +302,29 @@ plot.radf <- function(x, y,
           }else{
             cv_dat =  head(y$badf_cv[, 2], -(lagr(x)), row.names = NULL)
           }
-      } else if (method(y) == "Wild Bootstrap") {
-        if (lagr == 0) {
-          cv_dat = y$badf_cv[,2, i]
-        }else{
-          cv_dat =  head(y$badf_cv[, 2, i], -(lagr(x)), row.names = NULL)
+        } else if (method(y) == "Wild Bootstrap") {
+          if (lagr == 0) {
+            cv_dat = y$badf_cv[,2, i]
+          }else{
+            cv_dat =  head(y$badf_cv[, 2, i], -(lagr(x)), row.names = NULL)
+          }
         }
-      }
-
-      dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i], cv = cv_dat)
-
       }else if (option == "bsadf") {
         if (method(y) == "Monte Carlo") {
-          dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
-                                 if (lagr(x) == 0) cv = y$bsadf_cv[,2] else cv =  head(y$bsadf_cv[, 2], -(lagr(x)), row.names = NULL))
+          if (lagr(x) == 0) {
+            cv_dat = y$bsadf_cv[,2]
+          }else{
+            cv_dat =  head(y$bsadf_cv[, 2], -(lagr(x)), row.names = NULL)
+          }
         } else if (method(y) == "Wild Bootstrap") {
-          dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i],
-                                 if (lagr(x) == 0) cv = y$bsadf_cv[,2, i] else cv =  head(y$bsadf_cv[, 2, i], -(lagr(x)), row.names = NULL))
+          if (lagr(x) == 0) {
+            cv_dat = y$bsadf_cv[,2, i]
+          }else{
+            cv_dat =  head(y$bsadf_cv[, 2, i], -(lagr(x)), row.names = NULL)
+          }
         }
       }
+      dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i], cv = cv_dat)
     }
 
     h <- vector("list", length(choice))
@@ -380,6 +384,9 @@ plot.radf <- function(x, y,
                                                                                        tail(dating, 1)))
     }
   }
-
-  return(h)
+  if (length(h) == 1) {
+    return(h[[1]])
+  }else{
+    return(h)
+  }
 }
