@@ -148,28 +148,28 @@ print.diagnostics <- function(x, ...) {
     }
 }
 
-dummy.plot <- function(x, y, option){
+dummy_plot <- function(x, y, option){
 
-  dummy.plot <- matrix(0, nrow = NROW(x$badf), ncol = length(col_names(x)))
+  dummy <- matrix(0, nrow = NROW(x$badf), ncol = length(col_names(x)))
 
   for (i in seq_along(col_names(x))) {
     for (j in 1:(NROW(x$bsadf))) {
       if (option == "badf") {
         if (attributes(y)$method == "Monte Carlo") {
-          if (x$bsadf[j, i] > y$badf_cv[j, 2]) dummy.plot[j, i] = 1
+          if (x$bsadf[j, i] > y$badf_cv[j, 2]) dummy[j, i] = 1
         }else if (attributes(y)$method == "Wild Bootstrap") {
-          if (x$bsadf[j, i] > y$badf_cv[j, 2, i]) dummy.plot[j, i] = 1
+          if (x$bsadf[j, i] > y$badf_cv[j, 2, i]) dummy[j, i] = 1
         }
       }else if (option == "bsadf") {
         if (attributes(y)$method == "Monte Carlo") {
-          if (x$bsadf[j, i] > y$bsadf_cv[j, 2]) dummy.plot[j, i] = 1
+          if (x$bsadf[j, i] > y$bsadf_cv[j, 2]) dummy[j, i] = 1
         }else if (attributes(y)$method == "Wild Bootstrap") {
-          if (x$bsadf[j, i] > y$bsadf_cv[j, 2, i]) dummy.plot[j, i] = 1
+          if (x$bsadf[j, i] > y$bsadf_cv[j, 2, i]) dummy[j, i] = 1
         }
       }
     }
   }
-  return(dummy.plot)
+  return(dummy)
 }
 
 shade <- function(x){
@@ -222,7 +222,7 @@ datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0) {
   option <- match.arg(option)
 
   dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
-  temp <- dummy.plot(x, y, option = option) %>% shade()
+  temp <- dummy_plot(x, y, option = option) %>% shade()
   iter <- diagnostics(x, y) %>% match(col_names(x))
 
   rect_regions <- list();j <- 1
@@ -246,9 +246,9 @@ datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0) {
 #' @param plot_type for multivariate radf objects, "multiple" plots the series on multiple
 #' plots and "single" superimposes them on a single plot datestamping only the period of
 #' explosiveness. Default is "multiple".
-#' @param ... additional graphical passed on in method dispatch. Currently not used
+#' @param ... additional graphical arguments passed on to methods. Currently not used
 #'
-#' @return a list of ggplot
+#' @return a list of ggplot objects
 #' @export
 #'
 #' @import ggplot2
@@ -269,25 +269,29 @@ plot.radf <- function(x, y,
 
   cv_check(y)
   minw_check(x, y)
-
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
+
   choice <- diagnostics(x, y)
   iter <- match(choice, col_names(x))
   dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
 
-  if (missing(breaks_x)) if (class(index(x)) == "Date") breaks_x = "3 months" else breaks_x = 10
+  if (missing(breaks_x)) { #need to work on a transformation formula
+    if (class(index(x)) == "Date") {
+      breaks_x = "3 months"
+    }else{
+      breaks_x = 10
+    }
+  }
+  if (is.null(iter)) {
+    stop("Plotting is only for the series that reject the Null Hypothesis", call. = FALSE)
+  }
   if (!missing(breaks_y) & plot_type == "single") {
     warning("Argument 'breaks_y' does not need to be specified when plot_type is set to 'multiple'")
   }
-  if (missing(breaks_y)) breaks_y <- 1
-
-
-  if (is.null(iter)) stop("Plotting is only for the series that reject the Null Hypothesis")
   if (length(choice) == 1 & plot_type == "single" ) {
     warning("Argument 'plot_type' should be set to 'multiple' when there is only one series to plot")
   }
-
 
   if (plot_type == "multiple") {
 
@@ -327,6 +331,10 @@ plot.radf <- function(x, y,
       dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i], cv = cv_dat)
     }
 
+    if (missing(breaks_y)) breaks_y <- 1 #transform here as well
+
+
+
     h <- vector("list", length(choice))
     j <- 1
     for (i in iter)
@@ -355,24 +363,24 @@ plot.radf <- function(x, y,
       })
   }else if (plot_type == "single") {
 
-    plot.dummy  <- dummy.plot(x, y, option = option) %>% as.data.frame() %>%  select(iter)
+    dummy_temp  <- dummy_plot(x, y, option = option) %>% as.data.frame() %>%  select(iter)
 
-    shade.dummy <- shade(plot.dummy)
+    shade_temp <- shade(dummy_temp)
 
-    start.dummy <- shade.dummy$b %>% as.data.frame() %>% set_colnames(col_names(x)[iter]) %>%
+    dummy_start <- shade_temp$b %>% as.data.frame() %>% set_colnames(col_names(x)[iter]) %>%
       gather(value = "start", na.rm = TRUE)
 
-    end.dummy <- shade.dummy$e %>% as.data.frame() %>% set_colnames(col_names(x)[iter]) %>%
+    dummy_end <- shade_temp$e %>% as.data.frame() %>% set_colnames(col_names(x)[iter]) %>%
       gather(value = "end", na.rm = TRUE)
 
-    total <- bind_cols(start.dummy, end.dummy) %>% select(-!! sym("key1")) %>%
-      mutate("start_date" = dating[!! sym("start")], "end_date" = dating[!! sym("end")]) %>%
-      filter(sym("end") - sym("start") > min_duration)
+    total <- bind_cols(dummy_start, dummy_end) %>% select(-!!sym("key1")) %>%
+      mutate("start_date" = dating[!!sym("start")], "end_date" = dating[!!sym("end")]) %>%
+      filter(!!sym("end") - !!sym("start") > min_duration)
 
     h <- ggplot(total, aes_string(colour = "key")) +
       geom_segment(aes_string(x = "start_date", xend = "end_date", y = "key", yend = "key"), size = 7) +
-    ylab("") + xlab("") + theme_bw() +
-    theme(panel.grid.major.y = element_blank() ,legend.position = "none",
+      ylab("") + xlab("") + theme_bw() +
+      theme(panel.grid.major.y = element_blank() ,legend.position = "none",
           plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold",
                                                                          size = 8, hjust = 0))
 
@@ -380,10 +388,11 @@ plot.radf <- function(x, y,
       h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
                             limits = c(head(dating, 1), tail(dating, 1)))
     }else{
-      h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x), limits = c(minw(x),
-                                                                                       tail(dating, 1)))
+      h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x),
+                                  limits = c(minw(x), tail(dating, 1)))
     }
   }
+
   if (length(h) == 1) {
     return(h[[1]])
   }else{

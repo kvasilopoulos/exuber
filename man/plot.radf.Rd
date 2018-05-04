@@ -27,10 +27,10 @@
 plots and "single" superimposes them on a single plot datestamping only the period of
 explosiveness. Default is "multiple".}
 
-\item{...}{additional graphical passed on in method dispatch. Currently not used}
+\item{...}{additional graphical arguments passed on to methods. Currently not used}
 }
 \value{
-a list of ggplot
+a list of ggplot objects
 }
 \description{
 Plotting
