@@ -7,12 +7,14 @@
 \usage{
 report(x, y)
 
-diagnostics(x, y)
+diagnostics(x, y, option = c("gsadf", "sadf"))
 }
 \arguments{
 \item{x}{a radf object.}
 
 \item{y}{a cv oject.}
+
+\item{option}{check which methodology to use}
 }
 \description{
 Title

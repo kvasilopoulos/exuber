@@ -13,7 +13,7 @@ There were no ERRORs, WARNINGs, or NOTEs with local checks or on Travis CI/Appve
 
 On devtools::release() R's CMD check we get one NOTE:
 
-* N  checking CRAN incoming feasibility (1.9s)
+* N  checking CRAN incoming feasibility (10.4s)
    Maintainer: 'Vasilopoulos Kostas <kostasvasilo91@gmail.com>'
    
    Uses the superseded package: 'doSNOW'

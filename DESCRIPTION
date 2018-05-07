@@ -1,7 +1,7 @@
 Package: exdyn
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
             person("Vasilopoulos", "Kostas", ,email = "kostasvasilo91@gmail.com", c("cre", "aut")),
             person("Pavlidis", "Eftymios", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
@@ -22,7 +22,8 @@ Imports: foreach,
     tidyr,
     readr,
     Rcpp,
-    rlang
+    rlang,
+    purrr
 Suggests:
     knitr,
     rmarkdown,

@@ -4,7 +4,7 @@
 \alias{datestamp}
 \title{Date stamping the bubble period(s)}
 \usage{
-datestamp(x, y, option = c("bsadf", "badf"), min_duration = 0)
+datestamp(x, y, option = c("gsadf", "sadf"), min_duration = 0)
 }
 \arguments{
 \item{x}{a radf object.}

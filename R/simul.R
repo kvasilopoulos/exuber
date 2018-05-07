@@ -46,7 +46,7 @@ sim_dgp1 <- function(n, te = 0.4*n, tf = 0.15*n + te, c = 1, alpha = 0.6, sigma 
   is.between(tf, te, n)
   is.positive.int(c)
   is.between(alpha, 0, 1)
-  stopifnot(sigma > 0)
+  stopifnot(sigma >= 0)
 
   delta <-  1 + c*n^(-alpha)
   y <- 100
@@ -117,7 +117,7 @@ sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n
   is.between(te2, tf1, n)
   is.between(tf2, te2, n)
   is.between(alpha, 0, 1)
-  stopifnot(sigma>0)
+  stopifnot(sigma >= 0)
 
   delta <-  1 + c*n^(-alpha)
   y <- 100
@@ -175,7 +175,10 @@ sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n
 #' Economics letters, 3(4), 387-389.
 sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
 
-  #checks here
+  is.positive.int(n)
+  is.between(pi, 0, 1)
+  stopifnot(sigma >= 0)
+  stopifnot(r >= 0)
 
   b <- 1
   theta <- rbinom(n, 1, pi)
@@ -230,7 +233,6 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
   if (delta < 0 | delta > (1 + r)*alpha) {
      stop("Argument delta should be 0 < delta < (1+r)*alpha", call. = FALSE)
   }
-  # what about tau
   is.between(pi, 0, 1)
   stopifnot(r >= 0)
 
@@ -300,16 +302,18 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 #' p <- pf + 20*pb
 sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf","d")){
 
-  is.positive.int(n)
-  stopifnot(sigma > 0)
-  stopifnot(r > 0)
-  stopifnot(is.logical(log))
-  return <- match.arg(output)
+
 
   initval <- 1.3
   # Values obtained from West(1988, p53)
   if (missing(mu)) if (log) mu = 0.013 else mu = 0.0373
   if (missing(sigma)) if (log) sigma = sqrt(0.16) else sigma = sqrt(0.1574)
+
+  is.positive.int(n)
+  stopifnot(sigma >= 0)
+  stopifnot(r >= 0)
+  stopifnot(is.logical(log))
+  return <- match.arg(output)
 
   d <- stats::filter(mu + c(initval, rnorm(n - 1 , 0, sigma)),
                                c(1), init = 1.3, method = "recursive")
