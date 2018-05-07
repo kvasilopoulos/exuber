@@ -39,11 +39,11 @@ rls_gsadf <- function(yxmat, wmin){
     }
   }
   adf   <-  tstat[end, 1] # or badf[end]
-  radf  <-  diag(tstat)
   badf  <-  tstat[, 1]
   sadf  <-  max(tstat[, 1])
   bsadf <-  apply(tstat, 1, max) # or max(badf)
   gsadf <-  max(bsadf)
-  return(list(adf = adf, radf = radf, badf = badf,
+
+  return(list(adf = adf, badf = badf,
               sadf = sadf, bsadf = bsadf, gsadf = gsadf))
 }

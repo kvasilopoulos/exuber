@@ -4,7 +4,7 @@
 \alias{plot.radf}
 \title{Plotting}
 \usage{
-\method{plot}{radf}(x, y, option = c("badf", "bsadf"), min_duration = 0,
+\method{plot}{radf}(x, y, option = c("gsadf", "sadf"), min_duration = 0,
   breaks_x, format_date = "\%m-\%Y", breaks_y, plot_type = c("multiple",
   "single"), ...)
 }
@@ -13,9 +13,10 @@
 
 \item{y}{a cv oject.}
 
-\item{option}{the default value is "badf".}
+\item{option}{whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
+The default value is "badf".}
 
-\item{min_duration}{the minimum duration of an explosive period for it to be reported. Defaults to 0.}
+\item{min_duration}{the minimum duration of an explosive period for it to be reported. Default is 0.}
 
 \item{breaks_x}{plotting option}
 

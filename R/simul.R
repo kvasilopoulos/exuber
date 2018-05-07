@@ -225,9 +225,14 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05){
 sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05){
 
   #checks here
-
+  is.positive.int(n)
   stopifnot(alpha > 0)
-  if (delta < 0 & delta > (1 + r)*alpha) stop("Arguemnt delta should be 0 < delta < (1+r)*alpha")
+  if (delta < 0 | delta > (1 + r)*alpha) {
+     stop("Argument delta should be 0 < delta < (1+r)*alpha", call. = FALSE)
+  }
+  # what about tau
+  is.between(pi, 0, 1)
+  stopifnot(r >= 0)
 
 
   y <- rnorm(n, 0, tau)
@@ -295,18 +300,16 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 #' p <- pf + 20*pb
 sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf","d")){
 
-  # checks here
-
-  initval <- 1.3
-  # Values obtained from West(1988, p53)
-  if (missing(mu)) if (log) mu = 0.013 else mu = 0.0373
-  if (missing(sigma)) if (log) sigma = sqrt(0.16) else sigma = sqrt(0.1574)
-
   is.positive.int(n)
   stopifnot(sigma > 0)
   stopifnot(r > 0)
   stopifnot(is.logical(log))
   return <- match.arg(output)
+
+  initval <- 1.3
+  # Values obtained from West(1988, p53)
+  if (missing(mu)) if (log) mu = 0.013 else mu = 0.0373
+  if (missing(sigma)) if (log) sigma = sqrt(0.16) else sigma = sqrt(0.1574)
 
   d <- stats::filter(mu + c(initval, rnorm(n - 1 , 0, sigma)),
                                c(1), init = 1.3, method = "recursive")

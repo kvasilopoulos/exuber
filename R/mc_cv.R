@@ -64,12 +64,15 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
   badf_critical  <-  t(apply(results[-c(1:(n + 2 + minw)), ], 1, quantile,
                            probs =  c(0.9, 0.95, 0.99)))
 
-  for (i in 2:length(bsadf_critical)) {
-    if (bsadf_critical[i] <= bsadf_critical[i - 1]) {
-      bsadf_critical[i] <- bsadf_critical[i - 1]
-    }
-    if (badf_critical[i] <= badf_critical[i - 1]) {
-      badf_critical[i] <- badf_critical[i - 1]
+  # cv sequences should be increasing
+  for (j in 1:3) {
+    for (i in 2:NROW(bsadf_critical)) {
+      if (bsadf_critical[i, j] <= bsadf_critical[i - 1, j]) {
+        bsadf_critical[i, j] <- bsadf_critical[i - 1, j]
+      }
+      if (badf_critical[i, j] <= badf_critical[i - 1, j]) {
+        badf_critical[i, j] <- badf_critical[i - 1, j]
+      }
     }
   }
 
@@ -86,3 +89,5 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
 
   return(output)
 }
+
+

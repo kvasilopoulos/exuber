@@ -12,7 +12,9 @@
 is.positive.int <- function(arg)
 {
   level <- deparse(substitute(arg))
-  if (arg != round(arg) || arg <= 0L) stop(sprintf("Argument '%s' should be a positive integer", level))
+  if (arg != round(arg) || arg <= 0L) {
+    stop(sprintf("Argument '%s' should be a positive integer", level), call. = FALSE)
+  }
 }
 
 is.nonnegeative.int <- function(arg)
@@ -26,17 +28,23 @@ is.nonnegeative.int <- function(arg)
 is.between <- function(x, arg1, arg2)
 {
   level <- deparse(substitute(x))
-  if (x < arg1 | x > arg2) stop(sprintf("Argument '%s' should be a be between '%d' and '%d'", level, arg1, arg2))
+  if (x < arg1 | x > arg2) {
+    stop(sprintf("Argument '%s' should be a be between '%d' and '%d'", level, arg1, arg2), call. = FALSE)
+  }
 }
 
 # radf and cv specific ----------------------------------------------------
 
 radf_check <- function(x) {
-  if (!inherits(x, "radf")) stop("Argument 'x' should be of class 'radf'")
+  if (!inherits(x, "radf")) {
+    stop("Argument 'x' should be of class 'radf'", call. = FALSE)
+  }
 }
 
 cv_check <- function(y) {
-  if (!inherits(y, "cv")) stop("Arguement 'y' should be of class 'cv'")
+  if (!inherits(y, "cv")) {
+    stop("Arguement 'y' should be of class 'cv'", call. = FALSE)
+  }
 }
 
 minw_check <- function(x, y) {

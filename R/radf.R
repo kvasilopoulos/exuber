@@ -28,7 +28,7 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
     r0 <- 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
   } else if (minw > 0 & minw < 3) {
-    stop( "Argument 'minw' is too small")
+    stop( "Argument 'minw' is too small", call. = FALSE)
   }
   is.positive.int(minw)
   is.nonnegeative.int(lag)

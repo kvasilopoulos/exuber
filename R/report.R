@@ -45,7 +45,7 @@ report <- function(x, y){
 
 #' @export
 print.report <- function(x, ...) {
-  cat('\n', "Recursive Unit Root Summary", '\n',
+  cat('\n', "Recursive Unit Root Testing Summary", '\n',
       "---------------------------------------------",'\n',
       "H0:", "Unit root ", '\n',
       "H1:", "Explosive root", "\n",
@@ -118,9 +118,10 @@ diagnostics <- function(x, y) {
   }
 
   if (is.null(proceed)) {
-  stop("Cannot reject H0, do not proceed for date stamping or plotting!")
+  stop("Cannot reject H0, do not proceed for date stamping or plotting", call. = FALSE)
   }else{
-    attr(proceed, "significance") <- sig[match(proceed, col_names(x))]
+    attr(proceed, "significance") <- sig#[match(proceed, col_names(x))]
+    attr(proceed, "col_names") <- col_names(x)
     class(proceed) <- "diagnostics"
     proceed
   }
@@ -131,12 +132,12 @@ print.diagnostics <- function(x, ...) {
     cat('\n',
         "Diagnostics:",
         "\n---------------------------------------------")
-    for (i in seq_along(x)) {
-      cat("\n", x[i],":", sep = "")
-      if (attributes(x)$sig[i] == "Reject") {
+    for (i in seq_along(attr(x,"col_names"))) {
+      cat("\n", attr(x, "col_names")[i],":", sep = "")
+      if (attr(x, "significance")[i] == "Reject") {
         cat("\n", "Cannot reject H0!")
       }else{
-        cat("\n","Rejects H0 for significance level", attributes(x)$sig[i])
+        cat("\n","Rejects H0 for significance level", attr(x, "significance")[i])
       }
     }
     if (is.null(x)) {
@@ -156,15 +157,15 @@ dummy_plot <- function(x, y, option){
     for (j in 1:(NROW(x$bsadf))) {
       if (option == "badf") {
         if (attributes(y)$method == "Monte Carlo") {
-          if (x$bsadf[j, i] > y$badf_cv[j, 2]) dummy[j, i] = 1
+          if (x$badf[j, i] > y$adf_cv[2]) dummy[j, i] = 1
         }else if (attributes(y)$method == "Wild Bootstrap") {
-          if (x$bsadf[j, i] > y$badf_cv[j, 2, i]) dummy[j, i] = 1
+          if (x$badf[j, i] > y$adf_cv[j, 2]) dummy[j, i] = 1
         }
       }else if (option == "bsadf") {
         if (attributes(y)$method == "Monte Carlo") {
-          if (x$bsadf[j, i] > y$bsadf_cv[j, 2]) dummy[j, i] = 1
+          if (x$bsadf[j, i] > y$badf_cv[j, 2]) dummy[j, i] = 1
         }else if (attributes(y)$method == "Wild Bootstrap") {
-          if (x$bsadf[j, i] > y$bsadf_cv[j, 2, i]) dummy[j, i] = 1
+          if (x$bsadf[j, i] > y$badf_cv[j, 2, i]) dummy[j, i] = 1
         }
       }
     }
@@ -201,8 +202,9 @@ shade <- function(x){
 #' \code{radf}. Setting \code{min.duration} allows temporary spikes above the critical value sequence to be removed.
 #'
 #' @inheritParams report
-#' @param option the default value is "badf".
-#' @param min_duration the minimum duration of an explosive period for it to be reported. Defaults to 0.
+#' @param option whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
+#' The default value is "badf".
+#' @param min_duration the minimum duration of an explosive period for it to be reported. Default is 0.
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.
 #' @references Add reference to Phillips paper here.
@@ -212,7 +214,7 @@ shade <- function(x){
 #' @importFrom rlang sym
 #' @export
 #'
-datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0) {
+datestamp <- function(x, y, option = c("bsadf","badf"), min_duration = 0) {
 
   radf_check(x)
   cv_check(y)
@@ -227,8 +229,8 @@ datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0) {
 
   rect_regions <- list();j <- 1
   for (i in iter) {
-    rect_regions[[j]] <- data.frame("Peak" = dating[temp$b[, i]],
-                        "Trough" = dating[temp$e[, i]],
+    rect_regions[[j]] <- data.frame("Start" = dating[temp$b[, i]],
+                        "End" = dating[temp$e[, i]],
                         "Duration" = temp$e[, i] - temp$b[, i]) %>%
       drop_na() %>% filter(!! sym("Duration") >= min_duration)
     j <- j + 1
@@ -258,9 +260,10 @@ datestamp <- function(x, y, option = c("badf", "bsadf"), min_duration = 0) {
 #' @importFrom graphics plot
 #' @importFrom magrittr set_colnames
 #' @importFrom rlang sym
+#' @importFrom purrr map
 #'
 plot.radf <- function(x, y,
-                      option = c("badf", "bsadf"),
+                      option = c("gsadf", "sadf"),
                       min_duration = 0,
                       breaks_x ,
                       format_date = "%m-%Y",
@@ -272,9 +275,13 @@ plot.radf <- function(x, y,
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
 
-  choice <- diagnostics(x, y)
+
+  # option = "gsadf"
+  # min_duration = 0
+  choice <- diagnostics2(x, y, option)
   iter <- match(choice, col_names(x))
-  dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
+  # dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
+  shade <- datestamp2(x, y, option = option, min_duration = min_duration)
 
   if (missing(breaks_x)) { #need to work on a transformation formula
     if (class(index(x)) == "Date") {
@@ -283,52 +290,55 @@ plot.radf <- function(x, y,
       breaks_x = 10
     }
   }
+  ## Consider option = "sadf" with Wb does not make any difference
+  # for diagnostics and datestmap as well
+
   if (is.null(iter)) {
     stop("Plotting is only for the series that reject the Null Hypothesis", call. = FALSE)
   }
   if (!missing(breaks_y) & plot_type == "single") {
-    warning("Argument 'breaks_y' does not need to be specified when plot_type is set to 'multiple'")
+    warning("Argument 'breaks_y' is redundant plot_type is set to 'single'", call. = FALSE)
   }
-  if (length(choice) == 1 & plot_type == "single" ) {
-    warning("Argument 'plot_type' should be set to 'multiple' when there is only one series to plot")
+  if (length(choice) == 1 || length(shade) == 1 & plot_type == "single" ) {
+    warning("Argument 'plot_type' should be set to 'multiple' when there is only one series to plot",
+            call. = FALSE)
   }
 
   if (plot_type == "multiple") {
 
-    shade.temp <- datestamp(x, y, option = option, min_duration = min_duration)
+
     dat <- vector("list", length(choice))
 
     for (i in iter) {
-      if (option == "badf") {
+      if (option == "gsadf") {
+
+        tstat_dat = x$bsadf[, i]
+
         if (method(y) == "Monte Carlo") {
           if (lagr(x) == 0) {
             cv_dat = y$badf_cv[,2]
           }else{
-            cv_dat =  head(y$badf_cv[, 2], -(lagr(x)), row.names = NULL)
+            cv_dat =  head(y$badf_cv[, 2], -lagr(x), row.names = NULL)
           }
         } else if (method(y) == "Wild Bootstrap") {
-          if (lagr == 0) {
-            cv_dat = y$badf_cv[,2, i]
+          if (lagr(x) == 0) {
+            cv_dat = y$badf_cv[, 2, i]
           }else{
-            cv_dat =  head(y$badf_cv[, 2, i], -(lagr(x)), row.names = NULL)
+            cv_dat =  head(y$badf_cv[, 2, i], -lagr(x), row.names = NULL)
           }
         }
-      }else if (option == "bsadf") {
+      }else if (option == "sadf") {
+        tstat_dat = x$badf[, i]
         if (method(y) == "Monte Carlo") {
-          if (lagr(x) == 0) {
-            cv_dat = y$bsadf_cv[,2]
-          }else{
-            cv_dat =  head(y$bsadf_cv[, 2], -(lagr(x)), row.names = NULL)
-          }
+          cv_dat = rep(y$adf_cv[2], NROW(x$badf) - lagr(x))
         } else if (method(y) == "Wild Bootstrap") {
-          if (lagr(x) == 0) {
-            cv_dat = y$bsadf_cv[,2, i]
-          }else{
-            cv_dat =  head(y$bsadf_cv[, 2, i], -(lagr(x)), row.names = NULL)
-          }
+          cv_dat =  rep(y$adf_cv[i, 2], NROW(x$badf) - lagr(x))
         }
       }
-      dat[[i]] <- data.frame(dating = dating, tstat = x$bsadf[, i], cv = cv_dat)
+
+      dat[[i]] <- data.frame(dating = index(x)[-c(1:(minw(x) + 1 + lagr(x)))],
+                             tstat = tstat_dat,
+                             cv = cv_dat)
     }
 
     if (missing(breaks_y)) breaks_y <- 1 #transform here as well
@@ -347,8 +357,8 @@ plot.radf <- function(x, y,
                 panel.grid.minor = element_blank(), panel.background = element_blank()) +
           ggtitle(choice[j]) +
           scale_y_continuous(breaks = seq(floor(min(dat[[i]]$tstat)), ceiling(max(dat[[i]]$tstat)), breaks_y)) +
-          geom_rect(data = shade.temp[[j]][1:2],
-                    aes_string(xmin = "Peak", xmax = "Trough", ymin = -Inf, ymax = +Inf),
+          geom_rect(data = shade[[j]][1:2],
+                    aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf),
                     fill = 'grey', alpha = 0.25) +
           {if (class(index(x)) == "Date") {
             scale_x_date(date_breaks = breaks_x, date_labels = format_date)
@@ -363,19 +373,12 @@ plot.radf <- function(x, y,
       })
   }else if (plot_type == "single") {
 
-    dummy_temp  <- dummy_plot(x, y, option = option) %>% as.data.frame() %>%  select(iter)
-
-    shade_temp <- shade(dummy_temp)
-
-    dummy_start <- shade_temp$b %>% as.data.frame() %>% set_colnames(col_names(x)[iter]) %>%
-      gather(value = "start", na.rm = TRUE)
-
-    dummy_end <- shade_temp$e %>% as.data.frame() %>% set_colnames(col_names(x)[iter]) %>%
-      gather(value = "end", na.rm = TRUE)
-
-    total <- bind_cols(dummy_start, dummy_end) %>% select(-!!sym("key1")) %>%
-      mutate("start_date" = dating[!!sym("start")], "end_date" = dating[!!sym("end")]) %>%
-      filter(!!sym("end") - !!sym("start") > min_duration)
+    total <- data.frame(
+      "key" = shade %>% repn,
+      "start" = shade %>% map(~ .x[1]) %>% unlist,
+      "end" = shade %>% map(~ .x[2]) %>% unlist
+    ) %>% mutate("start_date" = index(x)[!!sym("start")], "end_date" = index(x)[!!sym("end")]) %>%
+      filter(!!sym("end") - !!sym("start") >= min_duration)
 
     h <- ggplot(total, aes_string(colour = "key")) +
       geom_segment(aes_string(x = "start_date", xend = "end_date", y = "key", yend = "key"), size = 7) +
@@ -386,10 +389,10 @@ plot.radf <- function(x, y,
 
     if (class(index(x)) == "Date") {
       h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
-                            limits = c(head(dating, 1), tail(dating, 1)))
+                            limits = c(head(dating, 1), tail(index(x), 1)))
     }else{
       h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x),
-                                  limits = c(minw(x), tail(dating, 1)))
+                                  limits = c(minw(x), tail(index(x), 1)))
     }
   }
 

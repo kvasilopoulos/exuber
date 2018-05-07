@@ -48,7 +48,9 @@ index.radf <- function(x, ...)
 #' @export
 `index<-.radf` <- function(x, value)
 {
-  if (length(index(x)) != length(value)) stop("length of index vectors does not match")
+  if (length(index(x)) != length(value)) {
+    stop("length of index vectors does not match", call. = FALSE)
+  }
   attr(x, "index") <- value
   return(x)
 }
@@ -79,7 +81,9 @@ col_names.radf <- function(x, ...)
 #' @export
 `col_names<-.radf` <- function(x, value)
 {
-  if (length(col_names(x)) != length(value)) stop("length of col_names vectors does not match")
+  if (length(col_names(x)) != length(value)) {
+    stop("length of col_names vectors does not match", call. = FALSE)
+  }
   attr(x, "col_names") <- value
   x
 }

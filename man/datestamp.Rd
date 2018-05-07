@@ -4,16 +4,17 @@
 \alias{datestamp}
 \title{Date stamping the bubble period(s)}
 \usage{
-datestamp(x, y, option = c("badf", "bsadf"), min_duration = 0)
+datestamp(x, y, option = c("bsadf", "badf"), min_duration = 0)
 }
 \arguments{
 \item{x}{a radf object.}
 
 \item{y}{a cv oject.}
 
-\item{option}{the default value is "badf".}
+\item{option}{whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
+The default value is "badf".}
 
-\item{min_duration}{the minimum duration of an explosive period for it to be reported. Defaults to 0.}
+\item{min_duration}{the minimum duration of an explosive period for it to be reported. Default is 0.}
 }
 \value{
 Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.
