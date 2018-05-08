@@ -5,8 +5,8 @@
 \title{Plotting}
 \usage{
 \method{plot}{radf}(x, y, option = c("gsadf", "sadf"), min_duration = 0,
-  breaks_x, format_date = "\%m-\%Y", breaks_y, plot_type = c("multiple",
-  "single"), ...)
+  breaks_x = NULL, format_date = "\%m-\%Y", breaks_y = NULL,
+  plot_type = c("multiple", "single"), ...)
 }
 \arguments{
 \item{x}{a radf object.}

@@ -211,14 +211,14 @@ datestamp <- function(x, y, option = c("gsadf","sadf"), min_duration = 0) {
   ds_stamp <- lapply(ds, function(z) z %>% stamp() %>%
                        filter(!!sym("Duration") >= min_duration) %>% as.matrix())
 
-  index_corrected <- lapply(ds_stamp, function(t) data.frame(
+  index_add <- lapply(ds_stamp, function(t) data.frame(
     "Start" = index(x)[t[, 1]],
     "End" = index(x)[t[, 2]],
     "Duration" = t[, 3], row.names = NULL
   ))
 
   min_reject <- lapply(ds_stamp, is.data.frame0) %>% unlist()
-  res <- index_corrected[!min_reject]
+  res <- index_add[!min_reject]
 
   if (length(res) == 0) {
     stop("Argument 'min_duration' excludes all the explosive periods", call. = FALSE)
@@ -276,9 +276,9 @@ repn <- function(x) {
 plot.radf <- function(x, y,
                       option = c("gsadf", "sadf"),
                       min_duration = 0,
-                      breaks_x ,
+                      breaks_x = NULL,
                       format_date = "%m-%Y",
-                      breaks_y ,
+                      breaks_y = NULL,
                       plot_type = c("multiple", "single"), ...) {
 
   cv_check(y)
@@ -293,21 +293,11 @@ plot.radf <- function(x, y,
   dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
   shade <- datestamp(x, y, option = option, min_duration = min_duration)
 
-  if (missing(breaks_x)) { #need to work on a transformation formula
-    if (class(index(x)) == "Date") {
-      breaks_x = "3 months"
-    }else{
-      breaks_x = 10
-    }
-  }
-  ## Consider option = "sadf" with Wb does not make any difference
-  # for diagnostics and datestmap as well
-
   if (is.null(reps)) {
     stop("Plotting is only for the series that reject the Null Hypothesis", call. = FALSE)
   }
   if (!missing(breaks_y) & plot_type == "single") {
-    warning("Argument 'breaks_y' is redundant plot_type is set to 'single'", call. = FALSE)
+    warning("Argument 'breaks_y' is redundant when 'plot_type' is set to 'single'", call. = FALSE)
   }
   if ((length(choice) == 1 || length(shade) == 1) & plot_type == "single" ) {
     warning("Argument 'plot_type' should be set to 'multiple' when there is only one series to plot",
@@ -350,8 +340,6 @@ plot.radf <- function(x, y,
                              "cv" = cv_dat)
     }
 
-   if (missing(breaks_y)) breaks_y <- 1 #transform here as well
-
     h <- vector("list", length(choice))
     j <- 1
     for (i in reps)
@@ -363,16 +351,18 @@ plot.radf <- function(x, y,
           theme(axis.line = element_line(colour = "black"), panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(), panel.background = element_blank()) +
           ggtitle(choice[j]) +
-          scale_y_continuous(breaks = seq(floor(min(dat[[i]]$tstat)), ceiling(max(dat[[i]]$tstat)), breaks_y)) +
-          geom_rect(data = shade[[j]][1:2],
-                    aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf),
+          geom_rect(data = shade[[j]][1:2], aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf),
                     fill = 'grey', alpha = 0.25) +
-          {if (class(index(x)) == "Date") {
-            scale_x_date(date_breaks = breaks_x, date_labels = format_date)
+                    {if (!is.null(breaks_y)) {
+                      scale_y_continuous(breaks = seq(floor(min(dat[[i]]$tstat)),
+                                                      ceiling(max(dat[[i]]$tstat)), breaks_y)) }} +
+          {if (!is.null(breaks_x)) {
+            if (class(index(x)) == "Date") {
+              scale_x_date(date_breaks = breaks_x, date_labels = format_date)
             }else{
               scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x))
             }
-          }
+          }}
 
         h[[j]] <<- p
         j <<- j + 1
@@ -380,28 +370,40 @@ plot.radf <- function(x, y,
       })
   }else if (plot_type == "single") {
 
+    if (class(index(x)) == "Date") {
+      st = shade %>% map(~ .x[1]) %>% unlist %>% as.Date(origin = '1970-01-01')
+      ed = shade %>% map(~ .x[2]) %>% unlist %>% as.Date(origin = '1970-01-01')
+    } else {
+      st = shade %>% map(~ .x[1]) %>% unlist
+      en = shade %>% map(~ .x[2]) %>% unlist
+    }
+
+
     total <- data.frame(
       "key" = shade %>% repn,
-      "start" = shade %>% map(~ .x[1]) %>% unlist,
-      "end" = shade %>% map(~ .x[2]) %>% unlist
-    ) %>% mutate("start_date" = index(x)[!!sym("start")], "end_date" = index(x)[!!sym("end")]) %>%
-      filter(!!sym("end") - !!sym("start") - 1 >= min_duration)
+      "start" = st,
+      "end" = ed,
+      "duration" = shade %>% map(~ .x[2]) %>% unlist
+    ) %>% filter(!!sym("duration") - 1 >= min_duration)
 
     h <- ggplot(total, aes_string(colour = "key")) +
-      geom_segment(aes_string(x = "start_date", xend = "end_date", y = "key", yend = "key"), size = 7) +
+      geom_segment(aes_string(x = "start", xend = "end", y = "key", yend = "key"), size = 7) +
       ylab("") + xlab("") + theme_bw() +
       theme(panel.grid.major.y = element_blank() ,legend.position = "none",
           plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold",
                                                                          size = 8, hjust = 0))
-
-    if (class(index(x)) == "Date") {
-      h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
-                            limits = c(head(dating, 1), tail(index(x), 1)))
-    }else{
-      h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x),
-                                  limits = c(minw(x), tail(index(x), 1)))
+    if (!is.null(breaks_x)) {
+      if (class(index(x)) == "Date") {
+        h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
+                              limits = c(head(dating, 1), tail(index(x), 1)))
+      }else{
+        h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x),
+                                    limits = c(minw(x), tail(index(x), 1)))
+      }
     }
   }
+
+
 
   if (length(h) == 1) {
     return(h[[1]])
