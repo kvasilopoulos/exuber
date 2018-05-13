@@ -1,7 +1,7 @@
 ---
 output:
   md_document:
-    variant: markdown_github
+    variant: gfm
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 
 
-# exdyn
+# exdyn : Econometric Analysis of Explosive Time Series
 
 [![Build Status](https://travis-ci.org/kvasilopoulos/exdyn.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exdyn)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exdyn)
@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-exdyn is a 
+Testing for and dating periods of explosive dynamics (exuberance) in time series. Simulating periodically-collapsing speculative bubbles.
 
 *
 *
@@ -39,9 +39,13 @@ exdyn is a
 The package is still under development, to install the development version from GitHub:
 
 ```{r installation, eval = FALSE}
-install.packages("devtools")
+if(!require(devtools)) install.packages("devtools")
 devtools::install_github("kvasilopoulos/exdyn")
 ```
+Note that development version requires compilation, so to install you will need the appropriate development tools.
+* Window Users should install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+* Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/)
+
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exdyn/issues).
 
 ## Usage

@@ -392,22 +392,19 @@ plot.radf <- function(x, y,
       })
   }else if (plot_type == "single") {
 
-    # if (class(index(x)) == "Date") {
-    #   st = shade %>% map(~ .x[1]) %>% unlist %>% as.Date(origin = '1970-01-01')
-    #   ed = shade %>% map(~ .x[2]) %>% unlist %>% as.Date(origin = '1970-01-01')
-    # } else {
-    #   st = shade %>% map(~ .x[1]) %>% unlist
-    #   ed = shade %>% map(~ .x[2]) %>% unlist
-    # }
-
-    start = shade %>% map(~ .x[1]) %>% unlist
-    end = shade %>% map(~ .x[2]) %>% unlist
+    if (class(index(x)) == "Date") {
+      st = shade %>% map(~ .x[1]) %>% unlist %>% as.Date(origin = '1970-01-01')
+      ed = shade %>% map(~ .x[2]) %>% unlist %>% as.Date(origin = '1970-01-01')
+    } else {
+      st = shade %>% map(~ .x[1]) %>% unlist
+      ed = shade %>% map(~ .x[2]) %>% unlist
+    }
 
     total <- data.frame(
       "key" = shade %>% repn,
-      "Start" = dating[start], # consider dating[st] here
-      "End" = dating[end],
-      "Duration" = shade %>% map(~ .x[2]) %>% unlist
+      "Start" = st,
+      "End" = ed,
+      "Duration" = shade %>% map(~ .x[3]) %>% unlist
     ) %>% filter(!!sym("Duration") - 1 >= min_duration)
 
     h <- ggplot(total, aes_string(colour = "key")) +
@@ -419,7 +416,7 @@ plot.radf <- function(x, y,
     if (!is.null(breaks_x)) {
       if (class(index(x)) == "Date") {
         h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
-                              limits = c(head(dating, 1), tail(index(x), 1)))
+                              limits = c(head(index(x), 1), tail(index(x), 1)))
       }else{
         h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x),
                                     limits = c(minw(x), tail(index(x), 1)))
