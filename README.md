@@ -1,11 +1,7 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# exdyn
+# exdyn : Econometric Analysis of Explosive Time Series
 
 [![Build
 Status](https://travis-ci.org/kvasilopoulos/exdyn.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exdyn)
@@ -17,11 +13,11 @@ Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?b
 
 ## Overview
 
-exdyn is a
+Testing for and dating periods of explosive dynamics (exuberance) in
+time series. Simulating periodically-collapsing speculative bubbles.
 
-  - 
-  - 
-  - 
+*`radf()` *`mc_cv()` \*`wb_cv()`
+
 ## Installation
 
 The package is still under development, to install the development
@@ -33,8 +29,8 @@ devtools::install_github("kvasilopoulos/exdyn")
 ```
 
 Note that development version requires compilation, so to install you
-will need the appropriate development tools. \* Window Users should
-install [Rtools](https://cran.r-project.org/bin/windows/Rtools/) \* Mac
+will need the appropriate development tools. *Window Users should
+install [Rtools](https://cran.r-project.org/bin/windows/Rtools/) *Mac
 User should install [Clang or GNU
 Fortran](https://cran.r-project.org/bin/macosx/tools/)
 
@@ -57,12 +53,10 @@ a4 <- sim_evans(200) # evans model
 dfrm <- data.frame(a1, a2, a3, a4)
 colnames(dfrm) <- c("oneb", "twob", "blan", "evans")
 
-
-
 ts <- radf(dfrm, lag = 1)
 
 # Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
-## Use 500 repetions(boostraps) for faster computation, default = 2000
+## Use 500 repetions(boostraps) for faster computation
 mc <- mc_cv(NROW(dfrm), nrep = 500, parallel = T)
 wb <- wb_cv(dfrm, nboot = 500, parallel = T)
 ```
@@ -77,7 +71,7 @@ datestamp(ts, mc)
 
 \#\#Plotting
 
-The output of plot will be a list
+The output of plot will be a list,
 
 ``` r
 
@@ -91,6 +85,8 @@ library(gridExtra)
 p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
 do.call("grid.arrange", c(p1, ncol = 2))
 ```
+
+-----
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://github.com/kvasilopoulos/exdyn/blob/master/CONDUCT.md).

@@ -1,7 +1,7 @@
 ---
 output:
-  md_document:
-    variant: gfm
+  github_document:
+    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -30,9 +30,9 @@ knitr::opts_chunk$set(
 
 Testing for and dating periods of explosive dynamics (exuberance) in time series. Simulating periodically-collapsing speculative bubbles.
 
-*
-*
-*
+*`radf()`
+*`mc_cv()`
+*`wb_cv()`
 
 ## Installation
 
@@ -43,8 +43,8 @@ if(!require(devtools)) install.packages("devtools")
 devtools::install_github("kvasilopoulos/exdyn")
 ```
 Note that development version requires compilation, so to install you will need the appropriate development tools.
-* Window Users should install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
-* Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/)
+*Window Users should install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+*Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/)
 
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exdyn/issues).
 
@@ -64,12 +64,10 @@ a4 <- sim_evans(200) # evans model
 dfrm <- data.frame(a1, a2, a3, a4)
 colnames(dfrm) <- c("oneb", "twob", "blan", "evans")
 
-
-
 ts <- radf(dfrm, lag = 1)
 
 # Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
-## Use 500 repetions(boostraps) for faster computation, default = 2000
+## Use 500 repetions(boostraps) for faster computation
 mc <- mc_cv(NROW(dfrm), nrep = 500, parallel = T)
 wb <- wb_cv(dfrm, nboot = 500, parallel = T)
 
@@ -87,7 +85,7 @@ datestamp(ts, mc)
 
 ##Plotting
 
-The output of plot will be a list
+The output of plot will be a list,
 
 ```{r plotting, echo=TRUE, eval = FALSE}
 
@@ -103,4 +101,5 @@ do.call("grid.arrange", c(p1, ncol = 2))
 ```
 
 
+---
 Please note that this project is released with a [Contributor Code of Conduct](https://github.com/kvasilopoulos/exdyn/blob/master/CONDUCT.md). By participating in this project you agree to abide by its terms.
