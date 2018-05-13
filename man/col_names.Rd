@@ -10,7 +10,7 @@ col_names(x, ...)
 col_names(x) <- value
 }
 \arguments{
-\item{x}{a radf object.}
+\item{x}{an object of class "radf", that contains}
 
 \item{...}{further arguements passed to methods.}
 

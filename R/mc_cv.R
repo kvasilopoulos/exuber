@@ -1,11 +1,11 @@
 #' #' Monte Carlo Critical Values
 #'
-#' \code{mc_cv} is used to compute
+#' \code{mc_cv} is computes Monte Carlo critical values for the recursive unit root tests.
 #'
-#' @param n the number of simulated periods
-#' @param nrep a positive integer, The number of simulations.
+#' @param n a positive integer. The sample size
+#' @param nrep a positive integer. The number of Monte Carlo simulations.
 #' @param minw a non-negative integer, The minimum window
-#' @param parallel logical, idicating whether parallel programming should be used
+#' @param parallel logical. If \code{TRUE} parallel programming is used (max cores)
 #'
 #' @return a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
 #'

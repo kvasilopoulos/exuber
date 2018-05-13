@@ -13,17 +13,16 @@ wb_cv(y, nboot = 1000, minw, parallel = FALSE, distribution_rad = FALSE)
 
 \item{minw}{a non-negative integer indicating the minimum window.}
 
-\item{parallel}{a logical value indicating whether parallel computing should be perfomed}
+\item{parallel}{logical. If \code{TRUE} parallel programming is used (max cores)}
 
-\item{distribution_rad}{a logical value indicating whether Radstander distributions should be
-applied for bootstraping.}
+\item{distribution_rad}{logical. If \code{TRUE} then Radstander distribution will be used}
 }
 \value{
 a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
 }
 \description{
 \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling scheme which is asymptotically robust to
-non-stationary volatility.
+non-stationary volatility, to generate critical values for the recursive unit root tests.
 }
 \details{
 This approach involves applying wild bootstrap re-sampling scheme to the first difference of the raw

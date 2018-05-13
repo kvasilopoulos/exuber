@@ -1,8 +1,12 @@
 context("test_report")
 
-mc_crit <- mc_cv(100, 10)
+set.seed(1234)
+vec <- sim_dgp1(100)
+radf_vec <- radf(vec)
+mc <- mc_cv(100, 200)
 
 # Arguements
-test_that("multiplication works", {
-  expect_output(str(mc_crit), "List of 5")
+test_that("Reporting works", {
+  expect_output(str(report(radf_vec, mc)), "List of 1")
+  expect_output(str(datestamp(radf_vec, mc)), "List of 1")
 })

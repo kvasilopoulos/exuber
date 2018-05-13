@@ -7,19 +7,19 @@
 mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 }
 \arguments{
-\item{n}{the number of simulated periods}
+\item{n}{a positive integer. The sample size}
 
-\item{nrep}{a positive integer, The number of simulations.}
+\item{nrep}{a positive integer. The number of Monte Carlo simulations.}
 
 \item{minw}{a non-negative integer, The minimum window}
 
-\item{parallel}{logical, idicating whether parallel programming should be used}
+\item{parallel}{logical. If \code{TRUE} parallel programming is used (max cores)}
 }
 \value{
 a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
 }
 \description{
-\code{mc_cv} is used to compute
+\code{mc_cv} is computes Monte Carlo critical values for the recursive unit root tests.
 }
 \seealso{
 \code{\link{wb_cv}} for Wild Bootstrapped critical values

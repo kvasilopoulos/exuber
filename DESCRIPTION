@@ -1,14 +1,13 @@
 Package: exdyn
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Econometric Analysis of Explosive Time Series
 Version: 0.2.0
 Authors@R: c(
             person("Vasilopoulos", "Kostas", ,email = "kostasvasilo91@gmail.com", c("cre", "aut")),
             person("Pavlidis", "Eftymios", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
             person("Simon", "Spavound", email = "simon.spavound@googlemail.com", role = "aut")
             )
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Testing for and dating periods of explosive dynamics (exuberance) in time series. Simulating periodically-collapsing speculative bubbles.
 License: GPL-3
 URL: https://github.com/kvasilopoulos/exdyn
 BugReports: https://github.com/kvasilopoulos/exdyn/issues
@@ -29,7 +28,7 @@ Suggests:
     rmarkdown,
     covr,
     testthat,
-    gridExtra,
+    gridExtra
 LinkingTo: Rcpp
 Encoding: UTF-8
 LazyData: true

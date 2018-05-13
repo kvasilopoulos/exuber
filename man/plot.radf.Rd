@@ -9,9 +9,9 @@
   plot_type = c("multiple", "single"), ...)
 }
 \arguments{
-\item{x}{a radf object.}
+\item{x}{an object of class "radf", that contains}
 
-\item{y}{a cv oject.}
+\item{y}{an object of class "cv".}
 
 \item{option}{whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
 The default value is "badf".}

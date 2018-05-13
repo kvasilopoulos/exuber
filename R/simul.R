@@ -1,14 +1,14 @@
 #' Simulation of a single-bubble episode
 #'
-#' The following generating process is an effective reduced-form mechanism that switches betweem a martingale
-#' mechanism, a single mildy explosive episode, collapse, and subsequent renewal of martingale behavior
+#' The following function generates a time series which switches from a martingale to a midly explsive
+#' process and  then back to a martingale.
 #'
 #' @param n a positive integer indicating the number of simulations
-#' @param te a value in (0,n) dating the origination of bubble expansion
-#' @param tf a value in (te,n) dating the termination of bubble collapse
-#' @param c a positive  value determining the value of the constant in the autoregressive coeffcient
+#' @param te a scalar in (0,n) specifying the origination of bubble expansion
+#' @param tf a scalar in (te,n) specifying the termination of bubble collapse
+#' @param c a positive  value determining the autoregressive coeffcient in the explosive regime
 #' @param alpha a positve value in (0,1) determining the value of the expansion rate in the autoregressive coefficient
-#' @param sigma a posiitve number indicating the standard deviation of the innovations
+#' @param sigma a positve number indicating the standard deviation of the innovations
 #
 #'
 #' @details
@@ -143,25 +143,25 @@ sim_dgp2 <- function(n, te1 = 0.2*n, tf1 = 0.2*n + te1, te2 = 0.6*n, tf2 = 0.1*n
   return(y)
 }
 
-#' Simulation of Blanchard Bubble
+#' Simulation a' la Blanchard(1979)
 #'
 #' @param n a positive integer indicating the number of simulations
-#' @param pi a positive value in (0, 1) indicating the probability of collapse
+#' @param pi a positive value in (0, 1) indicating the probability of the bubble continues to grow
 #' @param sigma the standard deviation of the innovations
-#' @param r a positive value describing the exapnsion rate
+#' @param r a positive scalar describing the that determines the growth rate of the bubbble process
 #'
 #' @export
 #' @return a numeric vector of length n
 #'
 #' @importFrom stats rbinom
 #' @details
-#' Blanchard's Bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
-#' In the first regime, the bubble grows expontentially at the rate \eqn{(1+r)\pi}, whereas in the
-#' second regime, the bubble collapses to a white noise.
+#' Blanchard's bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
+#' In the first regime, the bubble grows expontentially, whereas in the second regime, the bubble
+#' collapses to a white noise.
 #'
 #' With probability \eqn{\pi}
 #' \deqn{B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}}{B[t+1]=(1+r)/\pi*B[t]+\epsilon[t+1]}
-#' With probability \eqn{\pi}
+#' With probability \eqn{1 - \pi}
 #' \deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1]}
 #'
 #' where r is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.

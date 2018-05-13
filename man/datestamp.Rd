@@ -2,14 +2,14 @@
 % Please edit documentation in R/report.R
 \name{datestamp}
 \alias{datestamp}
-\title{Date stamping the bubble period(s)}
+\title{Date stamping periods of exuberance}
 \usage{
 datestamp(x, y, option = c("gsadf", "sadf"), min_duration = 0)
 }
 \arguments{
-\item{x}{a radf object.}
+\item{x}{an object of class "radf", that contains}
 
-\item{y}{a cv oject.}
+\item{y}{an object of class "cv".}
 
 \item{option}{whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
 The default value is "badf".}
@@ -20,8 +20,12 @@ The default value is "badf".}
 Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.
 }
 \description{
-\code{datestamp} computes the origination, termination and duration of the bubble episode(s) detected by
-\code{radf}. Setting \code{min.duration} allows temporary spikes above the critical value sequence to be removed.
+\code{datestamp} computes the origination, termination and duration of episodes during which
+the time series display explosive dynamics.
+}
+\details{
+Setting \code{min_duration} allows temporary spikes above the critical value sequence to
+be removed.
 }
 \references{
 Add reference to Phillips paper here.

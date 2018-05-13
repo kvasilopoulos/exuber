@@ -10,22 +10,22 @@ sim_dgp1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
 \arguments{
 \item{n}{a positive integer indicating the number of simulations}
 
-\item{te}{a value in (0,n) dating the origination of bubble expansion}
+\item{te}{a scalar in (0,n) specifying the origination of bubble expansion}
 
-\item{tf}{a value in (te,n) dating the termination of bubble collapse}
+\item{tf}{a scalar in (te,n) specifying the termination of bubble collapse}
 
-\item{c}{a positive  value determining the value of the constant in the autoregressive coeffcient}
+\item{c}{a positive  value determining the autoregressive coeffcient in the explosive regime}
 
 \item{alpha}{a positve value in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
 
-\item{sigma}{a posiitve number indicating the standard deviation of the innovations}
+\item{sigma}{a positve number indicating the standard deviation of the innovations}
 }
 \value{
 a numeric vector of length n
 }
 \description{
-The following generating process is an effective reduced-form mechanism that switches betweem a martingale
-mechanism, a single mildy explosive episode, collapse, and subsequent renewal of martingale behavior
+The following function generates a time series which switches from a martingale to a midly explsive
+process and  then back to a martingale.
 }
 \details{
 The data generating process can be described with the following equation:

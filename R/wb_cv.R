@@ -1,14 +1,13 @@
 #' Wild Bootstrapped Critical values
 #'
 #'\code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling scheme which is asymptotically robust to
-#'non-stationary volatility.
+#'non-stationary volatility, to generate critical values for the recursive unit root tests.
 #'
 #' @param y a data.frame or matrix containing the data.
 #' @param nboot a positive integer idicating the number of bootstraps.
 #' @param minw a non-negative integer indicating the minimum window.
-#' @param distribution_rad a logical value indicating whether Radstander distributions should be
-#' applied for bootstraping.
-#' @param parallel a logical value indicating whether parallel computing should be perfomed
+#' @param parallel logical. If \code{TRUE} parallel programming is used (max cores)
+#' @param distribution_rad logical. If \code{TRUE} then Radstander distribution will be used
 #'
 #' @return  a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
 #'
@@ -44,6 +43,9 @@ wb_cv <- function(y, nboot = 1000, minw , parallel = FALSE, distribution_rad = F
   }
   stopifnot(is.logical(parallel))
   stopifnot(is.logical(distribution_rad))
+  if (any(is.na(y))) {
+    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
+  }
 
   adf_critical   <- matrix(NA, nrow = nc, ncol = 3,
                            dimnames = list(colnames(y), c("90%","95%","95%")))

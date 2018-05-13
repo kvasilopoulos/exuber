@@ -3,21 +3,25 @@
 \name{report}
 \alias{report}
 \alias{diagnostics}
-\title{Title}
+\title{Report summary statistics}
 \usage{
 report(x, y)
 
 diagnostics(x, y, option = c("gsadf", "sadf"))
 }
 \arguments{
-\item{x}{a radf object.}
+\item{x}{an object of class "radf", that contains}
 
-\item{y}{a cv oject.}
+\item{y}{an object of class "cv".}
 
 \item{option}{check which methodology to use}
 }
+\value{
+The function \code{\link{report}} returns a list of summary statistics for the t-statistic
+and the critical values of the ADF, SADF and GSDF.
+}
 \description{
-Title
+Report summary statistics
 }
 \section{Functions}{
 \itemize{

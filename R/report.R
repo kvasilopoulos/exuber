@@ -1,9 +1,14 @@
 report <- function(x) UseMethod("report")
 
-#' Title
+#' Report summary statistics
 #'
-#' @param x a radf object.
-#' @param y a cv oject.
+#'
+#'
+#' @param x an object of class "radf", that contains
+#' @param y an object of class "cv".
+#'
+#' @return The function \code{\link{report}} returns a list of summary statistics for the t-statistic
+#' and the critical values of the ADF, SADF and GSDF.
 #'
 #' @export
 report <- function(x, y){
@@ -19,7 +24,7 @@ report <- function(x, y){
       df2 <- c(x$sadf[i], y$sadf_cv[i, ])
       df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
       df <- data.frame( rbind(df1,df2,df3), row.names = c("ADF","SADF","GSADF"))
-      colnames(df) <- c("t-stat", "90%", "95%", "95%")
+      colnames(df) <- c("t-stat", "90%", "95%", "99%")
       ret[[i]] <- df
     }
   }else if (method(y) == "Monte Carlo") {
@@ -28,7 +33,7 @@ report <- function(x, y){
       df2 <- c(x$sadf[i], y$sadf_cv)
       df3 <- c(x$gsadf[i], y$gsadf_cv)
       df <- data.frame( rbind(df1,df2,df3), row.names = c("ADF","SADF","GSADF"))
-      colnames(df) <- c("tstat", "90%", "95%", "95%")
+      colnames(df) <- c("tstat", "90%", "95%", "99%")
       ret[[i]] <- df
     }
   }
@@ -110,7 +115,7 @@ diagnostics <- function(x,y, option = c("gsadf", "sadf")) {
   sig <- case_when(
     tstat < cv1 ~ "Reject",
     tstat >= cv1 & tstat < cv2 ~ "90%",
-    tstat >= cv2 & tstat < cv3 ~ "90%",
+    tstat >= cv2 & tstat < cv3 ~ "95%",
     tstat >= cv3 ~ "99%"
   )
 
@@ -126,9 +131,16 @@ diagnostics <- function(x,y, option = c("gsadf", "sadf")) {
   class(proceed) <- "diagnostics"
   attr(proceed, "col_names") <- col_names(x)
 
-  proceed
+  if (is.character0(proceed)) {
+    stop("You cannot reject H0 for significance level 95%", call. = FALSE)
+  }else{
+    proceed
+  }
 }
 
+is.character0 <- function(ch) {
+  is.character(ch) && length(ch) == 0
+}
 
 #' @export
 print.diagnostics <- function(x, ...) {
@@ -156,10 +168,10 @@ print.diagnostics <- function(x, ...) {
 
 # datestamp ---------------------------------------------------------------
 
-#' Date stamping the bubble period(s)
+#' Date stamping periods of exuberance
 #'
-#' \code{datestamp} computes the origination, termination and duration of the bubble episode(s) detected by
-#' \code{radf}. Setting \code{min.duration} allows temporary spikes above the critical value sequence to be removed.
+#' \code{datestamp} computes the origination, termination and duration of episodes during which
+#' the time series display explosive dynamics.
 #'
 #' @inheritParams report
 #' @param option whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
@@ -167,6 +179,10 @@ print.diagnostics <- function(x, ...) {
 #' @param min_duration the minimum duration of an explosive period for it to be reported. Default is 0.
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the origin and termination dates as well as the number of periods explosive behaviour lasts.
+#'
+#' @details Setting \code{min_duration} allows temporary spikes above the critical value sequence to
+#' be removed.
+#'
 #' @references Add reference to Phillips paper here.
 #'
 #' @importFrom rlang sym
@@ -183,7 +199,7 @@ datestamp <- function(x, y, option = c("gsadf","sadf"), min_duration = 0) {
   option <- match.arg(option)
 
   if (method(y) == "Wild Bootstrap" & option == "sadf") {
-    stop("  Explosive periods with Wild Bootstraped critical valuesapply only for the option 'gsadf' ",
+    stop("  Explosive periods with Wild Bootstraped critical values apply only for the option 'gsadf' ",
          call. = FALSE)
   }
 
@@ -195,13 +211,20 @@ datestamp <- function(x, y, option = c("gsadf","sadf"), min_duration = 0) {
   for (i in reps) {
     if (method(y) == "Monte Carlo") {
       if (option == "gsadf") {
-        ds[[j]] <- which(x$bsadf[,i] > y$badf_cv[,2]) + minw(x) + 1
+        ds[[j]] <- which(x$bsadf[, i] >
+                           ifelse(lagr(x) == 0, y$badf_cv[, 2], y$badf_cv[-c(1:lagr(x)), 2])) +
+          minw(x) + lagr(x) + 1
+        # if (lagr(x) == 0) {
+        #   ds[[j]] <- which(x$bsadf[,i] > y$badf_cv[, 2]) + minw(x) + 1
+        # }else{
+        #   ds[[j]] <- which(x$bsadf[,i] > y$badf_cv[-c(1:lagr(x)), 2]) + minw(x) + 1
+        # }
       }else if (option == "sadf") {
         ds[[j]] <- which(x$badf[, i] > y$adf_cv[2]) + minw(x) + 1
       }
     }else if (method(y) == "Wild Bootstrap") {
       if (option == "gsadf") {
-        ds[[j]] <- which(x$bsadf[,i] > y$badf_cv[, 2, i]) + minw(x) + 1
+        ds[[j]] <- which(x$bsadf[,i] > y$badf_cv[-c(1:lagr(x)), 2, i]) + minw(x) + 1
       }else if (option == "sadf") {
         ds[[j]] <- which(x$badf[, i] > rep(y$adf_cv[i, 2], NROW(x$badf))) + minw(x) + 1
       }
@@ -266,10 +289,8 @@ repn <- function(x) {
 #'
 #' @import ggplot2
 #' @import dplyr
-#' @import tidyr
 #' @importFrom utils head tail
 #' @importFrom graphics plot
-#' @importFrom magrittr set_colnames
 #' @importFrom rlang sym
 #' @importFrom purrr map
 #'
@@ -285,8 +306,6 @@ plot.radf <- function(x, y,
   minw_check(x, y)
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
-
-
 
   choice <- diagnostics(x, y, option)
   reps <- match(choice, col_names(x))
@@ -314,24 +333,27 @@ plot.radf <- function(x, y,
         tstat_dat = x$bsadf[, i]
 
         if (method(y) == "Monte Carlo") {
-          if (lagr(x) == 0) {
-            cv_dat = y$badf_cv[,2]
-          }else{
-            cv_dat =  head(y$badf_cv[, 2], -lagr(x), row.names = NULL)
-          }
+          cv_dat <- ifelse(lagr(x) == 0, y$badf_cv[, 2], y$badf_cv[-c(1:lagr(x)), 2])
+          # if (lagr(x) == 0) {
+          #   cv_dat = y$badf_cv[,2]
+          # }else{
+          #   cv_dat = y$badf_cv[-c(1:lagr(x)), 2]
+          #   # cv_dat =  head(y$badf_cv[, 2], -lagr(x), row.names = NULL)
+          # }
         } else if (method(y) == "Wild Bootstrap") {
-          if (lagr(x) == 0) {
-            cv_dat = y$badf_cv[, 2, i]
-          }else{
-            cv_dat =  head(y$badf_cv[, 2, i], -lagr(x), row.names = NULL)
-          }
+          cv_dat <- ifelse(lagr(x) == 0, y$badf_cv[, 2, i], y$badf_cv[-c(1:lagr(x)), 2, i])
+          # if (lagr(x) == 0) {
+          #   cv_dat = y$badf_cv[, 2, i]
+          # }else{
+          #   cv_dat =  head(y$badf_cv[, 2, i], -lagr(x), row.names = NULL)
+          # }
         }
       }else if (option == "sadf") {
         tstat_dat = x$badf[, i]
         if (method(y) == "Monte Carlo") {
-          cv_dat = rep(y$adf_cv[2], NROW(x$badf) - lagr(x))
+          cv_dat = rep(y$adf_cv[2], NROW(x$badf))
         } else if (method(y) == "Wild Bootstrap") {
-          cv_dat =  rep(y$adf_cv[i, 2], NROW(x$badf) - lagr(x))
+          cv_dat =  rep(y$adf_cv[i, 2], NROW(x$badf))
         }
       }
 
@@ -370,24 +392,26 @@ plot.radf <- function(x, y,
       })
   }else if (plot_type == "single") {
 
-    if (class(index(x)) == "Date") {
-      st = shade %>% map(~ .x[1]) %>% unlist %>% as.Date(origin = '1970-01-01')
-      ed = shade %>% map(~ .x[2]) %>% unlist %>% as.Date(origin = '1970-01-01')
-    } else {
-      st = shade %>% map(~ .x[1]) %>% unlist
-      en = shade %>% map(~ .x[2]) %>% unlist
-    }
+    # if (class(index(x)) == "Date") {
+    #   st = shade %>% map(~ .x[1]) %>% unlist %>% as.Date(origin = '1970-01-01')
+    #   ed = shade %>% map(~ .x[2]) %>% unlist %>% as.Date(origin = '1970-01-01')
+    # } else {
+    #   st = shade %>% map(~ .x[1]) %>% unlist
+    #   ed = shade %>% map(~ .x[2]) %>% unlist
+    # }
 
+    start = shade %>% map(~ .x[1]) %>% unlist
+    end = shade %>% map(~ .x[2]) %>% unlist
 
     total <- data.frame(
       "key" = shade %>% repn,
-      "start" = st,
-      "end" = ed,
-      "duration" = shade %>% map(~ .x[2]) %>% unlist
-    ) %>% filter(!!sym("duration") - 1 >= min_duration)
+      "Start" = dating[start], # consider dating[st] here
+      "End" = dating[end],
+      "Duration" = shade %>% map(~ .x[2]) %>% unlist
+    ) %>% filter(!!sym("Duration") - 1 >= min_duration)
 
     h <- ggplot(total, aes_string(colour = "key")) +
-      geom_segment(aes_string(x = "start", xend = "end", y = "key", yend = "key"), size = 7) +
+      geom_segment(aes_string(x = "Start", xend = "End", y = "key", yend = "key"), size = 7) +
       ylab("") + xlab("") + theme_bw() +
       theme(panel.grid.major.y = element_blank() ,legend.position = "none",
           plot.margin = margin(1,1,0,0,"cm"), axis.text.y = element_text(face = "bold",
@@ -402,8 +426,6 @@ plot.radf <- function(x, y,
       }
     }
   }
-
-
 
   if (length(h) == 1) {
     return(h[[1]])

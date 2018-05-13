@@ -1,18 +1,16 @@
 
-#' Retrieving/Replacing the Index of a 'radf' object
+#' Retrieve/Replace the Index of a 'radf' object
 #'
-#' @description  The user can ex-post retrieve or replace the index of a'radf' object.
+#' @description  The user can retrieve/replace the index of a'radf' object.
 #'
 #' @inheritParams report
 #' @param ... further arguements passed to methods.
 #' @param value an ordered vector of the same length as the 'index' attribute of x.
 #'
-#' @details \code{index} can be both numeric or Date. The conception of this functions
-#' comes from \code{package::zoo}.
+#' @details If the use didn't specify the index during the estimation, the function will generate pseudo-index
+#' via creating a numeric sequence adancing by one. After the estimation, the user can use \code{index} to retrieve
+#' or \code{`index<-`} to replace the index. The index can numeric or Date.
 #'
-#' @references Achim Zeileis and Gabor Grothendieck (2005). zoo: S3
-#' Infrastructure for Regular and Irregular Time Series. Journal
-#' of Statistical Software, 14(6), 1-27.
 #'
 #' @export
 index <- function(x, ...)

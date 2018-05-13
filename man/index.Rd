@@ -3,28 +3,24 @@
 \name{index}
 \alias{index}
 \alias{index<-}
-\title{Retrieving/Replacing the Index of a 'radf' object}
+\title{Retrieve/Replace the Index of a 'radf' object}
 \usage{
 index(x, ...)
 
 index(x) <- value
 }
 \arguments{
-\item{x}{a radf object.}
+\item{x}{an object of class "radf", that contains}
 
 \item{...}{further arguements passed to methods.}
 
 \item{value}{an ordered vector of the same length as the 'index' attribute of x.}
 }
 \description{
-The user can ex-post retrieve or replace the index of a'radf' object.
+The user can retrieve/replace the index of a'radf' object.
 }
 \details{
-\code{index} can be both numeric or Date. The conception of this functions
-comes from \code{package::zoo}.
-}
-\references{
-Achim Zeileis and Gabor Grothendieck (2005). zoo: S3
-Infrastructure for Regular and Irregular Time Series. Journal
-of Statistical Software, 14(6), 1-27.
+If the use didn't specify the index during the estimation, the function will generate pseudo-index
+via creating a numeric sequence adancing by one. After the estimation, the user can use \code{index} to retrieve
+or \code{`index<-`} to replace the index. The index can numeric or Date.
 }

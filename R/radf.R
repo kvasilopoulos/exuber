@@ -1,4 +1,4 @@
-#' Recursive Augmented Dickey Fuller test
+#' Supremum Augmented Dickey Fuller test
 #'
 #' \code{radf} returns the t-statistics from a recursive augmented dickey fuller test
 #'
@@ -8,12 +8,14 @@
 #' @param format a character string. If not specified, it will try "\%Y-\%m-\%d".
 #'
 #' @return a list
+#'   \item{adsfasdf}{asfdafsd}
+#'   \item{asdfdsaf}{afdasdfas}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:
 #' When Did Exuberance Escalate Asset Values? International Economic Review, 52(1), 201-226.
 #'
-#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for multiple bubbles:
-#' Historical episodes of exuberance and collapse in the S&P 500. International Economic Review, 5
+#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
+#' Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
 #' 6(4), 1043-1078.
 #'
 #' @importFrom readr parse_datetime
@@ -33,8 +35,12 @@ radf <- function(x, minw, lag = 0, format = "%Y-%m-%d"){
   is.positive.int(minw)
   is.nonnegeative.int(lag)
 
+  if (any(is.na(x))) {
+    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
+  }
+
   if (is.null(colnames(x))) {
-    colnames(x) <- paste0("series", seq(1, nc, 1))
+    colnames(x) <- paste("Series", seq(1, nc, 1))
   }
   adf   <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   badf  <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
