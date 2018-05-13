@@ -36,11 +36,12 @@ wb_cv <- function(y, nboot = 1000, minw , parallel = FALSE, distribution_rad = F
   if (missing(minw)) {
     r0 = 0.01 + 1.8 / sqrt(nr)
     minw = floor(r0 * nr)
-  } else if (!minw == round(minw) & minw >= 0) {
-    stop("Argument 'minw' should be a postive integer", call. = FALSE)
+  } else if (!minw == round(minw) | minw <= 0) {
+    stop("Argument 'minw' should be a positive integer", call. = FALSE)
   } else if (minw < 3) {
     stop( "Argument 'minw' is too small", call. = FALSE)
   }
+
   stopifnot(is.logical(parallel))
   stopifnot(is.logical(distribution_rad))
   if (any(is.na(y))) {

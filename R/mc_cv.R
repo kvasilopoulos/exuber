@@ -25,8 +25,8 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
   if (missing(minw)) {
     r0 = 0.01 + 1.8 / sqrt(n)
     minw = floor(r0 * n)
-  } else if (!minw == round(minw) & minw >= 0) {
-    stop("Argument 'minw' should be a postive integer", call. = FALSE)
+  } else if (!minw == round(minw) | minw <= 0) {
+    stop("Argument 'minw' should be a positive integer", call. = FALSE)
   } else if (minw < 3) {
     stop( "Argument 'minw' is too small", call. = FALSE)
   }

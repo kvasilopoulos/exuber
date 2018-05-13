@@ -39,7 +39,7 @@ test_that("Right output", {
   expect_output(str(attributes(radf_df)), "List of 6")
 })
 
-series_names <- c("Series 1", "Series 2", "Series 3", "Series 4")
+series_names <- c("Series 1", "Series 2", "Series 3", "Series 4", "Series 5")
 
 test_that("colnames check",{
   expect_equal(col_names(radf(df)), series_names)
@@ -47,12 +47,11 @@ test_that("colnames check",{
   expect_equal(col_names(radf(as.data.frame(df, optional = TRUE))), series_names)
 })
 
-series_index_names <- index(radf_df) <- c("dgp1", "dgp2", "evans",  "dividends", "blanchard")
+series_index_names <- col_names(radf_df) <- c("dgp1", "dgp2", "evans","dividends", "blanchard")
 
-test_that("colnames check after index",{
-  expect_equal(col_names(radf(df)), series_names)
-  expect_equal(col_names(radf(as.ts(df))), series_names)
-  expect_equal(col_names(radf(as.data.frame(df, optional = TRUE))), series_names)
+test_that("col_names <-  check ",{
+  expect_equal(col_names(radf_df), series_index_names)
+  expect_error((col_names(radf_df) <- c("A")), "length of col_names vectors does not match")
 })
 
 test_that("lag check", {
