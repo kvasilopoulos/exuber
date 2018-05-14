@@ -16,7 +16,9 @@ Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?b
 Testing for and dating periods of explosive dynamics (exuberance) in
 time series. Simulating periodically-collapsing speculative bubbles.
 
-*`radf()` *`mc_cv()` \*`wb_cv()`
+  - `radf()`
+  - `mc_cv()`
+  - `wb_cv()`
 
 ## Installation
 
@@ -29,10 +31,12 @@ devtools::install_github("kvasilopoulos/exdyn")
 ```
 
 Note that development version requires compilation, so to install you
-will need the appropriate development tools. *Window Users should
-install [Rtools](https://cran.r-project.org/bin/windows/Rtools/) *Mac
-User should install [Clang or GNU
-Fortran](https://cran.r-project.org/bin/macosx/tools/)
+will need the appropriate development tools.
+
+  - Window Users should install
+    [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+  - Mac User should install [Clang or GNU
+    Fortran](https://cran.r-project.org/bin/macosx/tools/)
 
 If you encounter a clear bug, please file a reproducible example on
 [GitHub](https://github.com/kvasilopoulos/exdyn/issues).

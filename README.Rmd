@@ -43,6 +43,7 @@ if(!require(devtools)) install.packages("devtools")
 devtools::install_github("kvasilopoulos/exdyn")
 ```
 Note that development version requires compilation, so to install you will need the appropriate development tools.
+
 * Window Users should install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
 * Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/)
 
