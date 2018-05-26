@@ -45,26 +45,25 @@ If you encounter a clear bug, please file a reproducible example on
 
 ## Usage
 
-This is a basic example which shows you how use exdyn:
+This is a basic example which shows you how to use exdyn:
 
 ``` r
 library(exdyn)
+# Simulate data witn n = 100 observations
 set.seed(123)
-a1 <- sim_dgp1(200) # one bubble
-a2 <- sim_dgp2(200) # two bubbles
-a3 <- sim_blan(200) # blanchard model
-a4 <- sim_evans(200) # evans model
+a1 <- sim_dgp1(n = 100) # one bubble
+a2 <- sim_dgp2(n = 100) # two bubbles
+a3 <- sim_blan(n = 100) # blanchard model
+a4 <- sim_evans(n = 100) # evans model
 
-
-dfrm <- data.frame(a1, a2, a3, a4)
-colnames(dfrm) <- c("oneb", "twob", "blan", "evans")
+dta <- data.frame("oneb" = a1, "twob" = a2, "blan" = a3, "evans" = a4)
 
 ts <- radf(dfrm, lag = 1)
 
 # Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
 ## Use 500 repetions(boostraps) for faster computation
-mc <- mc_cv(NROW(dfrm), nrep = 500, parallel = T)
-wb <- wb_cv(dfrm, nboot = 500, parallel = T)
+mc <- mc_cv(n = NROW(dta), nrep = 500, parallel = T)
+wb <- wb_cv(dta, nboot = 500, parallel = T)
 ```
 
 ### Report
