@@ -33,7 +33,7 @@ test_that("minw check cv", {
 })
 
 test_that("parallel works", {
-  # skip_on_cran()
+  skip_on_travis()
   with_parallel({
   expect_error(invisible(capture.output(mc_cv(100, 12, parallel = TRUE))),
     regexp = NA)
