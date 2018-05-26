@@ -2,39 +2,37 @@
 % Please edit documentation in R/simul.R
 \name{sim_dgp2}
 \alias{sim_dgp2}
-\title{Simulation of a two-bubble proccess}
+\title{Simulation of a two-bubble process}
 \usage{
 sim_dgp2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n, tf2 = 0.1
   * n + te2, c = 1, alpha = 0.6, sigma = 6.79)
 }
 \arguments{
-\item{n}{a positive integer indicating the number of simulations}
+\item{n}{a strictly positive integer indicating the length of simulated output series}
 
-\item{te1}{a value dating the originatiopn of the first bubble epsiode}
+\item{te1}{a scalar in (0,n) specifying the origination of the first bubble episode}
 
-\item{tf1}{a value dating the termination of the first bubble episode}
+\item{tf1}{a scalar in  (te1,n) specifying the termination of the first bubble episode}
 
-\item{te2}{a value dating the origination of the second bubble episode}
+\item{te2}{a scalar in (tf1,n) specifying the origination of the second bubble episode}
 
-\item{tf2}{a value dating the termination of the second bubble episode}
+\item{tf2}{a scalar in (te2,n) specifying the termination of the second bubble episode}
 
-\item{c}{a positive numeric value determining the value of the constant in the autoregressive coeffcient}
+\item{c}{a positive scalar determining the autoregressive coefficient in the explosive regime}
 
-\item{alpha}{a positve number determining the value of the expansion rate in the autoregressive coefficient}
+\item{alpha}{a positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
 
-\item{sigma}{a posiitve number indicating the standard deviation of the innovations}
+\item{sigma}{a positive scalar indicating the standard deviation of the innovations}
 }
 \value{
 a numeric vector of length n
 }
 \description{
-The following generating process is simular to the simulation of the single-bubble process \code{\link{sim_dgp1}}.
-The generating process switches betweem a martingale mechanism, the first mildy explosive episode, collapse,
-renewal of martingale behavior, the second mildly explosive episode, another collapse and the subsequent renewal
-of martingale behavior.
+The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
+there are two episodes of midly explosive dynamics.
 }
 \details{
-The data generating process can be described with the following equation:
+The data generating process is described with the following equation:
 \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
@@ -45,15 +43,41 @@ The data generating process can be described with the following equation:
 \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 \epsilon[t] 1{t in N[0] union B[1] union B[2]}}
 
-where the he autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by the formula
+where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given:
 
 \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
 
-with \eqn{c>0} and \eqn{\alpha \in (0,1)}{\alpha} in (0,1),
-\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}.
+with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
+\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+\eqn{X_{\tau_{1f}} = X_{\tau_{1e}} + X^*}{X[t1f] = X[t1e] + X'} and
+\eqn{X_{\tau_{2f}} = X_{\tau_{2e}} + X^*}{X[t2f] = X[t2e] + X'}.
+We use the notation
+\eqn{N_0 = [1, \tau_{1e})}{N0 = [1, t1e)},
+\eqn{B_1 = [\tau_{1e}, \tau_{1f}]}{B1 = [te1, t1f]},
+\eqn{N_1 = (\tau_{1f}, \tau_{2e})}{N0 = (t1f, t2e)},
+\eqn{B_2 = [\tau_{2e}, \tau_{2f}]}{N0 = [t2e, t2f]},
+\eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]}, where \eqn{\tau}{t} is the last observation of the sample.
+After the collapse of the first bubble \eqn{X_t}{X[t]} resumes a martingale path until the time
+\eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
+The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
+\eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the
+sample period \eqn{\tau}{t}. The expansion duration is assumed to be longer than that of the second
+bubble, namely \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
+
+#'For further details the user can refer to Phillips et al., 2015 p. 1055.
 }
 \examples{
-sim_dgp2(100)
+# 100 periods with origination dates 20/60 and termination dates 40/70 respectively
+sim_dgp2(n = 100)
 
-
+# 200 periods with origination dates 40/120 and termination dates 80/140 respectively
+sim_dgp2(n = 200)
+}
+\references{
+Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
+Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
+6(4), 1043-1078.
+}
+\seealso{
+\code{\link{sim_dgp1}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 }

@@ -7,13 +7,13 @@
 sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05)
 }
 \arguments{
-\item{n}{a positive integer indicating the number of simulations}
+\item{n}{a strictly positive integer indicating the length of simulated output series}
 
 \item{pi}{a positive value in (0, 1) indicating the probability of the bubble continues to grow}
 
-\item{sigma}{the standard deviation of the innovations}
+\item{sigma}{a positive scalar indicating the standard deviation of the innovations}
 
-\item{r}{a positive scalar describing the that determines the growth rate of the bubbble process}
+\item{r}{a positive scalar that determines the growth rate of the bubble process}
 }
 \value{
 a numeric vector of length n
@@ -23,7 +23,7 @@ Simulation a' la Blanchard(1979)
 }
 \details{
 Blanchard's bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
-In the first regime, the bubble grows expontentially, whereas in the second regime, the bubble
+In the first regime, the bubble grows exponentially, whereas in the second regime, the bubble
 collapses to a white noise.
 
 With probability \eqn{\pi}
@@ -32,13 +32,14 @@ With probability \eqn{1 - \pi}
 \deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1]}
 
 where r is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
-Taking expectations on both sides yields
-
-\deqn{E_t[B_{t+1}] = (1+r)B_t}{E[B[t+1]]= (1+r)*B[t]}
-
-where \eqn{E_t}{E} is the expectation operator. The expected growth rate of the bubble is (1+r).
+}
+\examples{
+sim_blan(n = 100)
 }
 \references{
 Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 Economics letters, 3(4), 387-389.
+}
+\seealso{
+\code{\link{sim_dgp1}}, \code{\link{sim_dgp1}}, \code{\link{sim_evans}}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc_cv.R
 \name{mc_cv}
 \alias{mc_cv}
-\title{#' Monte Carlo Critical Values}
+\title{Monte Carlo Critical Values}
 \usage{
 mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 }
@@ -11,15 +11,30 @@ mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 
 \item{nrep}{a positive integer. The number of Monte Carlo simulations.}
 
-\item{minw}{a non-negative integer, The minimum window}
+\item{minw}{a positive integer. The minimum window}
 
-\item{parallel}{logical. If \code{TRUE} parallel programming is used (max cores)}
+\item{parallel}{logical. If \code{TRUE} parallel programming is used
+(max cores)}
 }
 \value{
-a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
+a list. Contains the critical values for ADF, BADF, BSADF, GSADF
+t-statistics
 }
 \description{
-\code{mc_cv} is computes Monte Carlo critical values for the recursive unit root tests.
+\code{mc_cv} computes Monte Carlo critical values for the recursive unit
+root tests.
+}
+\examples{
+\donttest{
+# Default minimum window
+mc <- mc_cv(n = 100)
+
+# Change the minimum window and the number of simulations
+mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
+
+# Use parallel computing (utilizing all available cores)
+mc <- mc_cv(n = 100, parallel = TRUE)
+}
 }
 \seealso{
 \code{\link{wb_cv}} for Wild Bootstrapped critical values

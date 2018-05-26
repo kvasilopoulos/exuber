@@ -7,24 +7,24 @@
 sim_div(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d"))
 }
 \arguments{
-\item{n}{a positive integer indicating the number of simulations}
+\item{n}{a strictly positive integer indicating the length of simulated output series}
 
-\item{mu}{a value inidcating the drift}
+\item{mu}{a scalar indicating the drift}
 
-\item{sigma}{a positive value inidcating the standard deviation of the the white noise}
+\item{sigma}{a positive scalar indicating the standard deviation of the innovations}
 
-\item{r}{a positive value indicationg the expansion of the bubble}
+\item{r}{a positive value indicating the discount factor}
 
 \item{log}{a logical. If true dividends follow a lognormal distribution}
 
-\item{output}{a character vector. Is set to either return fundamental price('pf') or dividend series('d')}
+\item{output}{a character string giving the fundamental price('pf') or
+dividend series('d'). Default is 'pf'}
 }
 \value{
 a numeric vector of length n
 }
 \description{
-The follow data generating process assumes a random walk with drift. Dividens can follow either a
-normal or lognormal distribution.
+Simulating (log) dividends from a random walk with drift.
 }
 \details{
 If log is set to FALSE (default value) the dividends follow:
@@ -32,8 +32,8 @@ If log is set to FALSE (default value) the dividends follow:
 \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t]}
 
 where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
-are set \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (initval). The above
-equation can be solved to yield the fundamental price:
+are set equal to \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (initial value).
+The above equation can be solved to yield the fundamental price:
 
 \deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r}
 
@@ -46,11 +46,11 @@ where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. T
 
 \deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
 
-where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}. All of the parameter values are
+where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}. All the default parameter values are
 obtained from West(1988).
 }
 \examples{
-# Price is the sum of bubble component and fundamental component
+# Price is the sum of the bubble and fundamental components
 # 20 is the scaling factor
 pf <- sim_div(100, r = 0.05, output = "pf")
 pb <- sim_evans(100, r = 0.05)

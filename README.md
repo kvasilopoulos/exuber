@@ -11,10 +11,12 @@ Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exdyn?b
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![codecov](https://codecov.io/gh/kvasilopoulos/exdyn/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exdyn)
 
-## Overview
+## Description
 
 Testing for and dating periods of explosive dynamics (exuberance) in
 time series. Simulating periodically-collapsing speculative bubbles.
+
+## Overview
 
   - `radf()`
   - `mc_cv()`
@@ -65,7 +67,7 @@ mc <- mc_cv(NROW(dfrm), nrep = 500, parallel = T)
 wb <- wb_cv(dfrm, nboot = 500, parallel = T)
 ```
 
-## Report
+### Report
 
 ``` r
 report(ts, mc)
@@ -73,12 +75,11 @@ diagnostics(ts, mc)
 datestamp(ts, mc)
 ```
 
-\#\#Plotting
+### Plotting
 
 The output of plot will be a list,
 
 ``` r
-
 # All together
 plot(ts, mc, plot_type = "single", breaks_x = 20)
 

@@ -5,34 +5,66 @@
 \title{Plotting}
 \usage{
 \method{plot}{radf}(x, y, option = c("gsadf", "sadf"), min_duration = 0,
-  breaks_x = NULL, format_date = "\%m-\%Y", breaks_y = NULL,
-  plot_type = c("multiple", "single"), ...)
+  plot_type = c("multiple", "single"), breaks_x = NULL,
+  format_date = "\%m-\%Y", breaks_y = NULL, ...)
 }
 \arguments{
-\item{x}{an object of class "radf", that contains}
+\item{x}{an object of class "radf".}
 
 \item{y}{an object of class "cv".}
 
-\item{option}{whether to plot badf-tstat with the adf-cv or bsadf-tsat with the badf-cv.
-The default value is "badf".}
+\item{option}{whether to apply the "gsadf" or "sadf" methodology. Default is
+"gsadf"}
 
-\item{min_duration}{the minimum duration of an explosive period for it to be reported. Default is 0.}
+\item{min_duration}{the minimum duration of an explosive period for it to be
+reported. Default is 0.}
 
-\item{breaks_x}{plotting option}
+\item{plot_type}{for multivariate radf objects, "multiple" plots the series
+on multiple plots and "single" superimposes them on a single plot
+datestamping only the period of explosiveness. Default is "multiple".}
 
-\item{format_date}{a cv object}
+\item{breaks_x}{optional, determines the breaks on the x axis.}
 
-\item{breaks_y}{plotting option}
+\item{format_date}{character string, optional, determines the format of the
+date on the plot when the index is of class 'Date'.}
 
-\item{plot_type}{for multivariate radf objects, "multiple" plots the series on multiple
-plots and "single" superimposes them on a single plot datestamping only the period of
-explosiveness. Default is "multiple".}
+\item{breaks_y}{optional, determines the breaks on the y axis.}
 
-\item{...}{additional graphical arguments passed on to methods. Currently not used}
+\item{...}{additional graphical arguments passed on to methods. Currently
+not used.}
 }
 \value{
 a list of ggplot objects
 }
 \description{
-Plotting
+Plotting method for objects of class 'radf'.
+}
+\details{
+\itemize{
+  \item{breaks_x: }{a scalar for continuous variable that will feed into
+  \code{scale_x_date}/ or a date period ("week","month", "year") or their
+  multiples ("6 months", "2 years") thereof that will feed into
+  \code{scale_x_continuous}}.
+  \item{format_date: }{the format_date and the format in a "radf" object can
+  be different. The user can specify the way }
+  \item{breaks_y: }{asfdafsd}
+}
+}
+\examples{
+\donttest{
+# Simulate bubble processes, compute the t-stat, critical values and summarize
+set.seed(4441)
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+rfd <- radf(x = dta)
+mc <- mc_cv(n = 100)
+plot(x = rfd, y = mc)
+
+# Plot the graphs in one plot
+library(gridExtra)
+p1 <- plot(x = rfd, mc)
+do.call(grid.arrange, c(p1, ncol = 2))
+
+#Plot in a single graph
+plot(x = rfd, y = mc, plot_type = "single")
+}
 }

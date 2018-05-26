@@ -7,29 +7,50 @@
 #                           " R package version 0.1.0. https://CRAN.R-project.org/package=exdyn \n")
 #   }
 
+
+# Check if a character string is a Date -----------------------------------
+
+findDates <- function(strings) {
+  pattern1 <- "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]"
+  pattern2 <- "[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]"
+  pattern3 <- "[0-9][0-9]/[0-9][0-9][0-9][0-9]/[0-9][0-9]"
+  pattern4 <- "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+
+  tdBool <- grepl(pattern1, strings) | grepl(pattern2, strings) |
+    grepl(pattern3, strings) | grepl(pattern4, strings)
+  return(tdBool)
+}
+
+
 # Testing arguments ------------------------------------------------------
 
-is.positive.int <- function(arg)
-{
+is.positive.int <- function(arg) {
   level <- deparse(substitute(arg))
   if (arg != round(arg) || arg <= 0L) {
-    stop(sprintf("Argument '%s' should be a positive integer", level), call. = FALSE)
+    stop(sprintf(
+      "Argument '%s' should be a positive integer",
+      level
+    ), call. = FALSE)
   }
 }
 
-is.nonnegeative.int <- function(arg)
-{
+is.nonnegeative.int <- function(arg) {
   level <- deparse(substitute(arg))
   if (arg != round(arg) | arg < 0L) {
-    stop(sprintf("Argument '%s' should be a non-negative integer", level), call. = FALSE)
+    stop(sprintf(
+      "Argument '%s' should be a non-negative integer",
+      level
+    ), call. = FALSE)
   }
 }
 
-is.between <- function(x, arg1, arg2)
-{
+is.between <- function(x, arg1, arg2) {
   level <- deparse(substitute(x))
   if (x < arg1 | x > arg2) {
-    stop(sprintf("Argument '%s' should be a be between '%d' and '%d'", level, arg1, arg2), call. = FALSE)
+    stop(sprintf(
+      "Argument '%s' should be a be between '%d' and '%d'",
+      level, arg1, arg2
+    ), call. = FALSE)
   }
 }
 
@@ -43,13 +64,14 @@ radf_check <- function(x) {
 
 cv_check <- function(y) {
   if (!inherits(y, "cv")) {
-    stop("Arguement 'y' should be of class 'cv'", call. = FALSE)
+    stop("Argument 'y' should be of class 'cv'", call. = FALSE)
   }
 }
 
 minw_check <- function(x, y) {
   if (minw(x) != minw(y)) {
-    stop("The critical values should have the same minumum window with the t-statistics!", call. = FALSE)
+    stop("The critical values should have the same minumum", "
+         window with the t-statistics!", call. = FALSE)
   }
 }
 
@@ -57,22 +79,18 @@ minw_check <- function(x, y) {
 # Rest --------------------------------------------------------------------
 
 
-minw <- function(x)
-{
+minw <- function(x) {
   attr(x, "minw")
 }
 
-lagr <- function(x, ...)
-{
+lagr <- function(x, ...) {
   attr(x, "lag")
 }
 
-method <- function(y)
-{
+method <- function(y) {
   attr(y, "method")
 }
 
-iter <- function(y)
-{
+iter <- function(y) {
   attr(y, "iter")
 }

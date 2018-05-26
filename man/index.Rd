@@ -3,24 +3,24 @@
 \name{index}
 \alias{index}
 \alias{index<-}
-\title{Retrieve/Replace the Index of a 'radf' object}
+\title{Retrieve/Replace the Index}
 \usage{
 index(x, ...)
 
 index(x) <- value
 }
 \arguments{
-\item{x}{an object of class "radf", that contains}
+\item{x}{an object of class "radf".}
 
-\item{...}{further arguements passed to methods.}
+\item{...}{further arguments passed to methods.}
 
 \item{value}{an ordered vector of the same length as the 'index' attribute of x.}
 }
 \description{
-The user can retrieve/replace the index of a'radf' object.
+Retrieve or replace the index of a 'radf' object.
 }
 \details{
 If the use didn't specify the index during the estimation, the function will generate pseudo-index
-via creating a numeric sequence adancing by one. After the estimation, the user can use \code{index} to retrieve
-or \code{`index<-`} to replace the index. The index can numeric or Date.
+via creating a numeric sequence advancing by one. After the estimation, the user can use \code{index} to retrieve
+or \code{`index<-`} to replace the index. The index can either numeric or Date.
 }

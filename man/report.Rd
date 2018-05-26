@@ -3,28 +3,76 @@
 \name{report}
 \alias{report}
 \alias{diagnostics}
-\title{Report summary statistics}
+\alias{datestamp}
+\title{Report summary statistics, diagnostics and date stamping periods of
+exuberance}
 \usage{
 report(x, y)
 
 diagnostics(x, y, option = c("gsadf", "sadf"))
+
+datestamp(x, y, option = c("gsadf", "sadf"), min_duration = 0)
 }
 \arguments{
-\item{x}{an object of class "radf", that contains}
+\item{x}{an object of class "radf".}
 
 \item{y}{an object of class "cv".}
 
-\item{option}{check which methodology to use}
+\item{option}{whether to apply the "gsadf" or "sadf" methodology. Default is
+"gsadf"}
+
+\item{min_duration}{the minimum duration of an explosive period for it to be
+reported. Default is 0.}
 }
 \value{
-The function \code{\link{report}} returns a list of summary statistics for the t-statistic
-and the critical values of the ADF, SADF and GSDF.
+Returns a list of values for each explosive sub-period, giving the
+origin and termination dates as well as the number of periods explosive
+behavior lasts.
 }
 \description{
-Report summary statistics
+Report summary statistics, diagnostics and date stamping periods of
+exuberance
+}
+\details{
+Setting \code{min_duration} allows temporary spikes above the critical value
+sequence to be removed. Phillips et al. 2015 propose a simple way to remove
+small periods of explosivenes by a rule of thumb of the class "log(T)" or
+"log(T)/T", where T is the number of observations.
+
+#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
+S&P 500. International Economic Review, 56(4), 1043-1078.
 }
 \section{Functions}{
 \itemize{
-\item \code{diagnostics}: mpla mpla
+\item \code{report}: returns a list of summary statistics for the t-statistic
+and the critical values of the ADF, SADF and GSADF.
+
+\item \code{diagnostics}: Finds the series that reject the null for 95\%
+significance level.
+
+\item \code{datestamp}: computes the origination, termination and duration of episodes during which
+the time series display explosive dynamics.
 }}
 
+\examples{
+\donttest{
+# Simulate bubble processes, compute the t-stat and critical values
+set.seed(4441)
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+rfd <- radf(dta)
+mc <- mc_cv(n = 100)
+
+# Report, diagnostics and datestamp (default)
+report(x = rfd, y = mc)
+diagnostics(x = rfd, y =mc)
+datestamp(x = rfd, y = mc)
+
+# Diagnostics for 'sadf'
+diagnostics(x = rfd, y = mc, option = "sadf")
+
+# Use rule of thumb to omit small kinks
+rot = round(log(NROW(rfd)))
+datestamp(x = rfd, y = mc, min_duration = rot)
+}
+}

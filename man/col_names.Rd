@@ -3,19 +3,29 @@
 \name{col_names}
 \alias{col_names}
 \alias{col_names<-}
-\title{Column Names of a 'radf' object}
+\title{Retrieve/set column names}
 \usage{
 col_names(x, ...)
 
 col_names(x) <- value
 }
 \arguments{
-\item{x}{an object of class "radf", that contains}
+\item{x}{an object of class "radf".}
 
-\item{...}{further arguements passed to methods.}
+\item{...}{further arguments passed to methods.}
 
 \item{value}{an ordered vector of the same length as the 'index' attribute of x.}
 }
 \description{
-Column Names of a 'radf' object
+Retrieve or set the column names of a 'radf' object. Simular to \code{colnames}, with the only
+difference that \code{col_names} is for 'radf' objects.
+}
+\examples{
+\donttest{
+# Simulate bubble processes
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+
+rfd <- radf(x = dta)
+colnames(rfd) <- c("OneBubble", "TwoBubbles")
+}
 }

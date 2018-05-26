@@ -9,29 +9,51 @@ wb_cv(y, nboot = 1000, minw, parallel = FALSE, distribution_rad = FALSE)
 \arguments{
 \item{y}{a data.frame or matrix containing the data.}
 
-\item{nboot}{a positive integer idicating the number of bootstraps.}
+\item{nboot}{a positive integer indicating the number of bootstraps.}
 
-\item{minw}{a non-negative integer indicating the minimum window.}
+\item{minw}{a positive integer. The minimum window}
 
-\item{parallel}{logical. If \code{TRUE} parallel programming is used (max cores)}
+\item{parallel}{logical. If \code{TRUE} parallel programming is used
+(max cores)}
 
-\item{distribution_rad}{logical. If \code{TRUE} then Radstander distribution will be used}
+\item{distribution_rad}{logical. If \code{TRUE} then Radstander distribution
+will be used}
 }
 \value{
-a list that contains the critical values for ADF, BADF, BSADF, GSADF t-statistics.
+a list that contains the critical values for ADF, BADF, BSADF,
+GSADF t-statistics.
 }
 \description{
-\code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling scheme which is asymptotically robust to
-non-stationary volatility, to generate critical values for the recursive unit root tests.
+\code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
+scheme which is asymptotically robust to non-stationary volatility, to
+generate critical values for the recursive unit root tests.
 }
 \details{
-This approach involves applying wild bootstrap re-sampling scheme to the first difference of the raw
-data and allow to construct bootstrap analogues of the PWY tst which are asymptotically robust to non-stationary
-volatility. The wild boostrap can replicate the pattern of heteroskedasticity present in the shocks.
+This approach involves applying wild bootstrap re-sampling scheme
+to the first difference of the raw data and allow to construct bootstrap
+analogues of the PWY tst which are asymptotically robust to non-stationary
+volatility. The wild bootstrap can replicate the pattern of
+heteroskedasticity present in the shocks.
+}
+\examples{
+\donttest{
+# Simulate bubble processes
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+
+# Default minimum window
+wb <- wb_cv(y = dta)
+
+# Change the minimum window and the number of bootstraps
+wb <- wb_cv(y = dta, nboot = 1500,  minw = 20)
+
+# Use parallel computing (utilizing all available cores)
+wb <- wb_cv(y = dta, parallel = TRUE)
+}
 }
 \references{
-Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R. (2016). Tests for explosive financial bubbles
-in the presence of non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
+Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R.
+(2016). Tests for explosive financial bubbles in the presence of
+non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 }
 \seealso{
 \code{\link{mc_cv}} for Monte Carlo critical values

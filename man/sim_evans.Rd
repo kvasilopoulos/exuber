@@ -2,28 +2,28 @@
 % Please edit documentation in R/simul.R
 \name{sim_evans}
 \alias{sim_evans}
-\title{Simulation of Evans Bubble}
+\title{Simulation a' la Evans(1991)}
 \usage{
 sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 }
 \arguments{
-\item{n}{a positive integer indicating the number of simulations}
+\item{n}{a strictly positive integer indicating the length of simulated output series}
 
-\item{alpha}{positive}
+\item{alpha}{positive scalar in}
 
 \item{delta}{positive value}
 
 \item{tau}{the standard deviation of the innovations}
 
-\item{pi}{a positive value in (0, 1) indicating the probability of collapse}
+\item{pi}{a positive value in (0, 1) indicating the probability of the bubble continues to grow}
 
-\item{r}{a positive value describing the exapnsion rate}
+\item{r}{a positive scalar that determines the growth rate of the bubble process}
 }
 \value{
 a numeric vector of length n
 }
 \description{
-The following generating process simulates a rational bubble that is always positive and collapses periodically.
+The following generating process simulates a rational periodically-collapsing bubble.
 }
 \details{
 If \eqn{B_t \leq \alpha}{B[t] \le \alpha}
@@ -34,4 +34,11 @@ If \eqn{B_t > \alpha}{B[t] > \alpha}
 
 \deqn{B_{t+1} =  \delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
 \delta*(1+r)/\pi* (B[t]-\delta/(1+r))*u[t+1]}
+}
+\references{
+Evans, G. W. (1991). Pitfalls in testing for explosive
+bubbles in asset prices. The American Economic Review, 81(4), 922-930.
+}
+\seealso{
+\code{\link{sim_dgp1}}, \code{\link{sim_dgp1}}, \code{\link{sim_blan}}
 }

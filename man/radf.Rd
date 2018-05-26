@@ -4,30 +4,45 @@
 \alias{radf}
 \title{Supremum Augmented Dickey Fuller test}
 \usage{
-radf(x, minw, lag = 0, format = "\%Y-\%m-\%d")
+radf(x, minw, lag = 0)
 }
 \arguments{
-\item{x}{a data.frame or matrix.}
+\item{x}{a univariate or multivariate numeric ts object, data.frame or matrix.
+The estimation process cannot handle NA.}
 
-\item{minw}{a positive integer.}
+\item{minw}{a positive integer. The minimum window}
 
 \item{lag}{a non-negative integer.}
-
-\item{format}{a character string. If not specified, it will try "\%Y-\%m-\%d".}
 }
 \value{
 a list
-  \item{adsfasdf}{asfdafsd}
-  \item{asdfdsaf}{afdasdfas}
+  \item{ADF}{asfdafsd}
+  \item{BADF}{afdasdfas}
+  \item{SADF}{afdasdfas}
+  \item{BSADF}{afdasdfas}
+  \item{GSADF}{afdasdfas}
 }
 \description{
-\code{radf} returns the t-statistics from a recursive augmented dickey fuller test
+\code{radf} returns the t-statistics from a recursive augmented dickey fuller
+test
+}
+\examples{
+\donttest{
+# Simulate bubble processes
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+
+rfd <- radf(x = dta)
+
+# For lag = 1 and minimum window =20
+rfd <- radf(x = dta, minw =20, lag = 1)
+}
 }
 \references{
-Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior In The 1990S Nasdaq:
-When Did Exuberance Escalate Asset Values? International Economic Review, 52(1), 201-226.
+Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
+In The 1990S Nasdaq: When Did Exuberance Escalate Asset Values? International
+Economic Review, 52(1), 201-226.
 
-Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
-Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
-6(4), 1043-1078.
+Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
+S&P 500. International Economic Review, 56(4), 1043-1078.
 }

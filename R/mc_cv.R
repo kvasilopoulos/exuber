@@ -1,13 +1,16 @@
-#' #' Monte Carlo Critical Values
+#'  Monte Carlo Critical Values
 #'
-#' \code{mc_cv} is computes Monte Carlo critical values for the recursive unit root tests.
+#' \code{mc_cv} computes Monte Carlo critical values for the recursive unit
+#' root tests.
 #'
 #' @param n a positive integer. The sample size
 #' @param nrep a positive integer. The number of Monte Carlo simulations.
-#' @param minw a non-negative integer, The minimum window
-#' @param parallel logical. If \code{TRUE} parallel programming is used (max cores)
+#' @inheritParams radf
+#' @param parallel logical. If \code{TRUE} parallel programming is used
+#' (max cores)
 #'
-#' @return a list. Contains the critical values for ADF, BADF, BSADF, GSADF t-statistics
+#' @return a list. Contains the critical values for ADF, BADF, BSADF, GSADF
+#' t-statistics
 #'
 #' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
@@ -18,17 +21,27 @@
 #' @importFrom stats quantile rnorm
 #' @export
 #'
-mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
-
+#' @examples
+#' \donttest{
+#' # Default minimum window
+#' mc <- mc_cv(n = 100)
+#'
+#' # Change the minimum window and the number of simulations
+#' mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
+#'
+#' # Use parallel computing (utilizing all available cores)
+#' mc <- mc_cv(n = 100, parallel = TRUE)
+#' }
+mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
   is.positive.int(n)
   is.positive.int(nrep)
   if (missing(minw)) {
-    r0 = 0.01 + 1.8 / sqrt(n)
-    minw = floor(r0 * n)
+    r0 <- 0.01 + 1.8 / sqrt(n)
+    minw <- floor(r0 * n)
   } else if (!minw == round(minw) | minw <= 0) {
     stop("Argument 'minw' should be a positive integer", call. = FALSE)
   } else if (minw < 3) {
-    stop( "Argument 'minw' is too small", call. = FALSE)
+    stop("Argument 'minw' is too small", call. = FALSE)
   }
   stopifnot(is.logical(parallel))
 
@@ -40,13 +53,15 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
 
-    results  <-  foreach(i = 1:nrep, .export = 'srls_gsadf_cpp',
-                         .combine = 'cbind', .options.snow = opts) %dopar% {
-                           y  <-  cumsum(rnorm(n))
-                           srls_gsadf_cpp(y[-1], y[-n], minw)
-                         }
+    results <- foreach(
+      i = 1:nrep, .export = "srls_gsadf_cpp",
+      .combine = "cbind", .options.snow = opts
+    ) %dopar% {
+      y <- cumsum(rnorm(n))
+      srls_gsadf_cpp(y[-1], y[-n], minw)
+    }
     stopCluster(cl)
-  }else{
+  } else {
     results <- matrix(0, 2 * n + 1, nrep)
     for (i in 1:nrep) {
       y <- cumsum(rnorm(n))
@@ -56,15 +71,26 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
   }
   close(pb)
 
-  bsadf_critical <-  t(apply(results[(minw + 1):(n - 1), ], 1, quantile,
-                           probs =  c(0.9, 0.95, 0.99)))
-  sadf_critical  <-  quantile(results[n, ], probs = c(0.9, 0.95, 0.99), drop = FALSE)
-  gsadf_critical <-  quantile(results[n + 1, ], probs = c(0.9, 0.95, 0.99), drop = FALSE)
-  adf_critical   <-  quantile(results[n + 2, ], probs =  c(0.9, 0.95, 0.99),drop = FALSE)
-  badf_critical  <-  t(apply(results[-c(1:(n + 2 + minw)), ], 1, quantile,
-                           probs =  c(0.9, 0.95, 0.99)))
+  bsadf_critical <- t(apply(results[(minw + 1):(n - 1), ], 1, quantile,
+    probs = c(0.9, 0.95, 0.99)
+  ))
+  sadf_critical <- quantile(results[n, ],
+    probs = c(0.9, 0.95, 0.99),
+    drop = FALSE
+  )
+  gsadf_critical <- quantile(results[n + 1, ],
+    probs = c(0.9, 0.95, 0.99),
+    drop = FALSE
+  )
+  adf_critical <- quantile(results[n + 2, ],
+    probs = c(0.9, 0.95, 0.99),
+    drop = FALSE
+  )
+  badf_critical <- t(apply(results[-c(1:(n + 2 + minw)), ], 1, quantile,
+    probs = c(0.9, 0.95, 0.99)
+  ))
 
-  # cv sequences should be increasing
+  # cv sequences should be increasing - i could use cummax
   for (j in 1:3) {
     for (i in 2:NROW(bsadf_critical)) {
       if (bsadf_critical[i, j] <= bsadf_critical[i - 1, j]) {
@@ -76,18 +102,18 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE){
     }
   }
 
-  output <- list(adf_cv   = adf_critical,
-                 sadf_cv  = sadf_critical,
-                 gsadf_cv = gsadf_critical,
-                 badf_cv  = badf_critical,
-                 bsadf_cv = bsadf_critical)
+  output <- list(
+    adf_cv = adf_critical,
+    sadf_cv = sadf_critical,
+    gsadf_cv = gsadf_critical,
+    badf_cv = badf_critical,
+    bsadf_cv = bsadf_critical
+  )
 
-  attr(output, "class")  <- append(class(output), "cv")
-  attr(output, "iter")   <- nrep
+  attr(output, "class") <- append(class(output), "cv")
+  attr(output, "iter") <- nrep
   attr(output, "method") <- "Monte Carlo"
-  attr(output, "minw")   <- minw
+  attr(output, "minw") <- minw
 
   return(output)
 }
-
-
