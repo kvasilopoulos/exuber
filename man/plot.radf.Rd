@@ -9,50 +9,51 @@
   format_date = "\%m-\%Y", breaks_y = NULL, ...)
 }
 \arguments{
-\item{x}{an object of class "radf".}
+\item{x}{An object of class \code{radf}.}
 
-\item{y}{an object of class "cv".}
+\item{y}{An object, which is the output of \code{mc_cv} or \code{wb_cv}.}
 
-\item{option}{whether to apply the "gsadf" or "sadf" methodology. Default is
-"gsadf"}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
+"gsadf".}
 
-\item{min_duration}{the minimum duration of an explosive period for it to be
+\item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 
-\item{plot_type}{for multivariate radf objects, "multiple" plots the series
+\item{plot_type}{For multivariate \code{radf} objects, "multiple" plots the series
 on multiple plots and "single" superimposes them on a single plot
 datestamping only the period of explosiveness. Default is "multiple".}
 
-\item{breaks_x}{optional, determines the breaks on the x axis.}
+\item{breaks_x}{Optional, determines the breaks on the x axis.}
 
-\item{format_date}{character string, optional, determines the format of the
+\item{format_date}{A character string, optional, determines the format of the
 date on the plot when the index is of class 'Date'.}
 
-\item{breaks_y}{optional, determines the breaks on the y axis.}
+\item{breaks_y}{Optional, determines the breaks on the y axis.}
 
-\item{...}{additional graphical arguments passed on to methods. Currently
+\item{...}{Additional graphical arguments passed on to methods. Currently
 not used.}
 }
 \value{
-a list of ggplot objects
+A list of ggplot objects
 }
 \description{
 Plotting method for objects of class 'radf'.
 }
 \details{
 \itemize{
-  \item{breaks_x: }{a scalar for continuous variable that will feed into
+  \item{breaks_x: }{A scalar for continuous variable that will feed into
   \code{scale_x_date}/ or a date period ("week","month", "year") or their
   multiples ("6 months", "2 years") thereof that will feed into
   \code{scale_x_continuous}}.
-  \item{format_date: }{the format_date and the format in a "radf" object can
+  \item{format_date: }{The format_date and the format in a radf object can
   be different. The user can specify the way }
-  \item{breaks_y: }{asfdafsd}
+  \item{breaks_y: }{a scalar for continuous variables which generates breaks
+  for points at which y gridlines will appear (see \code{scale_y_continuous}).}
 }
 }
 \examples{
 \donttest{
-# Simulate bubble processes, compute the t-stat, critical values and summarize
+# Simulate bubble processes, compute t-stat and critical values and summarize
 set.seed(4441)
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 rfd <- radf(x = dta)

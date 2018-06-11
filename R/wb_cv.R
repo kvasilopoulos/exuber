@@ -1,23 +1,21 @@
-#' Wild Bootstrapped Critical values
+#' Wild Bootstrap Critical values
 #'
 #' \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
-#' scheme which is asymptotically robust to non-stationary volatility, to
+#' scheme, which is asymptotically robust to non-stationary volatility, to
 #' generate critical values for the recursive unit root tests.
 #'
 #' @param y a data.frame or matrix containing the data.
 #' @param nboot a positive integer indicating the number of bootstraps.
 #' @inheritParams mc_cv
-#' @param distribution_rad logical. If \code{TRUE} then Radstander distribution
+#' @param dist_rad logical. If \code{TRUE} then Rademacher distribution
 #' will be used
 #'
-#' @return  a list that contains the critical values for ADF, BADF, BSADF,
-#' GSADF t-statistics.
+#' @return  A list that contains the critical values for ADF, BADF, BSADF and GSADF
+#' t-statistics.
 #'
-#' @details This approach involves applying wild bootstrap re-sampling scheme
-#' to the first difference of the raw data and allow to construct bootstrap
-#' analogues of the PWY tst which are asymptotically robust to non-stationary
-#' volatility. The wild bootstrap can replicate the pattern of
-#' heteroskedasticity present in the shocks.
+#' @details This approach involves applying a wild bootstrap re-sampling scheme
+#' to construct the bootstrap analogue of the PWY test which is asymptotically
+#' robust to non-stationary volatility.
 #'
 #' @references Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R.
 #' (2016). Tests for explosive financial bubbles in the presence of
@@ -25,10 +23,10 @@
 #'
 #' @seealso \code{\link{mc_cv}} for Monte Carlo critical values
 #'
-#' @import foreach
+#' @import doParallel
 #' @import parallel
-#' @import doSNOW
-#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @import foreach
+#' @importFrom utils setTxtProgressBar txtProgressBar flush.console
 #' @importFrom stats rnorm quantile
 #' @export
 #'
@@ -47,7 +45,7 @@
 #' wb <- wb_cv(y = dta, parallel = TRUE)
 #' }
 wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
-                  distribution_rad = FALSE) {
+                  dist_rad = FALSE) {
   y <- as.matrix(y)
   nc <- NCOL(y)
   nr <- NROW(y)
@@ -63,7 +61,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
   }
 
   stopifnot(is.logical(parallel))
-  stopifnot(is.logical(distribution_rad))
+  stopifnot(is.logical(dist_rad))
   if (any(is.na(y))) {
     stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
@@ -99,18 +97,28 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
   pb <- txtProgressBar(max = nboot, style = 3)
 
   if (parallel) {
-    cl <- makePSOCKcluster(detectCores())
-    registerDoSNOW(cl)
-    progress <- function(n) setTxtProgressBar(pb, n)
-    opts <- list(progress = progress)
+
+    f <- function(){
+      count <- 0
+      function(...) {
+        count <<- count + length(list(...)) - 1
+        setTxtProgressBar(pb, count)
+        flush.console()
+        cbind(...)
+      }
+    }
+
+    cl <- makeCluster(detectCores(), type = 'SOCK')
+    registerDoParallel(cl)
+
     for (j in 1:nc) {
       dy <- y[-1, j] - y[-nr, j]
       results <- foreach(
         i = 1:nboot, .export = "srls_gsadf_cpp",
-        .combine = "cbind", .options.snow = opts
+        .combine = f()
       ) %dopar% {
         ystar <- 0
-        if (distribution_rad) {
+        if (dist_rad) {
           w <- sample(c(-1, 1), nr - 1, replace = TRUE)
         } else {
           w <- rnorm(nr - 1, 0, 1)
@@ -144,7 +152,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
       dy <- y[-1, j] - y[-nr, j]
       for (i in 1:nboot) {
         ystar <- 0
-        if (distribution_rad) {
+        if (dist_rad) {
           w <- sample(c(-1, 1), nr - 1, replace = TRUE)
         } else {
           w <- rnorm(nr - 1, 0, 1)

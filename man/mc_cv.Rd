@@ -7,18 +7,19 @@
 mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 }
 \arguments{
-\item{n}{a positive integer. The sample size}
+\item{n}{A positive integer. The sample size.}
 
-\item{nrep}{a positive integer. The number of Monte Carlo simulations.}
+\item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
-\item{minw}{a positive integer. The minimum window}
+\item{minw}{A positive integer. The minimum window size, which defaults at
+\eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
 
-\item{parallel}{logical. If \code{TRUE} parallel programming is used
-(max cores)}
+\item{parallel}{Logical. If \code{TRUE} parallel programming is used
+(defaults to using all cores).}
 }
 \value{
-a list. Contains the critical values for ADF, BADF, BSADF, GSADF
-t-statistics
+A list that contains the critical values for ADF, BADF, BSADF and GSADF
+t-statistics.
 }
 \description{
 \code{mc_cv} computes Monte Carlo critical values for the recursive unit

@@ -8,31 +8,32 @@ sim_dgp2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n, tf2 = 0.1
   * n + te2, c = 1, alpha = 0.6, sigma = 6.79)
 }
 \arguments{
-\item{n}{a strictly positive integer indicating the length of simulated output series}
+\item{n}{A strictly positive integer specifying the length of the simulated output series.}
 
-\item{te1}{a scalar in (0,n) specifying the origination of the first bubble episode}
+\item{te1}{a scalar in (0,n) specifying the origination of the first bubble episode.}
 
-\item{tf1}{a scalar in  (te1,n) specifying the termination of the first bubble episode}
+\item{tf1}{a scalar in  (te1,n) specifying the termination of the first bubble episode.}
 
-\item{te2}{a scalar in (tf1,n) specifying the origination of the second bubble episode}
+\item{te2}{a scalar in (tf1,n) specifying the origination of the second bubble episode.}
 
-\item{tf2}{a scalar in (te2,n) specifying the termination of the second bubble episode}
+\item{tf2}{a scalar in (te2,n) specifying the termination of the second bubble episode.}
 
-\item{c}{a positive scalar determining the autoregressive coefficient in the explosive regime}
+\item{c}{A positive scalar determining the autoregressive coefficient in the explosive regime}
 
-\item{alpha}{a positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
+\item{alpha}{A positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
 
-\item{sigma}{a positive scalar indicating the standard deviation of the innovations}
+\item{sigma}{A positive scalar indicating the standard deviation of the innovations}
 }
 \value{
-a numeric vector of length n
+A numeric vector of length n
 }
 \description{
 The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
-there are two episodes of midly explosive dynamics.
+there are two episodes of mildy explosive dynamics.
 }
 \details{
-The data generating process is described with the following equation:
+The data generating process is described by
+
 \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
@@ -43,12 +44,12 @@ The data generating process is described with the following equation:
 \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 \epsilon[t] 1{t in N[0] union B[1] union B[2]}}
 
-where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given:
+where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given
 
 \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
 
 with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
-\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)},
 \eqn{X_{\tau_{1f}} = X_{\tau_{1e}} + X^*}{X[t1f] = X[t1e] + X'} and
 \eqn{X_{\tau_{2f}} = X_{\tau_{2e}} + X^*}{X[t2f] = X[t2e] + X'}.
 We use the notation
@@ -61,16 +62,16 @@ After the collapse of the first bubble \eqn{X_t}{X[t]} resumes a martingale path
 \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
 The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
 \eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the
-sample period \eqn{\tau}{t}. The expansion duration is assumed to be longer than that of the second
-bubble, namely \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
+sample period \eqn{\tau}{t}. The expansion duration of the first bubble is assumed to be longer than
+that of the second bubble, i.e. \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
 
-#'For further details the user can refer to Phillips et al., 2015 p. 1055.
+For further details the user can refer to Phillips et al., (2015) p. 1055.
 }
 \examples{
-# 100 periods with origination dates 20/60 and termination dates 40/70 respectively
+# 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
 sim_dgp2(n = 100)
 
-# 200 periods with origination dates 40/120 and termination dates 80/140 respectively
+# 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
 sim_dgp2(n = 200)
 }
 \references{

@@ -1,38 +1,39 @@
 #' Simulation of a single-bubble process
 #'
 #' The following function generates a time series which switches from a martingale to a mildly explosive
-#' process and  then back to a martingale.
+#' process and then back to a martingale.
 #'
-#' @param n a strictly positive integer indicating the length of simulated output series
-#' @param te a scalar in (0,tf) specifying the origination of bubble expansion
-#' @param tf a scalar in (te,n) specifying the termination of bubble collapse
-#' @param c a positive scalar determining the autoregressive coefficient in the explosive regime
-#' @param alpha a positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient
-#' @param sigma a positive scalar indicating the standard deviation of the innovations
+#' @param n A strictly positive integer specifying the length of the simulated output series.
+#' @param te A scalar in (0,tf) specifying the origination of bubble expansion.
+#' @param tf A scalar in (te,n) specifying the termination of bubble collapse.
+#' @param c A positive scalar determining the autoregressive coefficient in the explosive regime
+#' @param alpha A positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient
+#' @param sigma A positive scalar indicating the standard deviation of the innovations
 #
 #'
 #' @details
-#' The data generating process can be described with the following equation:
+#' The data generating process is described by the following equation
 #' \deqn{X_t = X_{t-1}1\{t < \tau_e\}+ \delta_T X_{t-1}1\{\tau_e \leq t\leq \tau_f\} +
 #' \left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}}{X[t] =
 #' X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
 #' (\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf}}
 #'
-#' where the he autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by the formula
+#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by
 #'
 #' \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
 #'
 #' with \eqn{c>0} and \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 #' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
 #' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}, where \eqn{\tau}{t} is the last observation of the sample.
-#' The pre-bubble periods \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)} is assumed to be a pure random walk process. The bubble expansion
-#' period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
-#' coefficient \eqn{\delta_t}{\delta[T]}, and continues its martingale path of the subsequent period
-#' \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}
+#' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
+#' During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
+#' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path of the subsequent period
+#' \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
 #'
 #'
-#' For further details the user can refer to Phillips et al., 2015 p. 1054.
-#' @return a numeric vector of length n
+#' For further details the user can refer to Phillips et al., (2015) p. 1054.
+#'
+#' @return A numeric vector of length n
 #' @export
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
@@ -42,13 +43,13 @@
 #' @seealso \code{\link{sim_dgp2}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 #'
 #' @examples
-#' # 100 periods with origination date 40 and termination date 55
+#' # 100 periods with bubble origination date 40 and termination date 55
 #' sim_dgp1(n = 100)
 #'
-#' # 200 periods with origination date 80 and termination date 110
+#' # 200 periods with bubble origination date 80 and termination date 110
 #' sim_dgp1(n = 200)
 #'
-#' # 200 periods with origination date 100 and termination date 150
+#' # 200 periods with bubble origination date 100 and termination date 150
 #' sim_dgp1(n = 200, te = 100, tf = 150)
 sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
                      alpha = 0.6, sigma = 6.79) {
@@ -80,16 +81,17 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' Simulation of a two-bubble process
 #'
 #' The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
-#' there are two episodes of midly explosive dynamics.
+#' there are two episodes of mildy explosive dynamics.
 #'
 #' @inheritParams sim_dgp1
-#' @param te1 a scalar in (0,n) specifying the origination of the first bubble episode
-#' @param tf1 a scalar in  (te1,n) specifying the termination of the first bubble episode
-#' @param te2 a scalar in (tf1,n) specifying the origination of the second bubble episode
-#' @param tf2 a scalar in (te2,n) specifying the termination of the second bubble episode
+#' @param te1 a scalar in (0,n) specifying the origination of the first bubble episode.
+#' @param tf1 a scalar in  (te1,n) specifying the termination of the first bubble episode.
+#' @param te2 a scalar in (tf1,n) specifying the origination of the second bubble episode.
+#' @param tf2 a scalar in (te2,n) specifying the termination of the second bubble episode.
 #'
 #' @details
-#' The data generating process is described with the following equation:
+#' The data generating process is described by
+#'
 #' \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 #' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
 #' 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
@@ -100,12 +102,12 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 #' \epsilon[t] 1{t in N[0] union B[1] union B[2]}}
 #'
-#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given:
+#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given
 #'
 #' \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
 #'
 #' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
-#' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+#' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)},
 #' \eqn{X_{\tau_{1f}} = X_{\tau_{1e}} + X^*}{X[t1f] = X[t1e] + X'} and
 #' \eqn{X_{\tau_{2f}} = X_{\tau_{2e}} + X^*}{X[t2f] = X[t2e] + X'}.
 #' We use the notation
@@ -118,12 +120,12 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
 #' The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
 #' \eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the
-#' sample period \eqn{\tau}{t}. The expansion duration is assumed to be longer than that of the second
-#' bubble, namely \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
+#' sample period \eqn{\tau}{t}. The expansion duration of the first bubble is assumed to be longer than
+#' that of the second bubble, i.e. \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
 #'
-#' #'For further details the user can refer to Phillips et al., 2015 p. 1055.
+#' For further details the user can refer to Phillips et al., (2015) p. 1055.
 #'
-#' @return a numeric vector of length n
+#' @return A numeric vector of length n
 #' @export
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
@@ -133,10 +135,10 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 #'
 #' @examples
-#' # 100 periods with origination dates 20/60 and termination dates 40/70 respectively
+#' # 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
 #' sim_dgp2(n = 100)
 #'
-#' # 200 periods with origination dates 40/120 and termination dates 80/140 respectively
+#' # 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
 #' sim_dgp2(n = 200)
 sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
                      te2 = 0.6 * n, tf2 = 0.1 * n + te2,
@@ -173,14 +175,16 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   return(y)
 }
 
-#' Simulation a' la Blanchard(1979)
+#' Simulation of Bubble Processes a la Blanchard (1979)
+#'
+#'Simulation a la Blanchard (1979)
 #'
 #' @inheritParams sim_dgp1
-#' @param pi a positive value in (0, 1) indicating the probability of the bubble continues to grow
-#' @param r a positive scalar that determines the growth rate of the bubble process
+#' @param pi A positive value in (0, 1) indicating the probability of the bubble continuing to grow.
+#' @param r A positive scalar that determines the growth rate of the bubble process
 #'
 #' @export
-#' @return a numeric vector of length n
+#' @return A numeric vector of length n.
 #'
 #' @importFrom stats rbinom
 #' @details
@@ -228,16 +232,16 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 }
 
 
-#' Simulation a' la Evans(1991)
+#' Simulation a la Evans (1991)
 #'
-#' The following generating process simulates a rational periodically-collapsing bubble.
+#' This function simulates a rational periodically-collapsing bubble of the type proposed in Evans (1991).
 #'
 #' @inheritParams sim_blan
-#' @param delta positive value
-#' @param tau the standard deviation of the innovations
-#' @param alpha positive scalar in
+#' @param delta A positive scalar
+#' @param tau The standard deviation of the innovations
+#' @param alpha A positive scalar in
 #'
-#' @return a numeric vector of length n
+#' @return A numeric vector of length n
 #'
 #' @importFrom stats rbinom
 #'
@@ -248,7 +252,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' If \eqn{B_t > \alpha}{B[t] > \alpha}
 #'
-#' \deqn{B_{t+1} =  \delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
+#' \deqn{B_{t+1} =  (\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
 #' \delta*(1+r)/\pi* (B[t]-\delta/(1+r))*u[t+1]}
 #'
 #' @export
@@ -289,44 +293,44 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 
 #' Simulation of dividends
 #'
-#' Simulating (log) dividends from a random walk with drift.
+#' Simulate (log) dividends from a random walk with drift.
 #'
 #' @inheritParams sim_dgp1
-#' @param mu a scalar indicating the drift
-#' @param r a positive value indicating the discount factor
-#' @param log a logical. If true dividends follow a lognormal distribution
-#' @param output a character string giving the fundamental price('pf') or
-#' dividend series('d'). Default is 'pf'
+#' @param mu A scalar indicating the drift.
+#' @param r A positive value indicating the discount factor.
+#' @param log A logical. If true dividends follow a lognormal distribution.
+#' @param output A character string giving the fundamental price("pf") or
+#' dividend series("d"). Default is 'pf'.
 #'
-#' @return a numeric vector of length n
+#' @return A numeric vector of length n.
 #' @export
 #'
 #' @details
 #'
-#' If log is set to FALSE (default value) the dividends follow:
+#' If log is set to FALSE (default value) the dividends follow
 #'
 #' \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t]}
 #'
 #' where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
-#' are set equal to \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (initial value).
-#' The above equation can be solved to yield the fundamental price:
+#' are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (the initial value of the dividend sequence).
+#' The above equation can be solved to yield the fundamental price
 #'
 #' \deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r}
 #'
-#' If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow:
+#' If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow
 #'
 #' \deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t]}
 #'
 #' where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The parameters
-#' \eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case:
+#' \eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case is
 #'
 #' \deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
 #'
-#' where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}. All the default parameter values are
-#' obtained from West(1988).
+#' where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}.
+#' All default parameter values are those suggested by West (1988).
 #'
 #' @references West, K. D. (1988). Dividend innovations and stock price volatility.
-#' Econometrica: Journal of the Econometric Society, 37-61.
+#' Econometrica: Journal of the Econometric Society, p. 37-61.
 #'
 #' @examples
 #' # Price is the sum of the bubble and fundamental components

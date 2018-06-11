@@ -1,22 +1,23 @@
 #' Supremum Augmented Dickey Fuller test
 #'
-#' \code{radf} returns the t-statistics from a recursive augmented dickey fuller
+#' \code{radf} returns the t-statistics from a recursive augmented Dickey-Fuller
 #' test
 #'
-#' @param x a univariate or multivariate numeric ts object, data.frame or matrix.
-#' The estimation process cannot handle NA.
-#' @param minw a positive integer. The minimum window
-#' @param lag a non-negative integer.
+#' @param x A univariate or multivariate numeric ts object, data.frame or matrix.
+#' The estimation process cannot handle NA values.
+#' @param minw A positive integer. The minimum window size, which defaults at
+#' \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.
+#' @param lag A non-negative integer. The lag of the Dickey-Fuller regression
 #'
-#' @return a list
-#'   \item{ADF}{asfdafsd}
-#'   \item{BADF}{afdasdfas}
-#'   \item{SADF}{afdasdfas}
-#'   \item{BSADF}{afdasdfas}
-#'   \item{GSADF}{afdasdfas}
+#' @return A list that contains the t-statistics (sequence) for
+#'   \item{ADF}{Augemented Dickey-Fuller}
+#'   \item{BADF}{Backward Dickey-Fuller}
+#'   \item{SADF}{Superemum Dickey-Fuller}
+#'   \item{BSADF}{Backward Supremum Dickey-Fuller}
+#'   \item{GSADF}{Generalized Supremum Dickey Fuller}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
-#' In The 1990S Nasdaq: When Did Exuberance Escalate Asset Values? International
+#' in The 1990S Nasdaq: When Did Exuberance Escalate Asset Values? International
 #' Economic Review, 52(1), 201-226.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for

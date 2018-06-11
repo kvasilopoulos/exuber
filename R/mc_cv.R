@@ -3,21 +3,21 @@
 #' \code{mc_cv} computes Monte Carlo critical values for the recursive unit
 #' root tests.
 #'
-#' @param n a positive integer. The sample size
-#' @param nrep a positive integer. The number of Monte Carlo simulations.
+#' @param n A positive integer. The sample size.
+#' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @inheritParams radf
-#' @param parallel logical. If \code{TRUE} parallel programming is used
-#' (max cores)
+#' @param parallel Logical. If \code{TRUE} parallel programming is used
+#' (defaults to using all cores).
 #'
-#' @return a list. Contains the critical values for ADF, BADF, BSADF, GSADF
-#' t-statistics
+#' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
+#' t-statistics.
 #'
 #' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
-#' @import foreach
+#' @import doParallel
 #' @import parallel
-#' @import doSNOW
-#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @import foreach
+#' @importFrom utils setTxtProgressBar txtProgressBar flush.console
 #' @importFrom stats quantile rnorm
 #' @export
 #'
@@ -33,6 +33,7 @@
 #' mc <- mc_cv(n = 100, parallel = TRUE)
 #' }
 mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
+
   is.positive.int(n)
   is.positive.int(nrep)
   if (missing(minw)) {
@@ -45,17 +46,25 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
   }
   stopifnot(is.logical(parallel))
 
-  pb <- txtProgressBar(max = nrep, style = 3)
+  pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
+
+  f <- function(){
+    count <- 0
+    function(...) {
+      count <<- count + length(list(...)) - 1
+      setTxtProgressBar(pb, count)
+      flush.console()
+      cbind(...)
+    }
+  }
 
   if (parallel) {
-    cl <- makePSOCKcluster(detectCores())
-    registerDoSNOW(cl)
-    progress <- function(n) setTxtProgressBar(pb, n)
-    opts <- list(progress = progress)
+    cl <- makeCluster(detectCores(), type = 'SOCK')
+    registerDoParallel(cl)
 
     results <- foreach(
       i = 1:nrep, .export = "srls_gsadf_cpp",
-      .combine = "cbind", .options.snow = opts
+      .combine = f()
     ) %dopar% {
       y <- cumsum(rnorm(n))
       srls_gsadf_cpp(y[-1], y[-n], minw)
@@ -72,42 +81,45 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
   close(pb)
 
   bsadf_critical <- t(apply(results[(minw + 1):(n - 1), ], 1, quantile,
-    probs = c(0.9, 0.95, 0.99)
+                            probs = c(0.9, 0.95, 0.99)
   ))
   sadf_critical <- quantile(results[n, ],
-    probs = c(0.9, 0.95, 0.99),
-    drop = FALSE
+                            probs = c(0.9, 0.95, 0.99),
+                            drop = FALSE
   )
   gsadf_critical <- quantile(results[n + 1, ],
-    probs = c(0.9, 0.95, 0.99),
-    drop = FALSE
+                             probs = c(0.9, 0.95, 0.99),
+                             drop = FALSE
   )
   adf_critical <- quantile(results[n + 2, ],
-    probs = c(0.9, 0.95, 0.99),
-    drop = FALSE
+                           probs = c(0.9, 0.95, 0.99),
+                           drop = FALSE
   )
   badf_critical <- t(apply(results[-c(1:(n + 2 + minw)), ], 1, quantile,
-    probs = c(0.9, 0.95, 0.99)
+                           probs = c(0.9, 0.95, 0.99)
   ))
 
   # cv sequences should be increasing - i could use cummax
-  for (j in 1:3) {
-    for (i in 2:NROW(bsadf_critical)) {
-      if (bsadf_critical[i, j] <= bsadf_critical[i - 1, j]) {
-        bsadf_critical[i, j] <- bsadf_critical[i - 1, j]
-      }
-      if (badf_critical[i, j] <= badf_critical[i - 1, j]) {
-        badf_critical[i, j] <- badf_critical[i - 1, j]
-      }
-    }
-  }
+  # for (j in 1:3) {
+  #   for (i in 2:NROW(bsadf_critical)) {
+  #     if (bsadf_critical[i, j] <= bsadf_critical[i - 1, j]) {
+  #       bsadf_critical[i, j] <- bsadf_critical[i - 1, j]
+  #     }
+  #     if (badf_critical[i, j] <= badf_critical[i - 1, j]) {
+  #       badf_critical[i, j] <- badf_critical[i - 1, j]
+  #     }
+  #   }
+  # }
+  # cv sequences should be increasing
+  bsadf_critical_adj <- apply(bsadf_critical, 2, cummax)
+  badf_critical_adj <- apply(badf_critical, 2, cummax)
 
   output <- list(
     adf_cv = adf_critical,
     sadf_cv = sadf_critical,
     gsadf_cv = gsadf_critical,
-    badf_cv = badf_critical,
-    bsadf_cv = bsadf_critical
+    badf_cv = badf_critical_adj,
+    bsadf_cv = bsadf_critical_adj
   )
 
   attr(output, "class") <- append(class(output), "cv")

@@ -4,8 +4,7 @@
 \alias{report}
 \alias{diagnostics}
 \alias{datestamp}
-\title{Report summary statistics, diagnostics and date stamping periods of
-exuberance}
+\title{Report summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.}
 \usage{
 report(x, y)
 
@@ -14,44 +13,39 @@ diagnostics(x, y, option = c("gsadf", "sadf"))
 datestamp(x, y, option = c("gsadf", "sadf"), min_duration = 0)
 }
 \arguments{
-\item{x}{an object of class "radf".}
+\item{x}{An object of class \code{radf}.}
 
-\item{y}{an object of class "cv".}
+\item{y}{An object, which is the output of \code{mc_cv} or \code{wb_cv}.}
 
-\item{option}{whether to apply the "gsadf" or "sadf" methodology. Default is
-"gsadf"}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
+"gsadf".}
 
-\item{min_duration}{the minimum duration of an explosive period for it to be
+\item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 }
 \value{
 Returns a list of values for each explosive sub-period, giving the
 origin and termination dates as well as the number of periods explosive
-behavior lasts.
+behaviour lasts.
 }
 \description{
-Report summary statistics, diagnostics and date stamping periods of
-exuberance
+Report summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.
 }
 \details{
 Setting \code{min_duration} allows temporary spikes above the critical value
-sequence to be removed. Phillips et al. 2015 propose a simple way to remove
-small periods of explosivenes by a rule of thumb of the class "log(T)" or
+sequence to be removed. Phillips et al. (2015) propose a simple way to remove
+small periods of explosivenes by a rule of thumb such as "log(T)" or
 "log(T)/T", where T is the number of observations.
-
-#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
-Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
-S&P 500. International Economic Review, 56(4), 1043-1078.
 }
 \section{Functions}{
 \itemize{
-\item \code{report}: returns a list of summary statistics for the t-statistic
+\item \code{report}: Returns a list of summary statistics for the t-statistic
 and the critical values of the ADF, SADF and GSADF.
 
 \item \code{diagnostics}: Finds the series that reject the null for 95\%
 significance level.
 
-\item \code{datestamp}: computes the origination, termination and duration of episodes during which
+\item \code{datestamp}: Computes the origination, termination and duration of episodes during which
 the time series display explosive dynamics.
 }}
 
@@ -71,8 +65,13 @@ datestamp(x = rfd, y = mc)
 # Diagnostics for 'sadf'
 diagnostics(x = rfd, y = mc, option = "sadf")
 
-# Use rule of thumb to omit small kinks
+# Use rule of thumb to omit periods of explosiveness which are short-lived
 rot = round(log(NROW(rfd)))
 datestamp(x = rfd, y = mc, min_duration = rot)
 }
+}
+\references{
+Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
+S&P 500. International Economic Review, 56(4), 1043-1078.
 }

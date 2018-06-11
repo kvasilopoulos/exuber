@@ -10,15 +10,15 @@ col_names(x, ...)
 col_names(x) <- value
 }
 \arguments{
-\item{x}{an object of class "radf".}
+\item{x}{An object of class \code{radf}.}
 
 \item{...}{further arguments passed to methods.}
 
 \item{value}{an ordered vector of the same length as the 'index' attribute of x.}
 }
 \description{
-Retrieve or set the column names of a 'radf' object. Simular to \code{colnames}, with the only
-difference that \code{col_names} is for 'radf' objects.
+Retrieve or set the column names of a class \code{radf} object. Simular to \code{colnames}, with the only
+difference that \code{col_names} is for \code{radf} objects.
 }
 \examples{
 \donttest{
@@ -26,6 +26,6 @@ difference that \code{col_names} is for 'radf' objects.
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 
 rfd <- radf(x = dta)
-colnames(rfd) <- c("OneBubble", "TwoBubbles")
+col_names(rfd) <- c("OneBubble", "TwoBubbles")
 }
 }

@@ -2,38 +2,37 @@
 % Please edit documentation in R/wb_cv.R
 \name{wb_cv}
 \alias{wb_cv}
-\title{Wild Bootstrapped Critical values}
+\title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(y, nboot = 1000, minw, parallel = FALSE, distribution_rad = FALSE)
+wb_cv(y, nboot = 1000, minw, parallel = FALSE, dist_rad = FALSE)
 }
 \arguments{
 \item{y}{a data.frame or matrix containing the data.}
 
 \item{nboot}{a positive integer indicating the number of bootstraps.}
 
-\item{minw}{a positive integer. The minimum window}
+\item{minw}{A positive integer. The minimum window size, which defaults at
+\eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
 
-\item{parallel}{logical. If \code{TRUE} parallel programming is used
-(max cores)}
+\item{parallel}{Logical. If \code{TRUE} parallel programming is used
+(defaults to using all cores).}
 
-\item{distribution_rad}{logical. If \code{TRUE} then Radstander distribution
+\item{dist_rad}{logical. If \code{TRUE} then Rademacher distribution
 will be used}
 }
 \value{
-a list that contains the critical values for ADF, BADF, BSADF,
-GSADF t-statistics.
+A list that contains the critical values for ADF, BADF, BSADF and GSADF
+t-statistics.
 }
 \description{
 \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
-scheme which is asymptotically robust to non-stationary volatility, to
+scheme, which is asymptotically robust to non-stationary volatility, to
 generate critical values for the recursive unit root tests.
 }
 \details{
-This approach involves applying wild bootstrap re-sampling scheme
-to the first difference of the raw data and allow to construct bootstrap
-analogues of the PWY tst which are asymptotically robust to non-stationary
-volatility. The wild bootstrap can replicate the pattern of
-heteroskedasticity present in the shocks.
+This approach involves applying a wild bootstrap re-sampling scheme
+to construct the bootstrap analogue of the PWY test which is asymptotically
+robust to non-stationary volatility.
 }
 \examples{
 \donttest{

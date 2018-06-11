@@ -2,24 +2,24 @@
 % Please edit documentation in R/simul.R
 \name{sim_blan}
 \alias{sim_blan}
-\title{Simulation a' la Blanchard(1979)}
+\title{Simulation of Bubble Processes a la Blanchard (1979)}
 \usage{
 sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05)
 }
 \arguments{
-\item{n}{a strictly positive integer indicating the length of simulated output series}
+\item{n}{A strictly positive integer specifying the length of the simulated output series.}
 
-\item{pi}{a positive value in (0, 1) indicating the probability of the bubble continues to grow}
+\item{pi}{A positive value in (0, 1) indicating the probability of the bubble continuing to grow.}
 
-\item{sigma}{a positive scalar indicating the standard deviation of the innovations}
+\item{sigma}{A positive scalar indicating the standard deviation of the innovations}
 
-\item{r}{a positive scalar that determines the growth rate of the bubble process}
+\item{r}{A positive scalar that determines the growth rate of the bubble process}
 }
 \value{
-a numeric vector of length n
+A numeric vector of length n.
 }
 \description{
-Simulation a' la Blanchard(1979)
+Simulation a la Blanchard (1979)
 }
 \details{
 Blanchard's bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.

@@ -1,13 +1,12 @@
 # report <- function(x) UseMethod("report")
 
-#' Report summary statistics, diagnostics and date stamping periods of
-#' exuberance
+#' Report summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.
 #'
 #'
-#' @param x an object of class "radf".
-#' @param y an object of class "cv".
+#' @param x An object of class \code{radf}.
+#' @param y An object, which is the output of \code{mc_cv} or \code{wb_cv}.
 #'
-#' @describeIn report returns a list of summary statistics for the t-statistic
+#' @describeIn report Returns a list of summary statistics for the t-statistic
 #' and the critical values of the ADF, SADF and GSADF.
 #'
 #' @examples
@@ -26,7 +25,7 @@
 #' # Diagnostics for 'sadf'
 #' diagnostics(x = rfd, y = mc, option = "sadf")
 #'
-#' # Use rule of thumb to omit small kinks
+#' # Use rule of thumb to omit periods of explosiveness which are short-lived
 #' rot = round(log(NROW(rfd)))
 #' datestamp(x = rfd, y = mc, min_duration = rot)
 #' }
@@ -100,8 +99,8 @@ print.report <- function(x, ...) {
 # diagnostics <- function(x) UseMethod("diagnostics")
 
 #' @inheritParams report
-#' @param option whether to apply the "gsadf" or "sadf" methodology. Default is
-#' "gsadf"
+#' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is
+#' "gsadf".
 #'
 #' @describeIn report Finds the series that reject the null for 95\%
 #' significance level.
@@ -203,24 +202,24 @@ print.diagnostics <- function(x, ...) {
 
 #' @describeIn report
 #'
-#' computes the origination, termination and duration of episodes during which
+#' Computes the origination, termination and duration of episodes during which
 #' the time series display explosive dynamics.
 #'
 #' @inheritParams report
-#' @param min_duration the minimum duration of an explosive period for it to be
+#' @param min_duration The minimum duration of an explosive period for it to be
 #' reported. Default is 0.
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the
 #' origin and termination dates as well as the number of periods explosive
-#' behavior lasts.
+#' behaviour lasts.
 #'
 #' @details
 #' Setting \code{min_duration} allows temporary spikes above the critical value
-#' sequence to be removed. Phillips et al. 2015 propose a simple way to remove
-#' small periods of explosivenes by a rule of thumb of the class "log(T)" or
+#' sequence to be removed. Phillips et al. (2015) propose a simple way to remove
+#' small periods of explosivenes by a rule of thumb such as "log(T)" or
 #' "log(T)/T", where T is the number of observations.
 #'
-#' #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
@@ -325,27 +324,28 @@ repn <- function(x) {
 #' Plotting method for objects of class 'radf'.
 #'
 #' @inheritParams datestamp
-#' @param breaks_x optional, determines the breaks on the x axis.
-#' @param format_date character string, optional, determines the format of the
+#' @param breaks_x Optional, determines the breaks on the x axis.
+#' @param format_date A character string, optional, determines the format of the
 #' date on the plot when the index is of class 'Date'.
-#' @param breaks_y optional, determines the breaks on the y axis.
-#' @param plot_type for multivariate radf objects, "multiple" plots the series
+#' @param breaks_y Optional, determines the breaks on the y axis.
+#' @param plot_type For multivariate \code{radf} objects, "multiple" plots the series
 #' on multiple plots and "single" superimposes them on a single plot
 #' datestamping only the period of explosiveness. Default is "multiple".
-#' @param ... additional graphical arguments passed on to methods. Currently
+#' @param ... Additional graphical arguments passed on to methods. Currently
 #' not used.
 #'
-#' @return a list of ggplot objects
+#' @return A list of ggplot objects
 #'
 #' @details
 #' \itemize{
-#'   \item{breaks_x: }{a scalar for continuous variable that will feed into
+#'   \item{breaks_x: }{A scalar for continuous variable that will feed into
 #'   \code{scale_x_date}/ or a date period ("week","month", "year") or their
 #'   multiples ("6 months", "2 years") thereof that will feed into
 #'   \code{scale_x_continuous}}.
-#'   \item{format_date: }{the format_date and the format in a "radf" object can
+#'   \item{format_date: }{The format_date and the format in a radf object can
 #'   be different. The user can specify the way }
-#'   \item{breaks_y: }{asfdafsd}
+#'   \item{breaks_y: }{a scalar for continuous variables which generates breaks
+#'   for points at which y gridlines will appear (see \code{scale_y_continuous}).}
 #' }
 #' @export
 #'
@@ -358,7 +358,7 @@ repn <- function(x) {
 #'
 #' @examples
 #' \donttest{
-#' # Simulate bubble processes, compute the t-stat, critical values and summarize
+#' # Simulate bubble processes, compute t-stat and critical values and summarize
 #' set.seed(4441)
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #' rfd <- radf(x = dta)

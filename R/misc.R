@@ -1,15 +1,16 @@
 
 #' Retrieve/Replace the Index
 #'
-#' @description  Retrieve or replace the index of a 'radf' object.
+#' @description  Retrieve or replace the index of a \code{radf} object.
 #'
 #' @inheritParams report
 #' @param ... further arguments passed to methods.
 #' @param value an ordered vector of the same length as the 'index' attribute of x.
 #'
-#' @details If the use didn't specify the index during the estimation, the function will generate pseudo-index
-#' via creating a numeric sequence advancing by one. After the estimation, the user can use \code{index} to retrieve
-#' or \code{`index<-`} to replace the index. The index can either numeric or Date.
+#' @details If the user does not specify an index during the estimation a
+#' pseudo-index is generated which a sequential numeric series. After the estimation,
+#' the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
+#' The index can be either numeric or Date.
 #'
 #'
 #' @export
@@ -54,8 +55,8 @@ index.ts <- function(x, ...) {
 
 #' Retrieve/set column names
 #'
-#' Retrieve or set the column names of a 'radf' object. Simular to \code{colnames}, with the only
-#' difference that \code{col_names} is for 'radf' objects.
+#' Retrieve or set the column names of a class \code{radf} object. Simular to \code{colnames}, with the only
+#' difference that \code{col_names} is for \code{radf} objects.
 #'
 #' @inheritParams index
 #' @export
@@ -66,7 +67,7 @@ index.ts <- function(x, ...) {
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #'
 #' rfd <- radf(x = dta)
-#' colnames(rfd) <- c("OneBubble", "TwoBubbles")
+#' col_names(rfd) <- c("OneBubble", "TwoBubbles")
 #' }
 col_names <- function(x, ...) {
   UseMethod("col_names")
