@@ -10,7 +10,7 @@ index(x, ...)
 index(x) <- value
 }
 \arguments{
-\item{x}{An object of class \code{radf}.}
+\item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{...}{further arguments passed to methods.}
 

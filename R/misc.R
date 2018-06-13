@@ -4,8 +4,8 @@
 #' @description  Retrieve or replace the index of a \code{radf} object.
 #'
 #' @inheritParams report
-#' @param ... further arguments passed to methods.
-#' @param value an ordered vector of the same length as the 'index' attribute of x.
+#' @param ... Further arguments passed to methods.
+#' @param value An ordered vector of the same length as the `index' attribute of x.
 #'
 #' @details If the user does not specify an index during the estimation a
 #' pseudo-index is generated which a sequential numeric series. After the estimation,
@@ -50,13 +50,10 @@ index.ts <- function(x, ...) {
 }
 
 # Col_names ---------------------------------------------------------------
-
-
-
-#' Retrieve/set column names
+#' Retrieve/Set column names
 #'
-#' Retrieve or set the column names of a class \code{radf} object. Simular to \code{colnames}, with the only
-#' difference that \code{col_names} is for \code{radf} objects.
+#' Retrieve or set the column names of a class \code{\link[=radf]{radf()}} object. Similar to \code{colnames}, with the only
+#' difference that \code{col_names} is for \code{\link[=radf]{radf()}} objects.
 #'
 #' @inheritParams index
 #' @export

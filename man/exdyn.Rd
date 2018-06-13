@@ -18,12 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Vasilopoulos Kostas \email{kostasvasilo91@gmail.com}
+\strong{Maintainer}: Kostas Vasilopoulos \email{kostasvasilo91@gmail.com}
 
 Authors:
 \itemize{
-  \item Pavlidis Eftymios \email{e.pavlidis@lancaster.ac.uk}
-  \item Spavound Simon \email{simon.spavound@googlemail.com}
+  \item Eftymios Pavlidis \email{e.pavlidis@lancaster.ac.uk}
+  \item Simon Spavound \email{simon.spavound@googlemail.com}
 }
 
 }

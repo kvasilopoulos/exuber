@@ -3,21 +3,21 @@
 \name{col_names}
 \alias{col_names}
 \alias{col_names<-}
-\title{Retrieve/set column names}
+\title{Retrieve/Set column names}
 \usage{
 col_names(x, ...)
 
 col_names(x) <- value
 }
 \arguments{
-\item{x}{An object of class \code{radf}.}
+\item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{...}{further arguments passed to methods.}
 
 \item{value}{an ordered vector of the same length as the 'index' attribute of x.}
 }
 \description{
-Retrieve or set the column names of a class \code{radf} object. Simular to \code{colnames}, with the only
+Retrieve or set the column names of a class \code{radf} object. Similar to \code{colnames}, with the only
 difference that \code{col_names} is for \code{radf} objects.
 }
 \examples{

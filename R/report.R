@@ -3,7 +3,7 @@
 #' Report summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.
 #'
 #'
-#' @param x An object of class \code{radf}.
+#' @param x An object of class \code{\link[=radf]{radf()}}.
 #' @param y An object, which is the output of \code{mc_cv} or \code{wb_cv}.
 #'
 #' @describeIn report Returns a list of summary statistics for the t-statistic

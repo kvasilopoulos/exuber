@@ -9,7 +9,7 @@
   format_date = "\%m-\%Y", breaks_y = NULL, ...)
 }
 \arguments{
-\item{x}{An object of class \code{radf}.}
+\item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{y}{An object, which is the output of \code{mc_cv} or \code{wb_cv}.}
 

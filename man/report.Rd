@@ -13,7 +13,7 @@ diagnostics(x, y, option = c("gsadf", "sadf"))
 datestamp(x, y, option = c("gsadf", "sadf"), min_duration = 0)
 }
 \arguments{
-\item{x}{An object of class \code{radf}.}
+\item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{y}{An object, which is the output of \code{mc_cv} or \code{wb_cv}.}
 
