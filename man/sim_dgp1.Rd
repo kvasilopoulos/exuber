@@ -10,37 +10,37 @@ sim_dgp1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
 
-\item{te}{A scalar in (0,tf) specifying the origination of bubble expansion.}
+\item{te}{A scalar in (0, tf) specifying the observation in which the bubble originates.}
 
-\item{tf}{A scalar in (te,n) specifying the termination of bubble collapse.}
+\item{tf}{A scalar in (te, n) specifying the observation in which the bubble collapses.}
 
-\item{c}{A positive scalar determining the autoregressive coefficient in the explosive regime}
+\item{c}{A positive scalar determining the autoregressive coefficient in the explosive regime.}
 
-\item{alpha}{A positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
+\item{alpha}{A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.}
 
-\item{sigma}{A positive scalar indicating the standard deviation of the innovations}
+\item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 }
 \value{
-A numeric vector of length n
+A numeric vector of length n.
 }
 \description{
 The following function generates a time series which switches from a martingale to a mildly explosive
 process and then back to a martingale.
 }
 \details{
-The data generating process is described by the following equation
+The data generating process is described by the following equation:
 \deqn{X_t = X_{t-1}1\{t < \tau_e\}+ \delta_T X_{t-1}1\{\tau_e \leq t\leq \tau_f\} +
 \left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}}{X[t] =
 X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
-(\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf}}
+(\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf},}
 
-where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by
+where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by:
 
 \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
 
-with \eqn{c>0} and \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
+with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
-\eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}, where \eqn{\tau}{t} is the last observation of the sample.
+\eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'} \eqn{\tau}{t} is the last observation of the sample.
 During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
 During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
 coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path of the subsequent period

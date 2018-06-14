@@ -2,25 +2,25 @@
 % Please edit documentation in R/simul.R
 \name{sim_evans}
 \alias{sim_evans}
-\title{Simulation a la Evans (1991)}
+\title{Simulation à la Evans (1991)}
 \usage{
 sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
 
-\item{alpha}{A positive scalar in}
+\item{alpha}{A positive scalar.}
 
-\item{delta}{A positive scalar}
+\item{delta}{A positive scalar.}
 
-\item{tau}{The standard deviation of the innovations}
+\item{tau}{The standard deviation of the innovations.}
 
 \item{pi}{A positive value in (0, 1) indicating the probability of the bubble continuing to grow.}
 
-\item{r}{A positive scalar that determines the growth rate of the bubble process}
+\item{r}{A positive scalar that determines the growth rate of the bubble process.}
 }
 \value{
-A numeric vector of length n
+A numeric vector of length \code{n}.
 }
 \description{
 This function simulates a rational periodically-collapsing bubble of the type proposed in Evans (1991).
@@ -32,8 +32,8 @@ If \eqn{B_t \leq \alpha}{B[t] \le \alpha}
 
 If \eqn{B_t > \alpha}{B[t] > \alpha}
 
-\deqn{B_{t+1} =  (\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
-\delta*(1+r)/\pi* (B[t]-\delta/(1+r))*u[t+1]}
+\deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
+\delta*(1+r)/\pi* (B[t]-\delta/(1+r))]*u[t+1]}
 }
 \references{
 Evans, G. W. (1991). Pitfalls in testing for explosive

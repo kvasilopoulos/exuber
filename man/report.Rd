@@ -26,7 +26,7 @@ reported. Default is 0.}
 \value{
 Returns a list of values for each explosive sub-period, giving the
 origin and termination dates as well as the number of periods explosive
-behaviour lasts.
+behavior lasts.
 }
 \description{
 Report summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.
@@ -34,7 +34,7 @@ Report summary statistics, diagnostics and date stamping periods of mildly explo
 \details{
 Setting \code{min_duration} allows temporary spikes above the critical value
 sequence to be removed. Phillips et al. (2015) propose a simple way to remove
-small periods of explosivenes by a rule of thumb such as "log(T)" or
+small periods of explosiveness by a rule of thumb such as "log(T)" or
 "log(T)/T", where T is the number of observations.
 }
 \section{Functions}{
@@ -59,7 +59,7 @@ mc <- mc_cv(n = 100)
 
 # Report, diagnostics and datestamp (default)
 report(x = rfd, y = mc)
-diagnostics(x = rfd, y =mc)
+diagnostics(x = rfd, y = mc)
 datestamp(x = rfd, y = mc)
 
 # Diagnostics for 'sadf'

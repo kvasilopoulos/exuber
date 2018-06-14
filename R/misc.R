@@ -8,7 +8,7 @@
 #' @param value An ordered vector of the same length as the `index' attribute of x.
 #'
 #' @details If the user does not specify an index during the estimation a
-#' pseudo-index is generated which a sequential numeric series. After the estimation,
+#' pseudo-index is generated which is a sequential numeric series. After the estimation,
 #' the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
 #' The index can be either numeric or Date.
 #'

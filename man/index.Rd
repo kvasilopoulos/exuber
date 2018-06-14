@@ -12,16 +12,16 @@ index(x) <- value
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{Further arguments passed to methods.}
 
-\item{value}{an ordered vector of the same length as the 'index' attribute of x.}
+\item{value}{An ordered vector of the same length as the `index' attribute of x.}
 }
 \description{
 Retrieve or replace the index of a \code{radf} object.
 }
 \details{
 If the user does not specify an index during the estimation a
-pseudo-index is generated which a sequential numeric series. After the estimation,
+pseudo-index is generated which is a sequential numeric series. After the estimation,
 the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
 The index can be either numeric or Date.
 }

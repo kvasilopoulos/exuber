@@ -10,29 +10,29 @@ sim_dgp2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n, tf2 = 0.1
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
 
-\item{te1}{a scalar in (0,n) specifying the origination of the first bubble episode.}
+\item{te1}{A scalar in (0, n) specifying the observation in which the first bubble originates.}
 
-\item{tf1}{a scalar in  (te1,n) specifying the termination of the first bubble episode.}
+\item{tf1}{A scalar in  (te1, n) specifying the observation in which the first bubble collapses.}
 
-\item{te2}{a scalar in (tf1,n) specifying the origination of the second bubble episode.}
+\item{te2}{A scalar in (tf1, n) specifying the observation in which the second bubble originates.}
 
-\item{tf2}{a scalar in (te2,n) specifying the termination of the second bubble episode.}
+\item{tf2}{A scalar in (te2, n) specifying the observation in which the second bubble collapses.}
 
-\item{c}{A positive scalar determining the autoregressive coefficient in the explosive regime}
+\item{c}{A positive scalar determining the autoregressive coefficient in the explosive regime.}
 
-\item{alpha}{A positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient}
+\item{alpha}{A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.}
 
-\item{sigma}{A positive scalar indicating the standard deviation of the innovations}
+\item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 }
 \value{
-A numeric vector of length n
+A numeric vector of length \code{n}.
 }
 \description{
 The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
 there are two episodes of mildy explosive dynamics.
 }
 \details{
-The data generating process is described by
+The data generating process is described by:
 
 \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
@@ -42,11 +42,11 @@ The data generating process is described by
 
 \deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
 \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
-\epsilon[t] 1{t in N[0] union B[1] union B[2]}}
+\epsilon[t] 1{t in N[0] union B[1] union B[2]},}
 
-where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given
+where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given:
 
-\deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
+\deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a},}
 
 with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)},

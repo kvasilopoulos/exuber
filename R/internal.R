@@ -7,7 +7,6 @@
 #                           " R package version 0.1.0. https://CRAN.R-project.org/package=exdyn \n")
 #   }
 
-
 # Check if a character string is a Date -----------------------------------
 
 findDates <- function(strings) {
@@ -20,7 +19,6 @@ findDates <- function(strings) {
     grepl(pattern3, strings) | grepl(pattern4, strings)
   return(tdBool)
 }
-
 
 # Testing arguments ------------------------------------------------------
 
@@ -75,9 +73,7 @@ minw_check <- function(x, y) {
   }
 }
 
-
 # Rest --------------------------------------------------------------------
-
 
 minw <- function(x) {
   attr(x, "minw")

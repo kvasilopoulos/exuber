@@ -2,7 +2,7 @@
 % Please edit documentation in R/simul.R
 \name{sim_blan}
 \alias{sim_blan}
-\title{Simulation of Bubble Processes a la Blanchard (1979)}
+\title{Simulation of Bubble Processes à la Blanchard (1979)}
 \usage{
 sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05)
 }
@@ -11,27 +11,27 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05)
 
 \item{pi}{A positive value in (0, 1) indicating the probability of the bubble continuing to grow.}
 
-\item{sigma}{A positive scalar indicating the standard deviation of the innovations}
+\item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
-\item{r}{A positive scalar that determines the growth rate of the bubble process}
+\item{r}{A positive scalar that determines the growth rate of the bubble process.}
 }
 \value{
-A numeric vector of length n.
+A numeric vector of length \code{n}.
 }
 \description{
-Simulation a la Blanchard (1979)
+Simulation à la Blanchard (1979)
 }
 \details{
 Blanchard's bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
 In the first regime, the bubble grows exponentially, whereas in the second regime, the bubble
 collapses to a white noise.
 
-With probability \eqn{\pi}
-\deqn{B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}}{B[t+1]=(1+r)/\pi*B[t]+\epsilon[t+1]}
-With probability \eqn{1 - \pi}
-\deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1]}
+With probability \eqn{\pi}:
+\deqn{B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}}{B[t+1]=(1+r)/\pi*B[t]+\epsilon[t+1],}
+With probability \eqn{1 - \pi}:
+\deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1],}
 
-where r is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+where \code{r} is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
 }
 \examples{
 sim_blan(n = 100)

@@ -12,7 +12,7 @@
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
 #'
-#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values
+#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values.
 #'
 #' @import doParallel
 #' @import parallel
@@ -59,7 +59,7 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
   }
 
   if (parallel) {
-    cl <- makeCluster(detectCores(), type = 'SOCK')
+    cl <- makeCluster(detectCores(), type = 'PSOCK')
     registerDoParallel(cl)
 
     results <- foreach(

@@ -7,18 +7,18 @@
 wb_cv(y, nboot = 1000, minw, parallel = FALSE, dist_rad = FALSE)
 }
 \arguments{
-\item{y}{a data.frame or matrix containing the data.}
+\item{y}{A data.frame or matrix containing the data.}
 
-\item{nboot}{a positive integer indicating the number of bootstraps.}
+\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
 
-\item{minw}{A positive integer. The minimum window size, which defaults at
+\item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used
 (defaults to using all cores).}
 
-\item{dist_rad}{logical. If \code{TRUE} then Rademacher distribution
-will be used}
+\item{dist_rad}{Logical. If \code{TRUE} then  the Rademacher distribution
+will be used.}
 }
 \value{
 A list that contains the critical values for ADF, BADF, BSADF and GSADF

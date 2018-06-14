@@ -1,6 +1,4 @@
-
 # Multiple recursive linear regression  -----------------------------------
-
 
 rls_gsadf <- function(yxmat, wmin) {
   end <- NROW(yxmat)

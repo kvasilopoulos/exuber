@@ -4,11 +4,11 @@
 #' scheme, which is asymptotically robust to non-stationary volatility, to
 #' generate critical values for the recursive unit root tests.
 #'
-#' @param y a data.frame or matrix containing the data.
-#' @param nboot a positive integer indicating the number of bootstraps.
+#' @param y A data.frame or matrix containing the data.
+#' @param nboot A positive integer indicating the number of bootstraps. Default is 1000 repetitions.
 #' @inheritParams mc_cv
-#' @param dist_rad logical. If \code{TRUE} then Rademacher distribution
-#' will be used
+#' @param dist_rad Logical. If \code{TRUE} then  the Rademacher distribution
+#' will be used.
 #'
 #' @return  A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
@@ -108,7 +108,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
       }
     }
 
-    cl <- makeCluster(detectCores(), type = 'SOCK')
+    cl <- makeCluster(detectCores(), type = 'PSOCK')
     registerDoParallel(cl)
 
     for (j in 1:nc) {

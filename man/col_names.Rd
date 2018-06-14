@@ -12,13 +12,13 @@ col_names(x) <- value
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{Further arguments passed to methods.}
 
-\item{value}{an ordered vector of the same length as the 'index' attribute of x.}
+\item{value}{An ordered vector of the same length as the `index' attribute of x.}
 }
 \description{
-Retrieve or set the column names of a class \code{radf} object. Similar to \code{colnames}, with the only
-difference that \code{col_names} is for \code{radf} objects.
+Retrieve or set the column names of a class \code{\link[=radf]{radf()}} object. Similar to \code{colnames}, with the only
+difference that \code{col_names} is for \code{\link[=radf]{radf()}} objects.
 }
 \examples{
 \donttest{

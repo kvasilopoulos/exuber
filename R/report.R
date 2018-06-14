@@ -19,7 +19,7 @@
 #'
 #' # Report, diagnostics and datestamp (default)
 #' report(x = rfd, y = mc)
-#' diagnostics(x = rfd, y =mc)
+#' diagnostics(x = rfd, y = mc)
 #' datestamp(x = rfd, y = mc)
 #'
 #' # Diagnostics for 'sadf'
@@ -91,10 +91,7 @@ print.report <- function(x, ...) {
   }
 }
 
-
 # diagnostics -------------------------------------------------------------
-
-
 
 # diagnostics <- function(x) UseMethod("diagnostics")
 
@@ -112,7 +109,6 @@ diagnostics <- function(x, y, option = c("gsadf", "sadf")) {
   cv_check(y)
   minw_check(x, y)
   option <- match.arg(option)
-
 
   if (option == "gsadf") {
     tstat <- x$gsadf
@@ -148,7 +144,6 @@ diagnostics <- function(x, y, option = c("gsadf", "sadf")) {
     tstat >= cv2 & tstat < cv3 ~ "95%",
     tstat >= cv3 ~ "99%"
   )
-
 
   if (all(sig == "Reject")) {
     stop("Cannot reject H0, do not proceed for date stamping or plotting",
@@ -196,8 +191,6 @@ print.diagnostics <- function(x, ...) {
   )
 }
 
-
-
 # datestamp ---------------------------------------------------------------
 
 #' @describeIn report
@@ -211,12 +204,12 @@ print.diagnostics <- function(x, ...) {
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the
 #' origin and termination dates as well as the number of periods explosive
-#' behaviour lasts.
+#' behavior lasts.
 #'
 #' @details
 #' Setting \code{min_duration} allows temporary spikes above the critical value
 #' sequence to be removed. Phillips et al. (2015) propose a simple way to remove
-#' small periods of explosivenes by a rule of thumb such as "log(T)" or
+#' small periods of explosiveness by a rule of thumb such as "log(T)" or
 #' "log(T)/T", where T is the number of observations.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
@@ -318,33 +311,32 @@ repn <- function(x) {
 
 # Plotting ----------------------------------------------------------------
 
-
 #' Plotting
 #'
-#' Plotting method for objects of class 'radf'.
+#' Plotting method for objects of class \code{\link[=radf]{radf()}}.
 #'
 #' @inheritParams datestamp
-#' @param breaks_x Optional, determines the breaks on the x axis.
 #' @param format_date A character string, optional, determines the format of the
-#' date on the plot when the index is of class 'Date'.
-#' @param breaks_y Optional, determines the breaks on the y axis.
+#' date on the plot when the index is of class `Date'.
+#' @param breaks_y Optional, determines the breaks on the y-axis.
+#' @param breaks_x optional, determines the breaks on the x-axis.
 #' @param plot_type For multivariate \code{radf} objects, "multiple" plots the series
 #' on multiple plots and "single" superimposes them on a single plot
 #' datestamping only the period of explosiveness. Default is "multiple".
 #' @param ... Additional graphical arguments passed on to methods. Currently
 #' not used.
 #'
-#' @return A list of ggplot objects
+#' @return A list of ggplot objects.
 #'
 #' @details
 #' \itemize{
-#'   \item{breaks_x: }{A scalar for continuous variable that will feed into
-#'   \code{scale_x_date}/ or a date period ("week","month", "year") or their
+#'   \item{\code{breaks_x}: }{A scalar for continuous variable that will feed into
+#'   \code{scale_x_date}/ or a date period ("week", "month", "year") or
 #'   multiples ("6 months", "2 years") thereof that will feed into
 #'   \code{scale_x_continuous}}.
-#'   \item{format_date: }{The format_date and the format in a radf object can
-#'   be different. The user can specify the way }
-#'   \item{breaks_y: }{a scalar for continuous variables which generates breaks
+#'   \item{\code{format_date}: }{The format_date and the format in a radf object can
+#'   be different. User can specify the format here.}
+#'   \item{\code{breaks_y}: }{a scalar for continuous variables which generates breaks
 #'   for points at which y gridlines will appear (see \code{scale_y_continuous}).}
 #' }
 #' @export

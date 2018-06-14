@@ -11,7 +11,7 @@ mc_cv(n, nrep = 2000, minw, parallel = FALSE)
 
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
-\item{minw}{A positive integer. The minimum window size, which defaults at
+\item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used
@@ -38,5 +38,5 @@ mc <- mc_cv(n = 100, parallel = TRUE)
 }
 }
 \seealso{
-\code{\link{wb_cv}} for Wild Bootstrapped critical values
+\code{\link{wb_cv}} for Wild Bootstrapped critical values.
 }

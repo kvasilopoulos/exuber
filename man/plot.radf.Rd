@@ -23,31 +23,31 @@ reported. Default is 0.}
 on multiple plots and "single" superimposes them on a single plot
 datestamping only the period of explosiveness. Default is "multiple".}
 
-\item{breaks_x}{Optional, determines the breaks on the x axis.}
+\item{breaks_x}{optional, determines the breaks on the x-axis.}
 
 \item{format_date}{A character string, optional, determines the format of the
-date on the plot when the index is of class 'Date'.}
+date on the plot when the index is of class `Date'.}
 
-\item{breaks_y}{Optional, determines the breaks on the y axis.}
+\item{breaks_y}{Optional, determines the breaks on the y-axis.}
 
 \item{...}{Additional graphical arguments passed on to methods. Currently
 not used.}
 }
 \value{
-A list of ggplot objects
+A list of ggplot objects.
 }
 \description{
-Plotting method for objects of class 'radf'.
+Plotting method for objects of class \code{\link[=radf]{radf()}}.
 }
 \details{
 \itemize{
-  \item{breaks_x: }{A scalar for continuous variable that will feed into
-  \code{scale_x_date}/ or a date period ("week","month", "year") or their
+  \item{\code{breaks_x}: }{A scalar for continuous variable that will feed into
+  \code{scale_x_date}/ or a date period ("week", "month", "year") or
   multiples ("6 months", "2 years") thereof that will feed into
   \code{scale_x_continuous}}.
-  \item{format_date: }{The format_date and the format in a radf object can
-  be different. The user can specify the way }
-  \item{breaks_y: }{a scalar for continuous variables which generates breaks
+  \item{\code{format_date}: }{The format_date and the format in a radf object can
+  be different. User can specify the format here.}
+  \item{\code{breaks_y}: }{a scalar for continuous variables which generates breaks
   for points at which y gridlines will appear (see \code{scale_y_continuous}).}
 }
 }

@@ -11,14 +11,14 @@ sim_div(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d"))
 
 \item{mu}{A scalar indicating the drift.}
 
-\item{sigma}{A positive scalar indicating the standard deviation of the innovations}
+\item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{r}{A positive value indicating the discount factor.}
 
 \item{log}{A logical. If true dividends follow a lognormal distribution.}
 
 \item{output}{A character string giving the fundamental price("pf") or
-dividend series("d"). Default is 'pf'.}
+dividend series("d"). Default is `pf'.}
 }
 \value{
 A numeric vector of length n.
@@ -27,24 +27,24 @@ A numeric vector of length n.
 Simulate (log) dividends from a random walk with drift.
 }
 \details{
-If log is set to FALSE (default value) the dividends follow
+If log is set to FALSE (default value) the dividends follow:
 
-\deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t]}
+\deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t],}
 
 where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
 are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (the initial value of the dividend sequence).
-The above equation can be solved to yield the fundamental price
+The above equation can be solved to yield the fundamental price:
 
-\deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r}
+\deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r.}
 
-If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow
+If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow:
 
-\deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t]}
+\deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t],}
 
-where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The parameters
-\eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case is
+where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. Default parameters are
+\eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case is:
 
-\deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
+\deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t],}
 
 where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}.
 All default parameter values are those suggested by West (1988).

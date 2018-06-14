@@ -2,7 +2,7 @@
 % Please edit documentation in R/radf.R
 \name{radf}
 \alias{radf}
-\title{Supremum Augmented Dickey Fuller test}
+\title{Supremum Augmented Dickey-Fuller test}
 \usage{
 radf(x, minw, lag = 0)
 }
@@ -10,22 +10,22 @@ radf(x, minw, lag = 0)
 \item{x}{A univariate or multivariate numeric ts object, data.frame or matrix.
 The estimation process cannot handle NA values.}
 
-\item{minw}{A positive integer. The minimum window size, which defaults at
+\item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
 
-\item{lag}{A non-negative integer. The lag of the Dickey-Fuller regression}
+\item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
 }
 \value{
-A list that contains the t-statistics (sequence) for
-  \item{ADF}{Augemented Dickey-Fuller}
-  \item{BADF}{Backward Dickey-Fuller}
-  \item{SADF}{Superemum Dickey-Fuller}
-  \item{BSADF}{Backward Supremum Dickey-Fuller}
-  \item{GSADF}{Generalized Supremum Dickey Fuller}
+A list that contains the t-statistic (sequence) for:
+  \item{ADF}{Augmented Dickey-Fuller.}
+  \item{BADF}{Backward Augmented Dickey-Fuller.}
+  \item{SADF}{Supremum Augmented Dickey-Fuller.}
+  \item{BSADF}{Backward Supremum Augmented Dickey-Fuller.}
+  \item{GSADF}{Generalized Supremum Augmented Dickey Fuller.}
 }
 \description{
-\code{radf} returns the t-statistics from a recursive augmented Dickey-Fuller
-test
+\code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
+test.
 }
 \examples{
 \donttest{

@@ -1,20 +1,20 @@
-#' Supremum Augmented Dickey Fuller test
+#' Supremum Augmented Dickey-Fuller test
 #'
-#' \code{radf} returns the t-statistics from a recursive augmented Dickey-Fuller
-#' test
+#' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
+#' test.
 #'
 #' @param x A univariate or multivariate numeric ts object, data.frame or matrix.
 #' The estimation process cannot handle NA values.
-#' @param minw A positive integer. The minimum window size, which defaults at
+#' @param minw A positive integer. The minimum window size, which defaults to
 #' \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.
-#' @param lag A non-negative integer. The lag of the Dickey-Fuller regression
+#' @param lag A non-negative integer. The lag of the Augmented Dickey-Fuller regression.
 #'
-#' @return A list that contains the t-statistics (sequence) for
-#'   \item{ADF}{Augemented Dickey-Fuller}
-#'   \item{BADF}{Backward Dickey-Fuller}
-#'   \item{SADF}{Superemum Dickey-Fuller}
-#'   \item{BSADF}{Backward Supremum Dickey-Fuller}
-#'   \item{GSADF}{Generalized Supremum Dickey Fuller}
+#' @return A list that contains the t-statistic (sequence) for:
+#'   \item{ADF}{Augmented Dickey-Fuller.}
+#'   \item{BADF}{Backward Augmented Dickey-Fuller.}
+#'   \item{SADF}{Supremum Augmented Dickey-Fuller.}
+#'   \item{BSADF}{Backward Supremum Augmented Dickey-Fuller.}
+#'   \item{GSADF}{Generalized Supremum Augmented Dickey Fuller.}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
 #' in The 1990S Nasdaq: When Did Exuberance Escalate Asset Values? International
@@ -38,7 +38,6 @@
 #' rfd <- radf(x = dta, minw =20, lag = 1)
 #' }
 radf <- function(x, minw, lag = 0) {
-
 
   if (any(class(x) %in% c("mts", "ts"))) {
       dating <- time(x)
@@ -82,7 +81,6 @@ radf <- function(x, minw, lag = 0) {
   gsadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   bsadf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
 
-
   for (i in 1:nc) {
     if (lag == 0) {
       x_embed <- embed(x[, i], 2)
@@ -103,7 +101,6 @@ radf <- function(x, minw, lag = 0) {
     bsadf[, i] <- results$bsadf
   }
 
-
   value <- list(
     adf = adf,
     badf = badf[-c(1:(minw)), , drop = F],
@@ -111,7 +108,6 @@ radf <- function(x, minw, lag = 0) {
     bsadf = bsadf[-c(1:(minw)), , drop = F],
     gsadf = gsadf
   )
-
 
   attr(value, "index") <- dating
   attr(value, "class") <- append(class(value), "radf")

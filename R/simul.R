@@ -4,27 +4,27 @@
 #' process and then back to a martingale.
 #'
 #' @param n A strictly positive integer specifying the length of the simulated output series.
-#' @param te A scalar in (0,tf) specifying the origination of bubble expansion.
-#' @param tf A scalar in (te,n) specifying the termination of bubble collapse.
-#' @param c A positive scalar determining the autoregressive coefficient in the explosive regime
-#' @param alpha A positive scalar in (0,1) determining the value of the expansion rate in the autoregressive coefficient
-#' @param sigma A positive scalar indicating the standard deviation of the innovations
+#' @param te A scalar in (0, tf) specifying the observation in which the bubble originates.
+#' @param tf A scalar in (te, n) specifying the observation in which the bubble collapses.
+#' @param c A positive scalar determining the autoregressive coefficient in the explosive regime.
+#' @param alpha A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.
+#' @param sigma A positive scalar indicating the standard deviation of the innovations.
 #
 #'
 #' @details
-#' The data generating process is described by the following equation
+#' The data generating process is described by the following equation:
 #' \deqn{X_t = X_{t-1}1\{t < \tau_e\}+ \delta_T X_{t-1}1\{\tau_e \leq t\leq \tau_f\} +
 #' \left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}}{X[t] =
 #' X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
-#' (\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf}}
+#' (\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf},}
 #'
-#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by
+#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by:
 #'
 #' \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
 #'
-#' with \eqn{c>0} and \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
+#' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 #' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
-#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}, where \eqn{\tau}{t} is the last observation of the sample.
+#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'} \eqn{\tau}{t} is the last observation of the sample.
 #' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
 #' During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
 #' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path of the subsequent period
@@ -33,7 +33,7 @@
 #'
 #' For further details the user can refer to Phillips et al., (2015) p. 1054.
 #'
-#' @return A numeric vector of length n
+#' @return A numeric vector of length n.
 #' @export
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
@@ -77,20 +77,19 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   return(y)
 }
 
-
 #' Simulation of a two-bubble process
 #'
 #' The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
 #' there are two episodes of mildy explosive dynamics.
 #'
 #' @inheritParams sim_dgp1
-#' @param te1 a scalar in (0,n) specifying the origination of the first bubble episode.
-#' @param tf1 a scalar in  (te1,n) specifying the termination of the first bubble episode.
-#' @param te2 a scalar in (tf1,n) specifying the origination of the second bubble episode.
-#' @param tf2 a scalar in (te2,n) specifying the termination of the second bubble episode.
+#' @param te1 A scalar in (0, n) specifying the observation in which the first bubble originates.
+#' @param tf1 A scalar in  (te1, n) specifying the observation in which the first bubble collapses.
+#' @param te2 A scalar in (tf1, n) specifying the observation in which the second bubble originates.
+#' @param tf2 A scalar in (te2, n) specifying the observation in which the second bubble collapses.
 #'
 #' @details
-#' The data generating process is described by
+#' The data generating process is described by:
 #'
 #' \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 #' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
@@ -100,11 +99,11 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #'
 #' \deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
 #' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
-#' \epsilon[t] 1{t in N[0] union B[1] union B[2]}}
+#' \epsilon[t] 1{t in N[0] union B[1] union B[2]},}
 #'
-#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given
+#' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given:
 #'
-#' \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a}}
+#' \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a},}
 #'
 #' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 #' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)},
@@ -125,7 +124,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #'
 #' For further details the user can refer to Phillips et al., (2015) p. 1055.
 #'
-#' @return A numeric vector of length n
+#' @return A numeric vector of length \code{n}.
 #' @export
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
@@ -175,16 +174,16 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   return(y)
 }
 
-#' Simulation of Bubble Processes a la Blanchard (1979)
+#' Simulation of Bubble Processes à la Blanchard (1979)
 #'
-#'Simulation a la Blanchard (1979)
+#'Simulation à la Blanchard (1979)
 #'
 #' @inheritParams sim_dgp1
 #' @param pi A positive value in (0, 1) indicating the probability of the bubble continuing to grow.
-#' @param r A positive scalar that determines the growth rate of the bubble process
+#' @param r A positive scalar that determines the growth rate of the bubble process.
 #'
 #' @export
-#' @return A numeric vector of length n.
+#' @return A numeric vector of length \code{n}.
 #'
 #' @importFrom stats rbinom
 #' @details
@@ -192,12 +191,12 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' In the first regime, the bubble grows exponentially, whereas in the second regime, the bubble
 #' collapses to a white noise.
 #'
-#' With probability \eqn{\pi}
-#' \deqn{B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}}{B[t+1]=(1+r)/\pi*B[t]+\epsilon[t+1]}
-#' With probability \eqn{1 - \pi}
-#' \deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1]}
+#' With probability \eqn{\pi}:
+#' \deqn{B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}}{B[t+1]=(1+r)/\pi*B[t]+\epsilon[t+1],}
+#' With probability \eqn{1 - \pi}:
+#' \deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1],}
 #'
-#' where r is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+#' where \code{r} is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
 #'
 #'
 #' @references Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
@@ -231,17 +230,16 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
   return(b)
 }
 
-
-#' Simulation a la Evans (1991)
+#' Simulation à la Evans (1991)
 #'
 #' This function simulates a rational periodically-collapsing bubble of the type proposed in Evans (1991).
 #'
 #' @inheritParams sim_blan
-#' @param delta A positive scalar
-#' @param tau The standard deviation of the innovations
-#' @param alpha A positive scalar in
+#' @param delta A positive scalar.
+#' @param tau The standard deviation of the innovations.
+#' @param alpha A positive scalar.
 #'
-#' @return A numeric vector of length n
+#' @return A numeric vector of length \code{n}.
 #'
 #' @importFrom stats rbinom
 #'
@@ -252,8 +250,8 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' If \eqn{B_t > \alpha}{B[t] > \alpha}
 #'
-#' \deqn{B_{t+1} =  (\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
-#' \delta*(1+r)/\pi* (B[t]-\delta/(1+r))*u[t+1]}
+#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
+#' \delta*(1+r)/\pi* (B[t]-\delta/(1+r))]*u[t+1]}
 #'
 #' @export
 #'
@@ -273,7 +271,6 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
   }
   is.between(pi, 0, 1)
   stopifnot(r >= 0)
-
 
   y <- rnorm(n, 0, tau)
   u <- exp(y - tau^2 / 2)
@@ -300,31 +297,31 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 #' @param r A positive value indicating the discount factor.
 #' @param log A logical. If true dividends follow a lognormal distribution.
 #' @param output A character string giving the fundamental price("pf") or
-#' dividend series("d"). Default is 'pf'.
+#' dividend series("d"). Default is `pf'.
 #'
 #' @return A numeric vector of length n.
 #' @export
 #'
 #' @details
 #'
-#' If log is set to FALSE (default value) the dividends follow
+#' If log is set to FALSE (default value) the dividends follow:
 #'
-#' \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t]}
+#' \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t],}
 #'
 #' where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
 #' are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (the initial value of the dividend sequence).
-#' The above equation can be solved to yield the fundamental price
+#' The above equation can be solved to yield the fundamental price:
 #'
-#' \deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r}
+#' \deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r.}
 #'
-#' If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow
+#' If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow:
 #'
-#' \deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t]}
+#' \deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t],}
 #'
-#' where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The parameters
-#' \eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case is
+#' where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. Default parameters are
+#' \eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case is:
 #'
-#' \deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t]}
+#' \deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t],}
 #'
 #' where \eqn{1+g=\exp(\mu+\sigma^2/2)}{1 + g = exp(\mu + \sigma^2/2)}.
 #' All default parameter values are those suggested by West (1988).
