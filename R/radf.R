@@ -1,4 +1,4 @@
-#' Supremum Augmented Dickey-Fuller test
+#' Recursive Augmented Dickey-Fuller test
 #'
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
 #' test.
@@ -17,7 +17,7 @@
 #'   \item{GSADF}{Generalized Supremum Augmented Dickey Fuller.}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
-#' in The 1990S Nasdaq: When Did Exuberance Escalate Asset Values? International
+#' in The 1990s Nasdaq: When Did Exuberance Escalate Asset Values? International
 #' Economic Review, 52(1), 201-226.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
@@ -34,8 +34,8 @@
 #'
 #' rfd <- radf(x = dta)
 #'
-#' # For lag = 1 and minimum window =20
-#' rfd <- radf(x = dta, minw =20, lag = 1)
+#' # For lag = 1 and minimum window = 20
+#' rfd <- radf(x = dta, minw = 20, lag = 1)
 #' }
 radf <- function(x, minw, lag = 0) {
 
