@@ -8,13 +8,10 @@ citEntry(
                    as.person("Themis Pavlidis"),
                    as.person("Simon Spavound")),
   year = "2018",
-  note = "R package version 0.2.0",
+  note = "R package version 0.1.0",
 
   textVersion  =
-<<<<<<< HEAD
-  paste("Vasilopoulos Kostas, Pavlidids Eftymios and Spavound Simon (2018).",
-=======
+
   paste("Vasilopoulos Kostas, Pavlidis Eftymios and Spavound Simon (2018).",
->>>>>>> 00305e24f9392ff4010fbda716a8265625440d4c
         "exuber: Testing and Simulating Explosive Periods")
 )
