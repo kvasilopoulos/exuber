@@ -27,6 +27,6 @@ r_packages:
 after_success:
   - Rscript -e 'library(covr); codecov()'
 
-addons:
-    apt:
-      update: true
+notifications:
+  email:
+    - k.vasilopoulo@gmail.com
