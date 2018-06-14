@@ -16,7 +16,7 @@ wb_cv(y, nboot = 1000, minw, parallel = FALSE, ncores, dist_rad = FALSE)
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
 
-\item{ncores}{A positive integer, optional. If 'parallel' is set to
+\item{ncores}{A positive integer, optional. If `parallel' is set to
 \code{TRUE}, then the user can specify the number of cores (defaults to
 using all cores).}
 

@@ -11,6 +11,7 @@ citEntry(
   note = "R package version 0.1.0",
 
   textVersion  =
+
   paste("Vasilopoulos Kostas, Pavlidis Eftymios and Spavound Simon (2018).",
         "exuber: Testing and Simulating Explosive Periods")
 )

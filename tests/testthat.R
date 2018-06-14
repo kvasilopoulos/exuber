@@ -1,4 +1,4 @@
 library(testthat)
-library(exdyn)
+library(exuber)
 
-test_check("exdyn")
+test_check("exuber")

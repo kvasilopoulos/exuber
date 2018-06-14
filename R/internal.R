@@ -3,8 +3,8 @@
 # .onAttach <-
 #   function(libname, pkgname) {
 #     packageStartupMessage("\nPlease cite as:\n",
-#                           " Vasilopoulos, Pavlidis and Spavound (2018): exdyn\n",
-#                           " R package version 0.1.0. https://CRAN.R-project.org/package=exdyn \n")
+#                           " Vasilopoulos, Pavlidis and Spavound (2018): exuber\n",
+#                           " R package version 0.1.0. https://CRAN.R-project.org/package=exuber \n")
 #   }
 
 # Check if a character string is a Date -----------------------------------
