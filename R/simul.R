@@ -179,7 +179,7 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'Simulation à la Blanchard (1979)
 #'
 #' @inheritParams sim_dgp1
-#' @param pi A positive value in (0, 1) indicating the probability of the bubble continuing to grow.
+#' @param pi A positive value in (0, 1) which governs the probability of the bubble continuing to grow.
 #' @param r A positive scalar that determines the growth rate of the bubble process.
 #'
 #' @export
@@ -235,23 +235,30 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' This function simulates a rational periodically-collapsing bubble of the type proposed in Evans (1991).
 #'
 #' @inheritParams sim_blan
-#' @param delta A positive scalar.
+#' @param delta A positive scalar, with restrictions (see details).
 #' @param tau The standard deviation of the innovations.
-#' @param alpha A positive scalar.
+#' @param alpha A positive scalar, with restrictions (see details).
 #'
 #' @return A numeric vector of length \code{n}.
 #'
 #' @importFrom stats rbinom
 #'
 #' @details
-#' If \eqn{B_t \leq \alpha}{B[t] \le \alpha}
 #'
-#' \deqn{B_{t+1} =  (1+r) B_t u_{t+1}}{B[t+1]= (1+r)*B[t]*u[t+1]}
+#' \code{delta} and \code{alpha} are positive parameters which satisfy \eqn{0 < \delta < (1+r)\alpha}.
+#' The default value of \code{r} is 0.05.
+#' The function checks whether \code{alpha} and \code{delta} satisfy this condition and will return an error if not.
 #'
-#' If \eqn{B_t > \alpha}{B[t] > \alpha}
+#' The Evans bubble has two regimes. If \eqn{B_t \leq \alpha}{B[t] \le \alpha} the bubble grows at an average rate of \eqn{1 + r}:
 #'
-#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )u_{t+1}}{B[t+1] =
-#' \delta*(1+r)/\pi* (B[t]-\delta/(1+r))]*u[t+1]}
+#' \deqn{B_{t+1} = (1+r) B_t u_{t+1},}{B[t+1]= (1+r)*B[t]*u[t+1].}
+#'
+#' When \eqn{B_t > \alpha}{B[t] > \alpha} the bubble expands at an increased rate of \eqn{(1+r)\pi^{-1}}:
+#'
+#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )]u_{t+1}.}{B[t+1] = \delta*(1+r)/\pi* (B[t]-\delta/(1+r))) *u[t+1].}
+#'
+#' But in this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
+#' By modification of the values of \code{delta}, \code{alpha} and \code{pi} the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble can all be modified.
 #'
 #' @export
 #'
@@ -267,7 +274,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
   is.positive.int(n)
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
-    stop("Argument delta should be 0 < delta < (1+r)*alpha", call. = FALSE)
+    stop("Alpha and Delta should satisfy: 0 < delta < (1+r)*alpha", call. = FALSE)
   }
   is.between(pi, 0, 1)
   stopifnot(r >= 0)

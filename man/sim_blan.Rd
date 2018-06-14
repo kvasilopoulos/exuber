@@ -9,7 +9,7 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05)
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
 
-\item{pi}{A positive value in (0, 1) indicating the probability of the bubble continuing to grow.}
+\item{pi}{A positive value in (0, 1) which governs the probability of the bubble continuing to grow.}
 
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
