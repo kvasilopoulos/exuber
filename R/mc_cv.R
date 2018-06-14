@@ -7,7 +7,7 @@
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @inheritParams radf
 #' @param parallel Logical. If \code{TRUE} parallel programming is used.
-#' @param ncores A positive integer, optional. If 'parallel' is set to
+#' @param ncores A positive integer, optional. If `parallel' is set to
 #' \code{TRUE}, then the user can specify the number of cores (defaults to
 #' using all cores).
 #'
