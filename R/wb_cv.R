@@ -44,7 +44,7 @@
 #' # Use parallel computing (utilizing all available cores)
 #' wb <- wb_cv(y = dta, parallel = TRUE)
 #' }
-wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
+wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
                   dist_rad = FALSE) {
   y <- as.matrix(y)
   nc <- NCOL(y)
@@ -66,6 +66,16 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
     stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
 
+  if (missing(ncores)) {
+    ncores <- detectCores()
+  }else{
+    if (!parallel) {
+      stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",
+           call. = FALSE)
+    }
+  }
+
+  is.between(ncores, 2, detectCores())
   adf_critical <- matrix(NA,
     nrow = nc, ncol = 3,
     dimnames = list(colnames(y), c("90%", "95%", "95%"))
@@ -94,6 +104,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
   )
   results <- matrix(0, nrow = 2 * nr + 1, ncol = nboot)
 
+
   pb <- txtProgressBar(max = nboot, style = 3)
 
   if (parallel) {
@@ -108,7 +119,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE,
       }
     }
 
-    cl <- makeCluster(detectCores(), type = 'PSOCK')
+    cl <- makeCluster(ncores, type = 'PSOCK')
     registerDoParallel(cl)
 
     for (j in 1:nc) {

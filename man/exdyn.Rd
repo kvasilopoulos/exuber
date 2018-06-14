@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Kostas Vasilopoulos \email{kostasvasilo91@gmail.com}
+\strong{Maintainer}: Kostas Vasilopoulos \email{k.vasilopoulo@gmail.com}
 
 Authors:
 \itemize{

@@ -6,8 +6,10 @@
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @inheritParams radf
-#' @param parallel Logical. If \code{TRUE} parallel programming is used
-#' (defaults to using all cores).
+#' @param parallel Logical. If \code{TRUE} parallel programming is used.
+#' @param ncores A positive integer, optional. If 'parallel' is set to
+#' \code{TRUE}, then the user can specify the number of cores (defaults to
+#' using all cores).
 #'
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
@@ -32,7 +34,7 @@
 #' # Use parallel computing (utilizing all available cores)
 #' mc <- mc_cv(n = 100, parallel = TRUE)
 #' }
-mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
+mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
 
   is.positive.int(n)
   is.positive.int(nrep)
@@ -46,20 +48,31 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE) {
   }
   stopifnot(is.logical(parallel))
 
-  pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
-
-  f <- function(){
-    count <- 0
-    function(...) {
-      count <<- count + length(list(...)) - 1
-      setTxtProgressBar(pb, count)
-      flush.console()
-      cbind(...)
+  if (missing(ncores)) {
+    ncores <- detectCores()
+  }else{
+    if (!parallel) {
+      stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",
+           call. = FALSE)
     }
   }
+  is.between(ncores, 2, detectCores())
+
+  pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 
   if (parallel) {
-    cl <- makeCluster(detectCores(), type = 'PSOCK')
+
+    f <- function(){
+       count <- 0
+       function(...) {
+         count <<- count + length(list(...)) - 1
+         setTxtProgressBar(pb, count)
+         flush.console()
+         cbind(...)
+       }
+    }
+
+    cl <- makeCluster(ncores, type = 'PSOCK')
     registerDoParallel(cl)
 
     results <- foreach(

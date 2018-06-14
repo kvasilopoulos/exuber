@@ -4,7 +4,7 @@
 \alias{wb_cv}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(y, nboot = 1000, minw, parallel = FALSE, dist_rad = FALSE)
+wb_cv(y, nboot = 1000, minw, parallel = FALSE, ncores, dist_rad = FALSE)
 }
 \arguments{
 \item{y}{A data.frame or matrix containing the data.}
@@ -14,8 +14,11 @@ wb_cv(y, nboot = 1000, minw, parallel = FALSE, dist_rad = FALSE)
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
 
-\item{parallel}{Logical. If \code{TRUE} parallel programming is used
-(defaults to using all cores).}
+\item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
+
+\item{ncores}{A positive integer, optional. If parallel programming is set to
+\code{TRUE}, then the user can specify the number of cores (defaults to
+using all cores).}
 
 \item{dist_rad}{Logical. If \code{TRUE} then  the Rademacher distribution
 will be used.}
