@@ -4,7 +4,8 @@
 #'
 #'
 #' @param x An object of class \code{\link[=radf]{radf()}}.
-#' @param y An object, which is the output of \code{mc_cv} or \code{wb_cv}.
+#' @param y An object, which is the output of \code{\link[=mc_cv]{mc_cv()}} or
+#' \code{\link[=wb_cv]{wb_cv()}}.
 #'
 #' @describeIn report Returns a list of summary statistics for the t-statistic
 #' and the critical values of the ADF, SADF and GSADF.
@@ -336,7 +337,7 @@ repn <- function(x) {
 #'   \code{scale_x_continuous}}.
 #'   \item{\code{format_date}: }{The format_date and the format in a radf object can
 #'   be different. User can specify the format here.}
-#'   \item{\code{breaks_y}: }{a scalar for continuous variables which generates breaks
+#'   \item{\code{breaks_y}: }{A scalar for continuous variables which generates breaks
 #'   for points at which y gridlines will appear (see \code{scale_y_continuous}).}
 #' }
 #' @export

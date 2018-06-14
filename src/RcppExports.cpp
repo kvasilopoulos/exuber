@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // srls_gsadf_cpp
 RcppExport SEXP srls_gsadf_cpp(SEXP ayy, SEXP axx, SEXP amin_win);
-RcppExport SEXP _exdyn_srls_gsadf_cpp(SEXP ayySEXP, SEXP axxSEXP, SEXP amin_winSEXP) {
+RcppExport SEXP _exuber_srls_gsadf_cpp(SEXP ayySEXP, SEXP axxSEXP, SEXP amin_winSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,11 +20,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_exdyn_srls_gsadf_cpp", (DL_FUNC) &_exdyn_srls_gsadf_cpp, 3},
+    {"_exuber_srls_gsadf_cpp", (DL_FUNC) &_exuber_srls_gsadf_cpp, 3},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_exdyn(DllInfo *dll) {
+RcppExport void R_init_exuber(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

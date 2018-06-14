@@ -1,9 +1,9 @@
 
-citHeader("To cite exdyn in publications as:")
+citHeader("To cite exuber in publications as:")
 
 citEntry(
   entry="Manual",
-  title = "exdyn: Testing and Simulating Explosive Periods",
+  title = "exuber: Testing and Simulating Explosive Periods",
   author       = personList(as.person("Kostas Vasilopoulos"),
                    as.person("Themis Pavlidis"),
                    as.person("Simon Spavound")),
@@ -12,5 +12,5 @@ citEntry(
 
   textVersion  =
   paste("Vasilopoulos Kostas, Pavlidids Eftymios and Spavound Simon (2018).",
-        "exdyn: Testing and Simulating Explosive Periods")
+        "exuber: Testing and Simulating Explosive Periods")
 )
