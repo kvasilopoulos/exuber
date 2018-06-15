@@ -12,9 +12,9 @@
 
 ## R CMD check results 
 
-0 error | 0 warnings  | 1 note 
-
 There were no ERRORs and WARNINGs, with local checks or on remote checks.
+
+0 error | 0 warnings  | 1 note 
 
 checking CRAN incoming feasibility ... NOTE
   
@@ -29,12 +29,14 @@ This is a new release, so there are no reverse dependencies.
 ## Added a reference for the methods in the 'Description' 
 
 Added reference: Phillips, P. C., Shi, S. and Yu, J. (2015)<doi:doi:10.1111/iere.12131>,
-and there was a Note in devtools::check().
+and there was extra details in the previous Note.
 
 checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
-  
-  Possibly mis-spelled words in DESCRIPTION:
-    Shi (10:159)
-    Yu (10:171)
 
+  Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
+
+New submission
+
+Possibly mis-spelled words in DESCRIPTION:
+  Shi (10:159)
+  Yu (10:171)
