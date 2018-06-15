@@ -5,7 +5,6 @@
 * macOS 12.06 on travis-ci (devel and release)
 * Windows Server 2012 on appveyor (devel and release)
 * Rhub
-  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
   * Debian Linux, R-devel, GCC ASAN/UBSAN
   * Fedora Linux, R-devel, clang, gfortran
   * Ubuntu Linux 16.04 LTS, R-release, GCC
@@ -13,10 +12,12 @@
 
 ## R CMD check results 
 
+0 error | 0 warnings  | 1 note 
+
 There were no ERRORs and WARNINGs, with local checks or on remote checks.
 
-
-
+checking CRAN incoming feasibility ... NOTE
+  
 Maintainer: ‘Kostas Vasilopoulos <k.vasilopoulo@gmail.com>’
 
 New submission

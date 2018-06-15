@@ -14,7 +14,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exuber?
 ## Description
 
 Testing for and dating periods of explosive dynamics (exuberance) in
-time series. Simulating periodically-collapsing speculative bubbles.
+time series using recursive unit root tests as proposed by Phillips et
+al. (2015). Simulate a variety of periodically-collapsing bubble models.
 
 ## Overview
 

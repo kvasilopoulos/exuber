@@ -26,7 +26,9 @@ knitr::opts_chunk$set(
 
 ## Description 
 
-Testing for and dating periods of explosive dynamics (exuberance) in time series. Simulating periodically-collapsing speculative bubbles.
+Testing for and dating periods of explosive dynamics (exuberance) in time series 
+using recursive unit root tests as proposed by Phillips et al. (2015). Simulate a 
+variety of periodically-collapsing bubble models.
 
 ## Overview
 
