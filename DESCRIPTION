@@ -7,7 +7,7 @@ Authors@R: c(
             person("Eftymios", "Pavlidis", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
             person("Simon", "Spavound", email = "simon.spavound@googlemail.com", role = "aut")
             )
-Description: Testing for and dating periods of explosive dynamics (exuberance) in time series. Simulating periodically-collapsing speculative bubbles.
+Description: Testing for and dating periods of explosive dynamics (exuberance) in time series using recursive unit root tests as proposed by Phillips et al. (2015). Simulate a variety of periodically-collapsing bubble models.
 License: GPL-3
 URL: https://github.com/kvasilopoulos/exuber
 BugReports: https://github.com/kvasilopoulos/exuber/issues
