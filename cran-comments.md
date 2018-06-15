@@ -25,3 +25,7 @@ New submission
 ## Reverse dependencies
 
 This is a new release, so there are no reverse dependencies.
+
+## Added a reference for the methods in the 'Description' 
+
+Phillips, P. C., Shi, S. and Yu, J. (2015)<doi:doi:10.1111/iere.12131>
