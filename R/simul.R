@@ -9,7 +9,6 @@
 #' @param c A positive scalar determining the autoregressive coefficient in the explosive regime.
 #' @param alpha A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.
 #' @param sigma A positive scalar indicating the standard deviation of the innovations.
-#
 #'
 #' @details
 #' The data generating process is described by the following equation:
@@ -176,7 +175,7 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 
 #' Simulation of a Blanchard (1979) bubble process
 #'
-#'Simulation of a Blanchard (1979) rational bubble process.
+#' Simulation of a Blanchard (1979) rational bubble process.
 #'
 #' @inheritParams sim_dgp1
 #' @param pi A positive value in (0, 1) which governs the probability of the bubble continuing to grow.
