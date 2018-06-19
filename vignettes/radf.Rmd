@@ -55,11 +55,11 @@ test <- radf(sp.500.ratio)
 WARNING: This will take a long time to evaluate, even on very fast computers with many cores. It is recommended for testing purposes that you reduce number of repetitions (nrep) to something small, i.e. 10.
 
 ```{r crit values, eval = FALSE}
-crit <- mc_cv(NROW(sp.500.ratio), nrep = 2000, parallel = T)
+crit <- mc_cv(NROW(sp.500.ratio), nrep = 2000, parallel = F)
 ```
 
 ```{r crit values execute, echo = FALSE}
-crit <- mc_cv(NROW(sp.500.ratio), nrep = 10, parallel = T)
+crit <- mc_cv(NROW(sp.500.ratio), nrep = 10, parallel = F)
 ```
 
 ## Report
