@@ -8,28 +8,44 @@ Status](https://travis-ci.org/kvasilopoulos/exuber.svg?branch=master)](https://t
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exuber?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exuber)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/exuber)](https://cran.r-project.org/package=exuber)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exuber)
 
 ## Description
 
 Testing for and dating periods of explosive dynamics (exuberance) in
-time series using recursive unit root tests as proposed by Phillips, P.
-C., Shi, S. and Yu, J. (2015a) \<:10.1111/iere.12132\>. Simulate a
+time series using recursive unit root tests as proposed by [Phillips, P.
+C., Shi, S. and Yu, J. (2015a)](doi:10.1111/iere.12132). Simulate a
 variety of periodically-collapsing bubble models. The estimation and
 simulation utilize the matrix inversion lemma from the recursive least
 squares algorithm, which results in a significant speed improvement.
 
 ## Overview
 
+### Estimation
+
   - `radf()` : Recursive Augmented Dickey-Fuller test
   - `mc_cv()` : Monte Carlo Critical Values
   - `wb_cv()` : Wild Bootstrap Critical values
 
+### Simulation
+
+  - `sim_dgp1()` : Simulation of a single-bubble process
+  - `sim_dgp2()` : Simulation of a two-bubble process
+  - `sim_blan()` : Simulation of a Blanchard (1979) bubble process
+  - `sim_evans()` : Simulation of a Evans (1991) bubble process
+  - `sim_div()` : Simulation of dividends
+
 ## Installation
 
-The package is still under development, to install the development
-version from GitHub:
+You can install the released version of exuber from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("exuber")
+```
+
+And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 if(!require(devtools)) install.packages("devtools")
@@ -65,7 +81,7 @@ dta <- data.frame("oneb" = a1, "twob" = a2, "blan" = a3, "evans" = a4)
 ts <- radf(dfrm, lag = 1)
 
 # Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
-## Use 500 repetions(boostraps) for faster computation
+# Use 500 repetions(boostraps) for faster computation
 mc <- mc_cv(n = NROW(dta), nrep = 500, parallel = T)
 wb <- wb_cv(dta, nboot = 500, parallel = T)
 ```
