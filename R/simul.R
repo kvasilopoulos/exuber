@@ -174,9 +174,9 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   return(y)
 }
 
-#' Simulation of Bubble Processes à la Blanchard (1979)
+#' Simulation of a Blanchard (1979) bubble process
 #'
-#'Simulation à la Blanchard (1979)
+#' Simulation of a Blanchard (1979) rational bubble process.
 #'
 #' @inheritParams sim_dgp1
 #' @param pi A positive value in (0, 1) which governs the probability of the bubble continuing to grow.
@@ -230,14 +230,15 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
   return(b)
 }
 
-#' Simulation à la Evans (1991)
+#' Simulation of a Evans (1991) bubble process
 #'
-#' This function simulates a rational periodically-collapsing bubble of the type proposed in Evans (1991).
+#' Simulation of a Evans (1991) rational periodically collapsing bubble process.
 #'
 #' @inheritParams sim_blan
 #' @param delta A positive scalar, with restrictions (see details).
 #' @param tau The standard deviation of the innovations.
 #' @param alpha A positive scalar, with restrictions (see details).
+#' @param b1 A positive scalar, the inital value of the series. Defaults to \code{delta}.
 #'
 #' @return A numeric vector of length \code{n}.
 #'
@@ -246,6 +247,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' @details
 #'
 #' \code{delta} and \code{alpha} are positive parameters which satisfy \eqn{0 < \delta < (1+r)\alpha}.
+#' \code{delta} represents the size the bubble will return to after collapse.
 #' The default value of \code{r} is 0.05.
 #' The function checks whether \code{alpha} and \code{delta} satisfy this condition and will return an error if not.
 #'
@@ -255,9 +257,10 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' When \eqn{B_t > \alpha}{B[t] > \alpha} the bubble expands at an increased rate of \eqn{(1+r)\pi^{-1}}:
 #'
-#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )]u_{t+1}.}{B[t+1] = \delta*(1+r)/\pi* (B[t]-\delta/(1+r))) *u[t+1].}
+#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )]u_{t+1},}{B[t+1] = \delta*(1+r)/\pi* (B[t]-\delta/(1+r))) *u[t+1],}
 #'
-#' But in this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
+#' where \eqn{\theta} is an indicator function taking a value of 0 with probability \eqn{1-\pi} and 1 with probability \eqn{\pi}.
+#' In this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
 #' By modification of the values of \code{delta}, \code{alpha} and \code{pi} the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble can all be modified.
 #'
 #' @export
@@ -268,7 +271,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' bubbles in asset prices. The American Economic Review, 81(4), 922-930.
 #'
 sim_evans <- function(n, alpha = 1, delta = 0.5,
-                      tau = 0.05, pi = 0.7, r = 0.05) {
+                      tau = 0.05, pi = 0.7, r = 0.05, b1 = delta) {
 
   # checks here
   is.positive.int(n)
@@ -282,7 +285,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
   y <- rnorm(n, 0, tau)
   u <- exp(y - tau^2 / 2)
   theta <- rbinom(n, 1, pi)
-  b <- delta
+  b <- b1
 
   for (i in 1:(n - 1)) {
     if (b[i] <= alpha) {
