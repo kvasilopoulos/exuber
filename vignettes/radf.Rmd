@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+WARNING: THIS VIGNETTE IS CURRENTLY WORK IN PROGRESS AND SUBJECT TO CHANGE.
+
 This vignette documents how to use the exuber package for analysing time series data.
 
 Let's start by loading the package:
@@ -24,9 +26,45 @@ Let's start by loading the package:
 library(exuber)
 ```
 
+## Creating simulated data which incorporate rational bubbles
+
+The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include `sim_dgp1()`, which generates a time series with a single episode of explosive behaviour, `sim_dgp2()` which generates a time series with two episodes of explosive behaviour. Two rational bubble models are also currently included; `sim_blan()` which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, `sim_evans()` generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.
+
+To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilise a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of `radf()` to detect them.
+
+Lets start be generating a realistic prices series incorporating an Evans (1991) type periodically collapsing bubble. We will use the monthly parameterisation detailed in PSY (2015a). exuber contains a function `sim_div()` which can be used to generate simulated dividends streams from a random walk with drift model.
+
+Need to make all of these clearer and more consistent with either Evans or Phillips (i.e., need to make a decision)
+
+```{r generate simulated data, eval = FALSE}
+# need to add explanation for what each of these is
+# n <- the sample size
+n <- 400
+mu <- 0.0024
+# this is the value of sigma squared in the paper need to check if code takes sigma (i.e. do i need to take sqroot)
+sigma <- 0.0010
+rho <- 0.985
+# check this is the correct understanding of rho to r transformation
+r <- 1/rho
+# the value which the bubble returns to when it collapses
+delta <- 1
+b1 <- 0.50
+pi <- 0.85
+xi <- 0.5
+# the scaling factor for the bubble
+kap <- 20
+# The fundamental value from the Lucas pricing model
+pf <- sim_div()
+# the evans bubble term
+b <- sim_evans()
+# the simulated time series
+p <- pf + kap * b
+  
+```
+
 ## Load data
 
-This vignette will demonstrate the features of the exuber package by replicating the empirical example of Philips, Shi and Yu (2015). They apply recursive unit root testing methods to the S and P 500 Price Dividend ratio.
+We now demonstrate the ability of the exuber package to detect bubbles in real data by replicating the empirical example of Philips, Shi and Yu (2015). They apply recursive unit root testing methods to the S and P 500 Price Dividend ratio.
 
 <!-- this will need a lot of modification once I have worked out how to correctly attach the data file --> 
 
