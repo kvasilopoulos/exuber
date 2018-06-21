@@ -26,13 +26,25 @@ Let's start by loading the package:
 library(exuber)
 ```
 
+## The `radf()` function
+
+The `radf()` function is the main workhorse function of the exuber package. It implements the recursive augmented Dickey-Fuller (hence radf) tests proposed in PWY (2011) and PSY (2015). It takes three arguments:
+
+* x
+* minw
+* lag
+
+`x` is a univariate or multivariate numeric object containing the data series for testing. It can be a ts object, data.frame or matrix. Due to the nature of the recursive procedure applied the series must be continuous and not contain missing values. `minw` is the minimum window size used during the estimation. If the minimum windows size is equal to the number of observations the test is merely the ADF test as all data is used. PSY (2015) (find precise referenceincluding page) suggest a rule of thumb which is that the fraction of the observations included in the minimum window should be equal to `0.01 + 1.8/sqrt(T)` where `T` is the sample size. This is the default option in the radf() function. Finally `lag` allows you to select the appropriate lag specification in the ADF regression.
+
+
+
 ## Creating simulated data which incorporate rational bubbles
 
 The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include `sim_dgp1()`, which generates a time series with a single episode of explosive behaviour, `sim_dgp2()` which generates a time series with two episodes of explosive behaviour. Two rational bubble models are also currently included; `sim_blan()` which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, `sim_evans()` generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.
 
 To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilise a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of `radf()` to detect them.
 
-Lets start be generating a realistic prices series incorporating an Evans (1991) type periodically collapsing bubble. We will use the monthly parameterisation detailed in PSY (2015a). exuber contains a function `sim_div()` which can be used to generate simulated dividends streams from a random walk with drift model.
+Lets start be generating a realistic prices series incorporating an Evans (1991) type periodically collapsing bubble. We will use the monthly parameterisation detailed in PSY (2015a), which corresponds to the empirical values from the S&amp;P 500 (see later example). exuber contains a function `sim_div()` which can be used to generate simulated dividends streams from a random walk with drift model.
 
 Need to make all of these clearer and more consistent with either Evans or Phillips (i.e., need to make a decision)
 
@@ -62,9 +74,28 @@ p <- pf + kap * b
   
 ```
 
+We can now plot this data to see what it looks like:
+
+```{r plot simulation, eval = FALSE}
+plot.ts(p)
+# need to add actual plot below it to show it looks similar to PSY(2015)
+```
+
+As we can see it looks very typical for the kind of data we wish to analyse with some peaks and troughs which may be indicative of explosive sub-periods. Let us conduct a more formal analysis:
+
+```{r test simulated data, eval = FALSE}
+test <- radf(p)
+```
+
+Then we must generate critical values. The exuber package contains two methods of generating critical values, `mc_cv()` which generates monte carlo critical values. And `wb_cv()` which generates critical values as in Sollis et al. `mc_cv()` merely requires the length of the series and the minimum window size
+
+
+
+
+
 ## Load data
 
-We now demonstrate the ability of the exuber package to detect bubbles in real data by replicating the empirical example of Philips, Shi and Yu (2015). They apply recursive unit root testing methods to the S and P 500 Price Dividend ratio.
+We now demonstrate the ability of the exuber package to detect bubbles in real data by replicating the empirical example of Philips, Shi and Yu (2015). They apply recursive unit root testing methods to the S&amp;P 500 Price Dividend ratio.
 
 <!-- this will need a lot of modification once I have worked out how to correctly attach the data file --> 
 
@@ -137,3 +168,6 @@ plot(test, crit)
 ```{r plot show}
 plot(test, crit)
 ```
+
+<!-- need to investigate including a fomal reference section here -->
+
