@@ -56,10 +56,6 @@ radf <- function(x, minw, lag = 0) {
     stop("Unsupported class", call. = FALSE)
   }
 
-  if (is.null(colnames(x))) {
-    colnames(x) <- paste("Series", seq(1, nc, 1))
-  }
-
   if (anyNA(x)) {
     stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
@@ -67,6 +63,10 @@ radf <- function(x, minw, lag = 0) {
   x <- as.matrix(x)
   nc <- NCOL(x)
   nr <- NROW(x)
+
+  if (is.null(colnames(x))) {
+    colnames(x) <- paste("Series", seq(1, nc, 1))
+  }
 
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(nr)

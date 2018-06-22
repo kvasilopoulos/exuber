@@ -6,7 +6,8 @@ knitr::opts_chunk$set(
 
 ## ----load_libraries, message=FALSE, warning=FALSE------------------------
 library(exuber)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 
 ## ----generate simulated data, eval = TRUE--------------------------------
 # need to add explanation for what each of these is
