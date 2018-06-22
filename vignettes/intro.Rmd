@@ -24,7 +24,8 @@ Let's start by loading the package:
 
 ```{r load_libraries, message=FALSE, warning=FALSE}
 library(exuber)
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 ```
 
 ## The `radf()` function

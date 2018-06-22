@@ -3,8 +3,8 @@
 \docType{data}
 \name{sp500}
 \alias{sp500}
-\title{S and P 500 Price-Dividend Ratio}
-\format{A time series with 1680 observations:
+\title{S\&P 500 Price-Dividend Ratio}
+\format{A data.frame with 1680 observations
 \describe{
   \item{sp.500.ratio}{S and P 500 Price-Dividen Ratio}
  }}

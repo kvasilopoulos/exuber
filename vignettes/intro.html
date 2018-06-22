@@ -288,7 +288,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>This vignette documents how to use the exuber package for analysing time series data.</p>
 <p>Let’s start by loading the package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(exuber)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
 <div id="the-radf-function" class="section level2">
 <h2>The <code>radf()</code> function</h2>
 <p>The <code>radf()</code> function is the main workhorse function of the exuber package. It implements the recursive augmented Dickey-Fuller (hence radf) tests proposed in PWY (2011) and PSY (2015). It takes three arguments:</p>
