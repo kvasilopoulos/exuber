@@ -12,7 +12,7 @@ mc_cv(n, nrep = 2000, minw, parallel = FALSE, ncores)
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{minw}{A positive integer. The minimum window size, which defaults to
-\eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
+\eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
 

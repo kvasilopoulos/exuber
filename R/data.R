@@ -8,4 +8,4 @@
 #'   \item{sp.500.ratio}{S and P 500 Price-Dividen Ratio}
 #'  }
 #' @source \url{http://www.econ.yale.edu/~shiller/data.htm}
-"sp500ratio"
+"sp500"

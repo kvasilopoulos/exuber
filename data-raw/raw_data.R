@@ -1,19 +1,17 @@
 require("readxl")
 
-raw.dat <- "data-raw/ie_data.xls"
+sp500 <- read_excel("data-raw/SP_DV.xlsx",
+                    col_types = c("text", "numeric", "numeric",
+                                  "numeric", "numeric")) %>%
+  na.omit() %>%
+  dplyr::mutate(Date = Date %>%
+                   zoo::as.yearmon("%Y.%m") %>%
+                   lubridate::myd(truncated = 1)) %>%
+  as.data.frame()
 
-dat <- read_excel(raw.dat, sheet = 3)
+testSP500 <- radf(sp500 %>% select(Date, PVratio))
+critSP500 <- mc_cv(NROW(sp500), parallel = TRUE)
 
-real.dividend <- as.numeric(as.matrix(dat[7:1686, 9]))
-
-real.price <- as.numeric(as.matrix(dat[7:1686, 8]))
-
-sp.500.ratio <- real.price / real.dividend
-
-sp.500.ratio <- ts(sp.500.ratio, start = c(1871, 1), frequency = 12)
-
-sp500ratio <- as.data.frame(sp.500.ratio)
-
-#save(sp.500.ratio, file = "data/sp500ratio.rdata")
-
-devtools::use_data(sp500ratio, overwrite = T)
+usethis::use_data(sp500, overwrite = T)
+usethis::use_data(testSP500, overwrite = T)
+usethis::use_data(critSP500, overwrite = T)

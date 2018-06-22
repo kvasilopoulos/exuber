@@ -12,7 +12,7 @@ wb_cv(y, nboot = 1000, minw, parallel = FALSE, ncores, dist_rad = FALSE)
 \item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
 
 \item{minw}{A positive integer. The minimum window size, which defaults to
-\eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
+\eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
 
