@@ -6,7 +6,7 @@
 #' @param x A univariate or multivariate numeric ts object, data.frame or matrix.
 #' The estimation process cannot handle NA values.
 #' @param minw A positive integer. The minimum window size, which defaults to
-#' \eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.
+#' \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.
 #' @param lag A non-negative integer. The lag of the Augmented Dickey-Fuller regression.
 #'
 #' @return A list that contains the t-statistic (sequence) for:
@@ -44,7 +44,7 @@ radf <- function(x, minw, lag = 0) {
   } else if (is.data.frame(x)) {
     if (class(x[, 1]) == "Date") {
       dating <- x[, 1]
-      x <- x[, -1]
+      x <- x[, -1, drop = FALSE]
     } else if (all(findDates(rownames(x)))) {
       dating <- as.Date(rownames(x))
     } else {
@@ -54,6 +54,14 @@ radf <- function(x, minw, lag = 0) {
     dating <- index(x)
   } else {
     stop("Unsupported class", call. = FALSE)
+  }
+
+  if (is.null(colnames(x))) {
+    colnames(x) <- paste("Series", seq(1, nc, 1))
+  }
+
+  if (anyNA(x)) {
+    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
 
   x <- as.matrix(x)
@@ -69,12 +77,6 @@ radf <- function(x, minw, lag = 0) {
   is.positive.int(minw)
   is.nonnegeative.int(lag)
 
-  if (anyNA(x)) {
-    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
-  }
-  if (is.null(colnames(x))) {
-    colnames(x) <- paste("Series", seq(1, nc, 1))
-  }
   adf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   badf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
   sadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
