@@ -79,7 +79,7 @@ a4 <- sim_evans(n = 100) # evans model
 
 dta <- data.frame("oneb" = a1, "twob" = a2, "blan" = a3, "evans" = a4)
 
-ts <- radf(dfrm, lag = 1)
+ts <- radf(dta, lag = 1)
 
 # Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
 # Use 500 repetions(boostraps) for faster computation
