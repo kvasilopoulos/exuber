@@ -11,7 +11,7 @@ radf(x, minw, lag = 0)
 The estimation process cannot handle NA values.}
 
 \item{minw}{A positive integer. The minimum window size, which defaults to
-\eqn{0.01 + 1.8/\sqrt(T)}{0.01 + 1.8 / \sqrtT}.}
+\eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
 }
