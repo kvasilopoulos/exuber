@@ -94,7 +94,7 @@ radf <- function(x, minw, lag = 0) {
       x_lag <- x_embed[, 2]
       yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
     }
-    results <- rls_gsadf(yxmat, minw)
+    results <- rls_gsadf_cpp(yxmat, minw)
 
     adf[i] <- results$adf
     badf[, i] <- results$badf

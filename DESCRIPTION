@@ -16,8 +16,7 @@ Depends:
 Imports: doParallel,
     parallel,
     foreach,
-    Rcpp,
-    RcppArmadillo,
+    Rcpp (>= 0.12.17),
     rlang,
     dplyr,
     ggplot2,
@@ -33,4 +32,3 @@ LinkingTo: Rcpp, RcppArmadillo
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-VignetteBuilder: knitr
