@@ -20,7 +20,7 @@ RcppExport SEXP rls_gsadf_cpp(arma::mat yxmat, SEXP min_win) {
   //be careful with counting from 0 here
   arma::mat x = yxmat.cols(1, yxmat.n_cols - 1);
   arma::mat y = yxmat.col(0);
-  Rcout << "end = " << end << std::endl;
+  //Rcout << "end = " << end << std::endl;
 
   //removing minus one here
   int nc = yxmat.n_cols - 1;
