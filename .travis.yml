@@ -12,6 +12,10 @@ os:
   - linux
   - osx
 
+compiler:
+  - gcc
+  - clang
+
 matrix:
   fast_finish: true
   allow_failures:
@@ -20,6 +24,7 @@ matrix:
 
 before_install:
   - export TZ=US/Central
+  - if [ "${TRAVIS_OS_NAME}" == "osx" ]; then brew install llvm; fi
 
 r_packages:
   - covr
@@ -30,3 +35,5 @@ after_success:
 notifications:
   email:
     - k.vasilopoulo@gmail.com
+    on_success: never
+    on_failure: always
