@@ -2,7 +2,7 @@
 #'
 #' @name exuber
 #' @useDynLib exuber, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
+#' @importFrom Rcpp evalCpp
 #' @docType package
 #' @keywords internal
 
