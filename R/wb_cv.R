@@ -24,6 +24,7 @@
 #' @seealso \code{\link{mc_cv}} for Monte Carlo critical values
 #'
 #' @import doParallel
+#' @import doSNOW
 #' @import parallel
 #' @import foreach
 #' @importFrom utils setTxtProgressBar txtProgressBar flush.console
@@ -68,10 +69,11 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
 
   if (missing(ncores)) {
     ncores <- detectCores()
-  }else{
+  } else {
     if (!parallel) {
       stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",
-           call. = FALSE)
+        call. = FALSE
+      )
     }
   }
 
@@ -107,71 +109,45 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
 
   pb <- txtProgressBar(max = nboot, style = 3)
 
-  if (parallel) {
-
-    f <- function(){
-      count <- 0
-      function(...) {
-        count <<- count + length(list(...)) - 1
-        setTxtProgressBar(pb, count)
-        flush.console()
-        cbind(...)
-      }
-    }
-
-    cl <- makeCluster(ncores, type = 'PSOCK')
-    registerDoParallel(cl)
-
     for (j in 1:nc) {
+
       dy <- y[-1, j] - y[-nr, j]
-      results <- foreach(
-        i = 1:nboot, .export = "srls_gsadf_cpp",
-        .combine = f()
-      ) %dopar% {
-        ystar <- 0
-        if (dist_rad) {
-          w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-        } else {
-          w <- rnorm(nr - 1, 0, 1)
+
+      if (parallel) {
+        cl <- makeCluster(ncores, type = "PSOCK")
+        on.exit(stopCluster(cl))
+        registerDoSNOW(cl)
+
+        progress <- function(n) setTxtProgressBar(pb, n)
+        opts <- list(progress = progress)
+
+
+        results <- foreach(i = 1:nboot, .export = "srls_gsadf_cpp",
+          .combine = "cbind", .options.snow = opts) %dopar% {
+          ystar <- 0
+          if (dist_rad) {
+            w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+          } else {
+            w <- rnorm(nr - 1, 0, 1)
+          }
+          ystar <- c(0, cumsum(w * dy))
+          srls_gsadf_cpp(ystar[-1], ystar[-nr], minw)
         }
-        ystar <- c(0, cumsum(w * dy))
-        srls_gsadf_cpp(ystar[-1], ystar[-nr], minw)
+      }else{
+        for (i in 1:nboot) {
+          ystar <- 0
+          if (dist_rad) {
+            w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+          } else {
+            w <- rnorm(nr - 1, 0, 1)
+          }
+          ystar <- c(0, cumsum(w * dy))
+          results[, i] <- srls_gsadf_cpp(ystar[-1], ystar[-nr], minw)
+          setTxtProgressBar(pb, i)
+        }
       }
 
-      bsadf_critical[, , j] <- t(apply(results[(1 + minw):(nr - 1), ], 1,
-        quantile,
-        prob = c(0.9, 0.95, 0.99)
-      ))
-      sadf_critical[j, ] <- quantile(results[nr, ],
-        prob = c(0.9, 0.95, 0.99)
-      )
-      gsadf_critical[j, ] <- quantile(results[nr + 1, ],
-        prob = c(0.9, 0.95, 0.99)
-      )
-      adf_critical[j, ] <- quantile(results[nr + 2, ],
-        prob = c(0.9, 0.95, 0.99)
-      )
-      badf_critical[, , j] <- t(apply(results[-c(1:(nr + 2 + minw)), ], 1,
-        quantile,
-        prob = c(0.9, 0.95, 0.99)
-      ))
-      cat("\n", paste("Series", j, "out of", nc, "completed!", sep = " "), "\n")
-    }
-    stopCluster(cl)
-  } else {
-    for (j in 1:nc) {
-      dy <- y[-1, j] - y[-nr, j]
-      for (i in 1:nboot) {
-        ystar <- 0
-        if (dist_rad) {
-          w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-        } else {
-          w <- rnorm(nr - 1, 0, 1)
-        }
-        ystar <- c(0, cumsum(w * dy))
-        results[, i] <- srls_gsadf_cpp(ystar[-1], ystar[-nr], minw)
-        setTxtProgressBar(pb, i)
-      }
+
       bsadf_critical[, , j] <- t(apply(results[(1 + minw):(nr - 1), ], 1,
         quantile,
         prob = c(0.9, 0.95, 0.99)
@@ -194,21 +170,20 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
         quote = FALSE
       )
     }
-  }
   close(pb)
 
-  output <- list(
-    adf_cv = adf_critical,
-    sadf_cv = sadf_critical,
-    gsadf_cv = gsadf_critical,
-    badf_cv = badf_critical,
-    bsadf_cv = bsadf_critical
-  )
+  bsadf_critical_adj <- apply(bsadf_critical, c(2,3), cummax)
+  badf_critical_adj <- apply(badf_critical, c(2,3), cummax)
 
-  attr(output, "class") <- append(class(output), "cv")
-  attr(output, "iter") <- nboot
-  attr(output, "method") <- "Wild Bootstrap"
-  attr(output, "minw") <- minw
+  output <- structure(list(adf_cv = adf_critical,
+                           sadf_cv = sadf_critical,
+                           gsadf_cv = gsadf_critical,
+                           badf_cv = badf_critical_adj,
+                           bsadf_cv = bsadf_critical_adj),
+                      method = "Wild Bootstrap",
+                      iter   = nboot,
+                      minw   = minw,
+                      class  = "cv")
 
   return(output)
 }
