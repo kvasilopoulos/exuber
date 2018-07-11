@@ -17,6 +17,7 @@
 #' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values.
 #'
 #' @import doParallel
+#' @import doSNOW
 #' @import parallel
 #' @import foreach
 #' @importFrom utils setTxtProgressBar txtProgressBar flush.console
@@ -61,28 +62,20 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
   pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 
   if (parallel) {
-
-    f <- function(){
-       count <- 0
-       function(...) {
-         count <<- count + length(list(...)) - 1
-         setTxtProgressBar(pb, count)
-         flush.console()
-         cbind(...)
-       }
-    }
-
     cl <- makeCluster(ncores, type = 'PSOCK')
-    registerDoParallel(cl)
+    on.exit(stopCluster(cl))
+    registerDoSNOW(cl)
+
+    progress <- function(n) setTxtProgressBar(pb, n)
+    opts <- list(progress = progress)
 
     results <- foreach(
       i = 1:nrep, .export = "srls_gsadf_cpp",
-      .combine = f()
+      .combine = "cbind", .options.snow = opts
     ) %dopar% {
       y <- cumsum(rnorm(n))
       srls_gsadf_cpp(y[-1], y[-n], minw)
     }
-    stopCluster(cl)
   } else {
     results <- matrix(0, 2 * n + 1, nrep)
     for (i in 1:nrep) {
@@ -112,33 +105,25 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
                            probs = c(0.9, 0.95, 0.99)
   ))
 
-  # cv sequences should be increasing - i could use cummax
-  # for (j in 1:3) {
-  #   for (i in 2:NROW(bsadf_critical)) {
-  #     if (bsadf_critical[i, j] <= bsadf_critical[i - 1, j]) {
-  #       bsadf_critical[i, j] <- bsadf_critical[i - 1, j]
-  #     }
-  #     if (badf_critical[i, j] <= badf_critical[i - 1, j]) {
-  #       badf_critical[i, j] <- badf_critical[i - 1, j]
-  #     }
-  #   }
-  # }
-  # cv sequences should be increasing
+
+
   bsadf_critical_adj <- apply(bsadf_critical, 2, cummax)
   badf_critical_adj <- apply(badf_critical, 2, cummax)
 
-  output <- list(
-    adf_cv = adf_critical,
-    sadf_cv = sadf_critical,
-    gsadf_cv = gsadf_critical,
-    badf_cv = badf_critical_adj,
-    bsadf_cv = bsadf_critical_adj
-  )
+  output <- structure(list(adf_cv = adf_critical,
+                           sadf_cv = sadf_critical,
+                           gsadf_cv = gsadf_critical,
+                           badf_cv = badf_critical_adj,
+                           bsadf_cv = bsadf_critical_adj),
+                      method = "Monte Carlo",
+                      iter   = nrep,
+                      minw   = minw,
+                      class  = "cv")
 
-  attr(output, "class") <- append(class(output), "cv")
-  attr(output, "iter") <- nrep
-  attr(output, "method") <- "Monte Carlo"
-  attr(output, "minw") <- minw
+  # attr(output, "class") <- append(class(output), "cv")
+  # attr(output, "iter") <- nrep
+  # attr(output, "method") <- "Monte Carlo"
+  # attr(output, "minw") <- minw
 
   return(output)
 }

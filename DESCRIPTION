@@ -14,6 +14,7 @@ BugReports: https://github.com/kvasilopoulos/exuber/issues
 Depends:
     R (>= 2.10)
 Imports: doParallel,
+    doSNOW,
     parallel,
     foreach,
     Rcpp (>= 0.12.17),
