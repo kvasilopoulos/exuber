@@ -21,7 +21,9 @@ Imports: doParallel,
     rlang,
     dplyr,
     ggplot2,
-    purrr
+    purrr,
+    magrittr,
+    lubridate
 Suggests:
     knitr,
     rmarkdown,

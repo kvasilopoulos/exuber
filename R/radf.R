@@ -25,6 +25,7 @@
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
 #' @importFrom stats embed
+#' @importFrom lubridate date_decimal round_date
 #' @export
 #'
 #' @examples
@@ -40,13 +41,18 @@
 radf <- function(x, minw, lag = 0) {
 
   if (any(class(x) %in% c("mts", "ts"))) {
-      dating <- time(x)
+    dating <- time(x) %>%
+      as.numeric() %>%
+      date_decimal() %>%
+      round_date("month") %>%
+      as.Date()
   } else if (is.data.frame(x)) {
     if (class(x[, 1]) == "Date") {
       dating <- x[, 1]
       x <- x[, -1, drop = FALSE]
     } else if (all(findDates(rownames(x)))) {
-      dating <- as.Date(rownames(x))
+      dating <- rownames(x) %>%
+        as.Date()
     } else {
       dating <- seq(1, NROW(x))
     }
