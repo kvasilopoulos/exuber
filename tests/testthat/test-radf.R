@@ -1,7 +1,7 @@
 context("radf")
 
 test_that("Right output", {
-  expect_output(str(radf_dta), "List of 5")
+  expect_output(str(radf_dta), "List of 7")
   expect_output(str(attributes(radf_dta)), "List of 6")
 })
 
