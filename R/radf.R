@@ -84,16 +84,9 @@ radf <- function(x, minw, lag = 0) {
   bsadf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
 
   for (i in 1:nc) {
-    if (lag == 0) {
-      x_embed <- embed(x[, i], 2)
-      yxmat <- cbind(x_embed[, 1], 1, x_embed[, 2])
-    } else {
-      x_embed <- embed(x[, i], lag + 2)
-      dx_embed <- embed(diff(x[, i]), lag + 1)[, -1]
-      x_lev <- x_embed[, 1]
-      x_lag <- x_embed[, 2]
-      yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
-    }
+
+    yxmat <- unroot(x[, i], lag = lag)
+
     results <- rls_gsadf_cpp(yxmat, minw)
 
     adf[i] <- results$adf
@@ -103,19 +96,23 @@ radf <- function(x, minw, lag = 0) {
     bsadf[, i] <- results$bsadf
   }
 
-  value <- list(
-    adf = adf,
-    badf = badf[-c(1:(minw)), , drop = F],
-    sadf = sadf,
-    bsadf = bsadf[-c(1:(minw)), , drop = F],
-    gsadf = gsadf
-  )
+  bsadf_panel <- apply(bsadf, 1, mean)[-c(1:minw)]
+  gsadf_panel <- max(bsadf_panel)
 
-  attr(value, "index") <- dating
-  attr(value, "class") <- append(class(value), "radf")
-  attr(value, "lag") <- lag
-  attr(value, "minw") <- minw
-  attr(value, "col_names") <- colnames(x)
+  value <- structure(list(adf = adf,
+                          badf = badf[-c(1:(minw)), , drop = F],
+                          sadf = sadf,
+                          bsadf = bsadf[-c(1:(minw)), , drop = F],
+                          gsadf = gsadf,
+                          bsadf_panel = bsadf_panel,
+                          gsadf_panel = gsadf_panel),
+                     index = dating,
+                     lag = lag,
+                     minw = minw,
+                     lag = lag,
+                     col_names = colnames(x),
+                     class = "radf")
+
 
   return(value)
 }
