@@ -41,11 +41,15 @@
 radf <- function(x, minw, lag = 0) {
 
   if (any(class(x) %in% c("mts", "ts"))) {
-    dating <- time(x) %>%
-      as.numeric() %>%
-      date_decimal() %>%
-      round_date("month") %>%
-      as.Date()
+    if (all(time(x) == seq(1, NROW(x), 1))) {
+      dating <- time(x)
+    }else{
+      dating <- time(x) %>%
+        as.numeric() %>%
+        date_decimal() %>%
+        round_date("month") %>%
+        as.Date()
+    }
   } else if (is.data.frame(x)) {
     if (class(x[, 1]) == "Date") {
       dating <- x[, 1]
