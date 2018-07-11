@@ -6,6 +6,7 @@
 #' @param x An object of class \code{\link[=radf]{radf()}}.
 #' @param y An object, which is the output of \code{\link[=mc_cv]{mc_cv()}} or
 #' \code{\link[=wb_cv]{wb_cv()}}.
+#' @param panel Logical. If false it will report the panel methodology.
 #'
 #' @describeIn report Returns a list of summary statistics for the t-statistic
 #' and the critical values of the ADF, SADF and GSADF.
@@ -31,42 +32,51 @@
 #' datestamp(x = rfd, y = mc, min_duration = rot)
 #' }
 #' @export
-report <- function(x, y) {
+report <- function(x, y, panel = F) {
+
   radf_check(x)
-  cv_check(y)
+  cv_check(y, panel)
   minw_check(x, y)
 
   ret <- list()
-  if (method(y) == "Wild Bootstrap") {
-    for (i in seq_along(col_names(x))) {
-      df1 <- c(x$adf[i], y$adf_cv[i, ])
-      df2 <- c(x$sadf[i], y$sadf_cv[i, ])
-      df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
-      df <- data.frame(rbind(df1, df2, df3),
-        row.names = c("ADF", "SADF", "GSADF")
-      )
-      colnames(df) <- c("t-stat", "90%", "95%", "99%")
-      ret[[i]] <- df
+
+  if (panel) {
+    stopifnot(method(y) == "Sieve Bootstrap",
+              lagr(x) == lagr(y))
+    ret <- cbind(x$gsadf_panel, t(y$gsadf_cv))
+    colnames(ret) <- c("t-stat", "90%", "95%", "99%")
+  }else{
+    if (method(y) == "Wild Bootstrap") {
+      stopifnot(method(y) != "Sieve Bootstrap")
+      for (i in seq_along(col_names(x))) {
+        df1 <- c(x$adf[i], y$adf_cv[i, ])
+        df2 <- c(x$sadf[i], y$sadf_cv[i, ])
+        df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
+        df <- data.frame(rbind(df1, df2, df3),
+                         row.names = c("ADF", "SADF", "GSADF")
+        )
+        colnames(df) <- c("t-stat", "90%", "95%", "99%")
+        ret[[i]] <- df
+      }
+    } else if (method(y) == "Monte Carlo") {
+      for (i in seq_along(col_names(x))) {
+        df1 <- c(x$adf[i], y$adf_cv)
+        df2 <- c(x$sadf[i], y$sadf_cv)
+        df3 <- c(x$gsadf[i], y$gsadf_cv)
+        df <- data.frame(rbind(df1, df2, df3),
+                         row.names = c("ADF", "SADF", "GSADF"))
+        colnames(df) <- c("tstat", "90%", "95%", "99%")
+        ret[[i]] <- df
+      }
     }
-  } else if (method(y) == "Monte Carlo") {
-    for (i in seq_along(col_names(x))) {
-      df1 <- c(x$adf[i], y$adf_cv)
-      df2 <- c(x$sadf[i], y$sadf_cv)
-      df3 <- c(x$gsadf[i], y$gsadf_cv)
-      df <- data.frame(rbind(df1, df2, df3),
-                       row.names = c("ADF", "SADF", "GSADF"))
-      colnames(df) <- c("tstat", "90%", "95%", "99%")
-      ret[[i]] <- df
-    }
+    names(ret) <- col_names(x)
   }
 
   attr(ret, "minw") <- minw(y)
   attr(ret, "lag") <- lagr(x)
   attr(ret, "method") <- method(y)
   attr(ret, "iter") <- iter(y)
-
-  names(ret) <- col_names(x)
-  class(ret) <- append(class(ret), "report")
+  class(ret) <- "report"
   ret
 }
 
@@ -86,13 +96,18 @@ print.report <- function(x, ...) {
     "Lag is set to:", lagr(x), "\n",
     "---------------------------------------------"
   )
-  for (i in seq_along(x)) {
-    cat("\n", names(x)[i], "\n")
-    print(x[[i]])
+  if (method(x) == "Sieve Bootstrap") {
+    cat("\nPanel\n")
+    print(x[1,])
+  }else{
+    for (i in seq_along(x)) {
+      cat("\n", names(x)[i], "\n")
+      print(x[[i]])
+    }
   }
+
 }
 
-# diagnostics -------------------------------------------------------------
 
 # diagnostics <- function(x) UseMethod("diagnostics")
 
@@ -105,15 +120,20 @@ print.report <- function(x, ...) {
 #'
 #' @import dplyr
 #' @export
-diagnostics <- function(x, y, option = c("gsadf", "sadf")) {
+diagnostics <- function(x, y, option = c("gsadf", "sadf"), panel = F) {
+
   radf_check(x)
-  cv_check(y)
+  cv_check(y, panel)
   minw_check(x, y)
   option <- match.arg(option)
 
   if (option == "gsadf") {
-    tstat <- x$gsadf
-    if (method(y) == "Monte Carlo") {
+    if (panel) {
+      tstat <- x$gsadf_panel
+    }else{
+      tstat <- x$gsadf
+    }
+    if (method(y) %in% c("Monte Carlo", "Sieve Bootstrap")) {
       cv1 <- y$gsadf_cv[1]
       cv2 <- y$gsadf_cv[2]
       cv3 <- y$gsadf_cv[3]
@@ -153,11 +173,18 @@ diagnostics <- function(x, y, option = c("gsadf", "sadf")) {
   }
 
   cond <- sig == "95%" | sig == "99%"
-  proceed <- col_names(x)[cond]
+  if (panel) {
+    proceed <- "Panel"
+    class(proceed) <- "diagnostics_panel"
+  }else {
+    proceed <- col_names(x)[cond]
+    attr(proceed, "col_names") <- col_names(x)
+    class(proceed) <- "diagnostics"
+  }
+
 
   attr(proceed, "significance") <- sig
-  class(proceed) <- "diagnostics"
-  attr(proceed, "col_names") <- col_names(x)
+
 
   if (is.character0(proceed)) {
     stop("You cannot reject H0 for significance level 95%", call. = FALSE)
@@ -171,10 +198,27 @@ is.character0 <- function(ch) {
 }
 
 #' @export
+print.diagnostics_panel <- function(x, ...) {
+  cat(
+    "\n",
+    "Diagnostics: Panel",
+    "\n---------------------------------------------"
+  )
+  if (attr(x, "significance") == "Reject") {
+    cat("\n", "Cannot reject H0!")
+  } else {
+    cat("\n", "Rejects H0 for significance level", attr(x, "significance"),
+        "\n---------------------------------------------",
+        "\n Procced for date stampting and plotting")
+  }
+}
+
+
+#' @export
 print.diagnostics <- function(x, ...) {
   cat(
     "\n",
-    "Diagnostics:",
+    "Diagnostics: Individual",
     "\n---------------------------------------------"
   )
   for (i in seq_along(attr(x, "col_names"))) {
@@ -187,12 +231,11 @@ print.diagnostics <- function(x, ...) {
   }
   cat(
     "\n---------------------------------------------",
-    "\nProcced for date stampting and plotting for variable(s)",
+    "\n Procced for date stampting and plotting for variable(s)",
     deparse(as.vector(x))
   )
 }
 
-# datestamp ---------------------------------------------------------------
 
 #' @describeIn report
 #'
@@ -221,9 +264,10 @@ print.diagnostics <- function(x, ...) {
 #' @import dplyr
 #' @export
 #'
-datestamp <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0) {
+datestamp <- function(x, y, option = c("gsadf", "sadf"), panel = F,
+                      min_duration = 0) {
   radf_check(x)
-  cv_check(y)
+  cv_check(y, panel)
   minw_check(x, y)
   is.nonnegeative.int(min_duration)
 
@@ -233,8 +277,8 @@ datestamp <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0) {
   #   stop(message("Explosive periods with Wild Bootstraped critical values",
   #        "apply only for the option 'gsadf'"), call. = FALSE)
   # }
-
-  reps <- diagnostics(x, y, option) %>% match(col_names(x))
+  if (panel) cand <- "Panel" else cand <- col_names(x)
+  reps <- diagnostics(x, y, option, panel) %>% match(cand)
   dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
 
   ds <- vector("list", length(reps))
@@ -264,6 +308,14 @@ datestamp <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0) {
       #   ds[[j]] <- which(x$badf[, i] > rep(y$adf_cv[i, 2], NROW(x$badf))) +
       #     minw(x) + 1
       # }
+    } else if (method(y) == "Sieve Bootstrap") {
+      if (option == "gsadf") {
+        ds <- list(  which(x$bsadf_panel >
+                             ifelse(lagr(x) == 0,
+                                    y$bsadf_cv[, 2],
+                                    y$bsadf_cv[-c(1:lagr(x)), 2]
+                             )) + minw(x) + lagr(x) + 1)
+      }
     }
     j <- j + 1
   }
@@ -287,7 +339,7 @@ datestamp <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0) {
     )
   }
 
-  names(res) <- col_names(x)[reps][!min_reject]
+  names(res) <- cand[reps][!min_reject]
   res
 }
 
@@ -310,7 +362,6 @@ repn <- function(x) {
   rep(nm, ln)
 }
 
-# Plotting ----------------------------------------------------------------
 
 #' Plotting
 #'
@@ -367,23 +418,22 @@ repn <- function(x) {
 #' plot(x = rfd, y = mc, plot_type = "single")
 #' }
 plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
-                      plot_type = c("multiple", "single"),
+                      panel = F, plot_type = c("multiple", "single"),
                       breaks_x = NULL, format_date = "%m-%Y",
                       breaks_y = NULL, ...) {
-  cv_check(y)
+
+  cv_check(y, panel)
   minw_check(x, y)
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
 
-  choice <- diagnostics(x, y, option)
-  reps <- match(choice, col_names(x))
-  dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
-  shade <- datestamp(x, y, option = option, min_duration = min_duration)
+  choice <- diagnostics(x, y, option, panel)
+  if (panel) reps <- 1 else reps <- match(choice, col_names(x))
 
-  # if (is.null(reps)) {
-  #   stop("Plotting is only for the series that reject the Null Hypothesis",
-  #     call. = FALSE)
-  # }
+  dating <- index(x)[-c(1:(minw(x) + 1 + lagr(x)))]
+  shade <- datestamp(x, y, option = option, min_duration = min_duration,
+                     panel = panel)
+
   if (!missing(breaks_y) & plot_type == "single") {
     warning("Argument 'breaks_y' is redundant when 'plot_type' ",
       "is set to 'single'", call. = FALSE)
@@ -398,7 +448,11 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
 
     for (i in reps) {
       if (option == "gsadf") {
-        tstat_dat <- x$bsadf[, i]
+        if (panel) {
+          tstat_dat <- x$bsadf_panel
+        }else{
+          tstat_dat <- x$bsadf[, i]
+        }
 
         if (method(y) == "Monte Carlo") {
           cv_dat <- ifelse(lagr(x) == 0,
@@ -421,6 +475,11 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
           # }else{
           #   cv_dat =  head(y$badf_cv[, 2, i], -lagr(x), row.names = NULL)
           # }
+        }else if (method(y) == "Sieve Bootstrap") {
+          cv_dat <- ifelse(lagr(x) == 0,
+                           y$bsadf_cv[, 2],
+                           y$bsadf_cv[-c(1:lagr(x)), 2]
+          )
         }
       } else if (option == "sadf") {
         tstat_dat <- x$badf[, i]
