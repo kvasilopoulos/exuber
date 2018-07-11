@@ -5,7 +5,7 @@
 \title{Plotting}
 \usage{
 \method{plot}{radf}(x, y, option = c("gsadf", "sadf"), min_duration = 0,
-  plot_type = c("multiple", "single"), breaks_x = NULL,
+  panel = F, plot_type = c("multiple", "single"), breaks_x = NULL,
   format_date = "\%m-\%Y", breaks_y = NULL, ...)
 }
 \arguments{
@@ -19,6 +19,8 @@
 
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
+
+\item{panel}{Logical. If false it will report the panel methodology.}
 
 \item{plot_type}{For multivariate \code{radf} objects, "multiple" plots the series
 on multiple plots and "single" superimposes them on a single plot

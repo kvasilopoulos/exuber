@@ -6,17 +6,19 @@
 \alias{datestamp}
 \title{Report summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.}
 \usage{
-report(x, y)
+report(x, y, panel = F)
 
-diagnostics(x, y, option = c("gsadf", "sadf"))
+diagnostics(x, y, option = c("gsadf", "sadf"), panel = F)
 
-datestamp(x, y, option = c("gsadf", "sadf"), min_duration = 0)
+datestamp(x, y, option = c("gsadf", "sadf"), panel = F, min_duration = 0)
 }
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{y}{An object, which is the output of \code{\link[=mc_cv]{mc_cv()}} or
 \code{\link[=wb_cv]{wb_cv()}}.}
+
+\item{panel}{Logical. If false it will report the panel methodology.}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
