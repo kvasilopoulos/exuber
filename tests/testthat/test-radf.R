@@ -57,7 +57,7 @@ test_that("col_names <-  check ", {
 
 
 test_that("index works in different classes", {
-  dating <- seq(as.Date("1991/10/01"), as.Date("2000/01/01"), by = "month")
+  dating <- seq(as.Date("1991/01/01"), as.Date("1999/04/01"), by = "month")
   df1 <- data.frame(dating, dta)
   expect_equal(index(radf(df1)), dating)
   df2 <- data.frame(dta)
@@ -65,7 +65,7 @@ test_that("index works in different classes", {
   expect_equal(index(radf(df2)), dating)
   ts1 <- ts(dta, frequency = 12, start = c(1991, 1))
   expect_error(invisible(index(ts1)), regexp = NA)
-  expect_equal(index(radf(ts1)), index(ts1))
+  expect_equal(index(radf(ts1)), index(radf(df1)))
   mat1 <- matrix(dta, ncol = 5)
   # expect_error(invisible(index(mat1)), regexp = NA)
   # expect_error(index(mat1) <- seq(1, NROW(mat1)), regexp = NA)
