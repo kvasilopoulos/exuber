@@ -1,3 +1,18 @@
+
+unroot <- function(x, lag) {
+  if (lag == 0) {
+    x_embed <- embed(x, 2)
+    yxmat <- cbind(x_embed[, 1], 1, x_embed[, 2])
+  } else {
+    x_embed <- embed(x, lag + 2)
+    dx_embed <- embed(diff(x), lag + 1)[, -1]
+    x_lev <- x_embed[, 1]
+    x_lag <- x_embed[, 2]
+    yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
+  }
+  return(yxmat)
+}
+
 # citation ----------------------------------------------------------------
 
 # .onAttach <-
@@ -60,9 +75,13 @@ radf_check <- function(x) {
   }
 }
 
-cv_check <- function(y) {
+cv_check <- function(y, panel) {
   if (!inherits(y, "cv")) {
     stop("Argument 'y' should be of class 'cv'", call. = FALSE)
+  }
+  if (!panel && method(y) == "Sieve Bootstrap") {
+    stop("Critical values should be of method 'Sieve Bootstrap'",
+         " when panel is set to TRUE", call. = FALSE)
   }
 }
 
