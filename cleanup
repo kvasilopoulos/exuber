@@ -1,0 +1,1 @@
+autoconf configure.ac --output=configure
