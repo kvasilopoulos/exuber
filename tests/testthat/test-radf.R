@@ -57,18 +57,24 @@ test_that("col_names <-  check ", {
 
 
 test_that("index works in different classes", {
-  dating <- seq(as.Date("1991/01/01"), as.Date("1999/04/01"), by = "month")
-  df1 <- data.frame(dating, dta)
-  expect_equal(index(radf(df1)), dating)
-  df2 <- data.frame(dta)
-  rownames(df2) <- dating
-  expect_equal(index(radf(df2)), dating)
+  dating_m <- seq(as.Date("1991/01/01"), as.Date("1999/04/01"), by = "month")
+  dating_w <- seq(as.Date("1991/01/01"), as.Date("1992/11/25"), by = "week")
+
+  df_m <- data.frame(dating_m, dta)
+  expect_equal(index(radf(df_m)), dating_m)
+  df_w <- data.frame(dating_w, dta)
+  expect_equal(index(radf(df_w)), dating_w)
+
+  df_row <- data.frame(dta)
+  rownames(df_row) <- dating_m
+  expect_equal(index(radf(df_row)), dating_m)
+
   ts1 <- ts(dta, frequency = 12, start = c(1991, 1))
   expect_error(invisible(index(ts1)), regexp = NA)
-  expect_equal(index(radf(ts1)), index(radf(df1)))
+  expect_equal(index(radf(ts1)), index(radf(df_m)))
+
   mat1 <- matrix(dta, ncol = 5)
-  # expect_error(invisible(index(mat1)), regexp = NA)
-  # expect_error(index(mat1) <- seq(1, NROW(mat1)), regexp = NA)
+  expect_error(invisible(index(mat1)), regexp = NA)
   expect_equal(index(radf(mat1)), seq(1, NROW(mat1)))
   expect_error(
     index(radf(mat1)) <- seq(1, NROW(mat1) - 1),
@@ -77,8 +83,7 @@ test_that("index works in different classes", {
 })
 
 test_that("error generation", {
-  dta_na <- dta
-  dta_na[1, 3] <- NA
+  dta_na <- dta; dta_na[1, 3] <- NA
   expect_error(
     radf(dta_na),
     "Recursive least square estimation cannot handle NA"
