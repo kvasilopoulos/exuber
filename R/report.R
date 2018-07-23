@@ -399,6 +399,7 @@ repn <- function(x) {
 #' @importFrom graphics plot
 #' @importFrom rlang sym
 #' @importFrom purrr map
+#' @method plot radf
 #'
 #' @examples
 #' \donttest{
@@ -419,13 +420,27 @@ repn <- function(x) {
 #' }
 plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
                       panel = F, plot_type = c("multiple", "single"),
-                      breaks_x = NULL, format_date = "%m-%Y",
+                      breaks_x = NULL, format_date = "%Y-%m",
                       breaks_y = NULL, ...) {
 
+  # strftime(dating_m, "%Y-%m-%d", tz = "")
   cv_check(y, panel)
   minw_check(x, y)
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
+
+  if (missing(format_date)) {
+    fm <- FALSE
+  }else{
+    fm <- TRUE # local evaluation inside ggplot transform cannot use missing
+  }
+
+  if (!inherits(index(x), "Date")) {
+    if (fm || is.character(breaks_x)) {
+      warning("Invalid input: date_trans works with objects of class Date only",
+              call. = FALSE)
+    }
+  }
 
   choice <- diagnostics(x, y, option, panel)
   if (panel) reps <- 1 else reps <- match(choice, col_names(x))
@@ -538,14 +553,22 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
               )
             }
           } + {
-            if (!is.null(breaks_x)) {
-              if (class(index(x)) == "Date") {
+            if (class(index(x)) == "Date") {
+              if (!is.null(breaks_x) && fm) {
                 scale_x_date(date_breaks = breaks_x, date_labels = format_date)
-              } else {
-                scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x))
+              }else if (fm) {
+                scale_x_date(date_labels = format_date)
+              }else{
+                scale_x_date(date_breaks = breaks_x)
               }
-        }
-        }
+            }else{
+              if (!is.null(breaks_x)) {
+                scale_x_continuous(
+                  breaks = seq(0, max(index(x)), breaks_x),
+                  limits = c(minw(x), tail(index(x), 1)))
+              }
+            }
+          }
 
         h[[j]] <<- p
         j <<- j + 1
@@ -561,15 +584,22 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
         unlist() %>%
         as.Date(origin = "1970-01-01")
     } else {
-      st <- shade %>% map(~ .x[1]) %>% unlist()
-      ed <- shade %>% map(~ .x[2]) %>% unlist()
+      st <- shade %>%
+        map(~ .x[1]) %>%
+        unlist()
+      ed <- shade %>%
+        map(~ .x[2]) %>%
+        unlist()
     }
 
     total <- data.frame(
-      "key" = shade %>% repn(),
+      "key" = shade %>%
+        repn(),
       "Start" = st,
       "End" = ed,
-      "Duration" = shade %>% map(~ .x[3]) %>% unlist()
+      "Duration" = shade %>%
+        map(~ .x[3]) %>%
+        unlist()
     ) %>% filter(!!sym("Duration") - 1 >= min_duration)
 
     h <- ggplot(total, aes_string(colour = "key")) +
@@ -584,19 +614,37 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
         plot.margin = margin(1, 1, 0, 0, "cm"),
         axis.text.y = element_text(face = "bold", size = 8, hjust = 0)
       )
-    if (!is.null(breaks_x)) {
-      if (class(index(x)) == "Date") {
-        h <- h + scale_x_date(
-          date_breaks = breaks_x, date_labels = format_date,
-          limits = c(head(index(x), 1), tail(index(x), 1))
-        )
-      } else {
-        h <- h + scale_x_continuous(
-          breaks = seq(0, max(index(x)), breaks_x),
-          limits = c(minw(x), tail(index(x), 1))
-        )
+    if (class(index(x)) == "Date") {
+      if (!is.null(breaks_x) && fm) {
+        h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
+                              ,limits = c(head(index(x), 1), tail(index(x), 1)))
+      }else if (fm) {
+        h <- h + scale_x_date(date_labels = format_date,
+                              ,limits = c(head(index(x), 1), tail(index(x), 1)))
+      }else{
+        h <- h + scale_x_date(date_breaks = breaks_x,
+                              limits = c(head(index(x), 1), tail(index(x), 1))))
+      }
+    }else{
+      if (!is.null(breaks_x)) {
+        h <- h + scale_x_continuous(breaks = seq(0, max(index(x)), breaks_x),
+                                    limits = c(minw(x), tail(index(x), 1)))
+
       }
     }
+    # if (!is.null(breaks_x)) {
+    #   if (class(index(x)) == "Date") {
+    #     h <- h + scale_x_date(
+    #       date_breaks = breaks_x, date_labels = format_date,
+    #       limits = c(head(index(x), 1), tail(index(x), 1))
+    #     )
+    #   } else {
+    #     h <- h + scale_x_continuous(
+    #       breaks = seq(0, max(index(x)), breaks_x),
+    #       limits = c(minw(x), tail(index(x), 1))
+    #     )
+    #   }
+    # }
   }
 
   if (length(h) == 1) {
