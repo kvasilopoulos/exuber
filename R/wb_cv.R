@@ -77,7 +77,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
     }
   }
 
-  is.between(ncores, 2, detectCores())
+  # is.between(ncores, 2, detectCores()) more than 2 maybe
   adf_critical <- matrix(NA,
     nrow = nc, ncol = 3,
     dimnames = list(colnames(y), c("90%", "95%", "95%"))

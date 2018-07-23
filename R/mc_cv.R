@@ -57,7 +57,7 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
            call. = FALSE)
     }
   }
-  is.between(ncores, 2, detectCores())
+  # is.between(ncores, 2, detectCores())
 
   pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 
