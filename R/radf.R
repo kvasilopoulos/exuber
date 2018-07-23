@@ -24,7 +24,7 @@
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
-#' @importFrom stats embed
+#' @importFrom stats embed frequency
 #' @importFrom lubridate date_decimal round_date
 #' @export
 #'
@@ -47,10 +47,12 @@ radf <- function(x, minw, lag = 0) {
       dating <- time(x) %>%
         as.numeric() %>%
         date_decimal() %>%
-        round_date("month") %>%
         as.Date()
+      if (frequency(x) %in% c(1,4,12)) {
+        dating <- round_date(dating, "month")
+      }
     }
-  } else if (is.data.frame(x)) {
+  } else if (is.data.frame(x)) { #need to identify date somehow and date format
     if (class(x[, 1]) == "Date") {
       dating <- x[, 1]
       x <- x[, -1, drop = FALSE]
