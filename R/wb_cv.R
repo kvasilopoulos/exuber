@@ -68,7 +68,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
   }
 
   if (missing(ncores)) {
-    ncores <- detectCores()
+    ncores <- detectCores() - 1
   } else {
     if (!parallel) {
       stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",
@@ -114,8 +114,8 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
       dy <- y[-1, j] - y[-nr, j]
 
       if (parallel) {
-        cl <- makeCluster(ncores, type = "PSOCK")
-        on.exit(stopCluster(cl))
+        cl <- parallel::makeCluster(ncores, type = "PSOCK")
+        on.exit(parallel::stopCluster(cl))
         registerDoSNOW(cl)
 
         progress <- function(n) setTxtProgressBar(pb, n)
