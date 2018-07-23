@@ -4,11 +4,10 @@
 \alias{panel_cv}
 \title{Panel Sieve Bootstrap Critical values}
 \usage{
-panel_cv(x, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores)
+panel_cv(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores)
 }
 \arguments{
-\item{x}{A univariate or multivariate numeric ts object, data.frame or matrix.
-The estimation process cannot handle NA values.}
+\item{y}{A data.frame or matrix containing the data.}
 
 \item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
 
@@ -28,7 +27,18 @@ A list that contains the panel critical values for BSADF and GSADF
 t-statistics.
 }
 \description{
-\code{panel_cv} performs the Pavlidis et al. (2016) wild bootstrap re-sampling
-scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests.
+\code{panel_cv} performs the Pavlidis et al. (2016)
+}
+\examples{
+\donttest{
+# Simulate bubble processes
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100), sim_dgp2(n = 100))
+
+rdta <- radf(dta)
+
+pcv <- panel_cv(y = dta)
+
+report(dta, pcv, panel = T)
+plot(rdta, pcv, panel = T)
+}
 }
