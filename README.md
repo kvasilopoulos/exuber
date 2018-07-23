@@ -100,7 +100,7 @@ datestamp(ts, mc)
 
 ### Plotting
 
-The output of plot will be a list,
+The output of plot is a list,
 
 ``` r
 # All together
@@ -114,7 +114,12 @@ p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
 do.call("grid.arrange", c(p1, ncol = 2))
 ```
 
------
+#### License
+
+This package is free and open source software, licensed under
+[GPL-3](https://github.com/kvasilopoulos/exuber/blob/master/LICENSE).
+
+#### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://github.com/kvasilopoulos/exuber/blob/master/CONDUCT.md).
