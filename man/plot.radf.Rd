@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{radf}(x, y, option = c("gsadf", "sadf"), min_duration = 0,
   panel = F, plot_type = c("multiple", "single"), breaks_x = NULL,
-  format_date = "\%m-\%Y", breaks_y = NULL, ...)
+  format_date = "\%Y-\%m", breaks_y = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}.}
