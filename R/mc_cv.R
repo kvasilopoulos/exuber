@@ -50,7 +50,7 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
   stopifnot(is.logical(parallel))
 
   if (missing(ncores)) {
-    ncores <- detectCores()
+    ncores <- detectCores() - 1
   }else{
     if (!parallel) {
       stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",
@@ -62,8 +62,8 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
   pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 
   if (parallel) {
-    cl <- makeCluster(ncores, type = 'PSOCK')
-    on.exit(stopCluster(cl))
+    cl <- parallel::makeCluster(ncores, type = 'PSOCK')
+    on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
 
     progress <- function(n) setTxtProgressBar(pb, n)
