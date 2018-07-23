@@ -617,13 +617,13 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
     if (class(index(x)) == "Date") {
       if (!is.null(breaks_x) && fm) {
         h <- h + scale_x_date(date_breaks = breaks_x, date_labels = format_date,
-                              ,limits = c(head(index(x), 1), tail(index(x), 1)))
+                              limits = c(head(index(x), 1), tail(index(x), 1)))
       }else if (fm) {
         h <- h + scale_x_date(date_labels = format_date,
-                              ,limits = c(head(index(x), 1), tail(index(x), 1)))
+                              limits = c(head(index(x), 1), tail(index(x), 1)))
       }else{
         h <- h + scale_x_date(date_breaks = breaks_x,
-                              limits = c(head(index(x), 1), tail(index(x), 1))))
+                              limits = c(head(index(x), 1), tail(index(x), 1)))
       }
     }else{
       if (!is.null(breaks_x)) {
