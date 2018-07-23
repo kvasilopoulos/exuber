@@ -78,15 +78,19 @@ panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
   }
 
   nres <- NROW(resmat)
+  if (lag == 0) { # not sure on why i ned to add -2 instead of -1
+    edf_bsadf_panel <- matrix(0, nr - 1 - minw, nboot)
+  }else{
+    edf_bsadf_panel <- matrix(0, nr - 2 - minw - lag, nboot)
 
-  edf_bsadf_panel <- matrix(0, nr - 1 - minw, nboot)
+  }
 
   pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
 
   if (parallel) {
 
-    cl <- makeCluster(ncores, type = "PSOCK")
-    on.exit(stopCluster(cl))
+    cl <- parallel::makeCluster(ncores, type = "PSOCK")
+    on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
 
     progress <- function(n) setTxtProgressBar(pb, n)
