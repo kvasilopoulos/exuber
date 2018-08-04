@@ -120,7 +120,8 @@ print.report <- function(x, ...) {
 #'
 #' @import dplyr
 #' @export
-diagnostics <- function(x, y, option = c("gsadf", "sadf"), panel = F) {
+diagnostics <- function(x, y, option = c("gsadf", "sadf"),
+                        reject = FALSE, panel = FALSE) {
 
   radf_check(x)
   cv_check(y, panel)
@@ -165,12 +166,16 @@ diagnostics <- function(x, y, option = c("gsadf", "sadf"), panel = F) {
     tstat >= cv2 & tstat < cv3 ~ "95%",
     tstat >= cv3 ~ "99%"
   )
-
-  if (all(sig == "Reject")) {
-    stop("Cannot reject H0, do not proceed for date stamping or plotting",
-      call. = FALSE
-    )
+  if (reject == FALSE) {
+    if (all(sig == "Reject")) {
+      stop("Cannot reject H0, do not proceed for date stamping or plotting",
+           call. = FALSE
+      )
+    }
+  }else{
+    return(1)
   }
+
 
   cond <- sig == "95%" | sig == "99%"
   if (panel) {
