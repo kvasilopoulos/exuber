@@ -49,7 +49,7 @@ panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
   }
 
   if (missing(ncores)) {
-    ncores <- detectCores()
+    ncores <- detectCores() - 1
   } else {
     if (!parallel) {
       stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",

@@ -8,7 +8,8 @@
 \usage{
 report(x, y, panel = F)
 
-diagnostics(x, y, option = c("gsadf", "sadf"), panel = F)
+diagnostics(x, y, option = c("gsadf", "sadf"), reject = FALSE,
+  panel = FALSE)
 
 datestamp(x, y, option = c("gsadf", "sadf"), panel = F, min_duration = 0)
 }
