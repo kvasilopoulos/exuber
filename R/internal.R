@@ -79,9 +79,22 @@ cv_check <- function(y, panel) {
   if (!inherits(y, "cv")) {
     stop("Argument 'y' should be of class 'cv'", call. = FALSE)
   }
-  if (!panel && method(y) == "Sieve Bootstrap") {
-    stop("Critical values should be of method 'Sieve Bootstrap'",
-         " when panel is set to TRUE", call. = FALSE)
+  if (method(y) == "Sieve Bootstrap" && panel != TRUE)
+    stop("Sieve Bootstrapped critical values are used for panel estimation",
+         call. = FALSE)
+}
+
+# inverse of in to control for cv in panel_check
+'%ni%' <- Negate('%in%')
+
+panel_check <- function(x, y) {
+  if (method(y) %ni% c("Monte Carlo", "Sieve Bootstrap")) {
+    stop("Wrong critical values", call. = FALSE)
+  }
+  if (method(y) == "Sieve Bootstrap") {
+    if (lagr(x) != lagr(y)) {
+      stop("Different lag values", call. = FALSE)
+    }
   }
 }
 

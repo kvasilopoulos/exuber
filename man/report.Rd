@@ -8,8 +8,8 @@
 \usage{
 report(x, y, panel = F)
 
-diagnostics(x, y, option = c("gsadf", "sadf"), reject = FALSE,
-  panel = FALSE)
+diagnostics(x, y, option = c("gsadf", "sadf"), panel = FALSE,
+  reject = FALSE)
 
 datestamp(x, y, option = c("gsadf", "sadf"), panel = F, min_duration = 0)
 }
@@ -19,7 +19,7 @@ datestamp(x, y, option = c("gsadf", "sadf"), panel = F, min_duration = 0)
 \item{y}{An object, which is the output of \code{\link[=mc_cv]{mc_cv()}} or
 \code{\link[=wb_cv]{wb_cv()}}.}
 
-\item{panel}{Logical. If false it will report the panel methodology.}
+\item{panel}{Logical. If false it will report the panel statistic.}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}

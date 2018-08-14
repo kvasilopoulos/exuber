@@ -20,7 +20,7 @@
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 
-\item{panel}{Logical. If false it will report the panel methodology.}
+\item{panel}{Logical. If false it will report the panel statistic.}
 
 \item{plot_type}{For multivariate \code{radf} objects, "multiple" plots the series
 on multiple plots and "single" superimposes them on a single plot
@@ -70,5 +70,11 @@ do.call(grid.arrange, c(p1, ncol = 2))
 
 #Plot in a single graph
 plot(x = rfd, y = mc, plot_type = "single")
+
+option = "gsadf"; min_duration = 0; x = radf(dta); y = mc; panel = T
+index(x) <- seq(as.Date("1991/01/01"), as.Date("1999/04/01"), by = "month")
+breaks_x = NULL; plot_type = "multiple"; breaks_y = NULL; fm = FALSE
+
+
 }
 }
