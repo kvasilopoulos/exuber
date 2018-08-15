@@ -353,6 +353,7 @@ datestamp <- function(x, y, option = c("gsadf", "sadf"), panel = F,
     )
   }
 
+  # min_duration may cause to reject all possilbe bubble periods
   names(res) <- cand[reps][!min_reject]
   res
 }
@@ -432,7 +433,7 @@ repn <- function(x) {
 #' #Plot in a single graph
 #' plot(x = rfd, y = mc, plot_type = "single")
 #'
-#' option = "gsadf"; min_duration = 0; x = radf(dta); y = mc; panel = T
+#' option = "gsadf"; min_duration = 0; x = radf(dta); y = mc_cv(100); panel = T
 #' index(x) <- seq(as.Date("1991/01/01"), as.Date("1999/04/01"), by = "month")
 #' breaks_x = NULL; plot_type = "multiple"; breaks_y = NULL; fm = FALSE
 #'
@@ -570,8 +571,6 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
               }else if (fm) {
                 scale_x_date(date_labels = format_date)
               }else if (!is.null(breaks_x)) {
-                scale_x_date(date_breaks = breaks_x)
-              }else{
                 scale_x_date(date_breaks = breaks_x)
               }
             }else{
