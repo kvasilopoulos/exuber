@@ -37,8 +37,8 @@
 #' }
 mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
 
-  is.positive.int(n)
-  is.positive.int(nrep)
+  assert_positive_int(n)
+  assert_positive_int(nrep)
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(n)
     minw <- floor(r0 * n)
@@ -48,7 +48,6 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
     stop("Argument 'minw' is too small", call. = FALSE)
   }
   stopifnot(is.logical(parallel))
-
   if (missing(ncores)) {
     ncores <- detectCores() - 1
   }else{
@@ -57,7 +56,6 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
            call. = FALSE)
     }
   }
-  # is.between(ncores, 2, detectCores())
 
   pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 

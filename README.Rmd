@@ -70,7 +70,7 @@ If you encounter a clear bug, please file a reproducible example on [GitHub](htt
 
 This is a basic example which shows you how to use exuber:
 
-```{r example, echo = TRUE, eval = TRUE, cache=TRUE, results = "hide"}
+```{r example, echo = TRUE, eval = TRUE, results = "hide"}
 library(exuber)
 # Simulate data witn n = 100 observations
 set.seed(123)
@@ -101,13 +101,15 @@ datestamp(ts, mc)
 
 The output of plot is a list,
 
-```{r plotting, echo=TRUE, eval = TRUE, fig.width=9}
+```{r plotting, echo=TRUE, eval = FALSE, fig.width=9}
 p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
 
 # Use gridExtra to rearrange
 library(gridExtra)
 do.call("grid.arrange", c(p1, ncol = 2))
 ```
+
+<img src="inst/figures/readme.png" width="900"/>
 
 #### License
 

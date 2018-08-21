@@ -22,19 +22,19 @@
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100), sim_dgp2(n = 100))
 #'
-#' rdta <- radf(dta)
+#' rfd <- radf(dta, lag = 1)
 #'
-#' pcv <- panel_cv(y = dta)
+#' pcv <- panel_cv(dta, lag = 1)
 #'
-#' report(dta, pcv, panel = T)
-#' plot(rdta, pcv, panel = T)
+#' report(dta, pcv, panel = TRUE)
+#' plot(rdta, pcv, panel = TRUE)
 #' }
 panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
 
   nc <- NCOL(y)
   nr <- NROW(y)
 
-  is.positive.int(nboot)
+  assert_positive_int(nboot)
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(nr)
     minw <- floor(r0 * nr)
@@ -43,28 +43,23 @@ panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
   } else if (minw < 3) {
     stop("Argument 'minw' is too small", call. = FALSE)
   }
-  # stopifnot(is.logical(parallel)
   if (any(is.na(y))) {
     stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
-
+  stopifnot(is.logical(parallel))
   if (missing(ncores)) {
     ncores <- detectCores() - 1
   } else {
     if (!parallel) {
       stop("Argument 'ncores' is redundant when 'parallel' is set to 'FALSE'",
-           call. = FALSE
-      )
+           call. = FALSE)
     }
   }
-
-
   initmat <- matrix(0, nc, 1 + lag)
   resmat <- matrix(0, nr - 2 - lag, nc)
   coefmat <- matrix(0, nc, 2 + lag)
 
   for (j in 1:nc) {
-
     ys <- y[, j]
     dy <- ys[-1] - ys[-nr]
     ym <- embed(dy, lag + 2)
@@ -76,19 +71,10 @@ panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
     coefmat[j, ] <- coef
     resmat[, j] <- res
   }
-
   nres <- NROW(resmat)
-  # if (lag == 0) { # not sure on why i ned to add -2 instead of -1
-    # edf_bsadf_panel <- matrix(0, nr - 1 - minw, nboot)
-  # }else{
-    edf_bsadf_panel <- matrix(0, nr - 1 - minw - lag, nboot)
-
-  # }
-
   pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
 
   if (parallel) {
-
     cl <- parallel::makeCluster(ncores, type = "PSOCK")
     on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
@@ -100,11 +86,9 @@ panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
                                .export = c("rls_gsadf_cpp", "unroot"),
                                .combine = "cbind",
                                .options.snow = opts) %dopar% {
-
       boot_index <- sample(1:nres, replace = TRUE)
 
       for (j in 1:nc) {
-
         boot_res <- resmat[boot_index, j]
         dboot_res <- boot_res - mean(boot_res)
         dy_boot <- c(initmat[j, lag:1],
@@ -114,35 +98,35 @@ panel_cv <- function(y, lag = 0, minw, nboot = 1000, parallel = FALSE, ncores){
         yxmat_boot <- unroot(x = y_boot, lag)
         aux_boot <- rls_gsadf_cpp(yxmat_boot, minw)
         bsadf_boot <- aux_boot$bsadf[-c(1:minw)]
-
       }
       edf_bsadf_panel <- bsadf_boot / nc
     }
   }else{
     for (i in 1:nboot) {
-
+      # non-parallel estimation needs preallocation
+      # need to add -2 because of the lag difference
+      if (lag == 0) {
+        edf_bsadf_panel <- matrix(0, nr - 1 - minw, nboot)
+      }else{
+        edf_bsadf_panel <- matrix(0, nr - 2 - minw - lag, nboot)
+      }
       boot_index <- sample(1:nres, replace = TRUE)
-
       for (j in 1:nc) {
         boot_res <- resmat[boot_index, j]
         dboot_res <- boot_res - mean(boot_res)
-        dy_boot <- c(initmat[j, lag:1], stats::filter(coefmat[j, 1] + dboot_res,
-                                                      coefmat[j, -1], "rec",
-                                                      init = initmat[j, ]))
+        dy_boot <- c(initmat[j, lag:1],
+                     stats::filter(coefmat[j, 1] + dboot_res,
+                                   coefmat[j, -1], "rec", init = initmat[j, ]))
         y_boot <- cumsum(c(y[1, j], dy_boot))
         yxmat_boot <- unroot(x = y_boot, lag)
         aux_boot <- rls_gsadf_cpp(yxmat_boot, minw)
         bsadf_boot <- aux_boot$bsadf[-c(1:minw)]
-
       }
-
       edf_bsadf_panel[, i] <- bsadf_boot / nc
       setTxtProgressBar(pb, i)
-
     }
   }
   close(pb)
-
 
   bsadf_cv <- t(apply(edf_bsadf_panel, 1, function(z)
     cummax(quantile(z, probs = c(0.90, 0.95, 0.99)))))

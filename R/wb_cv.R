@@ -51,7 +51,7 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
   nc <- NCOL(y)
   nr <- NROW(y)
 
-  is.positive.int(nboot)
+  assert_positive_int(nboot)
   if (missing(minw)) {
     r0 <- 0.01 + 1.8 / sqrt(nr)
     minw <- floor(r0 * nr)
@@ -61,8 +61,8 @@ wb_cv <- function(y, nboot = 1000, minw, parallel = FALSE, ncores,
     stop("Argument 'minw' is too small", call. = FALSE)
   }
 
-  stopifnot(is.logical(parallel))
-  stopifnot(is.logical(dist_rad))
+  stopifnot(is.logical(parallel),
+            is.logical(dist_rad))
   if (any(is.na(y))) {
     stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
