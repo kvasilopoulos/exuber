@@ -52,11 +52,11 @@
 #' sim_dgp1(n = 200, te = 100, tf = 150)
 sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
                      alpha = 0.6, sigma = 6.79) {
-  is.positive.int(n)
-  is.between(te, 0, n)
-  is.between(tf, te, n)
-  is.positive.int(c)
-  is.between(alpha, 0, 1)
+  assert_positive_int(n)
+  assert_between(te, 0, n)
+  assert_between(tf, te, n)
+  assert_positive_int(c)
+  assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
 
   delta <- 1 + c * n^(-alpha)
@@ -141,12 +141,12 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
                      te2 = 0.6 * n, tf2 = 0.1 * n + te2,
                      c = 1, alpha = 0.6, sigma = 6.79) {
-  is.positive.int(n)
-  is.between(te1, 0, n)
-  is.between(tf1, te1, n)
-  is.between(te2, tf1, n)
-  is.between(tf2, te2, n)
-  is.between(alpha, 0, 1)
+  assert_positive_int(n)
+  assert_between(te1, 0, n)
+  assert_between(tf1, te1, n)
+  assert_between(te2, tf1, n)
+  assert_between(tf2, te2, n)
+  assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
 
   delta <- 1 + c * n^(-alpha)
@@ -206,8 +206,8 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' @examples
 #' sim_blan(n = 100)
 sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
-  is.positive.int(n)
-  is.between(pi, 0, 1)
+  assert_positive_int(n)
+  assert_between(pi, 0, 1)
   stopifnot(sigma >= 0)
   stopifnot(r >= 0)
 
@@ -273,12 +273,12 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
                       tau = 0.05, pi = 0.7, r = 0.05, b1 = delta) {
 
   # checks here
-  is.positive.int(n)
+  assert_positive_int(n)
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
-    stop("Alpha and Delta should satisfy: 0 < delta < (1+r)*alpha", call. = FALSE)
+    stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha", call. = FALSE)
   }
-  is.between(pi, 0, 1)
+  assert_between(pi, 0, 1)
   stopifnot(r >= 0)
 
   y <- rnorm(n, 0, tau)
@@ -350,7 +350,7 @@ sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d")) 
   if (missing(mu)) if (log) mu <- 0.013 else mu <- 0.0373
   if (missing(sigma)) if (log) sigma <- sqrt(0.16) else sigma <- sqrt(0.1574)
 
-  is.positive.int(n)
+  assert_positive_int(n)
   stopifnot(sigma >= 0)
   stopifnot(r >= 0)
   stopifnot(is.logical(log))

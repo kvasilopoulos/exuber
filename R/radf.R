@@ -45,11 +45,19 @@ radf <- function(x, minw, lag = 0) {
       dating <- time(x)
     }else{
       dating <- time(x) %>%
-        as.numeric() %>%
-        date_decimal() %>%
-        as.Date()
-      if (frequency(x) %in% c(1,4,12)) {
-        dating <- round_date(dating, "month")
+          as.numeric() %>%
+          date_decimal()
+      if (frequency(x) %in% c(1, 4, 12)) {
+        dating <- dating %>%
+          round_date("month") %>%
+          as.Date()
+      }else if (frequency(x) == 52) {
+        dating <- dating %>%
+          as.Date()
+      }else{
+        dating <- dating %>%
+          round_date("day") %>%
+          as.Date()
       }
     }
   } else if (is.data.frame(x)) { #need to identify date somehow and date format
@@ -86,8 +94,8 @@ radf <- function(x, minw, lag = 0) {
   } else if (minw > 0 & minw < 3) {
     stop("Argument 'minw' is too small", call. = FALSE)
   }
-  is.positive.int(minw)
-  is.nonnegeative.int(lag)
+  assert_positive_int(minw)
+  assert_nonnegeative_int(lag)
 
   adf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   badf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
@@ -124,7 +132,6 @@ radf <- function(x, minw, lag = 0) {
                      lag = lag,
                      col_names = colnames(x),
                      class = "radf")
-
 
   return(value)
 }

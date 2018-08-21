@@ -13,16 +13,8 @@ unroot <- function(x, lag) {
   return(yxmat)
 }
 
-# citation ----------------------------------------------------------------
-
-# .onAttach <-
-#   function(libname, pkgname) {
-#     packageStartupMessage("\nPlease cite as:\n",
-#                           " Vasilopoulos, Pavlidis and Spavound (2018): exuber\n",
-#                           " R package version 0.1.0. https://CRAN.R-project.org/package=exuber \n")
-#   }
-
 # Check if a character string is a Date -----------------------------------
+
 
 findDates <- function(strings) {
   pattern1 <- "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]"
@@ -35,9 +27,9 @@ findDates <- function(strings) {
   return(tdBool)
 }
 
-# Testing arguments ------------------------------------------------------
+# Check arguments ------------------------------------------------------
 
-is.positive.int <- function(arg) {
+assert_positive_int <- function(arg) {
   level <- deparse(substitute(arg))
   if (arg != round(arg) || arg <= 0L) {
     stop(sprintf(
@@ -47,7 +39,7 @@ is.positive.int <- function(arg) {
   }
 }
 
-is.nonnegeative.int <- function(arg) {
+assert_nonnegeative_int <- function(arg) {
   level <- deparse(substitute(arg))
   if (arg != round(arg) | arg < 0L) {
     stop(sprintf(
@@ -57,7 +49,7 @@ is.nonnegeative.int <- function(arg) {
   }
 }
 
-is.between <- function(x, arg1, arg2) {
+assert_between <- function(x, arg1, arg2) {
   level <- deparse(substitute(x))
   if (x < arg1 | x > arg2) {
     stop(sprintf(
@@ -69,13 +61,13 @@ is.between <- function(x, arg1, arg2) {
 
 # radf and cv specific ----------------------------------------------------
 
-radf_check <- function(x) {
+assert_radf <- function(x) {
   if (!inherits(x, "radf")) {
     stop("Argument 'x' should be of class 'radf'", call. = FALSE)
   }
 }
 
-cv_check <- function(y, panel) {
+assert_cv <- function(y, panel) {
   if (!inherits(y, "cv")) {
     stop("Argument 'y' should be of class 'cv'", call. = FALSE)
   }
@@ -87,7 +79,7 @@ cv_check <- function(y, panel) {
 # inverse of in to control for cv in panel_check
 '%ni%' <- Negate('%in%')
 
-panel_check <- function(x, y) {
+assert_panel <- function(x, y) {
   if (method(y) %ni% c("Monte Carlo", "Sieve Bootstrap")) {
     stop("Wrong critical values", call. = FALSE)
   }
@@ -98,7 +90,7 @@ panel_check <- function(x, y) {
   }
 }
 
-minw_check <- function(x, y) {
+assert_minw <- function(x, y) {
   if (minw(x) != minw(y)) {
     stop("The critical values should have the same minumum", "
          window with the t-statistics!", call. = FALSE)
@@ -106,6 +98,7 @@ minw_check <- function(x, y) {
 }
 
 # Rest --------------------------------------------------------------------
+# Access attributes easily
 
 minw <- function(x) {
   attr(x, "minw")
