@@ -71,7 +71,7 @@ do.call(grid.arrange, c(p1, ncol = 2))
 #Plot in a single graph
 plot(x = rfd, y = mc, plot_type = "single")
 
-option = "gsadf"; min_duration = 0; x = radf(dta); y = mc; panel = T
+option = "gsadf"; min_duration = 0; x = radf(dta); y = mc_cv(100); panel = T
 index(x) <- seq(as.Date("1991/01/01"), as.Date("1999/04/01"), by = "month")
 breaks_x = NULL; plot_type = "multiple"; breaks_y = NULL; fm = FALSE
 

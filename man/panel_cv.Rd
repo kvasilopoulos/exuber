@@ -34,11 +34,11 @@ t-statistics.
 # Simulate bubble processes
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100), sim_dgp2(n = 100))
 
-rdta <- radf(dta)
+rfd <- radf(dta, lag = 1)
 
-pcv <- panel_cv(y = dta)
+pcv <- panel_cv(dta, lag = 1)
 
-report(dta, pcv, panel = T)
-plot(rdta, pcv, panel = T)
+report(dta, pcv, panel = TRUE)
+plot(rdta, pcv, panel = TRUE)
 }
 }

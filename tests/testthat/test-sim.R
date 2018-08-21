@@ -1,7 +1,8 @@
 context("sim")
 
 test_that("sim_evans", {
-  expect_error(sim_evans(100, delta = 1.5))
+  expect_error(sim_evans(100, delta = 1.5),
+       message("alpha and delta should satisfy: 0 < delta < (1+r)*alpha"))
 })
 
 test_that("sim_div", {
@@ -10,6 +11,8 @@ test_that("sim_div", {
 })
 
 test_that("dgp1", {
-  expect_error(sim_dgp1(100, te = 120))
-  expect_error(sim_dgp1(100, tf = 120))
+  expect_error(sim_dgp1(100, te = 120),
+               message("Argument 'te' should be a be between '0' and '100' "))
+  expect_error(sim_dgp1(100, tf = 120),
+               message("Argument 'tf' should be a be between '0' and '100' "))
 })

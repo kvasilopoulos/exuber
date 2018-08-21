@@ -9,9 +9,10 @@
 report(x, y, panel = F)
 
 diagnostics(x, y, option = c("gsadf", "sadf"), panel = FALSE,
-  reject = FALSE)
+  bool = FALSE)
 
-datestamp(x, y, option = c("gsadf", "sadf"), panel = F, min_duration = 0)
+datestamp(x, y, option = c("gsadf", "sadf"), panel = FALSE,
+  min_duration = 0, bool = FALSE)
 }
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}.}
@@ -23,6 +24,8 @@ datestamp(x, y, option = c("gsadf", "sadf"), panel = F, min_duration = 0)
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
+
+\item{bool}{Logical. If TRUE returns 0 (1) for not rejecting (not rejecting).}
 
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
