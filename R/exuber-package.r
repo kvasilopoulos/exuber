@@ -13,7 +13,6 @@
 #' @importFrom Rcpp evalCpp
 #' @docType package
 #' @keywords internal
-
 "_PACKAGE"
 
 #' Pipe operator

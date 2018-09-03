@@ -6,6 +6,22 @@
 
 using namespace Rcpp;
 
+<<<<<<< HEAD
+=======
+// rls_gsadf
+RcppExport arma::vec rls_gsadf(arma::mat yxmat, int min_win, int lag);
+RcppExport SEXP _exuber_rls_gsadf(SEXP yxmatSEXP, SEXP min_winSEXP, SEXP lagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type yxmat(yxmatSEXP);
+    Rcpp::traits::input_parameter< int >::type min_win(min_winSEXP);
+    Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
+    rcpp_result_gen = Rcpp::wrap(rls_gsadf(yxmat, min_win, lag));
+    return rcpp_result_gen;
+END_RCPP
+}
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 // rls_gsadf_cpp
 RcppExport SEXP rls_gsadf_cpp(arma::mat yxmat, SEXP min_win);
 RcppExport SEXP _exuber_rls_gsadf_cpp(SEXP yxmatSEXP, SEXP min_winSEXP) {
@@ -33,6 +49,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+<<<<<<< HEAD
+=======
+    {"_exuber_rls_gsadf", (DL_FUNC) &_exuber_rls_gsadf, 3},
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
     {"_exuber_rls_gsadf_cpp", (DL_FUNC) &_exuber_rls_gsadf_cpp, 2},
     {"_exuber_srls_gsadf_cpp", (DL_FUNC) &_exuber_srls_gsadf_cpp, 3},
     {NULL, NULL, 0}

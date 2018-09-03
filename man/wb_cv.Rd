@@ -4,10 +4,12 @@
 \alias{wb_cv}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(y, nboot = 1000, minw, parallel = FALSE, ncores, dist_rad = FALSE)
+wb_cv(data, nboot = 1000, minw, parallel = FALSE, ncores,
+  dist_rad = FALSE)
 }
 \arguments{
-\item{y}{A data.frame or matrix containing the data.}
+\item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
+The estimation process cannot handle NA values.}
 
 \item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
 
@@ -40,16 +42,16 @@ robust to non-stationary volatility.
 \examples{
 \donttest{
 # Simulate bubble processes
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
 
 # Default minimum window
-wb <- wb_cv(y = dta)
+wb <- wb_cv(dta)
 
 # Change the minimum window and the number of bootstraps
-wb <- wb_cv(y = dta, nboot = 1500,  minw = 20)
+wb <- wb_cv(dta, nboot = 1500,  minw = 20)
 
 # Use parallel computing (utilizing all available cores)
-wb <- wb_cv(y = dta, parallel = TRUE)
+wb <- wb_cv(dta, parallel = TRUE)
 }
 }
 \references{
