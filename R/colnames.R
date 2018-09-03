@@ -1,17 +1,10 @@
-<<<<<<< HEAD
-# Col_names ---------------------------------------------------------------
-=======
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
+
 #' Retrieve/Set column names
 #'
 #' Retrieve or set the column names of a class \code{\link[=radf]{radf()}} object. Similar to \code{colnames}, with the only
 #' difference that \code{col_names} is for \code{\link[=radf]{radf()}} objects.
 #'
-<<<<<<< HEAD
-#' @inheritParams index
-=======
 #' @inheritParams index.radf
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 #' @export
 #'
 #' @examples
@@ -26,14 +19,13 @@ col_names <- function(x, ...) {
   UseMethod("col_names")
 }
 
-<<<<<<< HEAD
-=======
+
 #' @export
 col_names.default <- function(x, ...) {
   base::colnames(x)
 }
 
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
+
 #' @rdname col_names
 #' @export
 `col_names<-` <- function(x, value) {

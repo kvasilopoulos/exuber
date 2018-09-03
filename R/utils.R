@@ -1,87 +1,104 @@
 
-unroot <- function(x, lag) {
-  if (lag == 0) {
-    x_embed <- embed(x, 2)
-    yxmat <- cbind(x_embed[, 1], 1, x_embed[, 2])
-  } else {
-    x_embed <- embed(x, lag + 2)
-    dx_embed <- embed(diff(x), lag + 1)[, -1]
-    x_lev <- x_embed[, 1]
-    x_lag <- x_embed[, 2]
-    yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
-  }
-  return(yxmat)
-}
-
 # Check if a character string is a Date -----------------------------------
 
 
-findDates <- function(strings) {
-  pattern1 <- "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]"
-  pattern2 <- "[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]"
-  pattern3 <- "[0-9][0-9]/[0-9][0-9][0-9][0-9]/[0-9][0-9]"
-  pattern4 <- "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+# findDates <- function(strings) {
+#   pattern1 <- "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]"
+#   pattern2 <- "[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]"
+#   pattern3 <- "[0-9][0-9]/[0-9][0-9][0-9][0-9]/[0-9][0-9]"
+#   pattern4 <- "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+#
+#   tdBool <- grepl(pattern1, strings) | grepl(pattern2, strings) |
+#     grepl(pattern3, strings) | grepl(pattern4, strings)
+#   return(tdBool)
+# }
 
-  tdBool <- grepl(pattern1, strings) | grepl(pattern2, strings) |
-    grepl(pattern3, strings) | grepl(pattern4, strings)
-  return(tdBool)
-}
 
-# Check arguments ------------------------------------------------------
+# access crit data --------------------------------------------------------
 
-assert_positive_int <- function(arg) {
-  level <- deparse(substitute(arg))
-  if (arg != round(arg) || arg <= 0L) {
-    stop(sprintf(
-      "Argument '%s' should be a positive integer",
-      level
-    ), call. = FALSE)
+provide_crit <- function(cv, x) {
+  if (missing(cv)) {
+    nr <- NROW(index(x))
+    if (nr > 5 && nr <= 500) {
+      return(get("crit")[[nr]])
+    } else {
+      stop("cannot provide MC critical values see ?crit", call. = FALSE)
+    }
+  }else{
+    return(cv)
   }
 }
 
-assert_nonnegeative_int <- function(arg) {
+
+# assert arguments ------------------------------------------------------
+
+
+warning_redudant <- function(arg, cond = TRUE) {
   level <- deparse(substitute(arg))
-  if (arg != round(arg) | arg < 0L) {
-    stop(sprintf(
-      "Argument '%s' should be a non-negative integer",
-      level
-    ), call. = FALSE)
+  if (cond) {
+    warning(sprintf("Argument '%s' is redundant", level),
+            call. = FALSE)
+  }
+}
+
+assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
+  level <- deparse(substitute(arg))
+  if (strictly) {
+    if (arg != round(arg) || arg <= 0) {
+      stop(sprintf("Argument '%s' should be a positive integer", level),
+           call. = FALSE)
+    }
+  }else{
+    if (arg != round(arg) | arg < 0L) {
+      stop(sprintf("Argument '%s' should be a non-negative integer",level
+      ), call. = FALSE)
+    }
+  }
+  if (!is.null(greater_than)) {
+    if (arg <= greater_than) {
+      stop(sprintf("Argument '%s' should be greater than '%d'",
+                   level, greater_than), call. = FALSE)
+    }
   }
 }
 
 assert_between <- function(x, arg1, arg2) {
   level <- deparse(substitute(x))
   if (x < arg1 | x > arg2) {
-    stop(sprintf(
-      "Argument '%s' should be a be between '%d' and '%d'",
-      level, arg1, arg2
-    ), call. = FALSE)
+    stop(sprintf("Argument '%s' should be a be between '%d' and '%d'",
+                 level, arg1, arg2), call. = FALSE)
   }
 }
+
+assert_class <- function(x, klass) {
+  xstring <- deparse(substitute(x))
+  klass <- deparse(substitute(klass))
+  if (!inherits(x, klass)) {
+    stop(sprintf("Argument '%s' should be of class '%s'", xstring, klass),
+         call. = FALSE)
+  }
+}
+
 
 # radf and cv specific ----------------------------------------------------
 
-assert_radf <- function(x) {
-  if (!inherits(x, "radf")) {
-    stop("Argument 'x' should be of class 'radf'", call. = FALSE)
+assert_na <- function(x) {
+  if (any(is.na(x))) {
+    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
   }
-}
-
-assert_cv <- function(y, panel) {
-  if (!inherits(y, "cv")) {
-    stop("Argument 'y' should be of class 'cv'", call. = FALSE)
-  }
-  if (method(y) == "Sieve Bootstrap" && panel != TRUE)
-    stop("Sieve Bootstrapped critical values are used for panel estimation",
-         call. = FALSE)
 }
 
 # inverse of in to control for cv in panel_check
 '%ni%' <- Negate('%in%')
 
-assert_panel <- function(x, y) {
-  if (method(y) %ni% c("Monte Carlo", "Sieve Bootstrap")) {
+
+assert_panel <- function(x, y, panel = FALSE) {
+  if (method(y) %ni% c("Monte Carlo", "Sieve Bootstrap") && panel == TRUE) {
     stop("Wrong critical values", call. = FALSE)
+  }
+  if (method(y) == "Sieve Bootstrap" && panel == FALSE) {
+    stop("Sieve Bootstrapped critical values are used for panel estimation",
+         call. = FALSE)
   }
   if (method(y) == "Sieve Bootstrap") {
     if (lagr(x) != lagr(y)) {
@@ -90,15 +107,16 @@ assert_panel <- function(x, y) {
   }
 }
 
-assert_minw <- function(x, y) {
+assert_equal_minw <- function(x, y) {
   if (minw(x) != minw(y)) {
     stop("The critical values should have the same minumum", "
          window with the t-statistics!", call. = FALSE)
   }
 }
 
-# Rest --------------------------------------------------------------------
-# Access attributes easily
+
+# Access attributes easily ------------------------------------------------
+
 
 minw <- function(x) {
   attr(x, "minw")
