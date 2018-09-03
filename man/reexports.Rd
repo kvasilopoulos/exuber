@@ -4,11 +4,8 @@
 \name{reexports}
 \alias{reexports}
 \alias{fortify}
-\alias{reexports}
 \alias{autoplot}
-\alias{reexports}
 \alias{index}
-\alias{reexports}
 \alias{index<-}
 \title{Objects exported from other packages}
 \seealso{

@@ -1,10 +1,7 @@
 context("radf")
 
 test_that("Right output", {
-<<<<<<< HEAD
 
-=======
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
   expect_output(str(radf_dta), "List of 7")
   expect_equal(names(radf_dta), c("adf", "badf", "sadf", "bsadf",
                                   "gsadf", "bsadf_panel", "gsadf_panel" ))
@@ -25,12 +22,8 @@ test_that("minw check radf", {
     radf(dta, minw = -1), "Argument 'minw' should be a positive integer")
   expect_error(
     radf(dta, minw = 0), "Argument 'minw' should be a positive integer")
-<<<<<<< HEAD
-  expect_error(radf(dta, minw = 2), "Argument 'minw' is too small")
-=======
   expect_error(radf(dta, minw = 1),
                "Argument 'minw' should be greater than '2'")
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
   expect_equal(minw(radf_dta),
                floor((0.01 + 1.8 / sqrt(NROW(dta))) * NROW(dta)))
 })
@@ -74,13 +67,6 @@ test_that("index works in different classes", {
   expect_equal(index(radf(df_w)), dating_w)
   df_d <- data.frame(dating_d, dta)
   expect_equal(index(radf(df_d)), dating_d)
-<<<<<<< HEAD
-  # parse dates from rows with findDates function
-  df_row <- data.frame(dta)
-  rownames(df_row) <- dating_m
-  expect_equal(index(radf(df_row)), dating_m)
-=======
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
   # parse dates from ts objects
   ts_y <- ts(dta, frequency = 1, start = c(1997))
   expect_equal(index(radf(ts_y)), dating_y)
@@ -95,11 +81,7 @@ test_that("index works in different classes", {
   ts_d <- ts(dta, frequency = 365, start = c(1997, 1))
   expect_equal(index(radf(ts_d)), dating_d)
   # parse index from matrix
-<<<<<<< HEAD
-  mat1 <- matrix(dta, ncol = 5)
-=======
   mat1 <- as.matrix(dta, ncol = 5)
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
   expect_equal(index(radf(mat1)), seq(1, NROW(mat1)))
   expect_error(index(radf(mat1)) <- seq(1, NROW(mat1) - 1),
     "length of index vectors does not match")

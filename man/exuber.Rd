@@ -4,7 +4,6 @@
 \name{exuber}
 \alias{exuber}
 \alias{exuber-package}
-\alias{exuber-package}
 \title{Econometric Analysis of Explosive Time Series}
 \description{
 Testing for and dating periods of explosive dynamics (exuberance) in time
