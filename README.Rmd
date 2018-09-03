@@ -73,7 +73,7 @@ This is a basic example which shows you how to use exuber:
 ```{r example, echo = TRUE, eval = TRUE, results = "hide"}
 library(exuber)
 # Simulate data witn n = 100 observations
-set.seed(123)
+set.seed(1234)
 a1 <- sim_dgp1(n = 100) # one bubble
 a2 <- sim_dgp2(n = 100) # two bubbles
 
@@ -101,7 +101,11 @@ datestamp(ts, mc)
 
 The output of plot is a list,
 
+<<<<<<< HEAD
 ```{r plotting, echo=TRUE, eval = FALSE, fig.width=9}
+=======
+```{r plotting, echo = TRUE, eval = FALSE, fig.width=9}
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
 
 # Use gridExtra to rearrange
