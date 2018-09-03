@@ -23,14 +23,16 @@ Imports: doParallel,
     ggplot2,
     purrr,
     magrittr,
-    lubridate
+    lubridate,
+    tibble,
+    zoo,
+    gridExtra
 Suggests:
     knitr,
     rmarkdown,
     covr,
     testthat,
-    withr,
-    gridExtra
+    withr
 LinkingTo: Rcpp, RcppArmadillo
 Encoding: UTF-8
 LazyData: true

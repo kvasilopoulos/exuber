@@ -2,7 +2,11 @@
 
 ## New features
 
+<<<<<<< HEAD
 * Added `panel_cv()`
+=======
+* Added `sb_cv()` function: Sieve Bootstrapped critical values
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 * Panel estimation in `radf()`
 
 

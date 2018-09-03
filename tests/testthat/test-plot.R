@@ -1,18 +1,28 @@
+<<<<<<< HEAD
+=======
+context("plot")
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 
 withr::with_options(
   c(warn = 2),
   test_that("no problem running (date, lag, wb)", {
+<<<<<<< HEAD
     expect_error(plot(radf_dta_lag1, wb), regexp = NA)
     expect_error(plot(radf_dta_lag1, wb, option = "sadf"),
       message("Explosive periods with Wild Bootstraped critical",
               "values apply only for the option 'gsadf'"))
     expect_error(plot(radf_dta_lag1, wb, plot_type = "single"), regexp = NA)
     expect_error(plot(radf_dta_lag1, wb, option = "sadf", plot_type = "single"),
+=======
+    expect_error(autoplot(radf_dta_lag1, wb), regexp = NA)
+    expect_error(autoplot(radf_dta_lag1, wb, option = "sadf"),
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
       message("Explosive periods with Wild Bootstraped critical",
               "values apply only for the option 'gsadf'"))
   })
 )
 
+<<<<<<< HEAD
 
 test_that("plot warnings & errors",{
   expect_error(plot(radf_div,mc),
@@ -32,11 +42,19 @@ test_that("further arguements to multiple plot",{
 })
 
 
+=======
+test_that("plot warnings & errors",{
+  expect_error(autoplot(radf_div,mc),
+    "Cannot reject H0, do not proceed")
+})
+
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 # Dates -------------------------------------------------------------------
 
 dating <- seq(as.Date("1991/10/01"), by = "month", length.out = 100)
 index(radf_dta) <- dating
 
+<<<<<<< HEAD
 test_that("further arguements to multiple plot with dates",{
   expect_error(plot(radf_dta, mc, breaks_x = "1 year", format_date = "%Y"), NA)
   expect_error(plot(radf_dta, mc, format_date = "%Y"), regexp = NA)
@@ -59,3 +77,8 @@ test_that("further arguements to single plot with dates",{
 test_that("",{
 
 })
+=======
+
+# Panel -------------------------------------------------------------------
+
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods

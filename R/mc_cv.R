@@ -16,12 +16,21 @@
 #'
 #' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values.
 #'
+<<<<<<< HEAD
 #' @import doParallel
 #' @import doSNOW
 #' @import parallel
 #' @import foreach
 #' @importFrom utils setTxtProgressBar txtProgressBar flush.console
+=======
+#' @importFrom doSNOW registerDoSNOW
+#' @importFrom parallel detectCores makeCluster stopCluster
+#' @importFrom foreach foreach %dopar%
+#' @importFrom utils setTxtProgressBar txtProgressBar
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 #' @importFrom stats quantile rnorm
+#' @importFrom lubridate is.Date
+#' @importFrom purrr detect_index
 #' @export
 #'
 #' @examples
@@ -37,6 +46,7 @@
 #' }
 mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
 
+<<<<<<< HEAD
   assert_positive_int(n)
   assert_positive_int(nrep)
   if (missing(minw)) {
@@ -74,16 +84,49 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
       y <- cumsum(rnorm(n))
       srls_gsadf_cpp(y[-1], y[-n], minw)
     }
+=======
+  # args
+  if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(n)) * n)
+  warning_redudant(ncores, cond = !missing(ncores) && !parallel)
+  if (missing(ncores)) ncores <- detectCores() - 1
+  # checks
+  assert_positive_int(n, greater_than = 5)
+  assert_positive_int(nrep)
+  assert_positive_int(minw, greater_than = 2)
+  stopifnot(is.logical(parallel))
+  # helpers
+  point <- n - minw
+  pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
+
+
+  if (parallel) {
+    cl <- parallel::makeCluster(ncores, type = 'PSOCK')
+    on.exit(parallel::stopCluster(cl))
+    # use DoSNOW for pb in parallel
+    registerDoSNOW(cl)
+
+    progress <- function(n) setTxtProgressBar(pb, n)
+    opts <- list(progress = progress)
+
+    results <- foreach(i = 1:nrep, .export = c("rls_gsadf","unroot"),
+                       .combine = "cbind", .options.snow = opts) %dopar% {
+                         y <- cumsum(rnorm(n))
+                         yxmat <- unroot(y)
+                         rls_gsadf(yxmat, min_win = minw)}
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
   } else {
-    results <- matrix(0, 2 * n + 1, nrep)
+    # preallocation required
+    results <- matrix(0, 2 * point + 3, nrep)
     for (i in 1:nrep) {
       y <- cumsum(rnorm(n))
+      yxmat <- unroot(y)
       setTxtProgressBar(pb, i)
-      results[, i] <- srls_gsadf_cpp(y[-1], y[-n], minw)
+      results[, i] <- rls_gsadf(yxmat, min_win = minw)
     }
   }
   close(pb)
 
+<<<<<<< HEAD
   bsadf_critical <- t(apply(results[(minw + 1):(n - 1), ], 1, quantile,
                             probs = c(0.9, 0.95, 0.99)
   ))
@@ -122,6 +165,27 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
   # attr(output, "iter") <- nrep
   # attr(output, "method") <- "Monte Carlo"
   # attr(output, "minw") <- minw
+=======
+  pr <- c(0.9, 0.95, 0.99)
+  badf_crit <- apply(results[1:point, ], 1, quantile, probs = pr)
+  badf_crit_adj <- apply(t(badf_crit), 2, cummax)
+  adf_crit <- quantile(results[point + 1, ], probs = pr, drop = FALSE)
+  sadf_crit <- quantile(results[point + 2, ], probs = pr, drop = FALSE)
+  gsadf_crit <- quantile(results[point + 3, ], probs = pr, drop = FALSE)
+  bsadf_crit <- apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr)
+  bsadf_crit_adj <- apply(t(bsadf_crit), 2, cummax)
+
+
+  output <- structure(list(adf_cv = adf_crit,
+                           sadf_cv = sadf_crit,
+                           gsadf_cv = gsadf_crit,
+                           badf_cv = badf_crit_adj,
+                           bsadf_cv = bsadf_crit_adj),
+                      method = "Monte Carlo",
+                      iter   = nrep,
+                      minw   = minw,
+                      class  = "cv")
+>>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 
   return(output)
 }

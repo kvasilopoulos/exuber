@@ -10,7 +10,7 @@ col_names(x, ...)
 col_names(x) <- value
 }
 \arguments{
-\item{x}{An object of class \code{\link[=radf]{radf()}}.}
+\item{x}{An object of class \code{\link[=radf]{radf()}}}
 
 \item{...}{Further arguments passed to methods.}
 
