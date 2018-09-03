@@ -6,11 +6,11 @@
 \alias{garrange}
 \title{Plotting radf with ggplot2}
 \usage{
-\method{autoplot}{radf}(object, cv, select, min_duration, option = c("gsadf",
-  "sadf"), panel = FALSE, ...)
+\method{autoplot}{radf}(object, cv, select, min_duration,
+  option = c("gsadf", "sadf"), panel = FALSE, ...)
 
-\method{fortify}{radf}(model, data, cv, select, option = c("gsadf", "sadf"),
-  panel = FALSE, ...)
+\method{fortify}{radf}(model, data, cv, select, option = c("gsadf",
+  "sadf"), panel = FALSE, ...)
 
 garrange(..., ncol = 2)
 }
