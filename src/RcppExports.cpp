@@ -7,12 +7,12 @@
 using namespace Rcpp;
 
 // rls_gsadf
-RcppExport arma::vec rls_gsadf(arma::mat yxmat, int min_win, int lag);
+arma::vec rls_gsadf(const arma::mat& yxmat, int min_win, int lag);
 RcppExport SEXP _exuber_rls_gsadf(SEXP yxmatSEXP, SEXP min_winSEXP, SEXP lagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type yxmat(yxmatSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type yxmat(yxmatSEXP);
     Rcpp::traits::input_parameter< int >::type min_win(min_winSEXP);
     Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
     rcpp_result_gen = Rcpp::wrap(rls_gsadf(yxmat, min_win, lag));
