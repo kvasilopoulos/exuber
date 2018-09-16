@@ -1,6 +1,6 @@
 #' Simulated Monte Carlo critical values
 #'
-#' A dataset containing the simulated critical values from 6:500 observations
+#' A dataset containing the simulated critical values for 2000 observations
 #' wirh default minimum window.
 #'
 #' @format A list with lower level lists that contain
@@ -12,16 +12,13 @@
 #'   \item{gsadf:}{Generalized Supremum Augmented Dickey Fuller}
 #'   ...
 #' }
+#' @source simulated from exuber package function \code{\link[=mc_cv]{mc_cv()}}
 "crit"
-
 
 #'@export
 #'@importFrom tibble enframe
 print.crit <- function(x, ...) {
-  # cat("Monte Carlo critical values - # of observations {6-500}")
-  # cat("\n", paste0("$ _nan", seq(1,5), ": NULL\n"))
-  # cat("", paste0("$ n", seq(6,10), ":List of 5\n"))
-  # cat("# ... with 490 more rows")
+  # we dont want to overwhelm the console
   print(tibble::enframe(x))
 }
 
