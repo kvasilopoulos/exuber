@@ -6,7 +6,7 @@ using namespace Rcpp;
 using namespace arma;
 
 // [[Rcpp::export]]
-RcppExport arma::vec rls_gsadf(arma::mat yxmat, int min_win, int lag = 0) {
+arma::vec rls_gsadf(const arma::mat & yxmat, int min_win, int lag = 0) {
 
   int start = min_win;
   int end = yxmat.n_rows;
@@ -57,7 +57,6 @@ RcppExport arma::vec rls_gsadf(arma::mat yxmat, int min_win, int lag = 0) {
 
     arma::mat x = yxmat.cols(1, nc - 1);
     arma::mat y = yxmat.col(0);
-
 
     arma::mat sx, sy, tsx, g, b, syn, res, sqres, vares, sb;
     arma::colvec tsxn;
