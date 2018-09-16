@@ -13,20 +13,11 @@
 #' @name index.radf
 NULL
 
-#' @importFrom zoo index
-#' @seealso \code{\link[=index]{index()}}
-#' @export
-zoo::index
-
 #' @rdname index.radf
 #' @export
 index.radf <- function(x, ...) {
   attr(x, "index")
 }
-
-#' @importFrom zoo index<-
-#' @export
-zoo::`index<-`
 
 #' @rdname  index.radf
 #' @export
