@@ -4,7 +4,8 @@
 \alias{mc_cv}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, nrep = 2000, minw, parallel = FALSE, ncores)
+mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
+  "simulated"), parallel = FALSE, ncores)
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
@@ -13,6 +14,8 @@ mc_cv(n, nrep = 2000, minw, parallel = FALSE, ncores)
 
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+
+\item{opt_badf}{the option for badf}
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
 

@@ -4,17 +4,17 @@
 \alias{wb_cv}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(data, nboot = 1000, minw, parallel = FALSE, ncores,
+wb_cv(data, minw, nboot = 1000, parallel = FALSE, ncores,
   dist_rad = FALSE)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
 The estimation process cannot handle NA values.}
 
-\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
-
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+
+\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
 
 \item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
 

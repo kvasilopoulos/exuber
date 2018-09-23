@@ -5,21 +5,18 @@
 \alias{datestamp}
 \title{Diagnostics and date stamping periods of mildly explosive behaviour}
 \usage{
-diagnostics(object, cv, option = c("gsadf", "sadf"), panel = FALSE)
+diagnostics(object, cv, option = c("gsadf", "sadf"))
 
-datestamp(object, cv, option = c("gsadf", "sadf"), panel = FALSE,
-  min_duration)
+datestamp(object, cv, option = c("gsadf", "sadf"), min_duration = NULL)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{cv}{An object, of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=sb_cv]{sb_cv()}} or \code{\link[=sb_cv]{sbc_cv()}}}
+\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
-
-\item{panel}{Logical. If false it will report the panel statistic.}
 
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}

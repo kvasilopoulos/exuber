@@ -6,35 +6,33 @@
 \alias{garrange}
 \title{Plotting radf with ggplot2}
 \usage{
-\method{autoplot}{radf}(object, cv, select, min_duration,
-  option = c("gsadf", "sadf"), panel = FALSE, ...)
+\method{autoplot}{radf}(object, cv, select, option = c("gsadf", "sadf"),
+  min_duration = NULL, ...)
 
 \method{fortify}{radf}(model, data, cv, select, option = c("gsadf",
-  "sadf"), panel = FALSE, ...)
+  "sadf"), ...)
 
 garrange(..., ncol = 2)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{cv}{An object, of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=sb_cv]{sb_cv()}} or \code{\link[=sb_cv]{sbc_cv()}}}
+\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}}
 
-\item{select}{choose the asdfa}
-
-\item{min_duration}{The minimum duration of an explosive period for it to be
-reported. Default is 0.}
+\item{select}{keeps only the variables you mention}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
 
-\item{panel}{Logical. If false it will report the panel statistic.}
+\item{min_duration}{The minimum duration of an explosive period for it to be
+reported. Default is 0.}
 
 \item{...}{further arguements passed to method, not used}
 
-\item{model}{radf object}
+\item{model}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{data}{data set, not used}
+\item{data}{original dataset, not used.}
 
 \item{ncol}{number of columns to arrange}
 }

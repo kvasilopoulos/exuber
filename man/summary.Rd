@@ -5,17 +5,15 @@
 \alias{summary.radf}
 \title{Summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.}
 \usage{
-\method{summary}{radf}(object, cv, panel = FALSE, ...)
+\method{summary}{radf}(object, cv, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{cv}{An object, of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=sb_cv]{sb_cv()}} or \code{\link[=sb_cv]{sbc_cv()}}}
+\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}}
 
-\item{panel}{Logical. If false it will report the panel statistic.}
-
-\item{...}{furhter arguements passe to method, not used.}
+\item{...}{furhter arguements passed to methods, not used.}
 }
 \value{
 Returns a list of summary statistics,

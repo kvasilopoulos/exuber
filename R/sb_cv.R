@@ -33,7 +33,7 @@
 
 sb_cv <- function(data, minw, lag =0, nboot = 1000, parallel = FALSE, ncores){
 
-  # date check
+  # index-date check
   if (is.data.frame(data)) {
     date_index <- purrr::detect_index(data, lubridate::is.Date)
     if (as.logical(date_index)) data <- data[, -date_index, drop = FALSE]
@@ -87,26 +87,25 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000, parallel = FALSE, ncores){
     edf_bsadf_panel <- foreach(i = 1:nboot,
                                .export = c("rls_gsadf", "unroot"),
                                .combine = "cbind",
-                               .options.snow = opts) %dopar% {
-
-                                 boot_index <- sample(1:nres, replace = TRUE)
-
-      for (j in 1:nc) {
-        boot_res <- resmat[boot_index, j]
-        dboot_res <- boot_res - mean(boot_res)
-        dy_boot <- c(initmat[j, lag:1],
-                     stats::filter(coefmat[j, 1] + dboot_res,
-                                   coefmat[j, -1], "rec", init = initmat[j, ]))
-        y_boot <- cumsum(c(y[1, j], dy_boot))
-        yxmat_boot <- unroot(x = y_boot, lag)
-        aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-        bsadf_boot <- aux_boot[-c(1:(point + 3))]
+                               .options.snow = opts) %dopar%
+      {
+        boot_index <- sample(1:nres, replace = TRUE)
+        for (j in 1:nc) {
+          boot_res <- resmat[boot_index, j]
+          dboot_res <- boot_res - mean(boot_res)
+          dy_boot <- c(initmat[j, lag:1],
+                       stats::filter(coefmat[j, 1] + dboot_res,
+                                     coefmat[j, -1], "rec", init = initmat[j, ]))
+          y_boot <- cumsum(c(y[1, j], dy_boot))
+          yxmat_boot <- unroot(x = y_boot, lag)
+          aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
+          bsadf_boot <- aux_boot[-c(1:(point + 3))]
+        }
+        bsadf_boot / nc
       }
-      edf_bsadf_panel <- bsadf_boot / nc
-    }
   }else{
     # non-parallel estimation needs preallocation
-    # need to add -3 because of the lag difference
+    # needs to substract 3 because of the lag difference
     if (lag == 0) {
       edf_bsadf_panel <- matrix(0, point, nboot)
     }else{
@@ -133,14 +132,11 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000, parallel = FALSE, ncores){
   }
   close(pb)
 
-  bsadf_crit <- apply(edf_bsadf_panel, 2, quantile, probs = pr) %>%
-    t() %>%
-    apply(2, cummax)
-  gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>%
-    quantile(probs = pr)
+  bsadf_crit <- apply(edf_bsadf_panel, 1, quantile, probs = pr) %>% t()
+  gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% quantile(probs = pr)
 
-  output <- structure(list(gsadf_cv = gsadf_crit,
-                           bsadf_cv = bsadf_crit),
+  output <- structure(list(gsadf_panel_cv = gsadf_crit,
+                           bsadf_panel_cv = bsadf_crit),
                       method = "Sieve Bootstrap",
                       lag    = lag,
                       iter   = nboot,

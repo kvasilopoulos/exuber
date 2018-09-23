@@ -93,5 +93,5 @@ test_that("class check", {
 
 test_that("NA handling", {
   expect_error(
-    radf(dta_na), "Recursive least square estimation cannot handle NA")
+    radf(dta_na), "RLS estimation cannot handle NA")
 })

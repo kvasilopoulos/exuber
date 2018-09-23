@@ -1,12 +1,4 @@
-#' @importFrom ggplot2 fortify
-#' @seealso \code{\link[=fortify.radf]{fortify.radf()}}
-#' @export
-ggplot2::fortify
 
-#' @importFrom ggplot2 autoplot
-#' @seealso \code{\link[=autoplot.radf]{autoplot.radf()}}
-#' @export
-ggplot2::autoplot
 
 #' Plotting radf with ggplot2
 #'
@@ -19,53 +11,52 @@ ggplot2::autoplot
 #' @importFrom dplyr filter
 #' @importFrom purrr map
 #' @export
-autoplot.radf <- function(object, cv, select, min_duration,
+autoplot.radf <- function(object, cv, select,
                           option = c("gsadf", "sadf"),
-                          panel = FALSE, ...) {
-  # args
+                          min_duration = NULL, ...) {
+
   x <- object
-  y <- provide_crit(cv, x)
-  if (missing(min_duration)) min_duration <- 1
+  y <- if (missing(cv)) get_crit(x) else cv
+  if (is.null(min_duration)) min_duration <- 0
   option <- match.arg(option)
 
-  # checks
   assert_class(y, cv)
-  assert_panel(x, y, panel = panel)
-  assert_equal_minw(x, y)
+  assert_equal_arg(x, y)
+  panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
 
   # plot only the series that reject null
-  choice <- diagnostics(x, y, option = option, panel = panel) %>%
+  choice <- diagnostics(x, y, option = option) %>%
     with(get("accepted"))
   if (missing(select)) {
-    cname <- choice[1]
+    cname <- choice
   }else {
     cname <- if (is.character(select)) select else choice[select]
     ## write unit test if reject first one
-    if (all(cname %ni% col_names(x)))
-      stop("subscript out of bounds", call. = FALSE)
-    if (all((cname %ni% choice))) stop("cannot reject the null", call. = FALSE)
+    if (all(cname %ni% col_names(x))) stop("subscript out of bounds",
+                                           call. = FALSE)
+    if (all(cname %ni% choice)) stop("cannot reject the null", call. = FALSE)
   }
 
+
   g <- vector("list", length = length(cname))
+
   for (i in seq_along(cname))
     local({
       i <- i
       # selected series in fortify (cname) can be only %in% choice
-      dat <- fortify.radf(x, y, select = cname[i], option = option)
-      shade <- datestamp(x, y, option = option, min_duration = min_duration,
-                         panel = panel) %>% with(get(cname[i]))
+      dat <- fortify.radf(x, cv = y, select = if (panel) NULL else cname[i],
+                          option = option)
+      shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
+        with(get(cname[i]))
+
       h <- ggplot(dat) +
-        geom_line(aes_string(x = "date", y = colnames(dat)[2]),
+        geom_line(aes_string(x = "index", y = colnames(dat)[2]),
                   size = 0.7, colour = "blue") +
-        geom_line(aes_string(x = "date", y = colnames(dat)[3]),
+        geom_line(aes_string(x = "index", y = colnames(dat)[3]),
                   colour = "red", size = 0.8, linetype = "dashed") +
         xlab("") + ylab("") + theme_bw() +
-        theme(axis.line = element_line(colour = "black"),
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              panel.background = element_blank()) +
         ggtitle(cname[i]) +
-        geom_rect(data = shade[,-3], fill = "grey", alpha = 0.25,
+        geom_rect(data = shade[, -3], fill = "grey", alpha = 0.25,
                   aes_string(xmin = "Start", xmax = "End",
                              ymin = -Inf, ymax = +Inf))
       g[[i]] <<- h
@@ -75,57 +66,76 @@ autoplot.radf <- function(object, cv, select, min_duration,
 }
 
 #' @inheritParams datestamp
-#' @param select choose the asdfa
-#' @param model radf object
-#' @param data data set, not used
+#' @param select keeps only the variables you mention
+#' @param model An object of class \code{\link[=radf]{radf()}}.
+#' @param data original dataset, not used.
 #'
 #' @importFrom purrr map
 #'
 #' @rdname autoplot.radf
 #' @export
-fortify.radf <- function(model, data , cv, select, option = c("gsadf", "sadf"),
-                         panel = FALSE, ...) {
-  # args
+fortify.radf <- function(model, data , cv, select,
+                         option = c("gsadf", "sadf"), ...) {
+
   x <- model
-  y <- provide_crit(cv, x)
-  if (missing(select)) select <- 1
+  y <- if (missing(cv)) get_crit(x) else cv
+  if (missing(select)) select <- diagnostics(model, cv, option) %>%
+    with(get("accepted"))
   option <- match.arg(option)
 
-  # checks
   assert_class(y, cv)
-  assert_panel(x, y, panel = panel)
-  assert_equal_minw(x, y)
+  assert_equal_arg(x, y)
 
   dating <- index(x)[-c(1:(minw(x) + lagr(x)))]
+  panel <-  if (method(y) == "Sieve Bootstrap") TRUE else FALSE
   choice <- if (panel) "Panel" else col_names(x)
   cname <-  if (is.character(select)) select else choice[select]
-  tstat_names <- paste0("tstat_", choice[select])
-  names_cv <- paste0("cv_", choice[select])
+
+  names_tstat <- paste0("tstat_", tolower(cname))
 
   if (option == "gsadf") {
+
     tstat_dat <- if (panel) x$bsadf_panel else x$bsadf[, select]
 
     if (method(y) == "Wild Bootstrap") {
       cv_dat <- if (lagr(x) == 0) {
-        y$badf_cv[, 2, select]
+        y$bsadf_cv[, 2, select]
       }else{
-        y$badf_cv[-c(1:lagr(x)), 2, select]
+        y$bsadf_cv[-c(1:lagr(x)), 2, select]
       }
-    }else if (method(y) %in% c("Monte Carlo", "Sieve Bootstrap")) {
+      names_cv <- paste0("cv_", cname)
+    }else if (method(y) == "Monte Carlo") {
       cv_dat <- if (lagr(x) == 0) {
-        y$badf_cv[, 2]
+        y$bsadf_cv[, 2]
       }else{
-        y$badf_cv[-c(1:lagr(x)), 2]
+        y$bsadf_cv[-c(1:lagr(x)), 2]
       }
+      names_cv <- "cv"
+    }else if (method(y) == "Sieve Bootstrap") {
+      cv_dat <- if (lagr(x) == 0) {
+        y$bsadf_panel_cv[, 2]
+      }else{
+        y$bsadf_panel_cv[-c(1:lagr(x)), 2]
+      }
+      names_cv <- "cv_panel"
     }
   } else if (option == "sadf") {
+
     tstat_dat <- x$badf[, select]
-    cv_dat <- rep(y$adf_cv[2], NROW(x$badf))
+    #rep(y$adf_cv[2], NROW(x$badf))
+    cv_dat <- if (lagr(x) == 0) {
+      y$badf_cv[, 2]
+    }else{
+      y$badf_cv[-c(1:lagr(x)), 2]
+    }
+    names_cv <- "cv"
   }
+
   dat <- data.frame(dating, tstat_dat, cv_dat)
-  colnames(dat) <- c("date", tstat_names, names_cv)
+  colnames(dat) <- c("index", names_tstat, names_cv)
   attr(dat, "select") <- cname
   return(dat)
+
 }
 
 #' @import ggplot2
@@ -140,13 +150,12 @@ garrange <- function(..., ncol = 2) {
 
 #' Plotting datestamp objects with ggplot2
 #'
-#' Plotting \code{\link[=datestamp]{datestamp()}} with ggplot2
+#' Plotting datestamp with ggplot2
 #'
-#' @param object An object of class datestamp
+#' @param object An object of class \code{\link[=datestamp]{datestamp()}}
 #' @import ggplot2
 #' @export
 autoplot.datestamp <- function(object, ...) {
-  if (!inherits(object, "datestamp")) object <- fortify.datestamp(object)
   ggplot(object, aes_string(colour = "key")) +
     geom_segment(aes_string(x = "Start", xend = "End",
                             y = "key", yend = "key"), size = 7) +
@@ -165,6 +174,7 @@ autoplot.datestamp <- function(object, ...) {
 #' @importFrom purrr map reduce
 #' @export
 fortify.datestamp <- function(model, data, ...) {
+  model <- model[-length(model)] # get rid of bool
   nr <- map(model, NROW) %>%
     unlist()
   df <- data.frame("key" = rep(names(model), nr),
