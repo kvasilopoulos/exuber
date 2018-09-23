@@ -6,6 +6,7 @@
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @inheritParams radf
+#' @param opt_badf the option for badf
 #' @param parallel Logical. If \code{TRUE} parallel programming is used.
 #' @param ncores A positive integer, optional. If `parallel' is set to
 #' \code{TRUE}, then the user can specify the number of cores (defaults to
@@ -36,13 +37,16 @@
 #' # Use parallel computing (utilizing all available cores)
 #' mc <- mc_cv(n = 100, parallel = TRUE)
 #' }
-mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
+mc_cv <- function(n, nrep = 2000, minw,
+                  opt_badf = c("fixed", "asymptotic", "simulated"),
+                  parallel = FALSE, ncores) {
 
-  # args
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(n)) * n)
   warning_redudant(ncores, cond = !missing(ncores) && !parallel)
   if (missing(ncores)) ncores <- detectCores() - 1
-  # checks
+  opt_badf <- match.arg(opt_badf)
+  if (is.data.frame(n) || is.matrix(n))
+    stop("Argument 'minw' should be a postive integer")
   assert_positive_int(n, greater_than = 5)
   assert_positive_int(nrep)
   assert_positive_int(minw, greater_than = 2)
@@ -52,13 +56,11 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
   pr <- c(0.9, 0.95, 0.99)
   pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 
-
   if (parallel) {
     cl <- parallel::makeCluster(ncores, type = 'PSOCK')
     on.exit(parallel::stopCluster(cl))
     # use DoSNOW for pb in parallel
     registerDoSNOW(cl)
-
     progress <- function(n) setTxtProgressBar(pb, n)
     opts <- list(progress = progress)
 
@@ -68,7 +70,7 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
                          yxmat <- unroot(y)
                          rls_gsadf(yxmat, min_win = minw)}
   } else {
-    # preallocation required
+    # preallocation required for non-parallel estimation
     results <- matrix(0, 2 * point + 3, nrep)
     for (i in 1:nrep) {
       y <- cumsum(rnorm(n))
@@ -79,21 +81,35 @@ mc_cv <- function(n, nrep = 2000, minw, parallel = FALSE, ncores) {
   }
   close(pb)
 
-  badf_crit <- apply(results[1:point, ], 1, quantile, probs = pr)
-  badf_crit_adj <- apply(t(badf_crit), 2, cummax)
+
+
   adf_crit <- quantile(results[point + 1, ], probs = pr, drop = FALSE)
   sadf_crit <- quantile(results[point + 2, ], probs = pr, drop = FALSE)
   gsadf_crit <- quantile(results[point + 3, ], probs = pr, drop = FALSE)
-  bsadf_crit <- apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr)
-  bsadf_crit_adj <- apply(t(bsadf_crit), 2, cummax)
+  bsadf_crit <- apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr) %>%
+    t() %>% apply(2, cummax)
+
+  if (opt_badf == "fixed") {
+    temp <- log(log(n*seq(minw + 1, n)))/100
+    badf_crit <- matrix(rep(temp, 3), ncol = 3,
+                        dimnames = list(NULL, c(paste(pr))))
+  } else if (opt_badf == "asymptotic") {
+    temp <- adf_crit %>% rep(each = 100)
+    badf_crit <- matrix(temp, ncol = 3,
+                        dimnames = list(NULL, c(paste(pr))))
+  }  else if (opt_badf == "simulated") {
+    badf_crit <- apply(results[1:point, ], 1, quantile, probs = pr) %>%
+      t() %>% apply(2, cummax)
+  }
 
 
   output <- structure(list(adf_cv = adf_crit,
                            sadf_cv = sadf_crit,
                            gsadf_cv = gsadf_crit,
-                           badf_cv = badf_crit_adj,
-                           bsadf_cv = bsadf_crit_adj),
+                           badf_cv = badf_crit,
+                           bsadf_cv = bsadf_crit),
                       method = "Monte Carlo",
+                      opt_badf = opt_badf,
                       iter   = nrep,
                       minw   = minw,
                       class  = "cv")

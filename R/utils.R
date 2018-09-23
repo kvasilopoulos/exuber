@@ -1,34 +1,15 @@
 
-# Check if a character string is a Date -----------------------------------
 
+# get crit data --------------------------------------------------------
 
-# findDates <- function(strings) {
-#   pattern1 <- "[0-9][0-9][0-9][0-9]/[0-9][0-9]/[0-9][0-9]"
-#   pattern2 <- "[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]"
-#   pattern3 <- "[0-9][0-9]/[0-9][0-9][0-9][0-9]/[0-9][0-9]"
-#   pattern4 <- "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
-#
-#   tdBool <- grepl(pattern1, strings) | grepl(pattern2, strings) |
-#     grepl(pattern3, strings) | grepl(pattern4, strings)
-#   return(tdBool)
-# }
-
-
-# access crit data --------------------------------------------------------
-
-provide_crit <- function(cv, x) {
-  if (missing(cv)) {
+get_crit <- function(x) {
     nr <- NROW(index(x))
-    if (nr > 5 && nr <= 500) {
+    if (nr > 5 && nr <= 2000) {
       return(get("crit")[[nr]])
     } else {
       stop("cannot provide MC critical values see ?crit", call. = FALSE)
     }
-  }else{
-    return(cv)
-  }
 }
-
 
 # assert arguments ------------------------------------------------------
 
@@ -36,20 +17,19 @@ provide_crit <- function(cv, x) {
 warning_redudant <- function(arg, cond = TRUE) {
   level <- deparse(substitute(arg))
   if (cond) {
-    warning(sprintf("Argument '%s' is redundant", level),
-            call. = FALSE)
+    warning(sprintf("Argument '%s' is redundant", level), call. = FALSE)
   }
 }
 
 assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
   level <- deparse(substitute(arg))
   if (strictly) {
-    if (arg != round(arg) || arg <= 0) {
+    if (arg != trunc(arg) || arg <= 0) {
       stop(sprintf("Argument '%s' should be a positive integer", level),
            call. = FALSE)
     }
   }else{
-    if (arg != round(arg) | arg < 0L) {
+    if (arg != trunc(arg) | arg < 0L) {
       stop(sprintf("Argument '%s' should be a non-negative integer",level
       ), call. = FALSE)
     }
@@ -64,7 +44,7 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
 
 assert_between <- function(x, arg1, arg2) {
   level <- deparse(substitute(x))
-  if (x < arg1 | x > arg2) {
+  if (!dplyr::between(x, arg1, arg2)) {
     stop(sprintf("Argument '%s' should be a be between '%d' and '%d'",
                  level, arg1, arg2), call. = FALSE)
   }
@@ -80,40 +60,24 @@ assert_class <- function(x, klass) {
 }
 
 
-# radf and cv specific ----------------------------------------------------
-
 assert_na <- function(x) {
   if (any(is.na(x))) {
-    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
+    stop("RLS estimation cannot handle NA", call. = FALSE)
   }
 }
 
-# inverse of in to control for cv in panel_check
+# not in
 '%ni%' <- Negate('%in%')
 
 
-assert_panel <- function(x, y, panel = FALSE) {
-  if (method(y) %ni% c("Monte Carlo", "Sieve Bootstrap") && panel == TRUE) {
-    stop("Wrong critical values", call. = FALSE)
-  }
-  if (method(y) == "Sieve Bootstrap" && panel == FALSE) {
-    stop("Sieve Bootstrapped critical values are used for panel estimation",
-         call. = FALSE)
-  }
+assert_equal_arg <- function(x, y, panel = FALSE) {
+  if (minw(x) != minw(y)) stop("Different minimum window", call. = FALSE)
+
   if (method(y) == "Sieve Bootstrap") {
-    if (lagr(x) != lagr(y)) {
-      stop("Different lag values", call. = FALSE)
-    }
+    if (lagr(x) != lagr(y)) stop("Different lag values", call. = FALSE)
+
   }
 }
-
-assert_equal_minw <- function(x, y) {
-  if (minw(x) != minw(y)) {
-    stop("The critical values should have the same minumum", "
-         window with the t-statistics!", call. = FALSE)
-  }
-}
-
 
 # Access attributes easily ------------------------------------------------
 
