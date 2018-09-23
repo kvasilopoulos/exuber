@@ -44,7 +44,6 @@ radf <- function(data, minw, lag = 0) {
   # class checks
   sim_index <- seq(1, NROW(data), 1)
   if (any(class(data) %in% c("mts", "ts"))) {
-
     if (all(time(data) == sim_index)) {
       dating <- sim_index
     }else{
@@ -67,7 +66,7 @@ radf <- function(data, minw, lag = 0) {
   } else if (is.data.frame(data)) {
     date_index <- purrr::detect_index(data, lubridate::is.Date)
     if (as.logical(date_index)) {
-      dating <- data[, date_index]
+      dating <- data[, date_index, drop = TRUE]
       data <- data[, -date_index, drop = FALSE]
     } else {
       dating <- sim_index
@@ -125,7 +124,6 @@ radf <- function(data, minw, lag = 0) {
 
   return(value)
 }
-
 
 unroot <- function(x, lag = 0) {
   if (lag == 0) {

@@ -46,10 +46,11 @@
 #' # Use parallel computing (utilizing all available cores)
 #' wb <- wb_cv(dta, parallel = TRUE)
 #' }
-wb_cv <- function(data, nboot = 1000, minw, parallel = FALSE,
-                  ncores, dist_rad = FALSE) {
+wb_cv <- function(data, minw, nboot = 1000,
+                  parallel = FALSE, ncores,
+                  dist_rad = FALSE) {
 
-  # date check
+  # index-date check
   if (is.data.frame(data)) {
     date_index <- purrr::detect_index(data, lubridate::is.Date)
     if (as.logical(date_index)) data <- data[, -date_index, drop = FALSE]
@@ -58,15 +59,15 @@ wb_cv <- function(data, nboot = 1000, minw, parallel = FALSE,
   y <- as.matrix(data)
   nc <- NCOL(y)
   nr <- NROW(y)
-  # args
+
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
   warning_redudant(ncores, cond = !missing(ncores) && !parallel)
   if (missing(ncores)) ncores <- detectCores() - 1
-  # checks
   assert_na(y)
   assert_positive_int(nboot)
   assert_positive_int(minw, greater_than = 2)
   stopifnot(is.logical(parallel), is.logical(dist_rad))
+
   # helpers 2
   point <- nr - minw
   pr <- c(0.9, 0.95, 0.99)

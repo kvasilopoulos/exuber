@@ -1,27 +1,24 @@
 context("cv")
 
 test_that("nboot positive integer",{
-  expect_error(sb_cv(dta, nboot = 0),
-               "Argument 'nboot' should be a positive integer")
-  expect_error(sb_cv(dta, nboot = -2),
-               "Argument 'nboot' should be a positive integer")
-  expect_error(wb_cv(dta, nboot = 0),
-               "Argument 'nboot' should be a positive integer")
+  msg <-  "Argument 'nboot' should be a positive integer"
+  expect_error(sb_cv(dta, nboot =  0),  msg)
+  expect_error(sb_cv(dta, nboot = -2), msg)
+  expect_error(wb_cv(dta, nboot =  0),  msg)
+  expect_error(wb_cv(dta, nboot = -2), msg)
 })
 
 test_that("minw positive integer", {
-  expect_error(
-    mc_cv(100, minw = -1), "Argument 'minw' should be a positive integer")
-  expect_error(
-    mc_cv(100, minw = 0), "Argument 'minw' should be a positive integer")
-  expect_error(
-    wb_cv(dta, minw = -1), "Argument 'minw' should be a positive integer")
-  expect_error(
-    wb_cv(dta, minw = 0), "Argument 'minw' should be a positive integer")
-  expect_error(
-    sb_cv(dta, minw = -1), "Argument 'minw' should be a positive integer")
-  expect_error(
-    sb_cv(dta, minw = 0), "Argument 'minw' should be a positive integer")
+  msg <- "Argument 'minw' should be a positive integer"
+  expect_error(mc_cv(100, minw = -1), msg)
+  expect_error(mc_cv(100, minw =  0), msg)
+  expect_error(wb_cv(dta, minw = -1), msg)
+  expect_error(wb_cv(dta, minw =  0), msg)
+  expect_error(sb_cv(dta, minw = -1), msg)
+  expect_error(sb_cv(dta, minw =  0), msg)
+})
+
+test_that("nboot/minw too small",{
 })
 
 test_that("minw too small", {
@@ -33,25 +30,24 @@ test_that("minw too small", {
 })
 
 test_that("NA handling",{
+  msg <- "RLS estimation cannot handle NA"
   expect_error(
-    wb_cv(dta_na),"Recursive least square estimation cannot handle NA")
+    wb_cv(dta_na), msg)
   expect_error(
-    sb_cv(dta_na),"Recursive least square estimation cannot handle NA")
+    sb_cv(dta_na), msg)
 })
 
 test_that("parallel-ncores arguements",{
+  msg <- "Argument 'ncores' is redundant"
   expect_warning(
     invisible(capture.output(
-      mc_cv(100, nrep = 10, parallel = FALSE, ncores = 3))),
-    "Argument 'ncores' is redundant")
+      mc_cv(100, nrep = 10, parallel = FALSE, ncores = 3))), msg)
   expect_warning(
     invisible(capture.output(
-      wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))),
-    "Argument 'ncores' is redundant")
+      wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
   expect_warning(
     invisible(capture.output(
-      wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))),
-    "Argument 'ncores' is redundant")
+      wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
 })
 
 test_that("distribution_rad works", {

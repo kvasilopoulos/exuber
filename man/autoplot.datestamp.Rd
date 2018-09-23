@@ -10,7 +10,7 @@
 \method{fortify}{datestamp}(model, data, ...)
 }
 \arguments{
-\item{object}{An object of class datestamp}
+\item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
 
 \item{...}{not used by this method}
 
@@ -19,5 +19,5 @@
 \item{data}{data set, defaults to data used to estimated model}
 }
 \description{
-Plotting \code{\link[=datestamp]{datestamp()}} with ggplot2
+Plotting datestamp with ggplot2
 }
