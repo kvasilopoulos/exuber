@@ -127,14 +127,11 @@ wb_cv <- function(data, minw, nboot = 1000,
   }
   close(pb)
 
-  bsadf_crit_adj <- apply(bsadf_crit, c(2,3), cummax)
-  badf_crit_adj <- apply(badf_crit, c(2,3), cummax)
-
   output <- structure(list(adf_cv = adf_crit,
                            sadf_cv = sadf_crit,
                            gsadf_cv = gsadf_crit,
-                           badf_cv = badf_crit_adj,
-                           bsadf_cv = bsadf_crit_adj),
+                           badf_cv = badf_crit,
+                           bsadf_cv = bsadf_crit),
                       method = "Wild Bootstrap",
                       iter   = nboot,
                       minw   = minw,
