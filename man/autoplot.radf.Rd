@@ -3,7 +3,7 @@
 \name{autoplot.radf}
 \alias{autoplot.radf}
 \alias{fortify.radf}
-\alias{garrange}
+\alias{ggarrange}
 \title{Plotting radf with ggplot2}
 \usage{
 \method{autoplot}{radf}(object, cv, select, option = c("gsadf", "sadf"),
@@ -12,13 +12,13 @@
 \method{fortify}{radf}(model, data, cv, select, option = c("gsadf",
   "sadf"), ...)
 
-garrange(..., ncol = 2)
+ggarrange(..., ncol = 2)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}}
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
 \item{select}{keeps only the variables you mention}
 
