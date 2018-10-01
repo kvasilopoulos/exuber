@@ -15,22 +15,26 @@ autoplot.radf <- function(object, cv, select,
                           option = c("gsadf", "sadf"),
                           min_duration = NULL, ...) {
 
-  x <- object
-  y <- if (missing(cv)) get_crit(x) else cv
+  cv <- if (missing(cv)) get_crit(object) else cv
+  assert_class(cv, "cv")
   if (is.null(min_duration)) min_duration <- 0
   option <- match.arg(option)
 
-  assert_class(y, cv)
+
+  x <- object
+  y <- cv
   assert_equal_arg(x, y)
   panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
 
   # plot only the series that reject null
   choice <- diagnostics(x, y, option = option) %>%
     with(get("accepted"))
+
   if (missing(select)) {
     cname <- choice
   }else {
     cname <- if (is.character(select)) select else choice[select]
+
     ## write unit test if reject first one
     if (all(cname %ni% col_names(x))) stop("subscript out of bounds",
                                            call. = FALSE)
@@ -54,9 +58,16 @@ autoplot.radf <- function(object, cv, select,
                   size = 0.7, colour = "blue") +
         geom_line(aes_string(x = "index", y = colnames(dat)[3]),
                   colour = "red", size = 0.8, linetype = "dashed") +
-        xlab("") + ylab("") + theme_bw() +
+        xlab("") + ylab("") +
+        theme_bw() +
+        # theme(
+        #   axis.line = element_line(colour = "black"),
+        #   # panel.grid.major.x = element_blank(),
+        #   panel.grid.minor = element_blank(),
+        #   panel.background = element_blank()
+        # ) +
         ggtitle(cname[i]) +
-        geom_rect(data = shade[, -3], fill = "grey", alpha = 0.25,
+        geom_rect(data = shade[, -3], fill = "grey", alpha = 0.35, #0.25
                   aes_string(xmin = "Start", xmax = "End",
                              ymin = -Inf, ymax = +Inf))
       g[[i]] <<- h
@@ -77,17 +88,19 @@ autoplot.radf <- function(object, cv, select,
 fortify.radf <- function(model, data , cv, select,
                          option = c("gsadf", "sadf"), ...) {
 
-  x <- model
-  y <- if (missing(cv)) get_crit(x) else cv
+
+  cv <- if (missing(cv)) get_crit(model) else cv
+  assert_class(cv, "cv")
   if (missing(select)) select <- diagnostics(model, cv, option) %>%
     with(get("accepted"))
   option <- match.arg(option)
 
-  assert_class(y, cv)
+  x <- model
+  y <- cv
   assert_equal_arg(x, y)
-
-  dating <- index(x)[-c(1:(minw(x) + lagr(x)))]
   panel <-  if (method(y) == "Sieve Bootstrap") TRUE else FALSE
+  dating <- index(x)[-c(1:(minw(x) + lagr(x)))]
+
   choice <- if (panel) "Panel" else col_names(x)
   cname <-  if (is.character(select)) select else choice[select]
 
@@ -143,7 +156,7 @@ fortify.radf <- function(model, data , cv, select,
 #' @rdname autoplot.radf
 #' @param ncol number of columns to arrange
 #' @export
-garrange <- function(..., ncol = 2) {
+ggarrange <- function(..., ncol = 2) {
   do.call(gridExtra::grid.arrange, c(..., ncol = ncol))
 }
 

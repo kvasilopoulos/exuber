@@ -13,7 +13,7 @@ datestamp(object, cv, option = c("gsadf", "sadf"), min_duration = NULL)
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}}
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
@@ -25,7 +25,7 @@ reported. Default is 0.}
 \code{\link[=diagnostics]{diagnostics()}}: Returns a list with the
 series that reject and the series that do not reject the Null Hypothesis
 
-\code{\link[=timestamp]{timestamp()}}: Returns a list of values for
+\code{\link[=datestamp]{datestamp()}}: Returns a list of values for
 each explosive sub-period, giving the origin and termination dates as well
 as the number of periods explosive behavior lasts.
 }
