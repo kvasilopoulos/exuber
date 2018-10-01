@@ -94,7 +94,7 @@ mc_cv <- function(n, nrep = 2000, minw,
     badf_crit <- matrix(rep(temp, 3), ncol = 3,
                         dimnames = list(NULL, c(paste(pr))))
   } else if (opt_badf == "asymptotic") {
-    temp <- adf_crit %>% rep(each = 100)
+    temp <- c(-0.44, -0.08, 0.6) %>% rep(each = 100) # values taken from PWY
     badf_crit <- matrix(temp, ncol = 3,
                         dimnames = list(NULL, c(paste(pr))))
   }  else if (opt_badf == "simulated") {
