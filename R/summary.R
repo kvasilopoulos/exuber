@@ -1,10 +1,9 @@
-#' Summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.
-#'
+#' Summary statistics
 #'
 #' @param object An object of class \code{\link[=radf]{radf()}}.
 #' @param cv An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-#' \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}
-#' @param ... furhter arguements passed to methods, not used.
+#' \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}
+#' @param ... further arguements passed to methods, not used.
 #'
 #' @return Returns a list of summary statistics,
 #' the t-statistic and the critical values of the ADF, SADF and GSADF.
@@ -34,11 +33,11 @@
 #' @export
 summary.radf <- function(object, cv, ...) {
 
-  assert_class(cv, cv)
+  cv <- if (missing(cv)) get_crit(object) else cv
+  assert_class(cv, "cv")
 
   x <- object
-  y <- if (missing(cv)) get_crit(x) else cv
-
+  y <- cv
   assert_equal_arg(x, y)
 
   ret <- list()
@@ -126,15 +125,14 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 #' @export
 diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
 
-  assert_class(object, radf)
-  assert_class(cv, cv)
-
-  x <- object
-  y <- if (missing(cv)) get_crit(x) else cv
+  assert_class(object, "radf")
+  cv <- if (missing(cv)) get_crit(object) else cv
+  assert_class(cv, "cv")
   option <- match.arg(option)
 
+  x <- object
+  y <- cv
   assert_equal_arg(x, y)
-
   panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
 
   if (option == "gsadf") {
@@ -253,7 +251,7 @@ print.diagnostics <- function(x, ...) {
 #' @param min_duration The minimum duration of an explosive period for it to be
 #' reported. Default is 0.
 #'
-#' @return \code{\link[=timestamp]{timestamp()}}: Returns a list of values for
+#' @return \code{\link[=datestamp]{datestamp()}}: Returns a list of values for
 #' each explosive sub-period, giving the origin and termination dates as well
 #' as the number of periods explosive behavior lasts.
 #'
@@ -274,19 +272,17 @@ print.diagnostics <- function(x, ...) {
 datestamp <- function(object, cv, option = c("gsadf", "sadf"),
                       min_duration = NULL) {
 
-  assert_class(object, radf)
+  assert_class(object, "radf")
   cv <- if (missing(cv)) get_crit(object) else cv
-  assert_class(cv, cv)
+  assert_class(cv, "cv")
+  option <- match.arg(option)
+  if (is.null(min_duration)) min_duration <- 0
 
   x <- object
   y <- cv
-
   panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
-  option <- match.arg(option)
-  if (is.null(min_duration)) min_duration <- 0
   assert_equal_arg(x, y)
   assert_positive_int(min_duration, strictly = FALSE)
-
 
   choice <- diagnostics(x, y, option) %>% with(get("accepted"))
   reps <- if (panel) 1 else match(choice, col_names(x))
@@ -382,18 +378,18 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
 #' @export
 print.datestamp <- function(x, ...) {
 
-  if (attr(x, "panel")) {
-    cat(
-      "\nDatestamp: Panel\n",
-      "-----------------------------------\n")
+    if (attr(x, "panel")) {
+      cat(
+        "\nDatestamp: Panel\n",
+        "-----------------------------------\n")
       print(x[[1]]) # drops list
-  }else if (attr(x, "panel") == FALSE) {
-    cat(
-      "\nDatestamp: Individual\n",
-      "-----------------------------------\n"
-    )
-    print.listof(x[-length(x)])
-  }else{
+    }else if (attr(x, "panel") == FALSE) {
+      cat(
+        "\nDatestamp: Individual\n",
+        "-----------------------------------\n"
+      )
+      print.listof(x[-length(x)])
+    }else{
     # in case of stacked fortify
     cat(
       "\nDatestamp: \n",
@@ -401,5 +397,15 @@ print.datestamp <- function(x, ...) {
     )
     print.listof(x)
   }
+}
+
+add_panel <- function(list, object, cv) {
+  if (method(cv) != "Sieve Bootstrap") stop("Wrong critical values")
+  list <- list[-length(list)]
+  list[["Panel"]] <- datestamp(object, cv)$Panel
+  output <- structure(list,
+            # min_duration = min_duration,
+            class = c("list", "datestamp"))
+  output
 }
 

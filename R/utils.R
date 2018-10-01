@@ -52,7 +52,7 @@ assert_between <- function(x, arg1, arg2) {
 
 assert_class <- function(x, klass) {
   xstring <- deparse(substitute(x))
-  klass <- deparse(substitute(klass))
+  # klass <- deparse(substitute(klass))
   if (!inherits(x, klass)) {
     stop(sprintf("Argument '%s' should be of class '%s'", xstring, klass),
          call. = FALSE)
@@ -66,7 +66,6 @@ assert_na <- function(x) {
   }
 }
 
-# not in
 '%ni%' <- Negate('%in%')
 
 

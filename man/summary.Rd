@@ -3,7 +3,7 @@
 \name{summary}
 \alias{summary}
 \alias{summary.radf}
-\title{Summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.}
+\title{Summary statistics}
 \usage{
 \method{summary}{radf}(object, cv, ...)
 }
@@ -11,16 +11,16 @@
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{bc_cv()}}}
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
-\item{...}{furhter arguements passed to methods, not used.}
+\item{...}{further arguements passed to methods, not used.}
 }
 \value{
 Returns a list of summary statistics,
 the t-statistic and the critical values of the ADF, SADF and GSADF.
 }
 \description{
-Summary statistics, diagnostics and date stamping periods of mildly explosive behaviour.
+Summary statistics
 }
 \examples{
 \donttest{
