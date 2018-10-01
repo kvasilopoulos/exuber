@@ -2,10 +2,13 @@
 % Please edit documentation in R/index.R
 \name{index.radf}
 \alias{index.radf}
+\alias{index.data.frame}
 \alias{index<-.radf}
 \title{Retrieve/Replace the Index}
 \usage{
 \method{index}{radf}(x, ...)
+
+\method{index}{data.frame}(x, ...)
 
 \method{index}{radf}(x) <- value
 }
