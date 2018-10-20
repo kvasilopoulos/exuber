@@ -5,7 +5,7 @@
 \title{Monte Carlo Critical Values}
 \usage{
 mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
-  "simulated"), parallel = FALSE, ncores)
+  "simulated"))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
@@ -38,9 +38,6 @@ mc <- mc_cv(n = 100)
 
 # Change the minimum window and the number of simulations
 mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
-
-# Use parallel computing (utilizing all available cores)
-mc <- mc_cv(n = 100, parallel = TRUE)
 }
 }
 \seealso{

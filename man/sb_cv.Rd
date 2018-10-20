@@ -4,7 +4,7 @@
 \alias{sb_cv}
 \title{Panel Sieve Bootstrap Critical values}
 \usage{
-sb_cv(data, minw, lag = 0, nboot = 1000, parallel = FALSE, ncores)
+sb_cv(data, minw, lag = 0, nboot = 1000)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -16,12 +16,6 @@ The estimation process cannot handle NA values.}
 \item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
 
 \item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
-
-\item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
-
-\item{ncores}{A positive integer, optional. If `parallel' is set to
-\code{TRUE}, then the user can specify the number of cores (defaults to
-using all cores).}
 }
 \value{
 A list that contains the panel critical values for BSADF and GSADF

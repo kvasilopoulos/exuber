@@ -1,27 +1,30 @@
 
-nn <- 500
+options("exuber.parallel" = TRUE)
+options("exuber.show_progress" = FALSE)
+
+# Simulation -------------------------------------------------------------
+
+nn <- 2000
 crit <- list()
 for (i in 6:nn) {
-  invisible(capture.output(crit[[i]] <- mc_cv(i, parallel = TRUE)))
+  crit[[i]] <- mc_cv(i)
 }
 names(crit) <- c(paste0("_nan", 1:5), c(paste0("n", 6:nn)))
 class(crit) <- c("list", "crit")
 
 
-# update ------------------------------------------------------------------
+# change critical values badf_cv from simulated to fixed ------------------
 
-update_by <- 1200
-# we cant get dim of list hence
-n_start <- length(names(crit)) + 1
-n_end <- n_start + update_by
+for (n in 6:nn) { #length(crit)
+  minw <- floor((0.01 + 1.8 / sqrt(n)) * n)
+  temp <- log(log(n*seq(minw + 1, n)))/100
+  new_cv <- matrix(rep(temp, 3), ncol = 3,
+                   dimnames = list(NULL, c("90%", "95%", "99%")))
 
-for (i in n_start:n_end) {
-  invisible(capture.output(crit[[i]] <- mc_cv(i, parallel = TRUE)))
-  names(crit)[i] <- paste0("n", i)
-  print(i)
+  crit[[n]]$"badf_cv" <- new_cv
+  attr(crit[[n]], "opt_badf") <- "fixed"
 }
 
 # ... ---------------------------------------------------------------------
 
 usethis::use_data(crit, overwrite = TRUE)
-

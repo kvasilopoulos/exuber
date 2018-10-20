@@ -284,7 +284,8 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   assert_equal_arg(x, y)
   assert_positive_int(min_duration, strictly = FALSE)
 
-  choice <- diagnostics(x, y, option) %>% with(get("accepted"))
+  choice <- diagnostics(x, y, option) %>%
+    pluck("accepted")
   reps <- if (panel) 1 else match(choice, col_names(x))
   dating <- index(x)[-c(1:(minw(x) + lagr(x)))]
 
@@ -356,7 +357,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   names(res) <- choice[!min_reject]
 
   if (length(res) == 0) {
-    stop("Argument 'min_duration' excludes all the explosive periods",
+    stop("Argument 'min_duration' excludes all explosive periods",
       call. = FALSE)
   }
 
@@ -397,15 +398,5 @@ print.datestamp <- function(x, ...) {
     )
     print.listof(x)
   }
-}
-
-add_panel <- function(list, object, cv) {
-  if (method(cv) != "Sieve Bootstrap") stop("Wrong critical values")
-  list <- list[-length(list)]
-  list[["Panel"]] <- datestamp(object, cv)$Panel
-  output <- structure(list,
-            # min_duration = min_duration,
-            class = c("list", "datestamp"))
-  output
 }
 

@@ -37,18 +37,18 @@ test_that("NA handling",{
     sb_cv(dta_na), msg)
 })
 
-test_that("parallel-ncores arguements",{
-  msg <- "Argument 'ncores' is redundant"
-  expect_warning(
-    invisible(capture.output(
-      mc_cv(100, nrep = 10, parallel = FALSE, ncores = 3))), msg)
-  expect_warning(
-    invisible(capture.output(
-      wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
-  expect_warning(
-    invisible(capture.output(
-      wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
-})
+# test_that("parallel-ncores arguements",{
+#   msg <- "Argument 'ncores' is redundant"
+#   expect_warning(
+#     invisible(capture.output(
+#       mc_cv(100, nrep = 10, parallel = FALSE, ncores = 3))), msg)
+#   expect_warning(
+#     invisible(capture.output(
+#       wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
+#   expect_warning(
+#     invisible(capture.output(
+#       wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
+# })
 
 test_that("distribution_rad works", {
   expect_error(invisible(capture.output(
