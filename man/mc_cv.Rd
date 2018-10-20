@@ -16,12 +16,6 @@ mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{opt_badf}{the option for badf}
-
-\item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
-
-\item{ncores}{A positive integer, optional. If `parallel' is set to
-\code{TRUE}, then the user can specify the number of cores (defaults to
-using all cores).}
 }
 \value{
 A list that contains the critical values for ADF, BADF, BSADF and GSADF

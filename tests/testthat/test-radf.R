@@ -28,27 +28,6 @@ test_that("minw check radf", {
                floor((0.01 + 1.8 / sqrt(NROW(dta))) * NROW(dta)))
 })
 
-test_that("col_names check", {
-  series_names <- colnames(dta)
-
-  expect_equal(col_names(radf(dta)), series_names)
-  expect_equal(col_names(radf(as.ts(dta))), series_names)
-  expect_equal(col_names(radf(as.matrix(dta,
-    ncol = 5, dimnames = list(NULL, series_names)))), series_names)
-  expect_equal(
-    col_names(radf(as.data.frame(dta, optional = TRUE))), series_names)
-})
-
-test_that("col_names <-  check ", {
-  series_index_names <- col_names(radf_dta) <- c("dgp1", "dgp2", "evans",
-                                                 "dividends", "blanchard")
-  expect_equal(col_names(radf_dta), series_index_names)
-  expect_error(
-    (col_names(radf_dta) <- c("A")),
-    "length of col_names vectors does not match"
-  )
-})
-
 
 test_that("index works in different classes", {
   dating_y <- seq(as.Date("1997/01/01"), by = "year", length.out = 100)
