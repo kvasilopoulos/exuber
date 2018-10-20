@@ -11,6 +11,18 @@ get_crit <- function(x) {
     }
 }
 
+# remove index ----------------------------------------------------------
+
+#' @importFrom purrr detect_index
+#' @importFrom lubridate is.Date
+rm_index <- function(data) {
+  if (is.data.frame(data)) {
+    date_index <- purrr::detect_index(data, lubridate::is.Date)
+    if (as.logical(date_index)) data <- data[, -date_index, drop = FALSE]
+  }
+  data
+}
+
 # assert arguments ------------------------------------------------------
 
 

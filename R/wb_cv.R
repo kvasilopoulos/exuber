@@ -28,8 +28,6 @@
 #' @importFrom foreach foreach %dopar%
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats quantile rnorm
-#' @importFrom lubridate is.Date
-#' @importFrom purrr detect_index
 #' @export
 #'
 #' @examples
@@ -46,23 +44,23 @@
 #' # Use parallel computing (utilizing all available cores)
 #' wb <- wb_cv(dta, parallel = TRUE)
 #' }
-wb_cv <- function(data, minw, nboot = 1000,
-                  parallel = FALSE, ncores,
-                  dist_rad = FALSE) {
+wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
   # index-date check
-  if (is.data.frame(data)) {
-    date_index <- purrr::detect_index(data, lubridate::is.Date)
-    if (as.logical(date_index)) data <- data[, -date_index, drop = FALSE]
-  }
+  data <- rm_index(data)
+
   # helpers
   y <- as.matrix(data)
   nc <- NCOL(y)
   nr <- NROW(y)
 
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
-  warning_redudant(ncores, cond = !missing(ncores) && !parallel)
-  if (missing(ncores)) ncores <- detectCores() - 1
+
+  # get options
+  show_pb <- getOption("exuber.show_progress")
+  parallel <- getOption("exuber.parallel")
+  ncores <- getOption("exuber.ncores")
+
   assert_na(y)
   assert_positive_int(nboot)
   assert_positive_int(minw, greater_than = 2)
@@ -71,7 +69,8 @@ wb_cv <- function(data, minw, nboot = 1000,
   # helpers 2
   point <- nr - minw
   pr <- c(0.9, 0.95, 0.99)
-  pb <- txtProgressBar(max = nboot , style = 3)
+  if (show_pb) pb <- txtProgressBar(max = nboot , style = 3)
+
   # preallocation
   results <- matrix(0, nrow = 2 * point + 3, ncol = nboot)
   adf_crit <-  matrix(NA, nc, 3, dimnames = list(colnames(y), c(paste(pr))))
@@ -83,7 +82,7 @@ wb_cv <- function(data, minw, nboot = 1000,
     cl <- parallel::makeCluster(ncores, type = "PSOCK")
     registerDoSNOW(cl)
     on.exit(parallel::stopCluster(cl))
-    progress <- function(n) setTxtProgressBar(pb, n)
+    progress <-  if (show_pb) function(n) setTxtProgressBar(pb, n) else NULL
     opts <- list(progress = progress)
   }
 
@@ -103,7 +102,7 @@ wb_cv <- function(data, minw, nboot = 1000,
                          }
     }else{
       for (i in 1:nboot) {
-        setTxtProgressBar(pb, i)
+        if (show_pb) setTxtProgressBar(pb, i)
         if (dist_rad) {
           w <- sample(c(-1, 1), nr - 1, replace = TRUE)
         } else {
@@ -121,11 +120,12 @@ wb_cv <- function(data, minw, nboot = 1000,
     gsadf_crit[j, ] <- quantile(results[point + 3, ], probs = pr)
     bsadf_crit[, , j] <- t(apply(results[-c(1:(point + 3)), ], 1,
                                  quantile, prob = pr))
+    if (show_pb) {
     cat("\n")
-    print(paste("Series", j, "out of", nc, "completed!", sep = " "),
-        quote = FALSE)
+    print(paste("Series", j, "out of", nc, "completed!", sep = " "), quote = F)
+    }
   }
-  close(pb)
+  if (show_pb) close(pb)
 
   output <- structure(list(adf_cv = adf_crit,
                            sadf_cv = sadf_crit,

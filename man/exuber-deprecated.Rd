@@ -8,7 +8,8 @@
 \usage{
 report(x, y, panel = FALSE, ...)
 
-\method{plot}{radf}(x, y)
+\method{plot}{radf}(x, y, option = c("gsadf", "sadf"),
+  min_duration = 0, plot_type = c("multiple", "single"))
 }
 \description{
 The functions listed below are deprecated and will be defunct in

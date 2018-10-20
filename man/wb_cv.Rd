@@ -4,8 +4,7 @@
 \alias{wb_cv}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(data, minw, nboot = 1000, parallel = FALSE, ncores,
-  dist_rad = FALSE)
+wb_cv(data, minw, nboot = 1000, dist_rad = FALSE)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -15,12 +14,6 @@ The estimation process cannot handle NA values.}
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
-
-\item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
-
-\item{ncores}{A positive integer, optional. If `parallel' is set to
-\code{TRUE}, then the user can specify the number of cores (defaults to
-using all cores).}
 
 \item{dist_rad}{Logical. If \code{TRUE} then  the Rademacher distribution
 will be used.}

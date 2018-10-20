@@ -26,8 +26,12 @@ improvement.
 ### Estimation
 
   - `radf()` : Recursive Augmented Dickey-Fuller test
-  - `mc_cv()` : Monte Carlo Critical Values
-  - `wb_cv()` : Wild Bootstrap Critical values
+
+### Simulate custom critical values
+
+  - `mc_cv()` : Monte Carlo critical values
+  - `wb_cv()` : Wild Bootstrap critical values
+  - `sb_cv()` : Sieve Bootstrap (panel) critical values
 
 ### Simulation
 
@@ -59,7 +63,11 @@ will need the appropriate development tools.
   - Window Users should install
     [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
   - Mac User should install [Clang or GNU
-    Fortran](https://cran.r-project.org/bin/macosx/tools/)
+    Fortran](https://cran.r-project.org/bin/macosx/tools/).
+
+**Note:** R 3.5.0 El Capitan binaries are using Clang 6.0.0 and GNU
+Fortran 6.1 to provide OpenMP parallelization support and C++17 standard
+features.
 
 If you encounter a clear bug, please file a reproducible example on
 [GitHub](https://github.com/kvasilopoulos/exuber/issues).
@@ -71,119 +79,72 @@ This is a basic example which shows you how to use exuber:
 ``` r
 library(exuber)
 # Simulate data witn n = 100 observations
-set.seed(1234)
-a1 <- sim_dgp1(n = 100) # one bubble
-a2 <- sim_dgp2(n = 100) # two bubbles
+set.seed(112)
+sim1 <- sim_dgp1(n = 100) # one bubble
+sim2 <- sim_dgp2(n = 100) # two bubbles
 
-dta <- data.frame("onebubble" = a1, 
-                  "twobbubbles" = a2)
+dta <- data.frame("onebubble" = sim1, 
+                  "twobbubbles" = sim2)
 
 ts <- radf(dta, lag = 1)
-
-# Monte Carlo critical values with parallel for faster computation
-mc <- mc_cv(n = NROW(dta), parallel = T)
 ```
 
 Report t-stats with the assiged critical values
 
 ``` r
-report(ts, mc)
-<<<<<<< HEAD
+summary(ts)
 #> 
 #>  Recursive Unit Root
-#>  --------------------------------
+#>  ----------------------------------
 #>  H0: Unit root
 #>  H1: Explosive root
-#>  --------------------------------
+#>  ----------------------------------
 #>  Critical values: Monte Carlo 
 #>  Minimum window: 19 
 #>  Iterations: 2000 
 #>  Lag: 1 
-#>  --------------------------------
+#>  ----------------------------------
 #>  onebubble 
-#>        tstat     90%      95%    99%
-#> ADF   -2.569 -0.3701 0.004608 0.6685
-#> SADF   3.565  1.0158 1.384951 1.9083
-#> GSADF  3.917  1.6840 1.975219 2.4931
+#>         tstat      90%      95%     99%
+#> ADF    -2.271  -0.4035  -0.0762  0.5104
+#> SADF    8.415   1.0074   1.3484  1.9454
+#> GSADF   8.898   1.6942   1.9259  2.6191
 #> 
 #>  twobbubbles 
-#>         tstat     90%      95%    99%
-#> ADF   -2.5876 -0.3701 0.004608 0.6685
-#> SADF   0.5412  1.0158 1.384951 1.9083
-#> GSADF  2.0348  1.6840 1.975219 2.4931
-=======
-#> Warning: 'report' is deprecated.
-#> Use 'summary' instead.
-#> See help("Deprecated") and help("exuber-deprecated").
-#> 
-#>  Recursive Unit Root
-#>  ------------------------------
-#>  H0: Unit root
-#>  H1: Explosive root
-#>  ------------------------------
-#>  Critical values: Monte Carlo 
-#>  Minimum window: 19 
-#>  Iterations: 2000 
-#>  Lag: 
-#>  ------------------------------
-#>  onebubble 
-#>        tstat     90%     95%   99%
-#> ADF    -1.84  -0.432  -0.128  0.56
-#> SADF    3.71   1.016   1.313  1.89
-#> GSADF   4.02   1.694   2.003  2.47
-#> 
-#>  twobbubbles 
-#>        tstat     90%     95%   99%
-#> ADF    -2.68  -0.432  -0.128  0.56
-#> SADF    4.99   1.016   1.313  1.89
-#> GSADF   5.30   1.694   2.003  2.47
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
+#>         tstat      90%      95%     99%
+#> ADF    -2.340  -0.4035  -0.0762  0.5104
+#> SADF    4.384   1.0074   1.3484  1.9454
+#> GSADF   6.696   1.6942   1.9259  2.6191
 ```
 
 Date stamp periods of explosive behaviour
 
 ``` r
-datestamp(ts, mc)
-<<<<<<< HEAD
-#> $onebubble
-#>   Start End Duration
-#> 1    27  28        2
-#> 2    30  31        2
-#> 3    45  55       11
-#> 4    93 100        8
-#> 
-#> $twobbubbles
-#>   Start End Duration
-#> 1    31  40       10
-#> 2    68  70        3
-=======
+datestamp(ts)
 #> 
 #> Datestamp: Individual
-#>  ------------------------------
+#>  -----------------------------------
 #> onebubble :
 #>   Start End Duration
-#> 1    37  55       19
+#> 1    41  55       15
 #> 
 #> twobbubbles :
 #>   Start End Duration
-#> 1    26  40       15
-#> 2    61  70       10
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
+#> 1    25  40       16
+#> 2    63  70        8
 ```
 
 ### Plotting
 
-The output of plot is a list,
+The output of autoplot is a list of ggplots
 
 ``` r
-p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
-
-# Use gridExtra to rearrange
-library(gridExtra)
-do.call("grid.arrange", c(p1, ncol = 2))
+ts %>% 
+  autoplot() %>% 
+  ggarrange()
 ```
 
-<img src="inst/figures/readme.png" width="900"/>
+<img src="inst/figures/Rplot.png" width="900"/>
 
 #### License
 

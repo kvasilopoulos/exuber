@@ -13,8 +13,6 @@
 #' @importFrom foreach foreach %dopar%
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats quantile lm
-#' @importFrom lubridate is.Date
-#' @importFrom purrr detect_index
 #' @export
 #'
 #'
@@ -31,27 +29,26 @@
 #' plot(rdta, pcv, panel = TRUE)
 #' }
 
-sb_cv <- function(data, minw, lag =0, nboot = 1000, parallel = FALSE, ncores){
+sb_cv <- function(data, minw, lag =0, nboot = 1000){
 
   # index-date check
-  if (is.data.frame(data)) {
-    date_index <- purrr::detect_index(data, lubridate::is.Date)
-    if (as.logical(date_index)) data <- data[, -date_index, drop = FALSE]
-  }
+  data <- rm_index(data)
   # helpers
   y <- as.matrix(data)
   nc <- NCOL(y)
   nr <- NROW(y)
   # args
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
-  warning_redudant(ncores, cond = !missing(ncores) && !parallel)
-  if (missing(ncores)) ncores <- detectCores() - 1
   # checks
   assert_na(y)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
   assert_positive_int(nboot)
-  stopifnot(is.logical(parallel))
+  # get options
+  show_pb <- getOption("exuber.show_progress")
+  parallel <- getOption("exuber.parallel")
+  ncores <- getOption("exuber.ncores")
+
   # helpers 2
   point <- nr - minw
   pr <- c(0.9, 0.95, 0.99)
@@ -81,7 +78,7 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000, parallel = FALSE, ncores){
     on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
 
-    progress <- function(n) setTxtProgressBar(pb, n)
+    progress <- if (show_pb)  function(n) setTxtProgressBar(pb, n) else NULL
     opts <- list(progress = progress)
 
     edf_bsadf_panel <- foreach(i = 1:nboot,
@@ -127,7 +124,7 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000, parallel = FALSE, ncores){
         bsadf_boot <- aux_boot[-c(1:(point + 3))]
       }
       edf_bsadf_panel[, i] <- bsadf_boot / nc
-      setTxtProgressBar(pb, i)
+      if (show_pb) setTxtProgressBar(pb, i)
     }
   }
   close(pb)
