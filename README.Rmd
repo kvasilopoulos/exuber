@@ -118,7 +118,7 @@ ts %>%
                   width = 9, height = 4.81)
 ```
 
-<img src="inst/figures/Rplot.png" width="900"/>
+<img src="inst/figures/readme.png" width="900"/>
 
 #### License
 
