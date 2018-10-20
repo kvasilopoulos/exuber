@@ -7,10 +7,6 @@
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @inheritParams radf
 #' @param opt_badf the option for badf
-#' @param parallel Logical. If \code{TRUE} parallel programming is used.
-#' @param ncores A positive integer, optional. If `parallel' is set to
-#' \code{TRUE}, then the user can specify the number of cores (defaults to
-#' using all cores).
 #'
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
@@ -39,8 +35,8 @@ mc_cv <- function(n, nrep = 2000, minw,
 
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(n)) * n)
   opt_badf <- match.arg(opt_badf)
-  if (is.data.frame(n) || is.matrix(n))
-    stop("Argument 'minw' should be a postive integer")
+  if (is.data.frame(n) || is.matrix(n)) # case of providiing data in 'n'
+    stop("Argument 'n' should be a postive integer")
   assert_positive_int(n, greater_than = 5)
   assert_positive_int(nrep)
   assert_positive_int(minw, greater_than = 2)

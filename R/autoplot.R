@@ -198,12 +198,4 @@ fortify.datestamp <- function(model, data, ...) {
   df
 }
 
-# gbreaks_x <- function(..., breaks) {
-#  purrr::map(..., ~.x + ggplot2::scale_x_continuous(breaks = seq(1, 100, breaks)))
-# }
-#
-# gtitle <- function(..., names) {
-#   names <- list(names)
-#   map2(..., aa, ~.x + ggtitle(.y))
-# }
 
