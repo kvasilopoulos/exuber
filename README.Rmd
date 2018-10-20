@@ -35,8 +35,11 @@ from the recursive least squares algorithm, which results in a significant speed
 
 ### Estimation
 * `radf()` : Recursive Augmented Dickey-Fuller test
-* `mc_cv()` : Monte Carlo Critical Values
-* `wb_cv()` : Wild Bootstrap Critical values
+
+### Simulate custom critical values
+* `mc_cv()` : Monte Carlo critical values
+* `wb_cv()` : Wild Bootstrap critical values
+* `sb_cv()` : Sieve Bootstrap (panel) critical values
 
 ### Simulation
 * `sim_dgp1()` : Simulation of a single-bubble process
@@ -62,7 +65,9 @@ devtools::install_github("kvasilopoulos/exuber")
 Note that development version requires compilation, so to install you will need the appropriate development tools.
 
 * Window Users should install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
-* Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/)
+* Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/). 
+
+**Note:** R 3.5.0 El Capitan binaries are using Clang 6.0.0 and GNU Fortran 6.1 to provide OpenMP parallelization support and C++17 standard features. 
 
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exuber/issues).
 
@@ -73,47 +78,47 @@ This is a basic example which shows you how to use exuber:
 ```{r example, echo = TRUE, eval = TRUE, results = "hide"}
 library(exuber)
 # Simulate data witn n = 100 observations
-set.seed(1234)
-a1 <- sim_dgp1(n = 100) # one bubble
-a2 <- sim_dgp2(n = 100) # two bubbles
+set.seed(112)
+sim1 <- sim_dgp1(n = 100) # one bubble
+sim2 <- sim_dgp2(n = 100) # two bubbles
 
-dta <- data.frame("onebubble" = a1, 
-                  "twobbubbles" = a2)
+dta <- data.frame("onebubble" = sim1, 
+                  "twobbubbles" = sim2)
 
 ts <- radf(dta, lag = 1)
-
-# Monte Carlo critical values with parallel for faster computation
-mc <- mc_cv(n = NROW(dta), parallel = T)
 ```
 
 Report t-stats with the assiged critical values
 
-```{r Report, eval = TRUE}
-report(ts, mc)
+```{r Summary, eval = TRUE}
+summary(ts)
 ```
 
 Date stamp periods of explosive behaviour
 ```{r Datestamp, eval = TRUE}
-datestamp(ts, mc)
+datestamp(ts)
 ```
 
 ### Plotting
 
-The output of plot is a list,
+The output of autoplot is a list of ggplots
 
-<<<<<<< HEAD
+
 ```{r plotting, echo=TRUE, eval = FALSE, fig.width=9}
-=======
-```{r plotting, echo = TRUE, eval = FALSE, fig.width=9}
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
-p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
-
-# Use gridExtra to rearrange
-library(gridExtra)
-do.call("grid.arrange", c(p1, ncol = 2))
+ts %>% 
+  autoplot() %>% 
+  ggarrange()
 ```
 
-<img src="inst/figures/readme.png" width="900"/>
+```{r include=FALSE}
+ts %>% 
+  autoplot() %>% 
+  ggarrange() %>% 
+  ggplot2::ggsave(file = "inst/figures/readme.png", 
+                  width = 9, height = 4.81)
+```
+
+<img src="inst/figures/Rplot.png" width="900"/>
 
 #### License
 

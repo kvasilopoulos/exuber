@@ -1,3 +1,6 @@
+options(exuber.show_progress = FALSE)
+options(exuber.parallel = FALSE)
+
 #Simulate data
 set.seed(4441)
 dta <- data.frame(

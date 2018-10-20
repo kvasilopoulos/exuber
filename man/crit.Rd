@@ -21,6 +21,6 @@ crit
 }
 \description{
 A dataset containing the simulated critical values for 2000 observations
-wirh default minimum window.
+with default minimum window.
 }
 \keyword{datasets}

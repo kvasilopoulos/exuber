@@ -1,7 +1,7 @@
 #' Simulated Monte Carlo critical values
 #'
 #' A dataset containing the simulated critical values for 2000 observations
-#' wirh default minimum window.
+#' with default minimum window.
 #'
 #' @format A list with lower level lists that contain
 #' \describe{

@@ -9,7 +9,7 @@
 #'
 #' @name autoplot.radf
 #' @importFrom dplyr filter
-#' @importFrom purrr map
+#' @importFrom purrr map pluck
 #' @export
 autoplot.radf <- function(object, cv, select,
                           option = c("gsadf", "sadf"),
@@ -28,7 +28,7 @@ autoplot.radf <- function(object, cv, select,
 
   # plot only the series that reject null
   choice <- diagnostics(x, y, option = option) %>%
-    with(get("accepted"))
+    pluck("accepted")
 
   if (missing(select)) {
     cname <- choice
@@ -51,12 +51,12 @@ autoplot.radf <- function(object, cv, select,
       dat <- fortify.radf(x, cv = y, select = if (panel) NULL else cname[i],
                           option = option)
       shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
-        with(get(cname[i]))
+        pluck(cname[i])
 
       h <- ggplot(dat) +
-        geom_line(aes_string(x = "index", y = colnames(dat)[2]),
+        geom_line(aes_string(x = "index", y = as.name(colnames(dat)[2])),
                   size = 0.7, colour = "blue") +
-        geom_line(aes_string(x = "index", y = colnames(dat)[3]),
+        geom_line(aes_string(x = "index", y = as.name(colnames(dat)[3])),
                   colour = "red", size = 0.8, linetype = "dashed") +
         xlab("") + ylab("") +
         theme_bw() +
@@ -81,7 +81,7 @@ autoplot.radf <- function(object, cv, select,
 #' @param model An object of class \code{\link[=radf]{radf()}}.
 #' @param data original dataset, not used.
 #'
-#' @importFrom purrr map
+#' @importFrom purrr map pluck
 #'
 #' @rdname autoplot.radf
 #' @export
@@ -92,7 +92,7 @@ fortify.radf <- function(model, data , cv, select,
   cv <- if (missing(cv)) get_crit(model) else cv
   assert_class(cv, "cv")
   if (missing(select)) select <- diagnostics(model, cv, option) %>%
-    with(get("accepted"))
+    pluck("accepted")
   option <- match.arg(option)
 
   x <- model
@@ -104,15 +104,17 @@ fortify.radf <- function(model, data , cv, select,
   choice <- if (panel) "Panel" else col_names(x)
   cname <-  if (is.character(select)) select else choice[select]
 
+
   names_tstat <- paste0("tstat_", tolower(cname))
+
 
   if (option == "gsadf") {
 
-    tstat_dat <- if (panel) x$bsadf_panel else x$bsadf[, select]
+    tstat_dat <- if (panel) x$bsadf_panel else x$bsadf[, cname]
 
     if (method(y) == "Wild Bootstrap") {
       cv_dat <- if (lagr(x) == 0) {
-        y$bsadf_cv[, 2, select]
+        y$bsadf_cv[, 2, cname]
       }else{
         y$bsadf_cv[-c(1:lagr(x)), 2, select]
       }
@@ -134,7 +136,7 @@ fortify.radf <- function(model, data , cv, select,
     }
   } else if (option == "sadf") {
 
-    tstat_dat <- x$badf[, select]
+    tstat_dat <- x$badf[, cname]
     #rep(y$adf_cv[2], NROW(x$badf))
     cv_dat <- if (lagr(x) == 0) {
       y$badf_cv[, 2]

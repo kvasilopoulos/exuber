@@ -33,35 +33,34 @@
 #'
 #' # Change the minimum window and the number of simulations
 #' mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
-#'
-#' # Use parallel computing (utilizing all available cores)
-#' mc <- mc_cv(n = 100, parallel = TRUE)
-#' }
+#'}
 mc_cv <- function(n, nrep = 2000, minw,
-                  opt_badf = c("fixed", "asymptotic", "simulated"),
-                  parallel = FALSE, ncores) {
+                  opt_badf = c("fixed", "asymptotic", "simulated")) {
 
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(n)) * n)
-  warning_redudant(ncores, cond = !missing(ncores) && !parallel)
-  if (missing(ncores)) ncores <- detectCores() - 1
   opt_badf <- match.arg(opt_badf)
   if (is.data.frame(n) || is.matrix(n))
     stop("Argument 'minw' should be a postive integer")
   assert_positive_int(n, greater_than = 5)
   assert_positive_int(nrep)
   assert_positive_int(minw, greater_than = 2)
-  stopifnot(is.logical(parallel))
+
   # helpers
   point <- n - minw
   pr <- c(0.9, 0.95, 0.99)
+
+  # get options
+  show_pb <- getOption("exuber.show_progress")
+  parallel <- getOption("exuber.parallel")
+  ncores <- getOption("exuber.ncores")
+
   pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
 
   if (parallel) {
     cl <- parallel::makeCluster(ncores, type = 'PSOCK')
     on.exit(parallel::stopCluster(cl))
-    # use DoSNOW for pb in parallel
-    registerDoSNOW(cl)
-    progress <- function(n) setTxtProgressBar(pb, n)
+    registerDoSNOW(cl) # use DoSNOW for pb in parallel
+    progress <- if (show_pb)  function(n) setTxtProgressBar(pb, n) else NULL
     opts <- list(progress = progress)
 
     results <- foreach(i = 1:nrep, .export = c("rls_gsadf","unroot"),
@@ -75,11 +74,11 @@ mc_cv <- function(n, nrep = 2000, minw,
     for (i in 1:nrep) {
       y <- cumsum(rnorm(n))
       yxmat <- unroot(y)
-      setTxtProgressBar(pb, i)
+      if (show_pb) setTxtProgressBar(pb, i)
       results[, i] <- rls_gsadf(yxmat, min_win = minw)
     }
   }
-  close(pb)
+  if (show_pb) close(pb)
 
 
 
