@@ -9,7 +9,7 @@ withr::with_options(
 )
 
 test_that("plot warnings & errors",{
-  expect_error(autoplot(radf_div,mc),
+  expect_error(autoplot(radf_div, mc),
     "Cannot reject H0")
 })
 

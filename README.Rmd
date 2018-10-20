@@ -110,7 +110,7 @@ ts %>%
   ggarrange()
 ```
 
-```{r include=FALSE}
+```{r include=FALSE, eval=FALSE}
 ts %>% 
   autoplot() %>% 
   ggarrange() %>% 

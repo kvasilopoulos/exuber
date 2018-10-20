@@ -35,24 +35,6 @@ test_that("different minw", {
   expect_error(datestamp(radf_dta, sb2), msg)
 })
 
-test_that("panel: different lag", {
-  msg <- "Different lag values"
-  expect_error(summary(radf_dta, sb1), msg)
-  expect_error(diagnostics(radf_dta, sb1), msg)
-  expect_error(datestamp(radf_dta, sb1), msg)
-  expect_error(autoplot(radf_dta, sb1), msg)
-})
-
-
-
-test_that("assert panel",{
-  # expect_error(summary(radf_dta, wb), "Wrong critical values")
-  # expect_error(datestamp(radf_dta, wb), "Wrong critical values")
-  # expect_error(summary(radf_dta, mc), regexp = NA)
-  # expect_error(datestamp(radf_dta, mc), regexp = NA)
-  # expect_error(summary(radf_dta, sb), regexp = NA)
-  # expect_error(datestamp(radf_dta, sb), regexp = NA)
-})
 
 
 test_that("Correct output in summary/datestamp", {
