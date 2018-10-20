@@ -144,7 +144,7 @@ ts %>%
   ggarrange()
 ```
 
-<img src="inst/figures/Rplot.png" width="900"/>
+<img src="inst/figures/readme.png" width="900"/>
 
 #### License
 
