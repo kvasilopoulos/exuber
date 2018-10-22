@@ -43,7 +43,7 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000){
   assert_na(y)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
-  assert_positive_int(nboot)
+  assert_positive_int(nboot, greater_than = 2)
   # get options
   show_pb <- getOption("exuber.show_progress")
   parallel <- getOption("exuber.parallel")

@@ -62,7 +62,7 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
   ncores <- getOption("exuber.ncores")
 
   assert_na(y)
-  assert_positive_int(nboot)
+  assert_positive_int(nboot, greater_than = 2)
   assert_positive_int(minw, greater_than = 2)
   stopifnot(is.logical(parallel), is.logical(dist_rad))
 

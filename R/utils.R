@@ -26,13 +26,6 @@ rm_index <- function(data) {
 # assert arguments ------------------------------------------------------
 
 
-warning_redudant <- function(arg, cond = TRUE) {
-  level <- deparse(substitute(arg))
-  if (cond) {
-    warning(sprintf("Argument '%s' is redundant", level), call. = FALSE)
-  }
-}
-
 assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
   level <- deparse(substitute(arg))
   if (strictly) {
