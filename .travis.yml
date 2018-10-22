@@ -12,11 +12,12 @@ os:
   - linux
   - osx
 
+warnings_are_errors: true
+
 matrix:
   fast_finish: true
   allow_failures:
     - r: devel
-      os: osx
 
 before_install:
   - export TZ=US/Central

@@ -12,8 +12,8 @@ Description: Testing for and dating periods of explosive dynamics
   (exuberance) in time series using recursive unit root tests as proposed 
   by Phillips, P. C., Shi, S. and Yu, J. (2015a) <doi:10.1111/iere.12132>. 
   Simulation of a variety of periodically-collapsing bubble processes. The 
-  estimation caode utilize the matrix inversion lemma and Rcpp which results 
-  in significant speed improvements of the recursive least squares algorithm.
+  estimation code utilize the matrix inversion lemma which results in 
+  significant speed improvements of the recursive least squares algorithm.
 License: GPL-3
 URL: https://github.com/kvasilopoulos/exuber
 BugReports: https://github.com/kvasilopoulos/exuber/issues
