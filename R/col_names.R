@@ -38,10 +38,19 @@ col_names.radf <- function(x, ...) {
 }
 
 #' @export
+#' @importFrom purrr imap
+#' @importFrom magrittr set_colnames set_names
 `col_names<-.radf` <- function(x, value) {
   if (length(col_names(x)) != length(value)) {
     stop("length of col_names vectors does not match", call. = FALSE)
   }
+
+  seq_cv <- c("badf", "bsadf")
+  cv <- c("adf", "sadf", "gsadf")
+
+  x[seq_cv] <- x[seq_cv] %>% imap( ~ set_colnames(.x, value))
+  x[cv] <- x[cv] %>% imap( ~ set_names(.x, value))
+
   attr(x, "col_names") <- value
   x
 }
