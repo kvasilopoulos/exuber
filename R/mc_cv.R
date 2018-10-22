@@ -36,7 +36,7 @@ mc_cv <- function(n, nrep = 2000, minw,
   if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(n)) * n)
   opt_badf <- match.arg(opt_badf)
   if (is.data.frame(n) || is.matrix(n)) # case of providiing data in 'n'
-    stop("Argument 'n' should be a postive integer")
+    stop("Argument 'n' should be a positive integer")
   assert_positive_int(n, greater_than = 5)
   assert_positive_int(nrep)
   assert_positive_int(minw, greater_than = 2)

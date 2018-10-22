@@ -10,6 +10,7 @@ r:
 
 os:
   - linux
+  - osx
 
 matrix:
   fast_finish: true
