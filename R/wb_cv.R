@@ -46,12 +46,11 @@
 #' }
 wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
-
   y <- data %>% rm_index() %>% as.matrix() # index-date check
   nc <- NCOL(y)
   nr <- NROW(y)
 
-  if (missing(minw)) minw <-  floor((0.01 + 1.8 / sqrt(nr)) * nr)
+  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
 
   # asserts
   assert_na(y)
@@ -65,41 +64,48 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
   # preallocation
   results <- matrix(0, nrow = 2 * point + 3, ncol = nboot)
-  adf_crit <-  matrix(NA, nc, 3, dimnames = list(colnames(y), c(paste(pr))))
+  adf_crit <- matrix(NA, nc, 3, dimnames = list(colnames(y), c(paste(pr))))
   sadf_crit <- gsadf_crit <- adf_crit
-  badf_crit <- bsadf_crit <- array(NA, dim = c(point, 3, nc),
-                        dimnames = list( NULL, c(paste(pr)), colnames(y)))
+  badf_crit <- bsadf_crit <- array(NA,
+    dim = c(point, 3, nc),
+    dimnames = list(NULL, c(paste(pr)), colnames(y))
+  )
+  # get Options
+  show_pb <- getOption("exuber.show_progress")
+  do_par <- getOption("exuber.parallel")
 
-  if (getOption("exuber.show_progress")) {
+  if (show_pb) {
     pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
     opts <- list(progress = function(n) setTxtProgressBar(pb, n))
     on.exit(close(pb))
-  }else{
+  } else {
     opts <- list(progress = NULL)
   }
 
-  if (getOption("exuber.parallel")) {
-    `%fun%` <- `%dopar%`
+  if (do_par) {
     cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
-  }else{
-    `%fun%` <- `%do%`
+    on.exit(parallel::stopCluster(cl))
   }
+
+  `%fun%` <- if (do_par) `%dopar%` else `%do%`
 
   for (j in 1:nc) {
     dy <- diff(y[, j])
-    results <- foreach(i = 1:nboot, .export = c("rls_gsadf", "unroot"),
-                       .combine = "cbind", .options.snow = opts) %fun% {
-                         if (dist_rad) {
-                           w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-                         } else {
-                           w <- rnorm(nr - 1, 0, 1)
-                         }
-                         ystar <- c(0, cumsum(w * dy))
-                         yxmat <- unroot(ystar)
-                         rls_gsadf(yxmat, min_win = minw)
-                       }
+    results <- foreach(
+      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
+      .combine = "cbind", .options.snow = opts
+    ) %fun% {
+      if (show_pb && !do_par) setTxtProgressBar(pb, i)
+      if (dist_rad) {
+        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+      } else {
+        w <- rnorm(nr - 1, 0, 1)
+      }
+      ystar <- c(0, cumsum(w * dy))
+      yxmat <- unroot(ystar)
+      rls_gsadf(yxmat, min_win = minw)
+    }
 
 
     badf_crit[, , j] <- t(apply(results[1:point, ], 1, quantile, prob = pr))
@@ -107,23 +113,28 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
     sadf_crit[j, ] <- quantile(results[point + 2, ], probs = pr)
     gsadf_crit[j, ] <- quantile(results[point + 3, ], probs = pr)
     bsadf_crit[, , j] <- t(apply(results[-c(1:(point + 3)), ], 1,
-                                 quantile, prob = pr))
+      quantile,
+      prob = pr
+    ))
 
-    if (getOption("exuber.show_progress")) {
-    cat("\n")
-    print(paste("Series", j, "out of", nc, "completed!", sep = " "), quote = F)
+    if (show_pb) {
+      cat("\n")
+      print(paste("Series", j, "out of", nc, "completed!", sep = " "), quote = F)
     }
   }
 
-  output <- structure(list(adf_cv = adf_crit,
-                           sadf_cv = sadf_crit,
-                           gsadf_cv = gsadf_crit,
-                           badf_cv = badf_crit,
-                           bsadf_cv = bsadf_crit),
-                      method = "Wild Bootstrap",
-                      iter   = nboot,
-                      minw   = minw,
-                      class  = "cv")
+  output <- structure(list(
+    adf_cv = adf_crit,
+    sadf_cv = sadf_crit,
+    gsadf_cv = gsadf_crit,
+    badf_cv = badf_crit,
+    bsadf_cv = bsadf_crit
+  ),
+  method = "Wild Bootstrap",
+  iter = nboot,
+  minw = minw,
+  class = "cv"
+  )
 
   return(output)
 }
