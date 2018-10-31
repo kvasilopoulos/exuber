@@ -11,6 +11,15 @@ get_crit <- function(x) {
     }
 }
 
+
+# is_panel ----------------------------------------------------------------
+
+is_panel <- function(y) {
+  assert_class(y, "cv")
+  res <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
+  res
+}
+
 # remove index ----------------------------------------------------------
 
 #' @importFrom purrr detect_index
