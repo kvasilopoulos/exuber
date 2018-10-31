@@ -34,14 +34,14 @@
 #' autoplot(rfs, pcv)
 #' }
 
-sb_cv <- function(data, minw, lag = 0, nboot = 1000){
+sb_cv <- function(data, minw, lag = 0, nboot = 1000) {
 
   y <- data %>% rm_index() %>% as.matrix() # index-date check
   nc <- NCOL(y)
   nr <- NROW(y)
 
   # args
-  if (missing(minw)) minw <-  floor((0.01 + 1.8 / sqrt(nr)) * nr)
+  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
 
   # asserts
   assert_na(y)
@@ -73,59 +73,65 @@ sb_cv <- function(data, minw, lag = 0, nboot = 1000){
 
   nres <- NROW(resmat)
 
-  if (getOption("exuber.show_progress")) {
+  # get Options
+  show_pb <- getOption("exuber.show_progress")
+  do_par <- getOption("exuber.parallel")
+
+  if (show_pb) {
     pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
     opts <- list(progress = function(n) setTxtProgressBar(pb, n))
     on.exit(close(pb))
-  }else{
+  } else {
     opts <- list(progress = NULL)
   }
 
-  if (getOption("exuber.parallel")) {
-    `%fun%` <- `%dopar%`
+  if (do_par) {
     cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
-  }else{
-    `%fun%` <- `%do%`
+    on.exit(parallel::stopCluster(cl))
   }
 
-  edf_bsadf_panel <- foreach(i = 1:nboot,
-                             .export = c("rls_gsadf", "unroot"),
-                             .combine = "cbind",
-                             .options.snow = opts)  %fun%
-                     {
-                       boot_index <- sample(1:nres, replace = TRUE)
-                       for (j in 1:nc) {
-                         boot_res <- resmat[boot_index, j]
-                         dboot_res <- boot_res - mean(boot_res)
-                         dy_boot <- c(initmat[j, lag:1],
-                                      stats::filter(coefmat[j, 1] + dboot_res,
-                                                    coefmat[j, -1], "rec",
-                                                    init = initmat[j, ]))
-                         y_boot <- cumsum(c(y[1, j], dy_boot))
-                         yxmat_boot <- unroot(x = y_boot, lag)
-                         aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-                         bsadf_boot <- aux_boot[-c(1:(point + 3))]
-                       }
-                       bsadf_boot / nc
+  `%fun%` <- if (do_par) `%dopar%` else `%do%`
 
-                      }
-
+  edf_bsadf_panel <- foreach(
+    i = 1:nboot,
+    .export = c("rls_gsadf", "unroot"),
+    .combine = "cbind",
+    .options.snow = opts
+  ) %fun% {
+    boot_index <- sample(1:nres, replace = TRUE)
+    if (show_pb && !do_par) setTxtProgressBar(pb, i)
+    for (j in 1:nc) {
+      boot_res <- resmat[boot_index, j]
+      dboot_res <- boot_res - mean(boot_res)
+      dy_boot <- c(
+        initmat[j, lag:1],
+        stats::filter(coefmat[j, 1] + dboot_res,
+          coefmat[j, -1], "rec",
+          init = initmat[j, ]
+        )
+      )
+      y_boot <- cumsum(c(y[1, j], dy_boot))
+      yxmat_boot <- unroot(x = y_boot, lag)
+      aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
+      bsadf_boot <- aux_boot[-c(1:(point + 3))]
+    }
+    bsadf_boot / nc
+  }
 
   bsadf_crit <- apply(edf_bsadf_panel, 1, quantile, probs = pr) %>% t()
   gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% quantile(probs = pr)
 
-  output <- structure(list(gsadf_panel_cv = gsadf_crit,
-                           bsadf_panel_cv = bsadf_crit),
-                      method = "Sieve Bootstrap",
-                      lag    = lag,
-                      iter   = nboot,
-                      minw   = minw,
-                      class  = "cv")
+  output <- structure(list(
+    gsadf_panel_cv = gsadf_crit,
+    bsadf_panel_cv = bsadf_crit
+  ),
+  method = "Sieve Bootstrap",
+  lag = lag,
+  iter = nboot,
+  minw = minw,
+  class = "cv"
+  )
 
   return(output)
 }
-
-
-
