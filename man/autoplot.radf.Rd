@@ -2,25 +2,19 @@
 % Please edit documentation in R/autoplot.R
 \name{autoplot.radf}
 \alias{autoplot.radf}
-\alias{fortify.radf}
-\alias{ggarrange}
+\alias{autoplot.datestamp}
 \title{Plotting radf with ggplot2}
 \usage{
-\method{autoplot}{radf}(object, cv, select, option = c("gsadf", "sadf"),
-  min_duration = NULL, ...)
+\method{autoplot}{radf}(object, cv, include = FALSE, select,
+  option = c("gsadf", "sadf"), min_duration = NULL, ...)
 
-\method{fortify}{radf}(model, data, cv, select, option = c("gsadf",
-  "sadf"), ...)
-
-ggarrange(..., ncol = 2)
+\method{autoplot}{datestamp}(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=radf]{radf()}}.}
+\item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
-
-\item{select}{keeps only the variables you mention}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
@@ -29,13 +23,9 @@ ggarrange(..., ncol = 2)
 reported. Default is 0.}
 
 \item{...}{further arguements passed to method, not used}
-
-\item{model}{An object of class \code{\link[=radf]{radf()}}.}
-
-\item{data}{original dataset, not used.}
-
-\item{ncol}{number of columns to arrange}
 }
 \description{
 Plotting \code{\link[=radf]{radf()}} with ggplot2
+
+Plotting datestamp with ggplot2
 }

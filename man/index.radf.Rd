@@ -6,11 +6,11 @@
 \alias{index<-.radf}
 \title{Retrieve/Replace the Index}
 \usage{
-\method{index}{radf}(x, ...)
+\method{index}{radf}(x, trunc = FALSE, ...)
 
 \method{index}{data.frame}(x, ...)
 
-\method{index}{radf}(x) <- value
+\method{index}{radf}(x, trunc = FALSE) <- value
 }
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}}
