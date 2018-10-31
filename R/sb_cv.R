@@ -10,11 +10,15 @@
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar%
+#' @importFrom foreach foreach %dopar% %do%
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats quantile lm
 #' @export
 #'
+#'
+#' @references Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
+#' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
+#' in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
 #'
 #' @examples
 #' \donttest{
@@ -23,36 +27,32 @@
 #'
 #' rfd <- radf(dta, lag = 1)
 #'
+#' # Panel critical vales should have the same lag length with the estimation
 #' pcv <- sb_cv(dta, lag = 1)
 #'
-#' summary(dta, pcv, panel = TRUE)
-#' plot(rdta, pcv, panel = TRUE)
+#' summary(dta, pcv)
+#' autoplot(rfs, pcv)
 #' }
 
-sb_cv <- function(data, minw, lag =0, nboot = 1000){
+sb_cv <- function(data, minw, lag = 0, nboot = 1000){
 
-  # index-date check
-  data <- rm_index(data)
-  # helpers
-  y <- as.matrix(data)
+  y <- data %>% rm_index() %>% as.matrix() # index-date check
   nc <- NCOL(y)
   nr <- NROW(y)
+
   # args
-  if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
-  # checks
+  if (missing(minw)) minw <-  floor((0.01 + 1.8 / sqrt(nr)) * nr)
+
+  # asserts
   assert_na(y)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
   assert_positive_int(nboot, greater_than = 2)
-  # get options
-  show_pb <- getOption("exuber.show_progress")
-  parallel <- getOption("exuber.parallel")
-  ncores <- getOption("exuber.ncores")
 
-  # helpers 2
-  point <- nr - minw
+  # helpers
+  point <- nr - minw - lag
   pr <- c(0.9, 0.95, 0.99)
-  pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
+
   # preallocation
   initmat <- matrix(0, nc, 1 + lag)
   resmat <- matrix(0, nr - 2 - lag, nc)
@@ -73,61 +73,45 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000){
 
   nres <- NROW(resmat)
 
-  if (parallel) {
-    cl <- parallel::makeCluster(ncores, type = "PSOCK")
+  if (getOption("exuber.show_progress")) {
+    pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
+    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
+    on.exit(close(pb))
+  }else{
+    opts <- list(progress = NULL)
+  }
+
+  if (getOption("exuber.parallel")) {
+    `%fun%` <- `%dopar%`
+    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
     on.exit(parallel::stopCluster(cl))
     registerDoSNOW(cl)
-
-    progress <- if (show_pb)  function(n) setTxtProgressBar(pb, n) else NULL
-    opts <- list(progress = progress)
-
-    edf_bsadf_panel <- foreach(i = 1:nboot,
-                               .export = c("rls_gsadf", "unroot"),
-                               .combine = "cbind",
-                               .options.snow = opts) %dopar%
-      {
-        boot_index <- sample(1:nres, replace = TRUE)
-        for (j in 1:nc) {
-          boot_res <- resmat[boot_index, j]
-          dboot_res <- boot_res - mean(boot_res)
-          dy_boot <- c(initmat[j, lag:1],
-                       stats::filter(coefmat[j, 1] + dboot_res,
-                                     coefmat[j, -1], "rec", init = initmat[j, ]))
-          y_boot <- cumsum(c(y[1, j], dy_boot))
-          yxmat_boot <- unroot(x = y_boot, lag)
-          aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-          bsadf_boot <- aux_boot[-c(1:(point + 3))]
-        }
-        bsadf_boot / nc
-      }
   }else{
-    # non-parallel estimation needs preallocation
-    # needs to substract 3 because of the lag difference
-    if (lag == 0) {
-      edf_bsadf_panel <- matrix(0, point, nboot)
-    }else{
-      edf_bsadf_panel <- matrix(0, point - lag - 3, nboot)
-    }
-    for (i in 1:nboot) {
-
-      boot_index <- sample(1:nres, replace = TRUE)
-
-      for (j in 1:nc) {
-        boot_res <- resmat[boot_index, j]
-        dboot_res <- boot_res - mean(boot_res)
-        dy_boot <- c(initmat[j, lag:1],
-                     stats::filter(coefmat[j, 1] + dboot_res,
-                                   coefmat[j, -1], "rec", init = initmat[j, ]))
-        y_boot <- cumsum(c(y[1, j], dy_boot))
-        yxmat_boot <- unroot(x = y_boot, lag)
-        aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-        bsadf_boot <- aux_boot[-c(1:(point + 3))]
-      }
-      edf_bsadf_panel[, i] <- bsadf_boot / nc
-      if (show_pb) setTxtProgressBar(pb, i)
-    }
+    `%fun%` <- `%do%`
   }
-  close(pb)
+
+  edf_bsadf_panel <- foreach(i = 1:nboot,
+                             .export = c("rls_gsadf", "unroot"),
+                             .combine = "cbind",
+                             .options.snow = opts)  %fun%
+                     {
+                       boot_index <- sample(1:nres, replace = TRUE)
+                       for (j in 1:nc) {
+                         boot_res <- resmat[boot_index, j]
+                         dboot_res <- boot_res - mean(boot_res)
+                         dy_boot <- c(initmat[j, lag:1],
+                                      stats::filter(coefmat[j, 1] + dboot_res,
+                                                    coefmat[j, -1], "rec",
+                                                    init = initmat[j, ]))
+                         y_boot <- cumsum(c(y[1, j], dy_boot))
+                         yxmat_boot <- unroot(x = y_boot, lag)
+                         aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
+                         bsadf_boot <- aux_boot[-c(1:(point + 3))]
+                       }
+                       bsadf_boot / nc
+
+                      }
+
 
   bsadf_crit <- apply(edf_bsadf_panel, 1, quantile, probs = pr) %>% t()
   gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% quantile(probs = pr)
@@ -142,3 +126,6 @@ sb_cv <- function(data, minw, lag =0, nboot = 1000){
 
   return(output)
 }
+
+
+

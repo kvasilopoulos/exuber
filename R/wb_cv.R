@@ -25,7 +25,7 @@
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar%
+#' @importFrom foreach foreach %dopar% %do%
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats quantile rnorm
 #' @export
@@ -46,30 +46,22 @@
 #' }
 wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
-  # index-date check
-  data <- rm_index(data)
 
-  # helpers
-  y <- as.matrix(data)
+  y <- data %>% rm_index() %>% as.matrix() # index-date check
   nc <- NCOL(y)
   nr <- NROW(y)
 
-  if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
+  if (missing(minw)) minw <-  floor((0.01 + 1.8 / sqrt(nr)) * nr)
 
-  # get options
-  show_pb <- getOption("exuber.show_progress")
-  parallel <- getOption("exuber.parallel")
-  ncores <- getOption("exuber.ncores")
-
+  # asserts
   assert_na(y)
   assert_positive_int(nboot, greater_than = 2)
   assert_positive_int(minw, greater_than = 2)
-  stopifnot(is.logical(parallel), is.logical(dist_rad))
+  stopifnot(is.logical(dist_rad))
 
-  # helpers 2
+  # helpers
   point <- nr - minw
   pr <- c(0.9, 0.95, 0.99)
-  if (show_pb) pb <- txtProgressBar(max = nboot , style = 3)
 
   # preallocation
   results <- matrix(0, nrow = 2 * point + 3, ncol = nboot)
@@ -78,41 +70,37 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
   badf_crit <- bsadf_crit <- array(NA, dim = c(point, 3, nc),
                         dimnames = list( NULL, c(paste(pr)), colnames(y)))
 
-  if (parallel) {
-    cl <- parallel::makeCluster(ncores, type = "PSOCK")
-    registerDoSNOW(cl)
+  if (getOption("exuber.show_progress")) {
+    pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
+    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
+    on.exit(close(pb))
+  }else{
+    opts <- list(progress = NULL)
+  }
+
+  if (getOption("exuber.parallel")) {
+    `%fun%` <- `%dopar%`
+    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
     on.exit(parallel::stopCluster(cl))
-    progress <-  if (show_pb) function(n) setTxtProgressBar(pb, n) else NULL
-    opts <- list(progress = progress)
+    registerDoSNOW(cl)
+  }else{
+    `%fun%` <- `%do%`
   }
 
   for (j in 1:nc) {
     dy <- diff(y[, j])
-    if (parallel) {
-      results <- foreach(i = 1:nboot, .export = c("rls_gsadf", "unroot"),
-                         .combine = "cbind", .options.snow = opts) %dopar% {
-                           if (dist_rad) {
-                             w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-                           } else {
-                             w <- rnorm(nr - 1, 0, 1)
-                           }
-                           ystar <- c(0, cumsum(w * dy))
-                           yxmat <- unroot(ystar)
-                           rls_gsadf(yxmat, min_win = minw)
+    results <- foreach(i = 1:nboot, .export = c("rls_gsadf", "unroot"),
+                       .combine = "cbind", .options.snow = opts) %fun% {
+                         if (dist_rad) {
+                           w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+                         } else {
+                           w <- rnorm(nr - 1, 0, 1)
                          }
-    }else{
-      for (i in 1:nboot) {
-        if (show_pb) setTxtProgressBar(pb, i)
-        if (dist_rad) {
-          w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-        } else {
-          w <- rnorm(nr - 1, 0, 1)
-        }
-        ystar <- c(0, cumsum(w * dy))
-        yxmat <- unroot(ystar)
-        results[, i] <- rls_gsadf(yxmat, min_win = minw)
-      }
-    }
+                         ystar <- c(0, cumsum(w * dy))
+                         yxmat <- unroot(ystar)
+                         rls_gsadf(yxmat, min_win = minw)
+                       }
+
 
     badf_crit[, , j] <- t(apply(results[1:point, ], 1, quantile, prob = pr))
     adf_crit[j, ] <- quantile(results[point + 1, ], probs = pr)
@@ -120,12 +108,12 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
     gsadf_crit[j, ] <- quantile(results[point + 3, ], probs = pr)
     bsadf_crit[, , j] <- t(apply(results[-c(1:(point + 3)), ], 1,
                                  quantile, prob = pr))
-    if (show_pb) {
+
+    if (getOption("exuber.show_progress")) {
     cat("\n")
     print(paste("Series", j, "out of", nc, "completed!", sep = " "), quote = F)
     }
   }
-  if (show_pb) close(pb)
 
   output <- structure(list(adf_cv = adf_crit,
                            sadf_cv = sadf_crit,
