@@ -270,33 +270,31 @@ print.diagnostics <- function(x, ...) {
 #' @export
 #'
 datestamp <- function(object, cv, option = c("gsadf", "sadf"),
-                      min_duration = NULL) {
+                      min_duration = 0) {
 
   assert_class(object, "radf")
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
   option <- match.arg(option)
-  if (is.null(min_duration)) min_duration <- 0
+  assert_positive_int(min_duration, strictly = FALSE)
+  assert_equal_arg(object, cv)
 
   x <- object
   y <- cv
-  panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
-  assert_equal_arg(x, y)
-  assert_positive_int(min_duration, strictly = FALSE)
 
-  choice <- diagnostics(x, y, option) %>%
-    pluck("accepted")
-  reps <- if (panel) 1 else match(choice, col_names(x))
-  dating <- index(x)[-c(1:(minw(x) + lagr(x)))]
+  choice <- diagnostics(x, cv = y, option = option) %>% pluck("accepted")
+  reps <- if (is_panel(y)) 1 else match(choice, col_names(x))
+  dating <- index(x)
 
   ds <- vector("list", length(choice))
-  if (panel) {
-    cv <- if (lagr(x) == 0) {
-      y$bsadf_panel_cv[, 2]
-    }else {
-      y$bsadf_panel_cv[-c(1:lagr(x)), 2]
+  if (is_panel(y)) {
+    if (lagr(y) != 0)  {
+      tstat <- x$bsadf_panel[-c(1:2)]
+      dating <- dating[-c(1:2)]
+    }else{
+      tstat <- x$bsadf_panel
     }
-    ds <- list(which(x$bsadf_panel > cv) + minw(x) + lagr(x))
+    ds <- list(which(tstat > y$bsadf_panel_cv[, 2])+ minw(x) + lagr(x))
   }
 
   for (i in seq_along(choice)) {
@@ -346,8 +344,8 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
       as.matrix())
 
   add_index <- lapply(ds_stamp, function(t) data.frame(
-      "Start" = index(x)[t[, 1]],
-      "End" = index(x)[t[, 2]],
+      "Start" = dating[t[, 1]],
+      "End" = dating[t[, 2]],
       "Duration" = t[, 3], row.names = NULL
     ))
 
@@ -362,7 +360,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   }
 
   dummy <- matrix(0, nrow = length(index(x)), ncol = length(choice),
-                    dimnames = list(seq_along(index(x)), if (panel) "Panel"
+                    dimnames = list(seq_along(index(x)), if (is_panel(y)) "Panel"
                                     else col_names(x)[reps]))
   for (z in seq_along(choice)) {
     dummy[ds[[z]], z] <- 1
@@ -370,7 +368,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   res[["bool"]] <- dummy
 
   structure(res,
-            panel = panel,
+            panel = is_panel(y),
             min_duration = min_duration,
             option = option,
             class = c("list", "datestamp"))

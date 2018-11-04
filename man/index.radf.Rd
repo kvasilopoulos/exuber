@@ -15,6 +15,9 @@
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}}
 
+\item{trunc}{default FALSE. If TRUE the index formed by truncateing the value
+in the minimum window.}
+
 \item{...}{Further arguments passed to methods.}
 
 \item{value}{An ordered vector of the same length as the `index' attribute of x.}

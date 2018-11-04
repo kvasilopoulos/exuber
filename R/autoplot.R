@@ -1,116 +1,148 @@
 
 
-#' Plotting radf with ggplot2
+#' Tidying and
 #'
-#' Plotting \code{\link[=radf]{radf()}} with ggplot2
+#'
+#' @description \code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
+#' \code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
+#' \code{ggarrange} is a wrapper of \code{\link[=gridExtra::arrangeGrob]}{arrangeGrob())}
+#'
 #'
 #' @inheritParams datestamp
-#' @param ... further arguements passed to method, not used
+#' @param include
+#' @param select
+#' @param ... further arguements passed to method, ignored.
 #'
-#' @name autoplot.radf
 #' @importFrom dplyr filter
 #' @importFrom purrr map pluck
+#'
 #' @export
-autoplot.radf <- function(object, cv, select,
+#' @examples
+#' \donttest{
+#' # Default minimum window
+#' mc <- mc_cv(n = 100)
+#'
+#' # Change the minimum window and the number of simulations
+#' mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
+#' }
+autoplot.radf <- function(object, cv, include = FALSE, select,
                           option = c("gsadf", "sadf"),
-                          min_duration = NULL, ...) {
+                          min_duration = 0, ...) {
 
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
-  if (is.null(min_duration)) min_duration <- 0
+  assert_positive_int(min_duration, strictly = FALSE)
   option <- match.arg(option)
-
+  assert_equal_arg(object, cv)
 
   x <- object
   y <- cv
-  assert_equal_arg(x, y)
-  panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
 
-  # plot only the series that reject null
-  choice <- diagnostics(x, y, option = option) %>%
-    pluck("accepted")
-
-  if (missing(select)) {
-    cname <- choice
-  }else {
-    cname <- if (is.character(select)) select else choice[select]
-
-    ## write unit test if reject first one
-    if (all(cname %ni% col_names(x))) stop("subscript out of bounds",
-                                           call. = FALSE)
-    if (all(cname %ni% choice)) stop("cannot reject the null", call. = FALSE)
+  if (include) {
+    cname <- fortify.radf(x, cv = y, include = include, option = option) %>%
+      attr("select")
+  }else{
+    cname <- fortify.radf(x, cv = y, option = option) %>%
+      attr("select")
   }
 
+  if (!missing(select)) {
+    cname <- intersect(cname, select) # select check here
+    if (is_panel(y)) warning("argument 'select' is redundant", call. = FALSE)
+  }
+  if (is_panel(y)) cname <- "Panel"
 
   g <- vector("list", length = length(cname))
 
   for (i in seq_along(cname))
     local({
       i <- i
-      # selected series in fortify (cname) can be only %in% choice
-      dat <- fortify.radf(x, cv = y, select = if (panel) NULL else cname[i],
-                          option = option)
-      shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
-        pluck(cname[i])
+      cn <- cname[i]
+      suppressWarnings(
+      dat <- fortify.radf(x, cv = y, include = include, option = option,
+                          select = if (is_panel(y)) NULL else cname[i]))
 
       h <- ggplot(dat) +
         geom_line(aes_string(x = "index", y = as.name(colnames(dat)[2])),
                   size = 0.7, colour = "blue") +
         geom_line(aes_string(x = "index", y = as.name(colnames(dat)[3])),
                   colour = "red", size = 0.8, linetype = "dashed") +
-        xlab("") + ylab("") +
-        theme_bw() +
-        # theme(
-        #   axis.line = element_line(colour = "black"),
-        #   # panel.grid.major.x = element_blank(),
-        #   panel.grid.minor = element_blank(),
-        #   panel.background = element_blank()
-        # ) +
-        ggtitle(cname[i]) +
-        geom_rect(data = shade[, -3], fill = "grey", alpha = 0.35, #0.25
+        ggtitle(cname[i]) + theme_bw() +  xlab("") + ylab("")
+
+      shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
+        pluck(cname[i])
+
+      if (!is.null(shade)) {
+
+       h <- h + geom_rect(data = shade[, -3], fill = "grey", alpha = 0.35, #0.25
                   aes_string(xmin = "Start", xmax = "End",
                              ymin = -Inf, ymax = +Inf))
+      }
+
       g[[i]] <<- h
     })
   names(g) <- cname
   if (length(g) == 1) return(g[[1]]) else return(g)
 }
 
+
+#' @rdname autoplot.radf()
 #' @inheritParams datestamp
 #' @param select keeps only the variables you mention
 #' @param model An object of class \code{\link[=radf]{radf()}}.
-#' @param data original dataset, not used.
+#' @param data original dataset, not used(required by generic
+#' \code{\link[=fortify]}{fortify()} method).
 #'
 #' @importFrom purrr map pluck
+#' @importFrom tibble as.tibble
 #'
-#' @rdname autoplot.radf
 #' @export
-fortify.radf <- function(model, data , cv, select,
+fortify.radf <- function(model, data , cv, include = FALSE, select,
                          option = c("gsadf", "sadf"), ...) {
-
 
   cv <- if (missing(cv)) get_crit(model) else cv
   assert_class(cv, "cv")
-  if (missing(select)) select <- diagnostics(model, cv, option) %>%
-    pluck("accepted")
   option <- match.arg(option)
 
   x <- model
   y <- cv
   assert_equal_arg(x, y)
-  panel <-  if (method(y) == "Sieve Bootstrap") TRUE else FALSE
-  dating <- index(x)[-c(1:(minw(x) + lagr(x)))]
+  dating <- index(x, trunc = TRUE)
 
-  choice <- if (panel) "Panel" else col_names(x)
-  cname <-  if (is.character(select)) select else choice[select]
+  if (is_panel(y)) {
+    cname <- "Panel"
+    if (!missing(select))
+      warning("argument 'select' is redundant", call. = FALSE)
+    if (!missing(include))
+      warning("argument 'include' is redundant", call. = FALSE)
+  }else{
 
-
-  names_tstat <- paste0("tstat_", tolower(cname))
-
+    if (include) {
+      nm <- col_names(x)
+      if (missing(select)) {
+        cname <- select <- nm
+      }else{
+        cname <- if (is.character(select)) select else nm[select]
+      }
+    }else{
+      nm <- diagnostics(object = x, cv = y, option = option) %>%
+        pluck("accepted")
+      if (missing(select)) {
+        cname <- select <- nm
+      }else{
+        if (is.character(select)) {
+          if (select %ni% nm) stop("subscript out of bounds", call. = FALSE)
+          cname <- select
+        }else{
+          cname <- nm[select]
+        }
+      }
+    }
+  }
 
   if (option == "gsadf") {
 
-    tstat_dat <- if (panel) x$bsadf_panel else x$bsadf[, cname]
+    tstat_dat <- if (is_panel(y)) x$bsadf_panel else x$bsadf[, cname]
 
     if (method(y) == "Wild Bootstrap") {
       cv_dat <- if (lagr(x) == 0) {
@@ -127,41 +159,55 @@ fortify.radf <- function(model, data , cv, select,
       }
       names_cv <- "cv"
     }else if (method(y) == "Sieve Bootstrap") {
-      cv_dat <- if (lagr(x) == 0) {
-        y$bsadf_panel_cv[, 2]
-      }else{
-        y$bsadf_panel_cv[-c(1:lagr(x)), 2]
+      cv_dat <- y$bsadf_panel_cv[, 2]
+      if (lagr(cv) > 0) {
+        dating <- dating[-c(1:2)]
+        tstat_dat <- tstat_dat[-c(1:2)]
       }
       names_cv <- "cv_panel"
     }
   } else if (option == "sadf") {
-
     tstat_dat <- x$badf[, cname]
-    #rep(y$adf_cv[2], NROW(x$badf))
-    cv_dat <- if (lagr(x) == 0) {
-      y$badf_cv[, 2]
-    }else{
-      y$badf_cv[-c(1:lagr(x)), 2]
-    }
+    cv_dat <- if (lagr(x) == 0) y$badf_cv[, 2] else y$badf_cv[-c(1:lagr(x)), 2]
     names_cv <- "cv"
   }
 
-  dat <- data.frame(dating, tstat_dat, cv_dat)
-  colnames(dat) <- c("index", names_tstat, names_cv)
+  dat <- data.frame(dating, tstat_dat, cv_dat) %>%
+    set_names(c("index", cname, names_cv)) %>%
+    as.tibble()
   attr(dat, "select") <- cname
-  return(dat)
+
+  dat
 
 }
 
+#' @rdname autoplot.radf()
 #' @import ggplot2
-#' @importFrom gridExtra grid.arrange
-#' @rdname autoplot.radf
-#' @param ncol number of columns to arrange
+#' @importFrom gridExtra arrangeGrob
 #' @export
-ggarrange <- function(..., ncol = 2) {
-  do.call(gridExtra::grid.arrange, c(..., ncol = ncol))
+ggarrange <- function(...) {
+  p <- do.call(gridExtra::arrangeGrob, c(...))
+  class(p) <- c("ggarrange", class(p))
+  p
 }
 
+#' Print a ggarrange object
+#'
+#' \code{ggarrange} objects are created from. This is the S3
+#' generic print method to print the re
+#'
+#' @param x autoplot.radf() object.
+#' @param newpage Should a new page (i.e., an empty page) be drawn before the
+#' ggExtraPlot is drawn?
+#' @param ... ignored
+#'
+#' @importFrom grid grid.newpage grid.draw
+#' @keywords internal
+#' @export
+print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
+  if (newpage) grid::grid.newpage()
+  grid::grid.draw(x)
+}
 
 #' Plotting datestamp objects with ggplot2
 #'
@@ -185,7 +231,7 @@ autoplot.datestamp <- function(object, ...) {
 #' @param data data set, defaults to data used to estimated model
 #' @param ... not used by this method
 #'
-#' @rdname autoplot.datestamp
+#' @rdname autoplot.datestatemp
 #' @importFrom purrr map reduce
 #' @export
 fortify.datestamp <- function(model, data, ...) {

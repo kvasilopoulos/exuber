@@ -14,9 +14,13 @@
 NULL
 
 #' @rdname index.radf
+#' @param trunc default FALSE. If TRUE the index formed by truncateing the value
+#' in the minimum window.
 #' @export
-index.radf <- function(x, ...) {
-  attr(x, "index")
+index.radf <- function(x, trunc = FALSE, ...) {
+  value <- attr(x, "index")
+  if (trunc) value <- value[-c(1:(minw(x) + lagr(x)))]
+  value
 }
 
 #' @importFrom purrr detect_index
@@ -30,11 +34,14 @@ index.data.frame <- function(x, ...) {
 
 
 #' @rdname  index.radf
+#' @inheritParams index.radf
 #' @export
-`index<-.radf` <- function(x, value) {
+`index<-.radf` <- function(x, value, trunc = FALSE) {
   if (length(index(x)) != length(value)) {
     stop("length of index vectors does not match", call. = FALSE)
   }
+  if (trunc) value <- value[-c(1:(minw(x) + lagr(x)))]
+
   attr(x, "index") <- value
   return(x)
 }
