@@ -2,16 +2,13 @@
 % Please edit documentation in R/autoplot.R
 \name{autoplot.radf}
 \alias{autoplot.radf}
-\alias{autoplot.datestamp}
-\title{Plotting radf with ggplot2}
+\title{Tidying and}
 \usage{
 \method{autoplot}{radf}(object, cv, include = FALSE, select,
-  option = c("gsadf", "sadf"), min_duration = NULL, ...)
-
-\method{autoplot}{datestamp}(object, ...)
+  option = c("gsadf", "sadf"), min_duration = 0, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
+\item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
@@ -22,10 +19,19 @@
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 
-\item{...}{further arguements passed to method, not used}
+\item{...}{further arguements passed to method, ignored.}
 }
 \description{
-Plotting \code{\link[=radf]{radf()}} with ggplot2
+\code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
+\code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
+\code{ggarrange} is a wrapper of \code{\link[=gridExtra::arrangeGrob]}{arrangeGrob())}
+}
+\examples{
+\donttest{
+# Default minimum window
+mc <- mc_cv(n = 100)
 
-Plotting datestamp with ggplot2
+# Change the minimum window and the number of simulations
+mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
+}
 }
