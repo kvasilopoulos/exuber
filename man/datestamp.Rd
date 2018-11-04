@@ -7,7 +7,7 @@
 \usage{
 diagnostics(object, cv, option = c("gsadf", "sadf"))
 
-datestamp(object, cv, option = c("gsadf", "sadf"), min_duration = NULL)
+datestamp(object, cv, option = c("gsadf", "sadf"), min_duration = 0)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
