@@ -2,16 +2,27 @@
 % Please edit documentation in R/autoplot.R
 \name{autoplot.radf}
 \alias{autoplot.radf}
-\title{Tidying and}
+\alias{fortify.radf}
+\alias{ggarrange}
+\title{Plotting with ggplot2 and Tidying with tibble \code{radf} Object}
 \usage{
-\method{autoplot}{radf}(object, cv, include = FALSE, select,
+\method{autoplot}{radf}(object, cv, include = FALSE, select = NULL,
   option = c("gsadf", "sadf"), min_duration = 0, ...)
+
+\method{fortify}{radf}(model, data, cv, include = FALSE, select = NULL,
+  option = c("gsadf", "sadf"), ...)
+
+ggarrange(...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
+
+\item{include}{adfsasd}
+
+\item{select}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
 "gsadf".}
@@ -20,18 +31,19 @@
 reported. Default is 0.}
 
 \item{...}{further arguements passed to method, ignored.}
+
+\item{model}{An object of class \code{\link[=radf]{radf()}}.}
+
+\item{data}{original dataset, not used(required by generic
+\code{\link[=fortify]{fortify()}} method).}
 }
 \description{
-\code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
 \code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
-\code{ggarrange} is a wrapper of \code{\link[=gridExtra::arrangeGrob]}{arrangeGrob())}
+\code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
+\code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}
 }
 \examples{
 \donttest{
-# Default minimum window
-mc <- mc_cv(n = 100)
 
-# Change the minimum window and the number of simulations
-mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
 }
 }

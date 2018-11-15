@@ -15,10 +15,12 @@
 #' @importFrom stats quantile lm
 #' @export
 #'
-#'
 #' @references Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 #' in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
+#'
+#'#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
+#' \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
 #' @examples
 #' \donttest{
@@ -30,8 +32,6 @@
 #' # Panel critical vales should have the same lag length with the estimation
 #' pcv <- sb_cv(dta, lag = 1)
 #'
-#' summary(dta, pcv)
-#' autoplot(rfs, pcv)
 #' }
 
 sb_cv <- function(data, minw, lag = 0, nboot = 1000) {
