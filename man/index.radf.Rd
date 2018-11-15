@@ -10,7 +10,7 @@
 
 \method{index}{data.frame}(x, ...)
 
-\method{index}{radf}(x, trunc = FALSE) <- value
+\method{index}{radf}(x) <- value
 }
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}}
