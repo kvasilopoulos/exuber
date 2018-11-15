@@ -14,29 +14,28 @@
 
 There were no ERRORs and WARNINGs, with local checks or on remote checks.
 
-0 error | 0 warnings  | 1 note 
+0 error | 0 warnings  | 2 notes 
 
-checking CRAN incoming feasibility ... NOTE
-  
-Maintainer: ‘Kostas Vasilopoulos <k.vasilopoulo@gmail.com>’
+* checking installed package size ... NOTE
+    installed size is 17.4Mb
+    sub-directories of 1Mb or more:
+      data  15.6Mb
+      libs   1.6Mb
 
-New submission
-
-## Reverse dependencies
-
-This is a new release, so there are no reverse dependencies.
-
-## Added a reference for the methods in the 'Description' 
-
-Added reference: Phillips, P. C., Shi, S. and Yu, J. (2015)<doi:doi:10.1111/iere.12131>,
-and there was extra details in the previous Note.
-
-checking CRAN incoming feasibility ... NOTE
-
-  Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
-
-New submission
+* checking CRAN incoming feasibility (26.4s) ... NOTE
+Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
+   
+Uses the superseded package: 'doSNOW'
+   
+Size of tarball: 21031594 bytes
 
 Possibly mis-spelled words in DESCRIPTION:
   Shi (10:159)
   Yu (10:171)
+
+## Reverse dependencies
+
+There are no reverse dependencies.
+
+
+

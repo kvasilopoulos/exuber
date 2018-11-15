@@ -24,18 +24,16 @@ test_that("error diagnostics", {
 
 test_that("different minw", {
   msg <- "Different minimum window"
-  expect_error(summary(radf_dta, mc2), msg)
-  expect_error(diagnostics(radf_dta, mc2), msg)
-  expect_error(datestamp(radf_dta, mc2), msg)
-  expect_error(summary(radf_dta, wb2), msg)
-  expect_error(diagnostics(radf_dta, wb2), msg)
-  expect_error(datestamp(radf_dta, wb2), msg)
-  expect_error(summary(radf_dta, sb2), msg)
-  expect_error(diagnostics(radf_dta, sb2), msg)
-  expect_error(datestamp(radf_dta, sb2), msg)
+  expect_error(summary(radf_dta, mc2_minw20), msg)
+  expect_error(diagnostics(radf_dta, mc2_minw20), msg)
+  expect_error(datestamp(radf_dta, mc2_minw20), msg)
+  expect_error(summary(radf_dta, wb2_minw20), msg)
+  expect_error(diagnostics(radf_dta, wb2_minw20), msg)
+  expect_error(datestamp(radf_dta, wb2_minw20), msg)
+  expect_error(summary(radf_dta, sb2_minw20), msg)
+  expect_error(diagnostics(radf_dta, sb2_minw20), msg)
+  expect_error(datestamp(radf_dta, sb2_minw20), msg)
 })
-
-
 
 test_that("Correct output in summary/datestamp", {
   expect_output(str(summary(radf_dta, mc)), "List of 5")

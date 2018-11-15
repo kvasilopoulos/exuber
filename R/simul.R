@@ -201,7 +201,7 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' @references Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 #' Economics letters, 3(4), 387-389.
 #'
-#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_dgp1}}, \code{\link{sim_evans}}
+#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_dgp2}}, \code{\link{sim_evans}}
 #'
 #' @examples
 #' sim_blan(n = 100)
@@ -264,7 +264,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_dgp1}}, \code{\link{sim_blan}}
+#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_dgp2}}, \code{\link{sim_blan}}
 #'
 #' @references Evans, G. W. (1991). Pitfalls in testing for explosive
 #' bubbles in asset prices. The American Economic Review, 81(4), 922-930.
