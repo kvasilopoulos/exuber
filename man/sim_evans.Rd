@@ -4,8 +4,8 @@
 \alias{sim_evans}
 \title{Simulation of a Evans (1991) bubble process}
 \usage{
-sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7, r = 0.05,
-  b1 = delta)
+sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
+  r = 0.05, b1 = delta)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}

@@ -26,8 +26,12 @@ improvement.
 ### Estimation
 
   - `radf()` : Recursive Augmented Dickey-Fuller test
-  - `mc_cv()` : Monte Carlo Critical Values
-  - `wb_cv()` : Wild Bootstrap Critical values
+
+### Simulate custom critical values
+
+  - `mc_cv()` : Monte Carlo critical values
+  - `wb_cv()` : Wild Bootstrap critical values
+  - `sb_cv()` : Sieve Bootstrap (panel) critical values
 
 ### Simulation
 
@@ -59,7 +63,11 @@ will need the appropriate development tools.
   - Window Users should install
     [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
   - Mac User should install [Clang or GNU
-    Fortran](https://cran.r-project.org/bin/macosx/tools/)
+    Fortran](https://cran.r-project.org/bin/macosx/tools/).
+
+**Note:** R 3.5.0 El Capitan binaries are using Clang 6.0.0 and GNU
+Fortran 6.1 to provide OpenMP parallelization support and C++17 standard
+features.
 
 If you encounter a clear bug, please file a reproducible example on
 [GitHub](https://github.com/kvasilopoulos/exuber/issues).
@@ -71,50 +79,79 @@ This is a basic example which shows you how to use exuber:
 ``` r
 library(exuber)
 # Simulate data witn n = 100 observations
-set.seed(123)
-a1 <- sim_dgp1(n = 100) # one bubble
-a2 <- sim_dgp2(n = 100) # two bubbles
-a3 <- sim_blan(n = 100) # blanchard model
-a4 <- sim_evans(n = 100) # evans model
+set.seed(112)
+sim1 <- sim_dgp1(n = 100) # one bubble
+sim2 <- sim_dgp2(n = 100) # two bubbles
 
-dta <- data.frame("oneb" = a1, "twob" = a2, "blan" = a3, "evans" = a4)
+dta <- data.frame("onebubble" = sim1, 
+                  "twobbubbles" = sim2)
 
 ts <- radf(dta, lag = 1)
-
-# Critical Values mc = Monte Carlo, wb= Wild Bootstrapped
-# Use 500 repetions(boostraps) for faster computation
-mc <- mc_cv(n = NROW(dta), nrep = 500, parallel = T)
-wb <- wb_cv(dta, nboot = 500, parallel = T)
 ```
 
-### Report
-
-Report summary statistics, diagnostics and date stamping periods of
-mildly explosive behaviour.
+Report t-stats with the assiged critical values
 
 ``` r
-report(ts, mc)
-diagnostics(ts, mc)
-datestamp(ts, mc)
+summary(ts)
+#> 
+#>  Recursive Unit Root
+#>  ----------------------------------
+#>  H0: Unit root
+#>  H1: Explosive root
+#>  ----------------------------------
+#>  Critical values: Monte Carlo 
+#>  Minimum window: 19 
+#>  Iterations: 2000 
+#>  Lag: 1 
+#>  ----------------------------------
+#>  onebubble 
+#>         tstat      90%      95%     99%
+#> ADF    -2.271  -0.4035  -0.0762  0.5104
+#> SADF    8.415   1.0074   1.3484  1.9454
+#> GSADF   8.898   1.6942   1.9259  2.6191
+#> 
+#>  twobbubbles 
+#>         tstat      90%      95%     99%
+#> ADF    -2.340  -0.4035  -0.0762  0.5104
+#> SADF    4.384   1.0074   1.3484  1.9454
+#> GSADF   6.696   1.6942   1.9259  2.6191
+```
+
+Date stamp periods of explosive behaviour
+
+``` r
+datestamp(ts)
+#> 
+#> Datestamp: Individual
+#>  -----------------------------------
+#> onebubble :
+#>   Start End Duration
+#> 1    41  55       15
+#> 
+#> twobbubbles :
+#>   Start End Duration
+#> 1    25  40       16
+#> 2    63  70        8
 ```
 
 ### Plotting
 
-The output of plot will be a list,
+The output of autoplot is a list of ggplots
 
 ``` r
-# All together
-plot(ts, mc, plot_type = "single", breaks_x = 20)
-
-# Individually
-plot(ts, mc, plot_type = "multiple", breaks_x = 20)
-
-library(gridExtra)
-p1 <- plot(ts, mc, plot_type = "multiple", breaks_x = 20, breaks_y = 3)
-do.call("grid.arrange", c(p1, ncol = 2))
+ts %>% 
+  autoplot() %>% 
+  ggarrange()
 ```
 
------
+<img src="inst/figures/readme.png" width="900"/>
+
+#### License
+
+This package is free and open source software, licensed under
+[GPL-3](https://github.com/kvasilopoulos/exuber/blob/master/LICENSE).
+
+#### Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://github.com/kvasilopoulos/exuber/blob/master/CONDUCT.md).

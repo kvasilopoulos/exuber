@@ -4,7 +4,8 @@
 \alias{mc_cv}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, nrep = 2000, minw, parallel = FALSE, ncores)
+mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
+  "simulated"))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
@@ -14,11 +15,7 @@ mc_cv(n, nrep = 2000, minw, parallel = FALSE, ncores)
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
-\item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
-
-\item{ncores}{A positive integer, optional. If `parallel' is set to
-\code{TRUE}, then the user can specify the number of cores (defaults to
-using all cores).}
+\item{opt_badf}{the option for badf}
 }
 \value{
 A list that contains the critical values for ADF, BADF, BSADF and GSADF
@@ -35,9 +32,6 @@ mc <- mc_cv(n = 100)
 
 # Change the minimum window and the number of simulations
 mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
-
-# Use parallel computing (utilizing all available cores)
-mc <- mc_cv(n = 100, parallel = TRUE)
 }
 }
 \seealso{

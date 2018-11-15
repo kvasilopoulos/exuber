@@ -12,11 +12,12 @@ os:
   - linux
   - osx
 
+warnings_are_errors: true
+
 matrix:
   fast_finish: true
   allow_failures:
     - r: devel
-      os: osx
 
 before_install:
   - export TZ=US/Central
@@ -29,4 +30,5 @@ after_success:
 
 notifications:
   email:
-    - k.vasilopoulo@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always

@@ -3,18 +3,18 @@
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
 #' test.
 #'
-#' @param x A univariate or multivariate numeric ts object, data.frame or matrix.
+#' @param data A univariate or multivariate numeric ts object, data.frame or matrix.
 #' The estimation process cannot handle NA values.
 #' @param minw A positive integer. The minimum window size, which defaults to
 #' \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.
 #' @param lag A non-negative integer. The lag of the Augmented Dickey-Fuller regression.
 #'
 #' @return A list that contains the t-statistic (sequence) for:
-#'   \item{ADF}{Augmented Dickey-Fuller.}
-#'   \item{BADF}{Backward Augmented Dickey-Fuller.}
-#'   \item{SADF}{Supremum Augmented Dickey-Fuller.}
-#'   \item{BSADF}{Backward Supremum Augmented Dickey-Fuller.}
-#'   \item{GSADF}{Generalized Supremum Augmented Dickey Fuller.}
+#'   \item{adf}{Augmented Dickey-Fuller}
+#'   \item{badf}{Backward Augmented Dickey-Fuller}
+#'   \item{sadf}{Supremum Augmented Dickey-Fuller}
+#'   \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
+#'   \item{gsadf}{Generalized Supremum Augmented Dickey Fuller}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
 #' in The 1990s Nasdaq: When Did Exuberance Escalate Asset Values? International
@@ -24,7 +24,9 @@
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
-#' @importFrom stats embed
+#' @importFrom stats embed frequency time
+#' @importFrom lubridate date_decimal round_date
+#' @importFrom purrr detect_index
 #' @export
 #'
 #' @examples
@@ -37,85 +39,102 @@
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(x = dta, minw = 20, lag = 1)
 #' }
-radf <- function(x, minw, lag = 0) {
+radf <- function(data, minw, lag = 0) {
 
-  if (any(class(x) %in% c("mts", "ts"))) {
-      dating <- time(x)
-  } else if (is.data.frame(x)) {
-    if (class(x[, 1]) == "Date") {
-      dating <- x[, 1]
-      x <- x[, -1, drop = FALSE]
-    } else if (all(findDates(rownames(x)))) {
-      dating <- as.Date(rownames(x))
-    } else {
-      dating <- seq(1, NROW(x))
+  # class checks
+  sim_index <- seq(1, NROW(data), 1)
+  if (any(class(data) %in% c("mts", "ts"))) {
+    if (all(time(data) == sim_index)) {
+      dating <- sim_index
+    }else{
+      dating <- time(data) %>%
+        as.numeric() %>%
+        date_decimal()
+      if (frequency(data) %in% c(1, 4, 12)) {
+        dating <- dating %>%
+          round_date("month") %>%
+          as.Date()
+      }else if (frequency(data) == 52) {
+        dating <- dating %>%
+          as.Date()
+      }else{
+        dating <- dating %>%
+          round_date("day") %>%
+          as.Date()
+      }
     }
-  } else if (class(x) %in% c("numeric", "matrix")) {
-    dating <- index(x)
+  } else if (is.data.frame(data)) {
+    date_index <- purrr::detect_index(data, lubridate::is.Date)
+    if (as.logical(date_index)) {
+      dating <- data[, date_index, drop = TRUE]
+      data <- data[, -date_index, drop = FALSE]
+    } else {
+      dating <- sim_index
+    }
+  } else if (class(data) %in% c("numeric", "matrix")) {
+    dating <- sim_index
   } else {
     stop("Unsupported class", call. = FALSE)
   }
+  x <- as.matrix(data)
+  nc <- NCOL(data)
+  nr <- NROW(data)
+  # args
+  if (is.null(colnames(x))) colnames(x) <- paste("Series", seq(1, nc, 1))
+  if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
+  # checks
+  assert_na(data)
+  assert_positive_int(minw, greater_than = 2)
+  assert_positive_int(lag, strictly = FALSE)
 
-  if (anyNA(x)) {
-    stop("Recursive least square estimation cannot handle NA", call. = FALSE)
-  }
+  point <- nr - minw - lag
 
-  x <- as.matrix(x)
-  nc <- NCOL(x)
-  nr <- NROW(x)
-
-  if (is.null(colnames(x))) {
-    colnames(x) <- paste("Series", seq(1, nc, 1))
-  }
-
-  if (missing(minw)) {
-    r0 <- 0.01 + 1.8 / sqrt(nr)
-    minw <- floor(r0 * nr)
-  } else if (minw > 0 & minw < 3) {
-    stop("Argument 'minw' is too small", call. = FALSE)
-  }
-  is.positive.int(minw)
-  is.nonnegeative.int(lag)
-
-  adf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
-  badf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
-  sadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
-  gsadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
-  bsadf <- matrix(0, nr - 1 - lag, nc, dimnames = list(NULL, colnames(x)))
+  adf <- sadf <- gsadf <- drop(matrix(0, 1, nc,
+                                     dimnames = list(NULL, colnames(x))))
+  badf <- bsadf <- matrix(0, point, nc, dimnames = list(NULL, colnames(x)))
 
   for (i in 1:nc) {
-    if (lag == 0) {
-      x_embed <- embed(x[, i], 2)
-      yxmat <- cbind(x_embed[, 1], 1, x_embed[, 2])
-    } else {
-      x_embed <- embed(x[, i], lag + 2)
-      dx_embed <- embed(diff(x[, i]), lag + 1)[, -1]
-      x_lev <- x_embed[, 1]
-      x_lag <- x_embed[, 2]
-      yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
-    }
-    results <- rls_gsadf(yxmat, minw)
 
-    adf[i] <- results$adf
-    badf[, i] <- results$badf
-    sadf[i] <- results$sadf
-    gsadf[i] <- results$gsadf
-    bsadf[, i] <- results$bsadf
+    yxmat <- unroot(x[, i], lag = lag)
+    results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
+
+    badf[, i] <- results[1:point]
+    adf[i]  <- results[point + 1]
+    sadf[i] <- results[point + 2]
+    gsadf[i] <- results[point + 3]
+    bsadf[, i] <- results[-c(1:(point + 3))]
   }
 
-  value <- list(
-    adf = adf,
-    badf = badf[-c(1:(minw)), , drop = F],
-    sadf = sadf,
-    bsadf = bsadf[-c(1:(minw)), , drop = F],
-    gsadf = gsadf
-  )
+  bsadf_panel <- apply(bsadf, 1, mean)
+  gsadf_panel <- max(bsadf_panel)
 
-  attr(value, "index") <- dating
-  attr(value, "class") <- append(class(value), "radf")
-  attr(value, "lag") <- lag
-  attr(value, "minw") <- minw
-  attr(value, "col_names") <- colnames(x)
+  value <- structure(list(adf = adf,
+                          badf = badf,
+                          sadf = sadf,
+                          bsadf = bsadf,
+                          gsadf = gsadf,
+                          bsadf_panel = bsadf_panel,
+                          gsadf_panel = gsadf_panel),
+                     index = dating,
+                     lag = lag,
+                     minw = minw,
+                     lag = lag,
+                     col_names = colnames(x),
+                     class = "radf")
 
   return(value)
+}
+
+unroot <- function(x, lag = 0) {
+  if (lag == 0) {
+    x_embed <- embed(x, 2)
+    yxmat <- cbind(x_embed[, 1], x_embed[, 2])
+  } else {
+    x_embed <- embed(x, lag + 2)
+    dx_embed <- embed(diff(x), lag + 1)[, -1]
+    x_lev <- x_embed[, 1]
+    x_lag <- x_embed[, 2]
+    yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
+  }
+  return(yxmat)
 }
