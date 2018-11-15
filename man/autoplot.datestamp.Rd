@@ -2,13 +2,22 @@
 % Please edit documentation in R/autoplot.R
 \name{autoplot.datestamp}
 \alias{autoplot.datestamp}
+\alias{fortify.datestamp}
 \title{Plotting datestamp objects with ggplot2}
 \usage{
 \method{autoplot}{datestamp}(object, ...)
+
+\method{fortify}{datestamp}(model, data, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
+
+\item{...}{not used by this method}
+
+\item{model}{datestamp object}
+
+\item{data}{data set, defaults to data used to estimated model}
 }
 \description{
-Plotting datestamp with ggplot2
+Plotting datestamp with \link[=ggplot2]{geom_segment}
 }
