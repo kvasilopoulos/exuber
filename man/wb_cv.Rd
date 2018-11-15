@@ -4,21 +4,16 @@
 \alias{wb_cv}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(y, nboot = 1000, minw, parallel = FALSE, ncores, dist_rad = FALSE)
+wb_cv(data, minw, nboot = 1000, dist_rad = FALSE)
 }
 \arguments{
-\item{y}{A data.frame or matrix containing the data.}
-
-\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
+\item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
+The estimation process cannot handle NA values.}
 
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
-\item{parallel}{Logical. If \code{TRUE} parallel programming is used.}
-
-\item{ncores}{A positive integer, optional. If `parallel' is set to
-\code{TRUE}, then the user can specify the number of cores (defaults to
-using all cores).}
+\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
 
 \item{dist_rad}{Logical. If \code{TRUE} then  the Rademacher distribution
 will be used.}
@@ -40,16 +35,16 @@ robust to non-stationary volatility.
 \examples{
 \donttest{
 # Simulate bubble processes
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
 
 # Default minimum window
-wb <- wb_cv(y = dta)
+wb <- wb_cv(dta)
 
 # Change the minimum window and the number of bootstraps
-wb <- wb_cv(y = dta, nboot = 1500,  minw = 20)
+wb <- wb_cv(dta, nboot = 1500,  minw = 20)
 
 # Use parallel computing (utilizing all available cores)
-wb <- wb_cv(y = dta, parallel = TRUE)
+wb <- wb_cv(dta, parallel = TRUE)
 }
 }
 \references{

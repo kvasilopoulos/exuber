@@ -4,10 +4,10 @@
 \alias{radf}
 \title{Recursive Augmented Dickey-Fuller test}
 \usage{
-radf(x, minw, lag = 0)
+radf(data, minw, lag = 0)
 }
 \arguments{
-\item{x}{A univariate or multivariate numeric ts object, data.frame or matrix.
+\item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
 The estimation process cannot handle NA values.}
 
 \item{minw}{A positive integer. The minimum window size, which defaults to
@@ -17,11 +17,11 @@ The estimation process cannot handle NA values.}
 }
 \value{
 A list that contains the t-statistic (sequence) for:
-  \item{ADF}{Augmented Dickey-Fuller.}
-  \item{BADF}{Backward Augmented Dickey-Fuller.}
-  \item{SADF}{Supremum Augmented Dickey-Fuller.}
-  \item{BSADF}{Backward Supremum Augmented Dickey-Fuller.}
-  \item{GSADF}{Generalized Supremum Augmented Dickey Fuller.}
+  \item{adf}{Augmented Dickey-Fuller}
+  \item{badf}{Backward Augmented Dickey-Fuller}
+  \item{sadf}{Supremum Augmented Dickey-Fuller}
+  \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
+  \item{gsadf}{Generalized Supremum Augmented Dickey Fuller}
 }
 \description{
 \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
