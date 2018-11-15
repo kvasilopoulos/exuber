@@ -1,16 +1,17 @@
-
-
-#' Tidying and
+#' Plotting with ggplot2 and Tidying with tibble radf Object
 #'
 #'
-#' @description \code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
 #' \code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
-#' \code{ggarrange} is a wrapper of \code{\link[=gridExtra::arrangeGrob]}{arrangeGrob())}
+#' \code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
+#' \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, can be
+#' used directly after autoplot to  multiple place grobs on a page.
 #'
+#' @name autoplot.radf
 #'
 #' @inheritParams datestamp
-#' @param include
-#' @param select
+#'
+#' @param include adfsasd
+#' @param select If not NULL, only plot with names or column number matching this regular expression will be executed.
 #' @param ... further arguements passed to method, ignored.
 #'
 #' @importFrom dplyr filter
@@ -19,13 +20,9 @@
 #' @export
 #' @examples
 #' \donttest{
-#' # Default minimum window
-#' mc <- mc_cv(n = 100)
 #'
-#' # Change the minimum window and the number of simulations
-#' mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
 #' }
-autoplot.radf <- function(object, cv, include = FALSE, select,
+autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0, ...) {
 
@@ -39,18 +36,21 @@ autoplot.radf <- function(object, cv, include = FALSE, select,
   y <- cv
 
   if (include) {
-    cname <- fortify.radf(x, cv = y, include = include, option = option) %>%
-      attr("select")
+    if (missing(select)) {
+      cname2 <- fortify.radf(x, cv = y, include = include, option = option)
+    }else{
+      cname2 <- fortify.radf(x, cv = y, option = option,
+                            select = select,  include = include)
+    }
   }else{
-    cname <- fortify.radf(x, cv = y, option = option) %>%
-      attr("select")
+    if (missing(select)) {
+      cname2 <- fortify.radf(x, cv = y, option = option)
+      }else{
+      cname2 <- fortify.radf(x, cv = y, option = option, select = select)
+    }
   }
 
-  if (!missing(select)) {
-    cname <- intersect(cname, select) # select check here
-    if (is_panel(y)) warning("argument 'select' is redundant", call. = FALSE)
-  }
-  if (is_panel(y)) cname <- "Panel"
+  cname <- if (is_panel(y)) "Panel" else cname2 %>% attr("select")
 
   g <- vector("list", length = length(cname))
 
@@ -86,18 +86,17 @@ autoplot.radf <- function(object, cv, include = FALSE, select,
 }
 
 
-#' @rdname autoplot.radf()
+#' @rdname autoplot.radf
 #' @inheritParams datestamp
-#' @param select keeps only the variables you mention
 #' @param model An object of class \code{\link[=radf]{radf()}}.
 #' @param data original dataset, not used(required by generic
-#' \code{\link[=fortify]}{fortify()} method).
+#' \code{\link[=fortify]{fortify()}} method).
 #'
 #' @importFrom purrr map pluck
 #' @importFrom tibble as.tibble
 #'
 #' @export
-fortify.radf <- function(model, data , cv, include = FALSE, select,
+fortify.radf <- function(model, data , cv, include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
 
   cv <- if (missing(cv)) get_crit(model) else cv
@@ -115,11 +114,12 @@ fortify.radf <- function(model, data , cv, include = FALSE, select,
       warning("argument 'select' is redundant", call. = FALSE)
     if (!missing(include))
       warning("argument 'include' is redundant", call. = FALSE)
+
   }else{
 
     if (include) {
       nm <- col_names(x)
-      if (missing(select)) {
+      if (is.null(select)) {
         cname <- select <- nm
       }else{
         cname <- if (is.character(select)) select else nm[select]
@@ -127,7 +127,7 @@ fortify.radf <- function(model, data , cv, include = FALSE, select,
     }else{
       nm <- diagnostics(object = x, cv = y, option = option) %>%
         pluck("accepted")
-      if (missing(select)) {
+      if (is.null(select)) {
         cname <- select <- nm
       }else{
         if (is.character(select)) {
@@ -181,7 +181,7 @@ fortify.radf <- function(model, data , cv, include = FALSE, select,
 
 }
 
-#' @rdname autoplot.radf()
+#' @rdname autoplot.radf
 #' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
 #' @export
@@ -211,8 +211,9 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 
 #' Plotting datestamp objects with ggplot2
 #'
-#' Plotting datestamp with ggplot2
+#' Plotting datestamp with \link[=ggplot2]{geom_segment}
 #'
+#' @name autoplot.datestamp
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
 #' @import ggplot2
 #' @export
@@ -227,6 +228,7 @@ autoplot.datestamp <- function(object, ...) {
           axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
 }
 
+#' @rdname autoplot.datestamp
 #' @param model datestamp object
 #' @param data data set, defaults to data used to estimated model
 #' @param ... not used by this method

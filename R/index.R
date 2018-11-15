@@ -36,11 +36,10 @@ index.data.frame <- function(x, ...) {
 #' @rdname  index.radf
 #' @inheritParams index.radf
 #' @export
-`index<-.radf` <- function(x, value, trunc = FALSE) {
+`index<-.radf` <- function(x, value) {
   if (length(index(x)) != length(value)) {
     stop("length of index vectors does not match", call. = FALSE)
   }
-  if (trunc) value <- value[-c(1:(minw(x) + lagr(x)))]
 
   attr(x, "index") <- value
   return(x)

@@ -21,7 +21,8 @@
 #' (2016). Tests for explosive financial bubbles in the presence of
 #' non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 #'
-#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values
+#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
+#' \code{\link{sb_cv}} for Sieve Bootstrapped critical values
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster

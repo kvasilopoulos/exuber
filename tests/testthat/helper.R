@@ -1,3 +1,4 @@
+# Set options
 options(exuber.show_progress = FALSE)
 options(exuber.parallel = FALSE)
 
@@ -10,7 +11,6 @@ dta <- data.frame(
   "div"  = sim_div(100),
   "blan" = sim_blan(100)
 )
-
 
 dta_df <- data.frame(
   "dgp1" = sim_dgp1(100),
@@ -28,6 +28,7 @@ dta_na[1, 3] <- NA
 # # Use main functions to compute tstats and critical values
 radf_dta <- radf(dta)
 radf_dta_lag1 <- radf(dta, lag = 1)
+radf_dta_lag2 <- radf(dta, lag = 2)
 
 # # Create a series "Reject"
 set.seed(1333)
@@ -44,8 +45,12 @@ wb <- wb_cv(dta, nboot = 100)
 # # Panel critical values
 sb <- sb_cv(dta, nboot = 100, lag = 0)
 sb1 <- sb_cv(dta, nboot = 100, lag = 1)
+sb2 <- sb_cv(dta, nboot = 100, lag = 2)
+
+warn_include <- "argument 'include' is redundant"
+warn_select <- "argument 'select' is redundant"
 
 # Different minw
-mc2 <- mc_cv(100, nrep = 100, minw = 20)
-wb2 <- wb_cv(dta, nboot = 100, minw = 20)
-sb2 <- sb_cv(dta, nboot = 100, minw = 20)
+mc2_minw20 <- mc_cv(100, nrep = 100, minw = 20)
+wb2_minw20 <- wb_cv(dta, nboot = 100, minw = 20)
+sb2_minw20 <- sb_cv(dta, nboot = 100, minw = 20)

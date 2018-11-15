@@ -11,7 +11,8 @@
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
 #'
-#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values.
+#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values and
+#' \code{\link{sb_cv}} for Sieve Bootstrapped critical values
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
