@@ -67,8 +67,6 @@ Note that development version requires compilation, so to install you will need 
 * Window Users should install [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
 * Mac User should install [Clang or GNU Fortran](https://cran.r-project.org/bin/macosx/tools/). 
 
-**Note:** R 3.5.0 El Capitan binaries are using Clang 6.0.0 and GNU Fortran 6.1 to provide OpenMP parallelization support and C++17 standard features. 
-
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exuber/issues).
 
 ## Usage

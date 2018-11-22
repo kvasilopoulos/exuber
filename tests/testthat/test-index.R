@@ -7,6 +7,9 @@ dating_w <- seq(as.Date("1997/01/01"), by = "week", length.out = 100)
 dating_d <- seq(as.Date("1997/01/01"), by = "day", length.out = 100)
 
 test_that("data.frame",{
+  # No date index
+  expect_equal(index(dta), seq(1, NROW(dta)))
+
   # parse dates from data.frame
   df_y <- data.frame(dating_y, dta)
   expect_equal(index(radf(df_y)), dating_y)

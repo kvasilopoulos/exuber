@@ -42,8 +42,6 @@
 #' # Change the minimum window and the number of bootstraps
 #' wb <- wb_cv(dta, nboot = 1500,  minw = 20)
 #'
-#' # Use parallel computing (utilizing all available cores)
-#' wb <- wb_cv(dta, parallel = TRUE)
 #' }
 wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 

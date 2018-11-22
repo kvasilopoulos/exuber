@@ -2,11 +2,7 @@
 
 ## New features
 
-<<<<<<< HEAD
-* Added `panel_cv()`
-=======
 * Added `sb_cv()` function: Sieve Bootstrapped critical values
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 * Panel estimation in `radf()`
 
 
@@ -18,7 +14,6 @@
 
 ## Bug Fixes
 
-* Progressbar appears not directly when using parallel
-* Plotiing date now works without having to to include any additonal plotting 
-option
-*
+* Progressbar appears directly when using 
+* Plotiing date now works without having to to include any additonal plotting option
+* 
