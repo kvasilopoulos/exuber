@@ -4,7 +4,7 @@
 \alias{autoplot.radf}
 \alias{fortify.radf}
 \alias{ggarrange}
-\title{Plotting with ggplot2 and Tidying with tibble \code{radf} Object}
+\title{Plotting with ggplot2 and tidying with tibble radf objects}
 \usage{
 \method{autoplot}{radf}(object, cv, include = FALSE, select = NULL,
   option = c("gsadf", "sadf"), min_duration = 0, ...)
@@ -20,7 +20,7 @@ ggarrange(...)
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
-\item{include}{adfsasd}
+\item{include}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5\% significance level.}
 
 \item{select}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
 
@@ -30,17 +30,18 @@ ggarrange(...)
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 
-\item{...}{further arguements passed to method, ignored.}
+\item{...}{further arguments passed to method, ignored.}
 
 \item{model}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{data}{original dataset, not used(required by generic
+\item{data}{original dataset, not used (required by generic
 \code{\link[=fortify]{fortify()}} method).}
 }
 \description{
-\code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
-\code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
-\code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}
+\code{autoplot.radf} takes an \code{radf} object and returs a (list) of ggplot2 objects.
+\code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
+\code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
+used directly after autoplot to place grobs on a page.
 }
 \examples{
 \donttest{

@@ -3,7 +3,7 @@
 \name{summary}
 \alias{summary}
 \alias{summary.radf}
-\title{Summary statistics}
+\title{Summarizing radf Models}
 \usage{
 \method{summary}{radf}(object, cv, ...)
 }
@@ -20,7 +20,7 @@ Returns a list of summary statistics,
 the t-statistic and the critical values of the ADF, SADF and GSADF.
 }
 \description{
-Summary statistics
+\code{summary} method for class "radf"
 }
 \examples{
 \donttest{

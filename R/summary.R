@@ -1,4 +1,6 @@
-#' Summary statistics
+#' Summarizing radf Models
+#'
+#' \code{summary} method for class "radf"
 #'
 #' @param object An object of class \code{\link[=radf]{radf()}}.
 #' @param cv An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
@@ -108,18 +110,20 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 }
 
 
+#' Diagnostics
+#'
+#' Finds the series that reject the null for at the 5\%significance level.
+#'
 #' @inheritParams summary
+#'
 #' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is
 #' "gsadf".
-#' @describeIn datestamp Finds the series that reject the null for 95\%
-#' significance level.
 #'
-#' @return \code{\link[=diagnostics]{diagnostics()}}: Returns a list with the
-#' series that reject and the series that do not reject the Null Hypothesis
+#' @return : Returns a list with the series that reject and the series that do not reject the
+#' Null Hypothesis
 #'
-#' @details In \code{\link[=diagnostics]{diagnostics()}} and
-#' \code{\link[=datestamp]{datestamp()}} have also stored a vector in {0,1}
-#' that corresponds to {reject, accept} respectively.
+#' @details
+#' Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
 #'
 #' @importFrom dplyr case_when
 #' @export
@@ -242,24 +246,26 @@ print.diagnostics <- function(x, ...) {
 }
 
 
-#' Diagnostics and date stamping periods of mildly explosive behaviour
+#' Date stamping periods of mildly explosive behaviour
 #'
-#' Computes the origination, termination and duration of episodes during which
-#' the time series display explosive dynamics.
+#' Computes the origination, termination and duration of
+#' episodes during which the time series display explosive dynamics.
 #'
 #' @inheritParams diagnostics
 #' @param min_duration The minimum duration of an explosive period for it to be
 #' reported. Default is 0.
 #'
-#' @return \code{\link[=datestamp]{datestamp()}}: Returns a list of values for
-#' each explosive sub-period, giving the origin and termination dates as well
-#' as the number of periods explosive behavior lasts.
+#' @return Returns a list of values for each explosive sub-period, giving the origin
+#' and termination dates as wellas the number of periods explosive behavior lasts.
 #'
 #' @details
-#' Setting \code{min_duration} allows temporary spikes above the critical value
-#' sequence to be removed. Phillips et al. (2015) propose a simple way to remove
-#' small periods of explosiveness by a rule of thumb such as "log(T)" or
-#' "log(T)/T", where T is the number of observations.
+#' Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
+#' respectively, for all series in the time period. This output can be used as
+#' a dummy that indicates the occurence of a bubble.
+#'
+#' Setting \code{min_duration} removes very short episode of exuberance.
+#' Phillips et al. (2015) propose two simple rules of thumb to remove short
+#' periods of explosive dynamics, "log(T)" or "log(T)/T", where T is the number of observations.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
@@ -294,7 +300,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
     }else{
       tstat <- x$bsadf_panel
     }
-    ds <- list(which(tstat > y$bsadf_panel_cv[, 2])+ minw(x) + lagr(x))
+    ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + minw(x) + lagr(x))
   }
 
   for (i in seq_along(choice)) {

@@ -1,12 +1,12 @@
 #' Retrieve/Replace the Index
 #'
-#' @description  Retrieve or replace the index of a \code{radf} object.
+#' @description  Retrieve or replace the index of an \code{radf} object.
 #'
 #' @param x An object of class \code{\link[=radf]{radf()}}
 #' @param ... Further arguments passed to methods.
 #' @param value An ordered vector of the same length as the `index' attribute of x.
 #'
-#' @details If the user does not specify an index during the estimation a
+#' @details If the user does not specify an index for the estimation a
 #' pseudo-index is generated which is a sequential numeric series. After the estimation,
 #' the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
 #' The index can be either numeric or Date.
@@ -14,7 +14,7 @@
 NULL
 
 #' @rdname index.radf
-#' @param trunc default FALSE. If TRUE the index formed by truncateing the value
+#' @param trunc default FALSE. If TRUE the index formed by truncating the value
 #' in the minimum window.
 #' @export
 index.radf <- function(x, trunc = FALSE, ...) {
@@ -29,7 +29,7 @@ index.radf <- function(x, trunc = FALSE, ...) {
 #' @export
 index.data.frame <- function(x, ...) {
   date_index <- purrr::detect_index(x, lubridate::is.Date)
-  if (as.logical(date_index)) x[, date_index, drop = TRUE] else x
+  if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq(1, NROW(x))
 }
 
 

@@ -1,4 +1,4 @@
-#' Recursive Augmented Dickey-Fuller test
+#' Recursive Augmented Dickey-Fuller Test
 #'
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
 #' test.
