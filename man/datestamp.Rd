@@ -30,8 +30,9 @@ each explosive sub-period, giving the origin and termination dates as well
 as the number of periods explosive behavior lasts.
 }
 \description{
-Computes the origination, termination and duration of episodes during which
-the time series display explosive dynamics.
+\code{\link{datestamp}} computes the origination, termination and duration of
+episodes during which the time series display explosive dynamics. \code{\link{diagnostics}}
+finds the series that reject the null for 95\%significance level.
 }
 \details{
 In \code{\link[=diagnostics]{diagnostics()}} and
@@ -43,12 +44,6 @@ sequence to be removed. Phillips et al. (2015) propose a simple way to remove
 small periods of explosiveness by a rule of thumb such as "log(T)" or
 "log(T)/T", where T is the number of observations.
 }
-\section{Functions}{
-\itemize{
-\item \code{diagnostics}: Finds the series that reject the null for 95\%
-significance level.
-}}
-
 \references{
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the

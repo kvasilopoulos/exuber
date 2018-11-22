@@ -17,18 +17,11 @@ test_that("col_names check", {
 })
 
 test_that("col_names <-  check ", {
-
-  expect_equal(col_names(radf_dta), cnames)
+  cnames2 <- c("dg1", "dg2", "ev", "div", "blan")
+  expect_equal(col_names(radf_dta) <- cnames2, cnames2)
   expect_error(
     (col_names(radf_dta) <- c("A")),
     "length of col_names vectors does not match"
   )
 })
 
-
-test_that("fortify", {
-
-  # radf_dta %>% fortify() %>% names()
-  # radf_dta %>% autoplot() %>% names()
-  #
-})

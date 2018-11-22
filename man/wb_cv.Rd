@@ -43,8 +43,6 @@ wb <- wb_cv(dta)
 # Change the minimum window and the number of bootstraps
 wb <- wb_cv(dta, nboot = 1500,  minw = 20)
 
-# Use parallel computing (utilizing all available cores)
-wb <- wb_cv(dta, parallel = TRUE)
 }
 }
 \references{
@@ -53,5 +51,6 @@ Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R.
 non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 }
 \seealso{
-\code{\link{mc_cv}} for Monte Carlo critical values
+\code{\link{mc_cv}} for Monte Carlo critical values and
+\code{\link{sb_cv}} for Sieve Bootstrapped critical values
 }

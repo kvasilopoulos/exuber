@@ -26,7 +26,7 @@
 #' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'} \eqn{\tau}{t} is the last observation of the sample.
 #' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
 #' During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
-#' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path of the subsequent period
+#' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
 #' \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
 #'
 #'
@@ -114,7 +114,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' \eqn{N_1 = (\tau_{1f}, \tau_{2e})}{N0 = (t1f, t2e)},
 #' \eqn{B_2 = [\tau_{2e}, \tau_{2f}]}{N0 = [t2e, t2f]},
 #' \eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]}, where \eqn{\tau}{t} is the last observation of the sample.
-#' After the collapse of the first bubble \eqn{X_t}{X[t]} resumes a martingale path until the time
+#' After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 #' \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
 #' The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
 #' \eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the
@@ -229,9 +229,9 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
   return(b)
 }
 
-#' Simulation of a Evans (1991) bubble process
+#' Simulation of an Evans (1991) bubble process
 #'
-#' Simulation of a Evans (1991) rational periodically collapsing bubble process.
+#' Simulation of an Evans (1991) rational periodically collapsing bubble process.
 #'
 #' @inheritParams sim_blan
 #' @param delta A positive scalar, with restrictions (see details).
@@ -246,7 +246,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' @details
 #'
 #' \code{delta} and \code{alpha} are positive parameters which satisfy \eqn{0 < \delta < (1+r)\alpha}.
-#' \code{delta} represents the size the bubble will return to after collapse.
+#' \code{delta} represents the size of the bubble after collapse.
 #' The default value of \code{r} is 0.05.
 #' The function checks whether \code{alpha} and \code{delta} satisfy this condition and will return an error if not.
 #'
@@ -260,7 +260,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' where \eqn{\theta} is an indicator function taking a value of 0 with probability \eqn{1-\pi} and 1 with probability \eqn{\pi}.
 #' In this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
-#' By modification of the values of \code{delta}, \code{alpha} and \code{pi} the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble can all be modified.
+#' By modifying the values of \code{delta}, \code{alpha} and \code{pi} the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.
 #'
 #' @export
 #'

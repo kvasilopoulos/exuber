@@ -4,6 +4,7 @@ test_that("printing coverage", {
   expect_error(capture.output(summary(radf_dta, mc)), regexp = NA)
   expect_error(capture.output(diagnostics(radf_dta, mc)), regexp = NA)
   expect_error(capture.output(summary(radf_dta, sb)), NA) # Panel
+  expect_error(capture.output(diagnostics(radf_dta, sb)), regexp = NA)
 })
 
 test_that("class checks", {

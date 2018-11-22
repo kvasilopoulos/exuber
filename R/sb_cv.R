@@ -1,4 +1,4 @@
-#' Panel Sieve Bootstrap Critical values
+#' Panel Sieve Bootstrap Critical Values
 #'
 #' \code{sb_cv} performs the Pavlidis et al. (2016)
 #'
