@@ -22,3 +22,23 @@
 \description{
 Plotting datestamp with \link[=ggplot2]{geom_segment()}
 }
+\examples{
+\donttest{
+
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+
+dta \%>\%
+  radf() \%>\%
+  datestamp() \%>\%
+  autoplot()
+
+# Change the colour manually
+dta \%>\%
+  radf() \%>\%
+  datestamp() \%>\%
+  autoplot() +
+  scale_colour_manual(values=rep("black", 4 ))
+
+
+}
+}

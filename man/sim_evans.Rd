@@ -2,7 +2,7 @@
 % Please edit documentation in R/simul.R
 \name{sim_evans}
 \alias{sim_evans}
-\title{Simulation of a Evans (1991) bubble process}
+\title{Simulation of an Evans (1991) bubble process}
 \usage{
 sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
   r = 0.05, b1 = delta)
@@ -26,11 +26,11 @@ sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
 A numeric vector of length \code{n}.
 }
 \description{
-Simulation of a Evans (1991) rational periodically collapsing bubble process.
+Simulation of an Evans (1991) rational periodically collapsing bubble process.
 }
 \details{
 \code{delta} and \code{alpha} are positive parameters which satisfy \eqn{0 < \delta < (1+r)\alpha}.
-\code{delta} represents the size the bubble will return to after collapse.
+\code{delta} represents the size of the bubble after collapse.
 The default value of \code{r} is 0.05.
 The function checks whether \code{alpha} and \code{delta} satisfy this condition and will return an error if not.
 
@@ -44,7 +44,7 @@ When \eqn{B_t > \alpha}{B[t] > \alpha} the bubble expands at an increased rate o
 
 where \eqn{\theta} is an indicator function taking a value of 0 with probability \eqn{1-\pi} and 1 with probability \eqn{\pi}.
 In this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
-By modification of the values of \code{delta}, \code{alpha} and \code{pi} the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble can all be modified.
+By modifying the values of \code{delta}, \code{alpha} and \code{pi} the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.
 }
 \references{
 Evans, G. W. (1991). Pitfalls in testing for explosive
