@@ -21,6 +21,13 @@
 #' @examples
 #' \donttest{
 #'
+#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+#'
+#' dta %>%
+#'   radf() %>%
+#'   autoplot() %>%
+#'   ggarrange(ncol = 2)
+#'
 #' }
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
@@ -63,20 +70,33 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           select = if (is_panel(y)) NULL else cname[i]))
 
       h <- ggplot(dat) +
-        geom_line(aes_string(x = "index", y = as.name(colnames(dat)[2])),
-                  size = 0.7, colour = "blue") +
-        geom_line(aes_string(x = "index", y = as.name(colnames(dat)[3])),
-                  colour = "red", size = 0.8, linetype = "dashed") +
-        ggtitle(cname[i]) + theme_bw() +  xlab("") + ylab("")
+        geom_line(aes_string(x = "index",
+                             y = as.name(colnames(dat)[2])),
+                  size = 0.7,
+                  colour = "blue") +
+        geom_line(aes_string(x = "index",
+                             y = as.name(colnames(dat)[3])),
+                  size = 0.8,
+                  colour = "red",
+                  linetype = "dashed") +
+        ggtitle(cname[i]) +
+        theme_bw() +
+        theme(axis.title.x = element_blank(),
+              axis.title.y = element_blank(),
+              plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
 
       shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
         pluck(cname[i])
 
       if (!is.null(shade)) {
 
-       h <- h + geom_rect(data = shade[, -3], fill = "grey", alpha = 0.35, #0.25
-                  aes_string(xmin = "Start", xmax = "End",
-                             ymin = -Inf, ymax = +Inf))
+       h <- h + geom_rect(data = shade[, -3],
+                          fill = "grey",
+                          alpha = 0.35, #0.25
+                  aes_string(xmin = "Start",
+                             xmax = "End",
+                             ymin = -Inf,
+                             ymax = +Inf))
       }
 
       g[[i]] <<- h
@@ -217,14 +237,38 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
 #' @import ggplot2
 #' @export
+#' @examples
+#' \donttest{
+#'
+#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+#'
+#' dta %>%
+#'   radf() %>%
+#'   datestamp() %>%
+#'   autoplot()
+#'
+#' # Change the colour manually
+#' dta %>%
+#'   radf() %>%
+#'   datestamp() %>%
+#'   autoplot() +
+#'   scale_colour_manual(values=rep("black", 4 ))
+#'
+#'
+#' }
 autoplot.datestamp <- function(object, ...) {
   ggplot(object, aes_string(colour = "key")) +
-    geom_segment(aes_string(x = "Start", xend = "End",
-                            y = "key", yend = "key"), size = 7) +
-    ylab("") + xlab("") + theme_bw() +
+    geom_segment(aes_string(x = "Start",
+                            xend = "End",
+                            y = "key",
+                            yend = "key"),
+                 size = 7) +
+    theme_bw() +
     theme(panel.grid.major.y = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
           legend.position = "none",
-          plot.margin = margin(1, 1, 0, 0, "cm"),
+          plot.margin = margin(1, 1, 0.5, 0.5, "cm"),
           axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
 }
 

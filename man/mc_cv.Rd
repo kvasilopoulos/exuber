@@ -5,7 +5,7 @@
 \title{Monte Carlo Critical Values}
 \usage{
 mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
-  "simulated"))
+  "simulated"), opt_bsadf = c("conventional", "conservative"))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}

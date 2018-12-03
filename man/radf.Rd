@@ -2,7 +2,7 @@
 % Please edit documentation in R/radf.R
 \name{radf}
 \alias{radf}
-\title{Recursive Augmented Dickey-Fuller test}
+\title{Recursive Augmented Dickey-Fuller Test}
 \usage{
 radf(data, minw, lag = 0)
 }

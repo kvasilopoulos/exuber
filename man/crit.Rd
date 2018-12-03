@@ -20,10 +20,9 @@ simulated from exuber package function \code{\link[=mc_cv]{mc_cv()}}
 crit
 }
 \description{
-A dataset containing the simulated critical values for 2000 observations
-with default minimum window. The critical values have been simulated and stored
-as data to save computationan time for the user. The critical values can be
-replicated with the help of the \code{\link[=mc_cv]{mc_cv()}} function. Note
-that the results may differ due to the randomness of the Monte Carlo trials.
+A dataset containing simulated critical values for 2000 observations
+base on default minimum window. The critical values have been simulated and stored
+as data to save computation time for the user. Critical values can be also
+obtained with the \code{\link[=mc_cv]{mc_cv()}} function.
 }
 \keyword{datasets}

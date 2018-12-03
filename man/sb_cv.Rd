@@ -2,7 +2,7 @@
 % Please edit documentation in R/sb_cv.R
 \name{sb_cv}
 \alias{sb_cv}
-\title{Panel Sieve Bootstrap Critical values}
+\title{Panel Sieve Bootstrap Critical Values}
 \usage{
 sb_cv(data, minw, lag = 0, nboot = 1000)
 }
@@ -26,14 +26,21 @@ t-statistics.
 }
 \examples{
 \donttest{
-# Simulate bubble processes
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100), sim_dgp2(n = 100))
 
-rfd <- radf(dta, lag = 1)
+# Simulate bubble processes
+set.seed(124)
+pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(100))
 
 # Panel critical vales should have the same lag length with the estimation
-pcv <- sb_cv(dta, lag = 1)
+sb <- sb_cv(aa, lag = 1)
 
+pdta \%>\%
+  radf(lag = 1) \%>\%
+  summary(cv = sb)
+
+pdta \%>\%
+  radf(lag = 1) \%>\%
+  autoplot(cv = sb)
 }
 }
 \references{

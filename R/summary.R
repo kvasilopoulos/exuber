@@ -119,7 +119,7 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 #' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is
 #' "gsadf".
 #'
-#' @return : Returns a list with the series that reject and the series that do not reject the
+#' @return Returns a list with the series that reject and the series that do not reject the
 #' Null Hypothesis
 #'
 #' @details
@@ -256,7 +256,7 @@ print.diagnostics <- function(x, ...) {
 #' reported. Default is 0.
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the origin
-#' and termination dates as wellas the number of periods explosive behavior lasts.
+#' and termination dates as well as the number of periods explosive behavior lasts.
 #'
 #' @details
 #' Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
