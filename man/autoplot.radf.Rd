@@ -46,5 +46,12 @@ used directly after autoplot to place grobs on a page.
 \examples{
 \donttest{
 
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+
+dta \%>\%
+  radf() \%>\%
+  autoplot() \%>\%
+  ggarrange(ncol = 2)
+
 }
 }
