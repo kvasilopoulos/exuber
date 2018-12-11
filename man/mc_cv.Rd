@@ -16,6 +16,8 @@ mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{opt_badf}{the option for badf}
+
+\item{opt_bsadf}{the option for bsadf}
 }
 \value{
 A list that contains the critical values for ADF, BADF, BSADF and GSADF
