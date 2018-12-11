@@ -6,24 +6,40 @@ Authors@R: c(
             person("Kostas", "Vasilopoulos", , email = "k.vasilopoulo@gmail.com", c("cre", "aut")),
             person("Eftymios", "Pavlidis", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
             person("Simon", "Spavound", email = "simon.spavound@googlemail.com", role = "aut"),
-            person("Enriqeu", "Matrinez-Garcia", email = "emg.economics@gmail.com", role = "aut")
+            person("Enrique", "Martinez-Garcia", email = "emg.economics@gmail.com", role = "aut")
             )
 Description: Testing for and dating periods of explosive dynamics 
   (exuberance) in time series using recursive unit root tests as proposed 
   by Phillips, P. C., Shi, S. and Yu, J. (2015a) <doi:10.1111/iere.12132>. 
   Simulation of a variety of periodically-collapsing bubble processes. The 
   estimation code utilizes the matrix inversion lemma of the recursive least 
-  squares algorithm which results in significant speed improvements .
+  squares algorithm which results in significant speed improvements.
 License: GPL-3
 URL: https://github.com/kvasilopoulos/exuber
 BugReports: https://github.com/kvasilopoulos/exuber/issues
 Depends:
     R (>= 2.10)
-Imports: doSNOW, parallel, foreach, Rcpp (>= 0.12.17),
-    dplyr, ggplot2, purrr, magrittr, lubridate, tibble, zoo, 
-    rlang, grid, gridExtra
+Imports: 
+    doSNOW, 
+    parallel, 
+    foreach, 
+    Rcpp (>= 0.12.17),
+    dplyr, 
+    ggplot2, 
+    purrr, 
+    magrittr, 
+    lubridate, 
+    tibble, 
+    zoo, 
+    rlang, 
+    grid, 
+    gridExtra
 Suggests:
-    knitr, rmarkdown, covr, testthat, withr
+    knitr, 
+    rmarkdown, 
+    covr, 
+    testthat, 
+    withr
 LinkingTo: Rcpp, RcppArmadillo
 Encoding: UTF-8
 LazyData: true

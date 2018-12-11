@@ -146,6 +146,8 @@ t-statistics.</p>
     <p>Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 E., Mack, A., &amp; Grossman, V. (2016). Episodes of exuberance in housing markets:
 in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.</p>
+<p>#' @seealso <code><a href='mc_cv.html'>mc_cv</a></code> for Monte Carlo critical values and
+<code><a href='wb_cv.html'>wb_cv</a></code> for Wild Bootstrapped critical values</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -155,15 +157,7 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='no'>rfd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
 <span class='co'># Panel critical vales should have the same lag length with the estimation</span>
-<span class='no'>pcv</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_cv</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-<span class='fu'><a href='summary.html'>summary</a></span>(<span class='no'>dta</span>, <span class='no'>pcv</span>)</div><div class='output co'>#&gt;        V1               V2               V3        
-#&gt;  Min.   : 49.41   Min.   : 65.00   Min.   : 84.68  
-#&gt;  1st Qu.: 73.70   1st Qu.: 86.82   1st Qu.: 99.23  
-#&gt;  Median : 86.72   Median : 98.51   Median :112.88  
-#&gt;  Mean   : 86.42   Mean   :107.65   Mean   :132.93  
-#&gt;  3rd Qu.: 97.74   3rd Qu.:110.61   3rd Qu.:133.74  
-#&gt;  Max.   :136.91   Max.   :251.40   Max.   :364.22  </div><div class='input'><span class='fu'><a href='ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rfs</span>, <span class='no'>pcv</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(rfs, pcv): object 'rfs' not found</span></div></pre>
+<span class='no'>pcv</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_cv</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -182,7 +176,7 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.github.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enriqeu Matrinez-Garcia.</p>
+  <p>Developed by <a href='https://kvasilopoulos.github.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enrique Martinez-Garcia.</p>
 </div>
 
 <div class="pkgdown">
