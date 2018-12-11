@@ -67,7 +67,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
       cn <- cname[i]
       suppressWarnings(
       dat <- fortify.radf(x, cv = y, include = include, option = option,
-                          select = if (is_panel(y)) NULL else cname[i]))
+                          select = if (is_panel(y)) cname else cname[i]))
 
       h <- ggplot(dat) +
         geom_line(aes_string(x = "index",
@@ -80,13 +80,21 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                   colour = "red",
                   linetype = "dashed") +
         ggtitle(cname[i]) +
-        theme_bw() +
-        theme(axis.title.x = element_blank(),
-              axis.title.y = element_blank(),
-              plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+        theme_bw() + xlab("") + ylab("")
 
-      shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
-        pluck(cname[i])
+      shade <-
+        if (include) {
+          tryCatch(
+            datestamp(x, y, option = option,
+                      min_duration = min_duration) %>%
+              pluck(cname[i]), error =  function(e){})
+        }else{
+          datestamp(x, y, option = option,
+                    min_duration = min_duration) %>%
+            pluck(cname[i])
+        }
+
+
 
       if (!is.null(shade)) {
 
@@ -129,10 +137,12 @@ fortify.radf <- function(model, data , cv, include = FALSE, select = NULL,
   dating <- index(x, trunc = TRUE)
 
   if (is_panel(y)) {
+    nm <- diagnostics(object = x, cv = y, option = option) %>%
+      pluck("accepted")
     cname <- "Panel"
     if (!missing(select))
       warning("argument 'select' is redundant", call. = FALSE)
-    if (!missing(include))
+    if (!missing(include) && !is.null(nm))
       warning("argument 'include' is redundant", call. = FALSE)
 
   }else{
@@ -263,12 +273,10 @@ autoplot.datestamp <- function(object, ...) {
                             y = "key",
                             yend = "key"),
                  size = 7) +
-    theme_bw() +
+    theme_bw() + xlab("") + ylab("") + ggtitle("") +
     theme(panel.grid.major.y = element_blank(),
-          axis.title.x = element_blank(),
-          axis.title.y = element_blank(),
           legend.position = "none",
-          plot.margin = margin(1, 1, 0.5, 0.5, "cm"),
+          plot.margin = margin(0.5, 1, 0, 0, "cm"),
           axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
 }
 
