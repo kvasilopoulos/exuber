@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Plotting datestamp objects with ggplot2 — autoplot.datestamp" />
 
-<meta property="og:description" content="Plotting datestamp with ggplot2" />
+<meta property="og:description" content="Plotting datestamp with geom_segment" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -107,12 +107,15 @@
 
     <div class="ref-description">
     
-    <p>Plotting datestamp with ggplot2</p>
+    <p>Plotting datestamp with geom_segment</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for datestamp</span>
-<span class='fu'><a href='ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for datestamp</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -120,6 +123,18 @@
     <tr>
       <th>object</th>
       <td><p>An object of class <code><a href='datestamp.html'>datestamp()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>not used by this method</p></td>
+    </tr>
+    <tr>
+      <th>model</th>
+      <td><p>datestamp object</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>data set, defaults to data used to estimated model</p></td>
     </tr>
     </table>
     
@@ -136,7 +151,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.github.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enriqeu Matrinez-Garcia.</p>
+  <p>Developed by <a href='https://kvasilopoulos.github.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enrique Martinez-Garcia.</p>
 </div>
 
 <div class="pkgdown">

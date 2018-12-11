@@ -35,5 +35,6 @@ mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
 }
 }
 \seealso{
-\code{\link{wb_cv}} for Wild Bootstrapped critical values.
+\code{\link{wb_cv}} for Wild Bootstrapped critical values and
+\code{\link{sb_cv}} for Sieve Bootstrapped critical values
 }
