@@ -171,15 +171,15 @@
 <a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt;  ----------------------------------</span></a>
 <a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt;  onebubble </span></a>
 <a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;         tstat      90%      95%     99%</span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; ADF    -2.271  -0.4035  -0.0762  0.5104</span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; SADF    8.415   1.0074   1.3484  1.9454</span></a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; GSADF   8.898   1.6942   1.9259  2.6191</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt; ADF    -2.332  -0.4035  -0.0762  0.5104</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt; SADF    4.492   1.0074   1.3484  1.9454</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">#&gt; GSADF   4.710   1.6942   1.9259  2.6191</span></a>
 <a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">#&gt;  twobbubbles </span></a>
 <a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">#&gt;         tstat      90%      95%     99%</span></a>
-<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; ADF    -2.340  -0.4035  -0.0762  0.5104</span></a>
-<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; SADF    4.384   1.0074   1.3484  1.9454</span></a>
-<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; GSADF   6.696   1.6942   1.9259  2.6191</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">#&gt; ADF    -2.470  -0.4035  -0.0762  0.5104</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">#&gt; SADF    3.943   1.0074   1.3484  1.9454</span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">#&gt; GSADF   5.289   1.6942   1.9259  2.6191</span></a></code></pre></div>
 <p>Date stamp periods of explosive behaviour</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/datestamp.html">datestamp</a></span>(ts)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; </span></a>
@@ -192,14 +192,14 @@
 <a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; twobbubbles :</span></a>
 <a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;   Start End Duration</span></a>
 <a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; 1    25  40       16</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 2    63  70        8</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; 2    64  70        7</span></a></code></pre></div>
 <div id="plotting" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h3>
 <p>The output of autoplot is a list of ggplots</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">ts <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw">ggarrange</span>()</a></code></pre></div>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="reference/autoplot.radf.html">ggarrange</a></span>()</a></code></pre></div>
 <p><img src="inst/figures/readme.png" width="900"></p>
 <div id="license" class="section level4">
 <h4 class="hasAnchor">
@@ -247,7 +247,7 @@
 <a href="https://kvasilopoulos.github.io/">Kostas Vasilopoulos</a> <br><small class="roles"> Maintainer, author </small>  </li>
 <li>Eftymios Pavlidis <br><small class="roles"> Author </small>  </li>
 <li>Simon Spavound <br><small class="roles"> Author </small>  </li>
-<li>Enriqeu Matrinez-Garcia <br><small class="roles"> Author </small>  </li>
+<li>Enrique Martinez-Garcia <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
@@ -267,7 +267,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.github.io/">Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enriqeu Matrinez-Garcia.</p>
+  <p>Developed by <a href="https://kvasilopoulos.github.io/">Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enrique Martinez-Garcia.</p>
 </div>
 
 <div class="pkgdown">

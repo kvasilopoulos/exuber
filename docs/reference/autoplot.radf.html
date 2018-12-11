@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tidying and — autoplot.radf • exuber</title>
+<title>Plotting with ggplot2 and Tidying with tibble radf Object — autoplot.radf • exuber</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,11 +30,12 @@
 
 
 
-<meta property="og:title" content="Tidying and — autoplot.radf" />
+<meta property="og:title" content="Plotting with ggplot2 and Tidying with tibble radf Object — autoplot.radf" />
 
-<meta property="og:description" content="fortify.radf takes a radf object and converts it into a data.frame.
-autoplot.radf takes a radf object and returs a (list) of ggplot2 objects.
-ggarrange is a wrapper of arrangeGrob())" />
+<meta property="og:description" content="autoplot.radf takes a radf object and returs a (list) of ggplot2 objects.
+fortify.radf takes a radf object and converts it into a data.frame.
+ggarrange is a wrapper of arrangeGrob(), can be
+used directly after autoplot to  multiple place grobs on a page." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,22 +103,29 @@ ggarrange is a wrapper of arrangeGrob())" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tidying and</h1>
+    <h1>Plotting with ggplot2 and Tidying with tibble radf Object</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot.R'><code>R/autoplot.R</code></a></small>
     <div class="hidden name"><code>autoplot.radf.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>fortify.radf</code> takes a <code>radf</code> object and converts it into a data.frame.
-<code>autoplot.radf</code> takes a <code>radf</code> object and returs a (list) of ggplot2 objects.
-<code>ggarrange</code> is a wrapper of <code></code>arrangeGrob())</p>
+    <p><code>autoplot.radf</code> takes a <code>radf</code> object and returs a (list) of ggplot2 objects.
+<code>fortify.radf</code> takes a <code>radf</code> object and converts it into a data.frame.
+<code>ggarrange</code> is a wrapper of <code>arrangeGrob()</code>, can be
+used directly after autoplot to  multiple place grobs on a page.</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf</span>
-<span class='fu'><a href='ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>cv</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>select</span>,
-  <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>cv</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for radf</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>cv</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='no'>...</span>)
+
+<span class='fu'>ggarrange</span>(<span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +138,14 @@ ggarrange is a wrapper of arrangeGrob())" />
       <th>cv</th>
       <td><p>An object of class "cv". The output of <code><a href='mc_cv.html'>mc_cv()</a></code>,
 <code><a href='wb_cv.html'>wb_cv()</a></code> or <code><a href='sb_cv.html'>sb_cv()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>adfsasd</p></td>
+    </tr>
+    <tr>
+      <th>select</th>
+      <td><p>If not NULL, only plot with names or column number matching this regular expression will be executed.</p></td>
     </tr>
     <tr>
       <th>option</th>
@@ -145,15 +161,21 @@ reported. Default is 0.</p></td>
       <th>...</th>
       <td><p>further arguements passed to method, ignored.</p></td>
     </tr>
+    <tr>
+      <th>model</th>
+      <td><p>An object of class <code><a href='radf.html'>radf()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>original dataset, not used(required by generic
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> method).</p></td>
+    </tr>
     </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Default minimum window</span>
-<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mc_cv.html'>mc_cv</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-
-<span class='co'># Change the minimum window and the number of simulations</span>
-<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mc_cv.html'>mc_cv</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2500</span>,  <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div></pre>
+    <pre class="examples"><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -168,7 +190,7 @@ reported. Default is 0.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.github.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enriqeu Matrinez-Garcia.</p>
+  <p>Developed by <a href='https://kvasilopoulos.github.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enrique Martinez-Garcia.</p>
 </div>
 
 <div class="pkgdown">

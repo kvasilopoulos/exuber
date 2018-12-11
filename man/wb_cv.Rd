@@ -53,5 +53,6 @@ Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R.
 non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 }
 \seealso{
-\code{\link{mc_cv}} for Monte Carlo critical values
+\code{\link{mc_cv}} for Monte Carlo critical values and
+\code{\link{sb_cv}} for Sieve Bootstrapped critical values
 }
