@@ -3,9 +3,10 @@
 #' \code{mc_cv} computes Monte Carlo critical values for the recursive unit
 #' root tests.
 #'
+#' @inheritParams radf
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
-#' @inheritParams radf
+#' @param opt_bsadf the option for bsadf
 #' @param opt_badf the option for badf
 #'
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
@@ -93,7 +94,7 @@ mc_cv <- function(n, nrep = 2000, minw,
       apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr) %>%
         t() %>%
         apply(2, cummax)
-    }else{
+    }else if(opt_bsadf == "conservative"){
       apply(results[1:point, ], 2, cummax) %>%
         apply(1, quantile, probs = pr) %>%
         t()
