@@ -6,8 +6,13 @@
 #' @inheritParams radf
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
-#' @param opt_bsadf the option for bsadf
-#' @param opt_badf the option for badf
+#' @param opt_bsadf Options for bsadf critical value calculation. "conventional"
+#' corresponds to the max of the quantile of the simulated distribution, while
+#' "conservative" corresponds to the quantile of the max which is more conservative
+#' in nature, thus the name.
+#' @param opt_badf Options for badf critical value calculation. "fixed" corresponds
+#' to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
+#' simulated to the monte carlo simulations.
 #'
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
@@ -94,7 +99,7 @@ mc_cv <- function(n, nrep = 2000, minw,
       apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr) %>%
         t() %>%
         apply(2, cummax)
-    }else if(opt_bsadf == "conservative"){
+    }else if (opt_bsadf == "conservative") {
       apply(results[1:point, ], 2, cummax) %>%
         apply(1, quantile, probs = pr) %>%
         t()

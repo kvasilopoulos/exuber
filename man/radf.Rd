@@ -21,7 +21,7 @@ A list that contains the t-statistic (sequence) for:
   \item{badf}{Backward Augmented Dickey-Fuller}
   \item{sadf}{Supremum Augmented Dickey-Fuller}
   \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
-  \item{gsadf}{Generalized Supremum Augmented Dickey Fuller}
+  \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
 \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
@@ -32,10 +32,10 @@ test.
 # Simulate bubble processes
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 
-rfd <- radf(x = dta)
+rfd <- radf(dta)
 
 # For lag = 1 and minimum window = 20
-rfd <- radf(x = dta, minw = 20, lag = 1)
+rfd <- radf(dta, minw = 20, lag = 1)
 }
 }
 \references{

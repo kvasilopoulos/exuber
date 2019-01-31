@@ -33,7 +33,7 @@ a dummy that indicates the occurence of a bubble.
 
 Setting \code{min_duration} removes very short episode of exuberance.
 Phillips et al. (2015) propose two simple rules of thumb to remove short
-periods of explosive dynamics, "log(T)" or "log(T)/T", where T is the number of observations.
+periods of explosive dynamics, "log(T)/T", where T is the number of observations.
 }
 \references{
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for

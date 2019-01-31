@@ -86,7 +86,7 @@ test_that("show_progress",{
   options(exuber.show_progress = FALSE)
 })
 
-# test_that("parallel-ncores arguements",{
+# test_that("parallel-ncores arguments",{
 #   msg <- "Argument 'ncores' is redundant"
 #   expect_warning(
 #     invisible(capture.output(
