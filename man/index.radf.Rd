@@ -3,12 +3,15 @@
 \name{index.radf}
 \alias{index.radf}
 \alias{index.data.frame}
+\alias{index.datestamp}
 \alias{index<-.radf}
 \title{Retrieve/Replace the Index}
 \usage{
 \method{index}{radf}(x, trunc = FALSE, ...)
 
 \method{index}{data.frame}(x, ...)
+
+\method{index}{datestamp}(x, ...)
 
 \method{index}{radf}(x) <- value
 }

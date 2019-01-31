@@ -13,7 +13,7 @@
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
-\item{...}{further arguements passed to methods, not used.}
+\item{...}{further arguments passed to methods, not used.}
 }
 \value{
 Returns a list of summary statistics,
@@ -38,8 +38,8 @@ datestamp(x = rfd, y = mc)
 # Diagnostics for 'sadf'
 diagnostics(x = rfd, y = mc, option = "sadf")
 
-# Use rule of thumb to omit periods of explosiveness which are short-lived
-rot = round(log(NROW(rfd)))
+# Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
+rot = round(log(NROW(rfd))/NROW(rfd))
 datestamp(x = rfd, y = mc, min_duration = rot)
 }
 }

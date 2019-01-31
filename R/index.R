@@ -32,6 +32,11 @@ index.data.frame <- function(x, ...) {
   if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq(1, NROW(x))
 }
 
+#' @rdname index.radf
+#' @export
+index.datestamp <- function(x, ...) {
+  attr(x, "index")
+}
 
 #' @rdname  index.radf
 #' @inheritParams index.radf

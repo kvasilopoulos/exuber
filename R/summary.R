@@ -5,7 +5,7 @@
 #' @param object An object of class \code{\link[=radf]{radf()}}.
 #' @param cv An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 #' \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}
-#' @param ... further arguements passed to methods, not used.
+#' @param ... further arguments passed to methods, not used.
 #'
 #' @return Returns a list of summary statistics,
 #' the t-statistic and the critical values of the ADF, SADF and GSADF.
@@ -28,8 +28,8 @@
 #' # Diagnostics for 'sadf'
 #' diagnostics(x = rfd, y = mc, option = "sadf")
 #'
-#' # Use rule of thumb to omit periods of explosiveness which are short-lived
-#' rot = round(log(NROW(rfd)))
+#' # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
+#' rot = round(log(NROW(rfd))/NROW(rfd))
 #' datestamp(x = rfd, y = mc, min_duration = rot)
 #' }
 #' @export
@@ -112,7 +112,7 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 
 #' Diagnostics
 #'
-#' Finds the series that reject the null for at the 5\%significance level.
+#' Finds the series that reject the null for at the 5\% significance level.
 #'
 #' @inheritParams summary
 #'
@@ -265,7 +265,7 @@ print.diagnostics <- function(x, ...) {
 #'
 #' Setting \code{min_duration} removes very short episode of exuberance.
 #' Phillips et al. (2015) propose two simple rules of thumb to remove short
-#' periods of explosive dynamics, "log(T)" or "log(T)/T", where T is the number of observations.
+#' periods of explosive dynamics, "log(T)/T", where T is the number of observations.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
@@ -365,8 +365,9 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
       call. = FALSE)
   }
 
-  dummy <- matrix(0, nrow = length(index(x)), ncol = length(choice),
-                    dimnames = list(seq_along(index(x)), if (is_panel(y)) "Panel"
+  dummy <-
+    matrix(0, nrow = length(index(x)), ncol = length(choice),
+           dimnames = list(seq_along(index(x)), if (is_panel(y)) "Panel"
                                     else col_names(x)[reps]))
   for (z in seq_along(choice)) {
     dummy[ds[[z]], z] <- 1
@@ -374,6 +375,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   res[["bool"]] <- dummy
 
   structure(res,
+            index = index(x, trunc = TRUE),
             panel = is_panel(y),
             min_duration = min_duration,
             option = option,

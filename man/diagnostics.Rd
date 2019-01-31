@@ -20,7 +20,7 @@ Returns a list with the series that reject and the series that do not reject the
 Null Hypothesis
 }
 \description{
-Finds the series that reject the null for at the 5\%significance level.
+Finds the series that reject the null for at the 5\% significance level.
 }
 \details{
 Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
