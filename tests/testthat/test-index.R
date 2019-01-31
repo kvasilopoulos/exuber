@@ -6,7 +6,7 @@ dating_m <- seq(as.Date("1997/01/01"), by = "month", length.out = 100)
 dating_w <- seq(as.Date("1997/01/01"), by = "week", length.out = 100)
 dating_d <- seq(as.Date("1997/01/01"), by = "day", length.out = 100)
 
-test_that("data.frame",{
+test_that("data.frame", {
   # No date index
   expect_equal(index(dta), seq(1, NROW(dta)))
 
@@ -29,7 +29,7 @@ test_that("data.frame",{
 
 })
 
-test_that("ts",{
+test_that("ts", {
   # parse dates from ts objects
   ts_y <- ts(dta, frequency = 1, start = c(1997))
   expect_equal(index(radf(ts_y)), dating_y)
@@ -53,5 +53,9 @@ test_that("matrix", {
   expect_equal(index(radf(mat1)), seq(1, NROW(mat1)))
   expect_error(index(radf(mat1)) <- seq(1, NROW(mat1) - 1),
                "length of index vectors does not match")
+})
+
+test_that("datestamp", {
+  expect_equal(radf_dta %>% datestamp() %>% index(), index(radf_dta, trunc = T))
 })
 

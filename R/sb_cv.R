@@ -19,7 +19,7 @@
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 #' in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
 #'
-#'#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
+#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
 #' \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
 #' @examples
@@ -40,7 +40,6 @@
 #'   radf(lag = 1) %>%
 #'   autoplot(cv = sb)
 #' }
-
 sb_cv <- function(data, minw, lag = 0, nboot = 1000) {
 
   y <- data %>% rm_index() %>% as.matrix() # index-date check

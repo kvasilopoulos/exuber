@@ -1,7 +1,7 @@
 #' Plotting with ggplot2 and tidying with tibble radf objects
 #'
 #'
-#' \code{autoplot.radf} takes an \code{radf} object and returs a (list) of ggplot2 objects.
+#' \code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
 #' \code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
 #' \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
 #' used directly after autoplot to place grobs on a page.
@@ -64,7 +64,6 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
   for (i in seq_along(cname))
     local({
       i <- i
-      cn <- cname[i]
       suppressWarnings(
       dat <- fortify.radf(x, cv = y, include = include, option = option,
                           select = if (is_panel(y)) cname else cname[i]))
@@ -100,7 +99,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 
        h <- h + geom_rect(data = shade[, -3],
                           fill = "grey",
-                          alpha = 0.35, #0.25
+                          alpha = 0.55, #0.25
                   aes_string(xmin = "Start",
                              xmax = "End",
                              ymin = -Inf,
@@ -267,6 +266,10 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #'
 #' }
 autoplot.datestamp <- function(object, ...) {
+
+  dating <- index(object)
+  scale <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
+
   ggplot(object, aes_string(colour = "key")) +
     geom_segment(aes_string(x = "Start",
                             xend = "End",
@@ -274,10 +277,12 @@ autoplot.datestamp <- function(object, ...) {
                             yend = "key"),
                  size = 7) +
     theme_bw() + xlab("") + ylab("") + ggtitle("") +
+    scale(limits = c(dating[1L], dating[length(dating)])) +
     theme(panel.grid.major.y = element_blank(),
           legend.position = "none",
           plot.margin = margin(0.5, 1, 0, 0, "cm"),
           axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
+
 }
 
 #' @rdname autoplot.datestamp

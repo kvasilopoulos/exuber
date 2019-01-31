@@ -38,7 +38,7 @@ reported. Default is 0.}
 \code{\link[=fortify]{fortify()}} method).}
 }
 \description{
-\code{autoplot.radf} takes an \code{radf} object and returs a (list) of ggplot2 objects.
+\code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
 \code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
 \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
 used directly after autoplot to place grobs on a page.

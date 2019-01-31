@@ -23,14 +23,14 @@
 #'
 #' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 #' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
-#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'} \eqn{\tau}{t} is the last observation of the sample.
+#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}.
 #' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
 #' During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
 #' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
 #' \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
 #'
 #'
-#' For further details the user can refer to Phillips et al., (2015) p. 1054.
+#' For further details the user can refer to Phillips et al. (2015) p. 1054.
 #'
 #' @return A numeric vector of length n.
 #' @export
@@ -62,15 +62,15 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   delta <- 1 + c * n^(-alpha)
   y <- 100
 
-  for (i in 1:(n - 1)) {
+  for (i in 2:n) {
     if (i < te) {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
-    } else if (i >= te & i < tf) {
-      y[i + 1] <- delta * y[i] + rnorm(1, sd = sigma)
-    } else if (i == tf) {
-      y[i + 1] <- y[te]
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i >= te & i <= tf) {
+      y[i ] <- delta * y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i == tf + 1) {
+      y[i] <- y[te] + rnorm(1, sd = sigma)
     } else {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
     }
   }
   return(y)
@@ -152,21 +152,21 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   delta <- 1 + c * n^(-alpha)
   y <- 100
 
-  for (i in 1:(n - 1)) {
+  for (i in 2:n) {
     if (i < te1) {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
-    } else if (i >= te1 & i < tf1) {
-      y[i + 1] <- delta * y[i] + rnorm(1, sd = sigma)
-    } else if (i == tf1) {
-      y[i + 1] <- y[te1]
-    } else if (i > tf1 & i < te2) {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
-    } else if (i >= te2 & i < tf2) {
-      y[i + 1] <- delta * y[i] + rnorm(1, sd = sigma)
-    } else if (i == tf2) {
-      y[i + 1] <- y[te2]
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i >= te1 & i <= tf1) {
+      y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i == tf1 + 1) {
+      y[i] <- y[te1] + rnorm(1, sd = sigma)
+    } else if (i > tf1 + 1 & i < te2) {
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i >= te2 & i <= tf2) {
+      y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i == tf2 + 1) {
+      y[i] <- y[te2] + rnorm(1, sd = sigma)
     } else {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
     }
   }
 
@@ -276,7 +276,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
   assert_positive_int(n)
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
-    stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha", call. = FALSE)
+    stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha",
+         call. = FALSE)
   }
   assert_between(pi, 0, 1)
   stopifnot(r >= 0)
@@ -344,7 +345,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 #' pf <- sim_div(100, r = 0.05, output = "pf")
 #' pb <- sim_evans(100, r = 0.05)
 #' p <- pf + 20*pb
-sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d")) {
+sim_div <- function(n, mu, sigma, r = 0.05,
+                    log = FALSE, output = c("pf", "d")) {
   initval <- 1.3
   # Values obtained from West(1988, p53)
   if (missing(mu)) if (log) mu <- 0.013 else mu <- 0.0373
