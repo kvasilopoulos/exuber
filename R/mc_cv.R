@@ -3,10 +3,16 @@
 #' \code{mc_cv} computes Monte Carlo critical values for the recursive unit
 #' root tests.
 #'
+#' @inheritParams radf
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
-#' @inheritParams radf
-#' @param opt_badf the option for badf
+#' @param opt_bsadf Options for bsadf critical value calculation. "conventional"
+#' corresponds to the max of the quantile of the simulated distribution, while
+#' "conservative" corresponds to the quantile of the max which is more conservative
+#' in nature, thus the name.
+#' @param opt_badf Options for badf critical value calculation. "fixed" corresponds
+#' to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
+#' simulated to the monte carlo simulations.
 #'
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
@@ -32,10 +38,12 @@
 #' mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
 #' }
 mc_cv <- function(n, nrep = 2000, minw,
-                  opt_badf = c("fixed", "asymptotic", "simulated")) {
+                  opt_badf = c("fixed", "asymptotic", "simulated"),
+                  opt_bsadf = c("conventional", "conservative")) {
 
   if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(n)) * n)
   opt_badf <- match.arg(opt_badf)
+  opt_bsadf <- match.arg(opt_bsadf)
 
   # asserts
   if (is.data.frame(n) || is.matrix(n)) { # case of providiing data in 'n'
@@ -81,12 +89,21 @@ mc_cv <- function(n, nrep = 2000, minw,
     rls_gsadf(yxmat, min_win = minw)
   }
 
+
   adf_crit <- quantile(results[point + 1, ], probs = pr, drop = FALSE)
   sadf_crit <- quantile(results[point + 2, ], probs = pr, drop = FALSE)
   gsadf_crit <- quantile(results[point + 3, ], probs = pr, drop = FALSE)
-  bsadf_crit <- apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr) %>%
-    t() %>%
-    apply(2, cummax)
+
+  bsadf_crit <-
+    if (opt_bsadf == "conventional") {
+      apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr) %>%
+        t() %>%
+        apply(2, cummax)
+    }else if (opt_bsadf == "conservative") {
+      apply(results[1:point, ], 2, cummax) %>%
+        apply(1, quantile, probs = pr) %>%
+        t()
+    }
 
   if (opt_badf == "fixed") {
     temp <- log(log(n * seq(minw + 1, n))) / 100
@@ -106,7 +123,6 @@ mc_cv <- function(n, nrep = 2000, minw,
       apply(2, cummax)
   }
 
-
   output <- structure(list(
     adf_cv = adf_crit,
     sadf_cv = sadf_crit,
@@ -116,6 +132,7 @@ mc_cv <- function(n, nrep = 2000, minw,
   ),
   method = "Monte Carlo",
   opt_badf = opt_badf,
+  opt_bsadf = opt_bsadf,
   iter = nrep,
   minw = minw,
   class = "cv"

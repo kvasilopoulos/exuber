@@ -16,3 +16,12 @@
 
 # Set Global Variables to avoid NOTES in cmdchecks
 globalVariables("i")
+
+# citation ----------------------------------------------------------------
+
+# .onAttach <-
+#   function(libname, pkgname) {
+#     packageStartupMessage("\nPlease cite as:\n",
+#                           " Vasilopoulos, Pavlidis and Spavound (2018): exuber\n",
+#                           " R package version 0.1.0. https://CRAN.R-project.org/package=exuber \n")
+#   }

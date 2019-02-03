@@ -1,4 +1,12 @@
-
+#' Pipe operator
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+NULL
 
 # get crit data --------------------------------------------------------
 
@@ -7,7 +15,7 @@ get_crit <- function(x) {
     if (nr > 5 && nr <= 2000) {
       return(get("crit")[[nr]])
     } else {
-      stop("cannot provide MC critical values see ?crit", call. = FALSE)
+      stop("cannot provide MC critical values see help(crit)", call. = FALSE)
     }
 }
 

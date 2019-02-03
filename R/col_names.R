@@ -12,7 +12,7 @@
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #'
-#' rfd <- radf(x = dta)
+#' rfd <- radf(dta)
 #' col_names(rfd) <- c("OneBubble", "TwoBubbles")
 #' }
 col_names <- function(x, ...) {
@@ -54,4 +54,3 @@ col_names.radf <- function(x, ...) {
   attr(x, "col_names") <- value
   x
 }
-

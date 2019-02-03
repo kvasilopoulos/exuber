@@ -58,7 +58,7 @@ We use the notation
 \eqn{N_1 = (\tau_{1f}, \tau_{2e})}{N0 = (t1f, t2e)},
 \eqn{B_2 = [\tau_{2e}, \tau_{2f}]}{N0 = [t2e, t2f]},
 \eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]}, where \eqn{\tau}{t} is the last observation of the sample.
-After the collapse of the first bubble \eqn{X_t}{X[t]} resumes a martingale path until the time
+After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
 The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
 \eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the

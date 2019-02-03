@@ -1,18 +1,18 @@
-#' Plotting with ggplot2 and Tidying with tibble radf Object
+#' Plotting with ggplot2 and tidying with tibble radf objects
 #'
 #'
-#' \code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
-#' \code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
-#' \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, can be
-#' used directly after autoplot to  multiple place grobs on a page.
+#' \code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
+#' \code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
+#' \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
+#' used directly after autoplot to place grobs on a page.
 #'
 #' @name autoplot.radf
 #'
 #' @inheritParams datestamp
 #'
-#' @param include adfsasd
+#' @param include If not FALSE, plot all variables regardless of rejecting the NULL at the 5\% significance level.
 #' @param select If not NULL, only plot with names or column number matching this regular expression will be executed.
-#' @param ... further arguements passed to method, ignored.
+#' @param ... further arguments passed to method, ignored.
 #'
 #' @importFrom dplyr filter
 #' @importFrom purrr map pluck
@@ -20,7 +20,17 @@
 #' @export
 #' @examples
 #' \donttest{
+#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #'
+#' dta %>%
+#'   radf() %>%
+#'   autoplot() %>%
+#'   ggarrange(ncol = 2)
+#'
+#' # For custom plotting with ggplot2
+#' dta %>%
+#'   radf() %>%
+#'   fortify()
 #' }
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
@@ -57,26 +67,46 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
   for (i in seq_along(cname))
     local({
       i <- i
-      cn <- cname[i]
       suppressWarnings(
       dat <- fortify.radf(x, cv = y, include = include, option = option,
-                          select = if (is_panel(y)) NULL else cname[i]))
+                          select = if (is_panel(y)) cname else cname[i]))
 
       h <- ggplot(dat) +
-        geom_line(aes_string(x = "index", y = as.name(colnames(dat)[2])),
-                  size = 0.7, colour = "blue") +
-        geom_line(aes_string(x = "index", y = as.name(colnames(dat)[3])),
-                  colour = "red", size = 0.8, linetype = "dashed") +
-        ggtitle(cname[i]) + theme_bw() +  xlab("") + ylab("")
+        geom_line(aes_string(x = "index",
+                             y = as.name(colnames(dat)[2])),
+                  size = 0.7,
+                  colour = "blue") +
+        geom_line(aes_string(x = "index",
+                             y = as.name(colnames(dat)[3])),
+                  size = 0.8,
+                  colour = "red",
+                  linetype = "dashed") +
+        ggtitle(cname[i]) +
+        theme_bw() + xlab("") + ylab("")
 
-      shade <- datestamp(x, y, option = option, min_duration = min_duration) %>%
-        pluck(cname[i])
+      shade <-
+        if (include) {
+          tryCatch(
+            datestamp(x, y, option = option,
+                      min_duration = min_duration) %>%
+              pluck(cname[i]), error =  function(e){})
+        }else{
+          datestamp(x, y, option = option,
+                    min_duration = min_duration) %>%
+            pluck(cname[i])
+        }
+
+
 
       if (!is.null(shade)) {
 
-       h <- h + geom_rect(data = shade[, -3], fill = "grey", alpha = 0.35, #0.25
-                  aes_string(xmin = "Start", xmax = "End",
-                             ymin = -Inf, ymax = +Inf))
+       h <- h + geom_rect(data = shade[, -3],
+                          fill = "grey",
+                          alpha = 0.55, #0.25
+                  aes_string(xmin = "Start",
+                             xmax = "End",
+                             ymin = -Inf,
+                             ymax = +Inf))
       }
 
       g[[i]] <<- h
@@ -89,14 +119,14 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' @rdname autoplot.radf
 #' @inheritParams datestamp
 #' @param model An object of class \code{\link[=radf]{radf()}}.
-#' @param data original dataset, not used(required by generic
+#' @param data original dataset, not used (required by generic
 #' \code{\link[=fortify]{fortify()}} method).
 #'
 #' @importFrom purrr map pluck
 #' @importFrom tibble as.tibble
 #'
 #' @export
-fortify.radf <- function(model, data , cv, include = FALSE, select = NULL,
+fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
 
   cv <- if (missing(cv)) get_crit(model) else cv
@@ -109,10 +139,12 @@ fortify.radf <- function(model, data , cv, include = FALSE, select = NULL,
   dating <- index(x, trunc = TRUE)
 
   if (is_panel(y)) {
+    nm <- diagnostics(object = x, cv = y, option = option) %>%
+      pluck("accepted")
     cname <- "Panel"
     if (!missing(select))
       warning("argument 'select' is redundant", call. = FALSE)
-    if (!missing(include))
+    if (!missing(include) && !is.null(nm))
       warning("argument 'include' is redundant", call. = FALSE)
 
   }else{
@@ -209,31 +241,57 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
   grid::grid.draw(x)
 }
 
-#' Plotting datestamp objects with ggplot2
+#' Plotting with ggplot2 and tidying with tibble datestamp objects
 #'
-#' Plotting datestamp with \link[=ggplot2]{geom_segment}
+#' Plotting datestamp with \link[=ggplot2]{geom_segment()}
 #'
 #' @name autoplot.datestamp
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
 #' @import ggplot2
 #' @export
+#' @examples
+#' \donttest{
+#'
+#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+#'
+#' dta %>%
+#'   radf() %>%
+#'   datestamp() %>%
+#'   autoplot()
+#'
+#' # Change the colour manually
+#' dta %>%
+#'   radf() %>%
+#'   datestamp() %>%
+#'   autoplot() +
+#'   ggplot2::scale_colour_manual(values=rep("black", 4 ))
+#'
+#'
+#' }
 autoplot.datestamp <- function(object, ...) {
+
+  dating <- index(object)
+  scale <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
+
   ggplot(object, aes_string(colour = "key")) +
-    geom_segment(aes_string(x = "Start", xend = "End",
-                            y = "key", yend = "key"), size = 7) +
-    ylab("") + xlab("") + theme_bw() +
+    geom_segment(aes_string(x = "Start",
+                            xend = "End",
+                            y = "key",
+                            yend = "key"),
+                 size = 7) +
+    theme_bw() + xlab("") + ylab("") + ggtitle("") +
+    scale(limits = c(dating[1L], dating[length(dating)])) +
     theme(panel.grid.major.y = element_blank(),
           legend.position = "none",
-          plot.margin = margin(1, 1, 0, 0, "cm"),
+          plot.margin = margin(0.5, 1, 0, 0, "cm"),
           axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
+
 }
 
 #' @rdname autoplot.datestamp
 #' @param model datestamp object
-#' @param data data set, defaults to data used to estimated model
-#' @param ... not used by this method
+#' @inheritParams autoplot.radf
 #'
-#' @rdname autoplot.datestatemp
 #' @importFrom purrr map reduce
 #' @export
 fortify.datestamp <- function(model, data, ...) {
@@ -245,5 +303,3 @@ fortify.datestamp <- function(model, data, ...) {
   class(df) <- c("data.frame", "datestamp")
   df
 }
-
-
