@@ -3,17 +3,17 @@ Type: Package
 Title: Econometric Analysis of Explosive Time Series
 Version: 0.2.0
 Authors@R: c(
-            person("Kostas", "Vasilopoulos", , email = "k.vasilopoulo@gmail.com", c("cre", "aut")),
-            person("Eftymios", "Pavlidis", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
-            person("Simon", "Spavound", email = "simon.spavound@googlemail.com", role = "aut"),
-            person("Enrique", "Martinez-Garcia", email = "emg.economics@gmail.com", role = "aut")
-            )
+    person("Kostas", "Vasilopoulos", , email = "k.vasilopoulo@gmail.com", c("cre", "aut")),
+    person("Eftymios", "Pavlidis", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
+    person("Simon", "Spavound", email = "simon.spavound@googlemail.com", role = "aut"),
+    person("Enr\u00EDqeu", "Matr\u00EDnez-Garc\u00EDa", email = "emg.economics@gmail.com", role = "aut")
+    )
 Description: Testing for and dating periods of explosive dynamics 
-  (exuberance) in time series using recursive unit root tests as proposed 
-  by Phillips, P. C., Shi, S. and Yu, J. (2015a) <doi:10.1111/iere.12132>. 
-  Simulation of a variety of periodically-collapsing bubble processes. The 
-  estimation code utilizes the matrix inversion lemma of the recursive least 
-  squares algorithm which results in significant speed improvements.
+    (exuberance) in time series using recursive unit root tests as proposed 
+    by Phillips, P. C., Shi, S. and Yu, J. (2015a) <doi:10.1111/iere.12132>. 
+    Simulation of a variety of periodically-collapsing bubble processes. The 
+    estimation code utilizes the matrix inversion lemma of the recursive least 
+    squares algorithm which results in significant speed improvements.
 License: GPL-3
 URL: https://github.com/kvasilopoulos/exuber
 BugReports: https://github.com/kvasilopoulos/exuber/issues

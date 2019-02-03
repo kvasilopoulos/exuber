@@ -39,6 +39,7 @@ test_that("ggarrange",{
     pluck("layout") %>% NROW(), 4)
   expect_equal(radf_dta %>% autoplot(include = TRUE) %>% ggarrange() %>%
                  pluck("layout") %>% NROW(), 5)
+  expect_error(parr, regexp = NA)
 
 })
 

@@ -14,12 +14,16 @@
 #' t-statistics.
 #'
 #' @details This approach involves applying a wild bootstrap re-sampling scheme
-#' to construct the bootstrap analogue of the PWY test which is asymptotically
-#' robust to non-stationary volatility.
+#' to construct the bootstrap analogue of the Phillips et al. (2015) test which
+#' is asymptotically robust to non-stationary volatility.
 #'
 #' @references Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R.
 #' (2016). Tests for explosive financial bubbles in the presence of
 #' non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
+#'
+#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+#' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
+#' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
 #' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
 #' \code{\link{sb_cv}} for Sieve Bootstrapped critical values
@@ -42,8 +46,6 @@
 #' # Change the minimum window and the number of bootstraps
 #' wb <- wb_cv(dta, nboot = 1500,  minw = 20)
 #'
-#' # Use parallel computing (utilizing all available cores)
-#' wb <- wb_cv(dta, parallel = TRUE)
 #' }
 wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
@@ -120,7 +122,8 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
     if (show_pb) {
       cat("\n")
-      print(paste("Series", j, "out of", nc, "completed!", sep = " "), quote = F)
+      print(paste("Series", j, "out of", nc, "completed!", sep = " "),
+            quote = F)
     }
   }
 

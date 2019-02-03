@@ -13,14 +13,15 @@ bibentry(bibtype  = "Manual",
   author = personList(as.person("Kostas Vasilopoulos"),
                    as.person("Themis Pavlidis"),
                    as.person("Simon Spavound"),
-                   as.person("Enrique Martinez-Garcia")),
+                   as.person("Enr\u00EDqeu Matr\u00EDnez-Garc\u00EDa")),
+
   year  = year,
   note  = vers,
   url   = "https://CRAN.R-project.org/package=exuber",
 
   textVersion =
-         paste0("Vasilopoulos Kostas, Pavlidis Themis, Spavound Simon and Enriqeu Matrinez-Garcia (",
-                year,"). exuber: Econometric Analysis of Explosive Time Series. ",
+         paste0("Vasilopoulos Kostas, Pavlidis Themis, Spavound Simon and Matr\u00EDnez-Garc\u00EDa Enr\u00EDqeu(",
+                year,"). exuber: Testing and Simulating Explosive Periods. ",
                 vers, ".", " https://CRAN.R-project.org/package=exuber")
 
 )

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sb_cv.R
 \name{sb_cv}
 \alias{sb_cv}
-\title{Panel Sieve Bootstrap Critical values}
+\title{Panel Sieve Bootstrap Critical Values}
 \usage{
 sb_cv(data, minw, lag = 0, nboot = 1000)
 }
@@ -22,18 +22,29 @@ A list that contains the panel critical values for BSADF and GSADF
 t-statistics.
 }
 \description{
-\code{sb_cv} performs the Pavlidis et al. (2016)
+\code{sb_cv} computes p-values for the panel recursive unit root test using
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
 }
 \examples{
 \donttest{
-# Simulate bubble processes
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100), sim_dgp2(n = 100))
 
-rfd <- radf(dta, lag = 1)
+# Simulate bubble processes
+set.seed(124)
+pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(100))
 
 # Panel critical vales should have the same lag length with the estimation
-pcv <- sb_cv(dta, lag = 1)
+sb <- sb_cv(pdta, lag = 1)
 
+<<<<<<< HEAD
+=======
+pdta \%>\%
+  radf(lag = 1) \%>\%
+  summary(cv = sb)
+
+pdta \%>\%
+  radf(lag = 1) \%>\%
+  autoplot(cv = sb)
+>>>>>>> master
 }
 }
 \references{
@@ -42,5 +53,9 @@ E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
 
 #' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
+\code{\link{wb_cv}} for Wild Bootstrapped critical values
+}
+\seealso{
+\code{\link{mc_cv}} for Monte Carlo critical values and
 \code{\link{wb_cv}} for Wild Bootstrapped critical values
 }

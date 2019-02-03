@@ -3,7 +3,7 @@
 \name{autoplot.datestamp}
 \alias{autoplot.datestamp}
 \alias{fortify.datestamp}
-\title{Plotting datestamp objects with ggplot2}
+\title{Plotting with ggplot2 and tidying with tibble datestamp objects}
 \usage{
 \method{autoplot}{datestamp}(object, ...)
 
@@ -12,12 +12,33 @@
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
 
-\item{...}{not used by this method}
+\item{...}{further arguments passed to method, ignored.}
 
 \item{model}{datestamp object}
 
-\item{data}{data set, defaults to data used to estimated model}
+\item{data}{original dataset, not used (required by generic
+\code{\link[=fortify]{fortify()}} method).}
 }
 \description{
-Plotting datestamp with \link[=ggplot2]{geom_segment}
+Plotting datestamp with \link[=ggplot2]{geom_segment()}
+}
+\examples{
+\donttest{
+
+dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+
+dta \%>\%
+  radf() \%>\%
+  datestamp() \%>\%
+  autoplot()
+
+# Change the colour manually
+dta \%>\%
+  radf() \%>\%
+  datestamp() \%>\%
+  autoplot() +
+  ggplot2::scale_colour_manual(values=rep("black", 4 ))
+
+
+}
 }

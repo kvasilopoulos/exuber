@@ -1,24 +1,35 @@
 # exuber 0.2.0
 
+## Options
+
+Some of the arguments in the functions were included as options, you can
+set the package options with e.g. `options(exuber.show_progress = TRUE)`.
+
+* `parallel` option boolean, allows for parallel in critical values computation.
+* `ncores` option numeric, sets the number of cores, defaults to max - 1.
+* `show_progress` option boolean, allows you to disable the progress bar, defaults to TRUE.
+
 ## New features
 
-<<<<<<< HEAD
-* Added `panel_cv()`
-=======
-* Added `sb_cv()` function: Sieve Bootstrapped critical values
->>>>>>> pipe friendly version: confrom better with ggplot and S3 methods
 * Panel estimation in `radf()`
-
+* Added `sb_cv()` function: Panel Sieve Bootstrapped critical values
+* Default critical values are supplied directly into `summary()`, `diagnostics`,
+  `datestamp()` and `autoplot()`, without having to specify argument cv. The 
+  critical values have been simulated from `mc_cv()` function and stored as data.
+  Custom critical values should be provided by the user with the option `cv`.
+* Added `ggarrange()` function, that can arrange a list of ggplot objects into a single grob.
+* Added `fortify` to arrange a data.frame from `radf()` function.
 
 ## Improvements
 
-* `radf()` can parse date from `ts` objects
-* 
-*
+* Parallel and ncores arguments are now set as options.
+* Ability to remove progressbar from package options.
+* `radf()` can parse date from `ts` objects.
+* `report()` has been renamed into `summary()`.
+* `plot()` has been renamed into `autoplot()`.
+* `plot()` and `report()` are soft depracated.
 
 ## Bug Fixes
 
-* Progressbar appears not directly when using parallel
-* Plotiing date now works without having to to include any additonal plotting 
-option
-*
+* Progressbar appears in the beginning of the iteration
+* Plotiing date now works without having to to include any additonal plotting option
