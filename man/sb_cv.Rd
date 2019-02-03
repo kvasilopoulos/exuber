@@ -35,8 +35,6 @@ pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(
 # Panel critical vales should have the same lag length with the estimation
 sb <- sb_cv(pdta, lag = 1)
 
-<<<<<<< HEAD
-=======
 pdta \%>\%
   radf(lag = 1) \%>\%
   summary(cv = sb)
@@ -44,16 +42,12 @@ pdta \%>\%
 pdta \%>\%
   radf(lag = 1) \%>\%
   autoplot(cv = sb)
->>>>>>> master
 }
 }
 \references{
 Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
-
-#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
-\code{\link{wb_cv}} for Wild Bootstrapped critical values
 }
 \seealso{
 \code{\link{mc_cv}} for Monte Carlo critical values and

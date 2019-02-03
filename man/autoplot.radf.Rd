@@ -4,11 +4,7 @@
 \alias{autoplot.radf}
 \alias{fortify.radf}
 \alias{ggarrange}
-<<<<<<< HEAD
-\title{Plotting with ggplot2 and Tidying with tibble radf Object}
-=======
 \title{Plotting with ggplot2 and tidying with tibble radf objects}
->>>>>>> master
 \usage{
 \method{autoplot}{radf}(object, cv, include = FALSE, select = NULL,
   option = c("gsadf", "sadf"), min_duration = 0, ...)
@@ -42,17 +38,10 @@ reported. Default is 0.}
 \code{\link[=fortify]{fortify()}} method).}
 }
 \description{
-<<<<<<< HEAD
-\code{autoplot.radf} takes a \code{radf} object and returs a (list) of ggplot2 objects.
-\code{fortify.radf} takes a \code{radf} object and converts it into a data.frame.
-\code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, can be
-used directly after autoplot to  multiple place grobs on a page.
-=======
 \code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
 \code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
 \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
 used directly after autoplot to place grobs on a page.
->>>>>>> master
 }
 \examples{
 \donttest{
