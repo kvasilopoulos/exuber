@@ -2,7 +2,7 @@ context("fortify")
 
 test_that("basic", {
   fort <- radf_dta %>% fortify()
-  expect_equal(col_names(fort), c("index", diagnostics(radf_dta)$accepted,"cv"))
+  expect_equal(col_names(fort), c("index", diagnostics(radf_dta)$accepted, "cv"))
   expect_equal(index(radf_dta, trunc = TRUE), fort$index )
 })
 
@@ -27,15 +27,15 @@ test_that("panel", {
 
 test_that("include = TRUE & select = 'div'", {
   fort <- radf_dta %>% fortify(include = TRUE)
-  expect_equal(colnames(fort), c("index", colnames(dta),"cv"))
+  expect_equal(colnames(fort), c("index", colnames(dta), "cv"))
   fort_1 <- radf_dta %>% fortify(include = TRUE, select = 1)
-  expect_equal(col_names(fort_1), c("index", colnames(dta)[1],"cv"))
+  expect_equal(col_names(fort_1), c("index", colnames(dta)[1], "cv"))
 
   #div is there
   fort_4 <- radf_dta %>% fortify(include = TRUE, select = 4)
   fort_div <- radf_dta %>% fortify(include = TRUE, select = "div")
   expect_equal(fort_4, fort_div)
-  expect_equal(col_names(fort_4), c("index", colnames(dta)[4],"cv"))
+  expect_equal(col_names(fort_4), c("index", colnames(dta)[4], "cv"))
 })
 
 test_that("wb-names", {

@@ -22,7 +22,8 @@ A list that contains the panel critical values for BSADF and GSADF
 t-statistics.
 }
 \description{
-\code{sb_cv} performs the Pavlidis et al. (2016)
+\code{sb_cv} computes p-values for the panel recursive unit root test using
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
 }
 \examples{
 \donttest{
@@ -32,7 +33,7 @@ set.seed(124)
 pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(100))
 
 # Panel critical vales should have the same lag length with the estimation
-sb <- sb_cv(aa, lag = 1)
+sb <- sb_cv(pdta, lag = 1)
 
 pdta \%>\%
   radf(lag = 1) \%>\%

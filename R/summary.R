@@ -18,19 +18,27 @@
 #' set.seed(4441)
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #' rfd <- radf(dta)
-#' mc <- mc_cv(n = 100)
 #'
 #' # Summary, diagnostics and datestamp (default)
-#' summary(x = rfd, y = mc)
-#' diagnostics(x = rfd, y = mc)
-#' datestamp(x = rfd, y = mc)
+#' summary(rfd)
+#' diagnostics(rfd)
+#' datestamp(rfd)
 #'
-#' # Diagnostics for 'sadf'
-#' diagnostics(x = rfd, y = mc, option = "sadf")
+#' #' # Diagnostics for 'sadf'
+#' diagnostics(rfd, option = "sadf")
 #'
 #' # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
 #' rot = round(log(NROW(rfd))/NROW(rfd))
-#' datestamp(x = rfd, y = mc, min_duration = rot)
+#' datestamp(rfd, min_duration = rot)
+#'
+#'
+#' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
+#'
+#' wb <- wb_cv(dta)
+#'
+#' summary(rfd, cv = wb)
+#' diagnostics(rfd, cv = wb)
+#' datestamp(rfd, cv = wb)
 #' }
 #' @export
 summary.radf <- function(object, cv, ...) {
@@ -261,7 +269,7 @@ print.diagnostics <- function(x, ...) {
 #' @details
 #' Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
 #' respectively, for all series in the time period. This output can be used as
-#' a dummy that indicates the occurence of a bubble.
+#' a dummy that indicates the occurrence of a bubble.
 #'
 #' Setting \code{min_duration} removes very short episode of exuberance.
 #' Phillips et al. (2015) propose two simple rules of thumb to remove short
