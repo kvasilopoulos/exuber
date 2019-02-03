@@ -25,7 +25,7 @@ difference that \code{col_names} is for \code{\link[=radf]{radf()}} objects.
 # Simulate bubble processes
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 
-rfd <- radf(x = dta)
+rfd <- radf(dta)
 col_names(rfd) <- c("OneBubble", "TwoBubbles")
 }
 }

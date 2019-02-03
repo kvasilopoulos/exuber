@@ -79,7 +79,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' Simulation of a two-bubble process
 #'
 #' The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
-#' there are two episodes of midly explosive dynamics.
+#' there are two episodes of mildy explosive dynamics.
 #'
 #' @inheritParams sim_dgp1
 #' @param te1 A scalar in (0, n) specifying the observation in which the first bubble originates.
@@ -237,7 +237,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' @param delta A positive scalar, with restrictions (see details).
 #' @param tau The standard deviation of the innovations.
 #' @param alpha A positive scalar, with restrictions (see details).
-#' @param b1 A positive scalar, the inital value of the series. Defaults to \code{delta}.
+#' @param b1 A positive scalar, the initial value of the series. Defaults to \code{delta}.
 #'
 #' @return A numeric vector of length \code{n}.
 #'
