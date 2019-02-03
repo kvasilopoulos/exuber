@@ -29,7 +29,7 @@ episodes during which the time series display explosive dynamics.
 \details{
 Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
 respectively, for all series in the time period. This output can be used as
-a dummy that indicates the occurence of a bubble.
+a dummy that indicates the occurrence of a bubble.
 
 Setting \code{min_duration} removes very short episode of exuberance.
 Phillips et al. (2015) propose two simple rules of thumb to remove short
