@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Simulation of a Blanchard (1979) bubble process — sim_blan • exuber</title>
+<title>Diagnostics — diagnostics • exuber</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Simulation of a Blanchard (1979) bubble process — sim_blan" />
+<meta property="og:title" content="Diagnostics — diagnostics" />
 
-<meta property="og:description" content="Simulation of a Blanchard (1979) rational bubble process." />
+<meta property="og:description" content="Finds the series that reject the null for at the 5% significance level." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,86 +102,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Simulation of a Blanchard (1979) bubble process</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/simul.R'><code>R/simul.R</code></a></small>
-    <div class="hidden name"><code>sim_blan.Rd</code></div>
+    <h1>Diagnostics</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/summary.R'><code>R/summary.R</code></a></small>
+    <div class="hidden name"><code>diagnostics.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Simulation of a Blanchard (1979) rational bubble process.</p>
+    <p>Finds the series that reject the null for at the 5% significance level.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>sim_blan</span>(<span class='no'>n</span>, <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>0.03</span>, <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</pre>
+    <pre class="usage"><span class='fu'>diagnostics</span>(<span class='no'>object</span>, <span class='no'>cv</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>A strictly positive integer specifying the length of the simulated output series.</p></td>
+      <th>object</th>
+      <td><p>An object of class <code><a href='radf.html'>radf()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>pi</th>
-      <td><p>A positive value in (0, 1) which governs the probability of the bubble continuing to grow.</p></td>
+      <th>cv</th>
+      <td><p>An object of class "cv". The output of <code><a href='mc_cv.html'>mc_cv()</a></code>,
+<code><a href='wb_cv.html'>wb_cv()</a></code> or <code><a href='sb_cv.html'>sb_cv()</a></code></p></td>
     </tr>
     <tr>
-      <th>sigma</th>
-      <td><p>A positive scalar indicating the standard deviation of the innovations.</p></td>
-    </tr>
-    <tr>
-      <th>r</th>
-      <td><p>A positive scalar that determines the growth rate of the bubble process.</p></td>
+      <th>option</th>
+      <td><p>Whether to apply the "gsadf" or "sadf" methodology. Default is
+"gsadf".</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector of length <code>n</code>.</p>
+    <p>Returns a list with the series that reject and the series that do not reject the
+Null Hypothesis</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Blanchard's bubble process has two regimes, which occur with probability \(\pi\) and \(1-\pi\).
-In the first regime, the bubble grows exponentially, whereas in the second regime, the bubble
-collapses to a white noise.</p>
-<p>With probability \(\pi\):
-$$B_{t+1} = \frac{1+r}{\pi}B_t+\epsilon_{t+1}$$
-With probability \(1 - \pi\):
-$$B_{t+1} = \epsilon_{t+1}$$</p>
-<p>where <code>r</code> is a positive constant and \(\epsilon \sim iid(0, \sigma^2)\).</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
-Economics letters, 3(4), 387-389.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='sim_dgp1.html'>sim_dgp1</a></code>, <code><a href='sim_dgp2.html'>sim_dgp2</a></code>, <code><a href='sim_evans.html'>sim_evans</a></code></p></div>
+    <p>Diagnostics also stores a vector in 0,1 that corresponds to reject, accept respectively.</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>sim_blan</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='output co'>#&gt;   [1] 1.0000000000 1.5044349516 0.0136663035 0.0082074077 0.0036984319
-#&gt;   [6] 0.0110823758 0.0218268655 0.0480192436 0.0653238090 0.1131860684
-#&gt;  [11] 0.1477189418 0.2040898572 0.3064469662 0.4707605891 0.7014608552
-#&gt;  [16] 0.0270895801 0.0300487280 0.0132735518 0.0167726606 0.0082474756
-#&gt;  [21] 0.0588150939 0.1275694272 0.0400255584 0.0802283141 0.0318977523
-#&gt;  [26] 0.0820676344 0.1275763916 0.1946864926 0.0004148071 0.0254236110
-#&gt;  [31] 0.0268990174 0.0732599701 0.0210401738 0.0243010776 0.0513516938
-#&gt;  [36] 0.0501854370 0.0847297349 0.0964721421 0.1280507084 0.2104421279
-#&gt;  [41] 0.3498599931 0.5819014097 0.8078654069 1.2212987568 1.8550141930
-#&gt;  [46] 0.0148626029 0.0058326533 0.0584005421 0.0841480113 0.1476947604
-#&gt;  [51] 0.0300152341 0.0106278439 0.0199550637 0.0595145022 0.0850109958
-#&gt;  [56] 0.1074097492 0.0220793617 0.0732551373 0.0844697141 0.0376664479
-#&gt;  [61] 0.0113018393 0.0693245281 0.1214876608 0.0070681462 0.0102631637
-#&gt;  [66] 0.0166109192 0.0780888811 0.0297210124 0.0879137260 0.1474779727
-#&gt;  [71] 0.1958249800 0.2524940764 0.0165279649 0.0166633939 0.0309742357
-#&gt;  [76] 0.0621325786 0.0269080946 0.0119138702 0.0377455736 0.0008485778
-#&gt;  [81] 0.0144447105 0.0033418798 0.0130216780 0.0295093272 0.0032873342
-#&gt;  [86] 0.0396630448 0.0791859826 0.0656195357 0.0003563488 0.0372713180
-#&gt;  [91] 0.0181835739 0.0175634855 0.0673842989 0.1079299381 0.1818182860
-#&gt;  [96] 0.3138950638 0.4815260474 0.0119868896 0.0537220519 0.0112337962</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -191,13 +153,7 @@ Economics letters, 3(4), 387-389.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

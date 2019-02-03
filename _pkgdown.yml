@@ -1,3 +1,42 @@
+url: https://kvasilopoulos.github.io/exuber/
+
+home:
+  strip_header: true
+
 authors:
   Kostas Vasilopoulos:
-    href: https://kvasilopoulos.github.io/
+    href: https://kvasilopoulos.netlify.io/
+
+reference:
+- title: Estimation
+  contents:
+  - radf
+- title: Critical Values
+  contents:
+  - crit
+  - mc_cv
+  - wb_cv
+  - sb_cv
+
+
+
+navbar:
+  type: default
+  structure:
+    left:
+    - home
+    right: github
+  components:
+    home:
+      icon: fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Changelog
+      href: news/index.html
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/kvasilopoulos/exuber
+
