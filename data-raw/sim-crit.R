@@ -1,6 +1,6 @@
 
-options("exuber.parallel" = TRUE)
-options("exuber.show_progress" = FALSE)
+# options("exuber.parallel" = TRUE)
+# options("exuber.show_progress" = FALSE)
 
 # Simulation -------------------------------------------------------------
 
@@ -27,4 +27,4 @@ for (n in 6:nn) { #length(crit)
 
 # ... ---------------------------------------------------------------------
 
-usethis::use_data(crit, overwrite = TRUE)
+# usethis::use_data(crit, overwrite = TRUE)

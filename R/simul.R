@@ -23,14 +23,14 @@
 #'
 #' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 #' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
-#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'} \eqn{\tau}{t} is the last observation of the sample.
+#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}.
 #' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
 #' During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
-#' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path of the subsequent period
+#' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
 #' \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
 #'
 #'
-#' For further details the user can refer to Phillips et al., (2015) p. 1054.
+#' For further details the user can refer to Phillips et al. (2015) p. 1054.
 #'
 #' @return A numeric vector of length n.
 #' @export
@@ -62,15 +62,15 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   delta <- 1 + c * n^(-alpha)
   y <- 100
 
-  for (i in 1:(n - 1)) {
+  for (i in 2:n) {
     if (i < te) {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
-    } else if (i >= te & i < tf) {
-      y[i + 1] <- delta * y[i] + rnorm(1, sd = sigma)
-    } else if (i == tf) {
-      y[i + 1] <- y[te]
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i >= te & i <= tf) {
+      y[i ] <- delta * y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i == tf + 1) {
+      y[i] <- y[te] + rnorm(1, sd = sigma)
     } else {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
     }
   }
   return(y)
@@ -79,7 +79,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' Simulation of a two-bubble process
 #'
 #' The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
-#' there are two episodes of midly explosive dynamics.
+#' there are two episodes of mildy explosive dynamics.
 #'
 #' @inheritParams sim_dgp1
 #' @param te1 A scalar in (0, n) specifying the observation in which the first bubble originates.
@@ -114,7 +114,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' \eqn{N_1 = (\tau_{1f}, \tau_{2e})}{N0 = (t1f, t2e)},
 #' \eqn{B_2 = [\tau_{2e}, \tau_{2f}]}{N0 = [t2e, t2f]},
 #' \eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]}, where \eqn{\tau}{t} is the last observation of the sample.
-#' After the collapse of the first bubble \eqn{X_t}{X[t]} resumes a martingale path until the time
+#' After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 #' \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
 #' The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
 #' \eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the
@@ -152,21 +152,21 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   delta <- 1 + c * n^(-alpha)
   y <- 100
 
-  for (i in 1:(n - 1)) {
+  for (i in 2:n) {
     if (i < te1) {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
-    } else if (i >= te1 & i < tf1) {
-      y[i + 1] <- delta * y[i] + rnorm(1, sd = sigma)
-    } else if (i == tf1) {
-      y[i + 1] <- y[te1]
-    } else if (i > tf1 & i < te2) {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
-    } else if (i >= te2 & i < tf2) {
-      y[i + 1] <- delta * y[i] + rnorm(1, sd = sigma)
-    } else if (i == tf2) {
-      y[i + 1] <- y[te2]
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i >= te1 & i <= tf1) {
+      y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i == tf1 + 1) {
+      y[i] <- y[te1] + rnorm(1, sd = sigma)
+    } else if (i > tf1 + 1 & i < te2) {
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i >= te2 & i <= tf2) {
+      y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
+    } else if (i == tf2 + 1) {
+      y[i] <- y[te2] + rnorm(1, sd = sigma)
     } else {
-      y[i + 1] <- y[i] + rnorm(1, sd = sigma)
+      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
     }
   }
 
@@ -229,15 +229,15 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
   return(b)
 }
 
-#' Simulation of a Evans (1991) bubble process
+#' Simulation of an Evans (1991) bubble process
 #'
-#' Simulation of a Evans (1991) rational periodically collapsing bubble process.
+#' Simulation of an Evans (1991) rational periodically collapsing bubble process.
 #'
 #' @inheritParams sim_blan
 #' @param delta A positive scalar, with restrictions (see details).
 #' @param tau The standard deviation of the innovations.
 #' @param alpha A positive scalar, with restrictions (see details).
-#' @param b1 A positive scalar, the inital value of the series. Defaults to \code{delta}.
+#' @param b1 A positive scalar, the initial value of the series. Defaults to \code{delta}.
 #'
 #' @return A numeric vector of length \code{n}.
 #'
@@ -246,7 +246,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' @details
 #'
 #' \code{delta} and \code{alpha} are positive parameters which satisfy \eqn{0 < \delta < (1+r)\alpha}.
-#' \code{delta} represents the size the bubble will return to after collapse.
+#' \code{delta} represents the size of the bubble after collapse.
 #' The default value of \code{r} is 0.05.
 #' The function checks whether \code{alpha} and \code{delta} satisfy this condition and will return an error if not.
 #'
@@ -260,7 +260,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' where \eqn{\theta} is an indicator function taking a value of 0 with probability \eqn{1-\pi} and 1 with probability \eqn{\pi}.
 #' In this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
-#' By modification of the values of \code{delta}, \code{alpha} and \code{pi} the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble can all be modified.
+#' By modifying the values of \code{delta}, \code{alpha} and \code{pi} the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.
 #'
 #' @export
 #'
@@ -276,7 +276,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
   assert_positive_int(n)
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
-    stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha", call. = FALSE)
+    stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha",
+         call. = FALSE)
   }
   assert_between(pi, 0, 1)
   stopifnot(r >= 0)
@@ -344,7 +345,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 #' pf <- sim_div(100, r = 0.05, output = "pf")
 #' pb <- sim_evans(100, r = 0.05)
 #' p <- pf + 20*pb
-sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d")) {
+sim_div <- function(n, mu, sigma, r = 0.05,
+                    log = FALSE, output = c("pf", "d")) {
   initval <- 1.3
   # Values obtained from West(1988, p53)
   if (missing(mu)) if (log) mu <- 0.013 else mu <- 0.0373

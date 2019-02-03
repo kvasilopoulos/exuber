@@ -55,7 +55,7 @@ arma::vec rls_gsadf(const arma::mat & yxmat, int min_win, int lag = 0) {
     //removing minus one here ~ the dependent variable
     int nc = yxmat.n_cols - 1;
 
-    arma::mat x = yxmat.cols(1, nc - 1);
+    arma::mat x = yxmat.cols(1, nc);
     arma::mat y = yxmat.col(0);
 
     arma::mat sx, sy, tsx, g, b, syn, res, sqres, vares, sb;

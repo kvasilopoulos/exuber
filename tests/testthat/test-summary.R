@@ -4,6 +4,7 @@ test_that("printing coverage", {
   expect_error(capture.output(summary(radf_dta, mc)), regexp = NA)
   expect_error(capture.output(diagnostics(radf_dta, mc)), regexp = NA)
   expect_error(capture.output(summary(radf_dta, sb)), NA) # Panel
+  expect_error(capture.output(diagnostics(radf_dta, sb)), regexp = NA)
 })
 
 test_that("class checks", {
@@ -39,7 +40,7 @@ test_that("Correct output in summary/datestamp", {
   expect_output(str(summary(radf_dta, mc)), "List of 5")
   expect_output(str(datestamp(radf_dta, mc)), "List of 5") # 4 plus bool
   expect_output(str(summary(radf_dta, wb)), "List of 5")
-  expect_output(str(datestamp(radf_dta, wb)), "List of 5")
+  expect_output(str(datestamp(radf_dta, wb)), "List of 2")
 })
 
 withr::with_options(

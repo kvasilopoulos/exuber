@@ -40,14 +40,14 @@ where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by:
 
 with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
-\eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'} \eqn{\tau}{t} is the last observation of the sample.
+\eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}.
 During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
 During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
-coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path of the subsequent period
+coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
 \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
 
 
-For further details the user can refer to Phillips et al., (2015) p. 1054.
+For further details the user can refer to Phillips et al. (2015) p. 1054.
 }
 \examples{
 # 100 periods with bubble origination date 40 and termination date 55

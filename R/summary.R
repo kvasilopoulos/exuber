@@ -1,9 +1,11 @@
-#' Summary statistics
+#' Summarizing radf Models
+#'
+#' \code{summary} method for class "radf"
 #'
 #' @param object An object of class \code{\link[=radf]{radf()}}.
 #' @param cv An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 #' \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}
-#' @param ... further arguements passed to methods, not used.
+#' @param ... further arguments passed to methods, not used.
 #'
 #' @return Returns a list of summary statistics,
 #' the t-statistic and the critical values of the ADF, SADF and GSADF.
@@ -16,19 +18,27 @@
 #' set.seed(4441)
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #' rfd <- radf(dta)
-#' mc <- mc_cv(n = 100)
 #'
 #' # Summary, diagnostics and datestamp (default)
-#' summary(x = rfd, y = mc)
-#' diagnostics(x = rfd, y = mc)
-#' datestamp(x = rfd, y = mc)
+#' summary(rfd)
+#' diagnostics(rfd)
+#' datestamp(rfd)
 #'
-#' # Diagnostics for 'sadf'
-#' diagnostics(x = rfd, y = mc, option = "sadf")
+#' #' # Diagnostics for 'sadf'
+#' diagnostics(rfd, option = "sadf")
 #'
-#' # Use rule of thumb to omit periods of explosiveness which are short-lived
-#' rot = round(log(NROW(rfd)))
-#' datestamp(x = rfd, y = mc, min_duration = rot)
+#' # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
+#' rot = round(log(NROW(rfd))/NROW(rfd))
+#' datestamp(rfd, min_duration = rot)
+#'
+#'
+#' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
+#'
+#' wb <- wb_cv(dta)
+#'
+#' summary(rfd, cv = wb)
+#' diagnostics(rfd, cv = wb)
+#' datestamp(rfd, cv = wb)
 #' }
 #' @export
 summary.radf <- function(object, cv, ...) {
@@ -108,18 +118,20 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 }
 
 
+#' Diagnostics
+#'
+#' Finds the series that reject the null for at the 5\% significance level.
+#'
 #' @inheritParams summary
+#'
 #' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is
 #' "gsadf".
-#' @describeIn datestamp Finds the series that reject the null for 95\%
-#' significance level.
 #'
-#' @return \code{\link[=diagnostics]{diagnostics()}}: Returns a list with the
-#' series that reject and the series that do not reject the Null Hypothesis
+#' @return Returns a list with the series that reject and the series that do not reject the
+#' Null Hypothesis
 #'
-#' @details In \code{\link[=diagnostics]{diagnostics()}} and
-#' \code{\link[=datestamp]{datestamp()}} have also stored a vector in {0,1}
-#' that corresponds to {reject, accept} respectively.
+#' @details
+#' Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
 #'
 #' @importFrom dplyr case_when
 #' @export
@@ -242,24 +254,26 @@ print.diagnostics <- function(x, ...) {
 }
 
 
-#' Diagnostics and date stamping periods of mildly explosive behaviour
+#' Date stamping periods of mildly explosive behaviour
 #'
-#' Computes the origination, termination and duration of episodes during which
-#' the time series display explosive dynamics.
+#' Computes the origination, termination and duration of
+#' episodes during which the time series display explosive dynamics.
 #'
 #' @inheritParams diagnostics
 #' @param min_duration The minimum duration of an explosive period for it to be
 #' reported. Default is 0.
 #'
-#' @return \code{\link[=datestamp]{datestamp()}}: Returns a list of values for
-#' each explosive sub-period, giving the origin and termination dates as well
-#' as the number of periods explosive behavior lasts.
+#' @return Returns a list of values for each explosive sub-period, giving the origin
+#' and termination dates as well as the number of periods explosive behavior lasts.
 #'
 #' @details
-#' Setting \code{min_duration} allows temporary spikes above the critical value
-#' sequence to be removed. Phillips et al. (2015) propose a simple way to remove
-#' small periods of explosiveness by a rule of thumb such as "log(T)" or
-#' "log(T)/T", where T is the number of observations.
+#' Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
+#' respectively, for all series in the time period. This output can be used as
+#' a dummy that indicates the occurrence of a bubble.
+#'
+#' Setting \code{min_duration} removes very short episode of exuberance.
+#' Phillips et al. (2015) propose two simple rules of thumb to remove short
+#' periods of explosive dynamics, "log(T)/T", where T is the number of observations.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
@@ -294,7 +308,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
     }else{
       tstat <- x$bsadf_panel
     }
-    ds <- list(which(tstat > y$bsadf_panel_cv[, 2])+ minw(x) + lagr(x))
+    ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + minw(x) + lagr(x))
   }
 
   for (i in seq_along(choice)) {
@@ -359,8 +373,9 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
       call. = FALSE)
   }
 
-  dummy <- matrix(0, nrow = length(index(x)), ncol = length(choice),
-                    dimnames = list(seq_along(index(x)), if (is_panel(y)) "Panel"
+  dummy <-
+    matrix(0, nrow = length(index(x)), ncol = length(choice),
+           dimnames = list(seq_along(index(x)), if (is_panel(y)) "Panel"
                                     else col_names(x)[reps]))
   for (z in seq_along(choice)) {
     dummy[ds[[z]], z] <- 1
@@ -368,6 +383,7 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   res[["bool"]] <- dummy
 
   structure(res,
+            index = index(x, trunc = TRUE),
             panel = is_panel(y),
             min_duration = min_duration,
             option = option,

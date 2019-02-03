@@ -3,6 +3,7 @@
 \name{index.radf}
 \alias{index.radf}
 \alias{index.data.frame}
+\alias{index.datestamp}
 \alias{index<-.radf}
 \title{Retrieve/Replace the Index}
 \usage{
@@ -10,12 +11,14 @@
 
 \method{index}{data.frame}(x, ...)
 
+\method{index}{datestamp}(x, ...)
+
 \method{index}{radf}(x) <- value
 }
 \arguments{
 \item{x}{An object of class \code{\link[=radf]{radf()}}}
 
-\item{trunc}{default FALSE. If TRUE the index formed by truncateing the value
+\item{trunc}{default FALSE. If TRUE the index formed by truncating the value
 in the minimum window.}
 
 \item{...}{Further arguments passed to methods.}
@@ -23,10 +26,10 @@ in the minimum window.}
 \item{value}{An ordered vector of the same length as the `index' attribute of x.}
 }
 \description{
-Retrieve or replace the index of a \code{radf} object.
+Retrieve or replace the index of an \code{radf} object.
 }
 \details{
-If the user does not specify an index during the estimation a
+If the user does not specify an index for the estimation a
 pseudo-index is generated which is a sequential numeric series. After the estimation,
 the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
 The index can be either numeric or Date.

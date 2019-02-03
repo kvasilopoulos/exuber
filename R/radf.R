@@ -1,4 +1,4 @@
-#' Recursive Augmented Dickey-Fuller test
+#' Recursive Augmented Dickey-Fuller Test
 #'
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
 #' test.
@@ -14,7 +14,7 @@
 #'   \item{badf}{Backward Augmented Dickey-Fuller}
 #'   \item{sadf}{Supremum Augmented Dickey-Fuller}
 #'   \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
-#'   \item{gsadf}{Generalized Supremum Augmented Dickey Fuller}
+#'   \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
 #' in The 1990s Nasdaq: When Did Exuberance Escalate Asset Values? International
@@ -34,10 +34,10 @@
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #'
-#' rfd <- radf(x = dta)
+#' rfd <- radf(dta)
 #'
 #' # For lag = 1 and minimum window = 20
-#' rfd <- radf(x = dta, minw = 20, lag = 1)
+#' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
 radf <- function(data, minw, lag = 0) {
 
@@ -81,7 +81,7 @@ radf <- function(data, minw, lag = 0) {
   nr <- NROW(data)
   # args
   if (is.null(colnames(x))) colnames(x) <- paste("Series", seq(1, nc, 1))
-  if (missing(minw)) minw <-  floor((r0 <- 0.01 + 1.8 / sqrt(nr)) * nr)
+  if (missing(minw)) minw <-  floor((0.01 + 1.8 / sqrt(nr)) * nr)
   # checks
   assert_na(data)
   assert_positive_int(minw, greater_than = 2)

@@ -1,6 +1,7 @@
-#' Panel Sieve Bootstrap Critical values
+#' Panel Sieve Bootstrap Critical Values
 #'
-#' \code{sb_cv} performs the Pavlidis et al. (2016)
+#' \code{sb_cv} computes p-values for the panel recursive unit root test using
+#' the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
 #'
 #' @inheritParams radf
 #' @inheritParams wb_cv
@@ -19,21 +20,27 @@
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 #' in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
 #'
-#'#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
+#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
 #' \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
 #' @examples
 #' \donttest{
-#' # Simulate bubble processes
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100), sim_dgp2(n = 100))
 #'
-#' rfd <- radf(dta, lag = 1)
+#' # Simulate bubble processes
+#' set.seed(124)
+#' pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(100))
 #'
 #' # Panel critical vales should have the same lag length with the estimation
-#' pcv <- sb_cv(dta, lag = 1)
+#' sb <- sb_cv(pdta, lag = 1)
 #'
+#' pdta %>%
+#'   radf(lag = 1) %>%
+#'   summary(cv = sb)
+#'
+#' pdta %>%
+#'   radf(lag = 1) %>%
+#'   autoplot(cv = sb)
 #' }
-
 sb_cv <- function(data, minw, lag = 0, nboot = 1000) {
 
   y <- data %>% rm_index() %>% as.matrix() # index-date check

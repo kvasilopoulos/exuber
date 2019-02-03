@@ -1,12 +1,23 @@
 context("cv")
 
+test_that("crit as data",{
+  expect_error(crit, NA)
+  expect_error(crit[[100]], NA)
+  expect_error(radf_dta %>% get_crit(), NA)
+  expect_error(crit[[2001]],  "subscript out of bounds")
+  msg_crit <- "cannot provide MC critical values see help(crit)"
+  expect_error(sim_blan(4) %>% get_crit(), msg_crit, fixed = TRUE)
+  expect_error(sim_blan(2001) %>% get_crit(), msg_crit, fixed = TRUE)
+  expect_error(sim_blan(2001) %>% radf(minw = 2000) %>% get_crit(),
+               msg_crit, fixed = TRUE)
+})
+
 test_that("n positive integer", {
   msg <- "Argument 'n' should be a positive integer"
   expect_error(mc_cv(dta, minw =  0), msg)
   expect_error(mc_cv(0, minw =  0), msg)
   expect_error(mc_cv(-1, minw =  0), msg)
 })
-
 
 test_that("nboot positive integer",{
   msg <-  "Argument 'nboot' should be a positive integer"
@@ -62,7 +73,20 @@ test_that("distribution_rad works", {
     wb_cv(dta, nboot = 10, dist_rad = TRUE))), regexp = NA)
 })
 
-# test_that("parallel-ncores arguements",{
+test_that("opt_badf",{
+  expect_error(mc_cv(100, nrep = 10, opt_badf = "asymptotic"), NA)
+  expect_error(mc_cv(100, nrep = 10, opt_badf = "simulated"), NA)
+})
+
+test_that("show_progress",{
+  options(exuber.show_progress = TRUE)
+  expect_error(capture.output(mc_cv(100, nrep = 10)), NA)
+  expect_error(capture.output(wb_cv(dta, nboot = 10)), NA)
+  expect_error(capture.output(sb_cv(dta, nboot = 10)), NA)
+  options(exuber.show_progress = FALSE)
+})
+
+# test_that("parallel-ncores arguments",{
 #   msg <- "Argument 'ncores' is redundant"
 #   expect_warning(
 #     invisible(capture.output(
