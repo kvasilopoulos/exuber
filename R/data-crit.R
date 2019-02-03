@@ -24,4 +24,3 @@ print.crit <- function(x, ...) {
   # we dont want to overwhelm the console
   print(tibble::enframe(x))
 }
-

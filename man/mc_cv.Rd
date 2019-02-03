@@ -17,7 +17,7 @@ mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
 
 \item{opt_badf}{Options for badf critical value calculation. "fixed" corresponds
 to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
-simulated to the output of the monte carlo simulation.}
+simulated to the monte carlo simulations.}
 
 \item{opt_bsadf}{Options for bsadf critical value calculation. "conventional"
 corresponds to the max of the quantile of the simulated distribution, while

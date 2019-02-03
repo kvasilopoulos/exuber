@@ -28,18 +28,26 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.
 set.seed(4441)
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 rfd <- radf(dta)
-mc <- mc_cv(n = 100)
 
 # Summary, diagnostics and datestamp (default)
-summary(x = rfd, y = mc)
-diagnostics(x = rfd, y = mc)
-datestamp(x = rfd, y = mc)
+summary(rfd)
+diagnostics(rfd)
+datestamp(rfd)
 
-# Diagnostics for 'sadf'
-diagnostics(x = rfd, y = mc, option = "sadf")
+#' # Diagnostics for 'sadf'
+diagnostics(rfd, option = "sadf")
 
 # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
 rot = round(log(NROW(rfd))/NROW(rfd))
-datestamp(x = rfd, y = mc, min_duration = rot)
+datestamp(rfd, min_duration = rot)
+
+
+# Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
+
+wb <- wb_cv(dta)
+
+summary(rfd, cv = wb)
+diagnostics(rfd, cv = wb)
+datestamp(rfd, cv = wb)
 }
 }

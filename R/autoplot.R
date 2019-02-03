@@ -20,7 +20,6 @@
 #' @export
 #' @examples
 #' \donttest{
-#'
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
 #'
 #' dta %>%
@@ -28,6 +27,10 @@
 #'   autoplot() %>%
 #'   ggarrange(ncol = 2)
 #'
+#' # For custom plotting with ggplot2
+#' dta %>%
+#'   radf() %>%
+#'   fortify()
 #' }
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
@@ -123,7 +126,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' @importFrom tibble as.tibble
 #'
 #' @export
-fortify.radf <- function(model, data , cv, include = FALSE, select = NULL,
+fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
 
   cv <- if (missing(cv)) get_crit(model) else cv
@@ -261,7 +264,7 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #'   radf() %>%
 #'   datestamp() %>%
 #'   autoplot() +
-#'   scale_colour_manual(values=rep("black", 4 ))
+#'   ggplot2::scale_colour_manual(values=rep("black", 4 ))
 #'
 #'
 #' }
@@ -300,5 +303,3 @@ fortify.datestamp <- function(model, data, ...) {
   class(df) <- c("data.frame", "datestamp")
   df
 }
-
-

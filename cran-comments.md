@@ -2,10 +2,11 @@
 
 * local OS MS install, R 3.4.5
 * Continuous Integration
-  * ubuntu 14.04 on travis-ci (R-oldrel and R-devel)
-  * macOS 12.06 on travis-ci (devel and release)
+  * Ubuntu Trusty 14.04 on travis-ci (devel and release)
+  * macOS on travis-ci (devel and release)
   * Windows Server 2012 on appveyor (devel and release)
 * Rhub
+  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
   * Debian Linux, R-devel, GCC ASAN/UBSAN
   * Fedora Linux, R-devel, clang, gfortran
   * Ubuntu Linux 16.04 LTS, R-release, GCC
@@ -25,7 +26,9 @@ There were no ERRORs and WARNINGs, with local checks or on remote checks.
       data  15.6Mb
       libs   1.6Mb
       
-### rhub::check_cran()
+  *(Store critical values as data, saves a lot of computation for the user)*
+      
+### rhub::check_for_cran() & devtools::check_win_*()
 
 * checking CRAN incoming feasibility (26.4s) ... NOTE
 Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
@@ -40,8 +43,7 @@ Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
       Shi (10:159)
       Yu (10:171)
   
-  *(The names of the authors in the doi included in the DESCRIPTION)*    
-  
+  *(The names of the authors in the doi included in the DESCRIPTION)* 
 
 ## Reverse dependencies
 
