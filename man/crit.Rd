@@ -20,9 +20,9 @@ simulated from exuber package function \code{\link[=mc_cv]{mc_cv()}}
 crit
 }
 \description{
-A dataset containing simulated critical values for up to 2000 observations
-based on default minimum window. The critical values have been simulated and stored
-as data to save computation time for the user. Critical values can be also
+A dataset containing simulated critical values for up to 700 observations
+based on default minimum window. The critical values have been simulated and
+stored as data to save computation time for the user. Critical values can be also
 obtained with the \code{\link[=mc_cv]{mc_cv()}} function.
 }
 \keyword{datasets}

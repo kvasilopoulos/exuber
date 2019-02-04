@@ -18,15 +18,7 @@
 
 There were no ERRORs and WARNINGs, with local checks or on remote checks.
 
-0 error | 0 warnings  | 1 note 
-
-* checking installed package size ... NOTE
-    installed size is 17.4Mb
-    sub-directories of 1Mb or more:
-      data  15.6Mb
-      libs   1.6Mb
-      
-  *(Store critical values as data, saves a lot of computation for the user)*
+0 errors √ | 0 warnings √ | 0 notes √
       
 ### rhub::check_for_cran() & devtools::check_win_*()
 
@@ -37,8 +29,6 @@ Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
   
   *(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)*
    
-  - Size of tarball: 21031594 bytes
-
   - Possibly mis-spelled words in DESCRIPTION:
       Shi (10:159)
       Yu (10:171)
