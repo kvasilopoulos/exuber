@@ -13,13 +13,13 @@ bibentry(bibtype  = "Manual",
   author = personList(as.person("Kostas Vasilopoulos"),
                    as.person("Themis Pavlidis"),
                    as.person("Simon Spavound"),
-                   as.person("Enr\u00EDqeu Matr\u00EDnez-Garc\u00EDa")),
+                   as.person("Enr\u00EDque Matr\u00EDnez-Garc\u00EDa")),
   year  = year,
   note  = vers,
   url   = "https://CRAN.R-project.org/package=exuber",
 
   textVersion =
-         paste0("Vasilopoulos Kostas, Pavlidis Themis, Spavound Simon and Matr\u00EDnez-Garc\u00EDa Enr\u00EDqeu(",
+         paste0("Vasilopoulos Kostas, Pavlidis Themis, Spavound Simon and Matr\u00EDnez-Garc\u00EDa Enr\u00EDque(",
                 year,"). exuber: Testing and Simulating Explosive Periods. ",
                 vers, ".", " https://CRAN.R-project.org/package=exuber")
 

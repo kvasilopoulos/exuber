@@ -29,7 +29,7 @@ Authors:
 \itemize{
   \item Eftymios Pavlidis \email{e.pavlidis@lancaster.ac.uk}
   \item Simon Spavound \email{simon.spavound@googlemail.com}
-  \item Enríqeu Matrínez-García \email{emg.economics@gmail.com}
+  \item Enríque Matrínez-García \email{emg.economics@gmail.com}
 }
 
 }

@@ -179,7 +179,7 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
   }
 
   # in case of simulation exercises
-  bool <- case_when(
+  dummy <- case_when(
     tstat < cv2 ~ 0,
     tstat >= cv2  ~ 1)
 
@@ -191,22 +191,22 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
 
   if (all(sig == "Reject")) {
     stop("Cannot reject H0", call. = FALSE)
-  } else if (all(bool == 0)) { # bool takes zero if below 95
+  } else if (all(dummy == 0)) { # dummy takes zero if below 95
     stop("Cannot reject H0 for significance level 95%", call. = FALSE)
   } else {
     if (panel) {
-      accepted <- ifelse(length(bool),"Panel", NA)
-      rejected <- ifelse(length(bool), NA, "Panel")
+      accepted <- ifelse(length(dummy),"Panel", NA)
+      rejected <- ifelse(length(dummy), NA, "Panel")
     }else {
-      accepted <- col_names(x)[as.logical(bool)]
-      rejected <- col_names(x)[!as.logical(bool)]
+      accepted <- col_names(x)[as.logical(dummy)]
+      rejected <- col_names(x)[!as.logical(dummy)]
     }
   }
 
   structure(list(accepted = accepted,
                  rejected = rejected,
                  sig = sig,
-                 bool = bool),
+                 dummy = dummy),
             panel = panel,
             col_names = if (!panel) col_names(x),
             class = "diagnostics")
@@ -380,9 +380,10 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   for (z in seq_along(choice)) {
     dummy[ds[[z]], z] <- 1
   }
-  res[["bool"]] <- dummy
+  # res[["dummy"]] <- dummy
 
   structure(res,
+            dummy = dummy,
             index = index(x, trunc = TRUE),
             panel = is_panel(y),
             min_duration = min_duration,
@@ -403,7 +404,7 @@ print.datestamp <- function(x, ...) {
         "\nDatestamp: Individual\n",
         "-----------------------------------\n"
       )
-      print.listof(x[-length(x)])
+      print.listof(x)
     }else{
     # in case of stacked fortify
     cat(

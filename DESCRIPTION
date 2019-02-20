@@ -6,7 +6,7 @@ Authors@R: c(
     person("Kostas", "Vasilopoulos", , email = "k.vasilopoulo@gmail.com", c("cre", "aut")),
     person("Eftymios", "Pavlidis", email = "e.pavlidis@lancaster.ac.uk", role = "aut"),
     person("Simon", "Spavound", email = "simon.spavound@googlemail.com", role = "aut"),
-    person("Enr\u00EDqeu", "Matr\u00EDnez-Garc\u00EDa", email = "emg.economics@gmail.com", role = "aut")
+    person("Enr\u00EDque", "Matr\u00EDnez-Garc\u00EDa", email = "emg.economics@gmail.com", role = "aut")
     )
 Description: Testing for and dating periods of explosive dynamics 
     (exuberance) in time series using recursive unit root tests as proposed 

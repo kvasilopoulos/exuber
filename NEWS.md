@@ -1,3 +1,9 @@
+
+# exuber 0.2.1
+
+* Changed DESCRIPTION to include `sb_cv` reference (and fixed typos)
+* Renamed boolean to dummy from `datestamp` and `diagnostics`
+
 # exuber 0.2.0
 
 ## Options
