@@ -295,7 +295,7 @@ autoplot.datestamp <- function(object, ...) {
 #' @importFrom purrr map reduce
 #' @export
 fortify.datestamp <- function(model, data, ...) {
-  model <- model[-length(model)] # get rid of bool
+  model <- model[-length(model)] # get rid of dummy
   nr <- map(model, NROW) %>%
     unlist()
   df <- data.frame("key" = rep(names(model), nr),
