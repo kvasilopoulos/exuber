@@ -79,7 +79,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' Simulation of a two-bubble process
 #'
 #' The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
-#' there are two episodes of mildy explosive dynamics.
+#' there are two episodes of mildly explosive dynamics.
 #'
 #' @inheritParams sim_dgp1
 #' @param te1 A scalar in (0, n) specifying the observation in which the first bubble originates.

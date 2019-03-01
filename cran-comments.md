@@ -30,8 +30,9 @@ Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
   *(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)*
    
   - Possibly mis-spelled words in DESCRIPTION:
-      Shi (10:159)
-      Yu (10:171)
+      Pavlidis (13:34)
+     al (12:86, 13:46)
+     et (12:83, 13:43)
   
   *(The names of the authors in the doi included in the DESCRIPTION)* 
 
