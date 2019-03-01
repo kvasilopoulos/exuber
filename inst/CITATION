@@ -13,14 +13,14 @@ citEntry(entry  = "Manual",
   author = personList(as.person("Kostas Vasilopoulos"),
                    as.person("Efthymios Pavlidis"),
                    as.person("Simon Spavound"),
-                   as.person("Enr\u00EDque Matr\u00EDnez-Garc\u00EDa")),
+                   as.person("Enr\u00EDque Mart\u00EDnez-Garc\u00EDa")),
   year  = year,
   note  = vers,
   url   = "https://CRAN.R-project.org/package=exuber",
 
   textVersion =
-         glue::glue("Vasilopoulos Kostas, Pavlidis Themis, \\
-         Spavound Simon and Matr\u00EDnez-Garc\u00EDa Enr\u00EDque ({year}). \\
-         exuber: Testing and Simulating Explosive Periods. {vers}. \\
-         https://CRAN.R-project.org/package=exuber")
+  paste0("Vasilopoulos Kostas, Pavlidis Efthymios,
+        Spavound Simon and Mart\u00EDnez-Garc\u00EDa Enr\u00EDque", " (", year , ") ",
+        "exuber: Testing and Simulating Explosive Periods. ", vers, ". ",
+        "https://CRAN.R-project.org/package=exuber")
 )
