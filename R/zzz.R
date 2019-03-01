@@ -15,7 +15,11 @@
 }
 
 # Set Global Variables to avoid NOTES in cmdchecks
-globalVariables("i")
+if (getRversion() >= "2.15.1") {
+  utils::globalVariables(
+    c("crit","i")
+  )
+}
 
 # citation ----------------------------------------------------------------
 

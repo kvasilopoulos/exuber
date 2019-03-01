@@ -85,7 +85,7 @@ dta <- data.frame("onebubble" = sim1,
 ts <- radf(dta, lag = 1)
 ```
 
-Report t-stats with the assiged critical values
+Report t-stats with the assigned critical values
 
 ``` r
 summary(ts)
