@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![Build Status](https://travis-ci.org/kvasilopoulos/exuber.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exuber)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exuber?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exuber)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/exuber)](https://cran.r-project.org/package=exuber)
- [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exuber)
 
 ## Description 
@@ -86,7 +86,7 @@ dta <- data.frame("onebubble" = sim1,
 ts <- radf(dta, lag = 1)
 ```
 
-Report t-stats with the assiged critical values
+Report t-stats with the assigned critical values
 
 ```{r Summary, eval = TRUE}
 summary(ts)

@@ -123,7 +123,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' \code{\link[=fortify]{fortify()}} method).
 #'
 #' @importFrom purrr map pluck
-#' @importFrom tibble as.tibble
+#' @importFrom tibble as_tibble
 #'
 #' @export
 fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
@@ -206,7 +206,7 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
 
   dat <- data.frame(dating, tstat_dat, cv_dat) %>%
     set_names(c("index", cname, names_cv)) %>%
-    as.tibble()
+    as_tibble()
   attr(dat, "select") <- cname
 
   dat
@@ -295,7 +295,6 @@ autoplot.datestamp <- function(object, ...) {
 #' @importFrom purrr map reduce
 #' @export
 fortify.datestamp <- function(model, data, ...) {
-  model <- model[-length(model)] # get rid of bool
   nr <- map(model, NROW) %>%
     unlist()
   df <- data.frame("key" = rep(names(model), nr),

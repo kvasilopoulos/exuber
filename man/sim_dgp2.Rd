@@ -29,7 +29,11 @@ A numeric vector of length \code{n}.
 }
 \description{
 The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
+<<<<<<< HEAD
 there are two episodes of mildy explosive dynamics.
+=======
+there are two episodes of mildly explosive dynamics.
+>>>>>>> master
 }
 \details{
 The data generating process is described by:

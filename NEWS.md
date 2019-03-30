@@ -1,3 +1,10 @@
+
+# exuber 0.2.1
+
+* Changed DESCRIPTION to include `sb_cv` reference.
+* Renamed boolean to dummy from `datestamp` and `diagnostics`.
+* `datestamp` dummy is now an attribute.
+
 # exuber 0.2.0
 
 ## Options
@@ -27,9 +34,9 @@ set the package options with e.g. `options(exuber.show_progress = TRUE)`.
 * `radf()` can parse date from `ts` objects.
 * `report()` has been renamed into `summary()`.
 * `plot()` has been renamed into `autoplot()`.
-* `plot()` and `report()` are soft depracated.
+* `plot()` and `report()` are soft deprecated.
 
 ## Bug Fixes
 
 * Progressbar appears in the beginning of the iteration
-* Plotiing date now works without having to to include any additonal plotting option
+* Plotting date now works without having to to include any additional plotting option
