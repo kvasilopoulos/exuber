@@ -38,7 +38,7 @@ test_that("different minw", {
 
 test_that("Correct output in summary/datestamp", {
   expect_output(str(summary(radf_dta, mc)), "List of 5")
-  expect_output(str(datestamp(radf_dta, mc)), "List of 5") # 4 plus bool
+  expect_output(str(datestamp(radf_dta, mc)), "List of 4") # 4 plus dummy
   expect_output(str(summary(radf_dta, wb)), "List of 5")
   expect_output(str(datestamp(radf_dta, wb)), "List of 2")
 })

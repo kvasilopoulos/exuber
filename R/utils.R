@@ -12,7 +12,7 @@ NULL
 
 get_crit <- function(x) {
     nr <- NROW(index(x))
-    if (nr > 5 && nr <= 2000) {
+    if (nr > 5 && nr <= length(crit)) {
       return(get("crit")[[nr]])
     } else {
       stop("cannot provide MC critical values see help(crit)", call. = FALSE)
