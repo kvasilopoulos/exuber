@@ -6,22 +6,21 @@ if(is.null(vers))
   vers <- packageVersion("exuber")
 vers <- paste("R package version", vers)
 
-citHeader("To cite exuber in publications as:")
+citHeader("To cite package 'exuber' in publications, please use:")
 
-bibentry(bibtype  = "Manual",
+citEntry(entry  = "Manual",
   title  = "exuber: Testing and Simulating Explosive Periods",
   author = personList(as.person("Kostas Vasilopoulos"),
-                   as.person("Themis Pavlidis"),
+                   as.person("Efthymios Pavlidis"),
                    as.person("Simon Spavound"),
-                   as.person("Enr\u00EDqeu Matr\u00EDnez-Garc\u00EDa")),
-
+                   as.person("Enr\u00EDque Mart\u00EDnez-Garc\u00EDa")),
   year  = year,
   note  = vers,
   url   = "https://CRAN.R-project.org/package=exuber",
 
   textVersion =
-         paste0("Vasilopoulos Kostas, Pavlidis Themis, Spavound Simon and Matr\u00EDnez-Garc\u00EDa Enr\u00EDqeu(",
-                year,"). exuber: Testing and Simulating Explosive Periods. ",
-                vers, ".", " https://CRAN.R-project.org/package=exuber")
-
+  paste0("Vasilopoulos Kostas, Pavlidis Efthymios,
+        Spavound Simon and Mart\u00EDnez-Garc\u00EDa Enr\u00EDque", " (", year , ") ",
+        "exuber: Testing and Simulating Explosive Periods. ", vers, ". ",
+        "https://CRAN.R-project.org/package=exuber")
 )

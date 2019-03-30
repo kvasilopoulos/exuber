@@ -85,7 +85,7 @@ dta <- data.frame("onebubble" = sim1,
 ts <- radf(dta, lag = 1)
 ```
 
-Report t-stats with the assiged critical values
+Report t-stats with the assigned critical values
 
 ``` r
 summary(ts)
@@ -102,15 +102,15 @@ summary(ts)
 #>  ----------------------------------
 #>  onebubble 
 #>         tstat      90%      95%     99%
-#> ADF    -2.271  -0.4035  -0.0762  0.5104
-#> SADF    8.415   1.0074   1.3484  1.9454
-#> GSADF   8.898   1.6942   1.9259  2.6191
+#> ADF    -2.304  -0.4035  -0.0762  0.5104
+#> SADF    4.522   1.0074   1.3484  1.9454
+#> GSADF   4.718   1.6942   1.9259  2.6191
 #> 
 #>  twobbubbles 
 #>         tstat      90%      95%     99%
-#> ADF    -2.340  -0.4035  -0.0762  0.5104
-#> SADF    4.384   1.0074   1.3484  1.9454
-#> GSADF   6.696   1.6942   1.9259  2.6191
+#> ADF    -2.411  -0.4035  -0.0762  0.5104
+#> SADF    4.057   1.0074   1.3484  1.9454
+#> GSADF   5.571   1.6942   1.9259  2.6191
 ```
 
 Date stamp periods of explosive behaviour
@@ -122,12 +122,12 @@ datestamp(ts)
 #>  -----------------------------------
 #> onebubble :
 #>   Start End Duration
-#> 1    41  55       15
+#> 1    40  55       16
 #> 
 #> twobbubbles :
 #>   Start End Duration
-#> 1    25  40       16
-#> 2    63  70        8
+#> 1    24  40       17
+#> 2    62  70        9
 ```
 
 ### Plotting
