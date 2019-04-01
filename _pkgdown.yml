@@ -1,42 +1,76 @@
 url: https://kvasilopoulos.github.io/exuber/
 
-home:
-  strip_header: true
-
 authors:
   Kostas Vasilopoulos:
-    href: https://kvasilopoulos.netlify.io/
+    href: https://kvasilopoulos.netlify.com/
 
 reference:
-- title: Estimation
-  contents:
-  - radf
-- title: Critical Values
-  contents:
-  - crit
-  - mc_cv
-  - wb_cv
-  - sb_cv
+  - title: Estimation
+    contents:
+      - radf
 
+  - title: Critical Values
+    contents:
+      - mc_cv
+      - wb_cv
+      - sb_cv
 
+  - title: Simulation
+    contents:
+      - sim_dgp1
+      - sim_dgp2
+      - sim_blan
+      - sim_evans
+      - sim_div
+
+  - title: Report
+    contents:
+      - summary
+      - diagnostics
+      - datestamp
+
+  - title: Plotting
+    contents:
+      - autoplot.radf
+      - autoplot.datestamp
+
+  - title: Misc
+    contents:
+      - col_names
+      - index.radf
+      - crit
 
 navbar:
-  type: default
+  title: "exuber"
+  type: inverse
   structure:
     left:
     - home
-    right: github
+    - intro
+    - reference
+    - articles
+    - tutorials
+    right:
+    - news
+    - github
   components:
     home:
       icon: fa-home fa-lg
       href: index.html
+    intro:
+      text: Intro
+      href: articles/intro.html
     reference:
       text: Reference
       href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+      - text: Intro to exuber
+        href: articles/intro.html
     news:
-      text: Changelog
+      text: News
       href: news/index.html
     github:
       icon: fa-github fa-lg
       href: https://github.com/kvasilopoulos/exuber
-

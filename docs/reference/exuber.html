@@ -8,6 +8,13 @@
 
 <title>Econometric Analysis of Explosive Time Series — exuber • exuber</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
@@ -32,13 +39,14 @@
 
 <meta property="og:title" content="Econometric Analysis of Explosive Time Series — exuber" />
 
-<meta property="og:description" content="Testing for and dating periods of explosive dynamics (exuberance) in time
-series using recursive unit root tests as proposed by
-Phillips, P. C., Shi,
-S. and Yu, J. 2015a. Simulate a variety of periodically-collapsing bubble
-models. The estimation and simulation utilizes the matrix inversion lemma
-from the recursive least squares algorithm, which results in a significant
-speed improvement." />
+<meta property="og:description" content="Testing for and dating periods of explosive dynamics (exuberance) in time series
+using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015)
+&amp;lt;doi:10.1111/iere.12132&amp;gt; and Pavlidis et al. (2016)  &amp;lt;doi:10.1007/s11146-015-9531-2&amp;gt;.
+The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix
+inversion which results in significant speed improvements. Simulation of a variety of
+periodically-collapsing bubble processes." />
+
+<meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -58,7 +66,7 @@ speed improvement." />
   <body>
     <div class="container template-reference-topic">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -69,7 +77,7 @@ speed improvement." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -82,15 +90,30 @@ speed improvement." />
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/intro.html">Intro</a>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/intro.html">Intro to exuber</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
   <a href="https://github.com/kvasilopoulos/exuber">
     <span class="fa fa-github fa-lg"></span>
      
@@ -115,13 +138,12 @@ speed improvement." />
 
     <div class="ref-description">
     
-    <p>Testing for and dating periods of explosive dynamics (exuberance) in time
-series using recursive unit root tests as proposed by
-<a href='https://doi.org/10.1111/iere.12132'>Phillips, P. C., Shi,
-S. and Yu, J. 2015a</a>. Simulate a variety of periodically-collapsing bubble
-models. The estimation and simulation utilizes the matrix inversion lemma
-from the recursive least squares algorithm, which results in a significant
-speed improvement.</p>
+    <p>Testing for and dating periods of explosive dynamics (exuberance) in time series
+using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015)
+&lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)  &lt;doi:10.1007/s11146-015-9531-2&gt;.
+The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix
+inversion which results in significant speed improvements. Simulation of a variety of
+periodically-collapsing bubble processes.</p>
     
     </div>
 
@@ -145,9 +167,9 @@ speed improvement.</p>
     <h2>Author</h2>
     <p><strong>Maintainer</strong>: Kostas Vasilopoulos <a href='mailto:k.vasilopoulo@gmail.com'>k.vasilopoulo@gmail.com</a></p>
 <p>Authors:</p><ul>
-<li><p>Eftymios Pavlidis <a href='mailto:e.pavlidis@lancaster.ac.uk'>e.pavlidis@lancaster.ac.uk</a></p></li>
+<li><p>Efthymios Pavlidis <a href='mailto:e.pavlidis@lancaster.ac.uk'>e.pavlidis@lancaster.ac.uk</a></p></li>
 <li><p>Simon Spavound <a href='mailto:simon.spavound@googlemail.com'>simon.spavound@googlemail.com</a></p></li>
-<li><p>Enríqeu Matrínez-García <a href='mailto:emg.economics@gmail.com'>emg.economics@gmail.com</a></p></li>
+<li><p>Enríque Martínez-García <a href='mailto:emg.economics@gmail.com'>emg.economics@gmail.com</a></p></li>
 </ul>
 
 
@@ -156,7 +178,7 @@ speed improvement.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.io/'>Kostas Vasilopoulos</a>, Eftymios Pavlidis, Simon Spavound, Enríqeu Matrínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">
