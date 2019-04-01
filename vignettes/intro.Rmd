@@ -1,0 +1,53 @@
+---
+title: "Intro to exuber"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r example, echo = TRUE, eval = TRUE, results = "hide"}
+
+library(exuber)
+
+# Simulate data witn n = 100 observations
+set.seed(112)
+sim1 <- sim_dgp1(n = 100) # one bubble
+sim2 <- sim_dgp2(n = 100) # two bubbles
+
+dta <- data.frame(
+  "onebubble" = sim1, 
+  "twobbubbles" = sim2)
+
+ts <- radf(dta, lag = 1)
+```
+
+Report t-stats with the assigned critical values
+
+```{r Summary, eval = TRUE}
+summary(ts)
+```
+
+Date stamp periods of explosive behaviour
+```{r Datestamp, eval = TRUE}
+datestamp(ts)
+```
+
+### Plotting
+
+The output of autoplot is a list of ggplots
+
+
+```{r plotting, echo=TRUE, eval = TRUE, fig.width=9}
+ts %>% 
+  autoplot() %>% 
+  ggarrange()
+```
