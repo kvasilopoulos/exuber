@@ -26,23 +26,29 @@ t-statistics.
 the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
 }
 \examples{
-\donttest{
+\dontrun{
 
 # Simulate bubble processes
-set.seed(124)
-pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(100))
+set.seed(4441)
+dta <- data.frame(
+"dgp1" = sim_dgp1(100),
+"dgp2" = sim_dgp2(100),
+"evans" = sim_evans(100),
+"div"  = sim_div(100),
+"blan" = sim_blan(100)
+)
 
 # Panel critical vales should have the same lag length with the estimation
 sb <- sb_cv(pdta, lag = 1)
-
-pdta \%>\%
+}
+dta \%>\%
   radf(lag = 1) \%>\%
   summary(cv = sb)
 
-pdta \%>\%
+dta \%>\%
   radf(lag = 1) \%>\%
   autoplot(cv = sb)
-}
+
 }
 \references{
 Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,

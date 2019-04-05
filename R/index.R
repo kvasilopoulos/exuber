@@ -1,4 +1,4 @@
-#' Retrieve/Replace the Index
+#' Retrieve/Replace the index
 #'
 #' @description  Retrieve or replace the index of an \code{radf} object.
 #'

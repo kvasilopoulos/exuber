@@ -4,7 +4,7 @@
 \alias{autoplot.radf}
 \alias{fortify.radf}
 \alias{ggarrange}
-\title{Plotting with ggplot2 and tidying with tibble radf objects}
+\title{Plotting and tidying radf objects}
 \usage{
 \method{autoplot}{radf}(object, cv, include = FALSE, select = NULL,
   option = c("gsadf", "sadf"), min_duration = 0, ...)

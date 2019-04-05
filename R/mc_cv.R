@@ -30,7 +30,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Default minimum window
 #' mc <- mc_cv(n = 100)
 #'
