@@ -1,0 +1,57 @@
+---
+title: "Intro to exuber"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(exuber)
+```
+
+We are goint to use the EuStockMarkets dataset, which contains the daily closing prices of four
+major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE.
+
+
+The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular
+exercise we want to focus on weekly observations, thus we need to aggregate to a weekly closing prices.
+
+```{r dataset}
+dataset <- 
+  EuStockMarkets %>% 
+  aggregate(nfrequency = 52, mean)
+```
+
+The number of observations reduce from 1860 to 372. Next we estimate the 
+
+
+```{r estimation}
+est_dt <-
+  dataset %>% 
+  radf(lag = 1)
+
+```
+
+```{r summary}
+summary(est_dt)
+```
+
+The `autoplot.radf` function returns a list of ggplot2, thus we need to grob the list into a
+single graph. Function `ggarrange
+
+```{r datestamp, fig.width = 9}
+est_dt %>% 
+  autoplot() %>% 
+  ggarrange(ncol = 2)
+```
+ge(ncol = 2)
+```

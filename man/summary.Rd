@@ -3,7 +3,7 @@
 \name{summary}
 \alias{summary}
 \alias{summary.radf}
-\title{Summarizing radf Models}
+\title{Summarizing radf models}
 \usage{
 \method{summary}{radf}(object, cv, ...)
 }
@@ -23,7 +23,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.
 \code{summary} method for class "radf"
 }
 \examples{
-\donttest{
+
 # Simulate bubble processes, compute the t-stat and critical values
 set.seed(4441)
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
@@ -43,11 +43,11 @@ datestamp(rfd, min_duration = rot)
 
 
 # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
-
+\\donotrun{
 wb <- wb_cv(dta)
-
+}
 summary(rfd, cv = wb)
 diagnostics(rfd, cv = wb)
 datestamp(rfd, cv = wb)
-}
+
 }

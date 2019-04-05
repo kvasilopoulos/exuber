@@ -44,8 +44,8 @@ If you encounter a clear bug, please file a reproducible example on [GitHub](htt
 
 ### Usage
 
-This is a basic example which shows you how to use exuber:
-
+Explain that the `radf()` is the estimation and that the package provides mc critical values up to a point.
+From this point onwards the researcher has to simulate or use bootsrap methods to generate critical values
 
 ### Code of Conduct
 

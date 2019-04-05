@@ -24,23 +24,29 @@
 #' \code{\link{wb_cv}} for Wild Bootstrapped critical values
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'
 #' # Simulate bubble processes
-#' set.seed(124)
-#' pdta <- cbind(sim_dgp1(100), sim_dgp1(100), sim_div(100), sim_div(100), sim_div(100))
+#' set.seed(4441)
+#' dta <- data.frame(
+#' "dgp1" = sim_dgp1(100),
+#' "dgp2" = sim_dgp2(100),
+#' "evans" = sim_evans(100),
+#' "div"  = sim_div(100),
+#' "blan" = sim_blan(100)
+#' )
 #'
 #' # Panel critical vales should have the same lag length with the estimation
 #' sb <- sb_cv(pdta, lag = 1)
-#'
-#' pdta %>%
+#' }
+#' dta %>%
 #'   radf(lag = 1) %>%
 #'   summary(cv = sb)
 #'
-#' pdta %>%
+#' dta %>%
 #'   radf(lag = 1) %>%
 #'   autoplot(cv = sb)
-#' }
+#'
 sb_cv <- function(data, minw, lag = 0, nboot = 1000) {
 
   y <- data %>% rm_index() %>% as.matrix() # index-date check

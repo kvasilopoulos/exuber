@@ -1,4 +1,4 @@
-#' Summarizing radf Models
+#' Summarizing radf models
 #'
 #' \code{summary} method for class "radf"
 #'
@@ -13,7 +13,7 @@
 #' @name summary
 #'
 #' @examples
-#' \donttest{
+#'
 #' # Simulate bubble processes, compute the t-stat and critical values
 #' set.seed(4441)
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
@@ -33,13 +33,13 @@
 #'
 #'
 #' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
-#'
+#'\donotrun{
 #' wb <- wb_cv(dta)
-#'
+#'}
 #' summary(rfd, cv = wb)
 #' diagnostics(rfd, cv = wb)
 #' datestamp(rfd, cv = wb)
-#' }
+#'
 #' @export
 summary.radf <- function(object, cv, ...) {
 
@@ -254,7 +254,7 @@ print.diagnostics <- function(x, ...) {
 }
 
 
-#' Date stamping periods of mildly explosive behaviour
+#' Date-stamping periods of mildly explosive behaviour
 #'
 #' Computes the origination, termination and duration of
 #' episodes during which the time series display explosive dynamics.

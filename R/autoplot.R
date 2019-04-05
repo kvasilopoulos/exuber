@@ -1,4 +1,4 @@
-#' Plotting with ggplot2 and tidying with tibble radf objects
+#' Plotting and tidying radf objects
 #'
 #'
 #' \code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
@@ -225,8 +225,7 @@ ggarrange <- function(...) {
 
 #' Print a ggarrange object
 #'
-#' \code{ggarrange} objects are created from. This is the S3
-#' generic print method to print the re
+#' \code{ggarrange} is a wrapper around gridExtra::arrangeGrob
 #'
 #' @param x autoplot.radf() object.
 #' @param newpage Should a new page (i.e., an empty page) be drawn before the
@@ -241,7 +240,7 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
   grid::grid.draw(x)
 }
 
-#' Plotting with ggplot2 and tidying with tibble datestamp objects
+#' Plotting and tidying datestamp objects
 #'
 #' Plotting datestamp with \link[=ggplot2]{geom_segment()}
 #'

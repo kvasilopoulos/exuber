@@ -57,17 +57,17 @@ navbar:
     home:
       icon: fa-home fa-lg
       href: index.html
-    intro:
-      text: Intro
-      href: articles/intro.html
-    reference:
-      text: Reference
-      href: reference/index.html
+   # intro:
+    #  text: Intro
+    #\  href: articles/intro.html
     articles:
       text: Articles
       menu:
-      - text: Intro to exuber
-        href: articles/intro.html
+      - text: Simulation
+        href: articles/simulation.html
+    reference:
+      text: Reference
+      href: reference/index.html
     news:
       text: News
       href: news/index.html

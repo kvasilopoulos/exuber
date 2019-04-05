@@ -3,7 +3,7 @@
 \name{autoplot.datestamp}
 \alias{autoplot.datestamp}
 \alias{fortify.datestamp}
-\title{Plotting with ggplot2 and tidying with tibble datestamp objects}
+\title{Plotting and tidying datestamp objects}
 \usage{
 \method{autoplot}{datestamp}(object, ...)
 

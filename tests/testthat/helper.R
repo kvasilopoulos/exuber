@@ -54,3 +54,6 @@ warn_select <- "argument 'select' is redundant"
 mc2_minw20 <- mc_cv(100, nrep = 100, minw = 20)
 wb2_minw20 <- wb_cv(dta, nboot = 100, minw = 20)
 sb2_minw20 <- sb_cv(dta, nboot = 100, minw = 20)
+
+
+
