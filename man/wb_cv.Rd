@@ -33,7 +33,7 @@ to construct the bootstrap analogue of the Phillips et al. (2015) test which
 is asymptotically robust to non-stationary volatility.
 }
 \examples{
-\donttest{
+\dontrun{
 # Simulate bubble processes
 dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
 

@@ -15,7 +15,6 @@ ggExtraPlot is drawn?}
 \item{...}{ignored}
 }
 \description{
-\code{ggarrange} objects are created from. This is the S3
-generic print method to print the re
+\code{ggarrange} is a wrapper around gridExtra::arrangeGrob
 }
 \keyword{internal}
