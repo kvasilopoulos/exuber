@@ -13,7 +13,7 @@
 #' @name summary
 #'
 #' @examples
-#'
+
 #' # Simulate bubble processes, compute the t-stat and critical values
 #' set.seed(4441)
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
@@ -31,15 +31,15 @@
 #' rot = round(log(NROW(rfd))/NROW(rfd))
 #' datestamp(rfd, min_duration = rot)
 #'
-#'
+#'\dontrun{
 #' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
-#'\donotrun{
+#'
 #' wb <- wb_cv(dta)
-#'}
+#'
 #' summary(rfd, cv = wb)
 #' diagnostics(rfd, cv = wb)
 #' datestamp(rfd, cv = wb)
-#'
+#'}
 #' @export
 summary.radf <- function(object, cv, ...) {
 
