@@ -3,8 +3,6 @@ pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
   exuber: exuber.html
-  house-prices: house-prices.html
-  simulation: simulation.html
 urls:
   reference: https://kvasilopoulos.github.io/exuber//reference
   article: https://kvasilopoulos.github.io/exuber//articles

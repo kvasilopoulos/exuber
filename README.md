@@ -26,7 +26,7 @@ Simulation of a variety of periodically-collapsing bubble processes.
 install.packages("exuber")
 
 # Install development version from GitHub
-if(!require(devtools)) install.packages("devtools")
+# install.packages("devtools")
 devtools::install_github("kvasilopoulos/exuber")
 ```
 
@@ -35,12 +35,15 @@ If you encounter a clear bug, please file a reproducible example on
 
 ### Usage
 
-This is a basic example which shows you how to use exuber:
+Testing explosive time series is based on two principles, estimating
+t-statistics and generating critical values.
 
-### License
+For the former we use the `radf()` which is able to
 
-This package is free and open source software, licensed under
-[GPL-3](https://github.com/kvasilopoulos/exuber/blob/master/LICENSE).
+For generating critical values we have several options. Firstly, the
+package offers in the form of `data` simulated critical values (up to
+700 observations) that are obtain with the `mc_cv()` fucntions. The user
+has option
 
 ### Code of Conduct
 

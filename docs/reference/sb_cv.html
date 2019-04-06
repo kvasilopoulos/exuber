@@ -99,9 +99,6 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016)" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/house-prices.html">International House Prices</a>
-    </li>
-    <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
   </ul>
@@ -197,14 +194,16 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 )
 
 <span class='co'># Panel critical vales should have the same lag length with the estimation</span>
-<span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_cv</span>(<span class='no'>pdta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='co'># }</span><div class='input'><span class='no'>dta</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='summary.html'>summary</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(lhs, parent, parent): object 'dta' not found</span></div><div class='input'>
+<span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_cv</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(lhs, parent, parent): object 'dta' not found</span></div><div class='input'>
-</div></pre>
+  <span class='fu'><a href='summary.html'>summary</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
+
+<span class='no'>dta</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
