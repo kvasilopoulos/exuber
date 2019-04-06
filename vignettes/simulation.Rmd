@@ -20,8 +20,6 @@ To test the GSADF test and its associated date-stamping strategy, the BSADF test
 
 ```{r load, echo=FALSE, message=FALSE}
 library(exuber)
-library(ggplot2)
-library(dplyr)
 ```
 
 Let's start be generating a realistic prices series incorporating an Evans (1991) type periodically collapsing bubble. We will use the monthly parameterisation detailed in PSY (2015a), which corresponds to the empirical values from the S&P 500 (see later example). exuber contains a function `sim_div()` which can be used to generate simulated dividends streams from a random walk with drift model.
@@ -46,6 +44,10 @@ p <- pf + kappa*pb
 We can now plot this data to see what it looks like:
 
 ```{r plot simulation, eval = TRUE, fig.width = 9}
+library(ggplot2)
+library(dplyr)
+
+
 tibble(
   index = 1:NROW(p),
   "Price" = p) %>% 
