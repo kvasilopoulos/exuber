@@ -1,8 +1,10 @@
+title: exuber
 url: https://kvasilopoulos.github.io/exuber/
 
 authors:
   Kostas Vasilopoulos:
     href: https://kvasilopoulos.netlify.com/
+
 
 reference:
   - title: Estimation
@@ -41,7 +43,6 @@ reference:
       - crit
 
 navbar:
-  title: "exuber"
   type: inverse
   structure:
     left:
@@ -57,9 +58,6 @@ navbar:
     home:
       icon: fa-home fa-lg
       href: index.html
-   # intro:
-    #  text: Intro
-    #\  href: articles/intro.html
     articles:
       text: Articles
       menu:

@@ -44,8 +44,15 @@ If you encounter a clear bug, please file a reproducible example on [GitHub](htt
 
 ### Usage
 
-Explain that the `radf()` is the estimation and that the package provides mc critical values up to a point.
-From this point onwards the researcher has to simulate or use bootsrap methods to generate critical values
+Testing explosive time series is based on two principles, estimating t-statistics and generating
+critical values.
+
+For the former we use the `radf()` which is able to 
+
+For generating critical values we have several options. Firstly, the package offers in the form of
+`data` simulated critical values (up to 700 observations) that are obtain with the `mc_cv()` fucntions.
+The user has option 
+
 
 ### Code of Conduct
 
