@@ -39,8 +39,8 @@ dta <- data.frame(
 )
 
 # Panel critical vales should have the same lag length with the estimation
-sb <- sb_cv(pdta, lag = 1)
-}
+sb <- sb_cv(dta, lag = 1)
+
 dta \%>\%
   radf(lag = 1) \%>\%
   summary(cv = sb)
@@ -48,7 +48,7 @@ dta \%>\%
 dta \%>\%
   radf(lag = 1) \%>\%
   autoplot(cv = sb)
-
+}
 }
 \references{
 Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
