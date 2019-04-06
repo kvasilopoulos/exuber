@@ -14,14 +14,17 @@ knitr::opts_chunk$set(
 )
 ```
 
+In this exercise
+
 ```{r message=FALSE}
 library(exuber)
 options(exuber.show_progress = FALSE)
-
-library(gridExtra)
-library(dplyr)
 ```
 
+
+```{r}
+library(dplyr)
+```
 
 # Download file 
 
@@ -30,20 +33,24 @@ dataURL <- "https://www.dallasfed.org/~/media/documents/institute/houseprice/hp1
 temp <- "hp.xlsx"
 download.file(dataURL, destfile = temp, mode = 'wb')
 rhpi <- readxl::read_excel(temp, sheet = 3)
-rpdi <- readxl::read_excel(temp, sheet = 5)
 ```
 
+```{r include=FALSE}
+file.remove(temp)
+```
 
 # Wrangle
+
+There are a couple of is
 
 ```{r Real House Price Index}
 price <-
   rhpi %>%
-  slice(-1) %>% 
-  rename(Date = 1) %>% 
-  mutate(Date = Date %>% lubridate::yq()) %>% 
+  rename(Date = 1) %>%
+  mutate(Date = Date %>% lubridate::yq()) %>%
   select( -25) %>% 
-  na.omit()
+  tidyr::drop_na()
+price
 ```
 
 
@@ -55,55 +62,60 @@ radf_price <-
   radf(lag = 1)
 ```
 
-<!-- # Critical Values  -->
+```{r}
+glimpse(radf_price)
+```
 
-<!-- ```{r cv, cache=TRUE} -->
-<!-- # Monte Carlo -->
-<!-- mc_con <- mc_cv(NROW(price), opt_bsadf = "conservative") -->
+# Critical Values
 
-<!-- # Sieve (Panel) Bootstrapped CV -->
-<!-- sb <- sb_cv(price, lag = 1) -->
-<!-- ``` -->
+```{r monte_carlo, cache=TRUE}
+# Monte Carlo
+mc_con <- mc_cv(NROW(price), opt_bsadf = "conservative")
+```
 
+```{r sieve_boot, cache = TRUE}
+# Sieve (Panel) Bootstrapped CV
+sb <- sb_cv(price, lag = 1)
+```
 
-<!-- # Report  -->
+# Report
 
-<!-- ```{r report_tstat} -->
-<!-- tibble( -->
-<!--   Country = col_names(radf_price), -->
-<!--   ADF = radf_price$adf, -->
-<!--   SADF = radf_price$sadf, -->
-<!--   GSADF = radf_price$gsadf -->
-<!-- ) -->
-<!-- ``` -->
+```{r report_tstat}
+tibble(
+  Country = col_names(radf_price),
+  ADF = radf_price$adf,
+  SADF = radf_price$sadf,
+  GSADF = radf_price$gsadf
+)
+```
 
-<!-- ```{r report_cv} -->
-<!-- tibble( -->
-<!--   Level = c("90%","95%","99%"), -->
-<!--   ADF = mc_con$adf_cv, -->
-<!--   SADF = mc_con$sadf_cv, -->
-<!--   GSADF = mc_con$gsadf_cv -->
-<!-- ) -->
-<!-- ``` -->
+```{r report_cv}
+tibble(
+  Level = c("90%","95%","99%"),
+  ADF = mc_con$adf_cv,
+  SADF = mc_con$sadf_cv,
+  GSADF = mc_con$gsadf_cv
+)
+```
 
-<!-- # Panel -->
+# Panel
 
-<!-- ```{r panel} -->
-<!-- summary(radf_price, sb) -->
-<!-- ``` -->
+```{r panel}
+summary(radf_price, sb)
+```
 
-<!-- # Plotting -->
+# Plotting
 
-<!-- ```{r autoplot_radf, out.width = '40%', out.height='80%'} -->
-<!-- radf_price %>%  -->
-<!--   autoplot(mc_con) %>%  -->
-<!--   ggarrange(ncol = 3) -->
-<!-- ``` -->
+```{r autoplot_radf, fig.width=9, fig.height=9}
+radf_price %>%
+  autoplot(mc_con, select = 1:9) %>%
+  ggarrange(ncol = 3)
+```
 
-<!-- Alternatively we can gather all the individuals graphs and report only the periods of explosiveness. -->
+Alternatively we can gather all the individuals graphs and report only the periods of explosiveness.
 
-<!-- ```{r} -->
-<!-- radf_price %>%  -->
-<!--   datestamp(cv = mc_con) %>%  -->
-<!--   autoplot() -->
-<!-- ``` -->
+```{r, fig.width=7, fig.height=5}
+radf_price %>%
+  datestamp(cv = mc_con) %>%
+  autoplot()
+```

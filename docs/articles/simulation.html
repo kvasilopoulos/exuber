@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -120,14 +120,26 @@
 <a class="sourceLine" id="cb1-11" title="11"><span class="co"># The simulated price</span></a>
 <a class="sourceLine" id="cb1-12" title="12">p &lt;-<span class="st"> </span>pf <span class="op">+</span><span class="st"> </span>kappa<span class="op">*</span>pb</a></code></pre></div>
 <p>We can now plot this data to see what it looks like:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="dt">index =</span> <span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">NROW</a></span>(p),</a>
-<a class="sourceLine" id="cb2-3" title="3">  <span class="st">"Price"</span> =<span class="st"> </span>p) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> index, <span class="dt">y =</span> Price)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">""</span>, <span class="dt">x =</span> <span class="st">""</span>)</a>
-<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; Don't know how to automatically pick scale for object of type ts. Defaulting to continuous.</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt;     filter, lag</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12"></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb2-14" title="14">  <span class="dt">index =</span> <span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">NROW</a></span>(p),</a>
+<a class="sourceLine" id="cb2-15" title="15">  <span class="st">"Price"</span> =<span class="st"> </span>p) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> index, <span class="dt">y =</span> Price)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">""</span>, <span class="dt">x =</span> <span class="st">""</span>)</a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; Don't know how to automatically pick scale for object of type ts. Defaulting to continuous.</span></a></code></pre></div>
 <p><img src="simulation_files/figure-html/plot%20simulation-1.png" width="864"></p>
 <p>As we can see it looks very typical for the kind of data we wish to analyse with some peaks and troughs which may be indicative of explosive sub-periods. Let us conduct a more formal analysis:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">test &lt;-<span class="st"> </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(p)</a>
