@@ -19,8 +19,10 @@ test_that("class checks", {
 
 test_that("error diagnostics", {
   expect_error(diagnostics(radf_div, mc), "Cannot reject H0")
-  expect_error(diagnostics(radf_95, mc),
-    "Cannot reject H0 for significance level 95%")
+  expect_error(
+    diagnostics(radf_95, mc),
+    "Cannot reject H0 for significance level 95%"
+  )
 })
 
 test_that("different minw", {
@@ -50,12 +52,14 @@ withr::with_options(
     expect_error(diagnostics(radf_dta, mc), regexp = NA)
     expect_error(diagnostics(radf_dta, mc, option = "sadf"), regexp = NA)
     expect_error(datestamp(radf_dta, mc), regexp = NA)
-    expect_error(datestamp(radf_dta, mc, min_duration = 50),
-                 "Argument 'min_duration' excludes all explosive periods")
+    expect_error(
+      datestamp(radf_dta, mc, min_duration = 50),
+      "Argument 'min_duration' excludes all explosive periods"
+    )
     expect_error(datestamp(radf_dta, mc, option = "sadf"), regexp = NA)
     expect_error(autoplot(radf_dta, mc), regexp = NA)
 
-# wokr here ---------------------------------------------------------------
+    # wokr here ---------------------------------------------------------------
 
     expect_error(autoplot(radf_dta, mc, option = "sadf"), regexp = NA)
   })

@@ -41,8 +41,7 @@ dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
 wb <- wb_cv(dta)
 
 # Change the minimum window and the number of bootstraps
-wb <- wb_cv(dta, nboot = 1500,  minw = 20)
-
+wb <- wb_cv(dta, nboot = 1500, minw = 20)
 }
 }
 \references{

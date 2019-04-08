@@ -18,8 +18,8 @@
 #' @source simulated from exuber package function \code{\link[=mc_cv]{mc_cv()}}
 "crit"
 
-#'@export
-#'@importFrom tibble enframe
+#' @export
+#' @importFrom tibble enframe
 print.crit <- function(x, ...) {
   # we dont want to overwhelm the console
   print(tibble::enframe(x))

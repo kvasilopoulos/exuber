@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{datestamp}
 \alias{datestamp}
-\title{Date-stamping periods of mildly explosive behaviour}
+\title{Date-stamping periods of mildly explosive behavior}
 \usage{
 datestamp(object, cv, option = c("gsadf", "sadf"), min_duration = 0)
 }
