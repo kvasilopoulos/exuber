@@ -44,10 +44,10 @@
 #' @examples
 #' # 100 periods with bubble origination date 40 and termination date 55
 #' sim_dgp1(n = 100)
-#'
+#' 
 #' # 200 periods with bubble origination date 80 and termination date 110
 #' sim_dgp1(n = 200)
-#'
+#' 
 #' # 200 periods with bubble origination date 100 and termination date 150
 #' sim_dgp1(n = 200, te = 100, tf = 150)
 sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
@@ -135,7 +135,7 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' @examples
 #' # 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
 #' sim_dgp2(n = 100)
-#'
+#' 
 #' # 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
 #' sim_dgp2(n = 200)
 sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
@@ -277,7 +277,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
     stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
   assert_between(pi, 0, 1)
   stopifnot(r >= 0)
@@ -344,7 +345,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 #' # 20 is the scaling factor
 #' pf <- sim_div(100, r = 0.05, output = "pf")
 #' pb <- sim_evans(100, r = 0.05)
-#' p <- pf + 20*pb
+#' p <- pf + 20 * pb
 sim_div <- function(n, mu, sigma, r = 0.05,
                     log = FALSE, output = c("pf", "d")) {
   initval <- 1.3

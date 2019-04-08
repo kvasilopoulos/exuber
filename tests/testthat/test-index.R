@@ -26,7 +26,6 @@ test_that("data.frame", {
   expect_equal(index(df_y), dating_y)
   expect_equal(index(df_m), dating_m)
   expect_equal(index(df_w), dating_w)
-
 })
 
 test_that("ts", {
@@ -51,11 +50,12 @@ test_that("matrix", {
   # parse index from matrix
   mat1 <- as.matrix(dta, ncol = 5)
   expect_equal(index(radf(mat1)), seq(1, NROW(mat1)))
-  expect_error(index(radf(mat1)) <- seq(1, NROW(mat1) - 1),
-               "length of index vectors does not match")
+  expect_error(
+    index(radf(mat1)) <- seq(1, NROW(mat1) - 1),
+    "length of index vectors does not match"
+  )
 })
 
 test_that("datestamp", {
   expect_equal(radf_dta %>% datestamp() %>% index(), index(radf_dta, trunc = T))
 })
-

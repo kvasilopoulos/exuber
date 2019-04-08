@@ -33,14 +33,13 @@
 #' \dontrun{
 #' # Default minimum window
 #' mc <- mc_cv(n = 100)
-#'
+#' 
 #' # Change the minimum window and the number of simulations
-#' mc <- mc_cv(n = 100, nrep = 2500,  minw = 20)
+#' mc <- mc_cv(n = 100, nrep = 2500, minw = 20)
 #' }
 mc_cv <- function(n, nrep = 2000, minw,
                   opt_badf = c("fixed", "asymptotic", "simulated"),
                   opt_bsadf = c("conventional", "conservative")) {
-
   if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(n)) * n)
   opt_badf <- match.arg(opt_badf)
   opt_bsadf <- match.arg(opt_bsadf)
@@ -99,7 +98,7 @@ mc_cv <- function(n, nrep = 2000, minw,
       apply(results[-c(1:(point + 3)), ], 1, quantile, probs = pr) %>%
         t() %>%
         apply(2, cummax)
-    }else if (opt_bsadf == "conservative") {
+    } else if (opt_bsadf == "conservative") {
       apply(results[1:point, ], 2, cummax) %>%
         apply(1, quantile, probs = pr) %>%
         t()
