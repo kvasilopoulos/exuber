@@ -54,7 +54,7 @@ All default parameter values are those suggested by West (1988).
 # 20 is the scaling factor
 pf <- sim_div(100, r = 0.05, output = "pf")
 pb <- sim_evans(100, r = 0.05)
-p <- pf + 20*pb
+p <- pf + 20 * pb
 }
 \references{
 West, K. D. (1988). Dividend innovations and stock price volatility.

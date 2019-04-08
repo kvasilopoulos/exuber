@@ -11,7 +11,7 @@
 #' \donttest{
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#'
+#' 
 #' rfd <- radf(dta)
 #' col_names(rfd) <- c("OneBubble", "TwoBubbles")
 #' }
@@ -48,8 +48,8 @@ col_names.radf <- function(x, ...) {
   seq_cv <- c("badf", "bsadf")
   cv <- c("adf", "sadf", "gsadf")
 
-  x[seq_cv] <- x[seq_cv] %>% imap( ~ set_colnames(.x, value))
-  x[cv] <- x[cv] %>% imap( ~ set_names(.x, value))
+  x[seq_cv] <- x[seq_cv] %>% imap(~ set_colnames(.x, value))
+  x[cv] <- x[cv] %>% imap(~ set_names(.x, value))
 
   attr(x, "col_names") <- value
   x

@@ -13,7 +13,6 @@ test_that("col_names check", {
 
   expect_equal(col_names(mat_dta), cnames)
   expect_equal(col_names(ts_dta), cnames)
-
 })
 
 test_that("col_names <-  check ", {
@@ -24,4 +23,3 @@ test_that("col_names <-  check ", {
     "length of col_names vectors does not match"
   )
 })
-

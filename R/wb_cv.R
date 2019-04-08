@@ -39,16 +39,14 @@
 #' \dontrun{
 #' # Simulate bubble processes
 #' dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
-#'
+#' 
 #' # Default minimum window
 #' wb <- wb_cv(dta)
-#'
+#' 
 #' # Change the minimum window and the number of bootstraps
-#' wb <- wb_cv(dta, nboot = 1500,  minw = 20)
-#'
+#' wb <- wb_cv(dta, nboot = 1500, minw = 20)
 #' }
 wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
-
   y <- data %>% rm_index() %>% as.matrix() # index-date check
   nc <- NCOL(y)
   nr <- NROW(y)
@@ -123,7 +121,8 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
     if (show_pb) {
       cat("\n")
       print(paste("Series", j, "out of", nc, "completed!", sep = " "),
-            quote = F)
+        quote = F
+      )
     }
   }
 

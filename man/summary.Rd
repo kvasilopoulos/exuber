@@ -23,6 +23,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.
 \code{summary} method for class "radf"
 }
 \examples{
+
 # Simulate bubble processes, compute the t-stat and critical values
 set.seed(4441)
 dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
@@ -37,9 +38,8 @@ datestamp(rfd)
 diagnostics(rfd, option = "sadf")
 
 # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
-rot = round(log(NROW(rfd))/NROW(rfd))
+rot <- round(log(NROW(rfd)) / NROW(rfd))
 datestamp(rfd, min_duration = rot)
-
 \dontrun{
 # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
 

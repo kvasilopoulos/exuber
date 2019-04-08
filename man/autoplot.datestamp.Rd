@@ -37,8 +37,6 @@ dta \%>\%
   radf() \%>\%
   datestamp() \%>\%
   autoplot() +
-  ggplot2::scale_colour_manual(values=rep("black", 4 ))
-
-
+  ggplot2::scale_colour_manual(values = rep("black", 4))
 }
 }

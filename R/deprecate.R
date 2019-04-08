@@ -15,7 +15,6 @@ report <- function(x, y, panel = FALSE, ...) {
 #' @rdname exuber-deprecated
 plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
                       plot_type = c("multiple", "single")) {
-
   .Deprecated("autoplot", package = "exuber")
 
   option <- match.arg(option)
@@ -25,10 +24,9 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
     x %>%
       autoplot(cv = y, option = option, min_duration = min_duration) %>%
       return()
-  } else{
+  } else {
     x %>%
       datestamp(cv = y, option = option, min_duration = min_duration) %>%
       autoplot()
   }
-
 }

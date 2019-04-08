@@ -21,12 +21,12 @@
 #' @examples
 #' \donttest{
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#'
+#' 
 #' dta %>%
 #'   radf() %>%
 #'   autoplot() %>%
 #'   ggarrange(ncol = 2)
-#'
+#' 
 #' # For custom plotting with ggplot2
 #' dta %>%
 #'   radf() %>%
@@ -35,7 +35,6 @@
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0, ...) {
-
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
   assert_positive_int(min_duration, strictly = FALSE)
@@ -48,14 +47,16 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
   if (include) {
     if (missing(select)) {
       cname2 <- fortify.radf(x, cv = y, include = include, option = option)
-    }else{
-      cname2 <- fortify.radf(x, cv = y, option = option,
-                            select = select,  include = include)
+    } else {
+      cname2 <- fortify.radf(x,
+        cv = y, option = option,
+        select = select, include = include
+      )
     }
-  }else{
+  } else {
     if (missing(select)) {
       cname2 <- fortify.radf(x, cv = y, option = option)
-      }else{
+    } else {
       cname2 <- fortify.radf(x, cv = y, option = option, select = select)
     }
   }
@@ -68,45 +69,63 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
     local({
       i <- i
       suppressWarnings(
-      dat <- fortify.radf(x, cv = y, include = include, option = option,
-                          select = if (is_panel(y)) cname else cname[i]))
+        dat <- fortify.radf(x,
+          cv = y, include = include, option = option,
+          select = if (is_panel(y)) cname else cname[i]
+        )
+      )
 
       h <- ggplot(dat) +
-        geom_line(aes_string(x = "index",
-                             y = as.name(colnames(dat)[2])),
-                  size = 0.7,
-                  colour = "blue") +
-        geom_line(aes_string(x = "index",
-                             y = as.name(colnames(dat)[3])),
-                  size = 0.8,
-                  colour = "red",
-                  linetype = "dashed") +
+        geom_line(aes_string(
+          x = "index",
+          y = as.name(colnames(dat)[2])
+        ),
+        size = 0.7,
+        colour = "blue"
+        ) +
+        geom_line(aes_string(
+          x = "index",
+          y = as.name(colnames(dat)[3])
+        ),
+        size = 0.8,
+        colour = "red",
+        linetype = "dashed"
+        ) +
         ggtitle(cname[i]) +
         theme_bw() + xlab("") + ylab("")
 
       shade <-
         if (include) {
           tryCatch(
-            datestamp(x, y, option = option,
-                      min_duration = min_duration) %>%
-              pluck(cname[i]), error =  function(e){})
-        }else{
-          datestamp(x, y, option = option,
-                    min_duration = min_duration) %>%
+            datestamp(x, y,
+              option = option,
+              min_duration = min_duration
+            ) %>%
+              pluck(cname[i]),
+            error = function(e) {}
+          )
+        } else {
+          datestamp(x, y,
+            option = option,
+            min_duration = min_duration
+          ) %>%
             pluck(cname[i])
         }
 
 
 
       if (!is.null(shade)) {
-
-       h <- h + geom_rect(data = shade[, -3],
-                          fill = "grey",
-                          alpha = 0.55, #0.25
-                  aes_string(xmin = "Start",
-                             xmax = "End",
-                             ymin = -Inf,
-                             ymax = +Inf))
+        h <- h + geom_rect(
+          data = shade[, -3],
+          fill = "grey",
+          alpha = 0.55, # 0.25
+          aes_string(
+            xmin = "Start",
+            xmax = "End",
+            ymin = -Inf,
+            ymax = +Inf
+          )
+        )
       }
 
       g[[i]] <<- h
@@ -128,7 +147,6 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' @export
 fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
-
   cv <- if (missing(cv)) get_crit(model) else cv
   assert_class(cv, "cv")
   option <- match.arg(option)
@@ -142,30 +160,30 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
     nm <- diagnostics(object = x, cv = y, option = option) %>%
       pluck("accepted")
     cname <- "Panel"
-    if (!missing(select))
+    if (!missing(select)) {
       warning("argument 'select' is redundant", call. = FALSE)
-    if (!missing(include) && !is.null(nm))
+    }
+    if (!missing(include) && !is.null(nm)) {
       warning("argument 'include' is redundant", call. = FALSE)
-
-  }else{
-
+    }
+  } else {
     if (include) {
       nm <- col_names(x)
       if (is.null(select)) {
         cname <- select <- nm
-      }else{
+      } else {
         cname <- if (is.character(select)) select else nm[select]
       }
-    }else{
+    } else {
       nm <- diagnostics(object = x, cv = y, option = option) %>%
         pluck("accepted")
       if (is.null(select)) {
         cname <- select <- nm
-      }else{
+      } else {
         if (is.character(select)) {
           if (select %ni% nm) stop("subscript out of bounds", call. = FALSE)
           cname <- select
-        }else{
+        } else {
           cname <- nm[select]
         }
       }
@@ -173,24 +191,23 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
   }
 
   if (option == "gsadf") {
-
     tstat_dat <- if (is_panel(y)) x$bsadf_panel else x$bsadf[, cname]
 
     if (method(y) == "Wild Bootstrap") {
       cv_dat <- if (lagr(x) == 0) {
         y$bsadf_cv[, 2, cname]
-      }else{
+      } else {
         y$bsadf_cv[-c(1:lagr(x)), 2, select]
       }
       names_cv <- paste0("cv_", cname)
-    }else if (method(y) == "Monte Carlo") {
+    } else if (method(y) == "Monte Carlo") {
       cv_dat <- if (lagr(x) == 0) {
         y$bsadf_cv[, 2]
-      }else{
+      } else {
         y$bsadf_cv[-c(1:lagr(x)), 2]
       }
       names_cv <- "cv"
-    }else if (method(y) == "Sieve Bootstrap") {
+    } else if (method(y) == "Sieve Bootstrap") {
       cv_dat <- y$bsadf_panel_cv[, 2]
       if (lagr(cv) > 0) {
         dating <- dating[-c(1:2)]
@@ -210,7 +227,6 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
   attr(dat, "select") <- cname
 
   dat
-
 }
 
 #' @rdname autoplot.radf
@@ -250,41 +266,42 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #' @export
 #' @examples
 #' \donttest{
-#'
+#' 
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#'
+#' 
 #' dta %>%
 #'   radf() %>%
 #'   datestamp() %>%
 #'   autoplot()
-#'
+#' 
 #' # Change the colour manually
 #' dta %>%
 #'   radf() %>%
 #'   datestamp() %>%
 #'   autoplot() +
-#'   ggplot2::scale_colour_manual(values=rep("black", 4 ))
-#'
-#'
+#'   ggplot2::scale_colour_manual(values = rep("black", 4))
 #' }
 autoplot.datestamp <- function(object, ...) {
-
   dating <- index(object)
   scale <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
 
   ggplot(object, aes_string(colour = "key")) +
-    geom_segment(aes_string(x = "Start",
-                            xend = "End",
-                            y = "key",
-                            yend = "key"),
-                 size = 7) +
+    geom_segment(aes_string(
+      x = "Start",
+      xend = "End",
+      y = "key",
+      yend = "key"
+    ),
+    size = 7
+    ) +
     theme_bw() + xlab("") + ylab("") + ggtitle("") +
     scale(limits = c(dating[1L], dating[length(dating)])) +
-    theme(panel.grid.major.y = element_blank(),
-          legend.position = "none",
-          plot.margin = margin(0.5, 1, 0, 0, "cm"),
-          axis.text.y = element_text(face = "bold", size = 8, hjust = 0))
-
+    theme(
+      panel.grid.major.y = element_blank(),
+      legend.position = "none",
+      plot.margin = margin(0.5, 1, 0, 0, "cm"),
+      axis.text.y = element_text(face = "bold", size = 8, hjust = 0)
+    )
 }
 
 #' @rdname autoplot.datestamp
@@ -296,8 +313,10 @@ autoplot.datestamp <- function(object, ...) {
 fortify.datestamp <- function(model, data, ...) {
   nr <- map(model, NROW) %>%
     unlist()
-  df <- data.frame("key" = rep(names(model), nr),
-                   reduce(model, rbind))
+  df <- data.frame(
+    "key" = rep(names(model), nr),
+    reduce(model, rbind)
+  )
   class(df) <- c("data.frame", "datestamp")
   df
 }

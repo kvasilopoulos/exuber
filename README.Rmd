@@ -50,7 +50,7 @@ critical values.
 For the former we use the `radf()` which is able to 
 
 For generating critical values we have several options. Firstly, the package offers in the form of
-`data` simulated critical values (up to 700 observations) that are obtain with the `mc_cv()` fucntions.
+`data` simulated critical values (up to 700 observations) that are obtain with the `mc_cv()` functions
 The user has option 
 
 

@@ -43,7 +43,7 @@ summary(est_stocks)
 
 The `autoplot.radf` function returns a list of ggplot2, thus we need to grob the list into a
 single graph. Function `ggarrange` does this for us, while we can specify the arrangement of the graphs
-by supplying nrow and ncol arguemnts.
+by supplying nrow and ncol arguments.
 
 ```{r datestamp, fig.width = 9}
 est_stocks %>% 
@@ -52,7 +52,7 @@ est_stocks %>%
 ```
 
 If we need to know the exact of the explosive periods we can do so with the function `datestamp`. Datestamp
-works in a simular fashion where the use has to specify the critical values, however we can still utilise the
+works in a similar fashion where the use has to specify the critical values, however we can still utilize the
 package's critical values by leaving the cv-argument blank.
 
 ```{r}

@@ -33,9 +33,9 @@
 #' \donttest{
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#'
+#' 
 #' rfd <- radf(dta)
-#'
+#' 
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
@@ -46,7 +46,7 @@ radf <- function(data, minw, lag = 0) {
   if (any(class(data) %in% c("mts", "ts"))) {
     if (all(time(data) == sim_index)) {
       dating <- sim_index
-    }else{
+    } else {
       dating <- time(data) %>%
         as.numeric() %>%
         date_decimal()
@@ -54,10 +54,10 @@ radf <- function(data, minw, lag = 0) {
         dating <- dating %>%
           round_date("month") %>%
           as.Date()
-      }else if (frequency(data) == 52) {
+      } else if (frequency(data) == 52) {
         dating <- dating %>%
           as.Date()
-      }else{
+      } else {
         dating <- dating %>%
           round_date("day") %>%
           as.Date()
@@ -81,7 +81,7 @@ radf <- function(data, minw, lag = 0) {
   nr <- NROW(data)
   # args
   if (is.null(colnames(x))) colnames(x) <- paste("Series", seq(1, nc, 1))
-  if (missing(minw)) minw <-  floor((0.01 + 1.8 / sqrt(nr)) * nr)
+  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
   # checks
   assert_na(data)
   assert_positive_int(minw, greater_than = 2)
@@ -90,16 +90,16 @@ radf <- function(data, minw, lag = 0) {
   point <- nr - minw - lag
 
   adf <- sadf <- gsadf <- drop(matrix(0, 1, nc,
-                                     dimnames = list(NULL, colnames(x))))
+    dimnames = list(NULL, colnames(x))
+  ))
   badf <- bsadf <- matrix(0, point, nc, dimnames = list(NULL, colnames(x)))
 
   for (i in 1:nc) {
-
     yxmat <- unroot(x[, i], lag = lag)
     results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
 
     badf[, i] <- results[1:point]
-    adf[i]  <- results[point + 1]
+    adf[i] <- results[point + 1]
     sadf[i] <- results[point + 2]
     gsadf[i] <- results[point + 3]
     bsadf[, i] <- results[-c(1:(point + 3))]
@@ -108,19 +108,22 @@ radf <- function(data, minw, lag = 0) {
   bsadf_panel <- apply(bsadf, 1, mean)
   gsadf_panel <- max(bsadf_panel)
 
-  value <- structure(list(adf = adf,
-                          badf = badf,
-                          sadf = sadf,
-                          bsadf = bsadf,
-                          gsadf = gsadf,
-                          bsadf_panel = bsadf_panel,
-                          gsadf_panel = gsadf_panel),
-                     index = dating,
-                     lag = lag,
-                     minw = minw,
-                     lag = lag,
-                     col_names = colnames(x),
-                     class = "radf")
+  value <- structure(list(
+    adf = adf,
+    badf = badf,
+    sadf = sadf,
+    bsadf = bsadf,
+    gsadf = gsadf,
+    bsadf_panel = bsadf_panel,
+    gsadf_panel = gsadf_panel
+  ),
+  index = dating,
+  lag = lag,
+  minw = minw,
+  lag = lag,
+  col_names = colnames(x),
+  class = "radf"
+  )
 
   return(value)
 }

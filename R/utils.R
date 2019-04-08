@@ -11,12 +11,12 @@ NULL
 # get crit data --------------------------------------------------------
 
 get_crit <- function(x) {
-    nr <- NROW(index(x))
-    if (nr > 5 && nr <= length(crit)) {
-      return(get("crit")[[nr]])
-    } else {
-      stop("cannot provide MC critical values see help(crit)", call. = FALSE)
-    }
+  nr <- NROW(index(x))
+  if (nr > 5 && nr <= length(crit)) {
+    return(get("crit")[[nr]])
+  } else {
+    stop("cannot provide MC critical values see help(crit)", call. = FALSE)
+  }
 }
 
 
@@ -48,18 +48,20 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
   if (strictly) {
     if (arg != trunc(arg) || arg <= 0) {
       stop(sprintf("Argument '%s' should be a positive integer", level),
-           call. = FALSE)
+        call. = FALSE
+      )
     }
-  }else{
+  } else {
     if (arg != trunc(arg) | arg < 0L) {
-      stop(sprintf("Argument '%s' should be a non-negative integer",level
-      ), call. = FALSE)
+      stop(sprintf("Argument '%s' should be a non-negative integer", level), call. = FALSE)
     }
   }
   if (!is.null(greater_than)) {
     if (arg <= greater_than) {
-      stop(sprintf("Argument '%s' should be greater than '%d'",
-                   level, greater_than), call. = FALSE)
+      stop(sprintf(
+        "Argument '%s' should be greater than '%d'",
+        level, greater_than
+      ), call. = FALSE)
     }
   }
 }
@@ -67,8 +69,10 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
 assert_between <- function(x, arg1, arg2) {
   level <- deparse(substitute(x))
   if (!dplyr::between(x, arg1, arg2)) {
-    stop(sprintf("Argument '%s' should be a be between '%d' and '%d'",
-                 level, arg1, arg2), call. = FALSE)
+    stop(sprintf(
+      "Argument '%s' should be a be between '%d' and '%d'",
+      level, arg1, arg2
+    ), call. = FALSE)
   }
 }
 
@@ -77,7 +81,8 @@ assert_class <- function(x, klass) {
   # klass <- deparse(substitute(klass))
   if (!inherits(x, klass)) {
     stop(sprintf("Argument '%s' should be of class '%s'", xstring, klass),
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 }
 
@@ -88,7 +93,7 @@ assert_na <- function(x) {
   }
 }
 
-'%ni%' <- Negate('%in%')
+"%ni%" <- Negate("%in%")
 
 
 assert_equal_arg <- function(x, y, panel = FALSE) {
@@ -96,7 +101,6 @@ assert_equal_arg <- function(x, y, panel = FALSE) {
 
   if (method(y) == "Sieve Bootstrap") {
     if (lagr(x) != lagr(y)) stop("Different lag values", call. = FALSE)
-
   }
 }
 

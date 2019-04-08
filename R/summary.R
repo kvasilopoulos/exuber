@@ -13,7 +13,7 @@
 #' @name summary
 #'
 #' @examples
-
+#'
 #' # Simulate bubble processes, compute the t-stat and critical values
 #' set.seed(4441)
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
@@ -28,10 +28,9 @@
 #' diagnostics(rfd, option = "sadf")
 #'
 #' # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
-#' rot = round(log(NROW(rfd))/NROW(rfd))
+#' rot <- round(log(NROW(rfd)) / NROW(rfd))
 #' datestamp(rfd, min_duration = rot)
-#'
-#'\dontrun{
+#' \dontrun{
 #' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
 #'
 #' wb <- wb_cv(dta)
@@ -39,10 +38,9 @@
 #' summary(rfd, cv = wb)
 #' diagnostics(rfd, cv = wb)
 #' datestamp(rfd, cv = wb)
-#'}
+#' }
 #' @export
 summary.radf <- function(object, cv, ...) {
-
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
 
@@ -52,25 +50,25 @@ summary.radf <- function(object, cv, ...) {
 
   ret <- list()
   if (method(y) == "Wild Bootstrap") {
-
     for (i in seq_along(col_names(x))) {
       df1 <- c(x$adf[i], y$adf_cv[i, ])
       df2 <- c(x$sadf[i], y$sadf_cv[i, ])
       df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
       df <- data.frame(rbind(df1, df2, df3),
-                       row.names = c("ADF", "SADF", "GSADF"))
+        row.names = c("ADF", "SADF", "GSADF")
+      )
       colnames(df) <- c("t-stat", "90%", "95%", "99%")
       ret[[i]] <- df
     }
     names(ret) <- col_names(x)
   } else if (method(y) == "Monte Carlo") {
-
     for (i in seq_along(col_names(x))) {
       df1 <- c(x$adf[i], y$adf_cv)
       df2 <- c(x$sadf[i], y$sadf_cv)
       df3 <- c(x$gsadf[i], y$gsadf_cv)
       df <- data.frame(rbind(df1, df2, df3),
-                       row.names = c("ADF", "SADF", "GSADF"))
+        row.names = c("ADF", "SADF", "GSADF")
+      )
       colnames(df) <- c("tstat", "90%", "95%", "99%")
       ret[[i]] <- df
     }
@@ -81,11 +79,12 @@ summary.radf <- function(object, cv, ...) {
   }
 
   structure(ret,
-            minw = minw(x),
-            lag = lagr(x),
-            method = method(y),
-            iter = iter(y),
-            class = "summary.radf")
+    minw = minw(x),
+    lag = lagr(x),
+    method = method(y),
+    iter = iter(y),
+    class = "summary.radf"
+  )
 }
 
 
@@ -109,7 +108,7 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
     pp <- x[1, , drop = FALSE]
     rownames(pp) <- "GSADF"
     print(format(pp, digits = digits), print.gap = 2L, quote = FALSE)
-  }else{
+  } else {
     for (i in seq_along(x)) {
       cat("\n", names(x)[i], "\n")
       print(format(x[[i]], digits = digits), print.gap = 2L)
@@ -136,7 +135,6 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 #' @importFrom dplyr case_when
 #' @export
 diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
-
   assert_class(object, "radf")
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
@@ -148,7 +146,6 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
   panel <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
 
   if (option == "gsadf") {
-
     tstat <- if (panel) x$gsadf_panel else x$gsadf
 
     if (method(y) == "Monte Carlo") {
@@ -164,9 +161,7 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
       cv2 <- y$gsadf_panel_cv[2]
       cv3 <- y$gsadf_panel_cv[3]
     }
-
   } else if (option == "sadf") {
-
     tstat <- x$sadf
 
     if (method(y) == "Monte Carlo") {
@@ -181,13 +176,15 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
   # in case of simulation exercises
   dummy <- case_when(
     tstat < cv2 ~ 0,
-    tstat >= cv2  ~ 1)
+    tstat >= cv2 ~ 1
+  )
 
   sig <- case_when(
     tstat < cv1 ~ "Reject",
     tstat >= cv1 & tstat < cv2 ~ "90%",
     tstat >= cv2 & tstat < cv3 ~ "95%",
-    tstat >= cv3 ~ "99%")
+    tstat >= cv3 ~ "99%"
+  )
 
   if (all(sig == "Reject")) {
     stop("Cannot reject H0", call. = FALSE)
@@ -195,28 +192,29 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
     stop("Cannot reject H0 for significance level 95%", call. = FALSE)
   } else {
     if (panel) {
-      accepted <- ifelse(length(dummy),"Panel", NA)
+      accepted <- ifelse(length(dummy), "Panel", NA)
       rejected <- ifelse(length(dummy), NA, "Panel")
-    }else {
+    } else {
       accepted <- col_names(x)[as.logical(dummy)]
       rejected <- col_names(x)[!as.logical(dummy)]
     }
   }
 
-  structure(list(accepted = accepted,
-                 rejected = rejected,
-                 sig = sig,
-                 dummy = dummy),
-            panel = panel,
-            col_names = if (!panel) col_names(x),
-            class = "diagnostics")
-
+  structure(list(
+    accepted = accepted,
+    rejected = rejected,
+    sig = sig,
+    dummy = dummy
+  ),
+  panel = panel,
+  col_names = if (!panel) col_names(x),
+  class = "diagnostics"
+  )
 }
 
 
 #' @export
 print.diagnostics <- function(x, ...) {
-
   if (attr(x, "panel")) {
     cat(
       "\n",
@@ -226,11 +224,13 @@ print.diagnostics <- function(x, ...) {
     if (x$sig == "Reject") {
       cat("\n", "Cannot reject H0!")
     } else {
-      cat("\n", "Rejects H0 for significance level", x$sig, "\n",
-          "-----------------------------------",
-          "\n Procced for date stampting and plotting")
+      cat(
+        "\n", "Rejects H0 for significance level", x$sig, "\n",
+        "-----------------------------------",
+        "\n Procced for date stampting and plotting"
+      )
     }
-  }else{
+  } else {
     cat(
       "\n",
       "Diagnostics: Individual\n",
@@ -244,17 +244,18 @@ print.diagnostics <- function(x, ...) {
         cat("\n", "Rejects H0 for significance level", x$sig[i])
       }
     }
-    cat("\n",
-        "-----------------------------------",
-        "\n Procced for date stampting and plotting for", length(x$accepted),
-        "variable(s)\n",
-        deparse(as.vector(x$accepted))
+    cat(
+      "\n",
+      "-----------------------------------",
+      "\n Procced for date stampting and plotting for", length(x$accepted),
+      "variable(s)\n",
+      deparse(as.vector(x$accepted))
     )
   }
 }
 
 
-#' Date-stamping periods of mildly explosive behaviour
+#' Date-stamping periods of mildly explosive behavior
 #'
 #' Computes the origination, termination and duration of
 #' episodes during which the time series display explosive dynamics.
@@ -285,7 +286,6 @@ print.diagnostics <- function(x, ...) {
 #'
 datestamp <- function(object, cv, option = c("gsadf", "sadf"),
                       min_duration = 0) {
-
   assert_class(object, "radf")
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
@@ -302,10 +302,10 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
 
   ds <- vector("list", length(choice))
   if (is_panel(y)) {
-    if (lagr(y) != 0)  {
+    if (lagr(y) != 0) {
       tstat <- x$bsadf_panel[-c(1:2)]
       dating <- dating[-c(1:2)]
-    }else{
+    } else {
       tstat <- x$bsadf_panel
     }
     ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + minw(x) + lagr(x))
@@ -314,31 +314,27 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   for (i in seq_along(choice)) {
     if (method(y) == "Monte Carlo") {
       if (option == "gsadf") {
-
         cv <- if (lagr(x) == 0) {
           y$bsadf_cv[, 2]
-        }else{
+        } else {
           y$bsadf_cv[-c(1:lagr(x)), 2]
         }
         ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + minw(x) + lagr(x)
-
       } else if (option == "sadf") {
-
         cv <- if (lagr(x) == 0) {
           y$badf_cv[, 2]
-        }else{
+        } else {
           y$badf_cv[-c(1:lagr(x)), 2]
         }
         ds[[i]] <- which(x$badf[, i] > cv) + minw(x) + lagr(x)
       }
     } else if (method(y) == "Wild Bootstrap") {
-
-        cv <- if (lagr(x) == 0) {
-          y$bsadf_cv[, 2, i]
-        }else{
-          y$bsadf_cv[-c(1:lagr(x)), 2, i]
-        }
-        ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + minw(x) + lagr(x)
+      cv <- if (lagr(x) == 0) {
+        y$bsadf_cv[, 2, i]
+      } else {
+        y$bsadf_cv[-c(1:lagr(x)), 2, i]
+      }
+      ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + minw(x) + lagr(x)
     }
   }
 
@@ -363,49 +359,56 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
       "Duration" = t[, 3], row.names = NULL
     ))
 
-  #min_duration may cause to exclude periods or the whole sample
+  # min_duration may cause to exclude periods or the whole sample
   min_reject <- lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
   res <- add_index[!min_reject]
   names(res) <- choice[!min_reject]
 
   if (length(res) == 0) {
     stop("Argument 'min_duration' excludes all explosive periods",
-      call. = FALSE)
+      call. = FALSE
+    )
   }
 
   dummy <-
-    matrix(0, nrow = length(index(x)), ncol = length(choice),
-           dimnames = list(seq_along(index(x)), if (is_panel(y)) "Panel"
-                                    else col_names(x)[reps]))
+    matrix(0,
+      nrow = length(index(x)), ncol = length(choice),
+      dimnames = list(seq_along(index(x)), if (is_panel(y)) {
+        "Panel"
+      } else {
+        col_names(x)[reps]
+      })
+    )
   for (z in seq_along(choice)) {
     dummy[ds[[z]], z] <- 1
   }
   # res[["dummy"]] <- dummy
 
   structure(res,
-            dummy = dummy,
-            index = index(x, trunc = TRUE),
-            panel = is_panel(y),
-            min_duration = min_duration,
-            option = option,
-            class = c("list", "datestamp"))
+    dummy = dummy,
+    index = index(x, trunc = TRUE),
+    panel = is_panel(y),
+    min_duration = min_duration,
+    option = option,
+    class = c("list", "datestamp")
+  )
 }
 
 #' @export
 print.datestamp <- function(x, ...) {
-
-    if (attr(x, "panel")) {
-      cat(
-        "\nDatestamp: Panel\n",
-        "-----------------------------------\n")
-      print(x[[1]]) # drops list
-    }else if (attr(x, "panel") == FALSE) {
-      cat(
-        "\nDatestamp: Individual\n",
-        "-----------------------------------\n"
-      )
-      print.listof(x)
-    }else{
+  if (attr(x, "panel")) {
+    cat(
+      "\nDatestamp: Panel\n",
+      "-----------------------------------\n"
+    )
+    print(x[[1]]) # drops list
+  } else if (attr(x, "panel") == FALSE) {
+    cat(
+      "\nDatestamp: Individual\n",
+      "-----------------------------------\n"
+    )
+    print.listof(x)
+  } else {
     # in case of stacked fortify
     cat(
       "\nDatestamp: \n",
@@ -414,4 +417,3 @@ print.datestamp <- function(x, ...) {
     print.listof(x)
   }
 }
-

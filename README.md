@@ -42,11 +42,11 @@ For the former we use the `radf()` which is able to
 
 For generating critical values we have several options. Firstly, the
 package offers in the form of `data` simulated critical values (up to
-700 observations) that are obtain with the `mc_cv()` fucntions. The user
+700 observations) that are obtain with the `mc_cv()` functions The user
 has option
 
 ### Code of Conduct
 
-Please note that this project is released with a [Contributor Code of
-Conduct](https://github.com/kvasilopoulos/exuber/blob/master/CONDUCT.md).
-By participating in this project you agree to abide by its terms.
+Please note that the ‘exuber’ project is released with a [Contributor
+Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms.

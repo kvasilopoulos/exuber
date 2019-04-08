@@ -31,11 +31,11 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
 # Simulate bubble processes
 set.seed(4441)
 dta <- data.frame(
-"dgp1" = sim_dgp1(100),
-"dgp2" = sim_dgp2(100),
-"evans" = sim_evans(100),
-"div"  = sim_div(100),
-"blan" = sim_blan(100)
+  "dgp1" = sim_dgp1(100),
+  "dgp2" = sim_dgp2(100),
+  "evans" = sim_evans(100),
+  "div" = sim_div(100),
+  "blan" = sim_blan(100)
 )
 
 # Panel critical vales should have the same lag length with the estimation

@@ -2,13 +2,13 @@
 options(exuber.show_progress = FALSE)
 options(exuber.parallel = FALSE)
 
-#Simulate data
+# Simulate data
 set.seed(4441)
 dta <- data.frame(
   "dgp1" = sim_dgp1(100),
   "dgp2" = sim_dgp2(100),
   "evans" = sim_evans(100),
-  "div"  = sim_div(100),
+  "div" = sim_div(100),
   "blan" = sim_blan(100)
 )
 
@@ -16,7 +16,7 @@ dta_df <- data.frame(
   "dgp1" = sim_dgp1(100),
   "dgp2" = sim_dgp2(100),
   "evans" = sim_evans(100),
-  "div"  = sim_div(100),
+  "div" = sim_div(100),
   "blan" = sim_blan(100),
   "date" = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 )
@@ -54,6 +54,3 @@ warn_select <- "argument 'select' is redundant"
 mc2_minw20 <- mc_cv(100, nrep = 100, minw = 20)
 wb2_minw20 <- wb_cv(dta, nboot = 100, minw = 20)
 sb2_minw20 <- sb_cv(dta, nboot = 100, minw = 20)
-
-
-

@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include `sim_dgp1()`, which generates a time series with a single episode of explosive behaviour, `sim_dgp2()` which generates a time series with two episodes of explosive behaviour. Two rational bubble models are also currently included; `sim_blan()` which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, `sim_evans()` generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.
+The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include `sim_dgp1()`, which generates a time series with a single episode of explosive behavior, `sim_dgp2()` which generates a time series with two episodes of explosive behavior. Two rational bubble models are also currently included; `sim_blan()` which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, `sim_evans()` generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.
 
-To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilise a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of `radf()` to detect them.
+To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilize a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of `radf()` to detect them.
 
 ```{r load, echo=FALSE, message=FALSE}
 library(exuber)
@@ -57,7 +57,7 @@ tibble(
   labs(y = "", x = "")
 ```
 
-As we can see it looks very typical for the kind of data we wish to analyse with some peaks and troughs which may be indicative of explosive sub-periods. Let us conduct a more formal analysis:
+As we can see it looks very typical for the kind of data we wish to analyze with some peaks and troughs which may be indicative of explosive sub-periods. Let us conduct a more formal analysis:
 
 ```{r test simulated data, eval = TRUE}
 test <- radf(p)
