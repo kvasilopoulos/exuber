@@ -1,3 +1,5 @@
+^LICENSE\.md$
+^\.github$
 ^docs$
 ^_pkgdown\.yml$
 ^CRAN-RELEASE$

@@ -67,7 +67,7 @@ test_that("fortify- datestamp", {
   expect_equal(fort_panel %>% dim(), c(3, 4))
   expect_equal(rbind(fort, fort_panel) %>% dim(), c(12, 4))
 
-  # Rest of the arguement
+  # Rest of the argument
   expect_equal(radf_dta %>% datestamp(min_duration = 10) %>%
                  fortify() %>% dim(), c(2, 4))
   expect_equal(radf_dta %>% datestamp(option = "sadf") %>%
