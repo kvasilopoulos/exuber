@@ -36,6 +36,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Wild Bootstrap Critical values — wb_cv" />
 
@@ -117,6 +123,12 @@ generate critical values for the recursive unit root tests." />
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -202,8 +214,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>dta</span>)
 
 <span class='co'># Change the minimum window and the number of bootstraps</span>
-<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>dta</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1500</span>,  <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
-
+<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>dta</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1500</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -237,6 +248,23 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '3da85b7c10c52498fbaeb87339345e28',
+    indexName: 'exuber',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>
