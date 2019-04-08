@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Citation and Authors • exuber</title>
+<title>Contributing to exuber • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -36,13 +36,19 @@
 <script src="pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
-<meta property="og:title" content="Citation and Authors" />
+
+<meta property="og:title" content="Contributing to exuber" />
 
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
 
-<meta name="robots" content="noindex">
+
 
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
@@ -57,7 +63,7 @@
   </head>
 
   <body>
-    <div class="container template-citation-authors">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">exuber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -114,6 +120,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -124,43 +136,55 @@
 <div class="row">
   <div class="contents col-md-9">
     <div class="page-header">
-      <h1>Citation</h1>
-      <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/inst/CITATION'><code>inst/CITATION</code></a></small>
+      <h1>Contributing to exuber</h1>
     </div>
 
-    <p>Vasilopoulos K, Pavlidis E, Spavound S, MartÃ­nez-GarcÃ­a E (2019).
-<em>exuber: Testing and Simulating Explosive Periods</em>.
-R package version 0.2.1.9000, <a href="https://CRAN.R-project.org/package=exuber">https://CRAN.R-project.org/package=exuber</a>. 
-</p>
-    <pre>@Manual{,
-  title = {exuber: Testing and Simulating Explosive Periods},
-  author = {Kostas Vasilopoulos and Efthymios Pavlidis and Simon Spavound and Enríque Martínez-García},
-  year = {2019},
-  note = {R package version 0.2.1.9000},
-  url = {https://CRAN.R-project.org/package=exuber},
-}</pre>
-    <div class="page-header">
-      <h1>Authors</h1>
-    </div>
+<div id="contributing-to-exuber" class="section level1">
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong><a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a></strong>. Maintainer, author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Efthymios Pavlidis</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Simon Spavound</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Enríque Martínez-García</strong>. Author. 
-        </p>
-      </li>
-    </ul>
+<p>This outlines how to propose a change to exuber. For more detailed info about contributing to this, and other tidyverse packages, please see the <a href="https://rstd.io/tidy-contrib"><strong>development contributing guide</strong></a>.</p>
+<div id="fixing-typos" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fixing-typos" class="anchor"></a>Fixing typos</h3>
+<p>Small typos or grammatical errors in documentation may be edited directly using the GitHub web interface, so long as the changes are made in the <em>source</em> file.</p>
+<ul>
+<li>YES: you edit a roxygen comment in a <code>.R</code> file below <code>R/</code>.</li>
+<li>NO: you edit an <code>.Rd</code> file below <code>man/</code>.</li>
+</ul>
+</div>
+<div id="prerequisites" class="section level3">
+<h3 class="hasAnchor">
+<a href="#prerequisites" class="anchor"></a>Prerequisites</h3>
+<p>Before you make a substantial pull request, you should always file an issue and make sure someone from the team agrees that it’s a problem. If you’ve found a bug, create an associated issue and illustrate the bug with a minimal <a href="https://www.tidyverse.org/help/#reprex">reprex</a>.</p>
+</div>
+<div id="pull-request-process" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pull-request-process" class="anchor"></a>Pull request process</h3>
+<ul>
+<li>We recommend that you create a Git branch for each pull request (PR).<br>
+</li>
+<li>Look at the Travis and AppVeyor build status before and after making changes. The <code>README</code> should contain badges for any continuous integration services used by the package.<br>
+</li>
+<li>New code should follow the tidyverse <a href="http://style.tidyverse.org">style guide</a>. You can use the <a href="https://CRAN.R-project.org/package=styler">styler</a> package to apply these styles, but please don’t restyle code that has nothing to do with your PR.<br>
+</li>
+<li>We use <a href="https://cran.r-project.org/package=roxygen2">roxygen2</a>, with <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html">Markdown syntax</a>, for documentation.<br>
+</li>
+<li>We use <a href="https://cran.r-project.org/package=testthat">testthat</a>. Contributions with test cases included are easier to accept.<br>
+</li>
+<li>For user-facing changes, add a bullet to the top of <code>NEWS.md</code> below the current development version header describing the changes made followed by your GitHub username, and links to relevant issue(s)/PR(s).</li>
+</ul>
+</div>
+<div id="code-of-conduct" class="section level3">
+<h3 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+<p>Please note that the exuber project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project you agree to abide by its terms.</p>
+</div>
+<div id="see-tidyverse-development-contributing-guide" class="section level3">
+<h3 class="hasAnchor">
+<a href="#see-tidyverse-development-contributing-guide" class="anchor"></a>See tidyverse <a href="https://rstd.io/tidy-contrib">development contributing guide</a>
+</h3>
+<p>for further details.</p>
+</div>
+</div>
 
   </div>
 
@@ -179,6 +203,23 @@ R package version 0.2.1.9000, <a href="https://CRAN.R-project.org/package=exuber
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '3da85b7c10c52498fbaeb87339345e28',
+    indexName: 'exuber',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

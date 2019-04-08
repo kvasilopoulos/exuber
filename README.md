@@ -36,7 +36,7 @@ If you encounter a clear bug, please file a reproducible example on
 ### Usage
 
 Testing explosive time series is based on two principles, estimating
-t-statistics and generating critical values.
+t-statistics and generating critical values..
 
 For the former we use the `radf()` which is able to
 

@@ -36,6 +36,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Panel Sieve Bootstrap Critical Values — sb_cv" />
 
@@ -117,6 +123,12 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016)" />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -186,11 +198,11 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='co'># Simulate bubble processes</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>4441</span>)
 <span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-<span class='st'>"dgp1"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp1.html'>sim_dgp1</a></span>(<span class='fl'>100</span>),
-<span class='st'>"dgp2"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp2.html'>sim_dgp2</a></span>(<span class='fl'>100</span>),
-<span class='st'>"evans"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_evans.html'>sim_evans</a></span>(<span class='fl'>100</span>),
-<span class='st'>"div"</span>  <span class='kw'>=</span> <span class='fu'><a href='sim_div.html'>sim_div</a></span>(<span class='fl'>100</span>),
-<span class='st'>"blan"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>)
+  <span class='st'>"dgp1"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp1.html'>sim_dgp1</a></span>(<span class='fl'>100</span>),
+  <span class='st'>"dgp2"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp2.html'>sim_dgp2</a></span>(<span class='fl'>100</span>),
+  <span class='st'>"evans"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_evans.html'>sim_evans</a></span>(<span class='fl'>100</span>),
+  <span class='st'>"div"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_div.html'>sim_div</a></span>(<span class='fl'>100</span>),
+  <span class='st'>"blan"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>)
 )
 
 <span class='co'># Panel critical vales should have the same lag length with the estimation</span>
@@ -234,6 +246,23 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '3da85b7c10c52498fbaeb87339345e28',
+    indexName: 'exuber',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>
