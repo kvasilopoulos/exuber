@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(exuber)
 ```
 
-For our analysis we are goint to use the `EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE. The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.
+For our analysis we are going to use the `EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE. The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.
 
 ```{r dataset}
 stocks <- 
@@ -35,14 +35,14 @@ est_stocks <-
 
 ```
 
-The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the `cv` arguement into the `summary` function. 
+The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the `cv` argument into the `summary` function. 
 
 ```{r summary}
 summary(est_stocks)
 ```
 
 The `autoplot.radf` function returns a list of ggplot2, thus we need to grob the list into a
-single graph. Function `ggarrange` does this for us, while we can specify the arrangment of the graphs
+single graph. Function `ggarrange` does this for us, while we can specify the arrangement of the graphs
 by supplying nrow and ncol arguemnts.
 
 ```{r datestamp, fig.width = 9}
@@ -52,8 +52,8 @@ est_stocks %>%
 ```
 
 If we need to know the exact of the explosive periods we can do so with the function `datestamp`. Datestamp
-works in a simular fashion where the use has to specify the critical values, however we can still utilize the
-package's critical values by leaving the cv-arguement blank.
+works in a simular fashion where the use has to specify the critical values, however we can still utilise the
+package's critical values by leaving the cv-argument blank.
 
 ```{r}
 datestamp(est_stocks)
