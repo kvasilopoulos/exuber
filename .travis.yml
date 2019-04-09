@@ -34,6 +34,32 @@ dist: trusty
 cache: packages
 latex: false
 
+r:
+  - release
+  - devel
+os:
+  - linux
+  - osx
+
+warnings_are_errors: true
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - r: devel
+
+r_github_packages:
+  - r-lib/covr
+
+after_success:
+  - Rscript -e 'covr::codecov()'
+
+
+notifications:	#services
+  email:	services:
+    on_success: never # default: change
+    on_failure: always # default: always
+
 #env
 env:
   global:
