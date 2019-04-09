@@ -17,3 +17,4 @@
 ^pkgdown$
 ^Makefile$
 
+^tic\.R$
