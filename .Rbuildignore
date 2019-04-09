@@ -15,3 +15,5 @@
 ^codecov\.yml$
 ^data-raw$
 ^pkgdown$
+^Makefile$
+
