@@ -45,12 +45,11 @@ matrix:
   allow_failures:
     - r: devel
 
-notifications:	#services
-  email:	services:
+notifications:
+  email:
     on_success: never # default: change
     on_failure: always # default: always
 
-#env
 env:
   global:
   - _R_CHECK_FORCE_SUGGESTS_=false
