@@ -11,11 +11,6 @@ template:
 authors:
   Kostas Vasilopoulos:
     href: https://kvasilopoulos.netlify.com/
-home:
-  links:
-
-development:
-  mode: auto
 
 reference:
   - title: Estimation
