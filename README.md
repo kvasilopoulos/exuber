@@ -45,7 +45,7 @@ package offers in the form of `data` simulated critical values (up to
 700 observations) that are obtain with the `mc_cv()` functions The user
 has option
 
-### Code of Conduct
+-----
 
 Please note that the ‘exuber’ project is released with a [Contributor
 Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
