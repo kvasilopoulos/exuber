@@ -16,3 +16,16 @@ ggplot2::fortify
 #' @seealso \code{\link[=autoplot.radf]{autoplot.radf()}}
 #' @export
 ggplot2::autoplot
+
+
+#' @importFrom generics tidy
+#' @export
+generics::tidy
+
+#' @importFrom generics augment
+#' @export
+generics::augment
+
+#' @importFrom generics glance
+#' @export
+generics::glance

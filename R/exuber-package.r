@@ -10,7 +10,6 @@
 #' @name exuber
 #' @useDynLib exuber, .registration = TRUE
 #' @importFrom Rcpp evalCpp
-#' @importFrom glue glue
 #' @docType package
 #' @keywords internal
 "_PACKAGE"
