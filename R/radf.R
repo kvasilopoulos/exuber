@@ -33,9 +33,9 @@
 #' \donttest{
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#' 
+#'
 #' rfd <- radf(dta)
-#' 
+#'
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
@@ -76,6 +76,7 @@ radf <- function(data, minw, lag = 0) {
   } else {
     stop("Unsupported class", call. = FALSE)
   }
+
   x <- as.matrix(data)
   nc <- NCOL(data)
   nr <- NROW(data)

@@ -10,7 +10,7 @@ Authors@R: c(
     )
 Description: Testing for and dating periods of explosive dynamics (exuberance) in time series 
     using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015) 
-    <doi:10.1111/iere.12132> and Pavlidis et al. (2016)  <doi:10.1007/s11146-015-9531-2>. 
+    <doi:10.1111/iere.12132> and Pavlidis et al. (2016) <doi:10.1007/s11146-015-9531-2>. 
     The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix 
     inversion which results in significant speed improvements. Simulation of a variety of 
     periodically-collapsing bubble processes.
@@ -20,21 +20,21 @@ BugReports: https://github.com/kvasilopoulos/exuber/issues
 Depends:
     R (>= 2.10)
 Imports: 
-    doSNOW, 
-    parallel, 
-    foreach, 
+    doSNOW,
+    parallel,
+    foreach,
     Rcpp (>= 0.12.17),
     dplyr,
-    glue,
-    ggplot2, 
-    purrr, 
-    magrittr, 
-    lubridate, 
-    tibble, 
-    zoo, 
-    rlang, 
-    grid, 
-    gridExtra
+    tidyr,
+    ggplot2,
+    purrr,
+    lubridate,
+    tibble,
+    zoo,
+    rlang,
+    grid,
+    gridExtra,
+    cli
 Suggests:
     knitr,
     rmarkdown,
@@ -48,3 +48,22 @@ LazyData: true
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Language: en-US
+Collate: 
+    'RcppExports.R'
+    'autoplot.R'
+    'col_names.R'
+    'data-crit.R'
+    'deprecate.R'
+    'exuber-package.r'
+    'index.R'
+    'mc_cv.R'
+    'radf.R'
+    'reexports.R'
+    'tidiers-radf.R'
+    'tidiers-cv.R'
+    'sb_cv.R'
+    'simul.R'
+    'summary.R'
+    'utils.R'
+    'wb_cv.R'
+    'zzz.R'

@@ -39,19 +39,21 @@
 #' \dontrun{
 #' # Simulate bubble processes
 #' dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
-#' 
+#'
 #' # Default minimum window
 #' wb <- wb_cv(dta)
-#' 
+#'
 #' # Change the minimum window and the number of bootstraps
 #' wb <- wb_cv(dta, nboot = 1500, minw = 20)
 #' }
-wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
-  y <- data %>% rm_index() %>% as.matrix() # index-date check
+wb_cv <- function(data, minw = psy_rule(NROW(data)), nboot = 1000,
+                  dist_rad = FALSE) {
+
+  y <- data %>% discard_index() %>% as.matrix() # index-date check
   nc <- NCOL(y)
   nr <- NROW(y)
 
-  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
+  # if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
 
   # asserts
   assert_na(y)
@@ -64,7 +66,6 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
   pr <- c(0.9, 0.95, 0.99)
 
   # preallocation
-  results <- matrix(0, nrow = 2 * point + 3, ncol = nboot)
   adf_crit <- matrix(NA, nc, 3, dimnames = list(colnames(y), c(paste(pr))))
   sadf_crit <- gsadf_crit <- adf_crit
   badf_crit <- bsadf_crit <- array(NA,
@@ -121,7 +122,7 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
     if (show_pb) {
       cat("\n")
       print(paste("Series", j, "out of", nc, "completed!", sep = " "),
-        quote = F
+        quote = FALSE
       )
     }
   }
@@ -141,3 +142,151 @@ wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
 
   return(output)
 }
+
+
+
+
+wb_sim <- function(data, minw = psy_rule(NROW(data)),
+                   nboot = 1000, dist_rad = FALSE) {
+
+  y <- data %>% discard_index() %>% as.matrix() # index-date check
+  nc <- NCOL(y)
+  nr <- NROW(y)
+
+  point <- nr - minw
+  pr <- c(0.9, 0.95, 0.99)
+
+  assert_na(y)
+  assert_positive_int(nboot, greater_than = 2)
+  assert_positive_int(minw, greater_than = 2)
+  stopifnot(is.logical(dist_rad))
+
+  sadf_crit <- gsadf_crit <- adf_crit <-matrix(
+    NA, nrow = nboot, ncol = nc) %>%
+    `colnames<-`(colnames(y))
+
+  badf_crit <-bsadf_crit <- array(
+    NA, dim = c(point, 3, nc), dimnames = list(NULL, c(paste(pr)), colnames(y)))
+
+  show_pb <- getOption("exuber.show_progress")
+  do_par <- getOption("exuber.parallel")
+
+  if (show_pb) {
+    pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
+    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
+    on.exit(close(pb))
+  } else {
+    opts <- list(progress = NULL)
+  }
+
+  if (do_par) {
+    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
+    registerDoSNOW(cl)
+    on.exit(parallel::stopCluster(cl))
+  }
+
+  `%fun%` <- if (do_par) `%dopar%` else `%do%`
+
+  for (j in 1:nc) {
+    dy <- diff(y[, j])
+    results <- foreach(
+      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
+      .combine = "cbind", .options.snow = opts
+    ) %fun% {
+      if (show_pb && !do_par) setTxtProgressBar(pb, i)
+      if (dist_rad) {
+        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+      } else {
+        w <- rnorm(nr - 1, 0, 1)
+      }
+      ystar <- c(0, cumsum(w * dy))
+      yxmat <- unroot(ystar)
+      rls_gsadf(yxmat, min_win = minw)
+    }
+
+    adf_crit[, j] <- results[point + 1, ]
+    sadf_crit[, j] <- results[point + 2, ]
+    gsadf_crit[, j] <- results[point + 3, ]
+
+    badf_crit[, , j] <- results[1:point, ]
+    bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
+
+    if (show_pb) {
+      cat("\n")
+      print(paste("Series", j, "out of", nc, "completed!", sep = " "),
+            quote = F
+      )
+    }
+  }
+
+  output <- list(
+    adf = adf_crit,
+    sadf = sadf_crit,
+    gsadf = gsadf_crit,
+    badf = badf_crit,
+    bsadf = bsadf_crit
+  )
+
+}
+
+wb_dist <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
+
+
+  output <- structure(list(
+    adf_cv = adf_crit,
+    sadf_cv = sadf_crit,
+    gsadf_cv = gsadf_crit
+  ),
+  method = "Wild Bootstrap",
+  iter = nboot,
+  minw = minw,
+  class = "wb_dist"
+  )
+
+  return(output)
+}
+
+
+#' @importFrom tidyr gather
+#' @importFrom dplyr select bind_cols as_tibble
+#' @importFrom purrr reduce pluck
+#'
+#' @export
+tidy.wb_dist <- function(x) {
+  list(
+    x %>%
+      pluck("adf_cv") %>%
+      as_tibble() %>%
+      tidyr::gather(name, adf),
+    x %>%
+      pluck("sadf_cv") %>%
+      as_tibble() %>%
+      gather(name, sadf) %>%
+      select(-name),
+    x %>%
+      pluck("gsadf_cv") %>%
+      as_tibble() %>%
+      gather(name, gsadf) %>%
+      select(-name)
+  ) %>%
+    reduce(bind_cols)
+}
+
+#' @importFrom tidyr gather
+#'
+#' @export
+autoplot.wb_dist <- function(object, ...) {
+
+  object %>%
+    tidy() %>%
+    tidyr::gather(Distribution, value, -name, factor_key = TRUE) %>%
+    ggplot(aes(value, fill = Distribution)) +
+    geom_density(alpha = 0.2) +
+    theme_bw() +
+    facet_wrap(~ name, scales = "free", ...) +
+    labs(x = "", y = "")
+}
+
+
+
+
