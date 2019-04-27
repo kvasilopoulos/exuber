@@ -11,14 +11,13 @@
 #' \donttest{
 #' # Simulate bubble processes
 #' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#' 
+#'
 #' rfd <- radf(dta)
 #' col_names(rfd) <- c("OneBubble", "TwoBubbles")
 #' }
 col_names <- function(x, ...) {
   UseMethod("col_names")
 }
-
 
 #' @export
 col_names.default <- function(x, ...) {
@@ -32,6 +31,10 @@ col_names.default <- function(x, ...) {
   UseMethod("col_names<-")
 }
 
+col_names.diagnostics <- function(x, ...) {
+  attr(x, "col_names")
+}
+
 #' @export
 col_names.radf <- function(x, ...) {
   attr(x, "col_names")
@@ -39,7 +42,7 @@ col_names.radf <- function(x, ...) {
 
 #' @export
 #' @importFrom purrr imap
-#' @importFrom magrittr set_colnames set_names
+#' @importFrom rlang set_names
 `col_names<-.radf` <- function(x, value) {
   if (length(col_names(x)) != length(value)) {
     stop("length of col_names vectors does not match", call. = FALSE)
@@ -48,7 +51,7 @@ col_names.radf <- function(x, ...) {
   seq_cv <- c("badf", "bsadf")
   cv <- c("adf", "sadf", "gsadf")
 
-  x[seq_cv] <- x[seq_cv] %>% imap(~ set_colnames(.x, value))
+  x[seq_cv] <- x[seq_cv] %>% imap(~ `colnames<-`(.x, value))
   x[cv] <- x[cv] %>% imap(~ set_names(.x, value))
 
   attr(x, "col_names") <- value

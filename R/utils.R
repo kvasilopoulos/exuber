@@ -1,10 +1,23 @@
+
+array_to_list <- function(x, var, itnames) {
+
+  iter <- length(itnames)
+
+  out <- vector("list", length = iter)
+  for (i in 1:iter) {
+    out[[i]] <- x %>% pluck(var) %>% `[`(, , i)
+  }
+  out
+}
+
+
 #' Pipe operator
 #'
 #' @name %>%
 #' @rdname pipe
 #' @keywords internal
 #' @export
-#' @importFrom magrittr %>%
+#' @importFrom dplyr %>%
 #' @usage lhs \%>\% rhs
 NULL
 
@@ -23,21 +36,36 @@ get_crit <- function(x) {
 # is_panel ----------------------------------------------------------------
 
 is_panel <- function(y) {
+  attr(y, "panel")
+}
+
+is_panel_cv <- function(y) {
   assert_class(y, "cv")
   res <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
   res
 }
 
-# remove index ----------------------------------------------------------
+
+# index operations --------------------------------------------------------
+
 
 #' @importFrom purrr detect_index
 #' @importFrom lubridate is.Date
-rm_index <- function(data) {
+discard_index <- function(data) {
   if (is.data.frame(data)) {
     date_index <- purrr::detect_index(data, lubridate::is.Date)
-    if (as.logical(date_index)) data <- data[, -date_index, drop = FALSE]
+    if (as.logical(date_index)) data %>% select(-date_index)
   }
   data
+}
+
+#' @importFrom purrr detect_index
+#' @importFrom lubridate is.Date
+extract_index <- function(data) {
+  if (is.data.frame(data)) {
+    date_index <- purrr::detect_index(data, lubridate::is.Date)
+    if (as.logical(date_index)) data %>% select(date_index)
+  }
 }
 
 # assert arguments ------------------------------------------------------

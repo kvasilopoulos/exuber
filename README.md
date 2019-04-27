@@ -13,11 +13,12 @@ Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exuber?
 
 Testing for and dating periods of explosive dynamics (exuberance) in
 time series using the univariate and panel recursive unit root tests
-proposed by [Phillips et al. (2015)](doi:10.1111/iere.12132) and
-[Pavlidis et al. (2016)](doi:10.1007/s11146-015-9531-2). The recursive
-least-squares algorithm utilizes the matrix inversion lemma to avoid
-matrix inversion which results in significant speed improvements.
-Simulation of a variety of periodically-collapsing bubble processes.
+proposed by [Phillips et al. (2015)](https://doi.org/10.1111/iere.12132)
+and [Pavlidis et al. (2016)](https://doi.org/10.1007/s11146-015-9531-2).
+The recursive least-squares algorithm utilizes the matrix inversion
+lemma to avoid matrix inversion which results in significant speed
+improvements. Simulation of a variety of periodically-collapsing bubble
+processes.
 
 ### Installation
 
@@ -36,14 +37,15 @@ If you encounter a clear bug, please file a reproducible example on
 ### Usage
 
 Testing explosive time series is based on two principles, estimating
-t-statistics and generating critical values..
+t-statistics and generating critical values.
 
 For the former we use the `radf()` which is able to
 
 For generating critical values we have several options. Firstly, the
-package offers in the form of `data` simulated critical values (up to
-700 observations) that are obtain with the `mc_cv()` functions The user
-has option
+package offers simulated critical values (up to 700 observations) in the
+form of `data` that are obtain with the `mc_cv()` function.
+
+The user has option
 
 -----
 
