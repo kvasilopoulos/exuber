@@ -1,9 +1,7 @@
-
 #' @importFrom purrr keep map reduce
 #' @importFrom dplyr full_join arrange
 #' @importFrom rlang set_names
 #' @importFrom tidyr gather
-#'
 #' @export
 tidy.radf <- function(x, format = c("wide", "long")) {
 
@@ -28,7 +26,6 @@ tidy.radf <- function(x, format = c("wide", "long")) {
 
 #' @importFrom dplyr rename as_tibble
 #' @importFrom tidyr gather
-#'
 #' @export
 augment.radf <- function(x, format = c("wide", "long")) {
 
@@ -65,7 +62,6 @@ augment.radf <- function(x, format = c("wide", "long")) {
 #' @importFrom purrr pluck
 #' @importFrom rlang set_names
 #' @importFrom dplyr full_join as_tibble
-#'
 #' @export
 glance.radf <- function(x, format = c("wide", "long")) {
 
@@ -83,4 +79,5 @@ glance.radf <- function(x, format = c("wide", "long")) {
   }
 
   tbl_radf
+
 }
