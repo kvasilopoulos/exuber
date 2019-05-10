@@ -4,16 +4,17 @@
 \alias{mc_cv}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
-  "simulated"), opt_bsadf = c("conventional", "conservative"))
+mc_cv(n, minw = psy_rule(n), nrep = 2000, opt_badf = c("fixed",
+  "asymptotic", "simulated"), opt_bsadf = c("conventional",
+  "conservative"))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
 
-\item{nrep}{A positive integer. The number of Monte Carlo simulations.}
-
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+
+\item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{opt_badf}{Options for badf critical value calculation. "fixed" corresponds
 to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and

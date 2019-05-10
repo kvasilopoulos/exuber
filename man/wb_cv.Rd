@@ -4,7 +4,8 @@
 \alias{wb_cv}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(data, minw, nboot = 1000, dist_rad = FALSE)
+wb_cv(data, minw = psy_rule(NROW(data)), nboot = 1000,
+  dist_rad = FALSE)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.

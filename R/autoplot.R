@@ -35,6 +35,7 @@
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0, ...) {
+
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
   assert_positive_int(min_duration, strictly = FALSE)
@@ -111,8 +112,6 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
           ) %>%
             pluck(cname[i])
         }
-
-
 
       if (!is.null(shade)) {
         h <- h + geom_rect(
