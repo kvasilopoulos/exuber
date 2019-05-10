@@ -1,4 +1,3 @@
-
 #' @importFrom purrr keep reduce
 #' @importFrom rlang set_names
 #' @importFrom dplyr full_join mutate
@@ -67,7 +66,7 @@ tidy.cv <- function(x, format = c("wide", "long")) {
 #' @importFrom tidyr gather
 #' @importFrom dplyr as_tibble bind_cols mutate select
 #' @importFrom purrr pluck map2 reduce
-#'
+#' @export
 augment.cv <- function(x, format = c("wide", "long")) {
 
   format <- match.arg(format)
@@ -134,7 +133,6 @@ augment.cv <- function(x, format = c("wide", "long")) {
         mutate(id = "panel") %>%
         select(id, name, sig, crit)
     }
-
   }
 
   tbl_cv
