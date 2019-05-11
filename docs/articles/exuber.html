@@ -108,14 +108,21 @@
 
     
     
-<p>For our analysis we are going to use the <code>EuStockMarkets</code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE. The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
+<p>For our analysis we are going to use the <code><a href="https://www.rdocumentation.org/packages/datasets/topics/EuStockMarkets">datasets::EuStockMarkets</a></code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE(see <code><a href="https://www.rdocumentation.org/packages/datasets/topics/EuStockMarkets">?EuStockMarkets</a></code>). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">stocks &lt;-<span class="st"> </span></a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="st">  </span>EuStockMarkets <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/aggregate">aggregate</a></span>(<span class="dt">nfrequency =</span> <span class="dv">52</span>, mean)</a></code></pre></div>
-<p>Next we estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.</p>
+<div id="estimation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#estimation" class="anchor"></a>Estimation</h2>
+<p>We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">est_stocks &lt;-</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="st">  </span>stocks <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb2-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(<span class="dt">lag =</span> <span class="dv">1</span>)</a></code></pre></div>
+</div>
+<div id="report" class="section level2">
+<h2 class="hasAnchor">
+<a href="#report" class="anchor"></a>Report</h2>
 <p>The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the <code>cv</code> argument into the <code>summary</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="../reference/summary.html">summary</a></span>(est_stocks)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; </span></a>
@@ -157,11 +164,11 @@
 <a class="sourceLine" id="cb4-2" title="2"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/autoplot">autoplot</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/autoplot.radf.html">ggarrange</a></span>(<span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="exuber_files/figure-html/datestamp-1.png" width="864"></p>
-<p>If we need to know the exact of the explosive periods we can do so with the function <code>datestamp</code>. Datestamp works in a similar fashion where the use has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
+<p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner, where the user has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>(est_stocks)</a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt; Datestamp: Individual</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt;  -----------------------------------</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt; -- Datestamp ----------------------------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; DAX :</span></a>
 <a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt;        Start        End Duration</span></a>
 <a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; 1 1993-08-12 1993-08-19        2</span></a>
@@ -207,14 +214,23 @@
 <a class="sourceLine" id="cb5-47" title="47"><span class="co">#&gt; 6 1997-04-28 1997-10-28       27</span></a>
 <a class="sourceLine" id="cb5-48" title="48"><span class="co">#&gt; 7 1997-12-09 1997-12-23        3</span></a>
 <a class="sourceLine" id="cb5-49" title="49"><span class="co">#&gt; 8 1998-01-06 1998-08-12       32</span></a></code></pre></div>
-<p>Or we can plot just the periods. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns.</p>
+<p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">est_stocks <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/autoplot">autoplot</a></span>()</a></code></pre></div>
 <p><img src="exuber_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#estimation">Estimation</a></li>
+      <li><a href="#report">Report</a></li>
+      </ul>
+</div>
       </div>
 
 </div>

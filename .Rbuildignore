@@ -16,3 +16,4 @@
 ^data-raw$
 ^pkgdown$
 ^tic\.R$
+^Makefile$

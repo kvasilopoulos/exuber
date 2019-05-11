@@ -18,12 +18,14 @@
 <script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Econometric Analysis of Explosive Time Series">
-<meta property="og:description" content="Testing for and dating periods of explosive dynamics (exuberance) in time series 
-    using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015) 
-    &lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)  &lt;doi:10.1007/s11146-015-9531-2&gt;. 
-    The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix 
-    inversion which results in significant speed improvements. Simulation of a variety of 
-    periodically-collapsing bubble processes.">
+<meta property="og:description" content="Testing for and dating periods of explosive
+    dynamics (exuberance) in time series using the univariate and panel
+    recursive unit root tests proposed by Phillips et al. (2015)
+    &lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)
+    &lt;doi:10.1007/s11146-015-9531-2&gt;.  The recursive least-squares
+    algorithm utilizes the matrix inversion lemma to avoid matrix
+    inversion which results in significant speed improvements. Simulation
+    of a variety of periodically-collapsing bubble processes.">
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -112,7 +114,7 @@
 <a href="#exuber" class="anchor"></a>exuber <a href="https://kvasilopoulos.github.io/exuber"><img src="logo.png" align="right" height="127.5"></a>
 </h1></div>
 
-<p>Testing for and dating periods of explosive dynamics (exuberance) in time series using the univariate and panel recursive unit root tests proposed by <a href="doi:10.1111/iere.12132">Phillips et al. (2015)</a> and <a href="doi:10.1007/s11146-015-9531-2">Pavlidis et al. (2016)</a>. The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix inversion which results in significant speed improvements. Simulation of a variety of periodically-collapsing bubble processes.</p>
+<p>Testing for and dating periods of explosive dynamics (exuberance) in time series using the univariate and panel recursive unit root tests proposed by <a href="https://doi.org/10.1111/iere.12132">Phillips et al. (2015)</a> and <a href="https://doi.org/10.1007/s11146-015-9531-2">Pavlidis et al. (2016)</a>. The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix inversion which results in significant speed improvements. Simulation of a variety of periodically-collapsing bubble processes.</p>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
@@ -127,14 +129,19 @@
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
-<p>Testing explosive time series is based on two principles, estimating t-statistics and generating critical values..</p>
-<p>For the former we use the <code><a href="reference/radf.html">radf()</a></code> which is able to</p>
-<p>For generating critical values we have several options. Firstly, the package offers in the form of <code>data</code> simulated critical values (up to 700 observations) that are obtain with the <code><a href="reference/mc_cv.html">mc_cv()</a></code> functions The user has option</p>
+<p>{exuber} is based on two principles when testing for explosive dynamics in time series — estimating statistics and generating critical values.</p>
+<div id="estimation" class="section level4">
+<h4 class="hasAnchor">
+<a href="#estimation" class="anchor"></a>Estimation</h4>
+<p>The <code><a href="reference/radf.html">radf()</a></code> function offers a vectorised estimation (i.e. single and multiple time-series) for individual and panel estimation. The estimation can parse data from multiple classes and handle dates as index.</p>
 </div>
-<div id="code-of-conduct" class="section level3">
-<h3 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+<div id="critical-values" class="section level4">
+<h4 class="hasAnchor">
+<a href="#critical-values" class="anchor"></a>Critical Values</h4>
+<p>There are several options for generating critical values. On default {exuber} will use Monte Carlo simulated critical values if no other option is provided. The package offers these critical values in the form of <code>data</code> (up to 700 observations), that are obtain with the <code><a href="reference/mc_cv.html">mc_cv()</a></code> function. Alternatively, {exuber} accomodates Wild Bootstrapped data and Sieve Bootstrapped data (panel) through <code><a href="reference/wb_cv.html">wb_cv()</a></code> and <code><a href="reference/sb_cv.html">sb_cv()</a></code> respectively.</p>
+<hr>
 <p>Please note that the ‘exuber’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
 </div>
 </div>
   </div>
