@@ -14,11 +14,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE}
 library(exuber)
 ```
 
-For our analysis we are going to use the `EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE. The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.
+For our analysis we are going to use the `datasets::EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE(see `?EuStockMarkets`). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372. 
 
 ```{r dataset}
 stocks <- 
@@ -26,7 +26,9 @@ stocks <-
   aggregate(nfrequency = 52, mean)
 ```
 
-Next we estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.
+## Estimation
+
+We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.
 
 ```{r estimation}
 est_stocks <-
@@ -35,6 +37,8 @@ est_stocks <-
 
 ```
 
+## Report
+
 The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the `cv` argument into the `summary` function. 
 
 ```{r summary}
@@ -42,8 +46,7 @@ summary(est_stocks)
 ```
 
 The `autoplot.radf` function returns a list of ggplot2, thus we need to grob the list into a
-single graph. Function `ggarrange` does this for us, while we can specify the arrangement of the graphs
-by supplying nrow and ncol arguments.
+single graph. Function `ggarrange` does this for us, while we can specify the arrangement of the graphs by supplying nrow and ncol arguments.
 
 ```{r datestamp, fig.width = 9}
 est_stocks %>% 
@@ -51,15 +54,13 @@ est_stocks %>%
   ggarrange(ncol = 2)
 ```
 
-If we need to know the exact of the explosive periods we can do so with the function `datestamp`. Datestamp
-works in a similar fashion where the use has to specify the critical values, however we can still utilize the
-package's critical values by leaving the cv-argument blank.
+If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner, where the user has to specify the critical values, however we can still utilize the package's critical values by leaving the cv-argument blank.
 
 ```{r}
 datestamp(est_stocks)
 ```
-Or we can plot just the periods. Plotting datestamp object is particularly useful when we have a lot 
-of series, and we are interested to identify explosive patterns.
+
+Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot  of series, and we are interested to identify explosive patterns.
 
 ```{r fig.width = 7}
 est_stocks %>% 

@@ -36,15 +36,25 @@ If you encounter a clear bug, please file a reproducible example on
 
 ### Usage
 
-Testing explosive time series is based on two principles, estimating
-t-statistics and generating critical values..
+{exuber} is based on two principles when testing for explosive dynamics
+in time series — estimating statistics and generating critical values.
 
-For the former we use the `radf()` which is able to
+#### Estimation
 
-For generating critical values we have several options. Firstly, the
-package offers in the form of `data` simulated critical values (up to
-700 observations) that are obtain with the `mc_cv()` functions The user
-has option
+The `radf()` function offers a vectorised estimation (i.e. single and
+multiple time-series) for individual and panel estimation. The
+estimation can parse data from multiple classes and handle dates as
+index.
+
+#### Critical Values
+
+There are several options for generating critical values. On default
+{exuber} will use Monte Carlo simulated critical values if no other
+option is provided. The package offers these critical values in the form
+of `data` (up to 700 observations), that are obtain with the `mc_cv()`
+function. Alternatively, {exuber} accomodates Wild Bootstrapped data and
+Sieve Bootstrapped data (panel) through `wb_cv()` and `sb_cv()`
+respectively.
 
 -----
 
