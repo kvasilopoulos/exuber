@@ -214,12 +214,12 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
   )
 }
 
-#' @importFrom cli cat_line rule
+#' @importFrom cli cat_line cat_rule
 #' @export
 print.diagnostics <- function(x, ...) {
 
   cli::cat_line()
-  cli::cat_line(left = "Diagnostics", right = method(x))
+  cli::cat_rule(left = "Diagnostics", right = method(x))
   cli::cat_line()
 
   if (attr(x, "panel")) {

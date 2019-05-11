@@ -1,3 +1,18 @@
+#' Calculate minimum window
+#'
+#' Helper function to calcuate the the PSY(2015) suggested minumum window.
+#'
+#' @inheritParams mc_cv
+#' @export
+#' @importFrom rlang is_scalar_atomic
+#' @example
+#' psy_rule(100)
+psy_rule <- function(n) {
+  if (!is_scalar_atomic(n))
+    n <- NROW(n)
+  floor((0.01 + 1.8 / sqrt(n)) * n)
+}
+
 #' Recursive Augmented Dickey-Fuller Test
 #'
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
@@ -39,7 +54,7 @@
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
-radf <- function(data, minw, lag = 0) {
+radf <- function(data, minw = psy_rule(data), lag = 0) {
 
   # class checks
   sim_index <- seq(1, NROW(data), 1)
@@ -80,29 +95,28 @@ radf <- function(data, minw, lag = 0) {
   x <- as.matrix(data)
   nc <- NCOL(data)
   nr <- NROW(data)
-  # args
+
   if (is.null(colnames(x))) colnames(x) <- paste("Series", seq(1, nc, 1))
-  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
-  # checks
+
   assert_na(data)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
 
   point <- nr - minw - lag
 
-  adf <- sadf <- gsadf <- drop(matrix(0, 1, nc,
-    dimnames = list(NULL, colnames(x))
-  ))
+  adf <- sadf <- gsadf <- drop(
+    matrix(0, 1, nc, dimnames = list(NULL, colnames(x)))
+    )
   badf <- bsadf <- matrix(0, point, nc, dimnames = list(NULL, colnames(x)))
 
   for (i in 1:nc) {
     yxmat <- unroot(x[, i], lag = lag)
     results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
 
-    badf[, i] <- results[1:point]
-    adf[i] <- results[point + 1]
-    sadf[i] <- results[point + 2]
-    gsadf[i] <- results[point + 3]
+    badf[, i]  <- results[1:point]
+    adf[i]     <- results[point + 1]
+    sadf[i]    <- results[point + 2]
+    gsadf[i]   <- results[point + 3]
     bsadf[, i] <- results[-c(1:(point + 3))]
   }
 

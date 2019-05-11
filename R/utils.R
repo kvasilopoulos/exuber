@@ -5,7 +5,7 @@ array_to_list <- function(x, var, itnames) {
 
   out <- vector("list", length = iter)
   for (i in 1:iter) {
-    out[[i]] <- x %>% pluck(var) %>% `[`(, , i)
+    out[[i]] <- pluck(x, var) %>% `[`(,,i)
   }
   out
 }
