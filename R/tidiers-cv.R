@@ -1,3 +1,16 @@
+#' Tidy an cv object
+#'
+#' @param x An `cv` object
+#' @inheritParams tidy.radf
+#'
+#' @return A \code{\link[=radf]{radf()}}[tibble::tibble()] with columns
+#'
+#' \itemize{
+#' \item sig The significance level.
+#' \item name The name of the series (when format is "long")
+#' \item crit The critical value (when format is "long")
+#' }
+#'
 #' @importFrom purrr keep reduce
 #' @importFrom rlang set_names
 #' @importFrom dplyr full_join mutate
@@ -61,7 +74,9 @@ tidy.cv <- function(x, format = c("wide", "long")) {
 
 }
 
-
+#' @rdname tidy.cv
+#' @inheritParams tidy.radf
+#'
 #' @importFrom rlang as_double set_names
 #' @importFrom tidyr gather
 #' @importFrom dplyr as_tibble bind_cols mutate select
@@ -139,6 +154,43 @@ augment.cv <- function(x, format = c("wide", "long")) {
 }
 
 
+# mc_dist -----------------------------------------------------------------
+
+#' Tidying *_dist objects
+#'
+#' `tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+#' a tibble.
+#'
+#' @param x An radf object
+#'
+#' @return A tibble.
+#'
+#' @importFrom dplyr tibble
+#' @export
+tidy.mc_dist <- function(x, ...) {
+  tibble(
+    adf = x$adf_cv,
+    sadf = x$sadf_cv,
+    gsadf = x$gsadf_cv
+  )
+}
+
+#' Plotting *_dist object
+#'
+#' @importFrom tidyr gather
+#' @export
+autoplot.mc_dist <- function(object, ...) {
+
+  object %>%
+    tidy() %>%
+    rename(ADF = adf, SADF = sadf, GSADF = gsadf) %>%
+    tidyr::gather(Distribution, value, factor_key = TRUE) %>%
+    ggplot(aes(value, fill = Distribution)) +
+    geom_density(alpha = 0.2) +
+    theme_bw() +
+    labs(x = "", y = "",
+         title = "Distributions of the ADF and supADF statistics")
+}
 
 
 
