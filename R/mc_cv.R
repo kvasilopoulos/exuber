@@ -1,10 +1,10 @@
 
-psy_rule <- function(n) floor((0.01 + 1.8 / sqrt(n)) * n)
 
-mc_sim <- function(n, nrep = 2000, minw) {
 
-  # asserts
-  if (is.data.frame(n) || is.matrix(n))  # case of providiing data in 'n'
+
+mc_sim <- function(n, nrep = 2000, minw = psy_rule(n)) {
+
+  if (!is_scalar_atomic(n))  # case of providiing data in 'n'
     stop("Argument 'n' should be a positive integer")
 
   assert_positive_int(n, greater_than = 5)
@@ -45,6 +45,8 @@ mc_sim <- function(n, nrep = 2000, minw) {
 }
 
 
+#' @rdname mc_cv
+#' @inheritParams mc_cv
 #' @export
 mc_dist <- function(n, nrep = 2000, minw = psy_rule(n)) {
 
@@ -72,7 +74,7 @@ mc_dist <- function(n, nrep = 2000, minw = psy_rule(n)) {
 #'  Monte Carlo Critical Values
 #'
 #' \code{mc_cv} computes Monte Carlo critical values for the recursive unit
-#' root tests.
+#' root tests. \code{mc_dist} computes the distribution.
 #'
 #' @inheritParams radf
 #' @param n A positive integer. The sample size.
@@ -129,7 +131,7 @@ mc_cv <- function(n, minw = psy_rule(n), nrep = 2000,
         t() %>%
         apply(2, cummax)
     } else if (opt_bsadf == "conservative") {
-      apply(results[1:n - minw, ], 2, cummax) %>%
+      apply(results[1:(n - minw), ], 2, cummax) %>%
         apply(1, quantile, probs = pr) %>%
         t()
     }
@@ -142,59 +144,29 @@ mc_cv <- function(n, minw = psy_rule(n), nrep = 2000,
     )
   } else if (opt_badf == "asymptotic") {
     temp <- c(-0.44, -0.08, 0.6) %>% rep(each = 100) # values taken from PWY
-    badf_crit <- matrix(temp,
-                        ncol = 3,
-                        dimnames = list(NULL, c(paste(pr)))
+    badf_crit <- matrix(temp, ncol = 3, dimnames = list(NULL, paste(pr))
     )
   } else if (opt_badf == "simulated") {
-    badf_crit <- apply(results[1:point, ], 1, quantile, probs = pr) %>%
-      t() %>%
+    badf_crit <- apply(results[1:point, ], 1, quantile, probs = pr) %>% t() %>%
       apply(2, cummax)
   }
 
-  output <- structure(list(
-    adf_cv = adf_crit,
-    sadf_cv = sadf_crit,
-    gsadf_cv = gsadf_crit,
-    badf_cv = badf_crit,
-    bsadf_cv = bsadf_crit
-  ),
-  method = "Monte Carlo",
-  opt_badf = opt_badf,
-  opt_bsadf = opt_bsadf,
-  iter = nrep,
-  minw = minw,
-  class = "cv"
+  output <- structure(
+    list(
+      adf_cv = adf_crit,
+      sadf_cv = sadf_crit,
+      gsadf_cv = gsadf_crit,
+      badf_cv = badf_crit,
+      bsadf_cv = bsadf_crit
+      ),
+    method = "Monte Carlo",
+    opt_badf = opt_badf,
+    opt_bsadf = opt_bsadf,
+    iter = nrep,
+    minw = minw,
+    class = "cv"
   )
 
   return(output)
 }
-
-
-
-#' @importFrom dplyr tibble
-#'
-#' @export
-tidy.mc_dist <- function(x) {
- tibble(
-   adf = x$adf_cv,
-   sadf = x$sadf_cv,
-   gsadf = x$gsadf_cv
- )
-}
-
-#' @importFrom tidyr gather
-#' @export
-autoplot.mc_dist <- function(object) {
-
-  object %>%
-    tidy() %>%
-    tidyr::gather(Distribution, value, factor_key = TRUE) %>%
-    ggplot(aes(value, fill = Distribution)) +
-    geom_density(alpha = 0.2) +
-    theme_bw() +
-    labs(x = "", y = "", title = "Distributions of the ASD and supADF statistics")
-}
-
-
 
