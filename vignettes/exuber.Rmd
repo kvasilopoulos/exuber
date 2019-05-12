@@ -62,7 +62,7 @@ datestamp(est_stocks)
 
 Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot  of series, and we are interested to identify explosive patterns.
 
-```{r fig.width = 7}
+```{r fig.width = 7, fig.height=2}
 est_stocks %>% 
   datestamp() %>% 
   autoplot()
