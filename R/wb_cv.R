@@ -1,3 +1,74 @@
+wb_ <- function(data, minw, nboot, dist_rad) {
+
+  lst <- parse_data(data)
+  y <- as.matrix(lst$data)
+
+  nc <- NCOL(y)
+  nr <- NROW(y)
+
+  point <- nr - minw
+
+  assert_na(y)
+  assert_positive_int(nboot, greater_than = 2)
+  assert_positive_int(minw, greater_than = 2)
+  stopifnot(is.logical(dist_rad))
+
+  adf_crit <- sadf_crit <- gsadf_crit <-
+    array(NA, dim = c(nboot, nc),
+          dimnames = list(NULL, colnames(y)))
+
+  badf_crit <- bsadf_crit <-
+    array(NA, dim = c(point, nboot, nc),
+          dimnames = list(NULL, NULL, colnames(y)))
+
+  show_pb <- getOption("exuber.show_progress")
+  pb <- get_pb(show_pb, nboot)
+  opts <- get_pb_opts(show_pb, pb)
+
+  do_par <- getOption("exuber.parallel")
+  set_cluster(do_par)
+
+  `%fun%` <- if (do_par) `%dopar%` else `%do%`
+
+  for (j in 1:nc) {
+
+    if (show_pb)
+      cat(paste0(" ", j, "/", nc))
+
+    dy <- diff(y[, j])
+    results <- foreach(
+      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
+      .combine = "cbind", .options.snow = opts
+    ) %fun% {
+      if (show_pb && !do_par)
+        setTxtProgressBar(pb, i)
+      if (dist_rad) {
+        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+      } else {
+        w <- rnorm(nr - 1, 0, 1)
+      }
+      ystar <- c(0, cumsum(w * dy))
+      yxmat <- unroot(ystar)
+      rls_gsadf(yxmat, min_win = minw)
+    }
+
+    adf_crit[, j] <- results[point + 1, ]
+    sadf_crit[, j] <- results[point + 2, ]
+    gsadf_crit[, j] <- results[point + 3, ]
+
+    badf_crit[, , j] <- results[1:point, ]
+    bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
+  }
+
+  list(
+    adf = adf_crit,
+    sadf = sadf_crit,
+    gsadf = gsadf_crit,
+    badf = badf_crit,
+    bsadf = bsadf_crit
+  )
+}
+
 #' Wild Bootstrap Critical values
 #'
 #' \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
@@ -46,247 +117,54 @@
 #' # Change the minimum window and the number of bootstraps
 #' wb <- wb_cv(dta, nboot = 1500, minw = 20)
 #' }
-wb_cv <- function(data, minw = psy_rule(NROW(data)), nboot = 1000,
+wb_cv <- function(data, minw = psy_rule(data), nboot = 1000,
                   dist_rad = FALSE) {
 
-  y <- data %>% discard_index() %>% as.matrix() # index-date check
-  nc <- NCOL(y)
-  nr <- NROW(y)
+  results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
 
-  # if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
-
-  # asserts
-  assert_na(y)
-  assert_positive_int(nboot, greater_than = 2)
-  assert_positive_int(minw, greater_than = 2)
-  stopifnot(is.logical(dist_rad))
-
-  # helpers
-  point <- nr - minw
   pr <- c(0.9, 0.95, 0.99)
 
-  # preallocation
-  adf_crit <- matrix(NA, nc, 3, dimnames = list(colnames(y), c(paste(pr))))
-  sadf_crit <- gsadf_crit <- adf_crit
-  badf_crit <- bsadf_crit <- array(NA,
-    dim = c(point, 3, nc),
-    dimnames = list(NULL, c(paste(pr)), colnames(y))
-  )
-  # get Options
-  show_pb <- getOption("exuber.show_progress")
-  do_par <- getOption("exuber.parallel")
+  adf_crit   <- apply(results$adf, 2, quantile, prob = pr) %>% t()
+  sadf_crit  <- apply(results$sadf, 2, quantile, prob = pr) %>% t()
+  gsadf_crit <- apply(results$gsadf, 2, quantile, prob = pr) %>% t()
 
-  if (show_pb) {
-    pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
-    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
-    on.exit(close(pb))
-  } else {
-    opts <- list(progress = NULL)
-  }
+  badf_crit  <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
+    apply(c(1,3), t)
+  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
+    apply(c(1,3), t)
 
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-
-  `%fun%` <- if (do_par) `%dopar%` else `%do%`
-
-  for (j in 1:nc) {
-    dy <- diff(y[, j])
-    results <- foreach(
-      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
-      .combine = "cbind", .options.snow = opts
-    ) %fun% {
-      if (show_pb && !do_par) setTxtProgressBar(pb, i)
-      if (dist_rad) {
-        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-      } else {
-        w <- rnorm(nr - 1, 0, 1)
-      }
-      ystar <- c(0, cumsum(w * dy))
-      yxmat <- unroot(ystar)
-      rls_gsadf(yxmat, min_win = minw)
-    }
-
-
-    badf_crit[, , j] <- t(apply(results[1:point, ], 1, quantile, prob = pr))
-    adf_crit[j, ] <- quantile(results[point + 1, ], probs = pr)
-    sadf_crit[j, ] <- quantile(results[point + 2, ], probs = pr)
-    gsadf_crit[j, ] <- quantile(results[point + 3, ], probs = pr)
-    bsadf_crit[, , j] <- t(apply(results[-c(1:(point + 3)), ], 1,
-      quantile,
-      prob = pr
-    ))
-
-    if (show_pb) {
-      cat("\n")
-      print(paste("Series", j, "out of", nc, "completed!", sep = " "),
-        quote = FALSE
-      )
-    }
-  }
-
-  output <- structure(list(
-    adf_cv = adf_crit,
-    sadf_cv = sadf_crit,
-    gsadf_cv = gsadf_crit,
-    badf_cv = badf_crit,
-    bsadf_cv = bsadf_crit
-  ),
-  method = "Wild Bootstrap",
-  iter = nboot,
-  minw = minw,
-  class = "cv"
-  )
-
-  return(output)
-}
-
-
-
-
-wb_sim <- function(data, minw = psy_rule(NROW(data)),
-                   nboot = 1000, dist_rad = FALSE) {
-
-  y <- data %>% discard_index() %>% as.matrix() # index-date check
-  nc <- NCOL(y)
-  nr <- NROW(y)
-
-  point <- nr - minw
-  pr <- c(0.9, 0.95, 0.99)
-
-  assert_na(y)
-  assert_positive_int(nboot, greater_than = 2)
-  assert_positive_int(minw, greater_than = 2)
-  stopifnot(is.logical(dist_rad))
-
-  sadf_crit <- gsadf_crit <- adf_crit <-matrix(
-    NA, nrow = nboot, ncol = nc) %>%
-    `colnames<-`(colnames(y))
-
-  badf_crit <-bsadf_crit <- array(
-    NA, dim = c(point, 3, nc), dimnames = list(NULL, c(paste(pr)), colnames(y)))
-
-  show_pb <- getOption("exuber.show_progress")
-  do_par <- getOption("exuber.parallel")
-
-  if (show_pb) {
-    pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
-    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
-    on.exit(close(pb))
-  } else {
-    opts <- list(progress = NULL)
-  }
-
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-
-  `%fun%` <- if (do_par) `%dopar%` else `%do%`
-
-  for (j in 1:nc) {
-    dy <- diff(y[, j])
-    results <- foreach(
-      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
-      .combine = "cbind", .options.snow = opts
-    ) %fun% {
-      if (show_pb && !do_par) setTxtProgressBar(pb, i)
-      if (dist_rad) {
-        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-      } else {
-        w <- rnorm(nr - 1, 0, 1)
-      }
-      ystar <- c(0, cumsum(w * dy))
-      yxmat <- unroot(ystar)
-      rls_gsadf(yxmat, min_win = minw)
-    }
-
-    adf_crit[, j] <- results[point + 1, ]
-    sadf_crit[, j] <- results[point + 2, ]
-    gsadf_crit[, j] <- results[point + 3, ]
-
-    badf_crit[, , j] <- results[1:point, ]
-    bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
-
-    if (show_pb) {
-      cat("\n")
-      print(paste("Series", j, "out of", nc, "completed!", sep = " "),
-            quote = F
-      )
-    }
-  }
-
-  output <- list(
-    adf = adf_crit,
-    sadf = sadf_crit,
-    gsadf = gsadf_crit,
-    badf = badf_crit,
-    bsadf = bsadf_crit
+  structure(
+    list(
+      adf_cv = adf_crit,
+      sadf_cv = sadf_crit,
+      gsadf_cv = gsadf_crit,
+      badf_cv = badf_crit,
+      bsadf_cv = bsadf_crit),
+    method = "Wild Bootstrap",
+    iter = nboot,
+    minw = minw,
+    class = "cv"
   )
 
 }
 
-wb_dist <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
-
-
-  output <- structure(list(
-    adf_cv = adf_crit,
-    sadf_cv = sadf_crit,
-    gsadf_cv = gsadf_crit
-  ),
-  method = "Wild Bootstrap",
-  iter = nboot,
-  minw = minw,
-  class = "wb_dist"
-  )
-
-  return(output)
-}
-
-
-#' @importFrom tidyr gather
-#' @importFrom dplyr select bind_cols as_tibble
-#' @importFrom purrr reduce pluck
-#'
+#' @rdname wb_cv
+#' @inheritParams wb_cv
 #' @export
-tidy.wb_dist <- function(x) {
-  list(
-    x %>%
-      pluck("adf_cv") %>%
-      as_tibble() %>%
-      tidyr::gather(name, adf),
-    x %>%
-      pluck("sadf_cv") %>%
-      as_tibble() %>%
-      gather(name, sadf) %>%
-      select(-name),
-    x %>%
-      pluck("gsadf_cv") %>%
-      as_tibble() %>%
-      gather(name, gsadf) %>%
-      select(-name)
-  ) %>%
-    reduce(bind_cols)
+wb_dist <- function(data, minw = psy_rule(data), nboot = 1000,
+                    dist_rad = FALSE) {
+
+  results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
+
+  structure(
+    list(
+      adf_cv = results$adf,
+      sadf_cv = results$sadf,
+      gsadf_cv = results$gsadf),
+    method = "Wild Bootstrap",
+    iter = nboot,
+    minw = minw,
+    class = "wb_dist"
+  )
 }
-
-#' @importFrom tidyr gather
-#'
-#' @export
-autoplot.wb_dist <- function(object, ...) {
-
-  object %>%
-    tidy() %>%
-    tidyr::gather(Distribution, value, -name, factor_key = TRUE) %>%
-    ggplot(aes(value, fill = Distribution)) +
-    geom_density(alpha = 0.2) +
-    theme_bw() +
-    facet_wrap(~ name, scales = "free", ...) +
-    labs(x = "", y = "")
-}
-
-
-
 

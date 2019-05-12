@@ -1,8 +1,5 @@
-
-
-
-
-mc_sim <- function(n, nrep = 2000, minw = psy_rule(n)) {
+#' @importFrom rlang is_scalar_atomic
+mc_ <- function(n, nrep, minw) {
 
   if (!is_scalar_atomic(n))  # case of providiing data in 'n'
     stop("Argument 'n' should be a positive integer")
@@ -12,21 +9,11 @@ mc_sim <- function(n, nrep = 2000, minw = psy_rule(n)) {
   assert_positive_int(minw, greater_than = 2)
 
   show_pb <- getOption("exuber.show_progress")
+  pb <- get_pb(show_pb, nrep)
+  opts <- get_pb_opts(show_pb, pb)
+
   do_par <- getOption("exuber.parallel")
-
-  if (show_pb) {
-    pb <- txtProgressBar(min = 1, max = nrep - 1, style = 3)
-    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
-    on.exit(close(pb))
-  } else {
-    opts <- list(progress = NULL)
-  }
-
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    on.exit(parallel::stopCluster(cl))
-    registerDoSNOW(cl)
-  }
+  set_cluster(do_par)
 
   `%fun%` <- if (do_par) `%dopar%` else `%do%`
 
@@ -36,40 +23,31 @@ mc_sim <- function(n, nrep = 2000, minw = psy_rule(n)) {
     .combine = "cbind",
     .options.snow = opts
   ) %fun% {
-    if (show_pb && !do_par) setTxtProgressBar(pb, i)
+    if (show_pb && !do_par)
+      setTxtProgressBar(pb, i)
     y <- cumsum(rnorm(n))
     yxmat <- unroot(y)
     rls_gsadf(yxmat, min_win = minw)
   }
-  results
-}
 
+  point <- n - minw
 
-#' @rdname mc_cv
-#' @inheritParams mc_cv
-#' @export
-mc_dist <- function(n, nrep = 2000, minw = psy_rule(n)) {
+  adf_crit   <- results[point + 1, ]
+  sadf_crit  <- results[point + 2, ]
+  gsadf_crit <- results[point + 3, ]
 
-  results <- mc_sim(n = n, nrep = nrep, minw = minw)
+  badf_crit  <- results[1:point, ]
+  bsadf_crit <- results[-c(1:(point + 3)), ]
 
-  adf_crit <- results[n - minw + 1, ]
-  sadf_crit <- results[n - minw + 2, ]
-  gsadf_crit <- results[n - minw + 3, ]
-
-  output <- structure(list(
-    adf_cv = adf_crit,
-    sadf_cv = sadf_crit,
-    gsadf_cv = gsadf_crit
-  ),
-  method = "Monte Carlo",
-  iter = nrep,
-  minw = minw,
-  class = "mc_dist"
+  list(
+    adf = adf_crit,
+    sadf = sadf_crit,
+    gsadf = gsadf_crit,
+    badf = badf_crit,
+    bsadf = bsadf_crit
   )
 
-  return(output)
 }
-
 
 #'  Monte Carlo Critical Values
 #'
@@ -119,46 +97,42 @@ mc_cv <- function(n, minw = psy_rule(n), nrep = 2000,
 
   pr <- c(0.9, 0.95, 0.99)
 
-  results <- mc_sim(n = n, nrep = nrep, minw = minw)
+  results <- mc_(n, nrep, minw = minw)
 
-  adf_crit <- quantile(results[n - minw + 1, ], probs = pr, drop = FALSE)
-  sadf_crit <- quantile(results[n - minw + 2, ], probs = pr, drop = FALSE)
-  gsadf_crit <- quantile(results[n - minw + 3, ], probs = pr, drop = FALSE)
+  adf_crit <- quantile(results$adf, probs = pr, drop = FALSE)
+  sadf_crit <- quantile(results$sadf, probs = pr, drop = FALSE)
+  gsadf_crit <- quantile(results$gsadf, probs = pr, drop = FALSE)
 
   bsadf_crit <-
     if (opt_bsadf == "conventional") {
-      apply(results[-c(1:(n - minw + 3)), ], 1, quantile, probs = pr) %>%
-        t() %>%
-        apply(2, cummax)
+      apply(results$bsadf, 1, quantile, probs = pr) %>%
+        t() %>% apply(2, cummax)
     } else if (opt_bsadf == "conservative") {
-      apply(results[1:(n - minw), ], 2, cummax) %>%
-        apply(1, quantile, probs = pr) %>%
-        t()
+      apply(results$badf, 2, cummax) %>%
+        apply(1, quantile, probs = pr) %>% t()
     }
 
   if (opt_badf == "fixed") {
     temp <- log(log(n * seq(minw + 1, n))) / 100
-    badf_crit <- matrix(rep(temp, 3),
-                        ncol = 3,
-                        dimnames = list(NULL, paste(pr))
+    badf_crit <- matrix(
+      rep(temp, 3), ncol = 3, dimnames = list(NULL, paste(pr))
     )
   } else if (opt_badf == "asymptotic") {
     temp <- c(-0.44, -0.08, 0.6) %>% rep(each = 100) # values taken from PWY
     badf_crit <- matrix(temp, ncol = 3, dimnames = list(NULL, paste(pr))
     )
   } else if (opt_badf == "simulated") {
-    badf_crit <- apply(results[1:point, ], 1, quantile, probs = pr) %>% t() %>%
-      apply(2, cummax)
+    badf_crit <- apply(results$badf, 1, quantile, probs = pr) %>%
+      t() %>% apply(2, cummax)
   }
 
-  output <- structure(
+  structure(
     list(
       adf_cv = adf_crit,
       sadf_cv = sadf_crit,
       gsadf_cv = gsadf_crit,
       badf_cv = badf_crit,
-      bsadf_cv = bsadf_crit
-      ),
+      bsadf_cv = bsadf_crit),
     method = "Monte Carlo",
     opt_badf = opt_badf,
     opt_bsadf = opt_bsadf,
@@ -167,6 +141,24 @@ mc_cv <- function(n, minw = psy_rule(n), nrep = 2000,
     class = "cv"
   )
 
-  return(output)
 }
 
+#' @rdname mc_cv
+#' @inheritParams mc_cv
+#' @export
+mc_dist <- function(n, nrep = 2000, minw = psy_rule(n)) {
+
+  results <- mc_(n, nrep, minw = minw)
+
+  structure(
+    list(
+      adf_cv = results$adf,
+      sadf_cv = results$sadf,
+      gsadf_cv = results$gsadf),
+    method = "Monte Carlo",
+    iter = nrep,
+    minw = minw,
+    class = "mc_dist"
+  )
+
+}
