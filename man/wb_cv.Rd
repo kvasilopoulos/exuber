@@ -2,10 +2,12 @@
 % Please edit documentation in R/wb_cv.R
 \name{wb_cv}
 \alias{wb_cv}
+\alias{wb_dist}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(data, minw = psy_rule(NROW(data)), nboot = 1000,
-  dist_rad = FALSE)
+wb_cv(data, minw = psy_rule(data), nboot = 1000, dist_rad = FALSE)
+
+wb_dist(data, minw = psy_rule(data), nboot = 1000, dist_rad = FALSE)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
