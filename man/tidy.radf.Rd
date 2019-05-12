@@ -6,16 +6,18 @@
 \alias{glance.radf}
 \title{Tidy an radf object}
 \usage{
-\method{tidy}{radf}(x, format = c("wide", "long"))
+\method{tidy}{radf}(x, format = c("wide", "long"), ...)
 
-\method{augment}{radf}(x, format = c("wide", "long"))
+\method{augment}{radf}(x, format = c("wide", "long"), ...)
 
-\method{glance}{radf}(x, format = c("wide", "long"))
+\method{glance}{radf}(x, format = c("wide", "long"), ...)
 }
 \arguments{
 \item{x}{An `radf` object}
 
 \item{format}{Long or wide format}
+
+\item{...}{Additional arguments. Not used.}
 }
 \value{
 A [tibble::tibble()]
