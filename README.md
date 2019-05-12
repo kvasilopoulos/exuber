@@ -52,9 +52,9 @@ There are several options for generating critical values. On default
 {exuber} will use Monte Carlo simulated critical values if no other
 option is provided. The package offers these critical values in the form
 of `data` (up to 700 observations), that are obtain with the `mc_cv()`
-function. Alternatively, {exuber} accomodates Wild Bootstrapped data and
-Sieve Bootstrapped data (panel) through `wb_cv()` and `sb_cv()`
-respectively.
+function. Alternatively, {exuber} accomodates Wild Bootstrapped and
+Sieve Bootstrapped (panel) critical values through `wb_cv()` and
+`sb_cv()` respectively.
 
 -----
 

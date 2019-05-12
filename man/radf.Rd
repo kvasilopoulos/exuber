@@ -17,11 +17,18 @@ The estimation process cannot handle NA values.}
 }
 \value{
 A list that contains the t-statistic (sequence) for:
-  \item{adf}{Augmented Dickey-Fuller}
-  \item{badf}{Backward Augmented Dickey-Fuller}
-  \item{sadf}{Supremum Augmented Dickey-Fuller}
-  \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
-  \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
+\itemize{
+  \item adf: Augmented Dickey-Fuller
+  \item sadf: Supremum Augmented Dickey-Fuller
+  \item gsadf: Generalized Supremum Augmented Dickey-Fuller
+  \item gsadf_panel: Panel Generalized Supremum Augmented Dickey-Fuller
+}
+and the t-statistic sequence for
+\itemize{
+ \item badf: Backward Augmented Dickey-Fuller
+ \item bsadf: Backward Supremum Augmented Dickey-Fuller
+ \item bsadf_panel: Panel Backward Supremum Augmented Dickey-Fuller
+}
 }
 \description{
 \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
