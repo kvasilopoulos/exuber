@@ -21,6 +21,8 @@ dta_df <- data.frame(
   "date" = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 )
 
+dat_mat <- as.matrix(dta)
+
 # NA to generate error message
 dta_na <- dta
 dta_na[1, 3] <- NA
