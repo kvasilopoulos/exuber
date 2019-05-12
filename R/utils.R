@@ -1,4 +1,32 @@
 
+
+# options -----------------------------------------------------------------
+
+set_cluster <- function(condition) {
+  if (condition) {
+    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
+    registerDoSNOW(cl)
+    on.exit(parallel::stopCluster(cl))
+  }
+}
+
+get_pb <- function(condition, iter) {
+  if (condition) {
+    txtProgressBar(min = 1, max = iter - 1, style = 3)
+  }
+}
+
+get_pb_opts <- function(condition, pb) {
+  if (condition) {
+    list(progress = function(n)
+      setTxtProgressBar(pb, n))
+  }else{
+    list(progress = NULL)
+  }
+}
+
+# tidy --------------------------------------------------------------------
+
 array_to_list <- function(x, var, itnames) {
 
   iter <- length(itnames)
@@ -46,27 +74,6 @@ is_panel_cv <- function(y) {
 }
 
 
-# index operations --------------------------------------------------------
-
-
-#' @importFrom purrr detect_index
-#' @importFrom lubridate is.Date
-discard_index <- function(data) {
-  if (is.data.frame(data)) {
-    date_index <- purrr::detect_index(data, lubridate::is.Date)
-    if (as.logical(date_index)) data %>% select(-date_index)
-  }
-  data
-}
-
-#' @importFrom purrr detect_index
-#' @importFrom lubridate is.Date
-extract_index <- function(data) {
-  if (is.data.frame(data)) {
-    date_index <- purrr::detect_index(data, lubridate::is.Date)
-    if (as.logical(date_index)) data %>% select(date_index)
-  }
-}
 
 # assert arguments ------------------------------------------------------
 

@@ -2,11 +2,14 @@
 % Please edit documentation in R/mc_cv.R
 \name{mc_cv}
 \alias{mc_cv}
+\alias{mc_dist}
 \title{Monte Carlo Critical Values}
 \usage{
 mc_cv(n, minw = psy_rule(n), nrep = 2000, opt_badf = c("fixed",
   "asymptotic", "simulated"), opt_bsadf = c("conventional",
   "conservative"))
+
+mc_dist(n, nrep = 2000, minw = psy_rule(n))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
@@ -31,7 +34,7 @@ t-statistics.
 }
 \description{
 \code{mc_cv} computes Monte Carlo critical values for the recursive unit
-root tests.
+root tests. \code{mc_dist} computes the distribution.
 }
 \examples{
 \dontrun{
