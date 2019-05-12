@@ -2,6 +2,7 @@
 #'
 #' @param x An `radf` object
 #' @param format Long or wide format
+#' @param ... Additional arguments. Not used.
 #'
 #' @importFrom purrr keep map reduce
 #' @importFrom dplyr full_join arrange
@@ -12,7 +13,7 @@
 #' A [tibble::tibble()]
 #'
 #' @export
-tidy.radf <- function(x, format = c("wide", "long")) {
+tidy.radf <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 
@@ -36,10 +37,10 @@ tidy.radf <- function(x, format = c("wide", "long")) {
 #' @rdname tidy.radf
 #' @inheritParams tidy.radf
 #'
-#' @importFrom dplyr rename as_tibble
+#' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather
 #' @export
-augment.radf <- function(x, format = c("wide", "long")) {
+augment.radf <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 
@@ -78,7 +79,7 @@ augment.radf <- function(x, format = c("wide", "long")) {
 #' @importFrom rlang set_names
 #' @importFrom dplyr full_join as_tibble
 #' @export
-glance.radf <- function(x, format = c("wide", "long")) {
+glance.radf <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 

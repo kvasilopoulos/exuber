@@ -16,7 +16,7 @@
 #' @importFrom dplyr full_join mutate
 #' @importFrom tibble rownames_to_column enframe
 #' @export
-tidy.cv <- function(x, format = c("wide", "long")) {
+tidy.cv <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 
@@ -79,10 +79,10 @@ tidy.cv <- function(x, format = c("wide", "long")) {
 #'
 #' @importFrom rlang as_double set_names
 #' @importFrom tidyr gather
-#' @importFrom dplyr as_tibble bind_cols mutate select
+#' @importFrom dplyr as_tibble bind_cols mutate select bind_rows
 #' @importFrom purrr pluck map2 reduce
 #' @export
-augment.cv <- function(x, format = c("wide", "long")) {
+augment.cv <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 
@@ -140,7 +140,7 @@ augment.cv <- function(x, format = c("wide", "long")) {
       pluck("bsadf_panel_cv") %>%
       as_tibble() %>%
       gather(sig, bsadf_panel) %>%
-      mutate(sig = sub("%$", "", sig) %>% as_factor())
+      mutate(sig = sub("%$", "", sig) %>% as.factor())
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
@@ -161,7 +161,8 @@ augment.cv <- function(x, format = c("wide", "long")) {
 #' `tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
 #' a tibble.
 #'
-#' @param x An radf object
+#' @param x An `*_dist` object
+#' @param ... Additional arguments. Not used.
 #'
 #' @return A tibble.
 #'
@@ -176,6 +177,12 @@ tidy.mc_dist <- function(x, ...) {
 }
 
 #' Plotting *_dist object
+#'
+#' `tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+#' a ggplot2 object
+#'
+#' @param object An `*_dist` object.
+#' @param ... Additional arguments, used only in `wb_dist` facet options.
 #'
 #' @importFrom tidyr gather
 #' @export
@@ -193,14 +200,74 @@ autoplot.mc_dist <- function(object, ...) {
 }
 
 
+# wb_dist -----------------------------------------------------------------
 
 
 
 
+#' @rdname tidy.mc_dist
+#'
+#' @importFrom tidyr gather
+#' @importFrom dplyr select bind_cols as_tibble
+#' @importFrom purrr reduce pluck
+#'
+#' @export
+tidy.wb_dist <- function(x, ...) {
+  list(
+    x %>%
+      pluck("adf_cv") %>%
+      as_tibble() %>%
+      tidyr::gather(name, adf),
+    x %>%
+      pluck("sadf_cv") %>%
+      as_tibble() %>%
+      gather(name, sadf) %>%
+      select(-name),
+    x %>%
+      pluck("gsadf_cv") %>%
+      as_tibble() %>%
+      gather(name, gsadf) %>%
+      select(-name)
+  ) %>%
+    reduce(bind_cols)
+}
 
+#' @rdname autoplot.mc_dist
+#'
+#' @importFrom tidyr gather
+#' @export
+autoplot.wb_dist <- function(object, ...) {
 
+  object %>%
+    tidy() %>%
+    rename(ADF = adf, SADF = sadf, GSADF = gsadf) %>%
+    tidyr::gather(Distribution, value, -name, factor_key = TRUE) %>%
+    ggplot(aes(value, fill = Distribution)) +
+    geom_density(alpha = 0.2) +
+    theme_bw() +
+    theme(strip.background = element_blank()) +
+    facet_wrap(~ name, scales = "free", ...) +
+    labs(x = "", y = "")
+}
 
+# sb_dist -----------------------------------------------------------------
 
+#' @rdname tidy.mc_dist
+#' @export
+tidy.sb_dist <- function(x, ...) {
+  tibble(
+    gsadf_panel = x
+  )
+}
 
-
-
+#' @rdname autoplot.mc_dist
+#' @export
+autoplot.sb_dist <- function(object, ...) {
+  object %>%
+    tidy() %>%
+    ggplot(aes(gsadf_panel, fill = gsadf_panel)) +
+    scale_x_continuous() +
+    geom_density(fill = "lightblue") +
+    theme_bw() +
+    labs(x = "", y = "", title = "Distribution of the Panel supADF statistic")
+}
