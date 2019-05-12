@@ -5,17 +5,19 @@
 \alias{augment.cv}
 \title{Tidy an cv object}
 \usage{
-\method{tidy}{cv}(x, format = c("wide", "long"))
+\method{tidy}{cv}(x, format = c("wide", "long"), ...)
 
-\method{augment}{cv}(x, format = c("wide", "long"))
+\method{augment}{cv}(x, format = c("wide", "long"), ...)
 }
 \arguments{
 \item{x}{An `cv` object}
 
 \item{format}{Long or wide format}
+
+\item{...}{Additional arguments. Not used.}
 }
 \value{
-A [tibble::tibble()] with columns
+A \code{\link[=radf]{radf()}}[tibble::tibble()] with columns
 
 \itemize{
 \item sig The significance level.
