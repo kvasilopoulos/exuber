@@ -9,6 +9,7 @@ bsadf
 BSADF
 CAC
 carlo
+crit
 codecov
 cv
 DAX
@@ -29,6 +30,7 @@ iere
 Leybourne
 lifecycle
 Martínez
+mc
 monte
 Nasdaq
 ncol
@@ -43,6 +45,8 @@ Rademacher
 radf
 sadf
 SADF
+sb
+sig
 Shi
 SMI
 datestamp
@@ -50,5 +54,7 @@ Datestamp
 Sollis
 te
 tf
+tibble
+wb
 Yu
 Yusupova

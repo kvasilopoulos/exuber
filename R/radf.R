@@ -1,6 +1,6 @@
 #' Calculate minimum window
 #'
-#' Helper function to calcuate the the PSY(2015) suggested minumum window.
+#' Helper function to calculate the the PSY(2015) suggested minimum window.
 #'
 #' @inheritParams mc_cv
 #' @export

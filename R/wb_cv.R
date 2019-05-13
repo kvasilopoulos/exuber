@@ -26,7 +26,11 @@ wb_ <- function(data, minw, nboot, dist_rad) {
   opts <- get_pb_opts(show_pb, pb)
 
   do_par <- getOption("exuber.parallel")
-  set_cluster(do_par)
+  if (do_par) {
+    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
+    registerDoSNOW(cl)
+    on.exit(parallel::stopCluster(cl))
+  }
 
   `%fun%` <- if (do_par) `%dopar%` else `%do%`
 
