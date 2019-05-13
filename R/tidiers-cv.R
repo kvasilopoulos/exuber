@@ -45,7 +45,8 @@ tidy.cv <- function(x, format = c("wide", "long"), ...) {
             as_tibble() %>%
             gather(name, value, -rowname)) %>%
       reduce(full_join, by = c("rowname", "name")) %>%
-      set_names(c("id", "sig", "adf", "sadf", "gsadf"))
+      set_names(c("id", "sig", "adf", "sadf", "gsadf")) %>%
+      mutate(sig = gsub("%", "", sig))
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
@@ -125,7 +126,8 @@ augment.cv <- function(x, format = c("wide", "long"), ...) {
         reduce(bind_cols) %>%
         mutate(name = "bsadf") %>%
         select(sig, name, iternames)
-    )
+    ) %>%
+      mutate(sig = gsub("%", "", sig))
 
 
     if (format == "long") {
