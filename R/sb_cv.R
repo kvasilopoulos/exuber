@@ -85,7 +85,8 @@ sb_ <-  function(data, minw, lag, nboot) {
 #' Panel Sieve Bootstrap Critical Values
 #'
 #' \code{sb_cv} computes p-values for the panel recursive unit root test using
-#' the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
+#' the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{sb_dist}
+#' computes the distribution.
 #'
 #' @inheritParams radf
 #' @inheritParams wb_cv
@@ -113,8 +114,8 @@ sb_ <-  function(data, minw, lag, nboot) {
 #' # Simulate bubble processes
 #' set.seed(4441)
 #' dta <- data.frame(
-#'   "dgp1" = sim_dgp1(100),
-#'   "dgp2" = sim_dgp2(100),
+#'   "psy1" = sim_psy1(100),
+#'   "psy2" = sim_psy2(100),
 #'   "evans" = sim_evans(100),
 #'   "div" = sim_div(100),
 #'   "blan" = sim_blan(100)
@@ -130,6 +131,9 @@ sb_ <-  function(data, minw, lag, nboot) {
 #' dta %>%
 #'   radf(lag = 1) %>%
 #'   autoplot(cv = sb)
+#'
+#'# Simulate distribution
+#'sb_dist(dta, lag = 1)
 #' }
 sb_cv <- function(data, minw = psy_rule(data), lag = 0, nboot = 1000) {
 

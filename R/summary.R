@@ -16,7 +16,7 @@
 #'
 #' # Simulate bubble processes, compute the t-stat and critical values
 #' set.seed(4441)
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 #' rfd <- radf(dta)
 #'
 #' # Summary, diagnostics and datestamp (default)
@@ -41,7 +41,8 @@
 #' }
 #' @export
 summary.radf <- function(object, cv, ...) {
-  cv <- if (missing(cv)) get_crit(object) else cv
+
+  if (missing(cv)) cv <- get_crit(object)
   assert_class(cv, "cv")
 
   x <- object
@@ -78,31 +79,26 @@ summary.radf <- function(object, cv, ...) {
     colnames(ret) <- c("t-stat", "90%", "95%", "99%")
   }
 
-  structure(ret,
-            minw = minw(x),
-            lag = lagr(x),
-            method = method(y),
-            iter = iter(y),
-            class = "summary.radf"
+  structure(
+    ret,
+    minw = minw(x),
+    lag = lagr(x),
+    method = method(y),
+    iter = iter(y),
+    class = "summary.radf"
   )
 }
 
-
+#' @importFrom glue glue
 #' @export
 print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
-                               ...) {
-  cat(
-    "\n", "Recursive Unit Root\n",
-    "----------------------------------\n",
-    "H0:", "Unit root\n",
-    "H1:", "Explosive root\n",
-    "----------------------------------\n",
-    "Critical values:", method(x), "\n",
-    "Minimum window:", minw(x), "\n",
-    if (method(x) == "Monte Carlo") "Iterations:" else "Bootstraps:", iter(x),
-    "\n Lag:", lagr(x), "\n",
-    "----------------------------------"
-  )
+                             ...) {
+
+  iter_char <- if (method(x) == "Monte Carlo") "nrep" else "nboot"
+  cat_line()
+  cat_rule(left = glue("Summary (minw = {minw(x)}, lag = {lagr(x)})"),
+           right = glue("{method(x)} ({iter_char} = {iter(x)})"))
+
   if (method(x) == "Sieve Bootstrap") {
     cat("\n Panel\n")
     pp <- x[1, , drop = FALSE]
@@ -114,6 +110,7 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
       print(format(x[[i]], digits = digits), print.gap = 2L)
     }
   }
+  cat_line()
 }
 
 
@@ -201,16 +198,17 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
     }
   }
 
-  structure(list(
-    accepted = accepted,
-    rejected = rejected,
-    sig = sig,
-    dummy = dummy
-  ),
-  panel = is_panel_cv(y),
-  col_names = if (!is_panel_cv(y)) col_names(x),
-  method = method(y),
-  class = "diagnostics"
+  structure(
+    list(
+      accepted = accepted,
+      rejected = rejected,
+      sig = sig,
+      dummy = dummy
+    ),
+    panel = is_panel_cv(y),
+    col_names = if (!is_panel_cv(y)) col_names(x),
+    method = method(y),
+    class = "diagnostics"
   )
 }
 
@@ -225,9 +223,9 @@ print.diagnostics <- function(x, ...) {
   if (attr(x, "panel")) {
 
     if (x$sig == "Reject")
-      cat("Cannot reject H0! \n")
+      cat(" Cannot reject H0! \n")
     else
-      cat("Rejects H0 for significance level", x$sig, "\n")
+      cat(" Rejects H0 for significance level", x$sig, "\n")
 
   } else {
 
@@ -237,13 +235,12 @@ print.diagnostics <- function(x, ...) {
       cat(col_names(x)[i], ":" , rep(" ", ngaps[i]), sep = "")
 
       if (x$sig[i] == "Reject")
-        cat("Cannot reject H0! \n")
+        cat(" Cannot reject H0! \n")
       else
-        cat("Rejects H0 for significance level", x$sig[i], "\n")
+        cat(" Rejects H0 for significance level", x$sig[i], "\n")
 
     }
   }
-
   cli::cat_line()
 }
 
@@ -343,50 +340,43 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
     foo
   }
 
-  ds_stamp <- lapply(ds, function(z) z %>%
-                       stamp() %>%
-                       filter(!!sym("Duration") >= min_duration) %>%
-                       as.matrix())
+  ds_stamp <-
+    lapply(ds, function(z) stamp(z) %>%
+             filter(!!sym("Duration") >= min_duration) %>% as.matrix())
 
-  add_index <- lapply(ds_stamp, function(t) data.frame(
-    "Start" = dating[t[, 1]],
-    "End" = dating[t[, 2]],
-    "Duration" = t[, 3], row.names = NULL
-  ))
+  add_index <- lapply(ds_stamp, function(t)
+    data.frame(
+      "Start" = dating[t[, 1]],
+      "End" = dating[t[, 2]],
+      "Duration" = t[, 3], row.names = NULL))
 
   # min_duration may cause to exclude periods or the whole sample
   min_reject <- lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
   res <- add_index[!min_reject]
   names(res) <- choice[!min_reject]
 
-  if (length(res) == 0) {
+  if (length(res) == 0)
     stop("Argument 'min_duration' excludes all explosive periods",
-         call. = FALSE
-    )
-  }
+         call. = FALSE)
 
   dummy <-
-    matrix(0,
-           nrow = length(index(x)), ncol = length(choice),
-           dimnames = list(seq_along(index(x)), if (is_panel_cv(y)) {
-             "Panel"
-           } else {
-             col_names(x)[reps]
-           })
-    )
+    matrix(0, nrow = length(index(x)), ncol = length(choice),
+           dimnames = list(seq_along(index(x)),
+                           if (is_panel_cv(y)) "Panel" else col_names(x)[reps]))
 
   for (z in seq_along(choice)) {
     dummy[ds[[z]], z] <- 1
   }
 
-  structure(res,
-            dummy = dummy,
-            index = index(x, trunc = TRUE),
-            panel = is_panel_cv(y),
-            min_duration = min_duration,
-            option = option,
-            method = method(y),
-            class = c("list", "datestamp")
+  structure(
+    res,
+    dummy = dummy,
+    index = index(x, trunc = TRUE),
+    panel = is_panel_cv(y),
+    min_duration = min_duration,
+    option = option,
+    method = method(y),
+    class = c("list", "datestamp")
   )
 }
 
@@ -394,7 +384,8 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
 print.datestamp <- function(x, ...) {
 
   cli::cat_line()
-  cli::cat_rule(left = "Datestamp", right = method(x))
+  cli::cat_rule(left = glue("Datestamp (min_duration = {min_dur(x)})"),
+                right = method(x))
   cli::cat_line()
 
   if (attr(x, "panel")) {

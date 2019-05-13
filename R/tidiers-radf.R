@@ -9,10 +9,24 @@
 #' @importFrom rlang set_names
 #' @importFrom tidyr gather
 #'
-#' @return
-#' A [tibble::tibble()]
+#' @return A [tibble::tibble()]
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+#'
+#' rfd <- radf(data)
+#'
+#' # Get the t-stat
+#' tidy(rfd)
+#'
+#' # Get the t-stat sequences
+#' augment(rfd)
+#'
+#' # Get the panel t-stat
+#' glance(mc)
+#' }
 tidy.radf <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)

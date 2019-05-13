@@ -51,5 +51,5 @@ Evans, G. W. (1991). Pitfalls in testing for explosive
 bubbles in asset prices. The American Economic Review, 81(4), 922-930.
 }
 \seealso{
-\code{\link{sim_dgp1}}, \code{\link{sim_dgp2}}, \code{\link{sim_blan}}
+\code{\link{sim_psy1}}, \code{\link{sim_psy2}}, \code{\link{sim_blan}}
 }

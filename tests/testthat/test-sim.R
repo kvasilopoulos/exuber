@@ -12,13 +12,13 @@ test_that("sim_div", {
   expect_error(sim_div(100, output = "d"), regexp = NA)
 })
 
-test_that("dgp1", {
+test_that("psy1", {
   expect_error(
-    sim_dgp1(100, te = 120),
+    sim_psy1(100, te = 120),
     message("Argument 'te' should be a be between '0' and '100' ")
   )
   expect_error(
-    sim_dgp1(100, tf = 120),
+    sim_psy1(100, tf = 120),
     message("Argument 'tf' should be a be between '0' and '100' ")
   )
 })

@@ -8,7 +8,7 @@ test_that("basic", {
 
 test_that("select", {
   fort_1 <- radf_dta %>% fortify(select = 1)
-  fort_dgp1 <- radf_dta %>% fortify(select = "dgp1")
+  fort_dgp1 <- radf_dta %>% fortify(select = "psy1")
   expect_equal(fort_1, fort_dgp1)
   expect_error(radf_dta %>% fortify(select = "div"), "subscript out of bounds")
 })

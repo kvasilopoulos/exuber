@@ -18,9 +18,16 @@
 \item{...}{Additional arguments. Not used.}
 }
 \value{
-A tibble.
+A [tibble::tibble()]
 }
 \description{
-`tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+tidy `*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
 a tibble.
+}
+\examples{
+\dontrun{
+mc <- mc_cv(n = 100)
+
+tidy(mc)
+}
 }

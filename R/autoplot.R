@@ -20,7 +20,7 @@
 #' @export
 #' @examples
 #' \donttest{
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 #'
 #' dta %>%
 #'   radf() %>%
@@ -267,7 +267,7 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #' @examples
 #' \donttest{
 #'
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+#' dta <- cbind(sim_psy1(n = 100), sim_psy2(n = 100))
 #'
 #' dta %>%
 #'   radf() %>%

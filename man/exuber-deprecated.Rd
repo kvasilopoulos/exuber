@@ -4,12 +4,18 @@
 \alias{exuber-deprecated}
 \alias{report}
 \alias{plot.radf}
+\alias{sim_dgp1}
+\alias{sim_dgp2}
 \title{Deprecated functions in package \pkg{exuber}.}
 \usage{
 report(x, y, panel = FALSE, ...)
 
 \method{plot}{radf}(x, y, option = c("gsadf", "sadf"),
   min_duration = 0, plot_type = c("multiple", "single"))
+
+sim_dgp1(...)
+
+sim_dgp2(...)
 }
 \description{
 The functions listed below are deprecated and will be defunct in

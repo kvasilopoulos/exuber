@@ -5,16 +5,16 @@ options(exuber.parallel = FALSE)
 # Simulate data
 set.seed(4441)
 dta <- data.frame(
-  "dgp1" = sim_dgp1(100),
-  "dgp2" = sim_dgp2(100),
+  "psy1" = sim_psy1(100),
+  "psy2" = sim_psy2(100),
   "evans" = sim_evans(100),
   "div" = sim_div(100),
   "blan" = sim_blan(100)
 )
 
 dta_df <- data.frame(
-  "dgp1" = sim_dgp1(100),
-  "dgp2" = sim_dgp2(100),
+  "psy1" = sim_psy1(100),
+  "psy2" = sim_psy2(100),
   "evans" = sim_evans(100),
   "div" = sim_div(100),
   "blan" = sim_blan(100),
@@ -38,7 +38,7 @@ radf_div <- radf(sim_div(100))
 
 # # Create a series that do not reject at 95 sig level
 set.seed(1132)
-radf_95 <- radf(sim_dgp1(100, alpha = 0.66))
+radf_95 <- radf(sim_psy1(100, alpha = 0.66))
 mc <- mc_cv(100, nrep = 100)
 
 set.seed(1333)

@@ -9,9 +9,7 @@ parse_df <- function(x) {
     index <- seq(1, NROW(x), 1)
   }
 
-  return(
-    list(data = x, index = index)
-  )
+  list(data = x, index = index)
 }
 
 parse_ts <- function(x) {
@@ -32,9 +30,11 @@ parse_ts <- function(x) {
     index <- as.Date(index)
   }
 
-  return(
-    list(data = x, index = index)
-  )
+  list(data = x, index = index)
+}
+
+parse_num <- function(x) {
+  list(data = x, index = seq(1, NROW(x), 1))
 }
 
 #' @importFrom stats frequency time
@@ -43,20 +43,20 @@ parse_ts <- function(x) {
 #' @importFrom stats is.ts
 parse_data <- function(x) {
 
-  tryCatch(
-    if (is.null(colnames(x)))
-      colnames(x) <- paste("Series", seq(1, NCOL(x), 1)),
-    error = function(e) {}
-  )
-
   if (is.ts(x)) {
     lst <- parse_ts(x)
   } else if (is.data.frame(x)) {
     lst <- parse_df(x)
   } else if (is.numeric(x)) {
-    lst <- list(data = x, index = seq(1, NROW(x), 1))
+    lst <- parse_num(x)
   } else {
     stop("Unsupported class", call. = FALSE)
   }
-  return(lst)
+
+  matx <- as.matrix(lst$data)
+
+  if (is.null(colnames(matx)))
+    colnames(matx) <- paste("Series", seq(1, ncol(matx), 1))
+
+  list(data = matx, index = lst$index)
 }

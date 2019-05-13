@@ -180,73 +180,58 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
     <pre class="examples"><div class='input'>
 <span class='co'># Simulate bubble processes, compute the t-stat and critical values</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>4441</span>)
-<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='sim_dgp1.html'>sim_dgp1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='fu'><a href='sim_dgp2.html'>sim_dgp2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
+<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='kw'>psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
 <span class='no'>rfd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>dta</span>)
 
 <span class='co'># Summary, diagnostics and datestamp (default)</span>
 <span class='fu'>summary</span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt;  Recursive Unit Root
-#&gt;  ----------------------------------
-#&gt;  H0: Unit root
-#&gt;  H1: Explosive root
-#&gt;  ----------------------------------
-#&gt;  Critical values: Monte Carlo 
-#&gt;  Minimum window: 19 
-#&gt;  Iterations: 2000 
-#&gt;  Lag: 0 
-#&gt;  ----------------------------------
-#&gt;  Series 1 
+#&gt; -- Summary (minw = 19, lag = 0) ------------------ Monte Carlo (nrep = 2000) --
+#&gt; 
+#&gt;  psy1 
 #&gt;         tstat      90%      95%     99%
 #&gt; ADF    -2.538  -0.4035  -0.0762  0.5104
 #&gt; SADF    6.218   1.0074   1.3484  1.9454
 #&gt; GSADF   6.541   1.6942   1.9259  2.6191
 #&gt; 
-#&gt;  Series 2 
+#&gt;  psy2 
 #&gt;         tstat      90%      95%     99%
 #&gt; ADF    -2.579  -0.4035  -0.0762  0.5104
 #&gt; SADF    7.027   1.0074   1.3484  1.9454
-#&gt; GSADF   7.574   1.6942   1.9259  2.6191</div><div class='input'><span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt;  Diagnostics: Individual
-#&gt;  -----------------------------------
-#&gt; Series 1:
-#&gt;  Rejects H0 for significance level 99%
-#&gt; Series 2:
-#&gt;  Rejects H0 for significance level 99%
-#&gt;  ----------------------------------- 
-#&gt;  Procced for date stampting and plotting for 2 variable(s)
-#&gt;  c("Series 1", "Series 2")</div><div class='input'><span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; Datestamp: Individual
-#&gt;  -----------------------------------
-#&gt; Series 1 :
+#&gt; GSADF   7.574   1.6942   1.9259  2.6191
+#&gt; </div><div class='input'><span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
+#&gt; -- Diagnostics ------------------------------------------------- Monte Carlo --
+#&gt; 
+#&gt; psy1:     Rejects H0 for significance level 99% 
+#&gt; psy2:     Rejects H0 for significance level 99% 
+#&gt; </div><div class='input'><span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
+#&gt; -- Datestamp (min_duration = 0) -------------------------------- Monte Carlo --
+#&gt; 
+#&gt; psy1 :
 #&gt;   Start End Duration
 #&gt; 1    44  55       12
 #&gt; 
-#&gt; Series 2 :
+#&gt; psy2 :
 #&gt;   Start End Duration
 #&gt; 1    22  40       19
 #&gt; 2    66  70        5
 #&gt; </div><div class='input'>
 <span class='co'>#' # Diagnostics for 'sadf'</span>
 <span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)</div><div class='output co'>#&gt; 
-#&gt;  Diagnostics: Individual
-#&gt;  -----------------------------------
-#&gt; Series 1:
-#&gt;  Rejects H0 for significance level 99%
-#&gt; Series 2:
-#&gt;  Rejects H0 for significance level 99%
-#&gt;  ----------------------------------- 
-#&gt;  Procced for date stampting and plotting for 2 variable(s)
-#&gt;  c("Series 1", "Series 2")</div><div class='input'>
+#&gt; -- Diagnostics ------------------------------------------------- Monte Carlo --
+#&gt; 
+#&gt; psy1:     Rejects H0 for significance level 99% 
+#&gt; psy2:     Rejects H0 for significance level 99% 
+#&gt; </div><div class='input'>
 <span class='co'># Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived</span>
 <span class='no'>rot</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>round</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NROW</a></span>(<span class='no'>rfd</span>)) / <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NROW</a></span>(<span class='no'>rfd</span>))
 <span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='no'>rot</span>)</div><div class='output co'>#&gt; 
-#&gt; Datestamp: Individual
-#&gt;  -----------------------------------
-#&gt; Series 1 :
+#&gt; -- Datestamp (min_duration = 0) -------------------------------- Monte Carlo --
+#&gt; 
+#&gt; psy1 :
 #&gt;   Start End Duration
 #&gt; 1    44  55       12
 #&gt; 
-#&gt; Series 2 :
+#&gt; psy2 :
 #&gt;   Start End Duration
 #&gt; 1    22  40       19
 #&gt; 2    66  70        5
@@ -275,7 +260,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

@@ -31,7 +31,7 @@ test_that("augment output",{
   expect_equal(names(augment(mc)), c("sig", "badf", "bsadf"))
   expect_equal(names(augment(mc, format = "long")), c("name", "sig", "crit"))
 
-  id_nms <- c("dgp1", "dgp2", "evans", "div", "blan")
+  id_nms <- c("psy1", "psy2", "evans", "div", "blan")
 
   expect_equal(names(augment(wb)), c("sig", "name", id_nms))
   expect_equal(names(augment(wb, format = "long")),
