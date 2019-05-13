@@ -39,18 +39,18 @@
 #' Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
 #' 6(4), 1043-1078.
 #'
-#' @seealso \code{\link{sim_dgp2}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
+#' @seealso \code{\link{sim_psy2}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 #'
 #' @examples
 #' # 100 periods with bubble origination date 40 and termination date 55
-#' sim_dgp1(n = 100)
-#' 
+#' sim_psy1(n = 100)
+#'
 #' # 200 periods with bubble origination date 80 and termination date 110
-#' sim_dgp1(n = 200)
-#' 
+#' sim_psy1(n = 200)
+#'
 #' # 200 periods with bubble origination date 100 and termination date 150
-#' sim_dgp1(n = 200, te = 100, tf = 150)
-sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
+#' sim_psy1(n = 200, te = 100, tf = 150)
+sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
                      alpha = 0.6, sigma = 6.79) {
   assert_positive_int(n)
   assert_between(te, 0, n)
@@ -78,10 +78,10 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 
 #' Simulation of a two-bubble process
 #'
-#' The following data generating process is similar to  \code{\link{sim_dgp1}}, with the difference that
+#' The following data generating process is similar to  \code{\link{sim_psy1}}, with the difference that
 #' there are two episodes of mildly explosive dynamics.
 #'
-#' @inheritParams sim_dgp1
+#' @inheritParams sim_psy1
 #' @param te1 A scalar in (0, n) specifying the observation in which the first bubble originates.
 #' @param tf1 A scalar in  (te1, n) specifying the observation in which the first bubble collapses.
 #' @param te2 A scalar in (tf1, n) specifying the observation in which the second bubble originates.
@@ -130,15 +130,15 @@ sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
 #' 6(4), 1043-1078.
 #'
-#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
+#' @seealso \code{\link{sim_psy1}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 #'
 #' @examples
 #' # 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
-#' sim_dgp2(n = 100)
-#' 
+#' sim_psy2(n = 100)
+#'
 #' # 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
-#' sim_dgp2(n = 200)
-sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
+#' sim_psy2(n = 200)
+sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
                      te2 = 0.6 * n, tf2 = 0.1 * n + te2,
                      c = 1, alpha = 0.6, sigma = 6.79) {
   assert_positive_int(n)
@@ -177,7 +177,7 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #' Simulation of a Blanchard (1979) rational bubble process.
 #'
-#' @inheritParams sim_dgp1
+#' @inheritParams sim_psy1
 #' @param pi A positive value in (0, 1) which governs the probability of the bubble continuing to grow.
 #' @param r A positive scalar that determines the growth rate of the bubble process.
 #'
@@ -201,7 +201,7 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' @references Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 #' Economics letters, 3(4), 387-389.
 #'
-#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_dgp2}}, \code{\link{sim_evans}}
+#' @seealso \code{\link{sim_psy1}}, \code{\link{sim_psy2}}, \code{\link{sim_evans}}
 #'
 #' @examples
 #' sim_blan(n = 100)
@@ -264,7 +264,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #'
 #' @export
 #'
-#' @seealso \code{\link{sim_dgp1}}, \code{\link{sim_dgp2}}, \code{\link{sim_blan}}
+#' @seealso \code{\link{sim_psy1}}, \code{\link{sim_psy2}}, \code{\link{sim_blan}}
 #'
 #' @references Evans, G. W. (1991). Pitfalls in testing for explosive
 #' bubbles in asset prices. The American Economic Review, 81(4), 922-930.
@@ -303,7 +303,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 #'
 #' Simulate (log) dividends from a random walk with drift.
 #'
-#' @inheritParams sim_dgp1
+#' @inheritParams sim_psy1
 #' @param mu A scalar indicating the drift.
 #' @param r A positive value indicating the discount factor.
 #' @param log A logical. If true dividends follow a lognormal distribution.

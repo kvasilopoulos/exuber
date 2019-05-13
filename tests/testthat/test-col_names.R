@@ -1,6 +1,6 @@
 context("col_names")
 
-cnames <- c("dgp1", "dgp2", "evans", "div", "blan")
+cnames <- c("psy1", "psy2", "evans", "div", "blan")
 
 test_that("col_names check", {
   expect_equal(cnames, colnames(dta))
@@ -16,7 +16,7 @@ test_that("col_names check", {
 })
 
 test_that("col_names <-  check ", {
-  cnames2 <- c("dg1", "dg2", "ev", "div", "blan")
+  cnames2 <- c("psy1", "psy2", "ev", "div", "blan")
   expect_equal(col_names(radf_dta) <- cnames2, cnames2)
   expect_error(
     (col_names(radf_dta) <- c("A")),

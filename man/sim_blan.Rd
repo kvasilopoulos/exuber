@@ -41,5 +41,5 @@ Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 Economics letters, 3(4), 387-389.
 }
 \seealso{
-\code{\link{sim_dgp1}}, \code{\link{sim_dgp2}}, \code{\link{sim_evans}}
+\code{\link{sim_psy1}}, \code{\link{sim_psy2}}, \code{\link{sim_evans}}
 }

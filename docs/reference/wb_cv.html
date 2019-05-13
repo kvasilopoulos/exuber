@@ -47,7 +47,8 @@
 
 <meta property="og:description" content="wb_cv performs the Harvey et al. (2016) wild bootstrap re-sampling
 scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests." />
+generate critical values for the recursive unit root tests. wb_dist
+computes the distribution." />
 
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -149,11 +150,14 @@ generate critical values for the recursive unit root tests." />
     
     <p><code>wb_cv</code> performs the Harvey et al. (2016) wild bootstrap re-sampling
 scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests.</p>
+generate critical values for the recursive unit root tests. <code>wb_dist</code>
+computes the distribution.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>wb_cv</span>(<span class='no'>data</span>, <span class='no'>minw</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>dist_rad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>wb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>data</span>), <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>dist_rad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'>wb_dist</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>data</span>), <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>dist_rad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,13 +212,16 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Simulate bubble processes</span>
-<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='st'>"dg1"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp1.html'>sim_dgp1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='st'>"dgp2"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp2.html'>sim_dgp2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
+<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='kw'>psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
 
 <span class='co'># Default minimum window</span>
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>dta</span>)
 
 <span class='co'># Change the minimum window and the number of bootstraps</span>
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>dta</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1500</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
+
+<span class='co'># Simulate distribution</span>
+<span class='fu'>wb_dist</span>(<span class='no'>dta</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -238,7 +245,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

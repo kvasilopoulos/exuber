@@ -1,3 +1,18 @@
+#' Calculate minimum window
+#'
+#' Helper function to calculate the the PSY(2015) suggested minimum window.
+#'
+#' @inheritParams mc_cv
+#' @export
+#' @importFrom rlang is_scalar_atomic
+#' @examples
+#' psy_rule(100)
+psy_rule <- function(n) {
+  if (!is_scalar_atomic(n))
+    n <- NROW(n)
+  floor((0.01 + 1.8 / sqrt(n)) * n)
+}
+
 #' Recursive Augmented Dickey-Fuller Test
 #'
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
@@ -24,110 +39,70 @@
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
-#' @importFrom stats embed frequency time
-#' @importFrom lubridate date_decimal round_date
-#' @importFrom purrr detect_index
 #' @export
 #'
 #' @examples
 #' \donttest{
 #' # Simulate bubble processes
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#' 
+#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+#'
 #' rfd <- radf(dta)
-#' 
+#'
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
-radf <- function(data, minw, lag = 0) {
+radf <- function(data, minw = psy_rule(data), lag = 0) {
 
-  # class checks
-  sim_index <- seq(1, NROW(data), 1)
-  if (any(class(data) %in% c("mts", "ts"))) {
-    if (all(time(data) == sim_index)) {
-      dating <- sim_index
-    } else {
-      dating <- time(data) %>%
-        as.numeric() %>%
-        date_decimal()
-      if (frequency(data) %in% c(1, 4, 12)) {
-        dating <- dating %>%
-          round_date("month") %>%
-          as.Date()
-      } else if (frequency(data) == 52) {
-        dating <- dating %>%
-          as.Date()
-      } else {
-        dating <- dating %>%
-          round_date("day") %>%
-          as.Date()
-      }
-    }
-  } else if (is.data.frame(data)) {
-    date_index <- purrr::detect_index(data, lubridate::is.Date)
-    if (as.logical(date_index)) {
-      dating <- data[, date_index, drop = TRUE]
-      data <- data[, -date_index, drop = FALSE]
-    } else {
-      dating <- sim_index
-    }
-  } else if (class(data) %in% c("numeric", "matrix")) {
-    dating <- sim_index
-  } else {
-    stop("Unsupported class", call. = FALSE)
-  }
-  x <- as.matrix(data)
-  nc <- NCOL(data)
-  nr <- NROW(data)
-  # args
-  if (is.null(colnames(x))) colnames(x) <- paste("Series", seq(1, nc, 1))
-  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
-  # checks
-  assert_na(data)
+  lst <- parse_data(data)
+  x <- lst$data
+
+  nc <- NCOL(x)
+
+  assert_na(x)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
 
-  point <- nr - minw - lag
+  point <- NROW(x) - minw - lag
 
-  adf <- sadf <- gsadf <- drop(matrix(0, 1, nc,
-    dimnames = list(NULL, colnames(x))
-  ))
-  badf <- bsadf <- matrix(0, point, nc, dimnames = list(NULL, colnames(x)))
+  adf <- sadf <- gsadf <-
+    drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
+  badf <- bsadf <-
+    matrix(0, point, nc, dimnames = list(NULL, colnames(x)))
 
   for (i in 1:nc) {
     yxmat <- unroot(x[, i], lag = lag)
     results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
 
-    badf[, i] <- results[1:point]
-    adf[i] <- results[point + 1]
-    sadf[i] <- results[point + 2]
-    gsadf[i] <- results[point + 3]
+    badf[, i]  <- results[1:point]
+    adf[i]     <- results[point + 1]
+    sadf[i]    <- results[point + 2]
+    gsadf[i]   <- results[point + 3]
     bsadf[, i] <- results[-c(1:(point + 3))]
   }
 
   bsadf_panel <- apply(bsadf, 1, mean)
   gsadf_panel <- max(bsadf_panel)
 
-  value <- structure(list(
-    adf = adf,
-    badf = badf,
-    sadf = sadf,
-    bsadf = bsadf,
-    gsadf = gsadf,
-    bsadf_panel = bsadf_panel,
-    gsadf_panel = gsadf_panel
-  ),
-  index = dating,
-  lag = lag,
-  minw = minw,
-  lag = lag,
-  col_names = colnames(x),
-  class = "radf"
+  structure(
+    list(
+      adf = adf,
+      badf = badf,
+      sadf = sadf,
+      bsadf = bsadf,
+      gsadf = gsadf,
+      bsadf_panel = bsadf_panel,
+      gsadf_panel = gsadf_panel),
+    index = lst$index,
+    lag = lag,
+    minw = minw,
+    lag = lag,
+    col_names = colnames(x),
+    class = "radf"
   )
 
-  return(value)
 }
 
+#' @importFrom stats embed
 unroot <- function(x, lag = 0) {
   if (lag == 0) {
     x_embed <- embed(x, 2)
