@@ -18,6 +18,6 @@
 \item{...}{Additional arguments, used only in `wb_dist` facet options.}
 }
 \description{
-`tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+tidy `*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
 a ggplot2 object
 }

@@ -46,7 +46,7 @@
 <meta property="og:title" content="Monte Carlo Critical Values — mc_cv" />
 
 <meta property="og:description" content="mc_cv computes Monte Carlo critical values for the recursive unit
-root tests." />
+root tests. mc_dist computes the distribution." />
 
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -147,12 +147,15 @@ root tests." />
     <div class="ref-description">
     
     <p><code>mc_cv</code> computes Monte Carlo critical values for the recursive unit
-root tests.</p>
+root tests. <code>mc_dist</code> computes the distribution.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mc_cv</span>(<span class='no'>n</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='no'>minw</span>, <span class='kw'>opt_badf</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"asymptotic"</span>,
-  <span class='st'>"simulated"</span>), <span class='kw'>opt_bsadf</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"conventional"</span>, <span class='st'>"conservative"</span>))</pre>
+    <pre class="usage"><span class='fu'>mc_cv</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>n</span>), <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>opt_badf</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>,
+  <span class='st'>"asymptotic"</span>, <span class='st'>"simulated"</span>), <span class='kw'>opt_bsadf</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"conventional"</span>,
+  <span class='st'>"conservative"</span>))
+
+<span class='fu'>mc_dist</span>(<span class='no'>n</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>n</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,13 +165,13 @@ root tests.</p>
       <td><p>A positive integer. The sample size.</p></td>
     </tr>
     <tr>
-      <th>nrep</th>
-      <td><p>A positive integer. The number of Monte Carlo simulations.</p></td>
-    </tr>
-    <tr>
       <th>minw</th>
       <td><p>A positive integer. The minimum window size, which defaults to
 \((0.01 + 1.8/\sqrt(T))*T\).</p></td>
+    </tr>
+    <tr>
+      <th>nrep</th>
+      <td><p>A positive integer. The number of Monte Carlo simulations.</p></td>
     </tr>
     <tr>
       <th>opt_badf</th>
@@ -203,6 +206,9 @@ t-statistics.</p>
 
 <span class='co'># Change the minimum window and the number of simulations</span>
 <span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2500</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
+
+<span class='no'>mdist</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_dist</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='no'>mdist</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -222,7 +228,7 @@ t-statistics.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

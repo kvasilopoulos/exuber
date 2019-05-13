@@ -28,7 +28,8 @@ t-statistics.
 \description{
 \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
 scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests.
+generate critical values for the recursive unit root tests. \code{wb_dist}
+computes the distribution.
 }
 \details{
 This approach involves applying a wild bootstrap re-sampling scheme
@@ -38,13 +39,16 @@ is asymptotically robust to non-stationary volatility.
 \examples{
 \dontrun{
 # Simulate bubble processes
-dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
+dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 
 # Default minimum window
 wb <- wb_cv(dta)
 
 # Change the minimum window and the number of bootstraps
 wb <- wb_cv(dta, nboot = 1500, minw = 20)
+
+# Simulate distribution
+wb_dist(dta)
 }
 }
 \references{

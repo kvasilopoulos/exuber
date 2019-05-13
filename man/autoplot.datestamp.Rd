@@ -25,7 +25,7 @@ Plotting datestamp with \link[=ggplot2]{geom_segment()}
 \examples{
 \donttest{
 
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+dta <- cbind(sim_psy1(n = 100), sim_psy2(n = 100))
 
 dta \%>\%
   radf() \%>\%
