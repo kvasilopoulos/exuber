@@ -11,22 +11,27 @@ template:
 authors:
   Kostas Vasilopoulos:
     href: https://kvasilopoulos.netlify.com/
+  Efthymios Pavlidis:
+    href: https://sites.google.com/site/etpavlidis/
+  Enr\u00EDque Mart\u00EDnez-Garc\u00EDa:
+    href: https://sites.google.com/view/emgeconomics
 
 reference:
   - title: Estimation
     contents:
       - radf
 
-  - title: Critical Values
+  - title: Critical Values & Distributions
     contents:
       - mc_cv
       - wb_cv
       - sb_cv
+      - crit
 
   - title: Simulation
     contents:
-      - sim_dgp1
-      - sim_dgp2
+      - sim_psy1
+      - sim_psy2
       - sim_blan
       - sim_evans
       - sim_div
@@ -41,13 +46,19 @@ reference:
     contents:
       - autoplot.radf
       - autoplot.datestamp
+      - autoplot.mc_dist
+
+  - title: Tidying
+    contents:
+      - tidy.radf
+      - tidy.cv
+      - tidy.mc_dist
 
   - title: Misc
     contents:
       - col_names
       - index.radf
-      - crit
-
+      - psy_rule
 
 navbar:
   type: default

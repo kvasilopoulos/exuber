@@ -10,7 +10,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  message=FALSE
 )
 ```
 
@@ -21,18 +22,13 @@ library(exuber)
 For our analysis we are going to use the `EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE. The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.
 
 ```{r dataset}
-stocks <- 
-  EuStockMarkets %>% 
-  aggregate(nfrequency = 52, mean)
+stocks <- aggregate(EuStockMarkets, nfrequency = 52, mean)
 ```
 
 Next we estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.
 
 ```{r estimation}
-est_stocks <-
-  stocks %>% 
-  radf(lag = 1)
-
+est_stocks <- radf(stocks,lag = 1)
 ```
 
 The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the `cv` argument into the `summary` function. 

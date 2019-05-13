@@ -3,7 +3,7 @@
 #' @param x An `cv` object
 #' @inheritParams tidy.radf
 #'
-#' @return A \code{\link[=radf]{radf()}}[tibble::tibble()] with columns
+#' @return A A [tibble::tibble()]
 #'
 #' \itemize{
 #' \item sig The significance level.
@@ -11,11 +11,24 @@
 #' \item crit The critical value (when format is "long")
 #' }
 #'
+#'
 #' @importFrom purrr keep reduce
 #' @importFrom rlang set_names
 #' @importFrom dplyr full_join mutate
 #' @importFrom tibble rownames_to_column enframe
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' mc <- mc_cv(100)
+#'
+#' # Get the critical values
+#' tidy(mc)
+#'
+#' # Get the critical value sequences
+#' augment(mc)
+#'
+#' }
 tidy.cv <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
@@ -160,16 +173,22 @@ augment.cv <- function(x, format = c("wide", "long"), ...) {
 
 #' Tidying *_dist objects
 #'
-#' `tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+#' tidy `*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
 #' a tibble.
 #'
 #' @param x An `*_dist` object
 #' @param ... Additional arguments. Not used.
 #'
-#' @return A tibble.
+#' @return A [tibble::tibble()]
 #'
 #' @importFrom dplyr tibble
 #' @export
+#' @examples
+#' \dontrun{
+#' mc <- mc_cv(n = 100)
+#'
+#' tidy(mc)
+#' }
 tidy.mc_dist <- function(x, ...) {
   tibble(
     adf = x$adf_cv,
@@ -180,7 +199,7 @@ tidy.mc_dist <- function(x, ...) {
 
 #' Plotting *_dist object
 #'
-#' `tidy.*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+#' tidy `*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
 #' a ggplot2 object
 #'
 #' @param object An `*_dist` object.

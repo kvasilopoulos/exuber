@@ -18,12 +18,14 @@
 <script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Econometric Analysis of Explosive Time Series">
-<meta property="og:description" content="Testing for and dating periods of explosive dynamics (exuberance) in time series 
-    using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015) 
-    &lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)  &lt;doi:10.1007/s11146-015-9531-2&gt;. 
-    The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix 
-    inversion which results in significant speed improvements. Simulation of a variety of 
-    periodically-collapsing bubble processes.">
+<meta property="og:description" content="Testing for and dating periods of explosive
+    dynamics (exuberance) in time series using the univariate and panel
+    recursive unit root tests proposed by Phillips et al. (2015)
+    &lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)
+    &lt;doi:10.1007/s11146-015-9531-2&gt;.  The recursive least-squares
+    algorithm utilizes the matrix inversion lemma to avoid matrix
+    inversion which results in significant speed improvements. Simulation
+    of a variety of periodically-collapsing bubble processes.">
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -109,10 +111,10 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="exuber" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#exuber" class="anchor"></a>exuber <a href="https://kvasilopoulos.github.io/exuber"><img src="logo.png" align="right" height="127.5"></a>
+<a href="#exuber" class="anchor"></a>exuber <a href="https://kvasilopoulos.github.io/exuber"><img src="reference/figures/logo.png" align="right" height="127.5"></a>
 </h1></div>
 
-<p>Testing for and dating periods of explosive dynamics (exuberance) in time series using the univariate and panel recursive unit root tests proposed by <a href="doi:10.1111/iere.12132">Phillips et al. (2015)</a> and <a href="doi:10.1007/s11146-015-9531-2">Pavlidis et al. (2016)</a>. The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix inversion which results in significant speed improvements. Simulation of a variety of periodically-collapsing bubble processes.</p>
+<p>Testing for and dating periods of explosive dynamics (exuberance) in time series using the univariate and panel recursive unit root tests proposed by <a href="https://doi.org/10.1111/iere.12132">Phillips et al. (2015)</a> and <a href="https://doi.org/10.1007/s11146-015-9531-2">Pavlidis et al. (2016)</a>. The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix inversion which results in significant speed improvements. Simulation of a variety of periodically-collapsing bubble processes.</p>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
@@ -127,13 +129,11 @@
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
-<p>Testing explosive time series is based on two principles, estimating t-statistics and generating critical values..</p>
+<p>Testing explosive time series is based on two principles, estimating t-statistics and generating critical values.</p>
 <p>For the former we use the <code><a href="reference/radf.html">radf()</a></code> which is able to</p>
-<p>For generating critical values we have several options. Firstly, the package offers in the form of <code>data</code> simulated critical values (up to 700 observations) that are obtain with the <code><a href="reference/mc_cv.html">mc_cv()</a></code> functions The user has option</p>
-</div>
-<div id="code-of-conduct" class="section level3">
-<h3 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h3>
+<p>For generating critical values we have several options. Firstly, the package offers simulated critical values (up to 700 observations) in the form of <code>data</code> that are obtain with the <code><a href="reference/mc_cv.html">mc_cv()</a></code> function.</p>
+<p>The user has option</p>
+<hr>
 <p>Please note that the ‘exuber’ project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 </div>
@@ -169,7 +169,8 @@
 <ul class="list-unstyled">
 <li>
 <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a> <br><small class="roles"> Maintainer, author </small>  </li>
-<li>Efthymios Pavlidis <br><small class="roles"> Author </small>  </li>
+<li>
+<a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a> <br><small class="roles"> Author </small>  </li>
 <li>Simon Spavound <br><small class="roles"> Author </small>  </li>
 <li>Enríque Martínez-García <br><small class="roles"> Author </small>  </li>
 </ul>
@@ -191,7 +192,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

@@ -17,7 +17,7 @@
 \item{...}{Additional arguments. Not used.}
 }
 \value{
-A \code{\link[=radf]{radf()}}[tibble::tibble()] with columns
+A A [tibble::tibble()]
 
 \itemize{
 \item sig The significance level.
@@ -27,4 +27,16 @@ A \code{\link[=radf]{radf()}}[tibble::tibble()] with columns
 }
 \description{
 Tidy an cv object
+}
+\examples{
+\dontrun{
+mc <- mc_cv(100)
+
+# Get the critical values
+tidy(mc)
+
+# Get the critical value sequences
+augment(mc)
+
+}
 }

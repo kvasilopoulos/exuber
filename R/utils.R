@@ -65,8 +65,6 @@ is_panel_cv <- function(y) {
   res
 }
 
-
-
 # assert arguments ------------------------------------------------------
 
 
@@ -148,4 +146,8 @@ method <- function(y) {
 
 iter <- function(y) {
   attr(y, "iter")
+}
+
+min_dur <- function(y) {
+  attr(y, "min_duration")
 }

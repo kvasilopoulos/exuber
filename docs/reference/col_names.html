@@ -175,7 +175,7 @@ difference that <code>col_names</code> is for <code><a href='radf.html'>radf()</
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Simulate bubble processes</span>
-<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='fu'><a href='sim_dgp1.html'>sim_dgp1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='fu'><a href='sim_dgp2.html'>sim_dgp2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
+<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='kw'>psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
 
 <span class='no'>rfd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>dta</span>)
 <span class='fu'>col_names</span>(<span class='no'>rfd</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"OneBubble"</span>, <span class='st'>"TwoBubbles"</span>)</div></pre>
@@ -193,7 +193,7 @@ difference that <code>col_names</code> is for <code><a href='radf.html'>radf()</
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

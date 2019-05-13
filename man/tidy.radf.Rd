@@ -25,3 +25,19 @@ A [tibble::tibble()]
 \description{
 Tidy an radf object
 }
+\examples{
+\dontrun{
+dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+
+rfd <- radf(data)
+
+# Get the t-stat
+tidy(rfd)
+
+# Get the t-stat sequences
+augment(rfd)
+
+# Get the panel t-stat
+glance(mc)
+}
+}

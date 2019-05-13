@@ -91,6 +91,9 @@ mc_ <- function(n, nrep, minw) {
 #'
 #' # Change the minimum window and the number of simulations
 #' mc <- mc_cv(n = 100, nrep = 2500, minw = 20)
+#'
+#' mdist <- mc_dist(n = 100)
+#' autoplot(mdist)
 #' }
 mc_cv <- function(n, minw = psy_rule(n), nrep = 2000,
                   opt_badf = c("fixed", "asymptotic", "simulated"),

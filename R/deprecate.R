@@ -8,14 +8,14 @@
 #' @keywords internal
 #' @export
 report <- function(x, y, panel = FALSE, ...) {
-  .Deprecated("summary", package = "exuber")
+  .Deprecated("summary()", package = "exuber")
   summary(object = x, cv = y)
 }
 
 #' @rdname exuber-deprecated
 plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
                       plot_type = c("multiple", "single")) {
-  .Deprecated("autoplot", package = "exuber")
+  .Deprecated("autoplot()", package = "exuber")
 
   option <- match.arg(option)
   plot_type <- match.arg(plot_type)
@@ -29,4 +29,16 @@ plot.radf <- function(x, y, option = c("gsadf", "sadf"), min_duration = 0,
       datestamp(cv = y, option = option, min_duration = min_duration) %>%
       autoplot()
   }
+}
+
+#' @rdname exuber-deprecated
+sim_dgp1 <- function(...) {
+  .Deprecated(new = "sim_psy1()", package = "exuber")
+  sim_psy1(...)
+}
+
+#' @rdname exuber-deprecated
+sim_dgp2 <- function(...) {
+  .Deprecated("sim_psy2()", package = "exuber")
+  sim_psy2(...)
 }

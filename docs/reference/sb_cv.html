@@ -46,7 +46,8 @@
 <meta property="og:title" content="Panel Sieve Bootstrap Critical Values — sb_cv" />
 
 <meta property="og:description" content="sb_cv computes p-values for the panel recursive unit root test using
-the sieve bootstrap procedure outlined in Pavlidis et al. (2016)" />
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016). sb_dist
+computes the distribution." />
 
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -147,11 +148,14 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016)" />
     <div class="ref-description">
     
     <p><code>sb_cv</code> computes p-values for the panel recursive unit root test using
-the sieve bootstrap procedure outlined in Pavlidis et al. (2016)</p>
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016). <code>sb_dist</code>
+computes the distribution.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>sb_cv</span>(<span class='no'>data</span>, <span class='no'>minw</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
+    <pre class="usage"><span class='fu'>sb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>data</span>), <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+
+<span class='fu'>sb_dist</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>data</span>), <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,8 +202,8 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='co'># Simulate bubble processes</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>4441</span>)
 <span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
-  <span class='st'>"dgp1"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp1.html'>sim_dgp1</a></span>(<span class='fl'>100</span>),
-  <span class='st'>"dgp2"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_dgp2.html'>sim_dgp2</a></span>(<span class='fl'>100</span>),
+  <span class='st'>"psy1"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>),
+  <span class='st'>"psy2"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='fl'>100</span>),
   <span class='st'>"evans"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_evans.html'>sim_evans</a></span>(<span class='fl'>100</span>),
   <span class='st'>"div"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_div.html'>sim_div</a></span>(<span class='fl'>100</span>),
   <span class='st'>"blan"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>)
@@ -215,6 +219,9 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
+
+<span class='co'># Simulate distribution</span>
+<span class='fu'>sb_dist</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -236,7 +243,7 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">
