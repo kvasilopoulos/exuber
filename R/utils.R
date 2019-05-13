@@ -2,14 +2,6 @@
 
 # options -----------------------------------------------------------------
 
-set_cluster <- function(condition) {
-  if (condition) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-}
-
 get_pb <- function(condition, iter) {
   if (condition) {
     txtProgressBar(min = 1, max = iter - 1, style = 3)

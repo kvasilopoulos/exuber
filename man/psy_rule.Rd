@@ -10,7 +10,7 @@ psy_rule(n)
 \item{n}{A positive integer. The sample size.}
 }
 \description{
-Helper function to calcuate the the PSY(2015) suggested minumum window.
+Helper function to calculate the the PSY(2015) suggested minimum window.
 }
 \examples{
 psy_rule(100)
