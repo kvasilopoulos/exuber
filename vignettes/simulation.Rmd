@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include `sim_dgp1()`, which generates a time series with a single episode of explosive behavior, `sim_dgp2()` which generates a time series with two episodes of explosive behavior. Two rational bubble models are also currently included; `sim_blan()` which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, `sim_evans()` generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.
+The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include `sim_psy1()`, which generates a time series with a single episode of explosive behavior, `sim_psy2()` which generates a time series with two episodes of explosive behavior. Two rational bubble models are also currently included; `sim_blan()` which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, `sim_evans()` generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.
 
 To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilize a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of `radf()` to detect them.
 
@@ -63,8 +63,8 @@ library(tidyr)
 
 procceses <- tibble(
   period = 1:100,
-  sim_dgp1 = sim_dgp1(100),
-  sim_dgp2 = sim_dgp2(100),
+  sim_psy1 = sim_psy1(100),
+  sim_psy2 = sim_psy2(100),
   sim_evans = sim_evans(100),
   sim_blan = sim_blan(100)
 )

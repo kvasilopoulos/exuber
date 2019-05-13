@@ -1,3 +1,37 @@
+# exuber 0.3.0
+
+Three new functions have been added to simulate emprical distributions for:
+
+* `mc_dist()`: Monte Carlo distribution
+* `wb_dist()`: Wild Bootsrap distribution
+* `sb_dist()`: Sieve Bootstrap distribution
+
+Also methods `tidy()` and `autoplot()` have been added to turn the object into
+a tidy tibble and draw a particular plot with ggplot2, respectively.
+
+## Breaking changes
+
+* `sim_dgp1()` and `sim_dgp2()` have been renamed to `sim_psy1()` and `sim_psy2()` 
+to better describe the origination of the dgp. 
+* `sim_dgp1()` and `sim_dgp2()` have been soft-deprecated.
+
+## New features
+
+* `tidy()` methods for objects of class `radf`, `cv`.
+* `augment()` methods for objects of class `radf` and `cv` 
+* `glance()` method for objects of class `radf`
+
+## Impovements
+
+* New printing output for the functrions `summary()`, `diagnostics()` and 
+`datestamp()`.
+
+## Bug Fixes
+
+* `sb_cv()` and `wb_cv()`now can parse data which contain a date-column. Similarly,
+to what `radf()` is doing, but without keeping the index.
+
+
 # exuber 0.2.1.9000
 
 * Website development

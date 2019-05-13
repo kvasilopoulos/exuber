@@ -26,7 +26,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.
 
 # Simulate bubble processes, compute the t-stat and critical values
 set.seed(4441)
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 rfd <- radf(dta)
 
 # Summary, diagnostics and datestamp (default)

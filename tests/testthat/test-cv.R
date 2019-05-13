@@ -1,6 +1,8 @@
 context("cv")
 
 test_that("crit as data", {
+  expect_error(capture.output(print(crit)), NA)
+
   expect_error(crit, NA)
   expect_error(crit[[100]], NA)
   expect_error(radf_dta %>% get_crit(), NA)

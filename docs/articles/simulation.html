@@ -108,7 +108,7 @@
 
     
     
-<p>The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include <code><a href="../reference/sim_dgp1.html">sim_dgp1()</a></code>, which generates a time series with a single episode of explosive behavior, <code><a href="../reference/sim_dgp2.html">sim_dgp2()</a></code> which generates a time series with two episodes of explosive behavior. Two rational bubble models are also currently included; <code><a href="../reference/sim_blan.html">sim_blan()</a></code> which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, <code><a href="../reference/sim_evans.html">sim_evans()</a></code> generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.</p>
+<p>The exuber package has numerous functions which allow the creation of time series which incorporate rational bubble models. These include <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>, which generates a time series with a single episode of explosive behavior, <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> which generates a time series with two episodes of explosive behavior. Two rational bubble models are also currently included; <code><a href="../reference/sim_blan.html">sim_blan()</a></code> which generates a time series containing rational bubbles as proposed by Blanchard (1979). The final function, <code><a href="../reference/sim_evans.html">sim_evans()</a></code> generates a periodically collapsing rational bubble model series. It is the latter type of bubbles that the GSADF test that PSY attempts to detect.</p>
 <p>To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilize a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of <code><a href="../reference/radf.html">radf()</a></code> to detect them.</p>
 <p>Let’s start be generating a realistic prices series incorporating an Evans (1991) type periodically collapsing bubble with the function <code><a href="../reference/sim_evans.html">sim_evans()</a></code>. We will use the monthly parameterisation detailed in PSY (2015a), which corresponds to the empirical values from the S&amp;P 500. {exuber} contains a function <code><a href="../reference/sim_div.html">sim_div()</a></code> which can be used to generate simulated dividends streams from a random walk with drift model.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">125</span>)</a>
@@ -131,8 +131,8 @@
 <a class="sourceLine" id="cb2-3" title="3"></a>
 <a class="sourceLine" id="cb2-4" title="4">procceses &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
 <a class="sourceLine" id="cb2-5" title="5">  <span class="dt">period =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb2-6" title="6">  <span class="dt">sim_dgp1 =</span> <span class="kw"><a href="../reference/sim_dgp1.html">sim_dgp1</a></span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb2-7" title="7">  <span class="dt">sim_dgp2 =</span> <span class="kw"><a href="../reference/sim_dgp2.html">sim_dgp2</a></span>(<span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb2-6" title="6">  <span class="dt">sim_psy1 =</span> <span class="kw"><a href="../reference/sim_psy1.html">sim_psy1</a></span>(<span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb2-7" title="7">  <span class="dt">sim_psy2 =</span> <span class="kw"><a href="../reference/sim_psy2.html">sim_psy2</a></span>(<span class="dv">100</span>),</a>
 <a class="sourceLine" id="cb2-8" title="8">  <span class="dt">sim_evans =</span> <span class="kw"><a href="../reference/sim_evans.html">sim_evans</a></span>(<span class="dv">100</span>),</a>
 <a class="sourceLine" id="cb2-9" title="9">  <span class="dt">sim_blan =</span> <span class="kw"><a href="../reference/sim_blan.html">sim_blan</a></span>(<span class="dv">100</span>)</a>
 <a class="sourceLine" id="cb2-10" title="10">)</a>
@@ -155,7 +155,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

@@ -1,8 +1,84 @@
+wb_ <- function(data, minw, nboot, dist_rad) {
+
+  lst <- parse_data(data)
+  y <- as.matrix(lst$data)
+
+  nc <- NCOL(y)
+  nr <- NROW(y)
+
+  point <- nr - minw
+
+  assert_na(y)
+  assert_positive_int(nboot, greater_than = 2)
+  assert_positive_int(minw, greater_than = 2)
+  stopifnot(is.logical(dist_rad))
+
+  adf_crit <- sadf_crit <- gsadf_crit <-
+    array(NA, dim = c(nboot, nc),
+          dimnames = list(NULL, colnames(y)))
+
+  badf_crit <- bsadf_crit <-
+    array(NA, dim = c(point, nboot, nc),
+          dimnames = list(NULL, NULL, colnames(y)))
+
+  show_pb <- getOption("exuber.show_progress")
+  pb <- get_pb(show_pb, nboot)
+  opts <- get_pb_opts(show_pb, pb)
+
+  do_par <- getOption("exuber.parallel")
+  if (do_par) {
+    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
+    registerDoSNOW(cl)
+    on.exit(parallel::stopCluster(cl))
+  }
+
+  `%fun%` <- if (do_par) `%dopar%` else `%do%`
+
+  for (j in 1:nc) {
+
+    if (show_pb)
+      cat(paste0(" ", j, "/", nc))
+
+    dy <- diff(y[, j])
+    results <- foreach(
+      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
+      .combine = "cbind", .options.snow = opts
+    ) %fun% {
+      if (show_pb && !do_par)
+        setTxtProgressBar(pb, i)
+      if (dist_rad) {
+        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+      } else {
+        w <- rnorm(nr - 1, 0, 1)
+      }
+      ystar <- c(0, cumsum(w * dy))
+      yxmat <- unroot(ystar)
+      rls_gsadf(yxmat, min_win = minw)
+    }
+
+    adf_crit[, j] <- results[point + 1, ]
+    sadf_crit[, j] <- results[point + 2, ]
+    gsadf_crit[, j] <- results[point + 3, ]
+
+    badf_crit[, , j] <- results[1:point, ]
+    bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
+  }
+
+  list(
+    adf = adf_crit,
+    sadf = sadf_crit,
+    gsadf = gsadf_crit,
+    badf = badf_crit,
+    bsadf = bsadf_crit
+  )
+}
+
 #' Wild Bootstrap Critical values
 #'
 #' \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
 #' scheme, which is asymptotically robust to non-stationary volatility, to
-#' generate critical values for the recursive unit root tests.
+#' generate critical values for the recursive unit root tests. \code{wb_dist}
+#' computes the distribution.
 #'
 #' @inheritParams radf
 #' @inheritParams mc_cv
@@ -38,106 +114,65 @@
 #' @examples
 #' \dontrun{
 #' # Simulate bubble processes
-#' dta <- data.frame("dg1" = sim_dgp1(n = 100), "dgp2" = sim_dgp2(n = 100))
-#' 
+#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+#'
 #' # Default minimum window
 #' wb <- wb_cv(dta)
-#' 
+#'
 #' # Change the minimum window and the number of bootstraps
 #' wb <- wb_cv(dta, nboot = 1500, minw = 20)
+#'
+#' # Simulate distribution
+#'wb_dist(dta)
 #' }
-wb_cv <- function(data, minw, nboot = 1000, dist_rad = FALSE) {
-  y <- data %>% rm_index() %>% as.matrix() # index-date check
-  nc <- NCOL(y)
-  nr <- NROW(y)
+wb_cv <- function(data, minw = psy_rule(data), nboot = 1000,
+                  dist_rad = FALSE) {
 
-  if (missing(minw)) minw <- floor((0.01 + 1.8 / sqrt(nr)) * nr)
+  results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
 
-  # asserts
-  assert_na(y)
-  assert_positive_int(nboot, greater_than = 2)
-  assert_positive_int(minw, greater_than = 2)
-  stopifnot(is.logical(dist_rad))
-
-  # helpers
-  point <- nr - minw
   pr <- c(0.9, 0.95, 0.99)
 
-  # preallocation
-  results <- matrix(0, nrow = 2 * point + 3, ncol = nboot)
-  adf_crit <- matrix(NA, nc, 3, dimnames = list(colnames(y), c(paste(pr))))
-  sadf_crit <- gsadf_crit <- adf_crit
-  badf_crit <- bsadf_crit <- array(NA,
-    dim = c(point, 3, nc),
-    dimnames = list(NULL, c(paste(pr)), colnames(y))
-  )
-  # get Options
-  show_pb <- getOption("exuber.show_progress")
-  do_par <- getOption("exuber.parallel")
+  adf_crit   <- apply(results$adf, 2, quantile, prob = pr) %>% t()
+  sadf_crit  <- apply(results$sadf, 2, quantile, prob = pr) %>% t()
+  gsadf_crit <- apply(results$gsadf, 2, quantile, prob = pr) %>% t()
 
-  if (show_pb) {
-    pb <- txtProgressBar(min = 1, max = nboot - 1, style = 3)
-    opts <- list(progress = function(n) setTxtProgressBar(pb, n))
-    on.exit(close(pb))
-  } else {
-    opts <- list(progress = NULL)
-  }
+  badf_crit  <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
+    apply(c(1,3), t)
+  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
+    apply(c(1,3), t)
 
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-
-  `%fun%` <- if (do_par) `%dopar%` else `%do%`
-
-  for (j in 1:nc) {
-    dy <- diff(y[, j])
-    results <- foreach(
-      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
-      .combine = "cbind", .options.snow = opts
-    ) %fun% {
-      if (show_pb && !do_par) setTxtProgressBar(pb, i)
-      if (dist_rad) {
-        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
-      } else {
-        w <- rnorm(nr - 1, 0, 1)
-      }
-      ystar <- c(0, cumsum(w * dy))
-      yxmat <- unroot(ystar)
-      rls_gsadf(yxmat, min_win = minw)
-    }
-
-
-    badf_crit[, , j] <- t(apply(results[1:point, ], 1, quantile, prob = pr))
-    adf_crit[j, ] <- quantile(results[point + 1, ], probs = pr)
-    sadf_crit[j, ] <- quantile(results[point + 2, ], probs = pr)
-    gsadf_crit[j, ] <- quantile(results[point + 3, ], probs = pr)
-    bsadf_crit[, , j] <- t(apply(results[-c(1:(point + 3)), ], 1,
-      quantile,
-      prob = pr
-    ))
-
-    if (show_pb) {
-      cat("\n")
-      print(paste("Series", j, "out of", nc, "completed!", sep = " "),
-        quote = F
-      )
-    }
-  }
-
-  output <- structure(list(
-    adf_cv = adf_crit,
-    sadf_cv = sadf_crit,
-    gsadf_cv = gsadf_crit,
-    badf_cv = badf_crit,
-    bsadf_cv = bsadf_crit
-  ),
-  method = "Wild Bootstrap",
-  iter = nboot,
-  minw = minw,
-  class = "cv"
+  structure(
+    list(
+      adf_cv = adf_crit,
+      sadf_cv = sadf_crit,
+      gsadf_cv = gsadf_crit,
+      badf_cv = badf_crit,
+      bsadf_cv = bsadf_crit),
+    method = "Wild Bootstrap",
+    iter = nboot,
+    minw = minw,
+    class = "cv"
   )
 
-  return(output)
 }
+
+#' @rdname wb_cv
+#' @inheritParams wb_cv
+#' @export
+wb_dist <- function(data, minw = psy_rule(data), nboot = 1000,
+                    dist_rad = FALSE) {
+
+  results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
+
+  structure(
+    list(
+      adf_cv = results$adf,
+      sadf_cv = results$sadf,
+      gsadf_cv = results$gsadf),
+    method = "Wild Bootstrap",
+    iter = nboot,
+    minw = minw,
+    class = "wb_dist"
+  )
+}
+
