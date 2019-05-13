@@ -17,7 +17,8 @@
 # Set Global Variables to avoid NOTES in cmdchecks
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(
-    c("crit", "i")
+    c("adf", "sadf", "gsadf", "badf", "bsadf", "bsadf_panel", "gsadf_panel",
+      "Distribution", ".", "crit", "i", "id", "name","sig", "tstat", "value")
   )
 }
 

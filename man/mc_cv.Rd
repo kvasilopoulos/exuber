@@ -2,18 +2,22 @@
 % Please edit documentation in R/mc_cv.R
 \name{mc_cv}
 \alias{mc_cv}
+\alias{mc_dist}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, nrep = 2000, minw, opt_badf = c("fixed", "asymptotic",
-  "simulated"), opt_bsadf = c("conventional", "conservative"))
+mc_cv(n, minw = psy_rule(n), nrep = 2000, opt_badf = c("fixed",
+  "asymptotic", "simulated"), opt_bsadf = c("conventional",
+  "conservative"))
+
+mc_dist(n, nrep = 2000, minw = psy_rule(n))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
 
-\item{nrep}{A positive integer. The number of Monte Carlo simulations.}
-
 \item{minw}{A positive integer. The minimum window size, which defaults to
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+
+\item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{opt_badf}{Options for badf critical value calculation. "fixed" corresponds
 to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
@@ -30,7 +34,7 @@ t-statistics.
 }
 \description{
 \code{mc_cv} computes Monte Carlo critical values for the recursive unit
-root tests.
+root tests. \code{mc_dist} computes the distribution.
 }
 \examples{
 \dontrun{
@@ -39,6 +43,9 @@ mc <- mc_cv(n = 100)
 
 # Change the minimum window and the number of simulations
 mc <- mc_cv(n = 100, nrep = 2500, minw = 20)
+
+mdist <- mc_dist(n = 100)
+autoplot(mdist)
 }
 }
 \seealso{

@@ -37,17 +37,19 @@ Imports:
     dplyr (>= 0.8.0.1),
     foreach (>= 1.4.4),
     ggplot2 (>= 3.1.1),
-    glue (>= 1.3.1),
     grid,
     gridExtra (>= 2.3),
     lubridate (>= 1.7.4),
-    magrittr (>= 1.5),
     parallel,
     purrr (>= 0.3.2),
     Rcpp (>= 0.12.17),
     rlang (>= 0.3.4),
     tibble (>= 2.1.1),
-    zoo (>= 1.8.5)
+    zoo (>= 1.8.5),
+    cli (>= 1.1.0),
+    generics (>= 0.0.2),
+    tidyr (>= 0.8.3),
+    glue (>= 1.3.1)
 Suggests:
     tidyr,
     covr (>= 3.2.1),
@@ -62,6 +64,26 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-Language: en-US
 LazyData: true
 RoxygenNote: 6.1.1
+Language: en-US
+Collate: 
+    'RcppExports.R'
+    'autoplot.R'
+    'col_names.R'
+    'parse_data.R'
+    'data-crit.R'
+    'deprecate.R'
+    'exuber-package.r'
+    'index.R'
+    'mc_cv.R'
+    'radf.R'
+    'reexports.R'
+    'tidiers-radf.R'
+    'tidiers-cv.R'
+    'sb_cv.R'
+    'simul.R'
+    'summary.R'
+    'utils.R'
+    'wb_cv.R'
+    'zzz.R'

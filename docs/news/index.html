@@ -140,6 +140,60 @@
       <small>Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="exuber-030" class="section level1">
+<h1 class="page-header">
+<a href="#exuber-030" class="anchor"></a>exuber 0.3.0<small> Unreleased </small>
+</h1>
+<p>Three new functions have been added to simulate emprical distributions for:</p>
+<ul>
+<li>
+<code><a href="../reference/mc_cv.html">mc_dist()</a></code>: Monte Carlo distribution</li>
+<li>
+<code><a href="../reference/wb_cv.html">wb_dist()</a></code>: Wild Bootsrap distribution</li>
+<li>
+<code><a href="../reference/sb_cv.html">sb_dist()</a></code>: Sieve Bootstrap distribution</li>
+</ul>
+<p>Also methods <code><a href="https://www.rdocumentation.org/packages/generics/topics/tidy">tidy()</a></code> and <code><a href="https://www.rdocumentation.org/packages/ggplot2/topics/autoplot">autoplot()</a></code> have been added to turn the object into a tidy tibble and draw a particular plot with ggplot2, respectively.</p>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>
+<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
+<li>
+<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been soft-deprecated.</li>
+</ul>
+</div>
+<div id="new-features" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features" class="anchor"></a>New features</h2>
+<ul>
+<li>
+<code><a href="https://www.rdocumentation.org/packages/generics/topics/tidy">tidy()</a></code> methods for objects of class <code>radf</code>, <code>cv</code>.</li>
+<li>
+<code><a href="https://www.rdocumentation.org/packages/generics/topics/augment">augment()</a></code> methods for objects of class <code>radf</code> and <code>cv</code>
+</li>
+<li>
+<code><a href="https://www.rdocumentation.org/packages/generics/topics/glance">glance()</a></code> method for objects of class <code>radf</code>
+</li>
+</ul>
+</div>
+<div id="impovements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#impovements" class="anchor"></a>Impovements</h2>
+<ul>
+<li>New printing output for the functrions <code><a href="../reference/summary.html">summary()</a></code>, <code><a href="../reference/diagnostics.html">diagnostics()</a></code> and <code><a href="../reference/datestamp.html">datestamp()</a></code>.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<ul>
+<li>
+<code><a href="../reference/sb_cv.html">sb_cv()</a></code> and <code><a href="../reference/wb_cv.html">wb_cv()</a></code>now can parse data which contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing, but without keeping the index.</li>
+</ul>
+</div>
+</div>
     <div id="exuber-0219000" class="section level1">
 <h1 class="page-header">
 <a href="#exuber-0219000" class="anchor"></a>exuber 0.2.1.9000<small> Unreleased </small>
@@ -176,9 +230,9 @@
 <code>show_progress</code> option boolean, allows you to disable the progress bar, defaults to TRUE.</li>
 </ul>
 </div>
-<div id="new-features" class="section level2">
+<div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New features</h2>
+<a href="#new-features-1" class="anchor"></a>New features</h2>
 <ul>
 <li>Panel estimation in <code><a href="../reference/radf.html">radf()</a></code>
 </li>
@@ -204,9 +258,9 @@
 <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> and <code><a href="../reference/exuber-deprecated.html">report()</a></code> are soft deprecated.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>Progressbar appears in the beginning of the iteration</li>
 <li>Plotting date now works without having to to include any additional plotting option</li>
@@ -219,6 +273,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#exuber-030">0.3.0</a></li>
         <li><a href="#exuber-0219000">0.2.1.9000</a></li>
         <li><a href="#exuber-021">0.2.1</a></li>
         <li><a href="#exuber-020">0.2.0</a></li>
@@ -230,7 +285,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, Efthymios Pavlidis, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

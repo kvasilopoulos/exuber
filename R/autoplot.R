@@ -20,13 +20,13 @@
 #' @export
 #' @examples
 #' \donttest{
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#' 
+#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+#'
 #' dta %>%
 #'   radf() %>%
 #'   autoplot() %>%
 #'   ggarrange(ncol = 2)
-#' 
+#'
 #' # For custom plotting with ggplot2
 #' dta %>%
 #'   radf() %>%
@@ -35,6 +35,7 @@
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0, ...) {
+
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
   assert_positive_int(min_duration, strictly = FALSE)
@@ -61,7 +62,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
     }
   }
 
-  cname <- if (is_panel(y)) "Panel" else cname2 %>% attr("select")
+  cname <- if (is_panel_cv(y)) "Panel" else cname2 %>% attr("select")
 
   g <- vector("list", length = length(cname))
 
@@ -71,7 +72,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
       suppressWarnings(
         dat <- fortify.radf(x,
           cv = y, include = include, option = option,
-          select = if (is_panel(y)) cname else cname[i]
+          select = if (is_panel_cv(y)) cname else cname[i]
         )
       )
 
@@ -112,8 +113,6 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
             pluck(cname[i])
         }
 
-
-
       if (!is.null(shade)) {
         h <- h + geom_rect(
           data = shade[, -3],
@@ -142,11 +141,12 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' \code{\link[=fortify]{fortify()}} method).
 #'
 #' @importFrom purrr map pluck
-#' @importFrom tibble as_tibble
+#' @importFrom dplyr as_tibble
 #'
 #' @export
 fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
+
   cv <- if (missing(cv)) get_crit(model) else cv
   assert_class(cv, "cv")
   option <- match.arg(option)
@@ -156,7 +156,7 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
   assert_equal_arg(x, y)
   dating <- index(x, trunc = TRUE)
 
-  if (is_panel(y)) {
+  if (is_panel_cv(y)) {
     nm <- diagnostics(object = x, cv = y, option = option) %>%
       pluck("accepted")
     cname <- "Panel"
@@ -191,7 +191,7 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
   }
 
   if (option == "gsadf") {
-    tstat_dat <- if (is_panel(y)) x$bsadf_panel else x$bsadf[, cname]
+    tstat_dat <- if (is_panel_cv(y)) x$bsadf_panel else x$bsadf[, cname]
 
     if (method(y) == "Wild Bootstrap") {
       cv_dat <- if (lagr(x) == 0) {
@@ -266,14 +266,14 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #' @export
 #' @examples
 #' \donttest{
-#' 
-#' dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
-#' 
+#'
+#' dta <- cbind(sim_psy1(n = 100), sim_psy2(n = 100))
+#'
 #' dta %>%
 #'   radf() %>%
 #'   datestamp() %>%
 #'   autoplot()
-#' 
+#'
 #' # Change the colour manually
 #' dta %>%
 #'   radf() %>%

@@ -4,7 +4,7 @@
 \alias{radf}
 \title{Recursive Augmented Dickey-Fuller Test}
 \usage{
-radf(data, minw, lag = 0)
+radf(data, minw = psy_rule(data), lag = 0)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -17,18 +17,11 @@ The estimation process cannot handle NA values.}
 }
 \value{
 A list that contains the t-statistic (sequence) for:
-\itemize{
-  \item adf: Augmented Dickey-Fuller
-  \item sadf: Supremum Augmented Dickey-Fuller
-  \item gsadf: Generalized Supremum Augmented Dickey-Fuller
-  \item gsadf_panel: Panel Generalized Supremum Augmented Dickey-Fuller
-}
-and the t-statistic sequence for
-\itemize{
- \item badf: Backward Augmented Dickey-Fuller
- \item bsadf: Backward Supremum Augmented Dickey-Fuller
- \item bsadf_panel: Panel Backward Supremum Augmented Dickey-Fuller
-}
+  \item{adf}{Augmented Dickey-Fuller}
+  \item{badf}{Backward Augmented Dickey-Fuller}
+  \item{sadf}{Supremum Augmented Dickey-Fuller}
+  \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
+  \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
 \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
@@ -37,7 +30,7 @@ test.
 \examples{
 \donttest{
 # Simulate bubble processes
-dta <- cbind(sim_dgp1(n = 100), sim_dgp2(n = 100))
+dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 
 rfd <- radf(dta)
 

@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 
-# exuber <a href='https://kvasilopoulos.github.io/exuber'><img src='docs/logo.png' align="right" height="127.5" /></a>
+# exuber <a href='https://kvasilopoulos.github.io/exuber'><img src='man/figures/logo.png' align="right" height="127.5" /></a>
  
 [![Build Status](https://travis-ci.org/kvasilopoulos/exuber.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exuber)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exuber?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exuber)
@@ -40,6 +40,7 @@ devtools::install_github("kvasilopoulos/exuber")
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exuber/issues).
 
 ### Usage
+
 
 {exuber} is based on two principles when testing for explosive dynamics in time 
 series --- estimating statistics and generating critical values. 

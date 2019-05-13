@@ -2,9 +2,12 @@
 % Please edit documentation in R/sb_cv.R
 \name{sb_cv}
 \alias{sb_cv}
+\alias{sb_dist}
 \title{Panel Sieve Bootstrap Critical Values}
 \usage{
-sb_cv(data, minw, lag = 0, nboot = 1000)
+sb_cv(data, minw = psy_rule(data), lag = 0, nboot = 1000)
+
+sb_dist(data, minw = psy_rule(data), nboot = 1000, lag = 0)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -23,7 +26,8 @@ t-statistics.
 }
 \description{
 \code{sb_cv} computes p-values for the panel recursive unit root test using
-the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{sb_dist}
+computes the distribution.
 }
 \examples{
 \dontrun{
@@ -31,8 +35,8 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016)
 # Simulate bubble processes
 set.seed(4441)
 dta <- data.frame(
-  "dgp1" = sim_dgp1(100),
-  "dgp2" = sim_dgp2(100),
+  "psy1" = sim_psy1(100),
+  "psy2" = sim_psy2(100),
   "evans" = sim_evans(100),
   "div" = sim_div(100),
   "blan" = sim_blan(100)
@@ -48,6 +52,9 @@ dta \%>\%
 dta \%>\%
   radf(lag = 1) \%>\%
   autoplot(cv = sb)
+
+# Simulate distribution
+sb_dist(dta, lag = 1)
 }
 }
 \references{

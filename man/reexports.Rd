@@ -7,6 +7,9 @@
 \alias{index<-}
 \alias{fortify}
 \alias{autoplot}
+\alias{tidy}
+\alias{augment}
+\alias{glance}
 \title{Objects exported from other packages}
 \seealso{
 \code{\link[=index]{index()}}
@@ -21,6 +24,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{generics}{\code{\link[generics]{tidy}}, \code{\link[generics]{augment}}, \code{\link[generics]{glance}}}
+
   \item{ggplot2}{\code{\link[ggplot2]{fortify}}, \code{\link[ggplot2]{autoplot}}}
 
   \item{zoo}{\code{\link[zoo]{index}}, \code{\link[zoo]{index<-}}}
