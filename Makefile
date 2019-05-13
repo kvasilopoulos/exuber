@@ -4,7 +4,7 @@ build_site:
 
 cran_check:
 	Rscript -e "devtools::check()"
-	Rscript -e "devtools::check_win_devel()"
+	Rscript -e "devtools::check_win_devel(quiet = TRUE)"
 	Rscript -e "rhub::check_for_cran()"
 	Rscript -e "rhub::check(platform = 'ubuntu-rchk')"
 	Rscript -e "rhub::check_with_sanitizers()"
