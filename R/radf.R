@@ -1,18 +1,3 @@
-#' Calculate minimum window
-#'
-#' Helper function to calculate the the PSY(2015) suggested minimum window.
-#'
-#' @inheritParams mc_cv
-#' @export
-#' @importFrom rlang is_scalar_atomic
-#' @examples
-#' psy_rule(100)
-psy_rule <- function(n) {
-  if (!is_scalar_atomic(n))
-    n <- NROW(n)
-  floor((0.01 + 1.8 / sqrt(n)) * n)
-}
-
 #' Recursive Augmented Dickey-Fuller Test
 #'
 #' \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
@@ -51,18 +36,18 @@ psy_rule <- function(n) {
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
-radf <- function(data, minw = psy_rule(data), lag = 0) {
+radf <- function(data, minw = psy_minw(data), lag = 0) {
 
   lst <- parse_data(data)
   x <- lst$data
 
-  nc <- NCOL(x)
+  nc <- ncol(x)
 
   assert_na(x)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
 
-  point <- NROW(x) - minw - lag
+  point <- nrow(x) - minw - lag
 
   adf <- sadf <- gsadf <-
     drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
@@ -99,6 +84,42 @@ radf <- function(data, minw = psy_rule(data), lag = 0) {
     col_names = colnames(x),
     class = "radf"
   )
+
+}
+
+#' Helper functions in accordance to PSY(2015)
+#'
+#' \code{psy_minw} proposed a minimum window. \code{psy_ds} proposed a rule of
+#' thumb to exclude periods of exuberance.
+#'
+#' @inheritParams mc_cv
+#' @export
+#' @importFrom rlang is_scalar_atomic
+#' @examples
+#' psy_minw(100)
+#' psy_ds(100)
+psy_minw <- function(n) {
+
+  if (!is_n(n)) {
+    n <- NROW(n)
+  }
+
+  floor((0.01 + 1.8 / sqrt(n)) * n)
+}
+
+#' @rdname psy_minw
+psy_ds <- function(n, rule = 1, delta = 1) {
+
+  if (!is_n(n)) {
+    n <- NROW(n)
+  }
+  stopifnot(x == 1 || x == 2)
+
+  if (rule == 1) {
+    round(delta * log(n))
+  } else if (rule == 2) {
+    round(delta*log(n)/n)
+  }
 
 }
 

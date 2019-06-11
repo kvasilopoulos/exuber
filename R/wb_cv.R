@@ -3,8 +3,8 @@ wb_ <- function(data, minw, nboot, dist_rad) {
   lst <- parse_data(data)
   y <- as.matrix(lst$data)
 
-  nc <- NCOL(y)
-  nr <- NROW(y)
+  nc <- ncol(y)
+  nr <- nrow(y)
 
   point <- nr - minw
 
@@ -22,7 +22,7 @@ wb_ <- function(data, minw, nboot, dist_rad) {
           dimnames = list(NULL, NULL, colnames(y)))
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- get_pb(show_pb, nboot)
+  pb <- get_pb(show_pb, nboot, width = getOption("width") - 15)
   opts <- get_pb_opts(show_pb, pb)
 
   do_par <- getOption("exuber.parallel")
@@ -36,13 +36,13 @@ wb_ <- function(data, minw, nboot, dist_rad) {
 
   for (j in 1:nc) {
 
-    if (show_pb)
-      cat(paste0(" ", j, "/", nc))
-
     dy <- diff(y[, j])
     results <- foreach(
-      i = 1:nboot, .export = c("rls_gsadf", "unroot"),
-      .combine = "cbind", .options.snow = opts
+      i = 1:nboot,
+      .export = c("rls_gsadf", "unroot"),
+      .combine = "cbind",
+      .options.snow = opts,
+      .inorder = FALSE
     ) %fun% {
       if (show_pb && !do_par)
         setTxtProgressBar(pb, i)
@@ -51,10 +51,14 @@ wb_ <- function(data, minw, nboot, dist_rad) {
       } else {
         w <- rnorm(nr - 1, 0, 1)
       }
-      ystar <- c(0, cumsum(w * dy))
+      estar <- cumsum(w*dy)
+      ystar <- c(0, estar)
       yxmat <- unroot(ystar)
       rls_gsadf(yxmat, min_win = minw)
     }
+
+    if (show_pb)
+      cat(paste0(" ", j, "/", nc))
 
     adf_crit[, j] <- results[point + 1, ]
     sadf_crit[, j] <- results[point + 2, ]
@@ -64,13 +68,17 @@ wb_ <- function(data, minw, nboot, dist_rad) {
     bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
   }
 
-  list(
-    adf = adf_crit,
-    sadf = sadf_crit,
-    gsadf = gsadf_crit,
-    badf = badf_crit,
-    bsadf = bsadf_crit
+  structure(
+    list(
+      adf = adf_crit,
+      sadf = sadf_crit,
+      gsadf = gsadf_crit,
+      badf = badf_crit,
+      bsadf = bsadf_crit
+    ),
+    index = lst$index
   )
+
 }
 
 #' Wild Bootstrap Critical values
@@ -125,7 +133,7 @@ wb_ <- function(data, minw, nboot, dist_rad) {
 #' # Simulate distribution
 #'wb_dist(dta)
 #' }
-wb_cv <- function(data, minw = psy_rule(data), nboot = 1000,
+wb_cv <- function(data, minw = psy_minw(data), nboot = 1000,
                   dist_rad = FALSE) {
 
   results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
@@ -136,10 +144,12 @@ wb_cv <- function(data, minw = psy_rule(data), nboot = 1000,
   sadf_crit  <- apply(results$sadf, 2, quantile, prob = pr) %>% t()
   gsadf_crit <- apply(results$gsadf, 2, quantile, prob = pr) %>% t()
 
-  badf_crit  <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
+  badf_crit  <- apply(results$badf, c(1,3), quantile, prob = pr) %>%
     apply(c(1,3), t)
   bsadf_crit <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
     apply(c(1,3), t)
+
+  # wb$bsadf_cv[,2,] %>% apply(1, cummax) %>% t() %>% apply(2, quantile, 0.95)
 
   structure(
     list(
@@ -149,6 +159,7 @@ wb_cv <- function(data, minw = psy_rule(data), nboot = 1000,
       badf_cv = badf_crit,
       bsadf_cv = bsadf_crit),
     method = "Wild Bootstrap",
+    index = index(data),
     iter = nboot,
     minw = minw,
     class = "cv"
@@ -159,7 +170,7 @@ wb_cv <- function(data, minw = psy_rule(data), nboot = 1000,
 #' @rdname wb_cv
 #' @inheritParams wb_cv
 #' @export
-wb_dist <- function(data, minw = psy_rule(data), nboot = 1000,
+wb_dist <- function(data, minw = psy_minw(data), nboot = 1000,
                     dist_rad = FALSE) {
 
   results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)

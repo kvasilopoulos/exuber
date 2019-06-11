@@ -12,7 +12,9 @@
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
 
-\item{...}{further arguments passed to method, ignored.}
+\item{...}{further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+a list.}
 
 \item{model}{datestamp object}
 

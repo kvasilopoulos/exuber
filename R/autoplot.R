@@ -12,10 +12,20 @@
 #'
 #' @param include If not FALSE, plot all variables regardless of rejecting the NULL at the 5\% significance level.
 #' @param select If not NULL, only plot with names or column number matching this regular expression will be executed.
-#' @param ... further arguments passed to method, ignored.
+#' @param arrange If FALSE returns a list of ggplot2 object, otheriwse it grobs the plots on a single page.
+#' @param ... further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+#' that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+#' a list.
 #'
 #' @importFrom dplyr filter
 #' @importFrom purrr map pluck
+#' @importFrom ggplot2 ggplot aes_string geom_line %+% ggtitle labs geom_rect
+#' @importFrom ggplot2 geom_segment theme_bw theme margin element_blank
+#' @importFrom ggplot2 element_text scale_x_date scale_x_continuous
+#'
+#' @details `arrange` offers flexibility to the user by specifying the desired output. If
+#' `arrange = FALSE`, the individual plots can be modified after creation the then rearranged with
+#' the `ggarrange` function into a single plot.
 #'
 #' @export
 #' @examples
@@ -24,8 +34,8 @@
 #'
 #' dta %>%
 #'   radf() %>%
-#'   autoplot() %>%
-#'   ggarrange(ncol = 2)
+#'   autoplot(ncol = 2)
+#'
 #'
 #' # For custom plotting with ggplot2
 #' dta %>%
@@ -34,7 +44,7 @@
 #' }
 autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
-                          min_duration = 0, ...) {
+                          min_duration = 0, arrange = TRUE, ...) {
 
   cv <- if (missing(cv)) get_crit(object) else cv
   assert_class(cv, "cv")
@@ -92,8 +102,7 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
         colour = "red",
         linetype = "dashed"
         ) +
-        ggtitle(cname[i]) +
-        theme_bw() + xlab("") + ylab("")
+        theme_bw() + labs(x = "", y = "", title = cname[i])
 
       shade <-
         if (include) {
@@ -130,7 +139,16 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
       g[[i]] <<- h
     })
   names(g) <- cname
-  if (length(g) == 1) return(g[[1]]) else return(g)
+  out <-
+    if (length(g) == 1) {
+      g[[1]]
+    } else {
+      if (arrange)
+        ggarrange(g, ...)
+      else
+        g
+    }
+  out
 }
 
 
@@ -144,10 +162,10 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' @importFrom dplyr as_tibble
 #'
 #' @export
-fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
+fortify.radf <- function(model, data, cv = get_crit(model),
+                         include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
 
-  cv <- if (missing(cv)) get_crit(model) else cv
   assert_class(cv, "cv")
   option <- match.arg(option)
 
@@ -191,46 +209,45 @@ fortify.radf <- function(model, data, cv, include = FALSE, select = NULL,
   }
 
   if (option == "gsadf") {
-    tstat_dat <- if (is_panel_cv(y)) x$bsadf_panel else x$bsadf[, cname]
+    tbl_stat <- if (is_panel_cv(y)) x$bsadf_panel else x$bsadf[, cname]
 
     if (method(y) == "Wild Bootstrap") {
-      cv_dat <- if (lagr(x) == 0) {
+      tbl_cv <- if (lagr(x) == 0) {
         y$bsadf_cv[, 2, cname]
       } else {
         y$bsadf_cv[-c(1:lagr(x)), 2, select]
       }
       names_cv <- paste0("cv_", cname)
     } else if (method(y) == "Monte Carlo") {
-      cv_dat <- if (lagr(x) == 0) {
+      tbl_cv <- if (lagr(x) == 0) {
         y$bsadf_cv[, 2]
       } else {
         y$bsadf_cv[-c(1:lagr(x)), 2]
       }
       names_cv <- "cv"
     } else if (method(y) == "Sieve Bootstrap") {
-      cv_dat <- y$bsadf_panel_cv[, 2]
+      tbl_cv <- y$bsadf_panel_cv[, 2]
       if (lagr(cv) > 0) {
         dating <- dating[-c(1:2)]
-        tstat_dat <- tstat_dat[-c(1:2)]
+        tbl_stat <- tbl_stat[-c(1:2)]
       }
       names_cv <- "cv_panel"
     }
   } else if (option == "sadf") {
-    tstat_dat <- x$badf[, cname]
-    cv_dat <- if (lagr(x) == 0) y$badf_cv[, 2] else y$badf_cv[-c(1:lagr(x)), 2]
+    tbl_stat <- x$badf[, cname]
+    tbl_cv <- if (lagr(x) == 0) y$badf_cv[, 2] else y$badf_cv[-c(1:lagr(x)), 2]
     names_cv <- "cv"
   }
 
-  dat <- data.frame(dating, tstat_dat, cv_dat) %>%
+  tbl_rf <- data.frame(dating, tbl_stat, tbl_cv) %>%
     set_names(c("index", cname, names_cv)) %>%
     as_tibble()
-  attr(dat, "select") <- cname
 
-  dat
+  attr(tbl_rf, "select") <- cname
+  tbl_rf
 }
 
 #' @rdname autoplot.radf
-#' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
 #' @export
 ggarrange <- function(...) {
@@ -262,7 +279,6 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #'
 #' @name autoplot.datestamp
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
-#' @import ggplot2
 #' @export
 #' @examples
 #' \donttest{
@@ -285,16 +301,16 @@ autoplot.datestamp <- function(object, ...) {
   dating <- index(object)
   scale <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
 
-  ggplot(object, aes_string(colour = "key")) +
+  ggplot(object, aes_string(colour = "id")) +
     geom_segment(aes_string(
       x = "Start",
       xend = "End",
-      y = "key",
-      yend = "key"
+      y = "id",
+      yend = "id"
     ),
     size = 7
     ) +
-    theme_bw() + xlab("") + ylab("") + ggtitle("") +
+    theme_bw() + labs(x = "", y = "", title = "") +
     scale(limits = c(dating[1L], dating[length(dating)])) +
     theme(
       panel.grid.major.y = element_blank(),
@@ -309,14 +325,17 @@ autoplot.datestamp <- function(object, ...) {
 #' @inheritParams autoplot.radf
 #'
 #' @importFrom purrr map reduce
+#' @importFrom tibble add_column
 #' @export
 fortify.datestamp <- function(model, data, ...) {
-  nr <- map(model, NROW) %>%
-    unlist()
-  df <- data.frame(
-    "key" = rep(names(model), nr),
-    reduce(model, rbind)
-  )
-  class(df) <- c("data.frame", "datestamp")
-  df
+  nr <- map_dbl(model, nrow)
+
+  tbl_ds <- reduce(model, bind_rows) %>%
+    add_column("id" = rep(names(model), nr)) %>%
+    mutate(id = as.factor(id)) %>%
+    select(id, everything()) %>%
+    as_tibble()
+
+  class(tbl_ds) <- append(class(tbl_ds), "datestamp")
+  tbl_ds
 }

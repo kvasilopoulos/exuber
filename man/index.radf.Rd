@@ -2,12 +2,15 @@
 % Please edit documentation in R/index.R
 \name{index.radf}
 \alias{index.radf}
+\alias{index.cv}
 \alias{index.data.frame}
 \alias{index.datestamp}
 \alias{index<-.radf}
 \title{Retrieve/Replace the index}
 \usage{
 \method{index}{radf}(x, trunc = FALSE, ...)
+
+\method{index}{cv}(x, trunc = FALSE, ...)
 
 \method{index}{data.frame}(x, ...)
 
