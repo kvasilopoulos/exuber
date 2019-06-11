@@ -41,25 +41,31 @@ The summary will print the t-stat and the critical values for 90, 95 and 99 sign
 summary(est_stocks)
 ```
 
+It seems that all stocks exhibit exuberant behaviour but we can also use a `diagnostics()` to do it for us. This is extremely useful when we deal a lot of series.
+
+```{r diagnostics}
+diagnostics(est_stocks)
+```
+
 The `autoplot.radf` function returns a list of ggplot2, thus we need to grob the list into a
 single graph. Function `ggarrange` does this for us, while we can specify the arrangement of the graphs by supplying nrow and ncol arguments.
 
 ```{r datestamp, fig.width = 9}
-est_stocks %>% 
-  autoplot() %>% 
-  ggarrange(ncol = 2)
+autoplot(est_stocks)
 ```
 
 If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner, where the user has to specify the critical values, however we can still utilize the package's critical values by leaving the cv-argument blank.
 
 ```{r}
-datestamp(est_stocks)
+# Minimum duration of an explosive period 
+rot = round(log(nrow(stocks))) # log(n) ~ rule of thumb
+
+datestamp(est_stocks, min_duration = rot)
 ```
 
 Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot  of series, and we are interested to identify explosive patterns.
 
 ```{r fig.width = 7, fig.height=2}
-est_stocks %>% 
-  datestamp() %>% 
+datestamp(est_stocks) %>% 
   autoplot()
 ```

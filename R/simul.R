@@ -76,6 +76,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   return(y)
 }
 
+
 #' Simulation of a two-bubble process
 #'
 #' The following data generating process is similar to  \code{\link{sim_psy1}}, with the difference that

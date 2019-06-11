@@ -166,8 +166,12 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
       cv1 <- y$sadf_cv[1]
       cv2 <- y$sadf_cv[2]
       cv3 <- y$sadf_cv[3]
-    } else {
-      stop("'sadf' applies onyl to MC critical values", call. = FALSE)
+    } else if (method(y) == "Wild Bootstrap") {
+      cv1 <- y$sadf_cv[, 1]
+      cv2 <- y$sadf_cv[, 2]
+      cv3 <- y$sadf_cv[, 3]
+    }else{
+      stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
     }
   }
 
@@ -208,16 +212,19 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
     panel = is_panel_cv(y),
     col_names = if (!is_panel_cv(y)) col_names(x),
     method = method(y),
+    option = option,
     class = "diagnostics"
   )
 }
 
 #' @importFrom cli cat_line cat_rule
+#' @importFrom glue glue
 #' @export
 print.diagnostics <- function(x, ...) {
 
   cli::cat_line()
-  cli::cat_rule(left = "Diagnostics", right = method(x))
+  cli::cat_rule(left = glue('Diagnostics (option = {attr(x, "option")})'),
+                            right = method(x))
   cli::cat_line()
 
   if (attr(x, "panel")) {

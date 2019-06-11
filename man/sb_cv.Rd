@@ -5,9 +5,9 @@
 \alias{sb_dist}
 \title{Panel Sieve Bootstrap Critical Values}
 \usage{
-sb_cv(data, minw = psy_rule(data), lag = 0, nboot = 1000)
+sb_cv(data, minw = psy_minw(data), lag = 0, nboot = 1000)
 
-sb_dist(data, minw = psy_rule(data), nboot = 1000, lag = 0)
+sb_dist(data, minw = psy_minw(data), nboot = 1000, lag = 0)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -17,8 +17,6 @@ The estimation process cannot handle NA values.}
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
-
-\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
 }
 \value{
 A list that contains the panel critical values for BSADF and GSADF

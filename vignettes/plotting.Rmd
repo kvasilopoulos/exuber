@@ -1,0 +1,137 @@
+---
+title: "Plotting with exuber"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Plotting with Exuber}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  fig.width = 10
+)
+```
+
+```{r setup}
+library(exuber)
+options(exuber.show_progress = FALSE)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r tstats-cv}
+set.seed(123)
+dta <- tibble(
+  sim_psy1 = sim_psy1(100),
+  sim_psy2 = sim_psy2(100),
+  sim_evans = sim_blan(100),
+  sim_blan = sim_evans(100),
+) 
+
+# Esimation
+tstats <- radf(dta, lag = 1)
+  
+# Critical Values ~ Conservative
+cv <- mc_cv(nrow(dta), opt_bsadf = "conservative")
+```
+
+## Autoplot
+
+```{r}
+autoplot(tstats, cv)
+```
+
+### Modify plots separately
+
+```{r}
+plots <- autoplot(tstats, cv, arrange = FALSE)
+
+mod_plot <- plots[[1]] + 
+  labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")
+mod_plot
+```
+### Reconstruct
+```{r}
+plots[[1]] <- mod_plot
+plots[1:2] %>% 
+  ggarrange()
+```
+
+
+## Custom plotting
+
+```{r join-sets}
+joined <- semi_join(
+  augment(tstats, "long") %>% 
+    filter(name == "bsadf"),
+  augment(cv, "long") %>% 
+    filter(name == "bsadf", sig == 0.95),
+  by = "name"
+  ) 
+joined 
+```
+
+```{r, eval=FALSE}
+library(ggplot2)
+joined %>% 
+  ggplot( aes(x = index)) +
+  geom_line(aes(y = tstat)) +
+  geom_line(aes(y = crit, col = "red")) +
+  facet_wrap(~id, scales = "free_y")
+```
+
+
+```{r, eval=FALSE}
+fortify(tstats, cv) %>% 
+  gather(id, tstat, -cv, -index) %>% 
+  ggplot(aes(x = index)) + 
+  geom_line(aes(y = tstat)) + 
+  geom_line(aes(y = cv, col = "red", linetype = "dotted")) + 
+  facet_wrap(~ id , scales = "free_y") +
+  theme_bw() + theme(strip.background = element_blank(),
+                     legend.position = "none") +
+  labs(x = "", y = "")
+  
+```
+
+
+
+```{r}
+bind_cols(
+fortify(radf_dta, cv = wb) %>% 
+  gather(id, tstat, -cv_psy1, - cv_psy2, -index),
+fortify(radf_dta, cv = wb) %>% 
+  gather(id, crit, -psy1, -psy2, -index) 
+) %>% 
+  select(index, id, crit, tstat) %>%
+  ggplot(aes(x = index)) +
+  geom_line(aes(y = tstat)) +
+  geom_line(aes(y = crit, color = "red"), linetype = "dashed") +
+  facet_wrap(~ id, ncol = 1) +
+  theme_bw()
+```
+
+# Distributions
+```{r}
+dist <- mc_dist(n = 300)
+
+autoplot(dist)
+
+```
+
+
+# Just for fun
+
+```{r}
+dist %>% 
+  tidy() %>% 
+  gather(name, value) %>% 
+  ggplot(aes(value, color = name)) + 
+  stat_ecdf() + 
+  geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw()
+```
+

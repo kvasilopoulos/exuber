@@ -5,11 +5,11 @@
 \alias{mc_dist}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, minw = psy_rule(n), nrep = 2000, opt_badf = c("fixed",
+mc_cv(n, minw = psy_minw(n), nrep = 2000, opt_badf = c("fixed",
   "asymptotic", "simulated"), opt_bsadf = c("conventional",
   "conservative"))
 
-mc_dist(n, nrep = 2000, minw = psy_rule(n))
+mc_dist(n, nrep = 2000, minw = psy_minw(n))
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}

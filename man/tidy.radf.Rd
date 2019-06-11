@@ -8,7 +8,8 @@
 \usage{
 \method{tidy}{radf}(x, format = c("wide", "long"), ...)
 
-\method{augment}{radf}(x, format = c("wide", "long"), ...)
+\method{augment}{radf}(x, format = c("wide", "long"), panel = FALSE,
+  ...)
 
 \method{glance}{radf}(x, format = c("wide", "long"), ...)
 }
