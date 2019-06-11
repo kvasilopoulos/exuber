@@ -3,8 +3,8 @@ sb_ <-  function(data, minw, lag, nboot) {
   lst <- parse_data(data)
   y <- as.matrix(lst$data)
 
-  nc <- NCOL(y)
-  nr <- NROW(y)
+  nc <- ncol(y)
+  nr <- nrow(y)
 
   assert_na(y)
   assert_positive_int(minw, greater_than = 2)
@@ -49,7 +49,8 @@ sb_ <-  function(data, minw, lag, nboot) {
     i = 1:nboot,
     .export = c("rls_gsadf", "unroot"),
     .combine = "cbind",
-    .options.snow = opts
+    .options.snow = opts,
+    .inorder = FALSE
   ) %fun% {
     boot_index <- sample(1:nres, replace = TRUE)
     if (show_pb && !do_par) setTxtProgressBar(pb, i)
@@ -74,10 +75,14 @@ sb_ <-  function(data, minw, lag, nboot) {
   bsadf_crit <- unname(edf_bsadf_panel)
   gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% unname()
 
-  list(
-    bsadf_panel = bsadf_crit,
-    gsadf_panel = gsadf_crit
+  structure(
+    list(
+      bsadf_panel = bsadf_crit,
+      gsadf_panel = gsadf_crit
+    ),
+    index = lst$index
   )
+
 
 }
 
@@ -89,7 +94,6 @@ sb_ <-  function(data, minw, lag, nboot) {
 #' computes the distribution.
 #'
 #' @inheritParams radf
-#' @inheritParams wb_cv
 #'
 #' @return A list that contains the panel critical values for BSADF and GSADF
 #' t-statistics.
@@ -107,6 +111,7 @@ sb_ <-  function(data, minw, lag, nboot) {
 #'
 #' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
 #' \code{\link{wb_cv}} for Wild Bootstrapped critical values
+#'
 #'
 #' @examples
 #' \dontrun{
@@ -135,7 +140,7 @@ sb_ <-  function(data, minw, lag, nboot) {
 #'# Simulate distribution
 #'sb_dist(dta, lag = 1)
 #' }
-sb_cv <- function(data, minw = psy_rule(data), lag = 0, nboot = 1000) {
+sb_cv <- function(data, minw = psy_minw(data), lag = 0, nboot = 1000) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag)
 
@@ -150,6 +155,7 @@ sb_cv <- function(data, minw = psy_rule(data), lag = 0, nboot = 1000) {
       bsadf_panel_cv = bsadf_crit
     ),
     method = "Sieve Bootstrap",
+    index = index(data),
     lag = lag,
     iter = nboot,
     minw = minw,
@@ -161,7 +167,7 @@ sb_cv <- function(data, minw = psy_rule(data), lag = 0, nboot = 1000) {
 #' @rdname sb_cv
 #' @inheritParams sb_cv
 #' @export
-sb_dist <- function(data, minw = psy_rule(data), nboot = 1000, lag = 0) {
+sb_dist <- function(data, minw = psy_minw(data), nboot = 1000, lag = 0) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag)
 

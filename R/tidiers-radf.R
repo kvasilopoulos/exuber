@@ -54,32 +54,51 @@ tidy.radf <- function(x, format = c("wide", "long"), ...) {
 #' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather
 #' @export
-augment.radf <- function(x, format = c("wide", "long"), ...) {
+augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 
   format <- match.arg(format)
+  stopifnot(is.logical(panel))
 
-  tbl_radf <- x %>%
-    pluck("badf") %>%
-    as_tibble() %>%
-    mutate(
-      bsadf_panel = pluck(x, "bsadf_panel"),
-      index = index(x, trunc = TRUE)
-    ) %>%
-    gather(id, badf, -bsadf_panel, -index) %>%
-    bind_cols(
-      x %>%
-        pluck("bsadf") %>%
-        as_tibble() %>%
-        gather(name, bsadf) %>%
-        select(bsadf)
-    ) %>%
-    select(index, id, everything())
+  if(panel) {
 
-  if (format == "long") {
-    tbl_radf <-
-      tbl_radf %>%
-      gather(name, tstat, -index, -id) %>%
-      arrange(id, name)
+    tbl_radf <- tibble(
+      index = index(x, trunc = TRUE),
+      "panel" = pluck(x, "bsadf_panel")
+      ) %>%
+      add_key(x) %>%
+      select(key, index, panel)
+
+    if (format == "long") {
+      tbl_radf <-
+        tbl_radf %>%
+        gather(name, tstat, -index, -key)
+    }
+
+  }else{
+
+    tbl_radf <- x %>%
+      pluck("badf") %>%
+      as_tibble() %>%
+      add_key(x) %>%
+      mutate(
+        index = index(x, trunc = TRUE)
+      ) %>%
+      gather(id, badf, -index, -key) %>%
+      bind_cols(
+        x %>%
+          pluck("bsadf") %>%
+          as_tibble() %>%
+          gather(name, bsadf) %>%
+          select(bsadf)
+      ) %>%
+      select(key, index, id, everything())
+
+    if (format == "long") {
+      tbl_radf <-
+        tbl_radf %>%
+        gather(name, tstat, -index, -id, -key) %>%
+        arrange(id, name)
+    }
   }
 
   tbl_radf
@@ -111,3 +130,8 @@ glance.radf <- function(x, format = c("wide", "long"), ...) {
   tbl_radf
 
 }
+
+
+
+
+

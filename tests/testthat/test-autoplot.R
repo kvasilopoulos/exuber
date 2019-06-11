@@ -1,6 +1,6 @@
 context("autoplot")
 
-p <- autoplot(radf_dta)
+p <- autoplot(radf_dta, arrange = FALSE)
 parr <- ggarrange(p)
 
 test_that("basic", {
@@ -36,12 +36,12 @@ test_that("plot warnings & errors", {
 
 test_that("ggarrange", {
   expect_equal(radf_dta %>%
-    autoplot(include = FALSE) %>%
+    autoplot(include = FALSE, arrange = FALSE) %>%
     ggarrange() %>%
     pluck("layout") %>%
     NROW(), 4)
   expect_equal(radf_dta %>%
-    autoplot(include = TRUE) %>%
+    autoplot(include = TRUE, arrange = FALSE) %>%
     ggarrange() %>%
     pluck("layout") %>%
     NROW(), 5)
@@ -67,10 +67,11 @@ test_that("panel", {
 test_that("dates", {
   dating <- seq(as.Date("1991/10/01"), by = "month", length.out = 100)
   index(radf_dta) <- dating
-  p <- radf_dta %>% autoplot()
+  p <- radf_dta %>% autoplot(arrange = FALSE)
   expect_equal(p$psy1$data$index, dating[-c(1:19)])
   expect_true(p$psy1$data$index %>% is.Date())
 
   pds <- radf_dta %>% datestamp() %>% autoplot()
   expect_true(pds$data$Start %>% is.Date())
 })
+

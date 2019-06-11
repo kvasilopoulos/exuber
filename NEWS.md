@@ -14,6 +14,8 @@ a tidy tibble and draw a particular plot with ggplot2, respectively.
 * `sim_dgp1()` and `sim_dgp2()` have been renamed to `sim_psy1()` and `sim_psy2()` 
 to better describe the origination of the dgp. 
 * `sim_dgp1()` and `sim_dgp2()` have been soft-deprecated.
+* `autoplot_radf()` arranges automatically multiple graphs, to return to previous
+behavior we included the optional argument `arrange` which is set to TRUE by default.
 
 ## New features
 
@@ -25,6 +27,7 @@ to better describe the origination of the dgp.
 
 * New printing output for the functrions `summary()`, `diagnostics()` and 
 `datestamp()`.
+* New improved progressbar with more succinct printing for `wb_cv()`
 
 ## Bug Fixes
 

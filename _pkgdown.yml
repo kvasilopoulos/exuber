@@ -58,7 +58,11 @@ reference:
     contents:
       - col_names
       - index.radf
-      - psy_rule
+
+  - title: Helpers
+      - psy_minw
+      - psy_ds
+      - get_crit
 
 navbar:
   type: default

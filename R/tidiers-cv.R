@@ -40,7 +40,7 @@ tidy.cv <- function(x, format = c("wide", "long"), ...) {
       map(enframe) %>%
       reduce(full_join, by = "name") %>%
       set_names(c("sig", "adf", "sadf", "gsadf")) %>%
-      mutate(sig = sub("%$", "", sig))
+      mutate(sig = sub("%$", "", .data$sig) %>% as.factor())
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
@@ -59,7 +59,7 @@ tidy.cv <- function(x, format = c("wide", "long"), ...) {
             gather(name, value, -rowname)) %>%
       reduce(full_join, by = c("rowname", "name")) %>%
       set_names(c("id", "sig", "adf", "sadf", "gsadf")) %>%
-      mutate(sig = gsub("%", "", sig))
+      mutate(sig = gsub("%", "", sig) %>% as.factor())
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
@@ -72,7 +72,7 @@ tidy.cv <- function(x, format = c("wide", "long"), ...) {
     tbl_cv <- x %>%
       pluck("gsadf_panel_cv") %>%
       enframe(name = "sig", value = "gsadf_panel") %>%
-      mutate(sig = sub("%$", "", sig)) %>%
+      mutate(sig = sub("%$", "", sig) %>% as.factor()) %>%
       select(sig, gsadf_panel)
 
     if (format == "long") {
@@ -106,25 +106,52 @@ augment.cv <- function(x, format = c("wide", "long"), ...) {
       x %>%
         pluck("badf_cv") %>%
         as_tibble() %>%
-        gather(sig, badf),
+        add_key(x) %>%
+        gather(sig, badf, -key),
       x %>%
         pluck("bsadf_cv") %>%
         as_tibble() %>%
         gather(sig, bsadf) %>%
-        select(-sig))
+        select(-sig)) %>%
+      mutate(sig = sub("%$", "", sig) %>% as.factor())
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
-        gather(name, crit, -sig) %>%
-        select(name, sig, crit)
+        gather(name, crit, -sig, -key) %>%
+        select(key, name, sig, crit)
     }
   } else if (method(x) == "Wild Bootstrap") {
 
     iternames <- x %>% pluck("badf_cv") %>% dimnames() %>% `[[`(3)
 
-    tbl_cv <- bind_rows(
+    # tbl_cv <- bind_rows(
+    #   x %>%
+    #     pluck("badf_cv") %>%
+    #     as_tibble() %>%
+    #     add_key(x) %>%
+    #     gather(comb, crit, -key) %>%
+    #     extract(comb, c("sig", "name"),
+    #             regex = "([[:alnum:]]+)%.([[:alnum:]]+)") %>%
+    #     mutate(name = "badf"),
+    #   x %>%
+    #     pluck("bsadf_cv") %>%
+    #     as_tibble() %>%
+    #     add_key(x) %>%
+    #     gather(comb, crit, -key) %>%
+    #     extract(comb, c("sig", "name"),
+    #             regex = "([[:alnum:]]+)%.([[:alnum:]]+)") %>%
+    #     mutate(name = "badf"),
+    # )
+    #
+    # if (format == "wide") {
+    #   tbl_cv <- tbl_cv %>%
+    #     spread(name, crit)
+    # }
+
+    tbl_cv <-
+      bind_rows(
       x %>%
-        array_to_list("badf_cv", iternames) %>%
+        array_to_list("badf_cv") %>%
         set_names(iternames) %>%
         map(as_tibble) %>%
         map2(iternames, ~ .x %>% gather(sig, !!(.y))) %>%
@@ -132,7 +159,7 @@ augment.cv <- function(x, format = c("wide", "long"), ...) {
         mutate(name = "badf") %>%
         select(sig, name, iternames),
       x %>%
-        array_to_list("bsadf_cv", iternames) %>%
+        array_to_list("bsadf_cv") %>%
         set_names(iternames) %>%
         map(as_tibble) %>%
         map2(iternames, ~ .x %>% gather(sig, !!(.y))) %>%
@@ -140,13 +167,15 @@ augment.cv <- function(x, format = c("wide", "long"), ...) {
         mutate(name = "bsadf") %>%
         select(sig, name, iternames)
     ) %>%
-      mutate(sig = gsub("%", "", sig))
+      mutate(index = rep(index(x, trunc = TRUE), 6)) %>% # n_sig * n_name
+      mutate(key = rep((minw(x) + 1):(nrow(.)/6 + minw(x)),6)) %>%
+      mutate(sig = gsub("%", "", sig) %>% as.factor()) %>%
+      select(key, index, sig, name , everything())
 
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
-        gather(id, crit, -sig, -name) %>%
-        select(id, name, sig, crit)
+        gather(id, crit, -key, -index, -sig, -name)
     }
 
   } else {
@@ -154,17 +183,18 @@ augment.cv <- function(x, format = c("wide", "long"), ...) {
     tbl_cv <- x %>%
       pluck("bsadf_panel_cv") %>%
       as_tibble() %>%
-      gather(sig, bsadf_panel) %>%
+      add_column(index = index(x, trunc = TRUE)) %>%
+      add_key(x) %>%
+      gather(sig, bsadf_panel, -index, -key) %>%
       mutate(sig = sub("%$", "", sig) %>% as.factor())
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
-        gather(name, crit, -sig) %>%
-        mutate(id = "panel") %>%
-        select(id, name, sig, crit)
+        rename(panel = bsadf_panel) %>%
+        gather(name, crit, -sig, -index, -key) %>%
+        select(key, index, sig, name, crit)
     }
   }
-
   tbl_cv
 }
 
@@ -206,6 +236,7 @@ tidy.mc_dist <- function(x, ...) {
 #' @param ... Additional arguments, used only in `wb_dist` facet options.
 #'
 #' @importFrom tidyr gather
+#' @importFrom ggplot2 geom_density aes
 #' @export
 autoplot.mc_dist <- function(object, ...) {
 
@@ -256,6 +287,7 @@ tidy.wb_dist <- function(x, ...) {
 #' @rdname autoplot.mc_dist
 #'
 #' @importFrom tidyr gather
+#' @importFrom ggplot2 facet_wrap
 #' @export
 autoplot.wb_dist <- function(object, ...) {
 

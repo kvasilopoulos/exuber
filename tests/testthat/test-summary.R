@@ -103,7 +103,6 @@ withr::with_options(
     expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), msg)
     expect_error(autoplot(radf_dta_lag1, wb), regexp = NA)
     expect_error(autoplot(radf_dta_lag1, wb, option = "sadf"), msg)
-    expect_error(autoplot(radf_dta_lag1, wb, plot_type = "single"), regexp = NA)
   })
 )
 

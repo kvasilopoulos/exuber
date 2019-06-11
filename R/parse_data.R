@@ -4,6 +4,7 @@ parse_df <- function(x) {
   date_index <- purrr::detect_index(x, lubridate::is.Date)
   if (as.logical(date_index)) {
     index <- x[, date_index, drop = TRUE]
+    message(glue("Using `{colnames(x)[date_index]}` as index variable."))
     x <- x[, -date_index, drop = FALSE]
   } else {
     index <- seq(1, NROW(x), 1)
@@ -50,7 +51,7 @@ parse_data <- function(x) {
   } else if (is.numeric(x)) {
     lst <- parse_num(x)
   } else {
-    stop("Unsupported class", call. = FALSE)
+    stop_glue("Unsupported class")
   }
 
   matx <- as.matrix(lst$data)

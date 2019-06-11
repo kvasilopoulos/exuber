@@ -13,6 +13,8 @@
 #' @name index.radf
 NULL
 
+# TODO create a method for index - do not import from zoo (remove deps)
+
 #' @rdname index.radf
 #' @param trunc default FALSE. If TRUE the index formed by truncating the value
 #' in the minimum window.
@@ -20,6 +22,20 @@ NULL
 index.radf <- function(x, trunc = FALSE, ...) {
   value <- attr(x, "index")
   if (trunc) value <- value[-c(1:(minw(x) + lagr(x)))]
+  value
+}
+
+#' @rdname index.radf
+#' @export
+index.cv <- function(x, trunc = FALSE, ...) {
+  if (method(x) == "Monte Carlo")
+    stop_glue("method `index` is not suppoted for {method(x)}")
+  value <- attr(x, "index")
+  if (method(x) == "Sieve Booststrap") {
+    if (trunc) value <- value[-c(1:(minw(x) + lagr(x)))]
+  }else{
+    if (trunc) value <- value[-c(1:minw(x))]
+  }
   value
 }
 
@@ -42,9 +58,8 @@ index.datestamp <- function(x, ...) {
 #' @inheritParams index.radf
 #' @export
 `index<-.radf` <- function(x, value) {
-  if (length(index(x)) != length(value)) {
-    stop("length of index vectors does not match", call. = FALSE)
-  }
+  if (length(index(x)) != length(value))
+    stop_glue("length of index vectors does not match")
 
   attr(x, "index") <- value
   return(x)

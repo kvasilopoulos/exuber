@@ -7,10 +7,10 @@
 \title{Plotting and tidying radf objects}
 \usage{
 \method{autoplot}{radf}(object, cv, include = FALSE, select = NULL,
-  option = c("gsadf", "sadf"), min_duration = 0, ...)
+  option = c("gsadf", "sadf"), min_duration = 0, arrange = TRUE, ...)
 
-\method{fortify}{radf}(model, data, cv, include = FALSE, select = NULL,
-  option = c("gsadf", "sadf"), ...)
+\method{fortify}{radf}(model, data, cv = get_crit(model),
+  include = FALSE, select = NULL, option = c("gsadf", "sadf"), ...)
 
 ggarrange(...)
 }
@@ -30,7 +30,11 @@ ggarrange(...)
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 
-\item{...}{further arguments passed to method, ignored.}
+\item{arrange}{If FALSE returns a list of ggplot2 object, otheriwse it grobs the plots on a single page.}
+
+\item{...}{further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+a list.}
 
 \item{model}{An object of class \code{\link[=radf]{radf()}}.}
 
@@ -43,14 +47,19 @@ reported. Default is 0.}
 \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
 used directly after autoplot to place grobs on a page.
 }
+\details{
+`arrange` offers flexibility to the user by specifying the desired output. If
+`arrange = FALSE`, the individual plots can be modified after creation the then rearranged with
+the `ggarrange` function into a single plot.
+}
 \examples{
 \donttest{
 dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 
 dta \%>\%
   radf() \%>\%
-  autoplot() \%>\%
-  ggarrange(ncol = 2)
+  autoplot(ncol = 2)
+
 
 # For custom plotting with ggplot2
 dta \%>\%
