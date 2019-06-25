@@ -26,6 +26,8 @@ after_script: R -q -e 'tic::after_script()'
 # DO NOT CHANGE THE CODE ABOVE
 
 # Custom parts:
+r_github_packages:
+      - kvasilopoulos/smgenerics
 
 # Header
 language: r
