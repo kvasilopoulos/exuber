@@ -4,7 +4,7 @@
 \alias{diagnostics}
 \title{Diagnostics}
 \usage{
-diagnostics(object, cv, option = c("gsadf", "sadf"))
+diagnostics(object, cv = NULL, option = c("gsadf", "sadf"))
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}

@@ -21,7 +21,7 @@ Retrieve or set the column names of a class \code{\link[=radf]{radf()}} object. 
 difference that \code{col_names} is for \code{\link[=radf]{radf()}} objects.
 }
 \examples{
-\donttest{
+\dontrun{
 # Simulate bubble processes
 dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 

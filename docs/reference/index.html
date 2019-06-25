@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/plotting.html">Plotting with exuber</a>
+    </li>
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
@@ -150,6 +153,20 @@
     <tbody>
       <tr>
         <th colspan="2">
+          <h2 id="section-overview" class="hasAnchor"><a href="#section-overview" class="anchor"></a>Overview</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="exuber.html">exuber</a></code> </p>
+        </td>
+        <td><p>Econometric Analysis of Explosive Time Series</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
           <h2 id="section-estimation" class="hasAnchor"><a href="#section-estimation" class="anchor"></a>Estimation</h2>
           <p class="section-desc"></p>
         </th>
@@ -186,6 +203,12 @@
           <p><code><a href="sb_cv.html">sb_cv()</a></code> <code><a href="sb_cv.html">sb_dist()</a></code> </p>
         </td>
         <td><p>Panel Sieve Bootstrap Critical Values</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calc_pvalue.html">calc_pvalue()</a></code> </p>
+        </td>
+        <td><p>Caclulate p-values</p></td>
       </tr><tr>
         
         <td>
@@ -299,15 +322,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="tidy.cv.html">tidy(<i>&lt;cv&gt;</i>)</a></code> <code><a href="tidy.cv.html">augment(<i>&lt;cv&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Tidy an cv object</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="tidy.mc_dist.html">tidy(<i>&lt;mc_dist&gt;</i>)</a></code> <code><a href="tidy.mc_dist.html">tidy(<i>&lt;wb_dist&gt;</i>)</a></code> <code><a href="tidy.mc_dist.html">tidy(<i>&lt;sb_dist&gt;</i>)</a></code> </p>
         </td>
         <td><p>Tidying *_dist objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="augment_join.html">augment_join()</a></code> </p>
+        </td>
+        <td><p>Tidy into a joint model</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -319,21 +342,29 @@
       <tr>
         
         <td>
-          <p><code><a href="col_names.html">col_names()</a></code> <code><a href="col_names.html">`col_names<-`()</a></code> </p>
-        </td>
-        <td><p>Retrieve/Set column names</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="index.radf.html">index(<i>&lt;radf&gt;</i>)</a></code> <code><a href="index.radf.html">index(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="index.radf.html">index(<i>&lt;datestamp&gt;</i>)</a></code> <code><a href="index.radf.html">`index<-`(<i>&lt;radf&gt;</i>)</a></code> </p>
+          <p><code><a href="index.radf.html">index(<i>&lt;radf&gt;</i>)</a></code> <code><a href="index.radf.html">`index<-`(<i>&lt;radf&gt;</i>)</a></code> </p>
         </td>
         <td><p>Retrieve/Replace the index</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="psy_rule.html">psy_rule()</a></code> </p>
+          <p><code><a href="col_names.html">col_names()</a></code> <code><a href="col_names.html">`col_names<-`()</a></code> </p>
         </td>
-        <td><p>Calculate minimum window</p></td>
+        <td><p>Retrieve/Set column names</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-helpers" class="hasAnchor"><a href="#section-helpers" class="anchor"></a>Helpers</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="psy_minw.html">psy_minw()</a></code> <code><a href="psy_minw.html">psy_ds()</a></code> </p>
+        </td>
+        <td><p>Helper functions in accordance to PSY(2015)</p></td>
       </tr>
     </tbody>
     </table>
@@ -342,6 +373,7 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#section-overview">Overview</a></li>
       <li><a href="#section-estimation">Estimation</a></li>
       <li><a href="#section-critical-values-distributions">Critical Values &amp; Distributions</a></li>
       <li><a href="#section-simulation">Simulation</a></li>
@@ -349,6 +381,7 @@
       <li><a href="#section-plotting">Plotting</a></li>
       <li><a href="#section-tidying">Tidying</a></li>
       <li><a href="#section-misc">Misc</a></li>
+      <li><a href="#section-helpers">Helpers</a></li>
     </ul>
   </div>
 </div>

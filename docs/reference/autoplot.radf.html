@@ -81,7 +81,7 @@ used directly after autoplot to place grobs on a page." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@ used directly after autoplot to place grobs on a page." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/plotting.html">Plotting with exuber</a>
+    </li>
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
@@ -156,12 +159,13 @@ used directly after autoplot to place grobs on a page.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>cv</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>arrange</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for radf</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/fortify'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>cv</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='no'>...</span>)
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>), <span class='no'>...</span>)
 
 <span class='fu'>ggarrange</span>(<span class='no'>...</span>)</pre>
     
@@ -196,8 +200,14 @@ used directly after autoplot to place grobs on a page.</p>
 reported. Default is 0.</p></td>
     </tr>
     <tr>
+      <th>arrange</th>
+      <td><p>If FALSE returns a list of ggplot2 object, otheriwse it grobs the plots on a single page.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>further arguments passed to method, ignored.</p></td>
+      <td><p>further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+a list.</p></td>
     </tr>
     <tr>
       <th>model</th>
@@ -206,9 +216,15 @@ reported. Default is 0.</p></td>
     <tr>
       <th>data</th>
       <td><p>original dataset, not used (required by generic
-<code><a href='https://www.rdocumentation.org/packages/ggplot2/topics/fortify'>fortify()</a></code> method).</p></td>
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> method).</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>`arrange` offers flexibility to the user by specifying the desired output. If
+`arrange = FALSE`, the individual plots can be modified after creation the then rearranged with
+the `ggarrange` function into a single plot.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -216,31 +232,33 @@ reported. Default is 0.</p></td>
 
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'>ggarrange</span>(<span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='autoplot.radf-1.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='autoplot.radf-1.png' alt='' width='700' height='433' /></div><div class='input'>
+
 <span class='co'># For custom plotting with ggplot2</span>
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/fortify'>fortify</a></span>()</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 81 x 4</span><span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>()</div><div class='output co'>#&gt; # A tibble: 81 x 4
 #&gt;    index  psy1      psy2     cv
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>    20 -</span><span style='color: #BB0000;'>1.19</span><span> -</span><span style='color: #BB0000;'>2.14</span><span>     0.025</span><span style='text-decoration: underline;'>4</span><span>
-#&gt; </span><span style='color: #555555;'> 2</span><span>    21 -</span><span style='color: #BB0000;'>1.27</span><span> -</span><span style='color: #BB0000;'>1.61</span><span>     0.104 
-#&gt; </span><span style='color: #555555;'> 3</span><span>    22 -</span><span style='color: #BB0000;'>1.14</span><span> -</span><span style='color: #BB0000;'>1.22</span><span>     0.236 
-#&gt; </span><span style='color: #555555;'> 4</span><span>    23 -</span><span style='color: #BB0000;'>1.34</span><span> -</span><span style='color: #BB0000;'>0.580</span><span>    0.258 
-#&gt; </span><span style='color: #555555;'> 5</span><span>    24 -</span><span style='color: #BB0000;'>1.33</span><span> -</span><span style='color: #BB0000;'>0.000</span><span style='color: #BB0000;text-decoration: underline;'>996</span><span> 0.258 
-#&gt; </span><span style='color: #555555;'> 6</span><span>    25 -</span><span style='color: #BB0000;'>1.34</span><span>  0.764    0.283 
-#&gt; </span><span style='color: #555555;'> 7</span><span>    26 -</span><span style='color: #BB0000;'>1.38</span><span>  1.37     0.283 
-#&gt; </span><span style='color: #555555;'> 8</span><span>    27 -</span><span style='color: #BB0000;'>1.42</span><span>  2.39     0.298 
-#&gt; </span><span style='color: #555555;'> 9</span><span>    28 -</span><span style='color: #BB0000;'>1.30</span><span>  2.68     0.378 
-#&gt; </span><span style='color: #555555;'>10</span><span>    29 -</span><span style='color: #BB0000;'>1.54</span><span>  3.86     0.378 
-#&gt; </span><span style='color: #555555;'># ... with 71 more rows</span><span></div></span></pre>
+#&gt;    &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;  1    20 -1.19 -2.14     0.0240
+#&gt;  2    21 -1.27 -1.61     0.220 
+#&gt;  3    22 -1.14 -1.22     0.334 
+#&gt;  4    23 -1.34 -0.580    0.445 
+#&gt;  5    24 -1.33 -0.000996 0.508 
+#&gt;  6    25 -1.34  0.764    0.583 
+#&gt;  7    26 -1.38  1.37     0.604 
+#&gt;  8    27 -1.42  2.39     0.640 
+#&gt;  9    28 -1.30  2.68     0.661 
+#&gt; 10    29 -1.54  3.86     0.673 
+#&gt; # ... with 71 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

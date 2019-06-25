@@ -23,23 +23,23 @@ test_that("tidy output", {
 test_that("augment output",{
 
   expect_equal(names(augment(radf_dta)),
-               c("index", "id", "bsadf_panel", "badf", "bsadf"))
+               c("key", "index", "id", "badf", "bsadf"))
   expect_equal(names(augment(radf_dta, format = "long")),
-               c("index", "id", "name", "tstat"))
+               c("key", "index", "id", "name", "tstat"))
 
 
-  expect_equal(names(augment(mc)), c("sig", "badf", "bsadf"))
-  expect_equal(names(augment(mc, format = "long")), c("name", "sig", "crit"))
+  expect_equal(names(augment(mc)), c("key", "sig", "badf", "bsadf"))
+  expect_equal(names(augment(mc, format = "long")), c("key", "name", "sig", "crit"))
 
   id_nms <- c("psy1", "psy2", "evans", "div", "blan")
 
-  expect_equal(names(augment(wb)), c("sig", "name", id_nms))
+  expect_equal(names(augment(wb)), c("key","index","sig", "name", id_nms))
   expect_equal(names(augment(wb, format = "long")),
-               c("id", "name", "sig", "crit"))
+               c("key", "index","sig", "name", "id", "crit"))
 
-  expect_equal(names(augment(sb)), c("sig", "bsadf_panel"))
+  expect_equal(names(augment(sb)), c("key", "index", "sig", "bsadf_panel"))
   expect_equal(names(augment(sb, format = "long")),
-               c("id", "name", "sig", "crit"))
+               c("key", "index", "sig", "name", "crit"))
 
 })
 

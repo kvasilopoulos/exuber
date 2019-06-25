@@ -6,11 +6,12 @@
 \alias{ggarrange}
 \title{Plotting and tidying radf objects}
 \usage{
-\method{autoplot}{radf}(object, cv, include = FALSE, select = NULL,
-  option = c("gsadf", "sadf"), min_duration = 0, arrange = TRUE, ...)
+\method{autoplot}{radf}(object, cv = NULL, include = FALSE,
+  select = NULL, option = c("gsadf", "sadf"), min_duration = 0,
+  arrange = TRUE, ...)
 
-\method{fortify}{radf}(model, data, cv = get_crit(model),
-  include = FALSE, select = NULL, option = c("gsadf", "sadf"), ...)
+\method{fortify}{radf}(model, data, cv = NULL, include = FALSE,
+  select = NULL, option = c("gsadf", "sadf"), ...)
 
 ggarrange(...)
 }

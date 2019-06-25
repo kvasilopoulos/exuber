@@ -26,7 +26,7 @@ dat_mat <- as.matrix(dta)
 # NA to generate error message
 dta_na <- dta
 dta_na[1, 3] <- NA
-#
+
 # # Use main functions to compute tstats and critical values
 radf_dta <- radf(dta)
 radf_dta_lag1 <- radf(dta, lag = 1)
@@ -56,5 +56,3 @@ warn_select <- "argument 'select' is redundant"
 mc2_minw20 <- mc_cv(100, nrep = 100, minw = 20)
 wb2_minw20 <- wb_cv(dta, nboot = 100, minw = 20)
 sb2_minw20 <- sb_cv(dta, nboot = 100, minw = 20)
-
-# Distributions
