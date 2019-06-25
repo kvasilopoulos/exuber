@@ -5,12 +5,12 @@ test_that("crit as data", {
 
   expect_error(crit, NA)
   expect_error(crit[[100]], NA)
-  expect_error(radf_dta %>% get_crit(), NA)
+  expect_error(radf_dta %>% retrieve_crit(), NA)
   expect_error(crit[[2001]], "subscript out of bounds")
   msg_crit <- "cannot provide MC critical values see help(crit)"
-  expect_error(sim_blan(4) %>% get_crit(), msg_crit, fixed = TRUE)
-  expect_error(sim_blan(2001) %>% get_crit(), msg_crit, fixed = TRUE)
-  expect_error(sim_blan(2001) %>% radf(minw = 2000) %>% get_crit(),
+  expect_error(sim_blan(4) %>% retrieve_crit(), msg_crit, fixed = TRUE)
+  expect_error(sim_blan(2001) %>% retrieve_crit(), msg_crit, fixed = TRUE)
+  expect_error(sim_blan(2001) %>% radf(minw = 2000) %>% retrieve_crit(),
     msg_crit,
     fixed = TRUE
   )
@@ -65,7 +65,7 @@ test_that("minw too small", {
 })
 
 test_that("NA handling", {
-  msg <- "RLS estimation cannot handle NA"
+  msg <- "rls estimation cannot handle NA"
   expect_error(wb_cv(dta_na), msg)
   expect_error(sb_cv(dta_na), msg)
 })

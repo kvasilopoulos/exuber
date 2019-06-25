@@ -80,7 +80,7 @@ computes the distribution." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -105,6 +105,9 @@ computes the distribution." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/plotting.html">Plotting with exuber</a>
+    </li>
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
@@ -153,9 +156,9 @@ computes the distribution.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>sb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>data</span>), <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+    <pre class="usage"><span class='fu'>sb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>sb_dist</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fu'><a href='psy_rule.html'>psy_rule</a></span>(<span class='no'>data</span>), <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
+<span class='fu'>sb_dist</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,6 +180,14 @@ The estimation process cannot handle NA values.</p></td>
     <tr>
       <th>nboot</th>
       <td><p>A positive integer indicating the number of bootstraps. Default is 1000 repetitions.</p></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>An object specifying if and how the random number generator(rng)
+shold be initialized. Either NULL or an integer will be used in a call to
+`set.seed` before simulation. If set, the value is save as "seed" attribute
+of the returned value. The default, NULL will note change the rng state, and
+return .Random.seed as the "seed" attribute.</p></td>
     </tr>
     </table>
     
@@ -218,7 +229,7 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
 
 <span class='co'># Simulate distribution</span>
 <span class='fu'>sb_dist</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)

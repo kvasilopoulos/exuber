@@ -9,6 +9,7 @@
 #' @param c A positive scalar determining the autoregressive coefficient in the explosive regime.
 #' @param alpha A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.
 #' @param sigma A positive scalar indicating the standard deviation of the innovations.
+#' @inheritParams mc_cv
 #'
 #' @details
 #' The data generating process is described by the following equation:
@@ -51,13 +52,15 @@
 #' # 200 periods with bubble origination date 100 and termination date 150
 #' sim_psy1(n = 200, te = 100, tf = 150)
 sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
-                     alpha = 0.6, sigma = 6.79) {
+                     alpha = 0.6, sigma = 6.79, seed = NULL) {
   assert_positive_int(n)
   assert_between(te, 0, n)
   assert_between(tf, te, n)
   assert_positive_int(c)
   assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
+
+  rng_state <- set_rng(seed = seed)
 
   delta <- 1 + c * n^(-alpha)
   y <- 100
@@ -73,7 +76,10 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
       y[i] <- y[i - 1] + rnorm(1, sd = sigma)
     }
   }
-  return(y)
+
+  y %>%
+    add_attr(seed = rng_state) %>%
+    add_class("sim")
 }
 
 
@@ -141,7 +147,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' sim_psy2(n = 200)
 sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
                      te2 = 0.6 * n, tf2 = 0.1 * n + te2,
-                     c = 1, alpha = 0.6, sigma = 6.79) {
+                     c = 1, alpha = 0.6, sigma = 6.79, seed = NULL) {
   assert_positive_int(n)
   assert_between(te1, 0, n)
   assert_between(tf1, te1, n)
@@ -149,6 +155,8 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   assert_between(tf2, te2, n)
   assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
+
+  rng_state <- set_rng(seed = seed)
 
   delta <- 1 + c * n^(-alpha)
   y <- 100
@@ -171,7 +179,9 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
     }
   }
 
-  return(y)
+  y %>%
+    add_attr(seed = rng_state) %>%
+    add_class("sim")
 }
 
 #' Simulation of a Blanchard (1979) bubble process
@@ -206,11 +216,14 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #' @examples
 #' sim_blan(n = 100)
-sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
+sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, seed = NULL) {
+
   assert_positive_int(n)
   assert_between(pi, 0, 1)
   stopifnot(sigma >= 0)
   stopifnot(r >= 0)
+
+  rng_state <- set_rng(seed = seed)
 
   b <- 1
   theta <- rbinom(n, 1, pi)
@@ -227,7 +240,10 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
       i <- i - 1
     }
   }
-  return(b)
+
+  b %>%
+    add_attr(seed = rng_state) %>%
+    add_class("sim")
 }
 
 #' Simulation of an Evans (1991) bubble process
@@ -270,19 +286,19 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05) {
 #' @references Evans, G. W. (1991). Pitfalls in testing for explosive
 #' bubbles in asset prices. The American Economic Review, 81(4), 922-930.
 #'
-sim_evans <- function(n, alpha = 1, delta = 0.5,
-                      tau = 0.05, pi = 0.7, r = 0.05, b1 = delta) {
+sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
+                      r = 0.05, b1 = delta, seed = NULL) {
 
   # checks here
   assert_positive_int(n)
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
-    stop("alpha and delta should satisfy: 0 < delta < (1+r)*alpha",
-      call. = FALSE
-    )
+    stop_glue("alpha and delta should satisfy: 0 < delta < (1+r)*alpha",)
   }
   assert_between(pi, 0, 1)
   stopifnot(r >= 0)
+
+  rng_state <- set_rng(seed = seed)
 
   y <- rnorm(n, 0, tau)
   u <- exp(y - tau^2 / 2)
@@ -297,7 +313,10 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
         (1 + r)^(-1) * delta)) * u[i + 1]
     }
   }
-  return(b)
+
+  b %>%
+    add_attr(seed = rng_state) %>%
+    add_class("sim")
 }
 
 #' Simulation of dividends
@@ -348,7 +367,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5,
 #' pb <- sim_evans(100, r = 0.05)
 #' p <- pf + 20 * pb
 sim_div <- function(n, mu, sigma, r = 0.05,
-                    log = FALSE, output = c("pf", "d")) {
+                    log = FALSE, output = c("pf", "d"), seed = NULL) {
   initval <- 1.3
   # Values obtained from West(1988, p53)
   if (missing(mu)) if (log) mu <- 0.013 else mu <- 0.0373
@@ -359,6 +378,8 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   stopifnot(r >= 0)
   stopifnot(is.logical(log))
   return <- match.arg(output)
+
+  rng_state <- set_rng(seed = seed)
 
   d <- stats::filter(mu + c(initval, rnorm(n - 1, 0, sigma)),
     c(1),
@@ -372,9 +393,18 @@ sim_div <- function(n, mu, sigma, r = 0.05,
     pf <- mu * (1 + r) * r^(-2) + d / r
   }
 
-  if (return == "pf") {
-    return(pf)
-  } else {
-    return(d)
-  }
+  if (return == "pf")  out <- pf else out <- d
+
+  out %>%
+    add_attr(seed = rng_state) %>%
+    add_class("sim")
+
+}
+
+# IDEA maybe add ps1 for smooth collapse, although sim_psy1 is nested in that case
+
+
+print.sim <- function(x, ...) {
+  strip_attributes(x)
+  x
 }

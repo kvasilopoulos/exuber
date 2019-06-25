@@ -5,9 +5,11 @@
 \alias{wb_dist}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(data, minw = psy_minw(data), nboot = 1000, dist_rad = FALSE)
+wb_cv(data, minw = NULL, nboot = 1000, dist_rad = FALSE,
+  seed = NULL)
 
-wb_dist(data, minw = psy_minw(data), nboot = 1000, dist_rad = FALSE)
+wb_dist(data, minw = NULL, nboot = 1000, dist_rad = FALSE,
+  seed = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -20,6 +22,12 @@ The estimation process cannot handle NA values.}
 
 \item{dist_rad}{Logical. If \code{TRUE} then  the Rademacher distribution
 will be used.}
+
+\item{seed}{An object specifying if and how the random number generator(rng)
+shold be initialized. Either NULL or an integer will be used in a call to
+`set.seed` before simulation. If set, the value is save as "seed" attribute
+of the returned value. The default, NULL will note change the rng state, and
+return .Random.seed as the "seed" attribute.}
 }
 \value{
 A list that contains the critical values for ADF, BADF, BSADF and GSADF

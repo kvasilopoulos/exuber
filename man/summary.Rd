@@ -5,7 +5,7 @@
 \alias{summary.radf}
 \title{Summarizing radf models}
 \usage{
-\method{summary}{radf}(object, cv, ...)
+\method{summary}{radf}(object, cv = NULL, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}

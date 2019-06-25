@@ -16,24 +16,23 @@ test_that("tidy methods work",{
   expect_error(tidy(wbd), regexp = NA)
   expect_error(tidy(sbd), regexp = NA)
 
-  expect_error(glance(mcd),
-               "no applicable method for 'glance' applied to an object of class \"mc_dist\"")
-  expect_error(glance(wbd),
-               "no applicable method for 'glance' applied to an object of class \"wb_dist\"")
-  expect_error(glance(sbd),
-               "no applicable method for 'glance' applied to an object of class \"sb_dist\"")
+  # glance_warning <- function(x)
+  #   glue("No glance method for objects of class {class(x)}")
+  # augment_warning <- function(x)
+  #   glue("No augment method for objects of class {class(x)}")
 
-  expect_error(augment(mcd),
-               "no applicable method for 'augment' applied to an object of class \"mc_dist\"")
-  expect_error(augment(wbd),
-               "no applicable method for 'augment' applied to an object of class \"wb_dist\"")
-  expect_error(augment(sbd),
-               "no applicable method for 'augment' applied to an object of class \"sb_dist\"")
+  expect_error(glance(mcd))
+  expect_error(glance(wbd))
+  expect_error(glance(sbd))
+
+  expect_error(augment(mcd))
+  expect_error(augment(wbd))
+  expect_error(augment(sbd))
 
 
   nms <- c("adf", "sadf", "gsadf")
   expect_equal(names(tidy(mcd)), nms)
-  expect_equal(names(tidy(wbd)), c("name", nms))
+  expect_equal(names(tidy(wbd)), c("id", nms))
   expect_equal(names(tidy(sbd)), c("gsadf_panel"))
 
 })
@@ -49,3 +48,4 @@ test_that("autoplot works",{
   expect_error(autoplot(wbd), regexp = NA)
   expect_error(autoplot(sbd), regexp = NA)
 })
+

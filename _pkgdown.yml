@@ -17,6 +17,11 @@ authors:
     href: https://sites.google.com/view/emgeconomics
 
 reference:
+
+  - title: Overview
+    contents:
+      - exuber
+
   - title: Estimation
     contents:
       - radf
@@ -26,6 +31,7 @@ reference:
       - mc_cv
       - wb_cv
       - sb_cv
+      - calc_pvalue
       - crit
 
   - title: Simulation
@@ -51,18 +57,18 @@ reference:
   - title: Tidying
     contents:
       - tidy.radf
-      - tidy.cv
+      - tidy.mc_cv
+      - augment_join
       - tidy.mc_dist
 
   - title: Misc
     contents:
-      - col_names
       - index.radf
+      - col_names
 
   - title: Helpers
+    contents:
       - psy_minw
-      - psy_ds
-      - get_crit
 
 navbar:
   type: default

@@ -50,6 +50,7 @@ tidy.radf <- function(x, format = c("wide", "long"), ...) {
 
 #' @rdname tidy.radf
 #' @inheritParams tidy.radf
+#' @param panel Either univariate or panel bsadf.
 #'
 #' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather
@@ -59,7 +60,7 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
   format <- match.arg(format)
   stopifnot(is.logical(panel))
 
-  if(panel) {
+  if (panel) {
 
     tbl_radf <- tibble(
       index = index(x, trunc = TRUE),
@@ -110,7 +111,8 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 #'
 #' @importFrom purrr pluck
 #' @importFrom rlang set_names
-#' @importFrom dplyr full_join as_tibble
+#' @importFrom dplyr full_join
+#' @importFrom tibble enframe
 #' @export
 glance.radf <- function(x, format = c("wide", "long"), ...) {
 
@@ -118,7 +120,7 @@ glance.radf <- function(x, format = c("wide", "long"), ...) {
 
   tbl_radf <- x %>%
     pluck("gsadf_panel") %>%
-    as_tibble() %>%
+    enframe(name = NULL) %>%
     set_names("panel")
 
   if (format == "long") {

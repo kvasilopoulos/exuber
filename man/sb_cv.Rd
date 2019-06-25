@@ -5,9 +5,9 @@
 \alias{sb_dist}
 \title{Panel Sieve Bootstrap Critical Values}
 \usage{
-sb_cv(data, minw = psy_minw(data), lag = 0, nboot = 1000)
+sb_cv(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL)
 
-sb_dist(data, minw = psy_minw(data), nboot = 1000, lag = 0)
+sb_dist(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -17,6 +17,14 @@ The estimation process cannot handle NA values.}
 \eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
 
 \item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
+
+\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
+
+\item{seed}{An object specifying if and how the random number generator(rng)
+shold be initialized. Either NULL or an integer will be used in a call to
+`set.seed` before simulation. If set, the value is save as "seed" attribute
+of the returned value. The default, NULL will note change the rng state, and
+return .Random.seed as the "seed" attribute.}
 }
 \value{
 A list that contains the panel critical values for BSADF and GSADF

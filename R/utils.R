@@ -1,7 +1,44 @@
 
+"%ni%" <- Negate("%in%")
+
+# For simulation ----------------------------------------------------------
+
+get_rng <- function(seed) {
+  if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+    runif(1)
+  if (is.null(seed)) {
+    RNGstate <- get(".Random.seed", envir = .GlobalEnv)
+  }else {
+    R.seed <- get(".Random.seed", envir = .GlobalEnv)
+    RNGstate <- structure(seed, kind = as.list(RNGkind()))
+    on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))
+  }
+  RNGstate
+}
+
+check_seed <- function() {
+  option_seed <- getOption("exuber.global_seed")
+  if (!is.na(option_seed) && !is.null(option_seed)) {
+    option_seed
+  }else{
+    NULL
+  }
+}
+
+set_rng <- function(seed) {
+  rng_state <- get_rng(seed)
+  global_seed <- check_seed()
+  if (!is.null(seed)) {
+    set.seed(seed)
+  } else if (!is.null(global_seed)) {
+    set.seed(global_seed)
+  }
+  rng_state
+}
+
 # get crit data --------------------------------------------------------
 
-get_crit <- function(x) {
+retrieve_crit <- function(x) {
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(crit)) {
     return(get("crit")[[nr]])
@@ -13,14 +50,14 @@ get_crit <- function(x) {
 
 # options -----------------------------------------------------------------
 
-get_pb <- function(condition, iter, width = getOption("width") - 10L) {
+set_pb <- function(condition, iter, width = getOption("width") - 10L) {
   if (condition) {
     txtProgressBar(min = 1, max = iter - 1, style = 3,
                    char = "-", width = width)
   }
 }
 
-get_pb_opts <- function(condition, pb) {
+set_pb_opts <- function(condition, pb) {
   if (condition) {
     list(progress = function(n) setTxtProgressBar(pb, n))
   }else{
@@ -44,43 +81,8 @@ array_to_list <- function(x, var) {
 }
 
 add_key <- function(x, attr_minw) {
-  nkey <- minw(attr_minw)
+  nkey <- get_minw(attr_minw)
   x %>% add_column(key = (nkey + 1):(nrow(.) + nkey))
 }
 
-
-#' Pipe operator
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom dplyr %>%
-#' @usage lhs \%>\% rhs
-NULL
-
-
-
-# Access attributes easily ------------------------------------------------
-
-
-minw <- function(x) {
-  attr(x, "minw")
-}
-
-lagr <- function(x, ...) {
-  attr(x, "lag")
-}
-
-method <- function(y) {
-  attr(y, "method")
-}
-
-iter <- function(y) {
-  attr(y, "iter")
-}
-
-min_dur <- function(y) {
-  attr(y, "min_duration")
-}
 

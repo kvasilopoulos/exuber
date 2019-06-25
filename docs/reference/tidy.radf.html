@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/plotting.html">Plotting with exuber</a>
+    </li>
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
@@ -153,7 +156,8 @@
 <span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/tidy'>tidy</a></span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"wide"</span>, <span class='st'>"long"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for radf</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/augment'>augment</a></span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"wide"</span>, <span class='st'>"long"</span>), <span class='no'>...</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/augment'>augment</a></span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"wide"</span>, <span class='st'>"long"</span>), <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for radf</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/glance'>glance</a></span>(<span class='no'>x</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"wide"</span>, <span class='st'>"long"</span>), <span class='no'>...</span>)</pre>
@@ -172,6 +176,10 @@
     <tr>
       <th>...</th>
       <td><p>Additional arguments. Not used.</p></td>
+    </tr>
+    <tr>
+      <th>panel</th>
+      <td><p>Either univariate or panel bsadf.</p></td>
     </tr>
     </table>
     

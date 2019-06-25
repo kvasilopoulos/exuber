@@ -6,7 +6,8 @@
   op.exuber <- list(
     exuber.show_progress = TRUE,
     exuber.parallel = TRUE,
-    exuber.ncores = ncores
+    exuber.ncores = ncores,
+    exuber.global_seed = NA
   )
   toset <- !(names(op.exuber) %in% names(op))
   if (any(toset)) options(op.exuber[toset])
@@ -18,7 +19,8 @@
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(
     c("adf", "sadf", "gsadf", "badf", "bsadf", "bsadf_panel", "gsadf_panel",
-      "Distribution", ".", "crit", "i", "id", "name","sig", "tstat", "value")
+      "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
+      "value", "value_x", "value_y", "stat", "pval")
   )
 }
 

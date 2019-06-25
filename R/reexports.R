@@ -1,11 +1,11 @@
-#' @importFrom zoo index
+#' @importFrom smgenerics index
 #' @seealso \code{\link[=index]{index()}}
 #' @export
-zoo::index
+smgenerics::index
 
-#' @importFrom zoo index<-
+#' @importFrom smgenerics index<-
 #' @export
-zoo::`index<-`
+smgenerics::`index<-`
 
 #' @importFrom ggplot2 fortify
 #' @seealso \code{\link[=fortify.radf]{fortify.radf()}}
@@ -29,3 +29,15 @@ generics::augment
 #' @importFrom generics glance
 #' @export
 generics::glance
+
+#' Pipe operator
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom dplyr %>%
+#' @usage lhs \%>\% rhs
+NULL
+
+

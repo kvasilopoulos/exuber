@@ -36,10 +36,13 @@
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
-radf <- function(data, minw = psy_minw(data), lag = 0) {
+radf <- function(data, minw = NULL, lag = 0) {
 
-  lst <- parse_data(data)
-  x <- lst$data
+  x <- parse_data(data)
+
+  if (is.null(minw)) {
+    minw <- psy_minw(data)
+  }
 
   nc <- ncol(x)
 
@@ -77,8 +80,9 @@ radf <- function(data, minw = psy_minw(data), lag = 0) {
       gsadf = gsadf,
       bsadf_panel = bsadf_panel,
       gsadf_panel = gsadf_panel),
-    index = lst$index,
+    index = attr(x, "index"),
     lag = lag,
+    n = nrow(x),
     minw = minw,
     lag = lag,
     col_names = colnames(x),
@@ -87,9 +91,27 @@ radf <- function(data, minw = psy_minw(data), lag = 0) {
 
 }
 
+#' @importFrom stats embed
+unroot <- function(x, lag = 0) {
+  if (lag == 0) {
+    x_embed <- embed(x, 2)
+    yxmat <- cbind(x_embed[, 1], x_embed[, 2])
+  } else {
+    x_embed <- embed(x, lag + 2)
+    dx_embed <- embed(diff(x), lag + 1)[, -1]
+    x_lev <- x_embed[, 1]
+    x_lag <- x_embed[, 2]
+    yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
+  }
+  return(yxmat)
+}
+
+
+# Helpers -----------------------------------------------------------------
+
 #' Helper functions in accordance to PSY(2015)
 #'
-#' \code{psy_minw} proposed a minimum window. \code{psy_ds} proposed a rule of
+#' \code{psy_minw} proposes a minimum window and \code{psy_ds} proposes a rule of
 #' thumb to exclude periods of exuberance.
 #'
 #' @inheritParams mc_cv
@@ -108,12 +130,26 @@ psy_minw <- function(n) {
 }
 
 #' @rdname psy_minw
+#' @param rule Rule 1 corresponds to log(T), while rule 2 log(T)/T
+#' @param delta Frequency-dependent parameter
+#'
+#' @details \code{delta } depends on the frequency of the data and the minimal
+#' duration condition. For example, for a 30-year period, we set arbitrarly duration
+#' to exceed a perios such as one year. Then, delta should is 0.7 for yearly data
+#' and 5 for monthly data.
+#'
+#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+#' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
+#' S&P 500. International Economic Review, 56(4), 1043-1078.
+#'
+#' @export
 psy_ds <- function(n, rule = 1, delta = 1) {
 
   if (!is_n(n)) {
     n <- NROW(n)
   }
-  stopifnot(x == 1 || x == 2)
+  stopifnot(rule == 1 || rule == 2)
+  stopifnot(delta > 0)
 
   if (rule == 1) {
     round(delta * log(n))
@@ -121,19 +157,4 @@ psy_ds <- function(n, rule = 1, delta = 1) {
     round(delta*log(n)/n)
   }
 
-}
-
-#' @importFrom stats embed
-unroot <- function(x, lag = 0) {
-  if (lag == 0) {
-    x_embed <- embed(x, 2)
-    yxmat <- cbind(x_embed[, 1], x_embed[, 2])
-  } else {
-    x_embed <- embed(x, lag + 2)
-    dx_embed <- embed(diff(x), lag + 1)[, -1]
-    x_lev <- x_embed[, 1]
-    x_lag <- x_embed[, 2]
-    yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
-  }
-  return(yxmat)
 }

@@ -40,17 +40,19 @@
 #' datestamp(rfd, cv = wb)
 #' }
 #' @export
-summary.radf <- function(object, cv, ...) {
+summary.radf <- function(object, cv = NULL, ...) {
 
-  if (missing(cv)) cv <- get_crit(object)
+  if (is.null(cv)) {
+    cv <- retrieve_crit(object)
+  }
   assert_class(cv, "cv")
+  assert_equal_arg(object, cv)
 
   x <- object
   y <- cv
-  assert_equal_arg(x, y)
 
   ret <- list()
-  if (method(y) == "Wild Bootstrap") {
+  if (is_wb(y)) {
     for (i in seq_along(col_names(x))) {
       df1 <- c(x$adf[i], y$adf_cv[i, ])
       df2 <- c(x$sadf[i], y$sadf_cv[i, ])
@@ -62,7 +64,7 @@ summary.radf <- function(object, cv, ...) {
       ret[[i]] <- df
     }
     names(ret) <- col_names(x)
-  } else if (method(y) == "Monte Carlo") {
+  } else if (is_mc(y)) {
     for (i in seq_along(col_names(x))) {
       df1 <- c(x$adf[i], y$adf_cv)
       df2 <- c(x$sadf[i], y$sadf_cv)
@@ -74,17 +76,17 @@ summary.radf <- function(object, cv, ...) {
       ret[[i]] <- df
     }
     names(ret) <- col_names(x)
-  } else if (method(y) == "Sieve Bootstrap") {
+  } else if (is_sb(y)) {
     ret <- cbind(x$gsadf_panel, t(y$gsadf_panel_cv))
     colnames(ret) <- c("t-stat", "90%", "95%", "99%")
   }
 
   structure(
     ret,
-    minw = minw(x),
-    lag = lagr(x),
-    method = method(y),
-    iter = iter(y),
+    minw = get_minw(x),
+    lag = get_lag(x),
+    method = get_method(y),
+    iter = get_iter(y),
     class = "summary.radf"
   )
 }
@@ -94,12 +96,12 @@ summary.radf <- function(object, cv, ...) {
 print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
                              ...) {
 
-  iter_char <- if (method(x) == "Monte Carlo") "nrep" else "nboot"
+  iter_char <- if (get_method(x) == "Monte Carlo") "nrep" else "nboot"
   cat_line()
-  cat_rule(left = glue("Summary (minw = {minw(x)}, lag = {lagr(x)})"),
-           right = glue("{method(x)} ({iter_char} = {iter(x)})"))
+  cat_rule(left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
+           right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})"))
 
-  if (method(x) == "Sieve Bootstrap") {
+  if (get_method(x) == "Sieve Bootstrap") {
     cat("\n Panel\n")
     pp <- x[1, , drop = FALSE]
     rownames(pp) <- "GSADF"
@@ -111,6 +113,71 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
     }
   }
   cat_line()
+}
+
+
+#' Caclulate p-values
+#'
+#' @param x An 'radf' object
+#' @param dist Which type of distribution to use to calculate the p-values
+#'
+#' @export
+#' @importFrom tidyr nest spread
+#' @importFrom purrr when map2_dbl
+#' @importFrom dplyr group_by
+#' @examples
+#'
+#' \dontrun{
+#' radf_psy1 <- radf(sim_psy1(100))
+#' calc_pvalue(radf_psy1)
+#'
+#' # Using the Wild-Bootstrapped
+#' wb_psy1 <- wb_dist(sim_psy1(100))
+#' calc_pvalue(radf_psy1, wb_psy1)
+#'
+#' }
+calc_pvalue <- function(x, dist = NULL) {
+
+  assert_class(x, "radf")
+
+  if (is.null(dist)) {
+    message_glue("Using `mc_dist`")
+    dist <- mc_dist(attr(x, "n"))
+  }
+
+  method <- get_method(dist)
+
+  tbl_x <- x %>%
+    when(is_sb(dist)
+         ~ glance(.) %>%
+           mutate(id = "panel", stat = "gsadf_panel") %>%
+           nest(panel, .key = value_x) ,
+         ~ tidy(.) %>%
+           gather(stat, value_x, -id) %>%
+           nest(value_x, .key = value_x))
+
+  tbl_dist <- dist %>%
+    tidy() %>%
+    when(is_wb(dist)
+         ~ gather(., stat, value_y, -id) %>%
+           group_by(stat, id),
+         ~  gather(., stat, value_y) %>%
+           group_by(stat)) %>%
+    nest(.key = value_y)
+
+  tbl_join_nested <- tbl_x %>%
+    when(is_wb(dist)
+         ~ full_join(., tbl_dist, by = c("id", "stat")),
+         ~ full_join(., tbl_dist, by = c("stat")))
+
+  tbl_join_nested %>%
+    mutate(pval = map2_dbl(value_x, value_y, ~ mean(unlist(.x) < unlist(.y)))) %>%
+    select(id, stat, pval) %>%
+    spread(stat, pval) %>%
+    when(is_sb(dist)
+         ~ . ,
+         ~ select(., id, adf, sadf, gsadf))
+
 }
 
 
@@ -131,47 +198,52 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 #'
 #' @importFrom dplyr case_when
 #' @export
-diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
+diagnostics <- function(object, cv = NULL, option = c("gsadf", "sadf")) {
 
   assert_class(object, "radf")
-  cv <- if (missing(cv)) get_crit(object) else cv
+  if (is.null(cv)) {
+    cv <- retrieve_crit(object)
+  }
   assert_class(cv, "cv")
+  assert_equal_arg(object, cv)
   option <- match.arg(option)
 
   x <- object
   y <- cv
-  assert_equal_arg(x, y)
 
   if (option == "gsadf") {
 
-    tstat <- if (is_panel_cv(y)) x$gsadf_panel else x$gsadf
+    tstat <- if (is_sb(y)) x$gsadf_panel else x$gsadf
 
-    if (method(y) == "Monte Carlo") {
+    if (is_mc(y)) {
       cv1 <- y$gsadf_cv[1]
       cv2 <- y$gsadf_cv[2]
       cv3 <- y$gsadf_cv[3]
-    } else if (method(y) == "Wild Bootstrap") {
+    } else if (is_wb(y)) {
       cv1 <- y$gsadf_cv[, 1]
       cv2 <- y$gsadf_cv[, 2]
       cv3 <- y$gsadf_cv[, 3]
-    } else if (method(y) == "Sieve Bootstrap") {
+    } else if (is_sb(y)) {
       cv1 <- y$gsadf_panel_cv[1]
       cv2 <- y$gsadf_panel_cv[2]
       cv3 <- y$gsadf_panel_cv[3]
     }
   } else if (option == "sadf") {
+
+    if (is_sb(y)) {
+      stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
+    }
+
     tstat <- x$sadf
 
-    if (method(y) == "Monte Carlo") {
+    if (is_mc(y)) {
       cv1 <- y$sadf_cv[1]
       cv2 <- y$sadf_cv[2]
       cv3 <- y$sadf_cv[3]
-    } else if (method(y) == "Wild Bootstrap") {
+    } else if (is_wb(y)) {
       cv1 <- y$sadf_cv[, 1]
       cv2 <- y$sadf_cv[, 2]
       cv3 <- y$sadf_cv[, 3]
-    }else{
-      stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
     }
   }
 
@@ -188,18 +260,12 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
     tstat >= cv3 ~ "99%"
   )
 
-  if (all(sig == "Reject")) {
-    stop("Cannot reject H0", call. = FALSE)
-  } else if (all(dummy == 0)) { # dummy takes zero if below 95
-    stop("Cannot reject H0 for significance level 95%", call. = FALSE)
+  if (is_sb(y)) {
+    accepted <- ifelse(length(dummy), "Panel", NA)
+    rejected <- ifelse(length(dummy), NA, "Panel")
   } else {
-    if (is_panel_cv(y)) {
-      accepted <- ifelse(length(dummy), "Panel", NA)
-      rejected <- ifelse(length(dummy), NA, "Panel")
-    } else {
-      accepted <- col_names(x)[as.logical(dummy)]
-      rejected <- col_names(x)[!as.logical(dummy)]
-    }
+    accepted <- col_names(x)[as.logical(dummy)]
+    rejected <- col_names(x)[!as.logical(dummy)]
   }
 
   structure(
@@ -209,9 +275,9 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
       sig = sig,
       dummy = dummy
     ),
-    panel = is_panel_cv(y),
-    col_names = if (!is_panel_cv(y)) col_names(x),
-    method = method(y),
+    panel = is_sb(y),
+    col_names = if (!is_sb(y)) col_names(x),
+    method = get_method(y),
     option = option,
     class = "diagnostics"
   )
@@ -219,18 +285,27 @@ diagnostics <- function(object, cv, option = c("gsadf", "sadf")) {
 
 #' @importFrom cli cat_line cat_rule
 #' @importFrom glue glue
+#' @importFrom rlang is_bare_character
 #' @export
 print.diagnostics <- function(x, ...) {
 
+  if (all(x$dummy == 0)) {
+    return(message_glue("Cannot reject H0 for significance level 95%"))
+  }
+
+  if (purrr::is_bare_character(x$accepted, n = 0)) {
+    return(message_glue("Cannot reject H0"))
+  }
+
   cli::cat_line()
   cli::cat_rule(left = glue('Diagnostics (option = {attr(x, "option")})'),
-                            right = method(x))
+                            right = get_method(x))
   cli::cat_line()
 
   if (attr(x, "panel")) {
 
     if (x$sig == "Reject")
-      cat(" Cannot reject H0! \n")
+      cat(" Cannot rejeact H0! \n")
     else
       cat(" Rejects H0 for significance level", x$sig, "\n")
 
@@ -283,57 +358,72 @@ print.diagnostics <- function(x, ...) {
 #' @importFrom dplyr filter
 #' @export
 #'
-datestamp <- function(object, cv, option = c("gsadf", "sadf"),
+datestamp <- function(object, cv = NULL, option = c("gsadf", "sadf"),
                       min_duration = 0) {
+
   assert_class(object, "radf")
-  cv <- if (missing(cv)) get_crit(object) else cv
+  if (is.null(cv)) {
+    cv <- retrieve_crit(object)
+  }
   assert_class(cv, "cv")
+
   option <- match.arg(option)
+
   assert_positive_int(min_duration, strictly = FALSE)
   assert_equal_arg(object, cv)
 
   x <- object
   y <- cv
 
-  choice <- diagnostics(x, cv = y, option = option) %>% pluck("accepted")
-  reps <- if (is_panel_cv(y)) 1 else match(choice, col_names(x))
+  ds <-  diagnostics(x, cv = y, option = option)
+  acc <- pluck(ds, "accepted")
+
+  if (is_bare_character(acc, n = 0)) {
+    stop_glue("Cannot reject the H0")
+  }
+
+  if (all(ds$dummy == 0)) {
+    return(message_glue("Cannot reject H0 for significance level 95%"))
+  }
+
+  reps <- if (is_sb(y)) 1 else match(acc, col_names(x))
   dating <- index(x)
 
-  ds <- vector("list", length(choice))
-  if (is_panel_cv(y)) {
-    if (lagr(y) != 0) {
+  ds <- vector("list", length(acc))
+  if (is_sb(y)) {
+    if (get_lag(y) != 0) {
       tstat <- x$bsadf_panel[-c(1:2)]
       dating <- dating[-c(1:2)]
     } else {
       tstat <- x$bsadf_panel
     }
-    ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + minw(x) + lagr(x))
+    ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + get_minw(x) + get_lag(x))
   }
 
-  for (i in seq_along(choice)) {
-    if (method(y) == "Monte Carlo") {
+  for (i in seq_along(acc)) {
+    if (is_mc(y)) {
       if (option == "gsadf") {
-        cv <- if (lagr(x) == 0) {
+        cv <- if (get_lag(x) == 0) {
           y$bsadf_cv[, 2]
         } else {
-          y$bsadf_cv[-c(1:lagr(x)), 2]
+          y$bsadf_cv[-c(1:get_lag(x)), 2]
         }
-        ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + minw(x) + lagr(x)
+        ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + get_minw(x) + get_lag(x)
       } else if (option == "sadf") {
-        cv <- if (lagr(x) == 0) {
+        cv <- if (get_lag(x) == 0) {
           y$badf_cv[, 2]
         } else {
-          y$badf_cv[-c(1:lagr(x)), 2]
+          y$badf_cv[-c(1:get_lag(x)), 2]
         }
-        ds[[i]] <- which(x$badf[, i] > cv) + minw(x) + lagr(x)
+        ds[[i]] <- which(x$badf[, i] > cv) + get_minw(x) + get_lag(x)
       }
-    } else if (method(y) == "Wild Bootstrap") {
-      cv <- if (lagr(x) == 0) {
+    } else if (is_wb(y)) {
+      cv <- if (get_lag(x) == 0) {
         y$bsadf_cv[, 2, i]
       } else {
-        y$bsadf_cv[-c(1:lagr(x)), 2, i]
+        y$bsadf_cv[-c(1:get_lag(x)), 2, i]
       }
-      ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + minw(x) + lagr(x)
+      ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + get_minw(x) + get_lag(x)
     }
   }
 
@@ -360,18 +450,18 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
   # min_duration may cause to exclude periods or the whole sample
   min_reject <- lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
   res <- add_index[!min_reject]
-  names(res) <- choice[!min_reject]
+  names(res) <- acc[!min_reject]
 
-  if (length(res) == 0)
-    stop("Argument 'min_duration' excludes all explosive periods",
-         call. = FALSE)
+  if (length(res) == 0) {
+    stop_glue("Argument 'min_duration' excludes all explosive periods")
+  }
 
   dummy <-
-    matrix(0, nrow = length(index(x)), ncol = length(choice),
+    matrix(0, nrow = length(index(x)), ncol = length(acc),
            dimnames = list(seq_along(index(x)),
-                           if (is_panel_cv(y)) "Panel" else col_names(x)[reps]))
+                           if (is_sb(y)) "Panel" else col_names(x)[reps]))
 
-  for (z in seq_along(choice)) {
+  for (z in seq_along(acc)) {
     dummy[ds[[z]], z] <- 1
   }
 
@@ -379,10 +469,10 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
     res,
     dummy = dummy,
     index = index(x, trunc = TRUE),
-    panel = is_panel_cv(y),
+    panel = is_sb(y),
     min_duration = min_duration,
     option = option,
-    method = method(y),
+    method = get_method(y),
     class = c("list", "datestamp")
   )
 }
@@ -391,11 +481,11 @@ datestamp <- function(object, cv, option = c("gsadf", "sadf"),
 print.datestamp <- function(x, ...) {
 
   cli::cat_line()
-  cli::cat_rule(left = glue("Datestamp (min_duration = {min_dur(x)})"),
-                right = method(x))
+  cli::cat_rule(left = glue("Datestamp (min_duration = {get_min_dur(x)})"),
+                right = get_method(x))
   cli::cat_line()
 
-  if (attr(x, "panel")) {
+  if (get_panel(x)) {
     print(x[[1]])
     cli::cat_line()
   } else{

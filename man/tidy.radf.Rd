@@ -19,6 +19,8 @@
 \item{format}{Long or wide format}
 
 \item{...}{Additional arguments. Not used.}
+
+\item{panel}{Either univariate or panel bsadf.}
 }
 \value{
 A [tibble::tibble()]

@@ -2,14 +2,14 @@
 % Please edit documentation in R/tidiers-join.R
 \name{augment_join}
 \alias{augment_join}
-\title{Tidy a joint model}
+\title{Tidy into a joint model}
 \usage{
-augment_join(x, y)
+augment_join(x, y = NULL)
 }
 \arguments{
-\item{x}{An object of classs `radf`}
+\item{x}{An object of class `radf`}
 
-\item{y}{An object of classs `cv`}
+\item{y}{An object of class `cv`}
 }
 \description{
 Tidy a model of `radf` with a model of `cv`

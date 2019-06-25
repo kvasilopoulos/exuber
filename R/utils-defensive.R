@@ -22,11 +22,9 @@ message_glue <-  function(..., .sep = "", .envir = parent.frame(),
                           call. = FALSE, .domain = NULL) {
   message(
     glue(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
+    domain = .domain
   )
 }
-
-"%ni%" <- Negate("%in%")
 
 # predicates --------------------------------------------------------------
 
@@ -35,16 +33,24 @@ is_n <- function(x) {
   is_scalar_atomic(x) && is_bare_numeric(x) && x == trunc(x) && x > 0
 }
 
-is_panel <- function(y) {
-  attr(y, "panel")
+is_identical <- function(x, y) {
+  if (identical(x, y)) TRUE else FALSE
 }
 
-is_panel_cv <- function(y) {
-  assert_class(y, "cv")
-  res <- if (method(y) == "Sieve Bootstrap") TRUE else FALSE
-  res
+is_mc <- function(y) {
+  # assert_class(y, "cv")
+  if (get_method(y) == "Monte Carlo") TRUE else FALSE
 }
 
+is_wb <- function(y) {
+  # assert_class(y, "cv")
+  if (get_method(y) == "Wild Bootstrap") TRUE else FALSE
+}
+
+is_sb <- function(y) {
+  # assert_class(y, "cv")
+  if (get_method(y) == "Sieve Bootstrap") TRUE else FALSE
+}
 
 # asserts ------ ------------------------------------------------------
 
@@ -83,7 +89,6 @@ assert_between <- function(x, arg1, arg2) {
 
 assert_class <- function(x, klass) {
   xstring <- deparse(substitute(x))
-  # klass <- deparse(substitute(klass))
   if (!inherits(x, klass)) {
     stop(sprintf("Argument '%s' should be of class '%s'", xstring, klass),
          call. = FALSE
@@ -94,15 +99,25 @@ assert_class <- function(x, klass) {
 
 assert_na <- function(x) {
   if (any(is.na(x))) {
-    stop("RLS estimation cannot handle NA", call. = FALSE)
+    stop_glue("rls estimation cannot handle NA")
   }
+}
+
+assert_same_data <- function(x, y) {
+  attr_x <- attributes(x)
+  attr_y <- attributes(y)
+
+  is_identical(attr_x$n, attr_y$n)
+  is_identical(attr_x$index, attr_y$index)
 }
 
 
 assert_equal_arg <- function(x, y, panel = FALSE) {
-  if (minw(x) != minw(y)) stop("Different minimum window", call. = FALSE)
+  if (get_minw(x) != get_minw(y))
+    stop_glue("Different minimum window")
 
-  if (method(y) == "Sieve Bootstrap") {
-    if (lagr(x) != lagr(y)) stop("Different lag values", call. = FALSE)
+  if (get_method(y) == "Sieve Bootstrap") {
+    if (get_lag(x) != get_lag(y))
+      stop_glue("Different lag values")
   }
 }

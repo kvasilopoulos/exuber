@@ -61,13 +61,13 @@ test_that("fortify- datestamp", {
   fort <- radf_dta %>% datestamp() %>% fortify()
   fort_panel <- radf_dta %>% datestamp(cv = sb) %>% fortify()
 
-  expect_equal(fort %>% dim(), c(9, 4))
+  expect_equal(fort %>% dim(), c(8, 4))
   expect_equal(radf_dta %>%
     datestamp(cv = wb) %>%
     fortify() %>%
     dim(), c(4, 4))
   expect_equal(fort_panel %>% dim(), c(3, 4))
-  expect_equal(rbind(fort, fort_panel) %>% dim(), c(12, 4))
+  expect_equal(rbind(fort, fort_panel) %>% dim(), c(11, 4))
 
   # Rest of the argument
   expect_equal(radf_dta %>%

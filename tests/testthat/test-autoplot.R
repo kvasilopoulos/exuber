@@ -26,7 +26,7 @@ withr::with_options(
   c(warn = 2),
   test_that("wb", {
     expect_error(radf_dta %>% autoplot(cv = wb), regexp = NA)
-    expect_error(radf_dta_lag1 %>% autoplot(cv = wb, option = "sadf"))
+    expect_error(radf_dta_lag1 %>% autoplot(cv = wb, option = "sadf"), NA)
   })
 )
 

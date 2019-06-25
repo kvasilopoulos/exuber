@@ -1,5 +1,9 @@
 
-parse_df <- function(x) {
+parse_dt <- function(x) {
+  UseMethod("parse_dt")
+}
+
+parse_dt.data.frame <- function(x) {
 
   date_index <- purrr::detect_index(x, lubridate::is.Date)
   if (as.logical(date_index)) {
@@ -13,7 +17,7 @@ parse_df <- function(x) {
   list(data = x, index = index)
 }
 
-parse_ts <- function(x) {
+parse_dt.ts <- function(x) {
 
   sim_index <- seq(1, NROW(x), 1)
   if (identical(time(x), sim_index)) {
@@ -34,8 +38,12 @@ parse_ts <- function(x) {
   list(data = x, index = index)
 }
 
-parse_num <- function(x) {
+parse_dt.numeric <- function(x) {
   list(data = x, index = seq(1, NROW(x), 1))
+}
+
+parse_dt.default <- function(x) {
+  stop_glue("Unsupported class")
 }
 
 #' @importFrom stats frequency time
@@ -44,20 +52,13 @@ parse_num <- function(x) {
 #' @importFrom stats is.ts
 parse_data <- function(x) {
 
-  if (is.ts(x)) {
-    lst <- parse_ts(x)
-  } else if (is.data.frame(x)) {
-    lst <- parse_df(x)
-  } else if (is.numeric(x)) {
-    lst <- parse_num(x)
-  } else {
-    stop_glue("Unsupported class")
-  }
-
+  lst <- parse_dt(x)
   matx <- as.matrix(lst$data)
 
-  if (is.null(colnames(matx)))
-    colnames(matx) <- paste("Series", seq(1, ncol(matx), 1))
+  if (is.null(colnames(matx))) {
+    colnames(matx) <- paste0("series", seq(1, ncol(matx), 1))
+  }
 
-  list(data = matx, index = lst$index)
+  matx %>%
+    add_attr(index = lst$index)
 }

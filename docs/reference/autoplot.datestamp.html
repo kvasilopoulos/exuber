@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/plotting.html">Plotting with exuber</a>
+    </li>
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
@@ -150,10 +153,10 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for datestamp</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for datestamp</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/fortify'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,7 +167,9 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to method, ignored.</p></td>
+      <td><p>further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+a list.</p></td>
     </tr>
     <tr>
       <th>model</th>
@@ -173,7 +178,7 @@
     <tr>
       <th>data</th>
       <td><p>original dataset, not used (required by generic
-<code><a href='https://www.rdocumentation.org/packages/ggplot2/topics/fortify'>fortify()</a></code> method).</p></td>
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> method).</p></td>
     </tr>
     </table>
     
@@ -185,13 +190,13 @@
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='datestamp.html'>datestamp</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>()</div><div class='img'><img src='autoplot.datestamp-1.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='img'><img src='autoplot.datestamp-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change the colour manually</span>
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='datestamp.html'>datestamp</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/autoplot'>autoplot</a></span>() +
-  <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/ggplot2/topics/scale_manual'>scale_colour_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='st'>"black"</span>, <span class='fl'>4</span>))</div><div class='img'><img src='autoplot.datestamp-2.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>() +
+  <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_colour_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/rep'>rep</a></span>(<span class='st'>"black"</span>, <span class='fl'>4</span>))</div><div class='img'><img src='autoplot.datestamp-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

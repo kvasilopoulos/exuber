@@ -2,25 +2,33 @@
 #'
 #' Tidy a model of `radf` with a model of `cv`
 #'
-#' @param x An object of classs `radf`
-#' @param y An object of classs `cv`
+#' @param x An object of class `radf`
+#' @param y An object of class `cv`
 #'
+#' @importFrom dplyr right_join select
 #' @export
-augment_join <- function(x, y) {
+augment_join <- function(x, y = NULL) {
 
-  if (!inherits(x, "radf"))
-    stop("`x` should be of class `radf`", call. = FALSE)
+  assert_class(x, "radf")
+  if (is.null(y)) {
+    y <- retrieve_crit(x)
+  }
+  assert_class(y, "cv")
 
-  if (!inherits(y, "cv"))
-    stop("`y` should be of class `cv`", call. = FALSE)
-
-  if (method(y) == "Sieve Bootstrap") {
+  if (is_sb(y)) {
     tbl <- right_join(
-      augment(radf_dta, "long", panel = TRUE),
-      augment(sb, "long"),
-      by = c("key", "name")
+      augment(x, "long", panel = TRUE),
+      augment(y, "long"),
+      by = c("key", "name", "index")
     )
-  }else{
+  }else if (is_wb(y)) {
+    tbl <- full_join(
+      augment(x, "long"),
+      augment(y, "long"),
+      by = c("key","index", "name", "id")
+    ) %>%
+      arrange(id, name, sig)
+  }else if (is_mc(y)) {
     tbl <- right_join(
       augment(x, "long"),
       augment(y, "long"),
