@@ -75,7 +75,7 @@ mc_ <- function(n, minw, nrep, seed) {
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @param seed An object specifying if and how the random number generator(rng)
-#' shold be initialized. Either NULL or an integer will be used in a call to
+#' should be initialized. Either NULL or an integer will be used in a call to
 #' `set.seed` before simulation. If set, the value is save as "seed" attribute
 #' of the returned value. The default, NULL will note change the rng state, and
 #' return .Random.seed as the "seed" attribute.

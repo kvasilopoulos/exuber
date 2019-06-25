@@ -31,10 +31,10 @@ ggarrange(...)
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported. Default is 0.}
 
-\item{arrange}{If FALSE returns a list of ggplot2 object, otheriwse it grobs the plots on a single page.}
+\item{arrange}{If FALSE returns a list of ggplot2 object, otherwise it grobs the plots on a single page.}
 
 \item{...}{further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
-that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+that are later passed to ggplot chain. For multiple changes, the input in the argument should be in
 a list.}
 
 \item{model}{An object of class \code{\link[=radf]{radf()}}.}

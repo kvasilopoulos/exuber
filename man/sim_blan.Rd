@@ -16,7 +16,7 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, seed = NULL)
 \item{r}{A positive scalar that determines the growth rate of the bubble process.}
 
 \item{seed}{An object specifying if and how the random number generator(rng)
-shold be initialized. Either NULL or an integer will be used in a call to
+should be initialized. Either NULL or an integer will be used in a call to
 `set.seed` before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute.}

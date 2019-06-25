@@ -55,7 +55,7 @@ tibble(
   labs(y = "", x = "")
 ```
 
-Let's repear
+Let's repeat
 
 ```{r, fig.width = 9, fig.height=7}
 library(ggplot2)
