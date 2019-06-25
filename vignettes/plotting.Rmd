@@ -2,12 +2,12 @@
 title: "Plotting with exuber"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Plotting with Exuber}
+  %\VignetteIndexEntry{Plotting with exuber}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -16,11 +16,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r load}
 library(exuber)
 options(exuber.show_progress = FALSE)
 library(dplyr)
 library(ggplot2)
+library(tidyr)
+```
+
+```{r options, echo=FALSE}
+options(exuber.parallel = FALSE)
 ```
 
 ```{r tstats-cv}
@@ -41,13 +46,13 @@ cv <- mc_cv(nrow(dta), opt_bsadf = "conservative")
 
 ## Autoplot
 
-```{r}
+```{r autoplot}
 autoplot(tstats, cv)
 ```
 
 ### Modify plots separately
 
-```{r}
+```{r autoplot-modify}
 plots <- autoplot(tstats, cv, arrange = FALSE)
 
 mod_plot <- plots[[1]] + 
@@ -55,58 +60,50 @@ mod_plot <- plots[[1]] +
 mod_plot
 ```
 ### Reconstruct
-```{r}
+```{r reconstruct}
 plots[[1]] <- mod_plot
 plots[1:2] %>% 
   ggarrange()
 ```
 
-
 ## Custom plotting
 
 ```{r join-sets}
-joined <- semi_join(
-  augment(tstats, "long") %>% 
-    filter(name == "bsadf"),
-  augment(cv, "long") %>% 
-    filter(name == "bsadf", sig == 0.95),
-  by = "name"
-  ) 
+joined <- augment_join(tstats, cv)
 joined 
 ```
 
-```{r, eval=FALSE}
+```{r facet-joined, warning=FALSE}
 library(ggplot2)
-joined %>% 
+joined %>%
   ggplot( aes(x = index)) +
   geom_line(aes(y = tstat)) +
   geom_line(aes(y = crit, col = "red")) +
-  facet_wrap(~id, scales = "free_y")
+  facet_grid(id ~ name + sig , scales = "free_y") +
+  theme_bw()
 ```
 
 
-```{r, eval=FALSE}
-fortify(tstats, cv) %>% 
-  gather(id, tstat, -cv, -index) %>% 
-  ggplot(aes(x = index)) + 
-  geom_line(aes(y = tstat)) + 
-  geom_line(aes(y = cv, col = "red", linetype = "dotted")) + 
+```{r autoplot-fortify}
+fortify(tstats, cv) %>%
+  gather(id, tstat, -cv, -index) %>%
+  ggplot(aes(x = index)) +
+  geom_line(aes(y = tstat)) +
+  geom_line(aes(y = cv, col = "red", linetype = "dotted")) +
   facet_wrap(~ id , scales = "free_y") +
   theme_bw() + theme(strip.background = element_blank(),
                      legend.position = "none") +
   labs(x = "", y = "")
-  
 ```
 
 
-
-```{r}
+```{r fortify-autoplot-datestamp, eval=FALSE, include=FALSE}
 bind_cols(
-fortify(radf_dta, cv = wb) %>% 
-  gather(id, tstat, -cv_psy1, - cv_psy2, -index),
-fortify(radf_dta, cv = wb) %>% 
-  gather(id, crit, -psy1, -psy2, -index) 
-) %>% 
+  fortify(tstats, cv) %>%
+    gather(id, tstat, -index),
+  fortify(tstats, cv = wb_cv(dta)) %>%
+    gather(id, crit, -psy1, -psy2, -index)
+) %>%
   select(index, id, crit, tstat) %>%
   ggplot(aes(x = index)) +
   geom_line(aes(y = tstat)) +
@@ -116,22 +113,23 @@ fortify(radf_dta, cv = wb) %>%
 ```
 
 # Distributions
-```{r}
+```{r distributions}
 dist <- mc_dist(n = 300)
-
 autoplot(dist)
-
 ```
 
 
 # Just for fun
 
-```{r}
-dist %>% 
-  tidy() %>% 
-  gather(name, value) %>% 
-  ggplot(aes(value, color = name)) + 
-  stat_ecdf() + 
+```{r ecdf}
+library(tidyr)
+dist %>%
+  tidy() %>%
+  rename_all(~ stringr::str_to_upper(.)) %>%
+  gather(Statistic, value, factor_key = TRUE) %>%
+  ggplot(aes(value, color = Statistic)) +
+  stat_ecdf() +
+  ggtitle("Empirical Cumulative Distribution Function") +
   geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw()
 ```
 

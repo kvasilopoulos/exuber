@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/plotting.html">Plotting with exuber</a>
+    </li>
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
@@ -150,7 +153,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf</span>
-<span class='fu'>summary</span>(<span class='no'>object</span>, <span class='no'>cv</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>summary</span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,30 +188,30 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 
 <span class='co'># Summary, diagnostics and datestamp (default)</span>
 <span class='fu'>summary</span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Summary (minw = 19, lag = 0) ------------------ Monte Carlo (nrep = 2000) --
+#&gt; -- Summary (minw = 19, lag = 0) ------------------------- Monte Carlo (nrep = 2000) --
 #&gt; 
 #&gt;  psy1 
 #&gt;         tstat      90%      95%     99%
-#&gt; ADF    -2.538  -0.4035  -0.0762  0.5104
-#&gt; SADF    6.218   1.0074   1.3484  1.9454
-#&gt; GSADF   6.541   1.6942   1.9259  2.6191
+#&gt; ADF    -2.538  -0.3233  0.04086  0.7717
+#&gt; SADF    6.218   0.9649  1.25853  1.8895
+#&gt; GSADF   6.541   1.6383  1.98345  2.6030
 #&gt; 
 #&gt;  psy2 
 #&gt;         tstat      90%      95%     99%
-#&gt; ADF    -2.579  -0.4035  -0.0762  0.5104
-#&gt; SADF    7.027   1.0074   1.3484  1.9454
-#&gt; GSADF   7.574   1.6942   1.9259  2.6191
+#&gt; ADF    -2.579  -0.3233  0.04086  0.7717
+#&gt; SADF    7.027   0.9649  1.25853  1.8895
+#&gt; GSADF   7.574   1.6383  1.98345  2.6030
 #&gt; </div><div class='input'><span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics ------------------------------------------------- Monte Carlo --
+#&gt; -- Diagnostics (option = gsadf) --------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1:     Rejects H0 for significance level 99% 
 #&gt; psy2:     Rejects H0 for significance level 99% 
 #&gt; </div><div class='input'><span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) -------------------------------- Monte Carlo --
+#&gt; -- Datestamp (min_duration = 0) --------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       12
+#&gt; 1    45  55       11
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration
@@ -217,7 +220,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 #&gt; </div><div class='input'>
 <span class='co'>#' # Diagnostics for 'sadf'</span>
 <span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics ------------------------------------------------- Monte Carlo --
+#&gt; -- Diagnostics (option = sadf) ---------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1:     Rejects H0 for significance level 99% 
 #&gt; psy2:     Rejects H0 for significance level 99% 
@@ -225,11 +228,11 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 <span class='co'># Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived</span>
 <span class='no'>rot</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>round</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NROW</a></span>(<span class='no'>rfd</span>)) / <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NROW</a></span>(<span class='no'>rfd</span>))
 <span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='no'>rot</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) -------------------------------- Monte Carlo --
+#&gt; -- Datestamp (min_duration = 0) --------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       12
+#&gt; 1    45  55       11
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration

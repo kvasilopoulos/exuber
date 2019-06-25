@@ -42,12 +42,14 @@
 #'   radf() %>%
 #'   fortify()
 #' }
-autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
+autoplot.radf <- function(object, cv = NULL, include = FALSE, select = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0, arrange = TRUE, ...) {
 
-  cv <- if (missing(cv)) get_crit(object) else cv
+  if (is.null(cv))
+    cv <- retrieve_crit(object)
   assert_class(cv, "cv")
+
   assert_positive_int(min_duration, strictly = FALSE)
   option <- match.arg(option)
   assert_equal_arg(object, cv)
@@ -56,23 +58,37 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
   y <- cv
 
   if (include) {
-    if (missing(select)) {
-      cname2 <- fortify.radf(x, cv = y, include = include, option = option)
+    if (is.null(select)) {
+      cname2 <-
+        fortify.radf(x, cv = y,
+                     include = include,
+                     option = option)
     } else {
-      cname2 <- fortify.radf(x,
-        cv = y, option = option,
-        select = select, include = include
+      cname2 <-
+        fortify.radf(x, cv = y,
+                     option = option,
+                     select = select,
+                     include = include
       )
     }
   } else {
-    if (missing(select)) {
-      cname2 <- fortify.radf(x, cv = y, option = option)
+    if (is.null(select)) {
+      cname2 <-
+        fortify.radf(x, cv = y,
+                     option = option)
     } else {
-      cname2 <- fortify.radf(x, cv = y, option = option, select = select)
+      cname2 <-
+        fortify.radf(x, cv = y,
+                     option = option,
+                     select = select)
     }
   }
 
-  cname <- if (is_panel_cv(y)) "Panel" else cname2 %>% attr("select")
+  attr_select <- attr(cname2, "select")
+  if (is_bare_character(attr_select, n = 0))
+    stop_glue("Cannot reject H0")
+
+  cname <- if (is_sb(y)) "Panel" else attr_select
 
   g <- vector("list", length = length(cname))
 
@@ -82,9 +98,11 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
       suppressWarnings(
         dat <- fortify.radf(x,
           cv = y, include = include, option = option,
-          select = if (is_panel_cv(y)) cname else cname[i]
+          select = if (is_sb(y)) cname else cname[i]
         )
       )
+
+
 
       h <- ggplot(dat) +
         geom_line(aes_string(
@@ -162,19 +180,24 @@ autoplot.radf <- function(object, cv, include = FALSE, select = NULL,
 #' @importFrom dplyr as_tibble
 #'
 #' @export
-fortify.radf <- function(model, data, cv = get_crit(model),
+fortify.radf <- function(model, data, cv = NULL,
                          include = FALSE, select = NULL,
                          option = c("gsadf", "sadf"), ...) {
 
+  if (is.null(cv)) {
+    cv <- retrieve_crit(model)
+  }
   assert_class(cv, "cv")
+
   option <- match.arg(option)
+  assert_equal_arg(model, cv)
 
   x <- model
   y <- cv
-  assert_equal_arg(x, y)
+
   dating <- index(x, trunc = TRUE)
 
-  if (is_panel_cv(y)) {
+  if (is_sb(y)) {
     nm <- diagnostics(object = x, cv = y, option = option) %>%
       pluck("accepted")
     cname <- "Panel"
@@ -199,7 +222,8 @@ fortify.radf <- function(model, data, cv = get_crit(model),
         cname <- select <- nm
       } else {
         if (is.character(select)) {
-          if (select %ni% nm) stop("subscript out of bounds", call. = FALSE)
+          if (select %ni% nm)
+            stop_glue("subscript out of bounds")
           cname <- select
         } else {
           cname <- nm[select]
@@ -209,39 +233,60 @@ fortify.radf <- function(model, data, cv = get_crit(model),
   }
 
   if (option == "gsadf") {
-    tbl_stat <- if (is_panel_cv(y)) x$bsadf_panel else x$bsadf[, cname]
+    tbl_stat <- if (is_sb(y)) x$bsadf_panel else x$bsadf[, cname]
 
-    if (method(y) == "Wild Bootstrap") {
-      tbl_cv <- if (lagr(x) == 0) {
+    if (get_method(y) == "Wild Bootstrap") {
+      tbl_cv <- if (get_lag(x) == 0) {
         y$bsadf_cv[, 2, cname]
       } else {
-        y$bsadf_cv[-c(1:lagr(x)), 2, select]
+        y$bsadf_cv[-c(1:get_lag(x)), 2, select]
       }
       names_cv <- paste0("cv_", cname)
-    } else if (method(y) == "Monte Carlo") {
-      tbl_cv <- if (lagr(x) == 0) {
+    } else if (get_method(y) == "Monte Carlo") {
+      tbl_cv <- if (get_lag(x) == 0) {
         y$bsadf_cv[, 2]
       } else {
-        y$bsadf_cv[-c(1:lagr(x)), 2]
+        y$bsadf_cv[-c(1:get_lag(x)), 2]
       }
       names_cv <- "cv"
-    } else if (method(y) == "Sieve Bootstrap") {
+    } else if (get_method(y) == "Sieve Bootstrap") {
       tbl_cv <- y$bsadf_panel_cv[, 2]
-      if (lagr(cv) > 0) {
+      if (get_lag(cv) > 0) {
         dating <- dating[-c(1:2)]
         tbl_stat <- tbl_stat[-c(1:2)]
       }
       names_cv <- "cv_panel"
     }
   } else if (option == "sadf") {
+
+    if (is_sb(y))
+      stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
+
     tbl_stat <- x$badf[, cname]
-    tbl_cv <- if (lagr(x) == 0) y$badf_cv[, 2] else y$badf_cv[-c(1:lagr(x)), 2]
-    names_cv <- "cv"
+
+    if (get_method(y) == "Wild Bootstrap") {
+      tbl_cv <- if (get_lag(x) == 0) {
+        y$badf_cv[, 2, cname]
+      } else {
+        y$badf_cv[-c(1:get_lag(x)), 2, select]
+      }
+      names_cv <- paste0("cv_", cname)
+    } else if (get_method(y) == "Monte Carlo") {
+      tbl_cv <- if (get_lag(x) == 0) {
+        y$badf_cv[, 2]
+      } else {
+        y$badf_cv[-c(1:get_lag(x)), 2]
+      }
+      names_cv <- "cv"
+    }
   }
 
   tbl_rf <- data.frame(dating, tbl_stat, tbl_cv) %>%
     set_names(c("index", cname, names_cv)) %>%
     as_tibble()
+
+  if(is.null(cname))
+    cname <- character()
 
   attr(tbl_rf, "select") <- cname
   tbl_rf
@@ -324,7 +369,7 @@ autoplot.datestamp <- function(object, ...) {
 #' @param model datestamp object
 #' @inheritParams autoplot.radf
 #'
-#' @importFrom purrr map reduce
+#' @importFrom purrr map_dbl reduce
 #' @importFrom tibble add_column
 #' @export
 fortify.datestamp <- function(model, data, ...) {

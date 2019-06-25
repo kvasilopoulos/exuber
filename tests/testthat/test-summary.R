@@ -18,9 +18,10 @@ test_that("class checks", {
 })
 
 test_that("error diagnostics", {
-  expect_error(diagnostics(radf_div, mc), "Cannot reject H0")
-  expect_error(
-    diagnostics(radf_95, mc),
+  expect_message(print(
+    diagnostics(radf_div, mc)), "Cannot reject H0")
+  expect_message(
+    print(diagnostics(radf_95, mc)),
     "Cannot reject H0 for significance level 95%"
   )
 })
@@ -82,13 +83,12 @@ withr::with_options(
   c(warn = 2),
   test_that("no problem running summary (wb)", {
     expect_error(summary(radf_dta, wb), regexp = NA)
-    msg <- "'sadf' applies onyl to MC critical values"
     expect_error(diagnostics(radf_dta, wb), regexp = NA)
-    expect_error(diagnostics(radf_dta, wb, option = "sadf"), msg)
+    expect_error(diagnostics(radf_dta, wb, option = "sadf"), regexp = NA)
     expect_error(datestamp(radf_dta, wb), regexp = NA)
-    expect_error(datestamp(radf_dta, wb, option = "sadf"), msg)
+    expect_error(datestamp(radf_dta, wb, option = "sadf"), regexp = NA)
     expect_error(autoplot(radf_dta, wb), regexp = NA)
-    expect_error(autoplot(radf_dta, wb, option = "sadf"), msg)
+    expect_error(autoplot(radf_dta, wb, option = "sadf"), regexp = NA)
   })
 )
 
@@ -97,12 +97,11 @@ withr::with_options(
   test_that("no problem running summary (lag,wb)", {
     expect_error(summary(radf_dta_lag1, wb), regexp = NA)
     expect_error(diagnostics(radf_dta_lag1, wb), regexp = NA)
-    msg <- "'sadf' applies onyl to MC critical values"
-    expect_error(diagnostics(radf_dta_lag1, wb, option = "sadf"), msg)
+    expect_error(diagnostics(radf_dta_lag1, wb, option = "sadf"), regexp = NA)
     expect_error(datestamp(radf_dta_lag1, wb), regexp = NA)
-    expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), msg)
+    expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), regexp = NA)
     expect_error(autoplot(radf_dta_lag1, wb), regexp = NA)
-    expect_error(autoplot(radf_dta_lag1, wb, option = "sadf"), msg)
+    expect_error(autoplot(radf_dta_lag1, wb, option = "sadf"), regexp = NA)
   })
 )
 
@@ -132,10 +131,9 @@ withr::with_options(
   c(warn = 2),
   test_that("no problem running summary (date, wb)", {
     expect_error(datestamp(radf_dta, wb), regexp = NA)
-    msg <- "'sadf' applies onyl to MC critical values"
-    expect_error(datestamp(radf_dta, wb, option = "sadf"), msg)
+    expect_error(datestamp(radf_dta, wb, option = "sadf"), regexp = NA)
     expect_error(autoplot(radf_dta, wb), regexp = NA)
-    expect_error(autoplot(radf_dta, wb, option = "sadf"), msg)
+    expect_error(autoplot(radf_dta, wb, option = "sadf"), regexp = NA)
   })
 )
 
@@ -143,7 +141,6 @@ withr::with_options(
   c(warn = 2),
   test_that("no problem running summary (date, lag, wb)", {
     expect_error(datestamp(radf_dta_lag1, wb), regexp = NA)
-    msg <- "'sadf' applies onyl to MC critical values"
-    expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), msg)
+    expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), regexp = NA)
   })
 )

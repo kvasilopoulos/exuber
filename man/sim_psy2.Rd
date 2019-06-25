@@ -5,7 +5,8 @@
 \title{Simulation of a two-bubble process}
 \usage{
 sim_psy2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n,
-  tf2 = 0.1 * n + te2, c = 1, alpha = 0.6, sigma = 6.79)
+  tf2 = 0.1 * n + te2, c = 1, alpha = 0.6, sigma = 6.79,
+  seed = NULL)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
@@ -23,6 +24,12 @@ sim_psy2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n,
 \item{alpha}{A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.}
 
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
+
+\item{seed}{An object specifying if and how the random number generator(rng)
+shold be initialized. Either NULL or an integer will be used in a call to
+`set.seed` before simulation. If set, the value is save as "seed" attribute
+of the returned value. The default, NULL will note change the rng state, and
+return .Random.seed as the "seed" attribute.}
 }
 \value{
 A numeric vector of length \code{n}.

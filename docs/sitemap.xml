@@ -4,6 +4,9 @@
     <loc>https://kvasilopoulos.github.io/exuber//index.html</loc>
   </url>
   <url>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/augment_join.html</loc>
+  </url>
+  <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/autoplot.datestamp.html</loc>
   </url>
   <url>
@@ -11,6 +14,9 @@
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/autoplot.radf.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/calc_pvalue.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/col_names.html</loc>
@@ -43,7 +49,7 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/print.ggarrange.html</loc>
   </url>
   <url>
-    <loc>https://kvasilopoulos.github.io/exuber//reference/psy_rule.html</loc>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/psy_minw.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/radf.html</loc>
@@ -73,7 +79,7 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/summary.html</loc>
   </url>
   <url>
-    <loc>https://kvasilopoulos.github.io/exuber//reference/tidy.cv.html</loc>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/tidy.mc_cv.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/tidy.mc_dist.html</loc>
@@ -86,6 +92,9 @@
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//articles/exuber.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber//articles/plotting.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//articles/simulation.html</loc>

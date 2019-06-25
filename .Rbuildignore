@@ -17,3 +17,5 @@
 ^pkgdown$
 ^tic\.R$
 ^Makefile$
+^doc$
+^Meta$

@@ -1,0 +1,65 @@
+set_attrs <- function(x, ...) {
+  attrs <- dots_list(...)
+  attributes(x) <- attrs
+  x
+}
+
+inherit_attrs <- function(x, y, exclude = NULL) {
+
+  attr_x <- attributes(x) %>% names()
+  attr_y <- attributes(y) %>% names()
+
+  those <- which(attr_x %in% attr_y)
+  attributes(y)[those] <- NULL
+  attributes(x) <- c(attributes(x), attributes(y))
+  x
+}
+
+#'@importFrom rlang dots_list
+add_attr <- function(x,  ...) {
+  attrs <- dots_list(...)
+  attributes(x) <- c(attributes(x), attrs)
+  x
+}
+
+set_class <- function(x, nm) {
+  class(x) <- nm
+  x
+}
+
+add_class <- function(x, nm = x) {
+  class(x) <- append(nm, class(x))
+  x
+}
+
+strip_attributes  <- function(x) {
+  attributes(x) <- NULL
+  x
+}
+
+# Access attributes easily ------------------------------------------------
+
+
+get_minw <- function(x) {
+  attr(x, "minw")
+}
+
+get_lag <- function(x, ...) {
+  attr(x, "lag")
+}
+
+get_method <- function(y) {
+  attr(y, "method")
+}
+
+get_iter <- function(y) {
+  attr(y, "iter")
+}
+
+get_min_dur <- function(y) {
+  attr(y, "min_duration")
+}
+
+get_panel <- function(y) {
+  attr(y, "panel")
+}

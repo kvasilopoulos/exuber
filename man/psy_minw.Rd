@@ -11,12 +11,27 @@ psy_ds(n, rule = 1, delta = 1)
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
+
+\item{rule}{Rule 1 corresponds to log(T), while rule 2 log(T)/T}
+
+\item{delta}{Frequency-dependent parameter}
 }
 \description{
-\code{psy_minw} proposed a minimum window. \code{psy_ds} proposed a rule of
+\code{psy_minw} proposes a minimum window and \code{psy_ds} proposes a rule of
 thumb to exclude periods of exuberance.
+}
+\details{
+\code{delta } depends on the frequency of the data and the minimal
+duration condition. For example, for a 30-year period, we set arbitrarly duration
+to exceed a perios such as one year. Then, delta should is 0.7 for yearly data
+and 5 for monthly data.
 }
 \examples{
 psy_minw(100)
 psy_ds(100)
+}
+\references{
+Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
+Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
+S&P 500. International Economic Review, 56(4), 1043-1078.
 }

@@ -1,15 +1,20 @@
-sb_ <-  function(data, minw, lag, nboot) {
+sb_ <-  function(data, minw, lag, nboot, seed) {
 
-  lst <- parse_data(data)
-  y <- as.matrix(lst$data)
+  y <- parse_data(data)
 
-  nc <- ncol(y)
-  nr <- nrow(y)
+  if (is.null(minw)) {
+    minw <- psy_minw(data)
+  }
 
   assert_na(y)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
   assert_positive_int(nboot, greater_than = 2)
+
+  rng_state <- set_rng(seed = seed)
+
+  nc <- ncol(y)
+  nr <- nrow(y)
 
   point <- nr - minw - lag
 
@@ -33,8 +38,8 @@ sb_ <-  function(data, minw, lag, nboot) {
   nres <- NROW(resmat)
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- get_pb(show_pb, nboot)
-  opts <- get_pb_opts(show_pb, pb)
+  pb <- set_pb(show_pb, nboot)
+  opts <- set_pb_opts(show_pb, pb)
 
   do_par <- getOption("exuber.parallel")
   if (do_par) {
@@ -75,15 +80,16 @@ sb_ <-  function(data, minw, lag, nboot) {
   bsadf_crit <- unname(edf_bsadf_panel)
   gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% unname()
 
-  structure(
-    list(
-      bsadf_panel = bsadf_crit,
-      gsadf_panel = gsadf_crit
-    ),
-    index = lst$index
-  )
-
-
+  list(bsadf_panel = bsadf_crit,
+       gsadf_panel = gsadf_crit) %>%
+    add_attr(
+      seed = rng_state,
+      index = attr(y, "index"),
+      method = "Sieve Bootstrap",
+      lag = lag,
+      iter = nboot,
+      n = nrow(data),
+      minw = minw)
 }
 
 
@@ -94,6 +100,7 @@ sb_ <-  function(data, minw, lag, nboot) {
 #' computes the distribution.
 #'
 #' @inheritParams radf
+#' @inheritParams wb_cv
 #'
 #' @return A list that contains the panel critical values for BSADF and GSADF
 #' t-statistics.
@@ -140,46 +147,33 @@ sb_ <-  function(data, minw, lag, nboot) {
 #'# Simulate distribution
 #'sb_dist(dta, lag = 1)
 #' }
-sb_cv <- function(data, minw = psy_minw(data), lag = 0, nboot = 1000) {
+sb_cv <- function(data, minw = NULL, lag = 0,
+                  nboot = 1000, seed = NULL) {
 
-  results <- sb_(data, minw, nboot = nboot, lag = lag)
+  results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
   pr <- c(0.9, 0.95, 0.99)
 
   bsadf_crit <- apply(results$bsadf_panel, 1, quantile, probs = pr) %>% t()
   gsadf_crit <- quantile(results$gsadf_panel, probs = pr)
 
-  structure(
-    list(
-      gsadf_panel_cv = gsadf_crit,
-      bsadf_panel_cv = bsadf_crit
-    ),
-    method = "Sieve Bootstrap",
-    index = index(data),
-    lag = lag,
-    iter = nboot,
-    minw = minw,
-    class = "cv"
-  )
+    list(gsadf_panel_cv = gsadf_crit,
+         bsadf_panel_cv = bsadf_crit) %>%
+      inherit_attrs(results) %>%
+      add_class(c("sb_cv","cv"))
 
 }
 
 #' @rdname sb_cv
 #' @inheritParams sb_cv
 #' @export
-sb_dist <- function(data, minw = psy_minw(data), nboot = 1000, lag = 0) {
+sb_dist <- function(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL) {
 
-  results <- sb_(data, minw, nboot = nboot, lag = lag)
+  results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
-  structure(
-    results$gsadf_panel,
-    method = "Sieve Bootstrap",
-    lag = lag,
-    iter = nboot,
-    minw = minw,
-    class = "sb_dist"
-  )
-
+  c(results$gsadf_panel) %>%
+    inherit_attrs(results) %>%
+    add_class("sb_dist")
 }
 
 

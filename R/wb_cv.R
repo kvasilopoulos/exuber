@@ -1,17 +1,22 @@
-wb_ <- function(data, minw, nboot, dist_rad) {
+wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 
-  lst <- parse_data(data)
-  y <- as.matrix(lst$data)
+  y <- parse_data(data)
 
-  nc <- ncol(y)
-  nr <- nrow(y)
-
-  point <- nr - minw
+  if (is.null(minw)) {
+    minw <- psy_minw(data)
+  }
 
   assert_na(y)
   assert_positive_int(nboot, greater_than = 2)
   assert_positive_int(minw, greater_than = 2)
   stopifnot(is.logical(dist_rad))
+
+  rng_state <- set_rng(seed = seed)
+
+  nc <- ncol(y)
+  nr <- nrow(y)
+
+  point <- nr - minw
 
   adf_crit <- sadf_crit <- gsadf_crit <-
     array(NA, dim = c(nboot, nc),
@@ -22,8 +27,8 @@ wb_ <- function(data, minw, nboot, dist_rad) {
           dimnames = list(NULL, NULL, colnames(y)))
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- get_pb(show_pb, nboot, width = getOption("width") - 15)
-  opts <- get_pb_opts(show_pb, pb)
+  pb <- set_pb(show_pb, nboot, width = getOption("width") - 15)
+  opts <- set_pb_opts(show_pb, pb)
 
   do_par <- getOption("exuber.parallel")
   if (do_par) {
@@ -68,16 +73,20 @@ wb_ <- function(data, minw, nboot, dist_rad) {
     bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
   }
 
-  structure(
     list(
       adf = adf_crit,
       sadf = sadf_crit,
       gsadf = gsadf_crit,
       badf = badf_crit,
-      bsadf = bsadf_crit
-    ),
-    index = lst$index
-  )
+      bsadf = bsadf_crit) %>%
+    add_attr(
+      seed = rng_state,
+      index = attr(y, "index"),
+      method = "Wild Bootstrap",
+      n = nrow(y),
+      minw = minw,
+      iter = nboot)
+
 
 }
 
@@ -133,10 +142,10 @@ wb_ <- function(data, minw, nboot, dist_rad) {
 #' # Simulate distribution
 #'wb_dist(dta)
 #' }
-wb_cv <- function(data, minw = psy_minw(data), nboot = 1000,
-                  dist_rad = FALSE) {
+wb_cv <- function(data, minw = NULL, nboot = 1000,
+                  dist_rad = FALSE, seed = NULL) {
 
-  results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
+  results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
 
   pr <- c(0.9, 0.95, 0.99)
 
@@ -149,41 +158,28 @@ wb_cv <- function(data, minw = psy_minw(data), nboot = 1000,
   bsadf_crit <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
     apply(c(1,3), t)
 
-  # wb$bsadf_cv[,2,] %>% apply(1, cummax) %>% t() %>% apply(2, quantile, 0.95)
-
-  structure(
-    list(
-      adf_cv = adf_crit,
-      sadf_cv = sadf_crit,
-      gsadf_cv = gsadf_crit,
-      badf_cv = badf_crit,
-      bsadf_cv = bsadf_crit),
-    method = "Wild Bootstrap",
-    index = index(data),
-    iter = nboot,
-    minw = minw,
-    class = "cv"
-  )
+  list(adf_cv = adf_crit,
+       sadf_cv = sadf_crit,
+       gsadf_cv = gsadf_crit,
+       badf_cv = badf_crit,
+       bsadf_cv = bsadf_crit) %>%
+    inherit_attrs(results) %>%
+    add_class(c("wb_cv", "cv"))
 
 }
 
 #' @rdname wb_cv
 #' @inheritParams wb_cv
 #' @export
-wb_dist <- function(data, minw = psy_minw(data), nboot = 1000,
-                    dist_rad = FALSE) {
+wb_dist <- function(data, minw = NULL, nboot = 1000,
+                    dist_rad = FALSE, seed = NULL) {
 
-  results <- wb_(data, minw, nboot = nboot, dist_rad = dist_rad)
+  results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
 
-  structure(
-    list(
-      adf_cv = results$adf,
-      sadf_cv = results$sadf,
-      gsadf_cv = results$gsadf),
-    method = "Wild Bootstrap",
-    iter = nboot,
-    minw = minw,
-    class = "wb_dist"
-  )
+    list(adf_cv = results$adf,
+         sadf_cv = results$sadf,
+         gsadf_cv = results$gsadf) %>%
+      inherit_attrs(results) %>%
+      add_class("wb_dist")
 }
 
