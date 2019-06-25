@@ -61,14 +61,11 @@ reference:
       - augment_join
       - tidy.mc_dist
 
-  - title: Misc
-    contents:
-      - index.radf
-      - col_names
-
   - title: Helpers
     contents:
       - psy_minw
+      - index.radf
+      - col_names
 
 navbar:
   type: default
