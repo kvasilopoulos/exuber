@@ -116,7 +116,7 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 }
 
 
-#' Caclulate p-values
+#' Calculate p-values
 #'
 #' @param x An 'radf' object
 #' @param dist Which type of distribution to use to calculate the p-values

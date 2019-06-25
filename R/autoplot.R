@@ -12,9 +12,9 @@
 #'
 #' @param include If not FALSE, plot all variables regardless of rejecting the NULL at the 5\% significance level.
 #' @param select If not NULL, only plot with names or column number matching this regular expression will be executed.
-#' @param arrange If FALSE returns a list of ggplot2 object, otheriwse it grobs the plots on a single page.
+#' @param arrange If FALSE returns a list of ggplot2 object, otherwise it grobs the plots on a single page.
 #' @param ... further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
-#' that are later paseed to ggplot chain. For multiple changes, the input in the arguement should be in
+#' that are later passed to ggplot chain. For multiple changes, the input in the argument should be in
 #' a list.
 #'
 #' @importFrom dplyr filter

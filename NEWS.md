@@ -3,7 +3,7 @@
 Three new functions have been added to simulate empirical distributions for:
 
 * `mc_dist()`: Monte Carlo 
-* `wb_dist()`: Wild Bootsrap 
+* `wb_dist()`: Wild Bootstrap 
 * `sb_dist()`: Sieve Bootstrap 
 
 and a function that can calculate the p-values `calc_pvalue()` given the above 
@@ -24,12 +24,12 @@ behavior we included the optional argument `arrange` which is set to TRUE by def
 
 * `tidy()` methods for objects of class `radf`, `cv`.
 * `augment()` methods for objects of class `radf` and `cv`.
-* `augment_join()` to combind object `radf` and `cv` into a single data.frame.
+* `augment_join()` to combine object `radf` and `cv` into a single data.frame.
 * `glance()` method for objects of class `radf`.
 
-## Impovements
+## Improvements
 
-* New printing output for the functrions `summary()`, `diagnostics()` and 
+* New printing output for the functions `summary()`, `diagnostics()` and 
 `datestamp()`.
 * New improved progressbar with more succinct printing for `wb_cv()`
 * `seed` argument to functions that are using rng. Also the options to declare

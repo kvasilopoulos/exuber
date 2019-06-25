@@ -2,7 +2,7 @@
 % Please edit documentation in R/summary.R
 \name{calc_pvalue}
 \alias{calc_pvalue}
-\title{Caclulate p-values}
+\title{Calculate p-values}
 \usage{
 calc_pvalue(x, dist = NULL)
 }
@@ -12,7 +12,7 @@ calc_pvalue(x, dist = NULL)
 \item{dist}{Which type of distribution to use to calculate the p-values}
 }
 \description{
-Caclulate p-values
+Calculate p-values
 }
 \examples{
 

@@ -22,8 +22,8 @@ thumb to exclude periods of exuberance.
 }
 \details{
 \code{delta } depends on the frequency of the data and the minimal
-duration condition. For example, for a 30-year period, we set arbitrarly duration
-to exceed a perios such as one year. Then, delta should is 0.7 for yearly data
+duration condition. For example, for a 30-year period, we set arbitrarily duration
+to exceed periods such as one year. Then, delta should is 0.7 for yearly data
 and 5 for monthly data.
 }
 \examples{

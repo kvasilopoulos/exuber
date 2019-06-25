@@ -21,7 +21,7 @@ sim_psy1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{seed}{An object specifying if and how the random number generator(rng)
-shold be initialized. Either NULL or an integer will be used in a call to
+should be initialized. Either NULL or an integer will be used in a call to
 `set.seed` before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute.}
