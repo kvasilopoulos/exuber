@@ -406,8 +406,8 @@ sim_div <- function(n, mu, sigma, r = 0.05,
 
 #' @export
 print.sim <- function(x, ...) {
-  strip_attributes(x)
-  x
+  attributes(x) <- NULL
+  print(x)
 }
 
 #' @export
