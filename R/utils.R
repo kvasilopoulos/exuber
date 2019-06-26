@@ -81,8 +81,17 @@ array_to_list <- function(x, var) {
 }
 
 add_key <- function(x, attr_from) {
-  attr_lag <- if (!is.null(get_lag(attr_from))) get_lag(attr_from) else 0
-  nkey <- get_minw(attr_from) + attr_lag
+  attr_lag <-  get_lag(attr_from) #else 0
+  if (is.null(attr_lag)) {
+    add_lag <- 0
+  } else{
+    if (is_sb(attr_from) && attr_lag != 0) {
+      add_lag <- attr_lag + 2
+    }else{
+      add_lag <- attr_lag
+    }
+  }
+  nkey <- get_minw(attr_from) + add_lag
   x %>% add_column(key = (nkey + 1):(nrow(.) + nkey))
 }
 

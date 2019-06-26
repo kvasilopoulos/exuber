@@ -5,7 +5,7 @@
 #' @param x An object of class `radf`
 #' @param y An object of class `cv`
 #'
-#' @importFrom dplyr right_join select
+#' @importFrom dplyr inner_join select
 #' @export
 augment_join <- function(x, y = NULL) {
 
@@ -14,6 +14,7 @@ augment_join <- function(x, y = NULL) {
     y <- retrieve_crit(x)
   }
   assert_class(y, "cv")
+  assert_match(x, y)
 
   if (is_sb(y)) {
     tbl <- inner_join(
