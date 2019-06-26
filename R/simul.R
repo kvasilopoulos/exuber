@@ -191,6 +191,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' @inheritParams sim_psy1
 #' @param pi A positive value in (0, 1) which governs the probability of the bubble continuing to grow.
 #' @param r A positive scalar that determines the growth rate of the bubble process.
+#' @param b0 The initial value of the bubble
 #'
 #' @export
 #' @return A numeric vector of length \code{n}.
@@ -216,7 +217,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #' @examples
 #' sim_blan(n = 100)
-sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, seed = NULL) {
+sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL) {
 
   assert_positive_int(n)
   assert_between(pi, 0, 1)
@@ -225,7 +226,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, seed = NULL) {
 
   rng_state <- set_rng(seed = seed)
 
-  b <- 1
+  b <- b0
   theta <- rbinom(n, 1, pi)
   i <- 1
   while (i < n) {
@@ -403,8 +404,19 @@ sim_div <- function(n, mu, sigma, r = 0.05,
 
 # IDEA maybe add ps1 for smooth collapse, although sim_psy1 is nested in that case
 
-
+#' @export
 print.sim <- function(x, ...) {
   strip_attributes(x)
   x
+}
+
+#' @export
+#' @keywords internal
+autoplot.sim <- function(object, ...) {
+  object %>%
+    enframe() %>%
+    ggplot(aes(name, value)) +
+    geom_line() +
+    theme_bw() +
+    labs(x = "", y = "")
 }
