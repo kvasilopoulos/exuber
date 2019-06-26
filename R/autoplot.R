@@ -1,6 +1,5 @@
 #' Plotting and tidying radf objects
 #'
-#'
 #' \code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
 #' \code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
 #' \code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
@@ -52,7 +51,7 @@ autoplot.radf <- function(object, cv = NULL, include = FALSE, select = NULL,
 
   assert_positive_int(min_duration, strictly = FALSE)
   option <- match.arg(option)
-  assert_equal_arg(object, cv)
+  assert_match(object, cv)
 
   x <- object
   y <- cv
@@ -190,7 +189,7 @@ fortify.radf <- function(model, data, cv = NULL,
   assert_class(cv, "cv")
 
   option <- match.arg(option)
-  assert_equal_arg(model, cv)
+  assert_match(model, cv)
 
   x <- model
   y <- cv

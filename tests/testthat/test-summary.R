@@ -27,7 +27,7 @@ test_that("error diagnostics", {
 })
 
 test_that("different minw", {
-  msg <- "Different minimum window"
+  msg <- "minimum window does not match"
   expect_error(summary(radf_dta, mc2_minw20), msg)
   expect_error(diagnostics(radf_dta, mc2_minw20), msg)
   expect_error(datestamp(radf_dta, mc2_minw20), msg)
