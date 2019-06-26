@@ -1,11 +1,11 @@
-#' @importFrom smgenerics index
+#' @importFrom zoo index
 #' @seealso \code{\link[=index]{index()}}
 #' @export
-smgenerics::index
+zoo::index
 
-#' @importFrom smgenerics index<-
+#' @importFrom zoo index<-
 #' @export
-smgenerics::`index<-`
+zoo::`index<-`
 
 #' @importFrom ggplot2 fortify
 #' @seealso \code{\link[=fortify.radf]{fortify.radf()}}
