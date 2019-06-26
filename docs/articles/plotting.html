@@ -154,20 +154,20 @@
 <a href="#custom-plotting" class="anchor"></a>Custom plotting</h2>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">joined &lt;-<span class="st"> </span><span class="kw"><a href="../reference/augment_join.html">augment_join</a></span>(tstats, cv)</a>
 <a class="sourceLine" id="cb6-2" title="2">joined </a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; # A tibble: 1,926 x 6</span></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;    index id        name   tstat sig     crit</span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  1    21 sim_blan  badf  -0.974 0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  2    21 sim_evans badf  -2.16  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  3    21 sim_psy1  badf  -2.08  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  4    21 sim_psy2  badf  -1.61  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  5    22 sim_blan  badf  -2.20  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  6    22 sim_evans badf  -2.20  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  7    22 sim_psy1  badf  -2.31  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  8    22 sim_psy2  badf  -1.54  0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  9    23 sim_blan  badf  -2.18  0.9   0.0204</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 10    23 sim_evans badf  -2.26  0.9   0.0204</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; # ... with 1,916 more rows</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; # A tibble: 1,920 x 6</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;    index id       name   tstat sig     crit</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  1    21 sim_blan badf  -0.974 0.9   0.0203</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  2    21 sim_blan badf  -0.974 0.95  0.0203</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  3    21 sim_blan badf  -0.974 0.99  0.0203</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  4    22 sim_blan badf  -2.20  0.9   0.0204</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  5    22 sim_blan badf  -2.20  0.95  0.0204</span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  6    22 sim_blan badf  -2.20  0.99  0.0204</span></a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  7    23 sim_blan badf  -2.18  0.9   0.0205</span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  8    23 sim_blan badf  -2.18  0.95  0.0205</span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  9    23 sim_blan badf  -2.18  0.99  0.0205</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 10    24 sim_blan badf  -2.25  0.9   0.0205</span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; # ... with 1,910 more rows</span></a></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb7-2" title="2">joined <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>( <span class="kw">aes</span>(<span class="dt">x =</span> index)) <span class="op">+</span></a>

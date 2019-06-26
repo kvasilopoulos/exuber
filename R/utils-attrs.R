@@ -32,10 +32,10 @@ add_class <- function(x, nm = x) {
   x
 }
 
-strip_attributes  <- function(x) {
-  attributes(x) <- NULL
-  x
-}
+# strip_attributes  <- function(x) {
+#   attributes(x) <- NULL
+#   x
+# }
 
 # Access attributes easily ------------------------------------------------
 
