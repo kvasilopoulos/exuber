@@ -28,6 +28,6 @@ below to see their documentation.
 
   \item{ggplot2}{\code{\link[ggplot2]{fortify}}, \code{\link[ggplot2]{autoplot}}}
 
-  \item{smgenerics}{\code{\link[smgenerics]{index}}, \code{\link[smgenerics]{index<-}}}
+  \item{zoo}{\code{\link[zoo]{index}}, \code{\link[zoo]{index<-}}}
 }}
 
