@@ -80,8 +80,9 @@ array_to_list <- function(x, var) {
   out
 }
 
-add_key <- function(x, attr_minw) {
-  nkey <- get_minw(attr_minw)
+add_key <- function(x, attr_from) {
+  attr_lag <- if (!is.null(get_lag(attr_from))) get_lag(attr_from) else 0
+  nkey <- get_minw(attr_from) + attr_lag
   x %>% add_column(key = (nkey + 1):(nrow(.) + nkey))
 }
 

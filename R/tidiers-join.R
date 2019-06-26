@@ -16,20 +16,20 @@ augment_join <- function(x, y = NULL) {
   assert_class(y, "cv")
 
   if (is_sb(y)) {
-    tbl <- right_join(
+    tbl <- inner_join(
       augment(x, "long", panel = TRUE),
       augment(y, "long"),
       by = c("key", "name", "index")
     )
   }else if (is_wb(y)) {
-    tbl <- full_join(
+    tbl <- inner_join(
       augment(x, "long"),
       augment(y, "long"),
       by = c("key","index", "name", "id")
     ) %>%
       arrange(id, name, sig)
   }else if (is_mc(y)) {
-    tbl <- right_join(
+    tbl <- inner_join(
       augment(x, "long"),
       augment(y, "long"),
       by = c("key", "name")
