@@ -46,7 +46,7 @@ summary.radf <- function(object, cv = NULL, ...) {
     cv <- retrieve_crit(object)
   }
   assert_class(cv, "cv")
-  assert_equal_arg(object, cv)
+  assert_match(object, cv)
 
   x <- object
   y <- cv
@@ -205,7 +205,7 @@ diagnostics <- function(object, cv = NULL, option = c("gsadf", "sadf")) {
     cv <- retrieve_crit(object)
   }
   assert_class(cv, "cv")
-  assert_equal_arg(object, cv)
+  assert_match(object, cv)
   option <- match.arg(option)
 
   x <- object
@@ -370,7 +370,7 @@ datestamp <- function(object, cv = NULL, option = c("gsadf", "sadf"),
   option <- match.arg(option)
 
   assert_positive_int(min_duration, strictly = FALSE)
-  assert_equal_arg(object, cv)
+  assert_match(object, cv)
 
   x <- object
   y <- cv

@@ -38,18 +38,31 @@ is_identical <- function(x, y) {
 }
 
 is_mc <- function(y) {
-  # assert_class(y, "cv")
-  if (get_method(y) == "Monte Carlo") TRUE else FALSE
+  mth <- get_method(y)
+  if (!is.null(mth)) {
+    if (mth == "Monte Carlo") TRUE else FALSE
+  }else {
+    FALSE
+  }
 }
 
 is_wb <- function(y) {
-  # assert_class(y, "cv")
-  if (get_method(y) == "Wild Bootstrap") TRUE else FALSE
+  mth <- get_method(y)
+  if (!is.null(mth)) {
+    if (mth == "Wild Bootstrap") TRUE else FALSE
+  }else {
+    FALSE
+  }
 }
 
 is_sb <- function(y) {
   # assert_class(y, "cv")
-  if (get_method(y) == "Sieve Bootstrap") TRUE else FALSE
+  mth <- get_method(y)
+  if (!is.null(mth)) {
+    if (mth == "Sieve Bootstrap") TRUE else FALSE
+  }else {
+    FALSE
+  }
 }
 
 # asserts ------ ------------------------------------------------------
@@ -103,21 +116,19 @@ assert_na <- function(x) {
   }
 }
 
-assert_same_data <- function(x, y) {
+assert_match <- function(x, y, panel = FALSE) {
+
   attr_x <- attributes(x)
   attr_y <- attributes(y)
 
-  is_identical(attr_x$n, attr_y$n)
-  is_identical(attr_x$index, attr_y$index)
-}
+  if (attr_x$minw != attr_y$minw)
+    stop_glue("minimum window does not match")
 
+  if (attr_x$n != attr_y$n)
+    stop_glue("sample size does not match")
 
-assert_equal_arg <- function(x, y, panel = FALSE) {
-  if (get_minw(x) != get_minw(y))
-    stop_glue("Different minimum window")
-
-  if (get_method(y) == "Sieve Bootstrap") {
-    if (get_lag(x) != get_lag(y))
-      stop_glue("Different lag values")
+  if (is_sb(y)) {
+    if (attr_x$lag != attr_y$lag)
+      stop_glue("lag value does not match")
   }
 }

@@ -46,11 +46,15 @@ index.default <- function(x, ...) {
 
 #' @export
 index.cv <- function(x, trunc = FALSE, ...) {
-  if (get_method(x) == "Monte Carlo")
+  if (is_mc(x))
     stop_glue("method `index` is not suppoted for {get_method(x)}")
   value <- attr(x, "index")
-  if (get_method(x) == "Sieve Booststrap") {
-    if (trunc) value <- value[-c(1:(get_minw(x) + get_lag(x)))]
+  if (is_sb(x)) {
+    if (get_lag(x) != 0) {
+      if (trunc) value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
+    }else{
+      if (trunc) value <- value[-c(1:(get_minw(x)))]
+    }
   }else{
     if (trunc) value <- value[-c(1:get_minw(x))]
   }
