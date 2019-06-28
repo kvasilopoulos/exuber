@@ -57,25 +57,36 @@ tibble(
 
 Let's repeat
 
-```{r, fig.width = 9, fig.height=7}
+```{r simulate}
 library(ggplot2)
-library(tidyr)
+library(purrr)
 
-procceses <- tibble(
-  period = 1:100,
+processes <- tibble(
   sim_psy1 = sim_psy1(100),
   sim_psy2 = sim_psy2(100),
   sim_evans = sim_evans(100),
   sim_blan = sim_blan(100)
 )
+```
 
-procceses %>%
-  tidyr::gather(name, value, -period, factor_key = TRUE) %>% 
-  ggplot(aes(x = period, y = value)) + 
-  geom_line() +
-  labs(y = "", x = "") +
-  facet_wrap(~name, ncol = 2, scales = "free_y")+
-  theme_minimal() +
-  theme(panel.border = element_rect(colour = "black", size = 1, fill = NA))
+To plot them altogether we can use the`autoplot()` method for "sim" objects. However, `autoplot.sim()` is for individual object thus we need some functional programming to plot them together. We can use the `purrr::map()` function, which iterates through every column of the data.frame and stores them into a list of "ggplot" objects, and then we can arrange with the `ggarrange()` function into a 2x2 grid.
+
+```{r autoplot-sim, fig.width = 9, fig.height=7}
+processes %>% 
+  map(autoplot) %>% 
+  ggarrange()
+```
+
+
+```{r omit, eval=FALSE, include=FALSE}
+
+# procceses %>%
+  # tidyr::gather(name, value, -period, factor_key = TRUE) %>% 
+  # ggplot(aes(x = period, y = value)) + 
+  # geom_line() +
+  # labs(y = "", x = "") +
+  # facet_wrap(~name, ncol = 2, scales = "free_y")+
+  # theme_minimal() +
+  # theme(panel.border = element_rect(colour = "black", size = 1, fill = NA))
 ```
 

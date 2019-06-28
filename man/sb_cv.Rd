@@ -2,12 +2,12 @@
 % Please edit documentation in R/sb_cv.R
 \name{sb_cv}
 \alias{sb_cv}
-\alias{sb_dist}
+\alias{sb_distr}
 \title{Panel Sieve Bootstrap Critical Values}
 \usage{
 sb_cv(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL)
 
-sb_dist(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL)
+sb_distr(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.

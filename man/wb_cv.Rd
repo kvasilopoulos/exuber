@@ -2,13 +2,13 @@
 % Please edit documentation in R/wb_cv.R
 \name{wb_cv}
 \alias{wb_cv}
-\alias{wb_dist}
+\alias{wb_distr}
 \title{Wild Bootstrap Critical values}
 \usage{
 wb_cv(data, minw = NULL, nboot = 1000, dist_rad = FALSE,
   seed = NULL)
 
-wb_dist(data, minw = NULL, nboot = 1000, dist_rad = FALSE,
+wb_distr(data, minw = NULL, nboot = 1000, dist_rad = FALSE,
   seed = NULL)
 }
 \arguments{
@@ -56,7 +56,7 @@ wb <- wb_cv(dta)
 wb <- wb_cv(dta, nboot = 1500, minw = 20)
 
 # Simulate distribution
-wb_dist(dta)
+wb_distr(dta)
 }
 }
 \references{
