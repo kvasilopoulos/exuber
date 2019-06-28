@@ -96,3 +96,31 @@ add_key <- function(x, attr_from) {
 }
 
 
+# seq ---------------------------------------------------------------------
+
+extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
+
+  if (is_sb(y)) {
+    stop_glue("cannot extract from `sb_cv()`")
+  }
+
+  out <- pluck(y, which)
+  if (lg != 0) {
+    if (is_wb(y)) {
+      out <- out[-c(1:lg), , ]
+    }else{
+      out <- out[-c(1:lg), ]
+    }
+  }
+
+  if (is_wb(y)) {
+    out <- out[, 2, ]
+  }else{
+    out <- out[, 2]
+  }
+
+  out
+}
+
+
+
