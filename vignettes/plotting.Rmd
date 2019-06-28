@@ -114,7 +114,7 @@ bind_cols(
 
 # Distributions
 ```{r distributions}
-dist <- mc_dist(n = 300)
+dist <- mc_distr(n = 300)
 autoplot(dist)
 ```
 

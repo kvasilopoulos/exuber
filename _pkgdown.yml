@@ -52,14 +52,14 @@ reference:
     contents:
       - autoplot.radf
       - autoplot.datestamp
-      - autoplot.mc_dist
+      - autoplot.mc_distr
 
   - title: Tidying
     contents:
       - tidy.radf
       - tidy.mc_cv
       - augment_join
-      - tidy.mc_dist
+      - tidy.mc_distr
 
   - title: Helpers
     contents:

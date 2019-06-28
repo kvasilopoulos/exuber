@@ -141,8 +141,8 @@ calc_pvalue <- function(x, dist = NULL) {
   assert_class(x, "radf")
 
   if (is.null(dist)) {
-    message_glue("Using `mc_dist`")
-    dist <- mc_dist(attr(x, "n"))
+    message_glue("Using `mc_distr`")
+    dist <- mc_distr(attr(x, "n"))
   }
 
   method <- get_method(dist)
@@ -400,9 +400,14 @@ datestamp <- function(object, cv = NULL, option = c("gsadf", "sadf"),
     ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + get_minw(x) + get_lag(x))
   }
 
+  # TODO tstat > cv is a vectorized function
+  # TODO map(stamp) map(~.x + 4)
+  # TODO DRy DRY DRY
+
   for (i in seq_along(acc)) {
     if (is_mc(y)) {
       if (option == "gsadf") {
+        # cv <- extract_cv(y, "bsadf_cv", get_lag(x))
         cv <- if (get_lag(x) == 0) {
           y$bsadf_cv[, 2]
         } else {
@@ -464,6 +469,8 @@ datestamp <- function(object, cv = NULL, option = c("gsadf", "sadf"),
   for (z in seq_along(acc)) {
     dummy[ds[[z]], z] <- 1
   }
+
+  # TODO inherit_attrs from object and cv
 
   structure(
     res,

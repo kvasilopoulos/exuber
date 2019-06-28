@@ -110,7 +110,7 @@ mc_ <- function(n, minw, nrep, seed) {
 #' # Change the minimum window and the number of simulations
 #' mc <- mc_cv(n = 100, nrep = 2500, minw = 20)
 #'
-#' mdist <- mc_dist(n = 100)
+#' mdist <- mc_distr(n = 100)
 #' autoplot(mdist)
 #' }
 mc_cv <- function(n, minw = NULL, nrep = 2000, seed = NULL,
@@ -160,14 +160,14 @@ mc_cv <- function(n, minw = NULL, nrep = 2000, seed = NULL,
     add_attr(
       opt_badf = opt_badf,
       opt_bsadf = opt_bsadf) %>%
-    set_class(c("cv", "mc_cv"))
+    add_class("mc_cv", "cv")
 
 }
 
 #' @rdname mc_cv
 #' @inheritParams mc_cv
 #' @export
-mc_dist <- function(n, minw = NULL, nrep = 2000, seed = NULL) {
+mc_distr <- function(n, minw = NULL, nrep = 2000, seed = NULL) {
 
   results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
 
@@ -175,6 +175,6 @@ mc_dist <- function(n, minw = NULL, nrep = 2000, seed = NULL) {
        sadf_cv = results$sadf,
        gsadf_cv = results$gsadf) %>%
     inherit_attrs(results) %>%
-    set_class("mc_dist")
+    add_class("mc_distr", "distr")
 
 }

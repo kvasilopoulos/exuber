@@ -140,7 +140,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' wb <- wb_cv(dta, nboot = 1500, minw = 20)
 #'
 #' # Simulate distribution
-#'wb_dist(dta)
+#'wb_distr(dta)
 #' }
 wb_cv <- function(data, minw = NULL, nboot = 1000,
                   dist_rad = FALSE, seed = NULL) {
@@ -164,14 +164,14 @@ wb_cv <- function(data, minw = NULL, nboot = 1000,
        badf_cv = badf_crit,
        bsadf_cv = bsadf_crit) %>%
     inherit_attrs(results) %>%
-    add_class(c("wb_cv", "cv"))
+    add_class("wb_cv", "cv")
 
 }
 
 #' @rdname wb_cv
 #' @inheritParams wb_cv
 #' @export
-wb_dist <- function(data, minw = NULL, nboot = 1000,
+wb_distr <- function(data, minw = NULL, nboot = 1000,
                     dist_rad = FALSE, seed = NULL) {
 
   results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
@@ -180,6 +180,6 @@ wb_dist <- function(data, minw = NULL, nboot = 1000,
          sadf_cv = results$sadf,
          gsadf_cv = results$gsadf) %>%
       inherit_attrs(results) %>%
-      add_class("wb_dist")
+      add_class("wb_distr", "distr")
 }
 
