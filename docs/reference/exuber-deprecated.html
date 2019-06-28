@@ -164,9 +164,12 @@
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>),
   <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"multiple"</span>, <span class='st'>"single"</span>))
 
-<span class='fu'>sim_dgp1</span>(<span class='no'>...</span>)
+<span class='fu'>sim_dgp1</span>(<span class='no'>n</span>, <span class='kw'>te</span> <span class='kw'>=</span> <span class='fl'>0.4</span> * <span class='no'>n</span>, <span class='kw'>tf</span> <span class='kw'>=</span> <span class='fl'>0.15</span> * <span class='no'>n</span> + <span class='no'>te</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>sim_dgp2</span>(<span class='no'>...</span>)</pre>
+<span class='fu'>sim_dgp2</span>(<span class='no'>n</span>, <span class='kw'>te1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span>, <span class='kw'>tf1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span> + <span class='no'>te1</span>, <span class='kw'>te2</span> <span class='kw'>=</span> <span class='fl'>0.6</span> * <span class='no'>n</span>,
+  <span class='kw'>tf2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>n</span> + <span class='no'>te2</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
         
 
   </div>

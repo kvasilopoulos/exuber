@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Monte Carlo Critical Values — mc_cv • exuber</title>
+<title>Tidying *_dist objects — tidy.mc_distr • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,10 +43,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Monte Carlo Critical Values — mc_cv" />
+<meta property="og:title" content="Tidying *_dist objects — tidy.mc_distr" />
 
-<meta property="og:description" content="mc_cv computes Monte Carlo critical values for the recursive unit
-root tests. mc_dist computes the distribution." />
+<meta property="og:description" content="tidy `*_dist` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
+a tibble." />
 
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -142,84 +142,50 @@ root tests. mc_dist computes the distribution." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Monte Carlo Critical Values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/mc_cv.R'><code>R/mc_cv.R</code></a></small>
-    <div class="hidden name"><code>mc_cv.Rd</code></div>
+    <h1>Tidying *_dist objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/tidiers-cv.R'><code>R/tidiers-cv.R</code></a></small>
+    <div class="hidden name"><code>tidy.mc_distr.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>mc_cv</code> computes Monte Carlo critical values for the recursive unit
-root tests. <code>mc_dist</code> computes the distribution.</p>
+    <p>tidy `*_dist` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
+a tibble.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mc_cv</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>opt_badf</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"fixed"</span>, <span class='st'>"asymptotic"</span>, <span class='st'>"simulated"</span>),
-  <span class='kw'>opt_bsadf</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"conventional"</span>, <span class='st'>"conservative"</span>))
+    <pre class="usage"><span class='co'># S3 method for mc_distr</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/tidy'>tidy</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>mc_distr</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='co'># S3 method for wb_distr</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/tidy'>tidy</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for sb_distr</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/tidy'>tidy</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>A positive integer. The sample size.</p></td>
+      <th>x</th>
+      <td><p>An `*_dist` object</p></td>
     </tr>
     <tr>
-      <th>minw</th>
-      <td><p>A positive integer. The minimum window size, which defaults to
-\((0.01 + 1.8/\sqrt(T))*T\).</p></td>
-    </tr>
-    <tr>
-      <th>nrep</th>
-      <td><p>A positive integer. The number of Monte Carlo simulations.</p></td>
-    </tr>
-    <tr>
-      <th>seed</th>
-      <td><p>An object specifying if and how the random number generator(rng)
-should be initialized. Either NULL or an integer will be used in a call to
-`set.seed` before simulation. If set, the value is save as "seed" attribute
-of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute.</p></td>
-    </tr>
-    <tr>
-      <th>opt_badf</th>
-      <td><p>Options for badf critical value calculation. "fixed" corresponds
-to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
-simulated to the monte carlo simulations.</p></td>
-    </tr>
-    <tr>
-      <th>opt_bsadf</th>
-      <td><p>Options for bsadf critical value calculation. "conventional"
-corresponds to the max of the quantile of the simulated distribution, while
-"conservative" corresponds to the quantile of the max which is more conservative
-in nature, thus the name.</p></td>
+      <th>...</th>
+      <td><p>Additional arguments. Not used.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list that contains the critical values for ADF, BADF, BSADF and GSADF
-t-statistics.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='wb_cv.html'>wb_cv</a></code> for Wild Bootstrapped critical values and
-<code><a href='sb_cv.html'>sb_cv</a></code> for Sieve Bootstrapped critical values</p></div>
+    <p>A [tibble::tibble()]</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Default minimum window</span>
-<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='mc_cv.html'>mc_cv</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 
-<span class='co'># Change the minimum window and the number of simulations</span>
-<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2500</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
-
-<span class='no'>mdist</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_distr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>mdist</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/generics/topics/tidy'>tidy</a></span>(<span class='no'>mc</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -228,8 +194,6 @@ t-statistics.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
