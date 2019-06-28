@@ -188,6 +188,8 @@ fortify.radf <- function(model, data, cv = NULL,
   }
   assert_class(cv, "cv")
 
+  # TODO maybe fortify subroutine and then use purrr to apply to the whole dset
+
   option <- match.arg(option)
   assert_match(model, cv)
 
@@ -195,6 +197,8 @@ fortify.radf <- function(model, data, cv = NULL,
   y <- cv
 
   dating <- index(x, trunc = TRUE)
+
+  # TODO separate statement no need for this kind of nested if
 
   if (is_sb(y)) {
     nm <- diagnostics(object = x, cv = y, option = option) %>%
@@ -231,24 +235,28 @@ fortify.radf <- function(model, data, cv = NULL,
     }
   }
 
+  # TODO consistent naming ---> stock to tbl_cv and tbl_stats
+  # TODO tbl_fort and tbl_ds tbl_dg and tbl_sum
+
   if (option == "gsadf") {
     tbl_stat <- if (is_sb(y)) x$bsadf_panel else x$bsadf[, cname]
 
-    if (get_method(y) == "Wild Bootstrap") {
+    if (is_wb(y)) {
+      # tbl_cv <- extract_cv(cv, lg = get_lag(x))
       tbl_cv <- if (get_lag(x) == 0) {
         y$bsadf_cv[, 2, cname]
       } else {
         y$bsadf_cv[-c(1:get_lag(x)), 2, select]
       }
       names_cv <- paste0("cv_", cname)
-    } else if (get_method(y) == "Monte Carlo") {
+    } else if (is_mc(y)) {
       tbl_cv <- if (get_lag(x) == 0) {
         y$bsadf_cv[, 2]
       } else {
         y$bsadf_cv[-c(1:get_lag(x)), 2]
       }
       names_cv <- "cv"
-    } else if (get_method(y) == "Sieve Bootstrap") {
+    } else if (is_sb(y)) {
       tbl_cv <- y$bsadf_panel_cv[, 2]
       if (get_lag(cv) > 0) {
         dating <- dating[-c(1:2)]
@@ -284,11 +292,12 @@ fortify.radf <- function(model, data, cv = NULL,
     set_names(c("index", cname, names_cv)) %>%
     as_tibble()
 
-  if(is.null(cname))
+  if (is.null(cname)) {
     cname <- character()
+  }
 
-  attr(tbl_rf, "select") <- cname
-  tbl_rf
+  tbl_rf %>%
+    add_attr("select" = cname)
 }
 
 #' @rdname autoplot.radf
@@ -296,8 +305,9 @@ fortify.radf <- function(model, data, cv = NULL,
 #' @export
 ggarrange <- function(...) {
   p <- do.call(gridExtra::arrangeGrob, c(...))
-  class(p) <- c("ggarrange", class(p))
-  p
+
+  p %>%
+    add_class("ggarrange")
 }
 
 #' Print a ggarrange object
@@ -342,6 +352,7 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 #'   ggplot2::scale_colour_manual(values = rep("black", 4))
 #' }
 autoplot.datestamp <- function(object, ...) {
+
   dating <- index(object)
   scale <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
 
@@ -372,6 +383,7 @@ autoplot.datestamp <- function(object, ...) {
 #' @importFrom tibble add_column
 #' @export
 fortify.datestamp <- function(model, data, ...) {
+
   nr <- map_dbl(model, nrow)
 
   tbl_ds <- reduce(model, bind_rows) %>%
@@ -380,6 +392,6 @@ fortify.datestamp <- function(model, data, ...) {
     select(id, everything()) %>%
     as_tibble()
 
-  class(tbl_ds) <- append(class(tbl_ds), "datestamp")
-  tbl_ds
+  tbl_ds %>%
+    add_class("datestamp")
 }
