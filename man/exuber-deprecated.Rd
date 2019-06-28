@@ -13,9 +13,12 @@ report(x, y, panel = FALSE, ...)
 \method{plot}{radf}(x, y, option = c("gsadf", "sadf"),
   min_duration = 0, plot_type = c("multiple", "single"))
 
-sim_dgp1(...)
+sim_dgp1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
+  sigma = 6.79, seed = NULL)
 
-sim_dgp2(...)
+sim_dgp2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n,
+  tf2 = 0.1 * n + te2, c = 1, alpha = 0.6, sigma = 6.79,
+  seed = NULL)
 }
 \description{
 The functions listed below are deprecated and will be defunct in

@@ -4,7 +4,7 @@ set_attrs <- function(x, ...) {
   x
 }
 
-inherit_attrs <- function(x, y, exclude = NULL) {
+inherit_attrs <- function(x, y) {
 
   attr_x <- attributes(x) %>% names()
   attr_y <- attributes(y) %>% names()
@@ -27,8 +27,8 @@ set_class <- function(x, nm) {
   x
 }
 
-add_class <- function(x, nm = x) {
-  class(x) <- append(nm, class(x))
+add_class <- function(x, ...) {
+  class(x) <- append(c(...), class(x))
   x
 }
 
