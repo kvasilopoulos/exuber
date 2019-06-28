@@ -196,11 +196,11 @@ augment.sb_cv <- function(x, format = c("wide", "long"), ...) {
 }
 
 
-# mc_dist -----------------------------------------------------------------
+# mc_distr -----------------------------------------------------------------
 
 #' Tidying *_dist objects
 #'
-#' tidy `*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
+#' tidy `*_dist` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
 #' a tibble.
 #'
 #' @param x An `*_dist` object
@@ -216,7 +216,7 @@ augment.sb_cv <- function(x, format = c("wide", "long"), ...) {
 #'
 #' tidy(mc)
 #' }
-tidy.mc_dist <- function(x, ...) {
+tidy.mc_distr <- function(x, ...) {
   tibble(
     adf = x$adf_cv,
     sadf = x$sadf_cv,
@@ -224,18 +224,17 @@ tidy.mc_dist <- function(x, ...) {
   )
 }
 
-#' Plotting *_dist object
+#' Plotting `distr` object
 #'
-#' tidy `*_dist` takes an `mc_dist`, `wb_dist` or `sb_dist` object and returns
-#' a ggplot2 object
+#' Takes `distr`objects and returns a ggplot2 object
 #'
 #' @param object An `*_dist` object.
-#' @param ... Additional arguments, used only in `wb_dist` facet options.
+#' @param ... Additional arguments, used only in `wb_distr` facet options.
 #'
 #' @importFrom tidyr gather
 #' @importFrom ggplot2 geom_density aes
 #' @export
-autoplot.mc_dist <- function(object, ...) {
+autoplot.mc_distr <- function(object, ...) {
 
   object %>%
     tidy() %>%
@@ -249,19 +248,19 @@ autoplot.mc_dist <- function(object, ...) {
 }
 
 
-# wb_dist -----------------------------------------------------------------
+# wb_distr -----------------------------------------------------------------
 
 
 
 
-#' @rdname tidy.mc_dist
+#' @rdname tidy.mc_distr
 #'
 #' @importFrom tidyr gather
 #' @importFrom dplyr select bind_cols as_tibble
 #' @importFrom purrr reduce pluck
 #'
 #' @export
-tidy.wb_dist <- function(x, ...) {
+tidy.wb_distr <- function(x, ...) {
   list(
     x %>%
       pluck("adf_cv") %>%
@@ -281,12 +280,12 @@ tidy.wb_dist <- function(x, ...) {
     reduce(bind_cols)
 }
 
-#' @rdname autoplot.mc_dist
+#' @rdname autoplot.mc_distr
 #'
 #' @importFrom tidyr gather
 #' @importFrom ggplot2 facet_wrap
 #' @export
-autoplot.wb_dist <- function(object, ...) {
+autoplot.wb_distr <- function(object, ...) {
 
   object %>%
     tidy() %>%
@@ -300,19 +299,19 @@ autoplot.wb_dist <- function(object, ...) {
     labs(x = "", y = "")
 }
 
-# sb_dist -----------------------------------------------------------------
+# sb_distr -----------------------------------------------------------------
 
-#' @rdname tidy.mc_dist
+#' @rdname tidy.mc_distr
 #' @export
-tidy.sb_dist <- function(x, ...) {
+tidy.sb_distr <- function(x, ...) {
   tibble(
     gsadf_panel = x
   )
 }
 
-#' @rdname autoplot.mc_dist
+#' @rdname autoplot.mc_distr
 #' @export
-autoplot.sb_dist <- function(object, ...) {
+autoplot.sb_distr <- function(object, ...) {
   object %>%
     tidy() %>%
     ggplot(aes(gsadf_panel, fill = gsadf_panel)) +

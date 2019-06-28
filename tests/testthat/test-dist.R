@@ -1,16 +1,16 @@
 context("test-dist")
 
 test_that("run properly", {
-  expect_error(mc_dist(100, nrep = 10), regexp = NA)
-  expect_error(wb_dist(dta, nboot = 10), regexp = NA)
-  expect_error(sb_dist(dta, nboot = 10), regexp = NA)
+  expect_error(mc_distr(100, nrep = 10), regexp = NA)
+  expect_error(wb_distr(dta, nboot = 10), regexp = NA)
+  expect_error(sb_distr(dta, nboot = 10), regexp = NA)
 })
 
 test_that("tidy methods work",{
 
-  mcd <- mc_dist(100, nrep = 10)
-  wbd <- wb_dist(dta, nboot = 10)
-  sbd <- sb_dist(dta, nboot = 10)
+  mcd <- mc_distr(100, nrep = 10)
+  wbd <- wb_distr(dta, nboot = 10)
+  sbd <- sb_distr(dta, nboot = 10)
 
   expect_error(tidy(mcd), regexp = NA)
   expect_error(tidy(wbd), regexp = NA)
@@ -40,9 +40,9 @@ test_that("tidy methods work",{
 
 test_that("autoplot works",{
 
-  mcd <- mc_dist(100, nrep = 10)
-  wbd <- wb_dist(dta, nboot = 10)
-  sbd <- sb_dist(dta, nboot = 10)
+  mcd <- mc_distr(100, nrep = 10)
+  wbd <- wb_distr(dta, nboot = 10)
+  sbd <- sb_distr(dta, nboot = 10)
 
   expect_error(autoplot(mcd), regexp = NA)
   expect_error(autoplot(wbd), regexp = NA)

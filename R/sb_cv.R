@@ -160,20 +160,20 @@ sb_cv <- function(data, minw = NULL, lag = 0,
     list(gsadf_panel_cv = gsadf_crit,
          bsadf_panel_cv = bsadf_crit) %>%
       inherit_attrs(results) %>%
-      add_class(c("sb_cv","cv"))
+      add_class("sb_cv","cv")
 
 }
 
 #' @rdname sb_cv
 #' @inheritParams sb_cv
 #' @export
-sb_dist <- function(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL) {
+sb_distr <- function(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
   c(results$gsadf_panel) %>%
     inherit_attrs(results) %>%
-    add_class("sb_dist")
+    add_class("sb_distr", "distr")
 }
 
 
