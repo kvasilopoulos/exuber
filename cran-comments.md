@@ -9,7 +9,6 @@
   * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
   * Debian Linux, R-devel, GCC ASAN/UBSAN
   * Fedora Linux, R-devel, clang, gfortran
-  * Ubuntu Linux 16.04 LTS, R-release, GCC
 * win-builder (devel)
 
 ## R CMD check results 
@@ -21,6 +20,8 @@ There were no ERRORs and WARNINGs, with local checks or on remote checks.
 0 errors √ | 0 warnings √ | 0 notes √
       
 ### rhub::check_for_cran() & devtools::check_win_devel()
+
+0 ERRORS √ | 0 WARNINGS √ | 1 NOTE
 
 * checking CRAN incoming feasibility (26.4s) ... NOTE
 Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
