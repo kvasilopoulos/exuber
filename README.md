@@ -62,5 +62,6 @@ Sieve Bootstrapped (panel) critical values through `wb_cv()` and
 -----
 
 Please note that the ‘exuber’ project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
+Code of
+Conduct](https://kvasilopoulos.github.io/exuber/CODE_OF_CONDUCT). By
+contributing to this project, you agree to abide by its terms.

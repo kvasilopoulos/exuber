@@ -1,5 +1,15 @@
 # exuber 0.3.0
 
+## Breaking changes
+
+* Changed the opt_bsadf to conservative for the simulate critical values (`crit`),
+also reduce the size of the `crit` to 400 instead of 700.
+* `sim_dgp1()` and `sim_dgp2()` have been renamed to `sim_psy1()` and `sim_psy2()` 
+to better describe the origination of the dgp. 
+* `sim_dgp1()` and `sim_dgp2()` have been soft-deprecated.
+* `autoplot_radf()` arranges automatically multiple graphs, to return to previous
+behavior we included the optional argument `arrange` which is set to TRUE by default.
+
 Three new functions have been added to simulate empirical distributions for:
 
 * `mc_dist()`: Monte Carlo 
@@ -11,14 +21,6 @@ distributions as argument.
 
 Also methods `tidy()` and `autoplot()` have been added to turn the object into
 a tidy tibble and draw a particular plot with ggplot2, respectively.
-
-## Breaking changes
-
-* `sim_dgp1()` and `sim_dgp2()` have been renamed to `sim_psy1()` and `sim_psy2()` 
-to better describe the origination of the dgp. 
-* `sim_dgp1()` and `sim_dgp2()` have been soft-deprecated.
-* `autoplot_radf()` arranges automatically multiple graphs, to return to previous
-behavior we included the optional argument `arrange` which is set to TRUE by default.
 
 ## New features
 

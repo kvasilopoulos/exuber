@@ -115,7 +115,7 @@ mc_ <- function(n, minw, nrep, seed) {
 #' }
 mc_cv <- function(n, minw = NULL, nrep = 2000, seed = NULL,
                   opt_badf = c("fixed", "asymptotic", "simulated"),
-                  opt_bsadf = c("conventional", "conservative")) {
+                  opt_bsadf = c("conservative", "conventional")) {
 
   opt_badf <- match.arg(opt_badf)
   opt_bsadf <- match.arg(opt_bsadf)
