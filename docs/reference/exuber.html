@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Econometric Analysis of Explosive Time Series — exuber • exuber</title>
+<title>exuber: Econometric Analysis of Explosive Time Series — exuber • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -43,14 +43,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Econometric Analysis of Explosive Time Series — exuber" />
+<meta property="og:title" content="exuber: Econometric Analysis of Explosive Time Series — exuber" />
 
-<meta property="og:description" content="Testing for and dating periods of explosive dynamics (exuberance) in time series
-using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015)
-&amp;lt;doi:10.1111/iere.12132&amp;gt; and Pavlidis et al. (2016)  &amp;lt;doi:10.1007/s11146-015-9531-2&amp;gt;.
-The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix
-inversion which results in significant speed improvements. Simulation of a variety of
-periodically-collapsing bubble processes." />
+<meta property="og:description" content="
+Testing for and dating periods of explosive
+    dynamics (exuberance) in time series using the univariate and panel
+    recursive unit root tests proposed by Phillips et al. (2015)
+    &amp;lt;doi:10.1111/iere.12132&amp;gt; and Pavlidis et al. (2016)
+    &amp;lt;doi:10.1007/s11146-015-9531-2&amp;gt;.  The recursive least-squares
+    algorithm utilizes the matrix inversion lemma to avoid matrix
+    inversion which results in significant speed improvements. Simulation
+    of a variety of periodically-collapsing bubble processes." />
 
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -146,23 +149,42 @@ periodically-collapsing bubble processes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Econometric Analysis of Explosive Time Series</h1>
+    <h1>exuber: Econometric Analysis of Explosive Time Series</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/exuber-package.r'><code>R/exuber-package.r</code></a></small>
     <div class="hidden name"><code>exuber.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Testing for and dating periods of explosive dynamics (exuberance) in time series
-using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015)
-&lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)  &lt;doi:10.1007/s11146-015-9531-2&gt;.
-The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix
-inversion which results in significant speed improvements. Simulation of a variety of
-periodically-collapsing bubble processes.</p>
+    <p><img src='figures/logo.png' align='right' /></p>
+<p>Testing for and dating periods of explosive
+    dynamics (exuberance) in time series using the univariate and panel
+    recursive unit root tests proposed by Phillips et al. (2015)
+    &lt;doi:10.1111/iere.12132&gt; and Pavlidis et al. (2016)
+    &lt;doi:10.1007/s11146-015-9531-2&gt;.  The recursive least-squares
+    algorithm utilizes the matrix inversion lemma to avoid matrix
+    inversion which results in significant speed improvements. Simulation
+    of a variety of periodically-collapsing bubble processes.</p>
     
     </div>
 
         
+    <h2 class="hasAnchor" id="package-options"><a class="anchor" href="#package-options"></a>Package options</h2>
+
+    
+    <p><code>exuber.show_progress</code></p><ul>
+<li><p>Should lengthy operations such as <code><a href='mc_cv.html'>mc_cv()</a></code> show a progress bar? Default: TRUE</p></li>
+</ul>
+    <p><code>exuber.parallel</code></p><ul>
+<li><p>Should lengthy operations use parallel computation? Default: TRUE</p></li>
+</ul>
+    <p><code>exuber.ncores</code></p><ul>
+<li><p>How many cores to use for parallel computation. Default: system cores - 1</p></li>
+</ul>
+    <p><code>exuber.global_seed</code></p><ul>
+<li><p>When chosen automatically feeds into all functions with random-number generation Default: NA</p></li>
+</ul>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Useful links:</p><ul>
@@ -176,6 +198,8 @@ periodically-collapsing bubble processes.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
+      <li><a href="#package-options">Package options</a></li>
+
       <li><a href="#see-also">See also</a></li>
           </ul>
 
@@ -184,7 +208,7 @@ periodically-collapsing bubble processes.</p>
 <p>Authors:</p><ul>
 <li><p>Efthymios Pavlidis <a href='mailto:e.pavlidis@lancaster.ac.uk'>e.pavlidis@lancaster.ac.uk</a></p></li>
 <li><p>Simon Spavound <a href='mailto:simon.spavound@googlemail.com'>simon.spavound@googlemail.com</a></p></li>
-<li><p>Enríque Martínez-García <a href='mailto:emg.economics@gmail.com'>emg.economics@gmail.com</a></p></li>
+<li><p>Enrique Martínez-García <a href='mailto:emg.economics@gmail.com'>emg.economics@gmail.com</a></p></li>
 </ul>
 
 
@@ -193,7 +217,7 @@ periodically-collapsing bubble processes.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enrique Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

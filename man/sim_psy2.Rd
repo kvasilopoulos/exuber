@@ -27,7 +27,7 @@ sim_psy2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n,
 
 \item{seed}{An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
-`set.seed` before simulation. If set, the value is save as "seed" attribute
+\code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute.}
 }

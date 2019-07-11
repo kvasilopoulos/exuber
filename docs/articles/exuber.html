@@ -125,7 +125,7 @@
 <p>The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the <code>cv</code> argument into the <code>summary</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="../reference/summary.html">summary</a></span>(est_stocks)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; -- Summary (minw = 38, lag = 1) ------------------------- Monte Carlo (nrep = 2000) --</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; -- Summary (minw = 38, lag = 1) ------- Monte Carlo (nrep = 2000) --</span></a>
 <a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;  DAX </span></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;        tstat      90%       95%     99%</span></a>
@@ -153,7 +153,7 @@
 <p>It seems that all stocks exhibit exuberant behaviour but we can also use a <code><a href="../reference/diagnostics.html">diagnostics()</a></code> to do it for us. This is extremely useful when we deal a lot of series.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="../reference/diagnostics.html">diagnostics</a></span>(est_stocks)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; -- Diagnostics (option = gsadf) --------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; -- Diagnostics (option = gsadf) --------------------- Monte Carlo --</span></a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; DAX:      Rejects H0 for significance level 99% </span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; SMI:      Rejects H0 for significance level 99% </span></a>
@@ -168,7 +168,7 @@
 <a class="sourceLine" id="cb6-3" title="3"></a>
 <a class="sourceLine" id="cb6-4" title="4"><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>(est_stocks, <span class="dt">min_duration =</span> rot)</a>
 <a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; -- Datestamp (min_duration = 6) --------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; -- Datestamp (min_duration = 6) --------------------- Monte Carlo --</span></a>
 <a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; DAX :</span></a>
 <a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;        Start        End Duration</span></a>
@@ -215,7 +215,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, Enrique Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

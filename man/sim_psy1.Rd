@@ -22,7 +22,7 @@ sim_psy1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
 
 \item{seed}{An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
-`set.seed` before simulation. If set, the value is save as "seed" attribute
+\code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute.}
 }
@@ -51,7 +51,6 @@ During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)},
 During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
 coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
 \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
-
 
 For further details the user can refer to Phillips et al. (2015) p. 1054.
 }

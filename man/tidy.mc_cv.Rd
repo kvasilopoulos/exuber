@@ -22,14 +22,14 @@
 \method{augment}{sb_cv}(x, format = c("wide", "long"), ...)
 }
 \arguments{
-\item{x}{An `cv` object}
+\item{x}{An \code{cv} object}
 
 \item{format}{Long or wide format}
 
 \item{...}{Additional arguments. Not used.}
 }
 \value{
-A A [tibble::tibble()]
+A A \code{\link[tibble:tibble]{tibble::tibble()}}
 
 \itemize{
 \item sig The significance level.

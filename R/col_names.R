@@ -24,6 +24,7 @@ col_names.default <- function(x, ...) {
   base::colnames(x)
 }
 
+# TODO maybe rename col_names to snames
 
 #' @rdname col_names
 #' @export

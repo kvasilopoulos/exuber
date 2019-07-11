@@ -101,8 +101,6 @@ autoplot.radf <- function(object, cv = NULL, include = FALSE, select = NULL,
         )
       )
 
-
-
       h <- ggplot(dat) +
         geom_line(aes_string(
           x = "index",

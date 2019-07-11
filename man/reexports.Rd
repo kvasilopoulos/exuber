@@ -12,11 +12,28 @@
 \alias{glance}
 \title{Objects exported from other packages}
 \seealso{
-\code{\link[=index]{index()}}
+\code{\link[=index.radf]{index.radf()}}
 
 \code{\link[=fortify.radf]{fortify.radf()}}
+\code{\link[=fortify.datestamp]{fortify.datestamp()}}
 
 \code{\link[=autoplot.radf]{autoplot.radf()}}
+\code{\link[=autoplot.datestamp]{autoplot.datestamp()}}
+
+\code{\link[=tidy.radf]{tidy.radf()}}
+\code{\link[=tidy.mc_cv]{tidy.mc_cv()}}
+\code{\link[=tidy.wb_cv]{tidy.wb_cv()}}
+\code{\link[=tidy.sb_cv]{tidy.sb_cv()}}
+\code{\link[=tidy.mc_distr]{tidy.mc_distr()}}
+\code{\link[=tidy.wb_distr]{tidy.wb_distr()}}
+\code{\link[=tidy.sb_distr]{tidy.sb_distr()}}
+
+\code{\link[=augment.radf]{augment.radf()}}
+\code{\link[=augment.mc_cv]{augment.mc_cv()}}
+\code{\link[=augment.wb_cv]{augment.wb_cv()}}
+\code{\link[=augment.sb_cv]{augment.sb_cv()}}
+
+\code{\link[=glance.radf]{glance.radf()}}
 }
 \keyword{internal}
 \description{

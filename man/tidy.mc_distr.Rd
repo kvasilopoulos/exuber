@@ -13,15 +13,15 @@
 \method{tidy}{sb_distr}(x, ...)
 }
 \arguments{
-\item{x}{An `*_dist` object}
+\item{x}{An \code{*_dist} object}
 
 \item{...}{Additional arguments. Not used.}
 }
 \value{
-A [tibble::tibble()]
+A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-tidy `*_dist` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
+tidy \code{*_dist} takes an \code{mc_distr}, \code{wb_distr} or \code{sb_distr} object and returns
 a tibble.
 }
 \examples{

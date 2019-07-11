@@ -33,7 +33,7 @@ reported. Default is 0.}
 
 \item{arrange}{If FALSE returns a list of ggplot2 object, otherwise it grobs the plots on a single page.}
 
-\item{...}{further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+\item{...}{further arguments passed to method. Specify common characteristics like \code{ggplot2::xlab},
 that are later passed to ggplot chain. For multiple changes, the input in the argument should be in
 a list.}
 
@@ -49,9 +49,9 @@ a list.}
 used directly after autoplot to place grobs on a page.
 }
 \details{
-`arrange` offers flexibility to the user by specifying the desired output. If
-`arrange = FALSE`, the individual plots can be modified after creation the then rearranged with
-the `ggarrange` function into a single plot.
+\code{arrange} offers flexibility to the user by specifying the desired output. If
+\code{arrange = FALSE}, the individual plots can be modified after creation the then rearranged with
+the \code{ggarrange} function into a single plot.
 }
 \examples{
 \donttest{

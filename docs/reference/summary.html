@@ -188,7 +188,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 
 <span class='co'># Summary, diagnostics and datestamp (default)</span>
 <span class='fu'>summary</span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Summary (minw = 19, lag = 0) ------------------------- Monte Carlo (nrep = 2000) --
+#&gt; -- Summary (minw = 19, lag = 0) ------- Monte Carlo (nrep = 2000) --
 #&gt; 
 #&gt;  psy1 
 #&gt;         tstat      90%      95%     99%
@@ -202,12 +202,12 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 #&gt; SADF    7.027   0.9649  1.25853  1.8895
 #&gt; GSADF   7.574   1.6383  1.98345  2.6030
 #&gt; </div><div class='input'><span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics (option = gsadf) --------------------------------------- Monte Carlo --
+#&gt; -- Diagnostics (option = gsadf) --------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1:     Rejects H0 for significance level 99% 
 #&gt; psy2:     Rejects H0 for significance level 99% 
 #&gt; </div><div class='input'><span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) --------------------------------------- Monte Carlo --
+#&gt; -- Datestamp (min_duration = 0) --------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
@@ -220,7 +220,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 #&gt; </div><div class='input'>
 <span class='co'>#' # Diagnostics for 'sadf'</span>
 <span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics (option = sadf) ---------------------------------------- Monte Carlo --
+#&gt; -- Diagnostics (option = sadf) ---------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1:     Rejects H0 for significance level 99% 
 #&gt; psy2:     Rejects H0 for significance level 99% 
@@ -228,7 +228,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 <span class='co'># Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived</span>
 <span class='no'>rot</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Round'>round</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NROW</a></span>(<span class='no'>rfd</span>)) / <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>NROW</a></span>(<span class='no'>rfd</span>))
 <span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='no'>rot</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) --------------------------------------- Monte Carlo --
+#&gt; -- Datestamp (min_duration = 0) --------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
@@ -263,7 +263,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enríque Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enrique Martínez-García.</p>
 </div>
 
 <div class="pkgdown">

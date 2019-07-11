@@ -4,13 +4,15 @@ set_attrs <- function(x, ...) {
   x
 }
 
-inherit_attrs <- function(x, y) {
+inherit_attrs <- function(x, y, exception = "class") {
 
-  attr_x <- attributes(x) %>% names()
-  attr_y <- attributes(y) %>% names()
+  attr_x <- attributes(x) %>% names() %||% NA_character_
+  attr_y <- attributes(y) %>% names() %||% NA_character_
 
-  those <- which(attr_x %in% attr_y)
-  attributes(y)[those] <- NULL
+  remove_those <- which(attr_x %in% attr_y)
+  attributes(y)[remove_those] <- NULL
+
+  # TODO: fix this function
   attributes(x) <- c(attributes(x), attributes(y))
   x
 }
@@ -31,11 +33,6 @@ add_class <- function(x, ...) {
   class(x) <- append(c(...), class(x))
   x
 }
-
-# strip_attributes  <- function(x) {
-#   attributes(x) <- NULL
-#   x
-# }
 
 # Access attributes easily ------------------------------------------------
 

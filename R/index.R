@@ -38,7 +38,11 @@ index.radf <- function(x, trunc = FALSE, ...) {
 
 #' @export
 index.default <- function(x, ...) {
-  seq_len(NROW(x))
+  if (is.null(attr(x, "index"))) {
+    seq_len(NROW(x))
+  }else{
+    attr(x, "index")
+  }
 }
 
 # Defensive ---------------------------------------------------------------
@@ -66,10 +70,6 @@ index.cv <- function(x, trunc = FALSE, ...) {
 #' @export
 index.data.frame <- function(x, ...) {
   date_index <- purrr::detect_index(x, lubridate::is.Date)
-  if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq(1, NROW(x))
+  if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq_len(NROW(x))
 }
 
-#' @export
-index.datestamp <- function(x, ...) {
-  attr(x, "index")
-}

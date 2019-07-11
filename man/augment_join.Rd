@@ -7,10 +7,10 @@
 augment_join(x, y = NULL)
 }
 \arguments{
-\item{x}{An object of class `radf`}
+\item{x}{An object of class \code{radf}}
 
-\item{y}{An object of class `cv`}
+\item{y}{An object of class \code{cv}}
 }
 \description{
-Tidy a model of `radf` with a model of `cv`
+Tidy a model of \code{radf} with a model of \code{cv}
 }

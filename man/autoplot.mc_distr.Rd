@@ -4,7 +4,7 @@
 \alias{autoplot.mc_distr}
 \alias{autoplot.wb_distr}
 \alias{autoplot.sb_distr}
-\title{Plotting `distr` object}
+\title{Plotting \code{distr} object}
 \usage{
 \method{autoplot}{mc_distr}(object, ...)
 
@@ -13,10 +13,10 @@
 \method{autoplot}{sb_distr}(object, ...)
 }
 \arguments{
-\item{object}{An `*_dist` object.}
+\item{object}{An \code{*_dist} object.}
 
-\item{...}{Additional arguments, used only in `wb_distr` facet options.}
+\item{...}{Additional arguments, used only in \code{wb_distr} facet options.}
 }
 \description{
-Takes `distr`objects and returns a ggplot2 object
+Takes \code{distr}objects and returns a ggplot2 object
 }
