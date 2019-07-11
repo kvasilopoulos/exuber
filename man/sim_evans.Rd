@@ -24,7 +24,7 @@ sim_evans(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
 
 \item{seed}{An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
-`set.seed` before simulation. If set, the value is save as "seed" attribute
+\code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute.}
 }

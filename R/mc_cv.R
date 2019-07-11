@@ -157,9 +157,8 @@ mc_cv <- function(n, minw = NULL, nrep = 2000, seed = NULL,
        badf_cv = badf_crit,
        bsadf_cv = bsadf_crit) %>%
     inherit_attrs(results) %>%
-    add_attr(
-      opt_badf = opt_badf,
-      opt_bsadf = opt_bsadf) %>%
+    add_attr(opt_badf = opt_badf,
+             opt_bsadf = opt_bsadf) %>%
     add_class("mc_cv", "cv")
 
 }

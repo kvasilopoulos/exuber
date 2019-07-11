@@ -22,8 +22,8 @@ sim_dgp2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n,
 }
 \description{
 The functions listed below are deprecated and will be defunct in
-  the near future. When possible, alternative functions with similar
-  functionality are also mentioned. Help pages for deprecated functions are
-  available at \code{help("-deprecated")}.
+the near future. When possible, alternative functions with similar
+functionality are also mentioned. Help pages for deprecated functions are
+available at \code{help("-deprecated")}.
 }
 \keyword{internal}

@@ -28,7 +28,7 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
     ym <- embed(dy, lag + 2)
     lr_dy <- lm(ym[, 1] ~ ym[, -1])
     res <- as.vector(lr_dy$residuals)
-    coef <- as.vector(lr_dy$coef)
+    coef <- as.vector(lr_dy$coefficients)
 
     initmat[j, ] <- ym[1, -1]
     coefmat[j, ] <- coef
@@ -86,10 +86,10 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
       seed = rng_state,
       index = attr(y, "index"),
       method = "Sieve Bootstrap",
-      lag = lag,
-      iter = nboot,
       n = nrow(data),
-      minw = minw)
+      minw = minw,
+      iter = nboot,
+      lag = lag)
 }
 
 

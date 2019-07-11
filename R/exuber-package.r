@@ -1,11 +1,15 @@
-#' Econometric Analysis of Explosive Time Series
+#' @section Package options:
+#'\code{exuber.show_progress}
+#' - Should lengthy operations such as \code{mc_cv()} show a progress bar? Default: TRUE
 #'
-#' Testing for and dating periods of explosive dynamics (exuberance) in time series
-#' using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015)
-#' <doi:10.1111/iere.12132> and Pavlidis et al. (2016)  <doi:10.1007/s11146-015-9531-2>.
-#' The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix
-#' inversion which results in significant speed improvements. Simulation of a variety of
-#' periodically-collapsing bubble processes.
+#'\code{exuber.parallel}
+#' - Should lengthy operations use parallel computation? Default: TRUE
+#'
+#'\code{exuber.ncores}
+#' - How many cores to use for parallel computation. Default: system cores - 1
+#'
+#'\code{exuber.global_seed}
+#' - When chosen automatically feeds into all functions with random-number generation Default: NA
 #'
 #' @name exuber
 #' @useDynLib exuber, .registration = TRUE
