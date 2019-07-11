@@ -5,16 +5,16 @@ test_that("local options", {
   expect_false(
     isTRUE(
       all.equal(
-        mc_cv(100, nrep = 20)$gsadf,
-        mc_cv(100, nrep = 20)$gsadf
+        mc_cv(100, nrep = 20)$gsadf_cv,
+        mc_cv(100, nrep = 20)$gsadf_cv
       )
     )
   )
   expect_true(
     isTRUE(
       all.equal(
-        mc_cv(100, nrep = 50, seed = 124)$gsadf,
-        mc_cv(100, nrep = 50, seed = 124)$gsadf
+        mc_cv(100, nrep = 50, seed = 124)$gsadf_cv,
+        mc_cv(100, nrep = 50, seed = 124)$gsadf_cv
       )
     )
   )
@@ -25,8 +25,8 @@ test_that("global options", {
   expect_true(
     isTRUE(
       all.equal(
-        mc_cv(100, nrep = 50)$gsadf,
-        mc_cv(100, nrep = 50)$gsadf
+        mc_cv(100, nrep = 50)$gsadf_cv,
+        mc_cv(100, nrep = 50)$gsadf_cv
       )
     )
   )
@@ -38,8 +38,8 @@ test_that("local options overwrite global", {
   expect_true(
     isTRUE(
       all.equal(
-        mc_cv(100, nrep = 50, seed = 123)$gsadf,
-        mc_cv(100, nrep = 50, seed = 123)$gsadf
+        mc_cv(100, nrep = 50, seed = 123)$gsadf_cv,
+        mc_cv(100, nrep = 50, seed = 123)$gsadf_cv
       )
     )
   )

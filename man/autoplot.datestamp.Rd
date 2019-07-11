@@ -12,7 +12,7 @@
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
 
-\item{...}{further arguments passed to method. Specify common characteristics like `ggplot2::xlab`,
+\item{...}{further arguments passed to method. Specify common characteristics like \code{ggplot2::xlab},
 that are later passed to ggplot chain. For multiple changes, the input in the argument should be in
 a list.}
 

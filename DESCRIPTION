@@ -15,7 +15,7 @@ Authors@R:
             family = "Spavound", 
             role = "aut", 
             email = "simon.spavound@googlemail.com"),
-     person(given = "Enr\u00EDque",
+     person(given = "Enrique",
             family = "Mart\u00EDnez-Garc\u00EDa",
             role = "aut",
             email = "emg.economics@gmail.com"))
@@ -65,28 +65,6 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
 Language: en-US
-Collate: 
-    'RcppExports.R'
-    'autoplot.R'
-    'col_names.R'
-    'parse_data.R'
-    'data-crit.R'
-    'deprecate.R'
-    'exuber-package.r'
-    'index.R'
-    'mc_cv.R'
-    'radf.R'
-    'reexports.R'
-    'tidiers-radf.R'
-    'tidiers-cv.R'
-    'tidiers-join.R'
-    'sb_cv.R'
-    'simul.R'
-    'summary.R'
-    'utils.R'
-    'utils-defensive.R'
-    'utils-attrs.R'
-    'wb_cv.R'
-    'zzz.R'
+RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)

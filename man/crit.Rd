@@ -6,11 +6,11 @@
 \title{Simulated Monte Carlo critical values}
 \format{A list with lower level lists that contain
 \describe{
-  \item{adf_cv:}{Augmented Dickey-Fuller}
-  \item{badf_cv:}{Backward Augmented Dickey-Fuller}
-  \item{sadf_cv:}{Supremum Augmented Dickey-Fuller}
-  \item{bsadf_cv:}{Backward Supremum Augmented Dickey-Fuller}
-  \item{gsadf_cv:}{Generalized Supremum Augmented Dickey Fuller}
+\item{adf_cv:}{Augmented Dickey-Fuller}
+\item{badf_cv:}{Backward Augmented Dickey-Fuller}
+\item{sadf_cv:}{Supremum Augmented Dickey-Fuller}
+\item{bsadf_cv:}{Backward Supremum Augmented Dickey-Fuller}
+\item{gsadf_cv:}{Generalized Supremum Augmented Dickey Fuller}
 
 }}
 \source{

@@ -1,6 +1,6 @@
 ## Test environments
 
-* local OS MS install, R 3.4.5
+* local OS MS install, R 3.6.0
 * Continuous Integration
   * Ubuntu Trusty 14.04 on travis-ci (devel and release)
   * macOS on travis-ci (devel and release)
@@ -28,6 +28,10 @@ Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
   - Uses the superseded package: 'doSNOW' 
   
   *(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)*
+  
+  - Found the following (possibly) invalid file URI:
+  URI: .github/CODE_OF_CONDUCT.md
+    From: README.md
 
 ## Reverse dependencies
 

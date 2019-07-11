@@ -76,7 +76,7 @@ joined
 ```{r facet-joined, warning=FALSE}
 library(ggplot2)
 joined %>%
-  ggplot( aes(x = index)) +
+  ggplot(aes(x = index)) +
   geom_line(aes(y = tstat)) +
   geom_line(aes(y = crit, col = "red")) +
   facet_grid(id ~ name + sig , scales = "free_y") +
@@ -86,7 +86,7 @@ joined %>%
 
 ```{r autoplot-fortify}
 fortify(tstats, cv) %>%
-  gather(id, tstat, -cv, -index) %>%
+  gather(id, tstat, -cv, -index, factor_key = TRUE) %>%
   ggplot(aes(x = index)) +
   geom_line(aes(y = tstat)) +
   geom_line(aes(y = cv, col = "red", linetype = "dotted")) +

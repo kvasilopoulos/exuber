@@ -37,32 +37,18 @@ is_identical <- function(x, y) {
   if (identical(x, y)) TRUE else FALSE
 }
 
+#' @importFrom rlang %||%
 is_mc <- function(y) {
-  mth <- get_method(y)
-  if (!is.null(mth)) {
-    if (mth == "Monte Carlo") TRUE else FALSE
-  }else {
-    FALSE
-  }
+  get_method(y) %||% FALSE == "Monte Carlo"
 }
 
 is_wb <- function(y) {
-  mth <- get_method(y)
-  if (!is.null(mth)) {
-    if (mth == "Wild Bootstrap") TRUE else FALSE
-  }else {
-    FALSE
-  }
+  get_method(y) %||% FALSE == "Wild Bootstrap"
+
 }
 
 is_sb <- function(y) {
-  # assert_class(y, "cv")
-  mth <- get_method(y)
-  if (!is.null(mth)) {
-    if (mth == "Sieve Bootstrap") TRUE else FALSE
-  }else {
-    FALSE
-  }
+  get_method(y) %||% FALSE == "Sieve Bootstrap"
 }
 
 # asserts ------ ------------------------------------------------------
@@ -91,24 +77,18 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
 }
 
 assert_between <- function(x, arg1, arg2) {
-  level <- deparse(substitute(x))
   if (!dplyr::between(x, arg1, arg2)) {
-    stop(sprintf(
-      "Argument '%s' should be a be between '%d' and '%d'",
-      level, arg1, arg2
-    ), call. = FALSE)
+    stop_glue("Argument '{x}' should be a be between '{arg1}' and '{arg2}'")
   }
 }
 
+#'@importFrom rlang enexpr
 assert_class <- function(x, klass) {
-  xstring <- deparse(substitute(x))
+  quas <- enexpr(x)
   if (!inherits(x, klass)) {
-    stop(sprintf("Argument '%s' should be of class '%s'", xstring, klass),
-         call. = FALSE
-    )
+    stop_glue("Argument '{quas}' should be of class '{klass}'")
   }
 }
-
 
 assert_na <- function(x) {
   if (any(is.na(x))) {
@@ -121,11 +101,13 @@ assert_match <- function(x, y, panel = FALSE) {
   attr_x <- attributes(x)
   attr_y <- attributes(y)
 
-  if (attr_x$minw != attr_y$minw)
+  if (attr_x$minw != attr_y$minw) {
     stop_glue("minimum window does not match")
+  }
 
-  if (attr_x$n != attr_y$n)
+  if (attr_x$n != attr_y$n) {
     stop_glue("sample size does not match")
+  }
 
   if (is_sb(y)) {
     if (attr_x$lag != attr_y$lag)

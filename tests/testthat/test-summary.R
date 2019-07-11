@@ -105,7 +105,7 @@ withr::with_options(
   })
 )
 
-index(radf_dta) <- seq(as.Date("1991/10/01"), by = "month", length.out = 100)
+index(radf_dta) <- seq(from = as.Date("1991/10/01"), by = "month", length.out = 100)
 
 withr::with_options(
   c(warn = 2),

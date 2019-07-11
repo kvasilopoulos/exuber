@@ -43,7 +43,7 @@ retrieve_crit <- function(x) {
   if (nr > 5 && nr <= length(crit)) {
     return(get("crit")[[nr]])
   } else {
-    stop("cannot provide MC critical values see help(crit)", call. = FALSE)
+    stop_glue("cannot provide MC critical values see help(crit)")
   }
 }
 

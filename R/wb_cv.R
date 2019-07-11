@@ -149,13 +149,13 @@ wb_cv <- function(data, minw = NULL, nboot = 1000,
 
   pr <- c(0.9, 0.95, 0.99)
 
-  adf_crit   <- apply(results$adf, 2, quantile, prob = pr) %>% t()
-  sadf_crit  <- apply(results$sadf, 2, quantile, prob = pr) %>% t()
-  gsadf_crit <- apply(results$gsadf, 2, quantile, prob = pr) %>% t()
+  adf_crit   <- apply(results$adf, 2, quantile, probs = pr) %>% t()
+  sadf_crit  <- apply(results$sadf, 2, quantile, probs = pr) %>% t()
+  gsadf_crit <- apply(results$gsadf, 2, quantile, probs = pr) %>% t()
 
-  badf_crit  <- apply(results$badf, c(1,3), quantile, prob = pr) %>%
+  badf_crit  <- apply(results$badf, c(1,3), quantile, probs = pr) %>%
     apply(c(1,3), t)
-  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, prob = pr) %>%
+  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, probs = pr) %>%
     apply(c(1,3), t)
 
   list(adf_cv = adf_crit,

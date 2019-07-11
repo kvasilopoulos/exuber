@@ -81,14 +81,14 @@ summary.radf <- function(object, cv = NULL, ...) {
     colnames(ret) <- c("t-stat", "90%", "95%", "99%")
   }
 
-  structure(
-    ret,
-    minw = get_minw(x),
-    lag = get_lag(x),
-    method = get_method(y),
-    iter = get_iter(y),
-    class = "summary.radf"
-  )
+
+ ret %>%
+   add_attr(minw = get_minw(x),
+            lag = get_lag(x),
+            method = get_method(y),
+            iter = get_iter(y)) %>%
+   add_class("summary.radf")
+
 }
 
 #' @importFrom glue glue
@@ -96,12 +96,12 @@ summary.radf <- function(object, cv = NULL, ...) {
 print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
                              ...) {
 
-  iter_char <- if (get_method(x) == "Monte Carlo") "nrep" else "nboot"
+  iter_char <- if (is_mc(x)) "nrep" else "nboot"
   cat_line()
   cat_rule(left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
            right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})"))
 
-  if (get_method(x) == "Sieve Bootstrap") {
+  if (is_sb(x)) {
     cat("\n Panel\n")
     pp <- x[1, , drop = FALSE]
     rownames(pp) <- "GSADF"

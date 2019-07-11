@@ -14,7 +14,7 @@
 \method{glance}{radf}(x, format = c("wide", "long"), ...)
 }
 \arguments{
-\item{x}{An `radf` object}
+\item{x}{An \code{radf} object}
 
 \item{format}{Long or wide format}
 
@@ -23,7 +23,7 @@
 \item{panel}{Either univariate or panel bsadf.}
 }
 \value{
-A [tibble::tibble()]
+A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
 Tidy an radf object
