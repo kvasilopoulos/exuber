@@ -29,10 +29,6 @@ Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
   - Uses the superseded package: 'doSNOW' 
   
   *(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)*
-  
-  - Found the following (possibly) invalid file URI:
-  URI: .github/CODE_OF_CONDUCT.md
-    From: README.md
 
 ## Reverse dependencies
 

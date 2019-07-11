@@ -4,9 +4,9 @@ options("exuber.show_progress" = FALSE)
 
 # Simulation -------------------------------------------------------------
 
-nn <- 400
+nn <- 500
 crit <- crit
-for (i in 301:nn) {
+for (i in 401:nn) {
   crit[[i]] <- mc_cv(i, seed = 123, opt_bsadf = "conservative")
   print(i)
 }
