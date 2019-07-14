@@ -52,7 +52,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       if (show_pb && !do_par)
         setTxtProgressBar(pb, i)
       if (dist_rad) {
-        w <- sample(c(-1, 1), nr - 1, replace = TRUE)
+        w <- sample(c(-1, 1), nr - 1, replace = TRUE, prob = 0.5)
       } else {
         w <- rnorm(nr - 1, 0, 1)
       }
