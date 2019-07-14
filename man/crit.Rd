@@ -22,7 +22,7 @@ crit
 \description{
 A dataset containing simulated critical values for up to 700 observations
 based on default minimum window. The critical values have been simulated and
-stored as data to save computation time for the user. Critical values can be also
-obtained with the \code{\link[=mc_cv]{mc_cv()}} function.
+stored as data to save computation time for the user. The stored ritical values
+can be obtained with the \code{\link[=mc_cv]{mc_cv()}} function, using the \code{seed = 123}.
 }
 \keyword{datasets}
