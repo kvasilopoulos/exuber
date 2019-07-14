@@ -7,7 +7,7 @@
 \usage{
 mc_cv(n, minw = NULL, nrep = 2000, seed = NULL,
   opt_badf = c("fixed", "asymptotic", "simulated"),
-  opt_bsadf = c("conventional", "conservative"))
+  opt_bsadf = c("conservative", "conventional"))
 
 mc_distr(n, minw = NULL, nrep = 2000, seed = NULL)
 }
