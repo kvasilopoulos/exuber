@@ -147,6 +147,18 @@
 <h1 class="page-header">
 <a href="#exuber-030" class="anchor"></a>exuber 0.3.0<small> Unreleased </small>
 </h1>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>Changed <code>opt_bsadf = conservative</code> for the simulated critical values (<code>crit</code>), also reduced the size of the <code>crit</code> from 700 to 600 due to package size restrictions.</li>
+<li>
+<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
+<li>
+<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been soft-deprecated.</li>
+<li>
+<code>autoplot_radf()</code> arranges automatically multiple graphs, to return to previous behavior we included the optional argument <code>arrange</code> which is set to TRUE by default.</li>
+</ul>
 <p>Three new functions have been added to simulate empirical distributions for:</p>
 <ul>
 <li>
@@ -158,17 +170,6 @@
 </ul>
 <p>and a function that can calculate the p-values <code><a href="../reference/calc_pvalue.html">calc_pvalue()</a></code> given the above distributions as argument.</p>
 <p>Also methods <code><a href="https://www.rdocumentation.org/packages/generics/topics/tidy">tidy()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> have been added to turn the object into a tidy tibble and draw a particular plot with ggplot2, respectively.</p>
-<div id="breaking-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
-<ul>
-<li>
-<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
-<li>
-<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been soft-deprecated.</li>
-<li>
-<code>autoplot_radf()</code> arranges automatically multiple graphs, to return to previous behavior we included the optional argument <code>arrange</code> which is set to TRUE by default.</li>
-</ul>
 </div>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
@@ -192,7 +193,7 @@
 <li>New improved progressbar with more succinct printing for <code><a href="../reference/wb_cv.html">wb_cv()</a></code>
 </li>
 <li>
-<code>seed</code> argument to functions that are using rng. Also the options to declare a global seed for reproducibility with the <code>option(exuber.global_seed = ###)</code>
+<code>seed</code> argument to functions that are using rng. Also the option to declare a global seed for reproducibility with the <code>option(exuber.global_seed = ###)</code>
 </li>
 </ul>
 </div>
@@ -201,7 +202,7 @@
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
-<code><a href="../reference/sb_cv.html">sb_cv()</a></code> and <code><a href="../reference/wb_cv.html">wb_cv()</a></code>now can parse data which contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing.</li>
+<code><a href="../reference/sb_cv.html">sb_cv()</a></code> and <code><a href="../reference/wb_cv.html">wb_cv()</a></code>now can parse data that contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing.</li>
 </ul>
 </div>
 </div>
@@ -296,7 +297,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, Enrique Martínez-García.</p>
+  <p>Developed by <a href='https://kvasilopoulos.netlify.com/'>Kostas Vasilopoulos</a>, <a href='https://sites.google.com/site/etpavlidis/'>Efthymios Pavlidis</a>, Simon Spavound, <a href='https://sites.google.com/view/emgeconomics'>Enrique Martínez-García</a>.</p>
 </div>
 
 <div class="pkgdown">

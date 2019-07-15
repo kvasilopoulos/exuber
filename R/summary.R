@@ -145,13 +145,11 @@ calc_pvalue <- function(x, dist = NULL) {
     dist <- mc_distr(attr(x, "n"))
   }
 
-  method <- get_method(dist)
-
   tbl_x <- x %>%
     when(is_sb(dist)
          ~ glance(.) %>%
            mutate(id = "panel", stat = "gsadf_panel") %>%
-           nest(panel, .key = value_x) ,
+           nest(panel, .key = value_x),
          ~ tidy(.) %>%
            gather(stat, value_x, -id) %>%
            nest(value_x, .key = value_x))
@@ -171,11 +169,12 @@ calc_pvalue <- function(x, dist = NULL) {
          ~ full_join(., tbl_dist, by = c("stat")))
 
   tbl_join_nested %>%
-    mutate(pval = map2_dbl(value_x, value_y, ~ mean(unlist(.x) < unlist(.y)))) %>%
+    mutate(pval = map2_dbl(value_x, value_y,
+                           ~ mean(unlist(.x) < unlist(.y)))) %>%
     select(id, stat, pval) %>%
     spread(stat, pval) %>%
     when(is_sb(dist)
-         ~ . ,
+         ~ .,
          ~ select(., id, adf, sadf, gsadf))
 
 }
