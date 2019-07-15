@@ -72,4 +72,3 @@ index.data.frame <- function(x, ...) {
   date_index <- purrr::detect_index(x, lubridate::is.Date)
   if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq_len(NROW(x))
 }
-

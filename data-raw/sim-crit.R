@@ -6,7 +6,7 @@ options("exuber.show_progress" = FALSE)
 
 # Simulation -------------------------------------------------------------
 
-nn <- 20
+nn <- 600
 crit <- list()
 for (i in 6:nn) {
   crit[[i]] <-  mc_cv(i, seed = 123)

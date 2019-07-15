@@ -62,7 +62,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 
   rng_state <- set_rng(seed = seed)
 
-  delta <- 1 + c * n^(-alpha)
+  delta <- 1 + c * n ^ (-alpha)
   y <- 100
 
   for (i in 2:n) {
@@ -158,7 +158,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 
   rng_state <- set_rng(seed = seed)
 
-  delta <- 1 + c * n^(-alpha)
+  delta <- 1 + c * n ^ (-alpha)
   y <- 100
 
   for (i in 2:n) {
@@ -217,7 +217,8 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #' @examples
 #' sim_blan(n = 100)
-sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL) {
+sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
+                     seed = NULL) {
 
   assert_positive_int(n)
   assert_between(pi, 0, 1)
@@ -294,7 +295,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
   assert_positive_int(n)
   stopifnot(alpha > 0)
   if (delta < 0 | delta > (1 + r) * alpha) {
-    stop_glue("alpha and delta should satisfy: 0 < delta < (1+r)*alpha",)
+    stop_glue("alpha and delta should satisfy: 0 < delta < (1+r)*alpha")
   }
   assert_between(pi, 0, 1)
   stopifnot(r >= 0)
@@ -302,7 +303,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
   rng_state <- set_rng(seed = seed)
 
   y <- rnorm(n, 0, tau)
-  u <- exp(y - tau^2 / 2)
+  u <- exp(y - tau ^ 2 / 2)
   theta <- rbinom(n, 1, pi)
   b <- b1
 
@@ -310,8 +311,8 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
     if (b[i] <= alpha) {
       b[i + 1] <- (1 + r) * b[i] * u[i + 1]
     } else {
-      b[i + 1] <- (delta + pi^(-1) * (1 + r) * theta[i + 1] * (b[i] -
-        (1 + r)^(-1) * delta)) * u[i + 1]
+      b[i + 1] <- (delta + pi ^ (-1) * (1 + r) * theta[i + 1] * (b[i] -
+        (1 + r) ^ (-1) * delta)) * u[i + 1]
     }
   }
 
@@ -388,10 +389,10 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   )
 
   if (log) {
-    g <- exp(mu + sigma^2 / 2) - 1
+    g <- exp(mu + sigma ^ 2 / 2) - 1
     pf <- (1 + g) * d / (r - g)
   } else {
-    pf <- mu * (1 + r) * r^(-2) + d / r
+    pf <- mu * (1 + r) * r ^ (-2) + d / r
   }
 
   if (return == "pf")  out <- pf else out <- d

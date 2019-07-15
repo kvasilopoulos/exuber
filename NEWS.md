@@ -2,8 +2,8 @@
 
 ## Breaking changes
 
-* Changed the opt_bsadf to conservative for the simulate critical values (`crit`),
-also reduce the size of the `crit` to 400 instead of 700.
+* Changed `opt_bsadf = conservative` for the simulated critical values (`crit`),
+also reduced the size of the `crit` from 700 to 600 due to package size restrictions.
 * `sim_dgp1()` and `sim_dgp2()` have been renamed to `sim_psy1()` and `sim_psy2()` 
 to better describe the origination of the dgp. 
 * `sim_dgp1()` and `sim_dgp2()` have been soft-deprecated.
@@ -34,12 +34,12 @@ a tidy tibble and draw a particular plot with ggplot2, respectively.
 * New printing output for the functions `summary()`, `diagnostics()` and 
 `datestamp()`.
 * New improved progressbar with more succinct printing for `wb_cv()`
-* `seed` argument to functions that are using rng. Also the options to declare
+* `seed` argument to functions that are using rng. Also the option to declare
 a global seed for reproducibility with the `option(exuber.global_seed = ###)`
 
 ## Bug Fixes
 
-* `sb_cv()` and `wb_cv()`now can parse data which contain a date-column. Similarly,
+* `sb_cv()` and `wb_cv()`now can parse data that contain a date-column. Similarly,
 to what `radf()` is doing.
 
 

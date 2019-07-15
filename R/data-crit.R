@@ -1,8 +1,8 @@
 #' Simulated Monte Carlo critical values
 #'
-#' A dataset containing simulated critical values for up to 700 observations
+#' A dataset containing simulated critical values for up to 600 observations
 #' based on default minimum window. The critical values have been simulated and
-#' stored as data to save computation time for the user. The stored ritical values
+#' stored as data to save computation time for the user. The stored critical values
 #' can be obtained with the \code{\link[=mc_cv]{mc_cv()}} function, using the `seed = 123`.
 #'
 #'
@@ -16,6 +16,11 @@
 #'
 #' }
 #' @source simulated from exuber package function \code{\link[=mc_cv]{mc_cv()}}
+#'
+#' @examples
+#' \dontrun{
+#' all.equal(crit[[50]], mc_cv(50, seed = 123))
+#' }
 "crit"
 
 #' @export
