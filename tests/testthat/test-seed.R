@@ -54,9 +54,3 @@ test_that("local options overwrite global", {
   )
   options(exuber.global_seed = NA)
 })
-
-
-
-
-
-

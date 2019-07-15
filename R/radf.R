@@ -126,7 +126,7 @@ psy_minw <- function(n) {
     n <- NROW(n)
   }
 
-  floor((0.01 + 1.8 / sqrt(n)) * n)
+  floor( (0.01 + 1.8 / sqrt(n)) * n)
 }
 
 #' @rdname psy_minw
@@ -154,7 +154,7 @@ psy_ds <- function(n, rule = 1, delta = 1) {
   if (rule == 1) {
     round(delta * log(n))
   } else if (rule == 2) {
-    round(delta*log(n)/n)
+    round(delta * log(n) / n)
   }
 
 }

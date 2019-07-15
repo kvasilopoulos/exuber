@@ -23,16 +23,16 @@ test_that("augment output",{
   expect_equal(names(augment(mc, format = "long")), c("key", "name", "sig", "crit"))
 
   id_nms <- c("psy1", "psy2", "evans", "div", "blan")
-  expect_equal(names(augment(wb)), c("key","index","sig", "name", id_nms))
+  expect_equal(names(augment(wb)), c("key", "index", "sig", "name", id_nms))
   expect_equal(names(augment(wb, format = "long")),
-               c("key", "index","sig", "name", "id", "crit"))
+               c("key", "index", "sig", "name", "id", "crit"))
   expect_equal(names(augment(sb)), c("key", "index", "sig", "bsadf_panel"))
   expect_equal(names(augment(sb, format = "long")),
                c("key", "index", "sig", "name", "crit"))
 
 })
 
-test_that("augment_join",{
+test_that("augment_join", {
   vec_na <- function(x) is.na(x) %>% all()
   expect_false(augment_join(radf_dta) %>% vec_na())
   expect_false(augment_join(radf_dta_lag1) %>% vec_na())
@@ -44,7 +44,7 @@ test_that("augment_join",{
   expect_error(augment_join(radf_dta_lag1, sb2))
 })
 
-test_that("glance output",{
+test_that("glance output", {
   # Glance
   expect_equal(names(glance(radf_dta)), "panel")
 })

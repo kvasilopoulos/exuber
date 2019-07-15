@@ -53,5 +53,3 @@ generics::glance
 #' @importFrom dplyr %>%
 #' @usage lhs \%>\% rhs
 NULL
-
-

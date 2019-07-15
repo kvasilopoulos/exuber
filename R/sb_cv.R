@@ -160,7 +160,7 @@ sb_cv <- function(data, minw = NULL, lag = 0,
     list(gsadf_panel_cv = gsadf_crit,
          bsadf_panel_cv = bsadf_crit) %>%
       inherit_attrs(results) %>%
-      add_class("sb_cv","cv")
+      add_class("sb_cv", "cv")
 
 }
 
@@ -175,5 +175,3 @@ sb_distr <- function(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL) {
     inherit_attrs(results) %>%
     add_class("sb_distr", "distr")
 }
-
-
