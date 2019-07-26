@@ -3,6 +3,7 @@ url: https://kvasilopoulos.github.io/exuber/
 
 template:
   params:
+    ganalytics: UA-129604855-4
     bootswatch: cosmo
     docsearch:
       api_key: 3da85b7c10c52498fbaeb87339345e28
