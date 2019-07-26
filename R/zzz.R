@@ -1,3 +1,6 @@
+
+.pkgenv <- new.env(parent = emptyenv())
+
 .onLoad <- function(libname, pkgname) {
   op <- options()
 
@@ -12,8 +15,34 @@
   toset <- !(names(op.exuber) %in% names(op))
   if (any(toset)) options(op.exuber[toset])
 
+  has_data <- requireNamespace("exuberdata", quietly = TRUE)
+  .pkgenv[["has_data"]] <- has_data
+
   invisible()
 }
+
+.onAttach <- function(libname, pkgname) {
+  if (!.pkgenv$has_data) {
+    msg <- paste(
+      "To use this package, you must install the",
+      "exuberdata package. To install that ",
+      "package, run `install.packages('exuberdata',",
+      "repos='https://kvasilopoulos.github.io/drat/',",
+      "type='source')`. "
+    )
+    packageStartupMessage(msg)
+  }
+}
+
+# TODO ui customization to download
+
+need_data <- function(has_data = .pkgenv$has_data) {
+  if (!has_data) {
+    msg <- paste("To use this package, you must have the exuberdata installed.")
+    stop(msg)
+  }
+}
+
 
 # Set Global Variables to avoid NOTES in cmdchecks
 if (getRversion() >= "2.15.1") {
