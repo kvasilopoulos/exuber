@@ -1,4 +1,6 @@
 
+
+
 "%ni%" <- Negate("%in%")
 
 # For simulation ----------------------------------------------------------
@@ -123,4 +125,24 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
 }
 
 
+# printing ----------------------------------------------------------------
+
+cat_line <- function(...) {
+  glue::glue_collapse(..., sep  = "")
+}
+
+
+width <- getOption("width")
+line <- paste(rep("-", width), collapse = "")
+
+rule <- function(left = "", right = "") {
+  res <- if (nchar(left) && nchar(right)) {
+    paste0()
+  }else if (nchar(left)) {
+
+  }else{
+    cat(line)
+  }
+  res
+}
 

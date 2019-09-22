@@ -4,7 +4,6 @@ parse_dt <- function(x) {
 }
 
 parse_dt.data.frame <- function(x) {
-
   date_index <- purrr::detect_index(x, lubridate::is.Date)
   if (as.logical(date_index)) {
     index <- x[, date_index, drop = TRUE]
@@ -13,12 +12,10 @@ parse_dt.data.frame <- function(x) {
   } else {
     index <- seq(1, NROW(x), 1)
   }
-
   list(data = x, index = index)
 }
 
 parse_dt.ts <- function(x) {
-
   sim_index <- seq(1, NROW(x), 1)
   if (identical(time(x), sim_index)) {
     index <- sim_index
@@ -34,7 +31,6 @@ parse_dt.ts <- function(x) {
     }
     index <- as.Date(index)
   }
-
   list(data = x, index = index)
 }
 
@@ -51,14 +47,11 @@ parse_dt.default <- function(x) {
 #' @importFrom purrr detect_index
 #' @importFrom stats is.ts
 parse_data <- function(x) {
-
   lst <- parse_dt(x)
   matx <- as.matrix(lst$data)
-
   if (is.null(colnames(matx))) {
     colnames(matx) <- paste0("series", seq(1, ncol(matx), 1))
   }
-
   matx %>%
     add_attr(index = lst$index)
 }
