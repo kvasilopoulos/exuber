@@ -25,13 +25,22 @@
   if (!.pkgenv$has_data) {
     msg <- paste(
       "To use this package, you must install the",
-      "exuberdata package. To install that ",
-      "package, run `install.packages('exuberdata',",
+      "{exuberdata} package. To install that ",
+      "package, run `install_exuberdata`or ",
+      "`install.packages('exuberdata',",
       "repos='https://kvasilopoulos.github.io/drat/',",
       "type='source')`. "
     )
     packageStartupMessage(msg)
   }
+}
+
+
+install_exuberdata <- function() {
+    install.packages(
+      'exuberdata',
+      repos = 'https://kvasilopoulos.github.io/drat/',
+      type = 'source')
 }
 
 # TODO ui customization to download

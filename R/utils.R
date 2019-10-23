@@ -1,5 +1,9 @@
 
-
+`%NA%` <- function (x, y) {
+  if (is.na(x))
+    y
+  else x
+}
 
 "%ni%" <- Negate("%in%")
 
@@ -41,6 +45,7 @@ set_rng <- function(seed) {
 # get crit data --------------------------------------------------------
 
 retrieve_crit <- function(x) {
+  need_data()
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(crit)) {
     return(get("crit")[[nr]])
@@ -127,22 +132,23 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
 
 # printing ----------------------------------------------------------------
 
-cat_line <- function(...) {
-  glue::glue_collapse(..., sep  = "")
-}
+# TODO custom printing function get rid of cli
 
-
-width <- getOption("width")
-line <- paste(rep("-", width), collapse = "")
-
-rule <- function(left = "", right = "") {
-  res <- if (nchar(left) && nchar(right)) {
-    paste0()
-  }else if (nchar(left)) {
-
-  }else{
-    cat(line)
-  }
-  res
-}
+# cat_line <- function(...) {
+#   glue::glue_collapse(..., sep  = "")
+# }
+#
+# width <- getOption("width")
+# line <- paste(rep("-", width), collapse = "")
+#
+# rule <- function(left = "", right = "") {
+#   res <- if (nchar(left) && nchar(right)) {
+#     paste0()
+#   }else if (nchar(left)) {
+#
+#   }else{
+#     cat(line)
+#   }
+#   res
+# }
 

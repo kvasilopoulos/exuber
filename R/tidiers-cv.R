@@ -166,7 +166,7 @@ augment.wb_cv <- function(x, format = c("wide", "long"), ...) {
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
-        gather(id, crit, -key, -index, -sig, -name)
+        gather(id, crit, -key, -index, -sig, -name, factor_key = TRUE)
     }
     tbl_cv
 }
@@ -182,14 +182,14 @@ augment.sb_cv <- function(x, format = c("wide", "long"), ...) {
       as_tibble() %>%
       add_column(index = index(x, trunc = TRUE)) %>%
       add_key(x) %>%
-      gather(sig, bsadf_panel, -index, -key) %>%
+      gather(sig, bsadf_panel, -index, -key, factor_key = TRUE) %>%
       mutate(sig = sub("%$", "", sig) %>% as.factor()) %>%
       select(key, index, everything())
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
         rename(panel = bsadf_panel) %>%
-        gather(name, crit, -sig, -index, -key) %>%
+        gather(name, crit, -sig, -index, -key, factor_key = TRUE) %>%
         select(key, index, sig, name, crit)
     }
   tbl_cv
