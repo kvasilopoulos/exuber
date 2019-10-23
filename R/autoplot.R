@@ -352,24 +352,21 @@ print.ggarrange <- function(x, newpage = grDevices::dev.interactive(), ...) {
 autoplot.datestamp <- function(object, ...) {
 
   dating <- index(object)
-  scale <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
+  scale_custom <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
 
   ggplot(object, aes_string(colour = "id")) +
-    geom_segment(aes_string(
-      x = "Start",
-      xend = "End",
-      y = "id",
-      yend = "id"
-    ),
-    size = 7
-    ) +
-    theme_bw() + labs(x = "", y = "", title = "") +
-    scale(limits = c(dating[1L], dating[length(dating)])) +
+    geom_segment(
+      aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7) +
+    theme_bw() +
+    scale_custom(limits = c(dating[1L], dating[length(dating)])) +
     theme(
-      panel.grid.major.y = element_blank(),
+      plot.title = element_blank(),
+      axis.title = element_blank(),
+      axis.text.y = element_text(face = "bold", size = 8, hjust = 0),
       legend.position = "none",
-      plot.margin = margin(0.5, 1, 0, 0, "cm"),
-      axis.text.y = element_text(face = "bold", size = 8, hjust = 0)
+      panel.grid.major.y = element_blank(),
+      plot.margin = margin(0.5, 1, 0, 0, "cm")
+
     )
 }
 
@@ -381,15 +378,6 @@ autoplot.datestamp <- function(object, ...) {
 #' @importFrom tibble add_column
 #' @export
 fortify.datestamp <- function(model, data, ...) {
-
-  nr <- map_dbl(model, nrow)
-
-  tbl_ds <- reduce(model, bind_rows) %>%
-    add_column("id" = rep(names(model), nr)) %>%
-    mutate(id = as.factor(id)) %>%
-    select(id, everything()) %>%
+  bind_rows(model, .id = "id") %>%
     as_tibble()
-
-  tbl_ds %>%
-    add_class("datestamp")
 }

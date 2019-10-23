@@ -142,7 +142,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' # Simulate distribution
 #'wb_distr(dta)
 #' }
-wb_cv <- function(data, minw = NULL, nboot = 1000,
+wb_cv <- function(data, minw = NULL, nboot = 1000L,
                   dist_rad = FALSE, seed = NULL) {
 
   results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
@@ -171,7 +171,7 @@ wb_cv <- function(data, minw = NULL, nboot = 1000,
 #' @rdname wb_cv
 #' @inheritParams wb_cv
 #' @export
-wb_distr <- function(data, minw = NULL, nboot = 1000,
+wb_distr <- function(data, minw = NULL, nboot = 1000L,
                     dist_rad = FALSE, seed = NULL) {
 
   results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)

@@ -15,7 +15,6 @@ augment_join <- function(x, y = NULL) {
   }
   assert_class(y, "cv")
   assert_match(x, y)
-
   if (is_sb(y)) {
     tbl <- inner_join(
       augment(x, "long", panel = TRUE),
