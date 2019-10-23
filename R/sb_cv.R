@@ -147,8 +147,8 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
 #'# Simulate distribution
 #'sb_dist(dta, lag = 1)
 #' }
-sb_cv <- function(data, minw = NULL, lag = 0,
-                  nboot = 1000, seed = NULL) {
+sb_cv <- function(data, minw = NULL, lag = 0L,
+                  nboot = 1000L, seed = NULL) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
@@ -167,7 +167,7 @@ sb_cv <- function(data, minw = NULL, lag = 0,
 #' @rdname sb_cv
 #' @inheritParams sb_cv
 #' @export
-sb_distr <- function(data, minw = NULL, lag = 0, nboot = 1000, seed = NULL) {
+sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 1000L, seed = NULL) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 

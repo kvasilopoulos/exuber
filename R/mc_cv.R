@@ -113,7 +113,7 @@ mc_ <- function(n, minw, nrep, seed) {
 #' mdist <- mc_distr(n = 100)
 #' autoplot(mdist)
 #' }
-mc_cv <- function(n, minw = NULL, nrep = 2000, seed = NULL,
+mc_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL,
                   opt_badf = c("fixed", "asymptotic", "simulated"),
                   opt_bsadf = c("conservative", "conventional")) {
 
@@ -166,7 +166,7 @@ mc_cv <- function(n, minw = NULL, nrep = 2000, seed = NULL,
 #' @rdname mc_cv
 #' @inheritParams mc_cv
 #' @export
-mc_distr <- function(n, minw = NULL, nrep = 2000, seed = NULL) {
+mc_distr <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 
   results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
 

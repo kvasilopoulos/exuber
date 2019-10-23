@@ -36,7 +36,7 @@
 #' # For lag = 1 and minimum window = 20
 #' rfd <- radf(dta, minw = 20, lag = 1)
 #' }
-radf <- function(data, minw = NULL, lag = 0) {
+radf <- function(data, minw = NULL, lag = 0L) {
 
   x <- parse_data(data)
 
