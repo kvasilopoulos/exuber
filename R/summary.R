@@ -42,9 +42,7 @@
 #' @export
 summary.radf <- function(object, cv = NULL, ...) {
 
-  if (is.null(cv)) {
-    cv <- retrieve_crit(object)
-  }
+  cv <- cv  %||% retrieve_crit(object)
   assert_class(cv, "cv")
   assert_match(object, cv)
 
@@ -100,13 +98,13 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
   cat_line()
   cat_rule(left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
            right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})"))
-
   if (is_sb(x)) {
     cat("\n Panel\n")
     pp <- x[1, , drop = FALSE]
     rownames(pp) <- "GSADF"
     print(format(pp, digits = digits), print.gap = 2L, quote = FALSE)
   } else {
+    cat_line()
     for (i in seq_along(x)) {
       cat("\n", names(x)[i], "\n")
       print(format(x[[i]], digits = digits), print.gap = 2L)
@@ -180,6 +178,18 @@ calc_pvalue <- function(x, dist = NULL) {
 }
 
 
+#' @export
+diagnostics <- function(object, ...) {
+  UseMethod("diagnostics")
+}
+
+#' @export
+datestamp <- function(object, ...) {
+  UseMethod("datestamp")
+}
+
+
+
 #' Diagnostics
 #'
 #' Finds the series that reject the null for at the 5\% significance level.
@@ -197,7 +207,7 @@ calc_pvalue <- function(x, dist = NULL) {
 #'
 #' @importFrom dplyr case_when
 #' @export
-diagnostics <- function(object, cv = NULL, option = c("gsadf", "sadf")) {
+diagnostics.radf <- function(object, cv = NULL, option = c("gsadf", "sadf")) {
 
   assert_class(object, "radf")
   if (is.null(cv)) {
@@ -357,7 +367,7 @@ print.diagnostics <- function(x, ...) {
 #' @importFrom dplyr filter
 #' @export
 #'
-datestamp <- function(object, cv = NULL, option = c("gsadf", "sadf"),
+datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
                       min_duration = 0) {
 
   assert_class(object, "radf")
@@ -484,7 +494,7 @@ datestamp <- function(object, cv = NULL, option = c("gsadf", "sadf"),
 }
 
 #' @export
-print.datestamp <- function(x, ...) {
+print.datestamp.radf <- function(x, ...) {
 
   cli::cat_line()
   cli::cat_rule(left = glue("Datestamp (min_duration = {get_min_dur(x)})"),
