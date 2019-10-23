@@ -16,20 +16,9 @@
 ggarrange(...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=radf]{radf()}}.}
-
-\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
-
 \item{include}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5\% significance level.}
 
 \item{select}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
-
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is
-"gsadf".}
-
-\item{min_duration}{The minimum duration of an explosive period for it to be
-reported. Default is 0.}
 
 \item{arrange}{If FALSE returns a list of ggplot2 object, otherwise it grobs the plots on a single page.}
 
