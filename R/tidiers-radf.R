@@ -61,7 +61,6 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
   stopifnot(is.logical(panel))
 
   if (panel) {
-
     tbl_radf <- tibble(
       index = index(x, trunc = TRUE),
       "panel" = pluck(x, "bsadf_panel")
@@ -72,11 +71,9 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
     if (format == "long") {
       tbl_radf <-
         tbl_radf %>%
-        gather(name, tstat, -index, -key)
+        gather(name, tstat, -index, -key, factor_key = TRUE)
     }
-
   }else{
-
     tbl_radf <- x %>%
       pluck("badf") %>%
       as_tibble() %>%
@@ -84,7 +81,7 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
       mutate(
         index = index(x, trunc = TRUE)
       ) %>%
-      gather(id, badf, -index, -key) %>%
+      gather(id, badf, -index, -key, factor_key = TRUE) %>%
       bind_cols(
         x %>%
           pluck("bsadf") %>%
@@ -101,9 +98,7 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
         arrange(id, name)
     }
   }
-
   tbl_radf
-
 }
 
 #' @rdname tidy.radf
@@ -117,7 +112,6 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 glance.radf <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
-
   tbl_radf <- x %>%
     pluck("gsadf_panel") %>%
     enframe(name = NULL) %>%
@@ -128,9 +122,7 @@ glance.radf <- function(x, format = c("wide", "long"), ...) {
       tbl_radf %>%
       gather(name, tstat)
   }
-
   tbl_radf
-
 }
 
 

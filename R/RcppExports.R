@@ -4,3 +4,4 @@
 rls_gsadf <- function(yxmat, min_win, lag = 0L) {
     .Call(`_exuber_rls_gsadf`, yxmat, min_win, lag)
 }
+
