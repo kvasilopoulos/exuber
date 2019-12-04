@@ -1,6 +1,12 @@
 
+idx_seq <- function(x) seq(1, NROW(x), 1)
+
 parse_dt <- function(x) {
   UseMethod("parse_dt")
+}
+
+parse_dt.default <- function(x) {
+  stop_glue("Unsupported class")
 }
 
 parse_dt.data.frame <- function(x) {
@@ -10,7 +16,7 @@ parse_dt.data.frame <- function(x) {
     message(glue("Using `{colnames(x)[date_index]}` as index variable."))
     x <- x[, -date_index, drop = FALSE]
   } else {
-    index <- seq(1, NROW(x), 1)
+    index <- idx_seq(x)
   }
   list(data = x, index = index)
 }
@@ -35,12 +41,9 @@ parse_dt.ts <- function(x) {
 }
 
 parse_dt.numeric <- function(x) {
-  list(data = x, index = seq(1, NROW(x), 1))
+  list(data = x, index = idx_seq(x))
 }
 
-parse_dt.default <- function(x) {
-  stop_glue("Unsupported class")
-}
 
 #' @importFrom stats frequency time
 #' @importFrom lubridate date_decimal round_date

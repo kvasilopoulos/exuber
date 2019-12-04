@@ -13,11 +13,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Plotting with exuber">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Plotting with exuber">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png">
 <meta name="twitter:card" content="summary">
@@ -65,9 +67,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/plotting.html">Plotting with exuber</a>
-    </li>
-    <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
   </ul>
@@ -84,7 +83,7 @@
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -98,25 +97,26 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Plotting with exuber</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/master/../../r/exuber/vignettes/plotting.Rmd"><code>../../r/exuber/vignettes/plotting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/master/vignettes/plotting.Rmd"><code>vignettes/plotting.Rmd</code></a></small>
       <div class="hidden name"><code>plotting.Rmd</code></div>
 
     </div>
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(exuber)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/options">options</a></span>(<span class="dt">exuber.show_progress =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(exuber)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">exuber.show_progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
 <a class="sourceLine" id="cb2-2" title="2">dta &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
 <a class="sourceLine" id="cb2-3" title="3">  <span class="dt">sim_psy1 =</span> <span class="kw"><a href="../reference/sim_psy1.html">sim_psy1</a></span>(<span class="dv">100</span>),</a>
 <a class="sourceLine" id="cb2-4" title="4">  <span class="dt">sim_psy2 =</span> <span class="kw"><a href="../reference/sim_psy2.html">sim_psy2</a></span>(<span class="dv">100</span>),</a>
@@ -128,7 +128,7 @@
 <a class="sourceLine" id="cb2-10" title="10">tstats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(dta, <span class="dt">lag =</span> <span class="dv">1</span>)</a>
 <a class="sourceLine" id="cb2-11" title="11">  </a>
 <a class="sourceLine" id="cb2-12" title="12"><span class="co"># Critical Values ~ Conservative</span></a>
-<a class="sourceLine" id="cb2-13" title="13">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mc_cv.html">mc_cv</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(dta), <span class="dt">opt_bsadf =</span> <span class="st">"conservative"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-13" title="13">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mc_cv.html">mc_cv</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(dta), <span class="dt">opt_bsadf =</span> <span class="st">"conservative"</span>)</a></code></pre></div>
 <div id="autoplot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#autoplot" class="anchor"></a>Autoplot</h2>
@@ -137,76 +137,66 @@
 <div id="modify-plots-separately" class="section level3">
 <h3 class="hasAnchor">
 <a href="#modify-plots-separately" class="anchor"></a>Modify plots separately</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">plots &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(tstats, cv, <span class="dt">arrange =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3">mod_plot &lt;-<span class="st"> </span>plots[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">"index"</span>, <span class="dt">y =</span> <span class="st">"Statistic"</span>, <span class="dt">title =</span> <span class="st">"Simulation of a single-bubble process"</span>)</a>
-<a class="sourceLine" id="cb4-5" title="5">mod_plot</a></code></pre></div>
-<p><img src="plotting_files/figure-html/autoplot-modify-1.png" width="960"> ### Reconstruct</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">plots[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>mod_plot</a>
-<a class="sourceLine" id="cb5-2" title="2">plots[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>] <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/autoplot.radf.html">ggarrange</a></span>()</a></code></pre></div>
-<p><img src="plotting_files/figure-html/reconstruct-1.png" width="960"></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">plots &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(tstats, cv)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co"># </span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co"># mod_plot &lt;- plots[[1]] + </span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#   labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co"># mod_plot</span></a></code></pre></div>
+<!-- ### Reconstruct -->
+<!-- ```{r reconstruct} -->
+<!-- # plots[[1]] <- mod_plot -->
+<!-- # plots[1:2] %>%  -->
+<!-- #   ggarrange() -->
+<!-- ``` -->
+<!-- ## Custom plotting -->
+<!-- ```{r join-sets} -->
+<!-- joined <- augment_join(tstats, cv) -->
+<!-- joined  -->
+<!-- ``` -->
+<!-- ```{r facet-joined, warning=FALSE} -->
+<!-- library(ggplot2) -->
+<!-- joined %>% -->
+<!--   ggplot(aes(x = index)) + -->
+<!--   geom_line(aes(y = tstat)) + -->
+<!--   geom_line(aes(y = crit, col = "red")) + -->
+<!--   facet_grid(id ~ name + sig , scales = "free_y") + -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- ```{r autoplot-fortify} -->
+<!-- <!-- fortify(tstats, cv) %>% -->
+<p>–&gt; <!-- <!--   gather(id, tstat, -cv, -index, factor_key = TRUE) %>% --> –&gt; <!-- <!--   ggplot(aes(x = index)) + --> –&gt; <!-- <!--   geom_line(aes(y = tstat)) + --> –&gt; <!-- <!--   geom_line(aes(y = cv, col = "red", linetype = "dotted")) + --> –&gt; <!-- <!--   facet_wrap(~ id , scales = "free_y") + --> –&gt; <!-- <!--   theme_bw() + theme(strip.background = element_blank(), --> –&gt; <!-- <!--                      legend.position = "none") + --> –&gt; <!-- <!--   labs(x = "", y = "") --> –&gt; <!-- ``` --></p>
+<!-- ```{r fortify-autoplot-datestamp, eval=FALSE, include=FALSE} -->
+<!-- bind_cols( -->
+<!--   fortify(tstats, cv) %>% -->
+<!--     gather(id, tstat, -index), -->
+<!--   fortify(tstats, cv = wb_cv(dta)) %>% -->
+<!--     gather(id, crit, -psy1, -psy2, -index) -->
+<!-- ) %>% -->
+<!--   select(index, id, crit, tstat) %>% -->
+<!--   ggplot(aes(x = index)) + -->
+<!--   geom_line(aes(y = tstat)) + -->
+<!--   geom_line(aes(y = crit, color = "red"), linetype = "dashed") + -->
+<!--   facet_wrap(~ id, ncol = 1) + -->
+<!--   theme_bw() -->
+<!-- ``` -->
+<!-- # Distributions -->
+<!-- ```{r distributions} -->
+<!-- dist <- mc_distr(n = 300) -->
+<!-- autoplot(dist) -->
+<!-- ``` -->
+<!-- # Just for fun -->
+<!-- ```{r ecdf} -->
+<!-- library(tidyr) -->
+<!-- dist %>% -->
+<!--   tidy() %>% -->
+<!--   rename_all(~ stringr::str_to_upper(.)) %>% -->
+<!--   gather(Statistic, value, factor_key = TRUE) %>% -->
+<!--   ggplot(aes(value, color = Statistic)) + -->
+<!--   stat_ecdf() + -->
+<!--   ggtitle("Empirical Cumulative Distribution Function") + -->
+<!--   geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw() -->
+<!-- ``` -->
 </div>
-</div>
-<div id="custom-plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#custom-plotting" class="anchor"></a>Custom plotting</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">joined &lt;-<span class="st"> </span><span class="kw"><a href="../reference/augment_join.html">augment_join</a></span>(tstats, cv)</a>
-<a class="sourceLine" id="cb6-2" title="2">joined </a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; # A tibble: 1,920 x 6</span></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;    index id       name   tstat sig     crit</span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;  1    21 sim_blan badf  -0.974 0.9   0.0203</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;  2    21 sim_blan badf  -0.974 0.95  0.0203</span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;  3    21 sim_blan badf  -0.974 0.99  0.0203</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;  4    22 sim_blan badf  -2.20  0.9   0.0204</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;  5    22 sim_blan badf  -2.20  0.95  0.0204</span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;  6    22 sim_blan badf  -2.20  0.99  0.0204</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;  7    23 sim_blan badf  -2.18  0.9   0.0205</span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;  8    23 sim_blan badf  -2.18  0.95  0.0205</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;  9    23 sim_blan badf  -2.18  0.99  0.0205</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 10    24 sim_blan badf  -2.25  0.9   0.0205</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; # ... with 1,910 more rows</span></a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb7-2" title="2">joined <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> index)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> tstat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> crit, <span class="dt">col =</span> <span class="st">"red"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(id <span class="op">~</span><span class="st"> </span>name <span class="op">+</span><span class="st"> </span>sig , <span class="dt">scales =</span> <span class="st">"free_y"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
-<p><img src="plotting_files/figure-html/facet-joined-1.png" width="960"></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify</a></span>(tstats, cv) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw">gather</span>(id, tstat, <span class="op">-</span>cv, <span class="op">-</span>index, <span class="dt">factor_key =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> index)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> tstat)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> cv, <span class="dt">col =</span> <span class="st">"red"</span>, <span class="dt">linetype =</span> <span class="st">"dotted"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>id , <span class="dt">scales =</span> <span class="st">"free_y"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb8-8" title="8">                     <span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">""</span>, <span class="dt">y =</span> <span class="st">""</span>)</a></code></pre></div>
-<p><img src="plotting_files/figure-html/autoplot-fortify-1.png" width="960"></p>
-</div>
-<div id="distributions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#distributions" class="anchor"></a>Distributions</h1>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">dist &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mc_cv.html">mc_distr</a></span>(<span class="dt">n =</span> <span class="dv">300</span>)</a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(dist)</a></code></pre></div>
-<p><img src="plotting_files/figure-html/distributions-1.png" width="960"></p>
-</div>
-<div id="just-for-fun" class="section level1">
-<h1 class="hasAnchor">
-<a href="#just-for-fun" class="anchor"></a>Just for fun</h1>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a>
-<a class="sourceLine" id="cb10-2" title="2">dist <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/generics/topics/tidy">tidy</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="st">  </span><span class="kw">rename_all</span>(<span class="op">~</span><span class="st"> </span>stringr<span class="op">::</span><span class="kw"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span>(.)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="st">  </span><span class="kw">gather</span>(Statistic, value, <span class="dt">factor_key =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(value, <span class="dt">color =</span> Statistic)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-7" title="7"><span class="st">  </span><span class="kw">stat_ecdf</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Empirical Cumulative Distribution Function"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="fl">0.95</span>, <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
-<p><img src="plotting_files/figure-html/ecdf-1.png" width="960"></p>
 </div>
   </div>
 
@@ -216,9 +206,6 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#autoplot">Autoplot</a></li>
-      <li><a href="#custom-plotting">Custom plotting</a></li>
-      <li><a href="#distributions">Distributions</a></li>
-      <li><a href="#just-for-fun">Just for fun</a></li>
       </ul>
 </div>
       </div>
@@ -226,13 +213,15 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://kvasilopoulos.netlify.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics">Enrique Martínez-García</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 

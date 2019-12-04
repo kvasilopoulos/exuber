@@ -1,3 +1,25 @@
+# exuber 0.4.0
+
+## Removed critical values
+
+* Due to scalability issues we removed the critical values from the package, but
+instead we created a new package called `exuberdata` that the through package {drat}
+can install the critical values with `install.packages('exuberdata', repos = 'https://kvasilopoulos.github.io/drat/', type = 'source')` or through `install_exuberdata` 
+function that is provided in {exuber}.
+* The critical values have been extended to 1000 observations and include both 
+`coventional` and `conservative` critical values.
+
+## Breaking changes
+
+* Changed the name of the function `col_names` into `series_names`. `col_names` is now defunct.
+* `autoplot` has been refactored and new features have been added for more flexibility and 
+conformity with the {ggplot} mindset.
+
+## Impovements
+
+* The package {zoo} has been used as a dependecy to import the method `index`. 
+We made the decision to remove {zoo} and create a new method `index` internally.
+
 # exuber 0.3.0
 
 ## Breaking changes

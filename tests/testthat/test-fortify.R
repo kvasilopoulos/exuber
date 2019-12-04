@@ -1,5 +1,7 @@
 context("fortify")
 
+skip("Removed fortify")
+
 test_that("basic", {
   fort <- radf_dta %>% fortify()
   expect_equal(col_names(fort), c("index", diagnostics(radf_dta)$accepted, "cv"))

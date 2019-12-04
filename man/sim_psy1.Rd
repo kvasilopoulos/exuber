@@ -4,8 +4,15 @@
 \alias{sim_psy1}
 \title{Simulation of a single-bubble process}
 \usage{
-sim_psy1(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1, alpha = 0.6,
-  sigma = 6.79, seed = NULL)
+sim_psy1(
+  n,
+  te = 0.4 * n,
+  tf = 0.15 * n + te,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
