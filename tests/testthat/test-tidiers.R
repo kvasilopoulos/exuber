@@ -21,7 +21,6 @@ test_that("augment output",{
                c("key", "index", "id", "name", "tstat"))
   expect_equal(names(augment(mc)), c("key", "sig", "badf", "bsadf"))
   expect_equal(names(augment(mc, format = "long")), c("key", "name", "sig", "crit"))
-
   id_nms <- c("psy1", "psy2", "evans", "div", "blan")
   expect_equal(names(augment(wb)), c("key", "index", "sig", "name", id_nms))
   expect_equal(names(augment(wb, format = "long")),
@@ -34,8 +33,8 @@ test_that("augment output",{
 
 test_that("augment_join", {
   vec_na <- function(x) is.na(x) %>% all()
-  expect_false(augment_join(radf_dta) %>% vec_na())
-  expect_false(augment_join(radf_dta_lag1) %>% vec_na())
+  expect_false(augment_join(radf_dta, mc) %>% vec_na())
+  expect_false(augment_join(radf_dta_lag1, mc) %>% vec_na())
   expect_false(augment_join(radf_dta_lag1, mc) %>% vec_na())
   expect_false(augment_join(radf_dta_lag1, wb) %>% vec_na())
   expect_false(augment_join(radf_dta_lag1, sb1) %>% vec_na())

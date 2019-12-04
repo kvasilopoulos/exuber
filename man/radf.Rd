@@ -4,7 +4,7 @@
 \alias{radf}
 \title{Recursive Augmented Dickey-Fuller Test}
 \usage{
-radf(data, minw = NULL, lag = 0)
+radf(data, minw = NULL, lag = 0L)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.

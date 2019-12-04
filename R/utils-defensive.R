@@ -97,18 +97,14 @@ assert_na <- function(x) {
 }
 
 assert_match <- function(x, y, panel = FALSE) {
-
   attr_x <- attributes(x)
   attr_y <- attributes(y)
-
   if (attr_x$minw != attr_y$minw) {
     stop_glue("minimum window does not match")
   }
-
   if (attr_x$n != attr_y$n) {
     stop_glue("sample size does not match")
   }
-
   if (is_sb(y)) {
     if (attr_x$lag != attr_y$lag)
       stop_glue("lag value does not match")

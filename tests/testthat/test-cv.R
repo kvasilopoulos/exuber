@@ -1,8 +1,9 @@
 context("cv")
 
-test_that("crit as data", {
+test_that("exuberdata::crit as data", {
+  skip_on_cran()
+  crit <- exuberdata::crit
   expect_error(capture.output(print(crit)), NA)
-
   expect_error(crit, NA)
   expect_error(crit[[100]], NA)
   expect_error(radf_dta %>% retrieve_crit(), NA)

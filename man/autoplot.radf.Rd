@@ -2,58 +2,68 @@
 % Please edit documentation in R/autoplot.R
 \name{autoplot.radf}
 \alias{autoplot.radf}
-\alias{fortify.radf}
-\alias{ggarrange}
+\alias{shade}
 \title{Plotting and tidying radf objects}
 \usage{
-\method{autoplot}{radf}(object, cv = NULL, include = FALSE,
-  select = NULL, option = c("gsadf", "sadf"), min_duration = 0,
-  arrange = TRUE, ...)
+\method{autoplot}{radf}(
+  object,
+  cv = NULL,
+  include_rejected = FALSE,
+  select_series = NULL,
+  option = c("gsadf", "sadf"),
+  shade_opt = shade(),
+  ...
+)
 
-\method{fortify}{radf}(model, data, cv = NULL, include = FALSE,
-  select = NULL, option = c("gsadf", "sadf"), ...)
-
-ggarrange(...)
+shade(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...)
 }
 \arguments{
-\item{include}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5\% significance level.}
+\item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
-\item{select}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
+\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
+\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
-\item{arrange}{If FALSE returns a list of ggplot2 object, otherwise it grobs the plots on a single page.}
+\item{include_rejected}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5\\% significance level.}
 
-\item{...}{further arguments passed to method. Specify common characteristics like \code{ggplot2::xlab},
-that are later passed to ggplot chain. For multiple changes, the input in the argument should be in
-a list.}
+\item{select_series}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
 
-\item{model}{An object of class \code{\link[=radf]{radf()}}.}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is}
 
-\item{data}{original dataset, not used (required by generic
-\code{\link[=fortify]{fortify()}} method).}
+\item{shade_opt}{options for the shading of the graph, usually used through \code{shade} functions.}
+
+\item{...}{further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
+
+\item{min_duration}{the minimum duration.}
+
+\item{shade_color}{the shade color that indicates the exuberance periods. Defaults
+to grey70.}
+
+\item{opacity}{the opacity of the shade color aka alpha.}
 }
 \description{
-\code{autoplot.radf} takes an \code{radf} object and returns a (list of ) ggplot2 objects.
-\code{fortify.radf} takes an \code{radf} object and converts it into a data.frame.
-\code{ggarrange} is a wrapper of \code{\link[=gridExtra]{arrangeGrob()}}, which can be
-used directly after autoplot to place grobs on a page.
-}
-\details{
-\code{arrange} offers flexibility to the user by specifying the desired output. If
-\code{arrange = FALSE}, the individual plots can be modified after creation the then rearranged with
-the \code{ggarrange} function into a single plot.
+\code{autoplot.radf} takes an \code{radf} object and returns a facetted ggplot object.
+\code{shade}
 }
 \examples{
 \donttest{
-dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+autoplot(radf_dta)
 
-dta \%>\%
-  radf() \%>\%
-  autoplot(ncol = 2)
+# Modify facet_wrap options through ellipsis
+autoplot(radf_dta, scales = "free", direction  = "v")
 
+autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3))
 
-# For custom plotting with ggplot2
-dta \%>\%
-  radf() \%>\%
-  fortify()
+# Change color, size or linetype
+autoplot(radf_dta) +
+  scale_color_manual(values = c("black", "black")) +
+  scale_size_manual(values = c(1.2, 1))
+  scale_linetype_manual(values = c("solid", "solid"))
+
+# Change names through ellipsis
+custom_labels <- c("psy1" = "new_name_for_psy1", "psy2" = "new_name_for_psy2")
+autoplot(radf_dta, labeller = labeller(id = as_labeller(custom_labels)))
+
+# Change Theme options
 }
+
 }

@@ -4,8 +4,7 @@
 \alias{sim_blan}
 \title{Simulation of a Blanchard (1979) bubble process}
 \usage{
-sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
-  seed = NULL)
+sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}
