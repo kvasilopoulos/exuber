@@ -1,12 +1,3 @@
-#' @importFrom zoo index
-#' @seealso \code{\link[=index.radf]{index.radf()}}
-#' @export
-zoo::index
-
-#' @importFrom zoo index<-
-#' @export
-zoo::`index<-`
-
 #' @importFrom ggplot2 fortify
 #' @seealso \code{\link[=fortify.radf]{fortify.radf()}}
 #' \code{\link[=fortify.datestamp]{fortify.datestamp()}}
@@ -18,7 +9,6 @@ ggplot2::fortify
 #' \code{\link[=autoplot.datestamp]{autoplot.datestamp()}}
 #' @export
 ggplot2::autoplot
-
 
 #' @importFrom generics tidy
 #' @seealso \code{\link[=tidy.radf]{tidy.radf()}}

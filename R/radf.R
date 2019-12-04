@@ -85,7 +85,7 @@ radf <- function(data, minw = NULL, lag = 0L) {
     n = nrow(x),
     minw = minw,
     lag = lag,
-    col_names = colnames(x),
+    series_names = colnames(x),
     class = "radf"
   )
 

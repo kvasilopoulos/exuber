@@ -4,8 +4,15 @@
 \alias{sim_div}
 \title{Simulation of dividends}
 \usage{
-sim_div(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d"),
-  seed = NULL)
+sim_div(
+  n,
+  mu,
+  sigma,
+  r = 0.05,
+  log = FALSE,
+  output = c("pf", "d"),
+  seed = NULL
+)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}

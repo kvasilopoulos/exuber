@@ -32,7 +32,13 @@ reference:
       - wb_cv
       - sb_cv
       - calc_pvalue
-      - crit
+
+
+  - title: Report
+    contents:
+      - summary.radf
+      - diagnostics.radf
+      - datestamp.radf
 
   - title: Simulation
     contents:
@@ -41,12 +47,6 @@ reference:
       - sim_blan
       - sim_evans
       - sim_div
-
-  - title: Report
-    contents:
-      - summary
-      - diagnostics
-      - datestamp
 
   - title: Plotting
     contents:
@@ -63,9 +63,9 @@ reference:
 
   - title: Helpers
     contents:
+      - index
       - psy_minw
-      - index.radf
-      - col_names
+      - series_names
 
 navbar:
   type: default
