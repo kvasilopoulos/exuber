@@ -5,11 +5,16 @@
 \alias{mc_distr}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, minw = NULL, nrep = 2000, seed = NULL,
+mc_cv(
+  n,
+  minw = NULL,
+  nrep = 2000L,
+  seed = NULL,
   opt_badf = c("fixed", "asymptotic", "simulated"),
-  opt_bsadf = c("conservative", "conventional"))
+  opt_bsadf = c("conservative", "conventional")
+)
 
-mc_distr(n, minw = NULL, nrep = 2000, seed = NULL)
+mc_distr(n, minw = NULL, nrep = 2000L, seed = NULL)
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}

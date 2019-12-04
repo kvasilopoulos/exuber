@@ -7,7 +7,7 @@
   ncores <- parallel::detectCores() - 1
 
   op.exuber <- list(
-    exuber.show_progress = TRUE,
+    exuber.show_progress = if (interactive()) TRUE else FALSE,
     exuber.parallel = TRUE,
     exuber.ncores = ncores,
     exuber.global_seed = NA
@@ -24,18 +24,21 @@
 .onAttach <- function(libname, pkgname) {
   if (!.pkgenv$has_data) {
     msg <- paste(
-      "To use this package, you must install the",
-      "{exuberdata} package. To install that ",
-      "package, run `install_exuberdata`or ",
-      "`install.packages('exuberdata',",
-      "repos='https://kvasilopoulos.github.io/drat/',",
-      "type='source')`. "
+      "To use this package more efficiently, you need to install",
+      "the {exuberdata} package which contains simulated critical values.",
+      "To install run `install_exuberdata"
     )
     packageStartupMessage(msg)
   }
 }
 
-
+#' convenience function to install exuberdata package
+#'
+#' This function wraps the \code{install.packages} function and offers a faster
+#' and more convinient way to install exuberdata.
+#'
+#' @importFrom utils install.packages
+#' @export
 install_exuberdata <- function() {
     install.packages(
       'exuberdata',
@@ -43,12 +46,13 @@ install_exuberdata <- function() {
       type = 'source')
 }
 
-# TODO ui customization to download
-
 need_data <- function(has_data = .pkgenv$has_data) {
   if (!has_data) {
-    msg <- paste("To use this package, you must have the exuberdata installed.")
-    stop(msg)
+    stop(
+      "To use stored simulated critical values,",
+      " you must have {exuberdata} installed.",
+      " To install run `install_exuberdata",
+      call. = FALSE)
   }
 }
 
@@ -58,7 +62,7 @@ if (getRversion() >= "2.15.1") {
   utils::globalVariables(
     c("adf", "sadf", "gsadf", "badf", "bsadf", "bsadf_panel", "gsadf_panel",
       "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
-      "value", "value_x", "value_y", "stat", "pval")
+      "value", "value_x", "value_y", "stat", "pval", "Duration")
   )
 }
 

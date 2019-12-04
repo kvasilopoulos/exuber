@@ -10,9 +10,7 @@
 augment_join <- function(x, y = NULL) {
 
   assert_class(x, "radf")
-  if (is.null(y)) {
-    y <- retrieve_crit(x)
-  }
+  y <- y %||% retrieve_crit(x)
   assert_class(y, "cv")
   assert_match(x, y)
   if (is_sb(y)) {
@@ -35,8 +33,6 @@ augment_join <- function(x, y = NULL) {
       by = c("key", "name")
     )
   }
-
   tbl %>%
     select(-key)
-
 }
