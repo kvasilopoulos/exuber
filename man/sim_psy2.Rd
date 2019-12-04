@@ -4,9 +4,17 @@
 \alias{sim_psy2}
 \title{Simulation of a two-bubble process}
 \usage{
-sim_psy2(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1, te2 = 0.6 * n,
-  tf2 = 0.1 * n + te2, c = 1, alpha = 0.6, sigma = 6.79,
-  seed = NULL)
+sim_psy2(
+  n,
+  te1 = 0.2 * n,
+  tf1 = 0.2 * n + te1,
+  te2 = 0.6 * n,
+  tf2 = 0.1 * n + te2,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+)
 }
 \arguments{
 \item{n}{A strictly positive integer specifying the length of the simulated output series.}

@@ -13,7 +13,7 @@
 #' @name summary
 #'
 #' @examples
-#'
+#' \dontrun{
 #' # Simulate bubble processes, compute the t-stat and critical values
 #' set.seed(4441)
 #' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
@@ -30,7 +30,7 @@
 #' # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
 #' rot <- round(log(NROW(rfd)) / NROW(rfd))
 #' datestamp(rfd, min_duration = rot)
-#' \dontrun{
+#'
 #' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
 #'
 #' wb <- wb_cv(dta)
@@ -51,7 +51,7 @@ summary.radf <- function(object, cv = NULL, ...) {
 
   ret <- list()
   if (is_wb(y)) {
-    for (i in seq_along(col_names(x))) {
+    for (i in seq_along(series_names(x))) {
       df1 <- c(x$adf[i], y$adf_cv[i, ])
       df2 <- c(x$sadf[i], y$sadf_cv[i, ])
       df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
@@ -61,9 +61,9 @@ summary.radf <- function(object, cv = NULL, ...) {
       colnames(df) <- c("t-stat", "90%", "95%", "99%")
       ret[[i]] <- df
     }
-    names(ret) <- col_names(x)
+    names(ret) <- series_names(x)
   } else if (is_mc(y)) {
-    for (i in seq_along(col_names(x))) {
+    for (i in seq_along(series_names(x))) {
       df1 <- c(x$adf[i], y$adf_cv)
       df2 <- c(x$sadf[i], y$sadf_cv)
       df3 <- c(x$gsadf[i], y$gsadf_cv)
@@ -73,7 +73,7 @@ summary.radf <- function(object, cv = NULL, ...) {
       colnames(df) <- c("tstat", "90%", "95%", "99%")
       ret[[i]] <- df
     }
-    names(ret) <- col_names(x)
+    names(ret) <- series_names(x)
   } else if (is_sb(y)) {
     ret <- cbind(x$gsadf_panel, t(y$gsadf_panel_cv))
     colnames(ret) <- c("t-stat", "90%", "95%", "99%")
@@ -178,333 +178,6 @@ calc_pvalue <- function(x, dist = NULL) {
 }
 
 
-#' @export
-diagnostics <- function(object, ...) {
-  UseMethod("diagnostics")
-}
-
-#' @export
-datestamp <- function(object, ...) {
-  UseMethod("datestamp")
-}
 
 
 
-#' Diagnostics
-#'
-#' Finds the series that reject the null for at the 5\% significance level.
-#'
-#' @inheritParams summary
-#'
-#' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is
-#' "gsadf".
-#'
-#' @return Returns a list with the series that reject and the series that do not reject the
-#' Null Hypothesis
-#'
-#' @details
-#' Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
-#'
-#' @importFrom dplyr case_when
-#' @export
-diagnostics.radf <- function(object, cv = NULL, option = c("gsadf", "sadf")) {
-
-  assert_class(object, "radf")
-  if (is.null(cv)) {
-    cv <- retrieve_crit(object)
-  }
-  assert_class(cv, "cv")
-  assert_match(object, cv)
-  option <- match.arg(option)
-
-  x <- object
-  y <- cv
-
-  if (option == "gsadf") {
-
-    tstat <- if (is_sb(y)) x$gsadf_panel else x$gsadf
-
-    if (is_mc(y)) {
-      cv1 <- y$gsadf_cv[1]
-      cv2 <- y$gsadf_cv[2]
-      cv3 <- y$gsadf_cv[3]
-    } else if (is_wb(y)) {
-      cv1 <- y$gsadf_cv[, 1]
-      cv2 <- y$gsadf_cv[, 2]
-      cv3 <- y$gsadf_cv[, 3]
-    } else if (is_sb(y)) {
-      cv1 <- y$gsadf_panel_cv[1]
-      cv2 <- y$gsadf_panel_cv[2]
-      cv3 <- y$gsadf_panel_cv[3]
-    }
-  } else if (option == "sadf") {
-
-    if (is_sb(y)) {
-      stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
-    }
-
-    tstat <- x$sadf
-
-    if (is_mc(y)) {
-      cv1 <- y$sadf_cv[1]
-      cv2 <- y$sadf_cv[2]
-      cv3 <- y$sadf_cv[3]
-    } else if (is_wb(y)) {
-      cv1 <- y$sadf_cv[, 1]
-      cv2 <- y$sadf_cv[, 2]
-      cv3 <- y$sadf_cv[, 3]
-    }
-  }
-
-  # in case of simulation exercises
-  dummy <- case_when(
-    tstat < cv2 ~ 0,
-    tstat >= cv2 ~ 1
-  )
-
-  sig <- case_when(
-    tstat < cv1 ~ "Reject",
-    tstat >= cv1 & tstat < cv2 ~ "90%",
-    tstat >= cv2 & tstat < cv3 ~ "95%",
-    tstat >= cv3 ~ "99%"
-  )
-
-  if (is_sb(y)) {
-    accepted <- ifelse(length(dummy), "Panel", NA)
-    rejected <- ifelse(length(dummy), NA, "Panel")
-  } else {
-    accepted <- col_names(x)[as.logical(dummy)]
-    rejected <- col_names(x)[!as.logical(dummy)]
-  }
-
-  structure(
-    list(
-      accepted = accepted,
-      rejected = rejected,
-      sig = sig,
-      dummy = dummy
-    ),
-    panel = is_sb(y),
-    col_names = if (!is_sb(y)) col_names(x),
-    method = get_method(y),
-    option = option,
-    class = "diagnostics"
-  )
-}
-
-#' @importFrom cli cat_line cat_rule
-#' @importFrom glue glue
-#' @importFrom rlang is_bare_character
-#' @export
-print.diagnostics <- function(x, ...) {
-
-  if (all(x$dummy == 0)) {
-    return(message_glue("Cannot reject H0 for significance level 95%"))
-  }
-
-  if (purrr::is_bare_character(x$accepted, n = 0)) {
-    return(message_glue("Cannot reject H0"))
-  }
-
-  cli::cat_line()
-  cli::cat_rule(left = glue('Diagnostics (option = {attr(x, "option")})'),
-                            right = get_method(x))
-  cli::cat_line()
-
-  if (attr(x, "panel")) {
-
-    if (x$sig == "Reject")
-      cat(" Cannot rejeact H0! \n")
-    else
-      cat(" Rejects H0 for significance level", x$sig, "\n")
-
-  } else {
-
-    width <- nchar(col_names(x))
-    ngaps <- max(8, width) - width
-    for (i in seq_along(col_names(x))) {
-      cat(col_names(x)[i], ":" , rep(" ", ngaps[i]), sep = "")
-
-      if (x$sig[i] == "Reject")
-        cat(" Cannot reject H0! \n")
-      else
-        cat(" Rejects H0 for significance level", x$sig[i], "\n")
-
-    }
-  }
-  cli::cat_line()
-}
-
-
-
-
-#' Date-stamping periods of mildly explosive behavior
-#'
-#' Computes the origination, termination and duration of
-#' episodes during which the time series display explosive dynamics.
-#'
-#' @inheritParams diagnostics
-#' @param min_duration The minimum duration of an explosive period for it to be
-#' reported. Default is 0.
-#'
-#' @return Returns a list of values for each explosive sub-period, giving the origin
-#' and termination dates as well as the number of periods explosive behavior lasts.
-#'
-#' @details
-#' Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
-#' respectively, for all series in the time period. This output can be used as
-#' a dummy that indicates the occurrence of a bubble.
-#'
-#' Setting \code{min_duration} removes very short episode of exuberance.
-#' Phillips et al. (2015) propose two simple rules of thumb to remove short
-#' periods of explosive dynamics, "log(T)/T", where T is the number of observations.
-#'
-#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
-#' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
-#' S&P 500. International Economic Review, 56(4), 1043-1078.
-#'
-#' @importFrom rlang sym !!
-#' @importFrom dplyr filter
-#' @export
-#'
-datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
-                      min_duration = 0) {
-
-  assert_class(object, "radf")
-  if (is.null(cv)) {
-    cv <- retrieve_crit(object)
-  }
-  assert_class(cv, "cv")
-
-  option <- match.arg(option)
-
-  assert_positive_int(min_duration, strictly = FALSE)
-  assert_match(object, cv)
-
-  x <- object
-  y <- cv
-
-  ds <-  diagnostics(x, cv = y, option = option)
-  acc <- pluck(ds, "accepted")
-
-  if (is_bare_character(acc, n = 0)) {
-    stop_glue("Cannot reject the H0")
-  }
-
-  if (all(ds$dummy == 0)) {
-    return(message_glue("Cannot reject H0 for significance level 95%"))
-  }
-
-  reps <- if (is_sb(y)) 1 else match(acc, col_names(x))
-  dating <- index(x)
-
-  ds <- vector("list", length(acc))
-  if (is_sb(y)) {
-    if (get_lag(y) != 0) {
-      tstat <- x$bsadf_panel[-c(1:2)]
-      dating <- dating[-c(1:2)]
-    } else {
-      tstat <- x$bsadf_panel
-    }
-    ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + get_minw(x) + get_lag(x))
-  }
-
-  # TODO tstat > cv is a vectorized function
-  # TODO map(stamp) map(~.x + 4)
-  # TODO DRy DRY DRY
-
-  for (i in seq_along(acc)) {
-    if (is_mc(y)) {
-      if (option == "gsadf") {
-        # cv <- extract_cv(y, "bsadf_cv", get_lag(x))
-        cv <- if (get_lag(x) == 0) {
-          y$bsadf_cv[, 2]
-        } else {
-          y$bsadf_cv[-c(1:get_lag(x)), 2]
-        }
-        ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + get_minw(x) + get_lag(x)
-      } else if (option == "sadf") {
-        cv <- if (get_lag(x) == 0) {
-          y$badf_cv[, 2]
-        } else {
-          y$badf_cv[-c(1:get_lag(x)), 2]
-        }
-        ds[[i]] <- which(x$badf[, i] > cv) + get_minw(x) + get_lag(x)
-      }
-    } else if (is_wb(y)) {
-      cv <- if (get_lag(x) == 0) {
-        y$bsadf_cv[, 2, i]
-      } else {
-        y$bsadf_cv[-c(1:get_lag(x)), 2, i]
-      }
-      ds[[i]] <- which(x$bsadf[, reps[i]] > cv) + get_minw(x) + get_lag(x)
-    }
-  }
-
-  # identification of periods
-  stamp <- function(ds) {
-    start <- ds[c(TRUE, diff(ds) != 1)]
-    end <- ds[c(diff(ds) != 1, TRUE)]
-    end[end - start == 0] <- end[end - start == 0] + 1
-    duration <- end - start + 1
-    foo <- data.frame("Start" = start, "End" = end, "Duration" = duration)
-    foo
-  }
-
-  ds_stamp <-
-    lapply(ds, function(z) stamp(z) %>%
-             filter(!!sym("Duration") >= min_duration) %>% as.matrix())
-
-  add_index <- lapply(ds_stamp, function(t)
-    data.frame(
-      "Start" = dating[t[, 1]],
-      "End" = dating[t[, 2]],
-      "Duration" = t[, 3], row.names = NULL))
-
-  # min_duration may cause to exclude periods or the whole sample
-  min_reject <- lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
-  res <- add_index[!min_reject]
-  names(res) <- acc[!min_reject]
-
-  if (length(res) == 0) {
-    stop_glue("Argument 'min_duration' excludes all explosive periods")
-  }
-
-  dummy <-
-    matrix(0, nrow = length(index(x)), ncol = length(acc),
-           dimnames = list(seq_along(index(x)),
-                           if (is_sb(y)) "Panel" else col_names(x)[reps]))
-
-  for (z in seq_along(acc)) {
-    dummy[ds[[z]], z] <- 1
-  }
-
-  # TODO inherit_attrs from object and cv
-
-  structure(
-    res,
-    dummy = dummy,
-    index = index(x, trunc = TRUE),
-    panel = is_sb(y),
-    min_duration = min_duration,
-    option = option,
-    method = get_method(y),
-    class = c("list", "datestamp")
-  )
-}
-
-#' @export
-print.datestamp.radf <- function(x, ...) {
-
-  cli::cat_line()
-  cli::cat_rule(left = glue("Datestamp (min_duration = {get_min_dur(x)})"),
-                right = get_method(x))
-  cli::cat_line()
-
-  if (get_panel(x)) {
-    print(x[[1]])
-    cli::cat_line()
-  } else{
-    print.listof(x)
-  }
-}

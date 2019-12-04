@@ -53,83 +53,83 @@ autoplot(tstats, cv)
 ### Modify plots separately
 
 ```{r autoplot-modify}
-plots <- autoplot(tstats, cv, arrange = FALSE)
-
-mod_plot <- plots[[1]] + 
-  labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")
-mod_plot
+plots <- autoplot(tstats, cv)
+# 
+# mod_plot <- plots[[1]] + 
+#   labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")
+# mod_plot
 ```
-### Reconstruct
-```{r reconstruct}
-plots[[1]] <- mod_plot
-plots[1:2] %>% 
-  ggarrange()
-```
+<!-- ### Reconstruct -->
+<!-- ```{r reconstruct} -->
+<!-- # plots[[1]] <- mod_plot -->
+<!-- # plots[1:2] %>%  -->
+<!-- #   ggarrange() -->
+<!-- ``` -->
 
-## Custom plotting
+<!-- ## Custom plotting -->
 
-```{r join-sets}
-joined <- augment_join(tstats, cv)
-joined 
-```
+<!-- ```{r join-sets} -->
+<!-- joined <- augment_join(tstats, cv) -->
+<!-- joined  -->
+<!-- ``` -->
 
-```{r facet-joined, warning=FALSE}
-library(ggplot2)
-joined %>%
-  ggplot(aes(x = index)) +
-  geom_line(aes(y = tstat)) +
-  geom_line(aes(y = crit, col = "red")) +
-  facet_grid(id ~ name + sig , scales = "free_y") +
-  theme_bw()
-```
-
-
-```{r autoplot-fortify}
-fortify(tstats, cv) %>%
-  gather(id, tstat, -cv, -index, factor_key = TRUE) %>%
-  ggplot(aes(x = index)) +
-  geom_line(aes(y = tstat)) +
-  geom_line(aes(y = cv, col = "red", linetype = "dotted")) +
-  facet_wrap(~ id , scales = "free_y") +
-  theme_bw() + theme(strip.background = element_blank(),
-                     legend.position = "none") +
-  labs(x = "", y = "")
-```
+<!-- ```{r facet-joined, warning=FALSE} -->
+<!-- library(ggplot2) -->
+<!-- joined %>% -->
+<!--   ggplot(aes(x = index)) + -->
+<!--   geom_line(aes(y = tstat)) + -->
+<!--   geom_line(aes(y = crit, col = "red")) + -->
+<!--   facet_grid(id ~ name + sig , scales = "free_y") + -->
+<!--   theme_bw() -->
+<!-- ``` -->
 
 
-```{r fortify-autoplot-datestamp, eval=FALSE, include=FALSE}
-bind_cols(
-  fortify(tstats, cv) %>%
-    gather(id, tstat, -index),
-  fortify(tstats, cv = wb_cv(dta)) %>%
-    gather(id, crit, -psy1, -psy2, -index)
-) %>%
-  select(index, id, crit, tstat) %>%
-  ggplot(aes(x = index)) +
-  geom_line(aes(y = tstat)) +
-  geom_line(aes(y = crit, color = "red"), linetype = "dashed") +
-  facet_wrap(~ id, ncol = 1) +
-  theme_bw()
-```
-
-# Distributions
-```{r distributions}
-dist <- mc_distr(n = 300)
-autoplot(dist)
-```
+<!-- ```{r autoplot-fortify} -->
+<!-- <!-- fortify(tstats, cv) %>% --> -->
+<!-- <!--   gather(id, tstat, -cv, -index, factor_key = TRUE) %>% --> -->
+<!-- <!--   ggplot(aes(x = index)) + --> -->
+<!-- <!--   geom_line(aes(y = tstat)) + --> -->
+<!-- <!--   geom_line(aes(y = cv, col = "red", linetype = "dotted")) + --> -->
+<!-- <!--   facet_wrap(~ id , scales = "free_y") + --> -->
+<!-- <!--   theme_bw() + theme(strip.background = element_blank(), --> -->
+<!-- <!--                      legend.position = "none") + --> -->
+<!-- <!--   labs(x = "", y = "") --> -->
+<!-- ``` -->
 
 
-# Just for fun
+<!-- ```{r fortify-autoplot-datestamp, eval=FALSE, include=FALSE} -->
+<!-- bind_cols( -->
+<!--   fortify(tstats, cv) %>% -->
+<!--     gather(id, tstat, -index), -->
+<!--   fortify(tstats, cv = wb_cv(dta)) %>% -->
+<!--     gather(id, crit, -psy1, -psy2, -index) -->
+<!-- ) %>% -->
+<!--   select(index, id, crit, tstat) %>% -->
+<!--   ggplot(aes(x = index)) + -->
+<!--   geom_line(aes(y = tstat)) + -->
+<!--   geom_line(aes(y = crit, color = "red"), linetype = "dashed") + -->
+<!--   facet_wrap(~ id, ncol = 1) + -->
+<!--   theme_bw() -->
+<!-- ``` -->
 
-```{r ecdf}
-library(tidyr)
-dist %>%
-  tidy() %>%
-  rename_all(~ stringr::str_to_upper(.)) %>%
-  gather(Statistic, value, factor_key = TRUE) %>%
-  ggplot(aes(value, color = Statistic)) +
-  stat_ecdf() +
-  ggtitle("Empirical Cumulative Distribution Function") +
-  geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw()
-```
+<!-- # Distributions -->
+<!-- ```{r distributions} -->
+<!-- dist <- mc_distr(n = 300) -->
+<!-- autoplot(dist) -->
+<!-- ``` -->
+
+
+<!-- # Just for fun -->
+
+<!-- ```{r ecdf} -->
+<!-- library(tidyr) -->
+<!-- dist %>% -->
+<!--   tidy() %>% -->
+<!--   rename_all(~ stringr::str_to_upper(.)) %>% -->
+<!--   gather(Statistic, value, factor_key = TRUE) %>% -->
+<!--   ggplot(aes(value, color = Statistic)) + -->
+<!--   stat_ecdf() + -->
+<!--   ggtitle("Empirical Cumulative Distribution Function") + -->
+<!--   geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw() -->
+<!-- ``` -->
 

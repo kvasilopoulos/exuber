@@ -49,13 +49,15 @@ test_that("ts", {
 test_that("matrix", {
   # parse index from matrix
   mat1 <- as.matrix(dta, ncol = 5)
-  expect_equal(index(radf(mat1)), seq(from = 1, to = NROW(mat1)))
+  rmat1 <- radf(mat1)
+  expect_equal(index(rmat1), seq(from = 1, to = NROW(mat1)))
   expect_error(
-    index(radf(mat1)) <- seq(from = 1, to = NROW(mat1) - 1),
+    index(rmat1) <- seq(from = 1, to = NROW(mat1) - 1),
     "length of index vectors does not match"
   )
 })
 
 test_that("datestamp", {
-  expect_equal(radf_dta %>% datestamp() %>% index(), index(radf_dta, trunc = T))
+  expect_equal(radf_dta %>% datestamp(cv = mc)
+               %>% index(), index(radf_dta, trunc = T))
 })

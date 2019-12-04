@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 ```{r echo=FALSE, message=FALSE}
 library(exuber)
+install_exuberdata()
 ```
 
 For our analysis we are going to use the `datasets::EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE(see `?EuStockMarkets`). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372. 

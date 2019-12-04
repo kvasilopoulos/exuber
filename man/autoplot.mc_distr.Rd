@@ -13,7 +13,7 @@
 \method{autoplot}{sb_distr}(object, ...)
 }
 \arguments{
-\item{object}{An \code{*_dist} object.}
+\item{object}{An \verb{*_dist} object.}
 
 \item{...}{Additional arguments, used only in \code{wb_distr} facet options.}
 }
