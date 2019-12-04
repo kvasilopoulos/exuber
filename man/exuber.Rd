@@ -6,7 +6,7 @@
 \alias{exuber-package}
 \title{exuber: Econometric Analysis of Explosive Time Series}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Testing for and dating periods of explosive
     dynamics (exuberance) in time series using the univariate and panel

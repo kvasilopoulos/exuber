@@ -1,9 +1,10 @@
 
 #' Retrieve/Replace the index
 #'
-#' @description  Retrieve or replace the index of an \code{radf} object.
+#' @description  Retrieve or replace the index of an object.
 #'
-#' @param x An object of class \code{\link[=radf]{radf()}}
+#' @param x An object.
+
 #' @param ... Further arguments passed to methods.
 #' @param value An ordered vector of the same length as the `index' attribute of x.
 #'
@@ -11,29 +12,10 @@
 #' pseudo-index is generated which is a sequential numeric series. After the estimation,
 #' the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
 #' The index can be either numeric or Date.
-#' @name index.radf
-NULL
-
-#' @rdname index.radf
-#' @param trunc default FALSE. If TRUE the index formed by truncating the value
-#' in the minimum window.
 #' @export
-index.radf <- function(x, trunc = FALSE, ...) {
-  value <- attr(x, "index")
-  if (trunc) value <- value[-c(1:(get_minw(x) + get_lag(x)))]
-  value
-}
-
-
-#' @rdname  index.radf
-#' @inheritParams index.radf
-#' @export
-`index<-.radf` <- function(x, value) {
-  if (length(index(x)) != length(value))
-    stop_glue("length of index vectors does not match")
-
-  attr(x, "index") <- value
-  return(x)
+#' @name index-rd
+index <- function(x, ...) {
+  UseMethod("index")
 }
 
 #' @export
@@ -45,8 +27,12 @@ index.default <- function(x, ...) {
   }
 }
 
-# Defensive ---------------------------------------------------------------
-
+#' @export
+index.radf <- function(x, trunc = FALSE, ...) {
+  idx <- attr(x, "index")
+  if (trunc) idx <- idx[-c(1:(get_minw(x) + get_lag(x)))]
+  idx
+}
 
 #' @export
 index.cv <- function(x, trunc = FALSE, ...) {
@@ -72,3 +58,24 @@ index.data.frame <- function(x, ...) {
   date_index <- purrr::detect_index(x, lubridate::is.Date)
   if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq_len(NROW(x))
 }
+
+#'@rdname index-rd
+#'@export
+`index<-` <- function(x,  value) {
+  UseMethod("index<-")
+}
+
+#' @export
+`index<-.default` <- function(x, value) {
+  stop_glue("Don't know how to handle {class(x)} objects.")
+}
+
+#' @export
+`index<-.radf` <- function(x, value) {
+  if (length(index(x)) != length(value)) {
+    stop_glue("length of index vectors does not match")
+  }
+  attr(x, "index") <- value
+  x
+}
+

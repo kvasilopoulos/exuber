@@ -1,5 +1,5 @@
 
-`%NA%` <- function (x, y) {
+`%NA%` <- function(x, y) {
   if (is.na(x))
     y
   else x
@@ -47,8 +47,8 @@ set_rng <- function(seed) {
 retrieve_crit <- function(x) {
   need_data()
   nr <- NROW(index(x))
-  if (nr > 5 && nr <= length(crit)) {
-    return(get("crit")[[nr]])
+  if (nr > 5 && nr <= length(exuberdata::crit)) {
+    return(exuberdata::crit[[nr]])
   } else {
     stop_glue("cannot provide MC critical values see help(crit)")
   }
@@ -75,7 +75,6 @@ set_pb_opts <- function(condition, pb) {
 # tidy --------------------------------------------------------------------
 
 array_to_list <- function(x, var) {
-
   itnames <- pluck(x, var) %>%
     dimnames() %>% pluck(3)
   iter <- length(itnames)
@@ -87,6 +86,7 @@ array_to_list <- function(x, var) {
   out
 }
 
+#' @importFrom tibble add_column
 add_key <- function(x, attr_from) {
   attr_lag <-  get_lag(attr_from) #else 0
   if (is.null(attr_lag)) {
@@ -110,7 +110,6 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
   if (is_sb(y)) {
     stop_glue("cannot extract from `sb_cv()`")
   }
-
   out <- pluck(y, which)
   if (lg != 0) {
     if (is_wb(y)) {
@@ -119,13 +118,11 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
       out <- out[-c(1:lg), ]
     }
   }
-
   if (is_wb(y)) {
     out <- out[, 2, ]
   }else{
     out <- out[, 2]
   }
-
   out
 }
 
@@ -137,7 +134,7 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
 # cat_line <- function(...) {
 #   glue::glue_collapse(..., sep  = "")
 # }
-#
+
 # width <- getOption("width")
 # line <- paste(rep("-", width), collapse = "")
 #

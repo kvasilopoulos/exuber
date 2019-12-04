@@ -72,9 +72,9 @@ processes <- tibble(
 To plot them altogether we can use the`autoplot()` method for "sim" objects. However, `autoplot.sim()` is for individual object thus we need some functional programming to plot them together. We can use the `purrr::map()` function, which iterates through every column of the data.frame and stores them into a list of "ggplot" objects, and then we can arrange with the `ggarrange()` function into a 2x2 grid.
 
 ```{r autoplot-sim, fig.width = 9, fig.height=7}
-processes %>% 
-  map(autoplot) %>% 
-  ggarrange()
+# processes %>% 
+  # map(autoplot) %>% 
+  # ggarrange()
 ```
 
 

@@ -8,7 +8,7 @@ test_that("Right output", {
   expect_output(str(attributes(radf_dta)), "List of 7")
   expect_equal(
     names(attributes(radf_dta)),
-    c("names", "index", "lag", "n", "minw", "col_names", "class")
+    c("names", "index", "lag", "n", "minw", "series_names", "class")
   )
 })
 
