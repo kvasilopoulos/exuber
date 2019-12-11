@@ -395,7 +395,7 @@ sim_div <- function(n, mu, sigma, r = 0.05,
     pf <- mu * (1 + r) * r ^ (-2) + d / r
   }
 
-  if (return == "pf")  out <- pf else out <- d
+  out <- if (return == "pf") pf else d
 
   out %>%
     add_attr(seed = rng_state) %>%
