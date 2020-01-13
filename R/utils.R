@@ -57,8 +57,14 @@ retrieve_crit <- function(x) {
 
 # options -----------------------------------------------------------------
 
-set_pb <- function(condition, iter, width = getOption("width") - 10L) {
-  if (condition) {
+# isTRUE(getOption("readr.show_progress")) && interactive() &&
+#   !isTRUE(getOption("rstudio.notebook.executing")) &&
+#   !isTRUE(getOption("knitr.in.progress"))
+
+# TODO
+# TODO
+set_pb <- function(iter, width = getOption("width") - 10L) {
+  if (getOption("exuber.show_progress") && interactive()) {
     txtProgressBar(min = 1, max = iter - 1, style = 3,
                    char = "-", width = width)
   }
