@@ -231,6 +231,7 @@ autoplot.datestamp <- function(object, ...) {
 #' @importFrom dplyr bind_rows
 tidy.datestamp <- function(x, ...) {
   bind_rows(x, .id = "id") %>%
-    as_tibble()
+    as_tibble() %>%
+    mutate(id = as.factor(id))
 }
 
