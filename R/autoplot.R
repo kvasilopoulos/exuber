@@ -26,7 +26,7 @@
 #'
 #' autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3))
 #'
-#' # Change color, size or linetype
+#' # Change (overwrite) color, size or linetype
 #' autoplot(radf_dta) +
 #'   scale_color_manual(values = c("black", "black")) +
 #'   scale_size_manual(values = c(1.2, 1))
@@ -43,7 +43,9 @@
 #'
 autoplot.radf <- function(
   object, cv = NULL, include_rejected = FALSE, select_series = NULL,
-  option = c("gsadf", "sadf"), shade_opt = shade(), ...) {
+  option = c("gsadf", "sadf"), shade_opt = shade(), include = NULL,
+  select = NULL, ...) {
+
 
 
   cv <- cv %||% retrieve_crit(object)
@@ -55,11 +57,16 @@ autoplot.radf <- function(
   } else {
     diagnostics(object, cv)$accepted
   }
+
   sel_series <- select_series %||% series_names(object)
   series <- intersect(acc_series, sel_series)
+  if (rlang::is_bare_character(acc_series, n = 0)) {
+    stop_glue("available series are not acceptable for plotting")
+  }
 
   gg <- augment_join(object, cv) %>%
     filter(id %in% series, sig == 0.95, name == option) %>%
+    droplevels() %>%
     pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "stat") %>%
     ggplot(aes(index, value, col = stat, size = stat, linetype = stat)) +
     geom_line() +
@@ -79,14 +86,30 @@ autoplot.radf <- function(
       legend.position = "none"
     )
   if (!is.null(shade_opt)) {
-    ds_data <- datestamp(object, cv) %>% tidy()
+    ds_data <- tidy(datestamp(object, cv)) %>%
+      filter(id %in% series) %>%
+      droplevels()
     gg <- gg + shade_opt(ds_data)
   }
-  dots <- rlang::dots_list(...)
   gg +
     {if (is.null(dots$scales)) facet_wrap( ~ id, scales = "free", ...)
       else facet_wrap( ~ id, ...)}
 }
+
+
+arg_deprecate <- function() {
+  structure(list(), class = "deprecate")
+}
+
+print.deprecate <- function(x, ...) {
+  warning_glue("mpla {x}")
+}
+
+signal_arg_depracate <- function(...) {
+
+}
+
+
 
 
 #' @param min_duration the minimum duration.
