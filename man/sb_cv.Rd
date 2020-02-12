@@ -51,12 +51,12 @@ dta <- data.frame(
 # Panel critical vales should have the same lag length with the estimation
 sb <- sb_cv(dta, lag = 1)
 
-dta %>%
-  radf(lag = 1) %>%
+dta \%>\%
+  radf(lag = 1) \%>\%
   summary(cv = sb)
 
-dta %>%
-  radf(lag = 1) %>%
+dta \%>\%
+  radf(lag = 1) \%>\%
   autoplot(cv = sb)
 
 # Simulate distribution

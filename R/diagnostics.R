@@ -4,9 +4,8 @@
 #'
 #' @inheritParams summary
 #' @param ... further arguments passed to methods.
-#' "gsadf".
-#' @return Returns a list with the series that reject and the series that do not reject the
-#' Null Hypothesis
+#'
+#' @return Returns a list with the series that reject and the series that do not reject the Null Hypothesis
 #' @details
 #' Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
 #'
@@ -15,9 +14,13 @@ diagnostics <- function(object, cv = NULL, ...) {
   UseMethod("diagnostics")
 }
 
+#' Diagnostics on `radf` object
+#'
+#' Finds the series from a `radf` object that reject the null for at the 5\% significance level.
+#'
 #' @importFrom dplyr case_when
 #' @inheritParams diagnostics
-#' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is
+#' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".
 #' @export
 diagnostics.radf <- function(object, cv = NULL,
                              option = c("gsadf", "sadf"), ...) {
@@ -73,9 +76,9 @@ diagnostics.radf <- function(object, cv = NULL,
 
   sig <- case_when(
     tstat < cv1 ~ "Reject",
-    tstat >= cv1 & tstat < cv2 ~ "90%",
-    tstat >= cv2 & tstat < cv3 ~ "95%",
-    tstat >= cv3 ~ "99%"
+    tstat >= cv1 & tstat < cv2 ~ "10%",
+    tstat >= cv2 & tstat < cv3 ~ "5%",
+    tstat >= cv3 ~ "1%"
   )
 
   if (is_sb(y)) {
@@ -108,7 +111,7 @@ diagnostics.radf <- function(object, cv = NULL,
 print.diagnostics <- function(x, ...) {
 
   if (all(x$dummy == 0)) {
-    return(message_glue("Cannot reject H0 for significance level 95%"))
+    return(message_glue("Cannot reject H0 for significance level of 5%"))
   }
   if (purrr::is_bare_character(x$accepted, n = 0)) {
     return(message_glue("Cannot reject H0"))
@@ -124,10 +127,8 @@ print.diagnostics <- function(x, ...) {
     if (x$sig == "Reject")
       cat(" Cannot rejeact H0! \n")
     else
-      cat(" Rejects H0 for significance level", x$sig, "\n")
-
+      cat(" Rejects H0 for significance level of", x$sig, "\n")
   } else {
-
     width <- nchar(series_names(x))
     ngaps <- max(8, width) - width
     for (i in seq_along(series_names(x))) {
@@ -135,7 +136,7 @@ print.diagnostics <- function(x, ...) {
       if (x$sig[i] == "Reject")
         cat(" Cannot reject H0! \n")
       else
-        cat(" Rejects H0 for significance level", x$sig[i], "\n")
+        cat(" Rejects H0 for significance level of", x$sig[i], "\n")
     }
   }
   cli::cat_line()

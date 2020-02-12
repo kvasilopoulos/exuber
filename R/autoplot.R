@@ -46,7 +46,8 @@ autoplot.radf <- function(
   option = c("gsadf", "sadf"), shade_opt = shade(), include = NULL,
   select = NULL, ...) {
 
-
+  deprecate_arg_warn(include, include_rejected)
+  deprecate_arg_warn(select, select_series)
 
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "cv")
@@ -63,7 +64,7 @@ autoplot.radf <- function(
   if (rlang::is_bare_character(acc_series, n = 0)) {
     stop_glue("available series are not acceptable for plotting")
   }
-
+  dots <- rlang::dots_list(...)
   gg <- augment_join(object, cv) %>%
     filter(id %in% series, sig == 0.95, name == option) %>%
     droplevels() %>%
@@ -95,21 +96,6 @@ autoplot.radf <- function(
     {if (is.null(dots$scales)) facet_wrap( ~ id, scales = "free", ...)
       else facet_wrap( ~ id, ...)}
 }
-
-
-arg_deprecate <- function() {
-  structure(list(), class = "deprecate")
-}
-
-print.deprecate <- function(x, ...) {
-  warning_glue("mpla {x}")
-}
-
-signal_arg_depracate <- function(...) {
-
-}
-
-
 
 
 #' @param min_duration the minimum duration.
