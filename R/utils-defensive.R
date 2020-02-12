@@ -63,7 +63,8 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
     }
   } else {
     if (arg != trunc(arg) | arg < 0L) {
-      stop(sprintf("Argument '%s' should be a non-negative integer", level), call. = FALSE)
+      stop(sprintf("Argument '%s' should be a non-negative integer", level),
+           call. = FALSE)
     }
   }
   if (!is.null(greater_than)) {

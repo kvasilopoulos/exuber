@@ -26,6 +26,10 @@ datestamp <- function(object, cv = NULL, ...) {
   UseMethod("datestamp")
 }
 
+datestamp.default <- function(object, cv, ...) {
+  stop_glue("method `datestamp` is not available for objects of class {class(object)}.")
+}
+
 #' This is a topic
 #'
 #' This is a description

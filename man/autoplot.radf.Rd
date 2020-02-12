@@ -12,22 +12,19 @@
   select_series = NULL,
   option = c("gsadf", "sadf"),
   shade_opt = shade(),
+  include = NULL,
+  select = NULL,
   ...
 )
 
 shade(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=radf]{radf()}}.}
-
-\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
-
 \item{include_rejected}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5\\% significance level.}
 
 \item{select_series}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
 
 \item{shade_opt}{options for the shading of the graph, usually used through \code{shade} functions.}
 
@@ -53,7 +50,7 @@ autoplot(radf_dta, scales = "free", direction  = "v")
 
 autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3))
 
-# Change color, size or linetype
+# Change (overwrite) color, size or linetype
 autoplot(radf_dta) +
   scale_color_manual(values = c("black", "black")) +
   scale_size_manual(values = c(1.2, 1))
