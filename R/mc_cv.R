@@ -15,8 +15,8 @@ mc_ <- function(n, minw, nrep, seed) {
   rng_state <- set_rng(seed = seed)
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(show_pb, nrep)
-  opts <- set_pb_opts(show_pb, pb)
+  pb <- set_pb(nrep)
+  pb_opts <- set_pb_opts(pb)
 
   do_par <- getOption("exuber.parallel")
   if (do_par) {
@@ -31,7 +31,7 @@ mc_ <- function(n, minw, nrep, seed) {
     i = 1:nrep,
     .export = c("rls_gsadf", "unroot"),
     .combine = "cbind",
-    .options.snow = opts,
+    .options.snow = pb_opts,
     .inorder = FALSE
   ) %fun% {
     if (show_pb && !do_par)
