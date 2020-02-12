@@ -7,17 +7,10 @@
 diagnostics(object, cv = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=radf]{radf()}}.}
-
-\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
-
-\item{...}{further arguments passed to methods.
-"gsadf".}
+\item{...}{further arguments passed to methods.}
 }
 \value{
-Returns a list with the series that reject and the series that do not reject the
-Null Hypothesis
+Returns a list with the series that reject and the series that do not reject the Null Hypothesis
 }
 \description{
 Finds the series that reject the null for at the 5\\% significance level.

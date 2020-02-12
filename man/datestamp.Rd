@@ -7,11 +7,6 @@
 datestamp(object, cv = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=radf]{radf()}}.}
-
-\item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
-\code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
-
 \item{...}{further arguments passed to methods.}
 }
 \value{
