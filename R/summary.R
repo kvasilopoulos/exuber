@@ -10,8 +10,6 @@
 #' @return Returns a list of summary statistics,
 #' the t-statistic and the critical values of the ADF, SADF and GSADF.
 #'
-#' @name summary
-#'
 #' @examples
 #' \dontrun{
 #' # Simulate bubble processes, compute the t-stat and critical values

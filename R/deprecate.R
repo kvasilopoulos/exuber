@@ -1,3 +1,8 @@
+deprecate_arg_warn <- function(what, with) {
+  if (!is.null(what))
+    warning_glue("`{substitute(what)}()` is depracated. Please use `{substitute(with)}()` instead.")
+}
+
 #' @title Deprecated functions in package \pkg{exuber}.
 #'
 #' @description The functions listed below are deprecated and will be defunct in

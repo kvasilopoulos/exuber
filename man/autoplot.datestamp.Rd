@@ -23,15 +23,15 @@ Plotting datestamp with \link[=ggplot2]{geom_segment()}
 \donttest{
 dta <- cbind(sim_psy1(n = 100), sim_psy2(n = 100))
 
-dta %>%
-  radf() %>%
-  datestamp() %>%
+dta \%>\%
+  radf() \%>\%
+  datestamp() \%>\%
   autoplot()
 
 # Change the colour manually
-dta %>%
-  radf() %>%
-  datestamp() %>%
+dta \%>\%
+  radf() \%>\%
+  datestamp() \%>\%
   autoplot() +
   ggplot2::scale_colour_manual(values = rep("black", 4))
 }
