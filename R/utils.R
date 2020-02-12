@@ -70,8 +70,8 @@ set_pb <- function(iter, width = getOption("width") - 10L) {
   }
 }
 
-set_pb_opts <- function(condition, pb) {
-  if (condition) {
+set_pb_opts <- function(pb) {
+  if (getOption("exuber.show_progress")) {
     list(progress = function(n) setTxtProgressBar(pb, n))
   }else{
     list(progress = NULL)
