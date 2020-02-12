@@ -27,8 +27,8 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
           dimnames = list(NULL, NULL, colnames(y)))
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(show_pb, nboot, width = getOption("width") - 15)
-  opts <- set_pb_opts(show_pb, pb)
+  pb <- set_pb(nboot, width = getOption("width") - 15)
+  pb_opts <- set_pb_opts(pb)
 
   do_par <- getOption("exuber.parallel")
   if (do_par) {
@@ -46,7 +46,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       i = 1:nboot,
       .export = c("rls_gsadf", "unroot"),
       .combine = "cbind",
-      .options.snow = opts,
+      .options.snow = pb_opts,
       .inorder = FALSE
     ) %fun% {
       if (show_pb && !do_par)
