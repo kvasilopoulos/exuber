@@ -47,9 +47,11 @@ set_rng <- function(seed) {
 retrieve_crit <- function(x) {
   need_data()
   nr <- NROW(index(x))
-  if (nr > 5 && nr <= length(exuberdata::crit)) {
+  if (nr > 5 && nr <= length(exuber::crit)) {
+    return(exuber::crit[[nr]])
+  } else if (nr > length(exuber::crit) && length(exuberdata::crit) <= 2000) {
     return(exuberdata::crit[[nr]])
-  } else {
+  }else {
     stop_glue("cannot provide MC critical values see help(crit)")
   }
 }

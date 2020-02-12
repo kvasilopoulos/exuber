@@ -51,7 +51,7 @@ need_data <- function(has_data = .pkgenv$has_data) {
     stop(
       "To use stored simulated critical values,",
       " you must have {exuberdata} installed.",
-      " To install run `install_exuberdata",
+      " To install run `install_exuberdata()",
       call. = FALSE)
   }
 }
