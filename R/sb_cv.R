@@ -38,8 +38,8 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
   nres <- NROW(resmat)
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(show_pb, nboot)
-  opts <- set_pb_opts(show_pb, pb)
+  pb <- set_pb(nboot)
+  pb_opts <- set_pb_opts(pb)
 
   do_par <- getOption("exuber.parallel")
   if (do_par) {
@@ -54,7 +54,7 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
     i = 1:nboot,
     .export = c("rls_gsadf", "unroot"),
     .combine = "cbind",
-    .options.snow = opts,
+    .options.snow = pb_opts,
     .inorder = FALSE
   ) %fun% {
     boot_index <- sample(1:nres, replace = TRUE)
