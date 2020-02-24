@@ -49,7 +49,6 @@ tidy.radf <- function(x, format = c("wide", "long"), ...) {
 }
 
 #' @rdname tidy.radf
-#' @inheritParams tidy.radf
 #' @param panel Either univariate or panel bsadf.
 #'
 #' @importFrom dplyr rename as_tibble everything
@@ -102,7 +101,6 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 }
 
 #' @rdname tidy.radf
-#' @inheritParams tidy.radf
 #'
 #' @importFrom purrr pluck
 #' @importFrom rlang set_names

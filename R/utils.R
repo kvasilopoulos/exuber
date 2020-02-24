@@ -49,7 +49,8 @@ retrieve_crit <- function(x) {
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(exuber::crit)) {
     return(exuber::crit[[nr]])
-  } else if (nr > length(exuber::crit) && length(exuberdata::crit) <= 2000) {
+  } else if (nr > length(exuber::crit) && nr <= 2000) {
+    need_data()
     return(exuberdata::crit[[nr]])
   }else {
     stop_glue("cannot provide MC critical values see help(crit)")
@@ -73,7 +74,7 @@ set_pb <- function(iter, width = getOption("width") - 10L) {
 }
 
 set_pb_opts <- function(pb) {
-  if (getOption("exuber.show_progress")) {
+  if (getOption("exuber.show_progress") && interactive()) {
     list(progress = function(n) setTxtProgressBar(pb, n))
   }else{
     list(progress = NULL)

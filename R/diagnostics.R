@@ -2,7 +2,7 @@
 #'
 #' Finds the series that reject the null for at the 5\% significance level.
 #'
-#' @inheritParams summary
+#' @inheritParams summary.radf
 #' @param ... further arguments passed to methods.
 #'
 #' @return Returns a list with the series that reject and the series that do not reject the Null Hypothesis
