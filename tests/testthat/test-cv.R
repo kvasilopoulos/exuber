@@ -2,6 +2,7 @@ context("cv")
 
 test_that("exuberdata::crit as data", {
   skip_on_cran()
+  skip_if(!"exuberdata" %in% loadedNamespaces())
   crit <- exuberdata::crit
   expect_error(capture.output(print(crit)), NA)
   expect_error(crit, NA)
@@ -82,13 +83,13 @@ test_that("opt_badf", {
   expect_error(mc_cv(100, nrep = 10, opt_badf = "simulated"), NA)
 })
 
-test_that("show_progress", {
-  options(exuber.show_progress = TRUE)
-  expect_error(capture.output(mc_cv(100, nrep = 10)), NA)
-  expect_error(capture.output(wb_cv(dta, nboot = 10)), NA)
-  expect_error(capture.output(sb_cv(dta, nboot = 10)), NA)
-  options(exuber.show_progress = FALSE)
-})
+# test_that("show_progress", {
+#   options(exuber.show_progress = TRUE)
+#   expect_error(capture.output(mc_cv(100, nrep = 10)), NA)
+#   expect_error(capture.output(wb_cv(dta, nboot = 10)), NA)
+#   expect_error(capture.output(sb_cv(dta, nboot = 10)), NA)
+#   options(exuber.show_progress = FALSE)
+# })
 
 # test_that("parallel-ncores arguments",{
 #   msg <- "Argument 'ncores' is redundant"

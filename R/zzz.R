@@ -22,7 +22,7 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  if (!.pkgenv$has_data) {
+  if (!has_data()) {
     msg <- paste(
       "To use this package more efficiently, you need to install",
       "the {exuberdata} package which contains simulated critical values.",
@@ -46,13 +46,15 @@ install_exuberdata <- function() {
       type = 'source')
 }
 
-need_data <- function(has_data = .pkgenv$has_data) {
-  if (!has_data) {
-    stop(
-      "To use stored simulated critical values,",
-      " you must have {exuberdata} installed.",
-      " To install run `install_exuberdata()",
-      call. = FALSE)
+has_data <- function() {
+  .pkgenv$has_data
+}
+
+need_data <- function() {
+  if (!has_data()) {
+    stop_glue(
+      "To use stored simulated critical values you must have `exuberdata` installed.
+      To install run `install_exuberdata()")
   }
 }
 

@@ -24,7 +24,7 @@ test_that("error diagnostics", {
     diagnostics(radf_div, mc)), "Cannot reject H0")
   expect_message(
     print(diagnostics(radf_95, mc)),
-    "Cannot reject H0 for significance level 95%"
+    "Cannot reject H0 for significance level of 5%"
   )
 })
 
