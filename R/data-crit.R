@@ -23,9 +23,10 @@
 #' }
 "crit"
 
-#' @export
-#' @importFrom tibble enframe
-print.crit <- function(x, ...) {
-  # we dont want to overwhelm the console
-  print(tibble::enframe(x))
-}
+
+#' #' @importFrom tibble enframe
+#' print.crit <- function(x, ...) {
+#'   # we dont want to overwhelm the console
+#'   # print(tibble::enframe(x), ...)
+#'   x
+#' }
