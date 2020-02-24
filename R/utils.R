@@ -45,7 +45,6 @@ set_rng <- function(seed) {
 # get crit data --------------------------------------------------------
 
 retrieve_crit <- function(x) {
-  need_data()
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(exuber::crit)) {
     return(exuber::crit[[nr]])
