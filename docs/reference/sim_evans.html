@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -47,12 +49,12 @@
 
   <link href="../extra.css" rel="stylesheet">
   
+
 <meta property="og:title" content="Simulation of an Evans (1991) bubble process — sim_evans" />
-
 <meta property="og:description" content="Simulation of an Evans (1991) rational periodically collapsing bubble process." />
-
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -114,7 +116,6 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -150,14 +151,20 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Simulation of an Evans (1991) rational periodically collapsing bubble process.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>sim_evans</span>(<span class='no'>n</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
-  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>b1</span> <span class='kw'>=</span> <span class='no'>delta</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>sim_evans</span>(
+  <span class='no'>n</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>tau</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>pi</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
+  <span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>b1</span> <span class='kw'>=</span> <span class='no'>delta</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -198,11 +205,10 @@ of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A numeric vector of length <code>n</code>.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>delta</code> and <code>alpha</code> are positive parameters which satisfy \(0 &lt; \delta &lt; (1+r)\alpha\).
@@ -216,31 +222,24 @@ The function checks whether <code>alpha</code> and <code>delta</code> satisfy th
 <p>where \(\theta\) is an indicator function taking a value of 0 with probability \(1-\pi\) and 1 with probability \(\pi\).
 In this secondary phase there is a probability (\(1-\pi\)) that the bubble collapses to <code>delta</code> and the process starts again.
 By modifying the values of <code>delta</code>, <code>alpha</code> and <code>pi</code> the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Evans, G. W. (1991). Pitfalls in testing for explosive
 bubbles in asset prices. The American Economic Review, 81(4), 922-930.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='sim_psy1.html'>sim_psy1</a></code>, <code><a href='sim_psy2.html'>sim_psy2</a></code>, <code><a href='sim_blan.html'>sim_blan</a></code></p></div>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
-
       <li><a href="#see-also">See also</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>

@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -47,13 +49,13 @@
 
   <link href="../extra.css" rel="stylesheet">
   
+
 <meta property="og:title" content="Plotting and tidying radf objects — autoplot.radf" />
-
-<meta property="og:description" content="autoplot.radf takes an radf object and returns a facetted ggplot object.
+<meta property="og:description" content="autoplot.radf takes an radf object and returns a faceted ggplot object.
 shade" />
-
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -115,7 +117,6 @@ shade" />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -146,25 +147,30 @@ shade" />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plotting and tidying radf objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot.R'><code>R/autoplot.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot-radf.R'><code>R/autoplot-radf.R</code></a></small>
     <div class="hidden name"><code>autoplot.radf.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
-    <p><code>autoplot.radf</code> takes an <code>radf</code> object and returns a facetted ggplot object.
+    <p><code>autoplot.radf</code> takes an <code>radf</code> object and returns a faceted ggplot object.
 <code>shade</code></p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>include_rejected</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>select_series</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>),
-  <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(), <span class='no'>...</span>)
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(
+  <span class='no'>object</span>,
+  <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include_rejected</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>select_series</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>),
+  <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(),
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)
 
-<span class='fu'>shade</span>(<span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shade_color</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='no'>...</span>)</pre>
-    
+<span class='fu'>shade</span>(<span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shade_color</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>...</span>)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -179,18 +185,46 @@ shade" />
     </tr>
     <tr>
       <th>include_rejected</th>
-      <td><p>If not FALSE, plot all variables regardless of rejecting the NULL at the 5% significance level.</p></td>
+      <td><p>If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.</p></td>
     </tr>
     <tr>
       <th>select_series</th>
       <td><p>If not NULL, only plot with names or column number matching this regular expression will be executed.</p></td>
     </tr>
     <tr>
+      <th>option</th>
+      <td><p>Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".</p></td>
+    </tr>
+    <tr>
+      <th>shade_opt</th>
+      <td><p>options for the shading of the graph, usually used through <code>shade</code> functions.</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>argument name is deprecated and substituted with <code>include_rejected</code>.</p></td>
+    </tr>
+    <tr>
+      <th>select</th>
+      <td><p>argument name is deprecated and substituted with <code>select_series</code>.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
-      <td><p>further arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>ggplot2::facet_wrap</a></code>.</p></td>
+      <td><p>further arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>ggplot2::facet_wrap</a></code> and <code><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>ggplot2::geom_rect</a></code> for <code>shade</code>.</p></td>
+    </tr>
+    <tr>
+      <th>min_duration</th>
+      <td><p>the minimum duration.</p></td>
+    </tr>
+    <tr>
+      <th>shade_color</th>
+      <td><p>the shade color that indicates the exuberance periods.</p></td>
+    </tr>
+    <tr>
+      <th>opacity</th>
+      <td><p>the opacity of the shade color aka alpha.</p></td>
     </tr>
     </table>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -198,23 +232,23 @@ shade" />
 <span class='co'># Modify facet_wrap options through ellipsis</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free"</span>, <span class='kw'>direction</span>  <span class='kw'>=</span> <span class='st'>"v"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta, scales = "free", direction = "v"): object 'radf_dta' not found</span></div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>, <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(<span class='kw'>shade_color</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.3</span>))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3)): object 'radf_dta' not found</span></div><div class='input'>
-<span class='co'># Change color, size or linetype</span>
+<span class='co'># Change (overwrite) color, size or linetype</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>) +
   <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"black"</span>)) +
-  <span class='fu'>scale_size_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.2</span>, <span class='fl'>1</span>))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta): object 'radf_dta' not found</span></div><div class='input'>  <span class='fu'>scale_linetype_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"solid"</span>, <span class='st'>"solid"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in scale_linetype_manual(values = c("solid", "solid")): could not find function "scale_linetype_manual"</span></div><div class='input'>
+  <span class='fu'>scale_size_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.2</span>, <span class='fl'>1</span>)) +
+  <span class='fu'>scale_linetype_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"solid"</span>, <span class='st'>"solid"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta): object 'radf_dta' not found</span></div><div class='input'>
 <span class='co'># Change names through ellipsis</span>
 <span class='no'>custom_labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"psy1"</span> <span class='kw'>=</span> <span class='st'>"new_name_for_psy1"</span>, <span class='st'>"psy2"</span> <span class='kw'>=</span> <span class='st'>"new_name_for_psy2"</span>)
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'>labeller</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'>as_labeller</span>(<span class='no'>custom_labels</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta, labeller = labeller(id = as_labeller(custom_labels))): object 'radf_dta' not found</span></div><div class='input'>
-# Change Theme options
-# }
-
+<span class='co'># Change Theme options</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>) +
+  <span class='fu'>theme</span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta): object 'radf_dta' not found</span></div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
       <li><a href="#examples">Examples</a></li>
     </ul>
 
