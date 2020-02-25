@@ -33,20 +33,20 @@ shade(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...)
 
 \item{shade_opt}{options for the shading of the graph, usually used through \code{shade} functions.}
 
-\item{include}{argument name is depracated and substituted with \code{include_rejected}.}
+\item{include}{argument name is deprecated and substituted with \code{include_rejected}.}
 
-\item{select}{argument name is depracated and substituted with \code{select_series}.}
+\item{select}{argument name is deprecated and substituted with \code{select_series}.}
 
 \item{...}{further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
 
 \item{min_duration}{the minimum duration.}
 
-\item{shade_color}{the shade color that indicates the exuberance periods. Defaults to grey70.}
+\item{shade_color}{the shade color that indicates the exuberance periods.}
 
 \item{opacity}{the opacity of the shade color aka alpha.}
 }
 \description{
-\code{autoplot.radf} takes an \code{radf} object and returns a facetted ggplot object.
+\code{autoplot.radf} takes an \code{radf} object and returns a faceted ggplot object.
 \code{shade}
 }
 \examples{

@@ -26,7 +26,7 @@
     msg <- paste(
       "To use this package more efficiently, you need to install",
       "the {exuberdata} package which contains simulated critical values.",
-      "To install run `install_exuberdata"
+      "To install run `install_exuberdata()"
     )
     packageStartupMessage(msg)
   }
@@ -35,7 +35,7 @@
 #' convenience function to install exuberdata package
 #'
 #' This function wraps the \code{install.packages} function and offers a faster
-#' and more convinient way to install exuberdata.
+#' and more convenient way to install exuberdata.
 #'
 #' @importFrom utils install.packages
 #' @export
