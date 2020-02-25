@@ -48,6 +48,7 @@ Imports:
     tidyr (>= 0.8.3),
     glue (>= 1.3.1)
 Suggests:
+    exuberdata (>= 0.0.0.9001),
     covr (>= 3.2.1),
     knitr (>= 1.22),
     rmarkdown (>= 1.12),
@@ -65,3 +66,4 @@ LazyData: true
 Language: en-US
 RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE,  roclets = c("rd", "namespace", "collate"))
+Additional_repositories: https://kvasilopoulos.github.io/drat
