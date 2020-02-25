@@ -8,5 +8,5 @@ install_exuberdata()
 }
 \description{
 This function wraps the \code{install.packages} function and offers a faster
-and more convinient way to install exuberdata.
+and more convenient way to install exuberdata.
 }
