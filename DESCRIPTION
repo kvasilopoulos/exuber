@@ -66,4 +66,4 @@ LazyData: true
 Language: en-US
 RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE,  roclets = c("rd", "namespace", "collate"))
-Additional_repositories: https://github.com/kvasilopoulos/drat/
+Additional_repositories: https://kvasilopoulos.github.io/drat

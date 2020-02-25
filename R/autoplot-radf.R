@@ -1,6 +1,6 @@
 #' Plotting and tidying radf objects
 #'
-#' \code{autoplot.radf} takes an \code{radf} object and returns a facetted ggplot object.
+#' \code{autoplot.radf} takes an \code{radf} object and returns a faceted ggplot object.
 #' \code{shade}
 #'
 #' @inheritParams datestamp.radf
@@ -9,8 +9,8 @@
 #' @param select_series If not NULL, only plot with names or column number matching this regular expression will be executed.
 #' @param shade_opt options for the shading of the graph, usually used through \code{shade} functions.
 #' @param ... further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
-#' @param include argument name is depracated and substituted with `include_rejected`.
-#' @param select argument name is depracated and substituted with `select_series`.
+#' @param include argument name is deprecated and substituted with `include_rejected`.
+#' @param select argument name is deprecated and substituted with `select_series`.
 #'
 #' @importFrom dplyr filter
 #' @importFrom tidyr pivot_longer
@@ -101,7 +101,7 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
 
 #' @rdname autoplot.radf
 #' @param min_duration the minimum duration.
-#' @param shade_color the shade color that indicates the exuberance periods. Defaults to grey70.
+#' @param shade_color the shade color that indicates the exuberance periods.
 #' @param opacity the opacity of the shade color aka alpha.
 #' @export
 shade <- function(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...) {
