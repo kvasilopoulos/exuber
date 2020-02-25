@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieve/Set column names — series_names • exuber</title>
+<title>Summarizing radf models — summary.radf • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -50,10 +50,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Retrieve/Set column names — series_names" />
-<meta property="og:description" content="Retrieve or set the column names of a class radf() object.
-Similar to colnames, with the only difference that series_names is
-for radf() objects." />
+<meta property="og:title" content="Summarizing radf models — summary.radf" />
+<meta property="og:description" content="summary method for class &quot;radf&quot;" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -147,54 +145,74 @@ for radf() objects." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Retrieve/Set column names</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/series_names.R'><code>R/series_names.R</code></a></small>
-    <div class="hidden name"><code>series_names.Rd</code></div>
+    <h1>Summarizing radf models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/summary.R'><code>R/summary.R</code></a></small>
+    <div class="hidden name"><code>summary.radf.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Retrieve or set the column names of a class <code><a href='radf.html'>radf()</a></code> object.
-Similar to <code>colnames</code>, with the only difference that <code>series_names</code> is
-for <code><a href='radf.html'>radf()</a></code> objects.</p>
+    <p><code>summary</code> method for class "radf"</p>
     </div>
 
-    <pre class="usage"><span class='fu'>series_names</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='fu'>series_names</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
-
-<span class='fu'>series_names</span>(<span class='no'>x</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span></pre>
+    <pre class="usage"><span class='co'># S3 method for radf</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object.</p></td>
+      <th>object</th>
+      <td><p>An object of class <code><a href='radf.html'>radf()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>cv</th>
+      <td><p>An object of class "cv". The output of <code><a href='mc_cv.html'>mc_cv()</a></code>,
+<code><a href='wb_cv.html'>wb_cv()</a></code> or <code><a href='sb_cv.html'>sb_cv()</a></code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to methods.</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>n ordered vector of the same length as the "index" attribute of x.</p></td>
+      <td><p>further arguments passed to methods, not used.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns a list of summary statistics,
+the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># Simulate bubble processes</span>
+<span class='co'># Simulate bubble processes, compute the t-stat and critical values</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>4441</span>)
 <span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='kw'>psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
-
 <span class='no'>rfd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>dta</span>)
-<span class='fu'>series_names</span>(<span class='no'>rfd</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"OneBubble"</span>, <span class='st'>"TwoBubbles"</span>)
+
+<span class='co'># Summary, diagnostics and datestamp (default)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rfd</span>)
+<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>)
+<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>)
+
+<span class='co'>#' # Diagnostics for 'sadf'</span>
+<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)
+
+<span class='co'># Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived</span>
+<span class='no'>rot</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>NROW</a></span>(<span class='no'>rfd</span>)) / <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>NROW</a></span>(<span class='no'>rfd</span>))
+<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='no'>rot</span>)
+
+<span class='co'># Summary, diagnostics and datestamp (Wild Bootstrapped critical values)</span>
+
+<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wb_cv.html'>wb_cv</a></span>(<span class='no'>dta</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rfd</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)
+<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rfd</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)
+<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rfd</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

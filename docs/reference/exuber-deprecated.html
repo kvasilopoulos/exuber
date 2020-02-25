@@ -15,10 +15,12 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -47,15 +49,15 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Deprecated functions in package <span class="pkg">exuber</span>. — exuber-deprecated" />
 
+<meta property="og:title" content="Deprecated functions in package <span class="pkg">exuber</span>. — exuber-deprecated" />
 <meta property="og:description" content="The functions listed below are deprecated and will be defunct in
 the near future. When possible, alternative functions with similar
 functionality are also mentioned. Help pages for deprecated functions are
 available at help(&quot;-deprecated&quot;)." />
-
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -117,7 +119,6 @@ available at help(&quot;-deprecated&quot;)." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">News</a>
@@ -153,31 +154,45 @@ available at help(&quot;-deprecated&quot;)." />
     </div>
 
     <div class="ref-description">
-    
     <p>The functions listed below are deprecated and will be defunct in
 the near future. When possible, alternative functions with similar
 functionality are also mentioned. Help pages for deprecated functions are
 available at <code><a href='https://rdrr.io/r/utils/help.html'>help("-deprecated")</a></code>.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>report</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
-<span class='fu'>sim_dgp1</span>(<span class='no'>n</span>, <span class='kw'>te</span> <span class='kw'>=</span> <span class='fl'>0.4</span> * <span class='no'>n</span>, <span class='kw'>tf</span> <span class='kw'>=</span> <span class='fl'>0.15</span> * <span class='no'>n</span> + <span class='no'>te</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
-  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>sim_dgp1</span>(
+  <span class='no'>n</span>,
+  <span class='kw'>te</span> <span class='kw'>=</span> <span class='fl'>0.4</span> * <span class='no'>n</span>,
+  <span class='kw'>tf</span> <span class='kw'>=</span> <span class='fl'>0.15</span> * <span class='no'>n</span> + <span class='no'>te</span>,
+  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
 
-<span class='fu'>sim_dgp2</span>(<span class='no'>n</span>, <span class='kw'>te1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span>, <span class='kw'>tf1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span> + <span class='no'>te1</span>, <span class='kw'>te2</span> <span class='kw'>=</span> <span class='fl'>0.6</span> * <span class='no'>n</span>,
-  <span class='kw'>tf2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>n</span> + <span class='no'>te2</span>, <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>, <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>sim_dgp2</span>(
+  <span class='no'>n</span>,
+  <span class='kw'>te1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span>,
+  <span class='kw'>tf1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span> + <span class='no'>te1</span>,
+  <span class='kw'>te2</span> <span class='kw'>=</span> <span class='fl'>0.6</span> * <span class='no'>n</span>,
+  <span class='kw'>tf2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>n</span> + <span class='no'>te2</span>,
+  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
 
 <span class='fu'>col_names</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
-        
+
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+    </ul>
 
   </div>
 </div>
