@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r load}
+```{r load, echo=FALSE, message=FALSE}
 library(exuber)
 options(exuber.show_progress = FALSE)
 library(dplyr)

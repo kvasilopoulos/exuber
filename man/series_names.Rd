@@ -8,8 +8,6 @@
 series_names(x, ...)
 
 series_names(x) <- value
-
-series_names(x) <- value
 }
 \arguments{
 \item{x}{An object.}
