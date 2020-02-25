@@ -59,21 +59,20 @@ retrieve_crit <- function(x) {
 
 # options -----------------------------------------------------------------
 
-# isTRUE(getOption("readr.show_progress")) && interactive() &&
-#   !isTRUE(getOption("rstudio.notebook.executing")) &&
-#   !isTRUE(getOption("knitr.in.progress"))
+show_pb <- function() {
+  isTRUE(getOption("exuber.show_progress")) && interactive() &&
+    !isTRUE(getOption("rstudio.notebook.executing")) &&
+    !isTRUE(getOption("knitr.in.progress"))
+}
 
-# TODO
-# TODO
 set_pb <- function(iter, width = getOption("width") - 10L) {
-  if (getOption("exuber.show_progress") && interactive()) {
-    txtProgressBar(min = 1, max = iter - 1, style = 3,
-                   char = "-", width = width)
+  if (show_pb()) {
+    txtProgressBar(min = 1, max = iter - 1, style = 3, char = "-", width = width)
   }
 }
 
 set_pb_opts <- function(pb) {
-  if (getOption("exuber.show_progress") && interactive()) {
+  if (show_pb()) {
     list(progress = function(n) setTxtProgressBar(pb, n))
   }else{
     list(progress = NULL)
@@ -136,8 +135,6 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
 
 
 # printing ----------------------------------------------------------------
-
-# TODO custom printing function get rid of cli
 
 # cat_line <- function(...) {
 #   glue::glue_collapse(..., sep  = "")

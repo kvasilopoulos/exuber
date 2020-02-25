@@ -33,12 +33,6 @@ series_names.default <- function(x, ...) {
   UseMethod("series_names<-")
 }
 
-#' @rdname series_names
-#' @export
-`series_names<-` <- function(x, value) {
-  UseMethod("series_names<-")
-}
-
 #' @export
 `series_names<-.default` <- function(x, value) {
   if (length(series_names(x)) != length(value)) {

@@ -111,37 +111,32 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(exuber)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">exuber.show_progress =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb2-2" title="2">dta &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
-<a class="sourceLine" id="cb2-3" title="3">  <span class="dt">sim_psy1 =</span> <span class="kw"><a href="../reference/sim_psy1.html">sim_psy1</a></span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb2-4" title="4">  <span class="dt">sim_psy2 =</span> <span class="kw"><a href="../reference/sim_psy2.html">sim_psy2</a></span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb2-5" title="5">  <span class="dt">sim_evans =</span> <span class="kw"><a href="../reference/sim_blan.html">sim_blan</a></span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb2-6" title="6">  <span class="dt">sim_blan =</span> <span class="kw"><a href="../reference/sim_evans.html">sim_evans</a></span>(<span class="dv">100</span>),</a>
-<a class="sourceLine" id="cb2-7" title="7">) </a>
-<a class="sourceLine" id="cb2-8" title="8"></a>
-<a class="sourceLine" id="cb2-9" title="9"><span class="co"># Esimation</span></a>
-<a class="sourceLine" id="cb2-10" title="10">tstats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(dta, <span class="dt">lag =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb2-11" title="11">  </a>
-<a class="sourceLine" id="cb2-12" title="12"><span class="co"># Critical Values ~ Conservative</span></a>
-<a class="sourceLine" id="cb2-13" title="13">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mc_cv.html">mc_cv</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(dta), <span class="dt">opt_bsadf =</span> <span class="st">"conservative"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2">dta &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb1-3" title="3">  <span class="dt">sim_psy1 =</span> <span class="kw"><a href="../reference/sim_psy1.html">sim_psy1</a></span>(<span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb1-4" title="4">  <span class="dt">sim_psy2 =</span> <span class="kw"><a href="../reference/sim_psy2.html">sim_psy2</a></span>(<span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb1-5" title="5">  <span class="dt">sim_evans =</span> <span class="kw"><a href="../reference/sim_blan.html">sim_blan</a></span>(<span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb1-6" title="6">  <span class="dt">sim_blan =</span> <span class="kw"><a href="../reference/sim_evans.html">sim_evans</a></span>(<span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb1-7" title="7">) </a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co"># Esimation</span></a>
+<a class="sourceLine" id="cb1-10" title="10">tstats &lt;-<span class="st"> </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(dta, <span class="dt">lag =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-11" title="11">  </a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co"># Critical Values ~ Conservative</span></a>
+<a class="sourceLine" id="cb1-13" title="13">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/mc_cv.html">mc_cv</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(dta), <span class="dt">opt_bsadf =</span> <span class="st">"conservative"</span>)</a></code></pre></div>
 <div id="autoplot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#autoplot" class="anchor"></a>Autoplot</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(tstats, cv)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(tstats, cv)</a></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-1.png" width="960"></p>
 <div id="modify-plots-separately" class="section level3">
 <h3 class="hasAnchor">
 <a href="#modify-plots-separately" class="anchor"></a>Modify plots separately</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">plots &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(tstats, cv)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="co"># </span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co"># mod_plot &lt;- plots[[1]] + </span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">#   labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co"># mod_plot</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">plots &lt;-<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(tstats, cv)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co"># </span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co"># mod_plot &lt;- plots[[1]] + </span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#   labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># mod_plot</span></a></code></pre></div>
 <!-- ### Reconstruct -->
 <!-- ```{r reconstruct} -->
 <!-- # plots[[1]] <- mod_plot -->
@@ -201,6 +196,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
