@@ -19,10 +19,16 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/calc_pvalue.html</loc>
   </url>
   <url>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/crit.html</loc>
+  </url>
+  <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/datestamp.radf.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/datestamp.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/diagnostics.radf.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/diagnostics.html</loc>
@@ -40,10 +46,10 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/index-rd.html</loc>
   </url>
   <url>
-    <loc>https://kvasilopoulos.github.io/exuber//reference/mc_cv.html</loc>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/install_exuberdata.html</loc>
   </url>
   <url>
-    <loc>https://kvasilopoulos.github.io/exuber//reference/parse_dt.data.frame.html</loc>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/mc_cv.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/pipe.html</loc>
@@ -79,7 +85,7 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/sim_psy2.html</loc>
   </url>
   <url>
-    <loc>https://kvasilopoulos.github.io/exuber//reference/summary.html</loc>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/summary.radf.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/tidy.mc_cv.html</loc>
