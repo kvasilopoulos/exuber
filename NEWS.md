@@ -15,9 +15,9 @@ function that is provided in {exuber}.
 * `autoplot` has been refactored and new features have been added for more flexibility and 
 conformity with the {ggplot} mindset.
 
-## Impovements
+## Improvements
 
-* The package {zoo} has been used as a dependecy to import the method `index`. 
+* The package {zoo} has been used as a dependency to import the method `index`. 
 We made the decision to remove {zoo} and create a new method `index` internally.
 
 # exuber 0.3.0
