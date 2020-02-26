@@ -50,7 +50,7 @@ retrieve_crit <- function(x) {
     return(exuber::crit[[nr]])
   } else if (nr > length(exuber::crit) && nr <= 2000) {
     need_data()
-    return(exuberdata::crit[[nr]])
+    # return(exuberdata::crit[[nr]])
   }else {
     stop_glue("cannot provide MC critical values see help(crit)")
   }
