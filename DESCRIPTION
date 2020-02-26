@@ -60,6 +60,8 @@ Suggests:
 LinkingTo: 
     Rcpp (>= 1.0.1),
     RcppArmadillo (>= 0.9.400.2.0)
+Additional_repositories: 
+    https://kvasilopoulos.github.io/drat
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
@@ -67,4 +69,4 @@ LazyData: true
 Language: en-US
 RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE,  roclets = c("rd", "namespace", "collate"))
-Additional_Repositories: https://kvasilopoulos.github.io/drat
+
