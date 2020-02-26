@@ -1,21 +1,21 @@
 context("cv")
 
 test_that("exuberdata::crit as data", {
-  skip_on_cran()
-  skip_if(!"exuberdata" %in% loadedNamespaces())
-  crit <- exuberdata::crit
-  expect_error(capture.output(print(crit)), NA)
-  expect_error(crit, NA)
-  expect_error(crit[[100]], NA)
-  expect_error(radf_dta %>% retrieve_crit(), NA)
-  expect_error(crit[[2001]], "subscript out of bounds")
-  msg_crit <- "cannot provide MC critical values see help(crit)"
-  expect_error(sim_blan(4) %>% retrieve_crit(), msg_crit, fixed = TRUE)
-  expect_error(sim_blan(2001) %>% retrieve_crit(), msg_crit, fixed = TRUE)
-  expect_error(sim_blan(2001) %>% radf(minw = 2000) %>% retrieve_crit(),
-    msg_crit,
-    fixed = TRUE
-  )
+  # skip_on_cran()
+  # skip_if(!"exuberdata" %in% loadedNamespaces())
+  # crit <- exuberdata::crit
+  # expect_error(capture.output(print(crit)), NA)
+  # expect_error(crit, NA)
+  # expect_error(crit[[100]], NA)
+  # expect_error(radf_dta %>% retrieve_crit(), NA)
+  # expect_error(crit[[2001]], "subscript out of bounds")
+  # msg_crit <- "cannot provide MC critical values see help(crit)"
+  # expect_error(sim_blan(4) %>% retrieve_crit(), msg_crit, fixed = TRUE)
+  # expect_error(sim_blan(2001) %>% retrieve_crit(), msg_crit, fixed = TRUE)
+  # expect_error(sim_blan(2001) %>% radf(minw = 2000) %>% retrieve_crit(),
+  #   msg_crit,
+  #   fixed = TRUE
+  # )
 })
 
 test_that("n positive integer", {
