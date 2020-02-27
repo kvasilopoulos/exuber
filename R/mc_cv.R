@@ -57,12 +57,12 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
     badf = badf_crit,
     bsadf = bsadf_crit) %>%
     add_attr(
-      seed = seed %||% check_seed(),
-      parallel = do_par,
       method = "Monte Carlo",
       n = n,
       minw = minw,
-      iter = nrep
+      iter = nrep,
+      seed = get_rng_state(seed),
+      parallel = do_par
     )
 
 }
@@ -79,7 +79,8 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' should be initialized. Either NULL or an integer will be used in a call to
 #' `set.seed` before simulation. If set, the value is save as "seed" attribute
 #' of the returned value. The default, NULL will note change the rng state, and
-#' return .Random.seed as the "seed" attribute.
+#' return .Random.seed as the "seed" attribute. Results between seeds in parallell
+#' and non-parallel differ.
 #' @param opt_bsadf Options for bsadf critical value calculation. "conventional"
 #' corresponds to the max of the quantile of the simulated distribution, while
 #' "conservative" corresponds to the quantile of the max which is more conservative
