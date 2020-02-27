@@ -52,7 +52,7 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 
   edf_bsadf_panel <- foreach(
     i = 1:nboot,
-    .export = c("rls_gsadf", "unroot"),
+    .export = c("rls_gsadf", "unroot", "set_rng"),
     .combine = "cbind",
     .options.snow = pb_opts,
     .inorder = FALSE
@@ -90,7 +90,7 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
       minw = minw,
       iter = nboot,
       lag = lag,
-      seed = seed %||% check_seed(),
+      seed = get_rng_state(seed),
       parallel = do_par)
 }
 

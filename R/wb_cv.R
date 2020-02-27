@@ -43,7 +43,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
     dy <- diff(y[, j])
     results <- foreach(
       i = 1:nboot,
-      .export = c("rls_gsadf", "unroot"),
+      .export = c("rls_gsadf", "unroot", "set_rng"),
       .combine = "cbind",
       .options.snow = pb_opts,
       .inorder = FALSE
@@ -85,7 +85,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       n = nrow(y),
       minw = minw,
       iter = nboot,
-      seed = seed %||% check_seed(),
+      seed = get_rng_state(seed),
       parallel = do_par
       )
 
