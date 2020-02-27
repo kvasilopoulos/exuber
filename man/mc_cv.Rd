@@ -28,7 +28,8 @@ mc_distr(n, minw = NULL, nrep = 2000L, seed = NULL)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute.}
+return .Random.seed as the "seed" attribute. Results between seeds in parallell
+and non-parallel differ.}
 
 \item{opt_badf}{Options for badf critical value calculation. "fixed" corresponds
 to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and

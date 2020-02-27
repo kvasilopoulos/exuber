@@ -12,7 +12,7 @@ test_that("seed gets the same results",{
   options(exuber.parallel = FALSE)
 })
 
-test_that("seed gets the same results",{
+test_that("seed gets the same results - wb",{
   skip_on_cran()
   options(exuber.parallel = TRUE)
   expect_true(
@@ -24,18 +24,14 @@ test_that("seed gets the same results",{
   options(exuber.parallel = FALSE)
 })
 
-test_that("seed is the same with or without paraller", {
-  skip_on_cran()
-  x <- mc_cv(10, nrep = 20, seed = 123)
-  options(exuber.parallel = TRUE)
-  expect_true(
-    all.equal(
-      x,
-      mc_cv(10, nrep = 20, seed = 123)
-    )
-  )
-  options(exuber.parallel = FALSE)
-})
+# test_that("seed is the same with or without parallel", {
+#   skip_on_cran()
+#   options(exuber.parallel = TRUE)
+#   x <- mc_cv(10, nrep = 20, seed = 123)
+#   options(exuber.parallel = FALSE)
+#   y <- mc_cv(10, nrep = 20, seed = 123)
+#   expect_true(all.equal(x,y))
+# })
 
 test_that("local options", {
   options(exuber.global_seed = NA)
@@ -57,7 +53,7 @@ test_that("local options", {
   )
 })
 
-test_that("global options", {
+test_that("global options works", {
   options(exuber.global_seed = 124)
   expect_true(
     isTRUE(
