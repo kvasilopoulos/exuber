@@ -80,12 +80,14 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       badf = badf_crit,
       bsadf = bsadf_crit) %>%
     add_attr(
-      seed = seed %||% check_seed(),
-      index = attr(y, "index"),
       method = "Wild Bootstrap",
+      index = attr(y, "index"),
       n = nrow(y),
       minw = minw,
-      iter = nboot)
+      iter = nboot,
+      seed = seed %||% check_seed(),
+      parallel = do_par
+      )
 
 
 }
