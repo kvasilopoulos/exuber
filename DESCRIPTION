@@ -1,7 +1,7 @@
 Type: Package
 Package: exuber
 Title: Econometric Analysis of Explosive Time Series
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: 
     c(person(given = "Kostas", 
              family = "Vasilopoulos",
@@ -68,4 +68,3 @@ LazyData: true
 Language: en-US
 RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE,  roclets = c("rd", "namespace", "collate"))
-
