@@ -1,5 +1,42 @@
 context("seed")
 
+test_that("seed gets the same results",{
+  skip_on_cran()
+  options(exuber.parallel = TRUE)
+  expect_true(
+    all.equal(
+      mc_cv(10, nrep = 20, seed = 123),
+      mc_cv(10, nrep = 20, seed = 123)
+    )
+  )
+  options(exuber.parallel = FALSE)
+})
+
+test_that("seed gets the same results",{
+  skip_on_cran()
+  options(exuber.parallel = TRUE)
+  expect_true(
+    all.equal(
+      wb_cv(dta, nboot = 20, seed = 123),
+      wb_cv(dta, nboot = 20, seed = 123)
+    )
+  )
+  options(exuber.parallel = FALSE)
+})
+
+test_that("seed is the same with or without paraller", {
+  skip_on_cran()
+  x <- mc_cv(10, nrep = 20, seed = 123)
+  options(exuber.parallel = TRUE)
+  expect_true(
+    all.equal(
+      x,
+      mc_cv(10, nrep = 20, seed = 123)
+    )
+  )
+  options(exuber.parallel = FALSE)
+})
+
 test_that("local options", {
   options(exuber.global_seed = NA)
   expect_false(

@@ -1,4 +1,4 @@
-sb_ <-  function(data, minw, lag, nboot, seed) {
+sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 
   y <- parse_data(data)
 
@@ -57,6 +57,7 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
     .options.snow = pb_opts,
     .inorder = FALSE
   ) %fun% {
+    set_rng(seed)
     boot_index <- sample(1:nres, replace = TRUE)
     if (show_pb && !do_par) setTxtProgressBar(pb, i)
     for (j in 1:nc) {
@@ -83,7 +84,7 @@ sb_ <-  function(data, minw, lag, nboot, seed) {
   list(bsadf_panel = bsadf_crit,
        gsadf_panel = gsadf_crit) %>%
     add_attr(
-      seed = rng_state,
+      seed = seed %||% check_seed(),
       index = attr(y, "index"),
       method = "Sieve Bootstrap",
       n = nrow(data),
