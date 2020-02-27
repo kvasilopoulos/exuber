@@ -11,7 +11,6 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
   assert_positive_int(minw, greater_than = 2)
   stopifnot(is.logical(dist_rad))
 
-  rng_state <- set_rng(seed = seed)
 
   nc <- ncol(y)
   nr <- nrow(y)
@@ -37,7 +36,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
     on.exit(parallel::stopCluster(cl))
   }
 
-  `%fun%` <- if (do_par) `%dopar%` else `%do%`
+  `%fun%` <- if (do_par) `%dorng%` else `%do%`
 
   for (j in 1:nc) {
 
@@ -49,6 +48,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       .options.snow = pb_opts,
       .inorder = FALSE
     ) %fun% {
+      set_rng(seed)
       if (show_pb && !do_par)
         setTxtProgressBar(pb, i)
       if (dist_rad) {
@@ -80,7 +80,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       badf = badf_crit,
       bsadf = bsadf_crit) %>%
     add_attr(
-      seed = rng_state,
+      seed = seed %||% check_seed(),
       index = attr(y, "index"),
       method = "Wild Bootstrap",
       n = nrow(y),

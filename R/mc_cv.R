@@ -1,5 +1,6 @@
 #' @importFrom rlang is_scalar_atomic
-mc_ <- function(n, minw, nrep, seed) {
+#' @importFrom doRNG `%dorng%`
+mc_ <- function(n, minw, nrep, seed = NULL) {
 
   if (!is_n(n)) { # case of providiing data in 'n'
     stop_glue("Argument 'n' should be a positive integer")
@@ -12,8 +13,6 @@ mc_ <- function(n, minw, nrep, seed) {
   assert_positive_int(nrep)
   assert_positive_int(minw, greater_than = 2)
 
-  rng_state <- set_rng(seed = seed)
-
   show_pb <- getOption("exuber.show_progress")
   pb <- set_pb(nrep)
   pb_opts <- set_pb_opts(pb)
@@ -25,15 +24,16 @@ mc_ <- function(n, minw, nrep, seed) {
     on.exit(parallel::stopCluster(cl))
   }
 
-  `%fun%` <- if (do_par) `%dopar%` else `%do%`
+  `%fun%` <- if (do_par) `%dorng%` else `%do%`
 
   results <- foreach(
     i = 1:nrep,
-    .export = c("rls_gsadf", "unroot"),
+    .export = c("rls_gsadf", "unroot", "set_rng"),
     .combine = "cbind",
     .options.snow = pb_opts,
-    .inorder = FALSE
+    .inorder = TRUE
   ) %fun% {
+    set_rng(seed)
     if (show_pb && !do_par)
       setTxtProgressBar(pb, i)
     y <- cumsum(rnorm(n))
@@ -57,7 +57,7 @@ mc_ <- function(n, minw, nrep, seed) {
     badf = badf_crit,
     bsadf = bsadf_crit) %>%
     add_attr(
-      seed = rng_state,
+      seed = seed %||% check_seed(),
       method = "Monte Carlo",
       n = n,
       minw = minw,
