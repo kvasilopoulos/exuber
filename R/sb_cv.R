@@ -84,13 +84,14 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   list(bsadf_panel = bsadf_crit,
        gsadf_panel = gsadf_crit) %>%
     add_attr(
-      seed = seed %||% check_seed(),
-      index = attr(y, "index"),
       method = "Sieve Bootstrap",
+      index = attr(y, "index"),
       n = nrow(data),
       minw = minw,
       iter = nboot,
-      lag = lag)
+      lag = lag,
+      seed = seed %||% check_seed(),
+      parallel = do_par)
 }
 
 

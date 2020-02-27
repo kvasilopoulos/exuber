@@ -58,6 +58,7 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
     bsadf = bsadf_crit) %>%
     add_attr(
       seed = seed %||% check_seed(),
+      parallel = do_par,
       method = "Monte Carlo",
       n = n,
       minw = minw,
