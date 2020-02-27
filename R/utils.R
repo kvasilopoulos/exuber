@@ -22,7 +22,7 @@ get_rng <- function(seed) {
   RNGstate
 }
 
-check_seed <- function() {
+get_global_rng <- function() {
   option_seed <- getOption("exuber.global_seed")
   if (!is.na(option_seed) && !is.null(option_seed)) {
     option_seed
@@ -32,14 +32,18 @@ check_seed <- function() {
 }
 
 set_rng <- function(seed) {
-  rng_state <- get_rng(seed)
-  global_seed <- check_seed()
-  if (!is.null(seed)) {
-    set.seed(seed)
-  } else if (!is.null(global_seed) && !is.na(global_seed)) {
-    set.seed(global_seed)
+  super <- seed %||% get_global_rng() # local supersedes global
+  rng_state <- super %||% get_rng(seed)
+  if (!is.null(super)) {
+    set.seed(super)
   }
   rng_state
+}
+
+get_rng_state <- function(seed) {
+  seed %||%
+    get_global_rng() %||%
+    get_rng(seed)
 }
 
 # get crit data --------------------------------------------------------
