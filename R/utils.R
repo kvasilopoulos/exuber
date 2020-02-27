@@ -36,7 +36,7 @@ set_rng <- function(seed) {
   global_seed <- check_seed()
   if (!is.null(seed)) {
     set.seed(seed)
-  } else if (!is.null(global_seed)) {
+  } else if (!is.null(global_seed) && !is.na(global_seed)) {
     set.seed(global_seed)
   }
   rng_state
