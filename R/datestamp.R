@@ -30,6 +30,11 @@ datestamp.default <- function(object, cv, ...) {
   stop_glue("method `datestamp` is not available for objects of class {class(object)}.")
 }
 
+# object <- radf_dta
+# cv <- crit[[100]]
+# option <- "gsadf"
+# min_duration = 0
+
 #' This is a topic
 #'
 #' This is a description
@@ -41,6 +46,7 @@ datestamp.default <- function(object, cv, ...) {
 #' reported. Default is 0.
 #' @importFrom rlang sym !!
 #' @importFrom dplyr filter
+#' @importFrom purrr map map_lgl
 #' @export
 datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
                            min_duration = 0, ...) {
@@ -50,44 +56,36 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
     cv <- retrieve_crit(object)
   }
   assert_class(cv, "cv")
-
   option <- match.arg(option)
-
   assert_positive_int(min_duration, strictly = FALSE)
   assert_match(object, cv)
 
   x <- object
   y <- cv
+  dating <- index(x)
 
   ds <-  diagnostics(x, cv = y, option = option)
-  acc <- pluck(ds, "accepted")
-
+  if (all(ds$dummy == 0)) {
+    return(message_glue("Cannot reject H0 for significance level 95%"))
+  }
+  acc <- ds[["accepted"]]
   if (is_bare_character(acc, n = 0)) {
     stop_glue("Cannot reject the H0")
   }
 
-  if (all(ds$dummy == 0)) {
-    return(message_glue("Cannot reject H0 for significance level 95%"))
-  }
-
-  reps <- if (is_sb(y)) 1 else match(acc, series_names(x))
-  dating <- index(x)
 
   ds <- vector("list", length(acc))
   if (is_sb(y)) {
     if (get_lag(y) != 0) {
-      tstat <- x$bsadf_panel[-c(1:2)]
+      tstat <- x$bsadf_panel[-c(1:2)] #remove 2 cause of the differnce in the regression
       dating <- dating[-c(1:2)]
-    } else {
+    } else if (get_lag(y) > 0) {
       tstat <- x$bsadf_panel
     }
     ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + get_minw(x) + get_lag(x))
   }
 
-  # TODO tstat > cv is a vectorized function
-  # TODO map(stamp) map(~.x + 4)
-  # TODO DRy DRY DRY
-
+  reps <- if (is_sb(y)) 1 else match(acc, series_names(x))
   for (i in seq_along(acc)) {
     if (is_mc(y)) {
       if (option == "gsadf") {
@@ -116,49 +114,32 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
     }
   }
 
-  # identification of periods
-  stamp <- function(ds) {
-    start <- ds[c(TRUE, diff(ds) != 1)]
-    end <- ds[c(diff(ds) != 1, TRUE)]
-    end[end - start == 0] <- end[end - start == 0] + 1
-    duration <- end - start + 1
-    foo <- data.frame("Start" = start, "End" = end, "Duration" = duration)
-    foo
-  }
-
-  ds_stamp <-
-    lapply(ds, function(z) stamp(z) %>%
-             filter(!!sym("Duration") >= min_duration) %>% as.matrix())
-
-  add_index <- lapply(ds_stamp, function(t)
+  ds_stamp <- map(ds, ~ stamp(.x) %>% filter(Duration >= min_duration))
+  ds_stamp_index <- lapply(ds_stamp, function(t)
     data.frame(
       "Start" = dating[t[, 1]],
       "End" = dating[t[, 2]],
       "Duration" = t[, 3], row.names = NULL))
 
   # min_duration may cause to exclude periods or the whole sample
-  min_reject <- lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
-  res <- add_index[!min_reject]
-  names(res) <- acc[!min_reject]
+  min_reject <- map_lgl(ds_stamp, ~ length(~.x) == 0)
+  # lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
 
+  res <- ds_stamp_index[!min_reject]
+  names(res) <- acc[!min_reject]
   if (length(res) == 0) {
     stop_glue("Argument 'min_duration' excludes all explosive periods")
   }
-
-  dummy <-
-    matrix(0, nrow = length(index(x)), ncol = length(acc),
-           dimnames = list(seq_along(index(x)),
-                           if (is_sb(y)) "Panel" else series_names(x)[reps]))
-
+  dms <- list(seq_along(index(x)), if (is_sb(y)) "Panel" else series_names(x)[reps])
+  dummy <- matrix(0, nrow = length(index(x)), ncol = length(acc), dimnames = dms)
   for (z in seq_along(acc)) {
     dummy[ds[[z]], z] <- 1
   }
 
-  # TODO inherit_attrs from object and cv
   structure(
     res,
     dummy = dummy,
-    index = index(x, trunc = TRUE),
+    index = index(x),
     panel = is_sb(y),
     min_duration = min_duration,
     option = option,
@@ -182,6 +163,16 @@ print.datestamp <- function(x, ...) {
   }
 }
 
+# identification of periods
+stamp <- function(ds) {
+  start <- ds[c(TRUE, diff(ds) != 1)]
+  end <- ds[c(diff(ds) != 1, TRUE)]
+  end[end - start == 0] <- end[end - start == 0] + 1
+  duration <- end - start + 1
+  foo <- data.frame("Start" = start, "End" = end, "Duration" = duration)
+  foo
+}
+
 #' Plotting and tidying datestamp objects
 #'
 #' Plotting datestamp with \link[=ggplot2]{geom_segment()}
@@ -189,6 +180,7 @@ print.datestamp <- function(x, ...) {
 #' @name autoplot.datestamp
 #'
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
+#' @inheritParams index
 #' @param ... further arguments passed to methods.
 #' @export
 #'
@@ -208,24 +200,22 @@ print.datestamp <- function(x, ...) {
 #'   autoplot() +
 #'   ggplot2::scale_colour_manual(values = rep("black", 4))
 #' }
-autoplot.datestamp <- function(object, ...) {
+autoplot.datestamp <- function(object, trunc = TRUE, ...) {
 
-  dating <- index(object)
+  dating <- index(object, trunc = trunc)
   scale_custom <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
 
   ggplot(tidy(object), aes_string(colour = "id")) +
     geom_segment(
       aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7) +
-    scale_custom(limits = c(dating[1L], dating[length(dating)])) +
+    scale_x_continuous(limits = c(dating[1L], dating[length(dating)])) +
     theme_bw() +
+    labs(title = "", x = "", y = "") + #intentionally not in theme
     theme(
-      plot.title = element_blank(),
-      axis.title = element_blank(),
       axis.text.y = element_text(face = "bold", size = 8, hjust = 0),
       legend.position = "none",
       panel.grid.major.y = element_blank(),
       plot.margin = margin(0.5, 1, 0, 0.5, "cm")
-
     )
 }
 
