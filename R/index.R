@@ -28,7 +28,7 @@ index.default <- function(x, ...) {
 }
 
 #' @export
-index.radf <- function(x, trunc = FALSE, ...) {
+index.datestamp <- index.radf <- function(x, trunc = FALSE, ...) {
   idx <- attr(x, "index")
   if (trunc) idx <- idx[-c(1:(get_minw(x) + get_lag(x)))]
   idx
