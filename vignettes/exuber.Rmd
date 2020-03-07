@@ -31,7 +31,7 @@ stocks <- aggregate(EuStockMarkets, nfrequency = 52, mean)
 We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.
 
 ```{r estimation}
-est_stocks <- radf(stocks,lag = 1)
+est_stocks <- radf(stocks, lag = 1)
 ```
 
 ## Report
