@@ -65,28 +65,18 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
   if (rlang::is_bare_character(acc_series, n = 0)) {
     stop_glue("available series are not acceptable for plotting")
   }
+
   dots <- rlang::dots_list(...)
-  gg <- augment_join(object, cv) %>%
+  plot_data <- augment_join(object, cv) %>%
     filter(id %in% series, sig == 0.95, name == option) %>%
     droplevels() %>%
-    pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "stat") %>%
+    pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "stat")
+  gg <-  plot_data %>%
     ggplot(aes(index, value, col = stat, size = stat, linetype = stat)) +
     geom_line() +
-    scale_color_manual(values = c("red", "blue")) +
-    scale_size_manual(values = c(0.8, 0.7)) +
-    scale_linetype_manual(values = c(2, 1)) +
-    theme(
-      panel.background = element_rect(fill = "white", colour = NA),
-      panel.border = element_rect(fill = NA, colour = "grey20"),
-      panel.grid = element_line(colour = "grey92"),
-      panel.grid.minor = element_blank(),
-      panel.grid.major = element_line(linetype = "dashed", size = 0.7),
-      strip.background = element_blank(),
-      strip.text.x = element_text(hjust = 0, size = rel(1.5)),
-      axis.title = element_blank(),
-      legend.key = element_blank(),
-      legend.position = "none"
-    )
+    scale_exuber_manual() +
+    theme_exuber()
+
   if (!is.null(shade_opt)) {
     ds_data <- tidy(datestamp(object, cv)) %>%
       filter(id %in% series) %>%
@@ -112,4 +102,42 @@ shade <- function(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ..
       aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
     )
   }
+}
+
+scale_exuber_manual <- function(
+  color_values = c("red", "blue"), linetype_values = c(2,1),
+  size_values = c(0.8, 0.7)) {
+  list(
+    scale_color_manual(values = color_values),
+    scale_size_manual(values = size_values),
+    scale_linetype_manual(values = linetype_values)
+  )
+}
+
+#' @importFrom ggplot2 `%+replace%`
+theme_exuber <- function(
+  base_size = 11, base_family = "", base_line_size = base_size/22,
+  base_rect_size = base_size/22) {
+  half_line <- base_size/2
+  theme_grey(
+    base_size = base_size,
+    base_family = base_family,
+    base_line_size = base_line_size,
+    base_rect_size = base_rect_size) %+replace%
+    theme(
+      panel.grid.minor = element_blank(),
+      strip.background = element_blank(),
+      axis.title = element_blank(),
+      legend.title = element_blank(),
+      legend.position = "none"
+    ) +
+    theme(
+      legend.key = element_rect(fill = "white", colour = NA),
+      panel.background = element_rect(fill = "white", colour = NA),
+      panel.border = element_rect(fill = NA, colour = "grey20"),
+      panel.grid = element_line(colour = "grey92"),
+      panel.grid.major = element_line(linetype = "dashed", size = 0.7),
+      strip.text.x = element_text(size = rel(1.5), hjust = 0,
+          vjust = 1, margin = margin(b = half_line)),
+    )
 }

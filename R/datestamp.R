@@ -114,7 +114,7 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
     }
   }
 
-  ds_stamp <- map(ds, ~ stamp(.x) %>% filter(Duration >= min_duration))
+  ds_stamp <- map(ds, ~ stamp(.x) %>% filter(Duration >= min_duration) %>% as.matrix())
   ds_stamp_index <- lapply(ds_stamp, function(t)
     data.frame(
       "Start" = dating[t[, 1]],
@@ -122,8 +122,7 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
       "Duration" = t[, 3], row.names = NULL))
 
   # min_duration may cause to exclude periods or the whole sample
-  min_reject <- map_lgl(ds_stamp, ~ length(~.x) == 0)
-  # lapply(ds_stamp, function(t) length(t) == 0) %>% unlist()
+  min_reject <- map_lgl(ds_stamp, ~ length(.x) == 0)
 
   res <- ds_stamp_index[!min_reject]
   names(res) <- acc[!min_reject]
@@ -141,6 +140,8 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
     dummy = dummy,
     index = index(x),
     panel = is_sb(y),
+    minw = get_minw(x),
+    lag = get_lag(x),
     min_duration = min_duration,
     option = option,
     method = get_method(y),
@@ -180,7 +181,8 @@ stamp <- function(ds) {
 #' @name autoplot.datestamp
 #'
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
-#' @inheritParams index
+#' @param trunc default FALSE. If TRUE the index formed by truncating the value
+#' in the minimum window.
 #' @param ... further arguments passed to methods.
 #' @export
 #'
@@ -208,7 +210,7 @@ autoplot.datestamp <- function(object, trunc = TRUE, ...) {
   ggplot(tidy(object), aes_string(colour = "id")) +
     geom_segment(
       aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7) +
-    scale_x_continuous(limits = c(dating[1L], dating[length(dating)])) +
+    scale_custom(limits = c(dating[1L], dating[length(dating)])) +
     theme_bw() +
     labs(title = "", x = "", y = "") + #intentionally not in theme
     theme(

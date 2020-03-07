@@ -5,7 +5,7 @@
 \alias{tidy.datestamp}
 \title{Plotting and tidying datestamp objects}
 \usage{
-\method{autoplot}{datestamp}(object, ...)
+\method{autoplot}{datestamp}(object, trunc = TRUE, ...)
 
 \method{tidy}{datestamp}(x, ...)
 }
