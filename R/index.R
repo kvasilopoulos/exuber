@@ -27,6 +27,14 @@ index.default <- function(x, ...) {
   }
 }
 
+#' @importFrom purrr detect_index
+#' @importFrom lubridate is.Date
+#' @export
+index.data.frame <- function(x, ...) {
+  date_index <- purrr::detect_index(x, lubridate::is.Date)
+  if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq_len(NROW(x))
+}
+
 #' @export
 index.datestamp <- index.radf <- function(x, trunc = FALSE, ...) {
   idx <- attr(x, "index")
@@ -36,27 +44,18 @@ index.datestamp <- index.radf <- function(x, trunc = FALSE, ...) {
 
 #' @export
 index.cv <- function(x, trunc = FALSE, ...) {
-  if (is_mc(x))
+  if (is_mc(x)) {
     stop_glue("method `index` is not suppoted for {get_method(x)}")
+  }
   value <- attr(x, "index")
-  if (is_sb(x)) {
-    if (get_lag(x) != 0) {
-      if (trunc) value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
+  if (trunc) {
+    if (is_sb(x) && (get_lag(x) != 0)) {
+      value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
     }else{
-      if (trunc) value <- value[-c(1:(get_minw(x)))]
+      value <- value[-c(1:get_minw(x))]
     }
-  }else{
-    if (trunc) value <- value[-c(1:get_minw(x))]
   }
   value
-}
-
-#' @importFrom purrr detect_index
-#' @importFrom lubridate is.Date
-#' @export
-index.data.frame <- function(x, ...) {
-  date_index <- purrr::detect_index(x, lubridate::is.Date)
-  if (as.logical(date_index)) x[, date_index, drop = TRUE] else seq_len(NROW(x))
 }
 
 #'@rdname index-rd
