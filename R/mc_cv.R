@@ -24,16 +24,16 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
     on.exit(parallel::stopCluster(cl))
   }
 
-  `%fun%` <- if (do_par) `%dorng%` else `%do%`
+  `%fun%` <- if (do_par) `%dorng%` else `%do%`#dorng to seed in parallel
 
+  set_rng(seed)
   results <- foreach(
     i = 1:nrep,
     .export = c("rls_gsadf", "unroot", "set_rng"),
     .combine = "cbind",
     .options.snow = pb_opts,
-    .inorder = TRUE
+    .inorder = FALSE
   ) %fun% {
-    set_rng(seed)
     if (show_pb && !do_par)
       setTxtProgressBar(pb, i)
     y <- cumsum(rnorm(n))
