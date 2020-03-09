@@ -50,6 +50,35 @@ cv <- mc_cv(nrow(dta), opt_bsadf = "conservative")
 autoplot(tstats, cv)
 ```
 
+## Old Functionality
+
+'exuber' used to plot graph individually in a list, and then you had the option 
+to modify each plot and arrange into a single grob with `ggarrange()`. However,
+newer versions of exuber are focus on provide a plot with facet as to easier 
+manipulation of aesthetics and themes. To return to older functionality there 
+are several ways. Some of them are the following
+
+```{r ggforoce-way}
+library(gridExtra)
+
+accepted_series <- diagnostics(tstats, cv)$accepted # series_names(tstats)
+# you can select all seris with 
+
+# Through a loop on accepted series 
+h <- list()
+for (as in accepted_series) {
+  h[[as]] <- autoplot(tstats, cv, select_series = as)
+}
+
+# Alternatively in a vectorized way
+h <- lapply(accepted_series, function(x) autoplot(tstats, cv, select_series = x))
+names(h) <- accepted_series
+
+arranged_plot <- do.call(gridExtra::arrangeGrob, h)
+plot(arranged_plot)
+
+```
+
 ### Modify plots separately
 
 ```{r autoplot-modify}
