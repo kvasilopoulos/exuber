@@ -56,7 +56,8 @@ Suggests:
     spelling (>= 2.1),
     testthat (>= 2.1.1),
     withr (>= 2.1.2),
-    stringr (>= 1.4.0)
+    stringr (>= 1.4.0),
+    gridExtra
 LinkingTo: 
     Rcpp (>= 1.0.1),
     RcppArmadillo (>= 0.9.400.2.0)
