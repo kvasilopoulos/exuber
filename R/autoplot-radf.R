@@ -45,7 +45,7 @@
 autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
                           select_series = NULL, option = c("gsadf", "sadf"),
                           shade_opt = shade(),
-                          include = NULL, select = NULL, ...) {
+                          include = "DEPRECATED", select = "DEPRECATED", ...) {
 
   deprecate_arg_warn(include, include_rejected)
   deprecate_arg_warn(select, select_series)
@@ -83,10 +83,21 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
       droplevels()
     gg <- gg + shade_opt(ds_data)
   }
-  gg +
-    {if (is.null(dots$scales)) facet_wrap( ~ id, scales = "free", ...)
-      else facet_wrap( ~ id, ...)}
+
+  # h <- list()
+  # for (i in 1:length(series)) {
+  #   h[[i]] <- gg +
+  #     ggforce::facet_grid_paginate(~id, ncol = 1, nrow = 1, page = i)
+  # }
+  # h
+  if (is.null(dots$scales)) {
+    h <- gg + facet_wrap( ~ id, scales = "free", ...)
+  }else{
+    h <- gg <- facet_wrap( ~ id, ...)
+  }
+  h
 }
+
 
 
 #' @rdname autoplot.radf

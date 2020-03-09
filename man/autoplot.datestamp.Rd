@@ -12,6 +12,9 @@
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
 
+\item{trunc}{default FALSE. If TRUE the index formed by truncating the value
+in the minimum window.}
+
 \item{...}{further arguments passed to methods.}
 
 \item{x}{An object of class \code{\link[=datestamp]{datestamp()}}}
