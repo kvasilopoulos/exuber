@@ -1,11 +1,11 @@
-deprecate_arg_warn <- function(what, with) {
-  if (!is.null(what))
-    warning_glue("`{substitute(what)}` is deprecated. Please use `{substitute(with)}` instead.")
+deprecate_arg_warn <- function(old, new) {
+  if (!is.null(old) && old != "DEPRECATED")
+    warning_glue("`{substitute(old)}` is deprecated. Please use `{substitute(new)}` instead.")
 }
 
-deprecate_arg_stop <- function(what, with) {
-  if (!is.null(what))
-    stop_glue("`{substitute(what)}` is deprecated. Please use `{substitute(with)}` instead.")
+deprecate_arg_stop <- function(old, new) {
+  if (!is.null(old) && old != "DEPRECATED")
+    stop_glue("`{substitute(old)}` is deprecated. Please use `{substitute(new)}` instead.")
 }
 
 
