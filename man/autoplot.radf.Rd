@@ -12,8 +12,8 @@
   select_series = NULL,
   option = c("gsadf", "sadf"),
   shade_opt = shade(),
-  include = NULL,
-  select = NULL,
+  include = "DEPRECATED",
+  select = "DEPRECATED",
   ...
 )
 
