@@ -6,7 +6,7 @@ parse_dt <- function(x) {
 }
 
 parse_dt.default <- function(x) {
-  stop_glue("Unsupported class")
+  stop_glue("unsupported class")
 }
 
 parse_dt.data.frame <- function(x) {
@@ -23,6 +23,7 @@ parse_dt.data.frame <- function(x) {
 
 parse_dt.ts <- function(x) {
   sim_index <- seq(1, NROW(x), 1)
+  vec_time <- as.vector(time(x))
   if (identical(time(x), sim_index)) {
     index <- sim_index
   } else {

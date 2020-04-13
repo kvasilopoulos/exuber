@@ -21,7 +21,7 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{

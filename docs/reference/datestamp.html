@@ -114,6 +114,12 @@ episodes during which the time series display explosive dynamics." />
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -156,7 +162,7 @@ episodes during which the time series display explosive dynamics." />
 episodes during which the time series display explosive dynamics.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>datestamp</span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>datestamp</span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,6 +175,11 @@ episodes during which the time series display explosive dynamics.</p>
       <th>cv</th>
       <td><p>An object of class "cv". The output of <code><a href='mc_cv.html'>mc_cv()</a></code>,
 <code><a href='wb_cv.html'>wb_cv()</a></code> or <code><a href='sb_cv.html'>sb_cv()</a></code></p></td>
+    </tr>
+    <tr>
+      <th>min_duration</th>
+      <td><p>The minimum duration of an explosive period for it to be
+reported. Default is 0.</p></td>
     </tr>
     <tr>
       <th>...</th>

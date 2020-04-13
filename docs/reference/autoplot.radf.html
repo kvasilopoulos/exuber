@@ -114,6 +114,12 @@ shade" />
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -164,12 +170,12 @@ shade" />
   <span class='kw'>select_series</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>option</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span>),
   <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(),
-  <span class='kw'>include</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>select</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>include</span> <span class='kw'>=</span> <span class='st'>"DEPRECATED"</span>,
+  <span class='kw'>select</span> <span class='kw'>=</span> <span class='st'>"DEPRECATED"</span>,
   <span class='no'>...</span>
 )
 
-<span class='fu'>shade</span>(<span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>shade_color</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>shade</span>(<span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,7 +222,7 @@ shade" />
       <td><p>the minimum duration.</p></td>
     </tr>
     <tr>
-      <th>shade_color</th>
+      <th>fill</th>
       <td><p>the shade color that indicates the exuberance periods.</p></td>
     </tr>
     <tr>
@@ -227,23 +233,23 @@ shade" />
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta): object 'radf_dta' not found</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data</span>)
+
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>)</div><div class='img'><img src='autoplot.radf-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Modify facet_wrap options through ellipsis</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free"</span>, <span class='kw'>direction</span>  <span class='kw'>=</span> <span class='st'>"v"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta, scales = "free", direction = "v"): object 'radf_dta' not found</span></div><div class='input'>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>, <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(<span class='kw'>shade_color</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.3</span>))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3)): object 'radf_dta' not found</span></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free"</span>, <span class='kw'>direction</span>  <span class='kw'>=</span> <span class='st'>"v"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in facet_wrap(~id, ...): unused argument (direction = "v")</span></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(<span class='kw'>shade_color</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.3</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Ignoring unknown parameters: shade_colour</span></div><div class='img'><img src='autoplot.radf-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change (overwrite) color, size or linetype</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>) +
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>) +
   <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"black"</span>)) +
   <span class='fu'>scale_size_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1.2</span>, <span class='fl'>1</span>)) +
-  <span class='fu'>scale_linetype_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"solid"</span>, <span class='st'>"solid"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta): object 'radf_dta' not found</span></div><div class='input'>
+  <span class='fu'>scale_linetype_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"solid"</span>, <span class='st'>"solid"</span>))</div><div class='output co'>#&gt; <span class='error'>Error in scale_color_manual(values = c("black", "black")): could not find function "scale_color_manual"</span></div><div class='input'>
 <span class='co'># Change names through ellipsis</span>
 <span class='no'>custom_labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"psy1"</span> <span class='kw'>=</span> <span class='st'>"new_name_for_psy1"</span>, <span class='st'>"psy2"</span> <span class='kw'>=</span> <span class='st'>"new_name_for_psy2"</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'>labeller</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'>as_labeller</span>(<span class='no'>custom_labels</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta, labeller = labeller(id = as_labeller(custom_labels))): object 'radf_dta' not found</span></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'>labeller</span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'>as_labeller</span>(<span class='no'>custom_labels</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in labeller(id = as_labeller(custom_labels)): could not find function "labeller"</span></div><div class='input'>
 <span class='co'># Change Theme options</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>radf_dta</span>) +
-  <span class='fu'>theme</span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(radf_dta): object 'radf_dta' not found</span></div><div class='input'># }
-</div></pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>) +
+  <span class='fu'>theme</span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in theme(legend.position = "right"): could not find function "theme"</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

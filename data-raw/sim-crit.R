@@ -5,7 +5,7 @@ options("exuber.show_progress" = FALSE)
 
 # Simulation -------------------------------------------------------------
 
-# nn <- 700
+# nn <- 600
 # pkg_radf_crit <- list()
 # for (i in 6:nn) {
 #   pkg_radf_crit[[i]] <-  mc_cv(i, seed = 123)
