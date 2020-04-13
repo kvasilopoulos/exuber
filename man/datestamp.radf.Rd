@@ -8,7 +8,7 @@
   object,
   cv = NULL,
   option = c("gsadf", "sadf"),
-  min_duration = 0,
+  min_duration = 0L,
   ...
 )
 }

@@ -55,18 +55,19 @@ reference:
       - autoplot.datestamp
       - autoplot.mc_distr
 
-  - title: Tidying
-    contents:
-      - tidy.radf
-      - tidy.mc_cv
-      - augment_join
-      - tidy.mc_distr
-
   - title: Helpers
     contents:
       - index
       - psy_minw
       - series_names
+
+  - title: Tidying
+    contents:
+      - tidy.radf
+      - tidy.mc_cv
+      - tidy.mc_distr
+      - augment_join
+
 
 navbar:
   type: default
@@ -92,6 +93,10 @@ navbar:
       menu:
       - text: Simulation
         href: articles/simulation.html
+      - text: Plotting
+        href: articles/plotting.html
+      - text: Available tidy methods
+        href: articles/tidy.html
     reference:
       text: Reference
       href: reference/index.html

@@ -55,7 +55,7 @@ col_names <- function(x, ...) {
 #' @keywords internal
 #' @export
 ggarrange <- function(...) {
-  .Defunct(new = "do.call(gridExtra::arrangeGrob, c(...))", package = "exuber")
+  .Defunct(new = "do.call(gridExtra::grid.arrange, c(...))", package = "exuber")
 }
 
 #' @rdname exuber-defunct

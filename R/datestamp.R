@@ -4,6 +4,8 @@
 #' episodes during which the time series display explosive dynamics.
 #'
 #' @inheritParams diagnostics
+#' @param min_duration The minimum duration of an explosive period for it to be
+#' reported. Default is 0.
 #' @param ... further arguments passed to methods.
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the origin
@@ -22,18 +24,15 @@
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
 #' @export
-datestamp <- function(object, cv = NULL, ...) {
+datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
   UseMethod("datestamp")
 }
 
+#' @export
 datestamp.default <- function(object, cv, ...) {
-  stop_glue("method `datestamp` is not available for objects of class {class(object)}.")
+  stop_glue(
+    "method 'datestamp' is not available for objects of class '{class(object)}'.")
 }
-
-# object <- radf_dta
-# cv <- crit[[100]]
-# option <- "gsadf"
-# min_duration = 0
 
 #' This is a topic
 #'
@@ -42,19 +41,15 @@ datestamp.default <- function(object, cv, ...) {
 #' @inheritParams datestamp
 #' @inheritParams diagnostics.radf
 #'
-#' @param min_duration The minimum duration of an explosive period for it to be
-#' reported. Default is 0.
-#' @importFrom rlang sym !!
+#' @importFrom rlang sym !! %||%
 #' @importFrom dplyr filter
 #' @importFrom purrr map map_lgl
 #' @export
 datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
-                           min_duration = 0, ...) {
+                           min_duration = 0L, ...) {
 
   assert_class(object, "radf")
-  if (is.null(cv)) {
-    cv <- retrieve_crit(object)
-  }
+  cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "cv")
   option <- match.arg(option)
   assert_positive_int(min_duration, strictly = FALSE)
@@ -66,13 +61,12 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
 
   ds <-  diagnostics(x, cv = y, option = option)
   if (all(ds$dummy == 0)) {
-    return(message_glue("Cannot reject H0 for significance level 95%"))
+    return(message_glue("Cannot reject H0 for significance level of 5%"))
   }
   acc <- ds[["accepted"]]
   if (is_bare_character(acc, n = 0)) {
     stop_glue("Cannot reject the H0")
   }
-
 
   ds <- vector("list", length(acc))
   if (is_sb(y)) {
@@ -85,9 +79,21 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
     ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + get_minw(x) + get_lag(x))
   }
 
+  # extract_cv <- function(cv, option, lag) {
+  #   option_cv <- paste0(option, "_cv")
+  #   cv_option <- cv$option_cv
+  #   if (lag == 0) {
+  #     cv_out <- cv_option[, 2]
+  #   }esle {
+  #     cv_out <- cv_optionc[-c(1:lag), 2]
+  #   }
+  #   cv_out
+  # }
+
   reps <- if (is_sb(y)) 1 else match(acc, series_names(x))
   for (i in seq_along(acc)) {
     if (is_mc(y)) {
+
       if (option == "gsadf") {
         # cv <- extract_cv(y, "bsadf_cv", get_lag(x))
         cv <- if (get_lag(x) == 0) {
@@ -123,12 +129,12 @@ datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
 
   # min_duration may cause to exclude periods or the whole sample
   min_reject <- map_lgl(ds_stamp, ~ length(.x) == 0)
-
   res <- ds_stamp_index[!min_reject]
   names(res) <- acc[!min_reject]
   if (length(res) == 0) {
     stop_glue("Argument 'min_duration' excludes all explosive periods")
   }
+
   dms <- list(seq_along(index(x)), if (is_sb(y)) "Panel" else series_names(x)[reps])
   dummy <- matrix(0, nrow = length(index(x)), ncol = length(acc), dimnames = dms)
   for (z in seq_along(acc)) {
@@ -212,7 +218,9 @@ autoplot.datestamp <- function(object, trunc = TRUE, ...) {
       aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7) +
     scale_custom(limits = c(dating[1L], dating[length(dating)])) +
     theme_bw() +
-    labs(title = "", x = "", y = "") + #intentionally not in theme
+    scale_color_grey() +
+    # discrete_scale("color", "manual", function(n) rep("black", n)) +
+    labs(title = "", x = "", y = "") + #intentionally not in theme (for extra margin)
     theme(
       axis.text.y = element_text(face = "bold", size = 8, hjust = 0),
       legend.position = "none",
@@ -225,6 +233,7 @@ autoplot.datestamp <- function(object, trunc = TRUE, ...) {
 #' @param x An object of class \code{\link[=datestamp]{datestamp()}}
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_rows
+#' @export
 tidy.datestamp <- function(x, ...) {
   bind_rows(x, .id = "id") %>%
     as_tibble() %>%

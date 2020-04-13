@@ -1,0 +1,51 @@
+---
+title: "Available tidy methods"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tidy}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The following methods are currently available in `exuber`. All `augment` methods
+are given the additional argument `format` which can return the object in either
+`wide` (default) or `long` format. 
+
+```{r methods, echo = FALSE, message =FALSE, warning=FALSE}
+library(exuber)
+library(rlang)
+library(purrr)
+library(dplyr)
+tick <- clisymbols::symbol$tick
+method_df <- function(x) {
+  methods(x) %>% 
+  # grep(x, ., value = TRUE) %>% 
+  strsplit("[.]") %>% 
+  purrr::reduce(rbind) %>%
+  when(is.null(nrow(.)) ~ t(.),!is.null(nrow(.)) ~ .) %>% 
+  as_tibble() %>% 
+  magrittr::set_colnames(c(x, "class")) %>% 
+  select(class, !!enquo(x)) %>% 
+  mutate(!!enquo(x) := tick)
+}
+
+method_tidy <- method_df("tidy") 
+method_augment <- method_df("augment")
+method_glance <- method_df("glance")
+
+list(method_tidy, method_augment, method_glance) %>% 
+  purrr::reduce(full_join) %>% 
+  mutate(class = as.factor(class) %>% forcats::fct_relevel("radf")) %>%
+  arrange(class) %>% 
+  filter(!class %in% c("tidy", "augment", "glance", "augment_join")) %>% 
+  dplyr::mutate_all(tidyr::replace_na, "") %>% 
+  knitr::kable()
+
+```

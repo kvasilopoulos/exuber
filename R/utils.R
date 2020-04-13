@@ -53,8 +53,8 @@ retrieve_crit <- function(x) {
   if (nr > 5 && nr <= length(exuber::crit)) {
     return(exuber::crit[[nr]])
   } else if (nr > length(exuber::crit) && nr <= 2000) {
-    need_data()
-    # return(exuberdata::crit[[nr]])
+    need_exuberdata()
+    return(exuberdata::radf_crit[[nr]])
   }else {
     stop_glue("cannot provide MC critical values see help(crit)")
   }
@@ -64,7 +64,8 @@ retrieve_crit <- function(x) {
 # options -----------------------------------------------------------------
 
 show_pb <- function() {
-  isTRUE(getOption("exuber.show_progress")) && interactive() &&
+  isTRUE(getOption("exuber.show_progress")) &&
+    interactive() &&
     !isTRUE(getOption("rstudio.notebook.executing")) &&
     !isTRUE(getOption("knitr.in.progress"))
 }

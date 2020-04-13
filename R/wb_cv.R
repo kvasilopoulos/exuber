@@ -131,18 +131,17 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' # Simulate bubble processes
-#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
-#'
+#' \donttest{
 #' # Default minimum window
-#' wb <- wb_cv(dta)
+#' wb <- wb_cv(sim_data)
 #'
 #' # Change the minimum window and the number of bootstraps
-#' wb <- wb_cv(dta, nboot = 1500, minw = 20)
+#' wb <- wb_cv(im_data, nboot = 500, minw = 20)
+#' tidy(wdist)
 #'
 #' # Simulate distribution
-#'wb_distr(dta)
+#' wdist <- wb_distr(im_data)
+#' autoplot(wdist)
 #' }
 wb_cv <- function(data, minw = NULL, nboot = 1000L,
                   dist_rad = FALSE, seed = NULL) {

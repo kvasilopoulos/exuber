@@ -28,7 +28,7 @@ mc_distr(n, minw = NULL, nrep = 2000L, seed = NULL)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 
 \item{opt_badf}{Options for badf critical value calculation. "fixed" corresponds
@@ -49,12 +49,13 @@ t-statistics.
 root tests. \code{mc_dist} computes the distribution.
 }
 \examples{
-\dontrun{
+\donttest{
 # Default minimum window
 mc <- mc_cv(n = 100)
 
 # Change the minimum window and the number of simulations
-mc <- mc_cv(n = 100, nrep = 2500, minw = 20)
+mc <- mc_cv(n = 100, nrep = 1500, minw = 20)
+tidy(mc)
 
 mdist <- mc_distr(n = 100)
 autoplot(mdist)

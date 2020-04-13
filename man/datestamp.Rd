@@ -4,13 +4,16 @@
 \alias{datestamp}
 \title{Date-stamping periods of mildly explosive behavior}
 \usage{
-datestamp(object, cv = NULL, ...)
+datestamp(object, cv = NULL, min_duration = 0L, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
 
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
+
+\item{min_duration}{The minimum duration of an explosive period for it to be
+reported. Default is 0.}
 
 \item{...}{further arguments passed to methods.}
 }

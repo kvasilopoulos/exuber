@@ -31,7 +31,7 @@ sim_psy1(
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{

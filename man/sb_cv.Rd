@@ -24,7 +24,7 @@ The estimation process cannot handle NA values.}
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{
@@ -37,20 +37,11 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{sb_dist}
 computes the distribution.
 }
 \examples{
-\dontrun{
-
-# Simulate bubble processes
-set.seed(4441)
-dta <- data.frame(
-  "psy1" = sim_psy1(100),
-  "psy2" = sim_psy2(100),
-  "evans" = sim_evans(100),
-  "div" = sim_div(100),
-  "blan" = sim_blan(100)
-)
+\donttest{
 
 # Panel critical vales should have the same lag length with the estimation
 sb <- sb_cv(dta, lag = 1)
+tidy(sb)
 
 dta \%>\%
   radf(lag = 1) \%>\%
@@ -61,7 +52,8 @@ dta \%>\%
   autoplot(cv = sb)
 
 # Simulate distribution
-sb_dist(dta, lag = 1)
+sdist <- sb_dist(dta, lag = 1)
+autoplot(sdist)
 }
 }
 \references{
