@@ -25,7 +25,7 @@ will be used.}
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{
@@ -44,18 +44,17 @@ to construct the bootstrap analogue of the Phillips et al. (2015) test which
 is asymptotically robust to non-stationary volatility.
 }
 \examples{
-\dontrun{
-# Simulate bubble processes
-dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
-
+\donttest{
 # Default minimum window
-wb <- wb_cv(dta)
+wb <- wb_cv(sim_data)
 
 # Change the minimum window and the number of bootstraps
-wb <- wb_cv(dta, nboot = 1500, minw = 20)
+wb <- wb_cv(im_data, nboot = 500, minw = 20)
+tidy(wdist)
 
 # Simulate distribution
-wb_distr(dta)
+wdist <- wb_distr(im_data)
+autoplot(wdist)
 }
 }
 \references{

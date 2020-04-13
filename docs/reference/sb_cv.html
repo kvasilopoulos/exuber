@@ -115,6 +115,12 @@ computes the distribution." />
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -189,7 +195,7 @@ The estimation process cannot handle NA values.</p></td>
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.</p></td>
     </tr>
     </table>
@@ -209,32 +215,19 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <code><a href='wb_cv.html'>wb_cv</a></code> for Wild Bootstrapped critical values</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-
-<span class='co'># Simulate bubble processes</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>4441</span>)
-<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='st'>"psy1"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>),
-  <span class='st'>"psy2"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='fl'>100</span>),
-  <span class='st'>"evans"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_evans.html'>sim_evans</a></span>(<span class='fl'>100</span>),
-  <span class='st'>"div"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_div.html'>sim_div</a></span>(<span class='fl'>100</span>),
-  <span class='st'>"blan"</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>)
-)
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 
 <span class='co'># Panel critical vales should have the same lag length with the estimation</span>
-<span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_cv</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
+<span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_cv</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in parse_dt(x): object 'dta' not found</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>sb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in tidy(sb): object 'sb' not found</span></div><div class='input'>
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
-
+  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(lhs, parent, parent): object 'dta' not found</span></div><div class='input'>
 <span class='no'>dta</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)
-
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(lhs, parent, parent): object 'dta' not found</span></div><div class='input'>
 <span class='co'># Simulate distribution</span>
-<span class='fu'>sb_dist</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-}</div></pre>
+<span class='no'>sdist</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_dist</span>(<span class='no'>dta</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='error'>Error in sb_dist(dta, lag = 1): could not find function "sb_dist"</span></div><div class='input'><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>sdist</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(sdist): object 'sdist' not found</span></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

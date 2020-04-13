@@ -53,8 +53,9 @@ summary.radf <- function(object, cv = NULL, ...) {
       df1 <- c(x$adf[i], y$adf_cv[i, ])
       df2 <- c(x$sadf[i], y$sadf_cv[i, ])
       df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
-      df <- data.frame(rbind(df1, df2, df3),
-                       row.names = c("ADF", "SADF", "GSADF")
+      df <- data.frame(
+        rbind(df1, df2, df3),
+        row.names = c("ADF", "SADF", "GSADF")
       )
       colnames(df) <- c("t-stat", "90%", "95%", "99%")
       ret[[i]] <- df
@@ -65,8 +66,9 @@ summary.radf <- function(object, cv = NULL, ...) {
       df1 <- c(x$adf[i], y$adf_cv)
       df2 <- c(x$sadf[i], y$sadf_cv)
       df3 <- c(x$gsadf[i], y$gsadf_cv)
-      df <- data.frame(rbind(df1, df2, df3),
-                       row.names = c("ADF", "SADF", "GSADF")
+      df <- data.frame(
+        rbind(df1, df2, df3),
+        row.names = c("ADF", "SADF", "GSADF")
       )
       colnames(df) <- c("tstat", "90%", "95%", "99%")
       ret[[i]] <- df
@@ -79,10 +81,12 @@ summary.radf <- function(object, cv = NULL, ...) {
 
 
  ret %>%
-   add_attr(minw = get_minw(x),
-            lag = get_lag(x),
-            method = get_method(y),
-            iter = get_iter(y)) %>%
+   add_attr(
+     minw = get_minw(x),
+     lag = get_lag(x),
+     method = get_method(y),
+     iter = get_iter(y)
+   ) %>%
    add_class("summary.radf")
 
 }
@@ -94,15 +98,17 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 
   iter_char <- if (is_mc(x)) "nrep" else "nboot"
   cat_line()
-  cat_rule(left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
-           right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})"))
+  cat_rule(
+    left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
+    right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})")
+  )
   if (is_sb(x)) {
     cat("\n Panel\n")
     pp <- x[1, , drop = FALSE]
     rownames(pp) <- "GSADF"
     print(format(pp, digits = digits), print.gap = 2L, quote = FALSE)
   } else {
-    cat_line()
+    # cat_line()
     for (i in seq_along(x)) {
       cat("\n", names(x)[i], "\n")
       print(format(x[[i]], digits = digits), print.gap = 2L)

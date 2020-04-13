@@ -69,6 +69,12 @@
 <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -132,16 +138,17 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(purrr)</a>
 <a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4">processes &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
+<a class="sourceLine" id="cb2-4" title="4">sims &lt;-<span class="st"> </span><span class="kw">tibble</span>(</a>
 <a class="sourceLine" id="cb2-5" title="5">  <span class="dt">sim_psy1 =</span> <span class="kw"><a href="../reference/sim_psy1.html">sim_psy1</a></span>(<span class="dv">100</span>),</a>
 <a class="sourceLine" id="cb2-6" title="6">  <span class="dt">sim_psy2 =</span> <span class="kw"><a href="../reference/sim_psy2.html">sim_psy2</a></span>(<span class="dv">100</span>),</a>
 <a class="sourceLine" id="cb2-7" title="7">  <span class="dt">sim_evans =</span> <span class="kw"><a href="../reference/sim_evans.html">sim_evans</a></span>(<span class="dv">100</span>),</a>
 <a class="sourceLine" id="cb2-8" title="8">  <span class="dt">sim_blan =</span> <span class="kw"><a href="../reference/sim_blan.html">sim_blan</a></span>(<span class="dv">100</span>)</a>
 <a class="sourceLine" id="cb2-9" title="9">)</a></code></pre></div>
 <p>To plot them altogether we can use the<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> method for “sim” objects. However, <code>autoplot.sim()</code> is for individual object thus we need some functional programming to plot them together. We can use the <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function, which iterates through every column of the data.frame and stores them into a list of “ggplot” objects, and then we can arrange with the <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> function into a 2x2 grid.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># processes %&gt;% </span></a>
-<a class="sourceLine" id="cb3-2" title="2">  <span class="co"># map(autoplot) %&gt;% </span></a>
-<a class="sourceLine" id="cb3-3" title="3">  <span class="co"># ggarrange()</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">sims <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="st">  </span><span class="kw">map</span>(autoplot) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(grid.arrange, .)</a></code></pre></div>
+<p><img src="simulation_files/figure-html/autoplot-sim-1.png" width="864"></p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

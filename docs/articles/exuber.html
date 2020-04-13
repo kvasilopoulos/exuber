@@ -69,6 +69,12 @@
 <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -111,21 +117,21 @@
 
     
     
-<p>For our analysis we are going to use the <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">datasets::EuStockMarkets</a></code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE(see <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">?EuStockMarkets</a></code>). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
+<p>For our analysis we are going to use the <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">datasets::EuStockMarkets</a></code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE (see <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">?EuStockMarkets</a></code>). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">stocks &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span>(EuStockMarkets, <span class="dt">nfrequency =</span> <span class="dv">52</span>, mean)</a></code></pre></div>
 <div id="estimation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#estimation" class="anchor"></a>Estimation</h2>
 <p>We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">est_stocks &lt;-<span class="st"> </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(stocks,<span class="dt">lag =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">est_stocks &lt;-<span class="st"> </span><span class="kw"><a href="../reference/radf.html">radf</a></span>(stocks, <span class="dt">lag =</span> <span class="dv">1</span>)</a></code></pre></div>
 </div>
 <div id="report" class="section level2">
 <h2 class="hasAnchor">
 <a href="#report" class="anchor"></a>Report</h2>
-<p>The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the <code>cv</code> argument into the <code>summary</code> function.</p>
+<p>The summary will print the t-stat and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the <code>cv</code> argument in the <code>summary</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(est_stocks)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; -- Summary (minw = 38, lag = 1) -------------------------------------------------- Monte Carlo (nrep = 2000) --</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; -- Summary (minw = 38, lag = 1) -------------------------- Monte Carlo (nrep = 2000) --</span></a>
 <a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;  DAX </span></a>
@@ -151,51 +157,66 @@
 <a class="sourceLine" id="cb3-26" title="26"><span class="co">#&gt; ADF    0.1945  -0.4474  -0.133  0.4789</span></a>
 <a class="sourceLine" id="cb3-27" title="27"><span class="co">#&gt; SADF   2.5563   1.0919   1.435  1.9664</span></a>
 <a class="sourceLine" id="cb3-28" title="28"><span class="co">#&gt; GSADF  2.6689   1.9050   2.100  2.5998</span></a></code></pre></div>
-<p>It seems that all stocks exhibit exuberant behaviour but we can also use a <code><a href="../reference/diagnostics.html">diagnostics()</a></code> to do it for us. This is extremely useful when we deal a lot of series.</p>
+<p>It seems that all stocks exhibit exuberant behaviour but we can also verify it using <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. This function is particularly useful when we deal a large number of series.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="../reference/diagnostics.html">diagnostics</a></span>(est_stocks)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; -- Diagnostics (option = gsadf) ---------------------------------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt; -- Diagnostics (option = gsadf) ---------------------------------------- Monte Carlo --</span></a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; DAX:      Rejects H0 for significance level of 1% </span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; SMI:      Rejects H0 for significance level of 1% </span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; CAC:      Rejects H0 for significance level of 1% </span></a>
 <a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; FTSE:     Rejects H0 for significance level of 1%</span></a></code></pre></div>
-<p>The <code>autoplot.radf</code> function returns a list of ggplot2, thus we need to grob the list into a single graph. Function <code>ggarrange</code> does this for us, while we can specify the arrangement of the graphs by supplying nrow and ncol arguments.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(est_stocks)</a></code></pre></div>
-<p><img src="exuber_files/figure-html/datestamp-1.png" width="864"></p>
-<p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner, where the user has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># Minimum duration of an explosive period </span></a>
-<a class="sourceLine" id="cb6-2" title="2">rot =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(stocks))) <span class="co"># log(n) ~ rule of thumb</span></a>
-<a class="sourceLine" id="cb6-3" title="3"></a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>(est_stocks, <span class="dt">min_duration =</span> rot)</a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; -- Datestamp (min_duration = 6) ---------------------------------------------------------------- Monte Carlo --</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; DAX :</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;        Start        End Duration</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; 1 1997-02-10 1997-10-28       38</span></a>
-<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; 2 1998-01-27 1998-08-19       30</span></a>
-<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt; SMI :</span></a>
-<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;        Start        End Duration</span></a>
-<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 1 1993-10-21 1994-02-10       17</span></a>
-<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; 2 1997-04-14 1997-08-26       20</span></a>
-<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt; 3 1997-09-09 1997-10-28        8</span></a>
-<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt; 4 1997-11-25 1998-08-19       39</span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; CAC :</span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt;        Start        End Duration</span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; 1 1997-07-08 1997-08-12        6</span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; 2 1998-03-10 1998-08-05       22</span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt; FTSE :</span></a>
-<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt;        Start        End Duration</span></a>
-<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt; 1 1997-07-08 1997-10-28       17</span></a>
-<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt; 2 1998-02-10 1998-06-17       19</span></a></code></pre></div>
-<p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>(est_stocks) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>()</a></code></pre></div>
-<p><img src="exuber_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
+<p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner with <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. The user still has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Minimum duration of an explosive period </span></a>
+<a class="sourceLine" id="cb5-2" title="2">rot =<span class="st"> </span><span class="kw"><a href="../reference/psy_minw.html">psy_ds</a></span>(stocks) <span class="co"># log(n) ~ rule of thumb</span></a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4">dstamp_stocks &lt;-<span class="st"> </span><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>(est_stocks, <span class="dt">min_duration =</span> rot)</a>
+<a class="sourceLine" id="cb5-5" title="5">dstamp_stocks</a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; -- Datestamp (min_duration = 6) ---------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; DAX :</span></a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt;        Start        End Duration</span></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="co">#&gt; 1 1997-02-10 1997-10-28       38</span></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt; 2 1998-01-27 1998-08-19       30</span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="co">#&gt; SMI :</span></a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="co">#&gt;        Start        End Duration</span></a>
+<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt; 1 1993-10-21 1994-02-10       17</span></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="co">#&gt; 2 1997-04-14 1997-08-26       20</span></a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt; 3 1997-09-09 1997-10-28        8</span></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="co">#&gt; 4 1997-11-25 1998-08-19       39</span></a>
+<a class="sourceLine" id="cb5-20" title="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="co">#&gt; CAC :</span></a>
+<a class="sourceLine" id="cb5-22" title="22"><span class="co">#&gt;        Start        End Duration</span></a>
+<a class="sourceLine" id="cb5-23" title="23"><span class="co">#&gt; 1 1997-07-08 1997-08-12        6</span></a>
+<a class="sourceLine" id="cb5-24" title="24"><span class="co">#&gt; 2 1998-03-10 1998-08-05       22</span></a>
+<a class="sourceLine" id="cb5-25" title="25"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-26" title="26"><span class="co">#&gt; FTSE :</span></a>
+<a class="sourceLine" id="cb5-27" title="27"><span class="co">#&gt;        Start        End Duration</span></a>
+<a class="sourceLine" id="cb5-28" title="28"><span class="co">#&gt; 1 1997-07-08 1997-10-28       17</span></a>
+<a class="sourceLine" id="cb5-29" title="29"><span class="co">#&gt; 2 1998-02-10 1998-06-17       19</span></a></code></pre></div>
+<p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance. Recent studies Pavlidies et al (2018) &amp; Pavlidis and Vasilopoulos (2020) use the datestamp in a probit model, thus …</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">dummy &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(dstamp_stocks, <span class="st">"dummy"</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>(dummy)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;     DAX SMI CAC FTSE</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt; 367   1   1   1    1</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; 368   1   1   1    1</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; 369   1   1   1    1</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; 370   1   1   1    0</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; 371   1   1   0    0</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; 372   1   1   0    0</span></a></code></pre></div>
+</div>
+<div id="plotting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plotting" class="anchor"></a>Plotting</h2>
+<p>The <code>autoplot.radf</code> method returns a faceted ggplot2 object of all the series the reject the null hypothesis 5% significance level.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(est_stocks)</a></code></pre></div>
+<p><img src="exuber_files/figure-html/plot-radf-1.png" width="864"></p>
+<p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="../reference/datestamp.html">datestamp</a></span>(est_stocks) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>()</a></code></pre></div>
+<p><img src="exuber_files/figure-html/plot-datestaemp-1.png" width="672"></p>
 </div>
   </div>
 
@@ -207,6 +228,7 @@
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#estimation">Estimation</a></li>
       <li><a href="#report">Report</a></li>
+      <li><a href="#plotting">Plotting</a></li>
       </ul>
 </div>
       </div>

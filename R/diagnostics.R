@@ -14,6 +14,12 @@ diagnostics <- function(object, cv = NULL, ...) {
   UseMethod("diagnostics")
 }
 
+diagnostics.default <- function(object, cv = NULL, ...) {
+  stop_glue(
+    "method 'diagnostics' is not available for objects of class '{class(object)}'."
+  )
+}
+
 #' Diagnostics on `radf` object
 #'
 #' Finds the series from a `radf` object that reject the null for at the 5\% significance level.
@@ -104,22 +110,37 @@ diagnostics.radf <- function(object, cv = NULL,
   )
 }
 
+#' @export
+tidy.diagnostics <- function(x, ...) {
+  snames <- series_names(x)
+  sig <- gsub("%", "", x$sig)
+  tibble(
+    "series" = snames,
+    "accepted" = ifelse(snames %in% x$accepted, TRUE, FALSE),
+    "rejected" = ifelse(snames %in% x$rejected, TRUE, FALSE),
+    "sig" = as.factor(ifelse(sig == "Reject", NA, sig))
+  )
+}
+
+
 #' @importFrom cli cat_line cat_rule
 #' @importFrom glue glue
 #' @importFrom rlang is_bare_character
 #' @export
 print.diagnostics <- function(x, ...) {
 
-  if (all(x$dummy == 0)) {
-    return(message_glue("Cannot reject H0 for significance level of 5%"))
-  }
-  if (purrr::is_bare_character(x$accepted, n = 0)) {
-    return(message_glue("Cannot reject H0"))
-  }
+  # if (all(x$dummy == 0)) {
+  #   return(message_glue("Cannot reject H0 for significance level of 5%"))
+  # }
+  # if (purrr::is_bare_character(x$accepted, n = 0)) {
+  #   return(message_glue("Cannot reject H0"))
+  # }
 
   cli::cat_line()
-  cli::cat_rule(left = glue('Diagnostics (option = {attr(x, "option")})'),
-                right = get_method(x))
+  cli::cat_rule(
+    left = glue('Diagnostics (option = {attr(x, "option")})'),
+    right = get_method(x)
+  )
   cli::cat_line()
 
   if (attr(x, "panel")) {

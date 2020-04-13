@@ -28,9 +28,15 @@ library(tidyr)
 options(exuber.parallel = FALSE)
 ```
 
-```{r tstats-cv}
+### The plotting API has changed in exuber 0.3.1
+
+The new design offers full flexibility and customization to produce publication-ready plots. `exuber` used to plot graph individually in a list, and then you had the option to modify each plot and arrange into a single grob with `ggarrange()`(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to manipule the aesthetics and themes.
+
+Let's start by simulating some data.
+
+```{r tstats-cv, cache=TRUE}
 set.seed(123)
-dta <- tibble(
+sims <- tibble(
   sim_psy1 = sim_psy1(100),
   sim_psy2 = sim_psy2(100),
   sim_evans = sim_blan(100),
@@ -38,127 +44,122 @@ dta <- tibble(
 ) 
 
 # Esimation
-tstats <- radf(dta, lag = 1)
+estimation <- radf(sims, lag = 1)
   
 # Critical Values ~ Conservative
-cv <- mc_cv(nrow(dta), opt_bsadf = "conservative")
+crit_values <- mc_cv(nrow(sims))
 ```
 
-## Autoplot
+## New Features
 
-```{r autoplot}
-autoplot(tstats, cv)
+```{r autoplot-basic}
+autoplot(estimation, crit_values)
+```
+
+### Change color and theme
+
+The custom color for autoplot are "blue and "red", however the use may overide this
+option easily with scale_col
+
+```{r autoplot-color-theme}
+autoplot(estimation, crit_values) +
+  scale_color_manual(values = c("grey","black")) + 
+  theme_classic()
+```
+
+### Specify the shade_opt
+
+```{r autoplot-shade}
+autoplot(estimation, crit_values, shade_opt = shade(fill = "pink", opacity = 0.3))
 ```
 
 ## Old Functionality
 
-'exuber' used to plot graph individually in a list, and then you had the option 
-to modify each plot and arrange into a single grob with `ggarrange()`. However,
-newer versions of exuber are focus on provide a plot with facet as to easier 
-manipulation of aesthetics and themes. To return to older functionality there 
-are several ways. Some of them are the following
+To return to older functionality there are several ways.
 
-```{r ggforoce-way}
+```{r lapply-arrange}
 library(gridExtra)
 
-accepted_series <- diagnostics(tstats, cv)$accepted # series_names(tstats)
-# you can select all seris with 
+# To choose only accepted series (i.e. statistically significant for 5%)
+accepted_series <- diagnostics(estimation, crit_values)$accepted 
 
 # Through a loop on accepted series 
-h <- list()
+plot_list1 <- list()
 for (as in accepted_series) {
-  h[[as]] <- autoplot(tstats, cv, select_series = as)
+  plot_list1[[as]] <- autoplot(estimation, crit_values, select_series = as)
 }
 
-# Alternatively in a vectorized way
-h <- lapply(accepted_series, function(x) autoplot(tstats, cv, select_series = x))
-names(h) <- accepted_series
+# Alternatively  with lapply
+plot_list2 <- lapply(accepted_series, function(x) autoplot(estimation, crit_values, select_series = x))
+names(plot_list2) <- accepted_series
 
-arranged_plot <- do.call(gridExtra::arrangeGrob, h)
-plot(arranged_plot)
-
+do.call(gridExtra::grid.arrange, plot_list1)
 ```
 
-### Modify plots separately
-
-```{r autoplot-modify}
-plots <- autoplot(tstats, cv)
-# 
-# mod_plot <- plots[[1]] + 
-#   labs(x = "index", y = "Statistic", title = "Simulation of a single-bubble process")
-# mod_plot
+With the old functionality you had to make changes one at a time
+```{r example-old}
+plot_list1[[1]] <- plot_list1[[1]] + theme_classic()
 ```
-<!-- ### Reconstruct -->
-<!-- ```{r reconstruct} -->
-<!-- # plots[[1]] <- mod_plot -->
-<!-- # plots[1:2] %>%  -->
-<!-- #   ggarrange() -->
-<!-- ``` -->
+and then reconstruct the plot with `grid.arrange` or some other function that arranges all plots into a single grob.
 
-<!-- ## Custom plotting -->
+## Custom plotting
 
-<!-- ```{r join-sets} -->
-<!-- joined <- augment_join(tstats, cv) -->
-<!-- joined  -->
-<!-- ``` -->
+Custom plotting is also very easy with the `augment_join` function, that merge
+the estimation and and critical values results in a ggplot2-friendly way.
 
-<!-- ```{r facet-joined, warning=FALSE} -->
-<!-- library(ggplot2) -->
-<!-- joined %>% -->
-<!--   ggplot(aes(x = index)) + -->
-<!--   geom_line(aes(y = tstat)) + -->
-<!--   geom_line(aes(y = crit, col = "red")) + -->
-<!--   facet_grid(id ~ name + sig , scales = "free_y") + -->
-<!--   theme_bw() -->
-<!-- ``` -->
+```{r join-sets}
+joined <- augment_join(estimation, crit_values)
+joined
+```
 
+The output of `augment_join` returns data in tidy format and the offers full flexibility to the user. After this point plotting becomes extremely trivial.
 
-<!-- ```{r autoplot-fortify} -->
-<!-- <!-- fortify(tstats, cv) %>% --> -->
-<!-- <!--   gather(id, tstat, -cv, -index, factor_key = TRUE) %>% --> -->
-<!-- <!--   ggplot(aes(x = index)) + --> -->
-<!-- <!--   geom_line(aes(y = tstat)) + --> -->
-<!-- <!--   geom_line(aes(y = cv, col = "red", linetype = "dotted")) + --> -->
-<!-- <!--   facet_wrap(~ id , scales = "free_y") + --> -->
-<!-- <!--   theme_bw() + theme(strip.background = element_blank(), --> -->
-<!-- <!--                      legend.position = "none") + --> -->
-<!-- <!--   labs(x = "", y = "") --> -->
-<!-- ``` -->
+```{r facet-joined}
+joined %>% 
+  ggplot(aes(x = index)) +
+  geom_line(aes(y = tstat)) +
+  geom_line(aes(y = crit)) +
+  facet_grid(sig + name ~  id  , scales = "free_y")
+```
 
+We also offer two functions `scale_exuber_manual` and `theme_exuber` that offer some
+extra functionality. 
 
-<!-- ```{r fortify-autoplot-datestamp, eval=FALSE, include=FALSE} -->
-<!-- bind_cols( -->
-<!--   fortify(tstats, cv) %>% -->
-<!--     gather(id, tstat, -index), -->
-<!--   fortify(tstats, cv = wb_cv(dta)) %>% -->
-<!--     gather(id, crit, -psy1, -psy2, -index) -->
-<!-- ) %>% -->
-<!--   select(index, id, crit, tstat) %>% -->
-<!--   ggplot(aes(x = index)) + -->
-<!--   geom_line(aes(y = tstat)) + -->
-<!--   geom_line(aes(y = crit, color = "red"), linetype = "dashed") + -->
-<!--   facet_wrap(~ id, ncol = 1) + -->
-<!--   theme_bw() -->
-<!-- ``` -->
+```{r facet-joined-theme-exuber, warning=FALSE}
+joined %>%
+  pivot_longer(cols = c("tstat", "crit"), names_to = "nms") %>% 
+  ggplot(aes(x = index, y = value, col = nms)) +
+  geom_line() +
+  facet_grid(sig + name ~  id  , scales = "free_y") +
+  scale_exuber_manual() +
+  theme_exuber()
+```
 
-<!-- # Distributions -->
-<!-- ```{r distributions} -->
-<!-- dist <- mc_distr(n = 300) -->
-<!-- autoplot(dist) -->
-<!-- ``` -->
+# Distributions
 
+In addition to critical values, we can also calculate the empirical distribution
+by utilizing the family of *_distr fucntions. For example if we can simulate
+the distribution of the supADF tests with Monte Carlo method.
 
-<!-- # Just for fun -->
+```{r distributions, cache=TRUE}
+distr <- mc_distr(n = 300, nrep = 500)
+autoplot(distr)
+```
 
-<!-- ```{r ecdf} -->
-<!-- library(tidyr) -->
-<!-- dist %>% -->
-<!--   tidy() %>% -->
-<!--   rename_all(~ stringr::str_to_upper(.)) %>% -->
-<!--   gather(Statistic, value, factor_key = TRUE) %>% -->
-<!--   ggplot(aes(value, color = Statistic)) + -->
-<!--   stat_ecdf() + -->
-<!--   ggtitle("Empirical Cumulative Distribution Function") + -->
-<!--   geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw() -->
-<!-- ``` -->
+## Empirical distribution
 
+This part is made just for fun.
+
+```{r ecdf}
+library(tidyr)
+distr %>%
+  tidy() %>%
+  rename_all(~ stringr::str_to_upper(.)) %>%
+  gather(Statistic, value, factor_key = TRUE) %>%
+  ggplot(aes(value, color = Statistic)) +
+  stat_ecdf() +
+  ggtitle("Empirical Cumulative Distribution") +
+  geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw()
+```
+
+Enjoy Plotting with `exuber` !!!

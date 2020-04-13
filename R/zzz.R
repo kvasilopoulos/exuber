@@ -15,24 +15,24 @@
   toset <- !(names(op.exuber) %in% names(op))
   if (any(toset)) options(op.exuber[toset])
 
-  has_data <- requireNamespace("exuberdata", quietly = TRUE)
-  .pkgenv[["has_data"]] <- has_data
+  has_exuberdata <- requireNamespace("exuberdata", quietly = TRUE)
+  .pkgenv[["has_exuberdata"]] <- has_exuberdata
 
   invisible()
 }
 
-.onAttach <- function(libname, pkgname) {
-  if (!has_data()) {
-    msg <- paste(
-      "To use this package more efficiently, you need to install",
-      "the {exuberdata} package which contains simulated critical values.",
-      "To install run `install_exuberdata()"
-    )
-    packageStartupMessage(msg)
-  }
-}
+# .onAttach <- function(libname, pkgname) {
+#   if (!has_data()) {
+#     msg <- paste(
+#       "To use this package more efficiently, you need to install",
+#       "the {exuberdata} package which contains simulated critical values.",
+#       "To install run `install_exuberdata()"
+#     )
+#     packageStartupMessage(msg)
+#   }
+# }
 
-#' convenience function to install exuberdata package
+#' Convenience function to install exuberdata package
 #'
 #' This function wraps the \code{install.packages} function and offers a faster
 #' and more convenient way to install exuberdata.
@@ -46,18 +46,18 @@ install_exuberdata <- function() {
       type = 'source')
 }
 
-has_data <- function() {
-  .pkgenv$has_data
+has_exuberdata <- function() {
+  .pkgenv$has_exuberdata
 }
 
-need_data <- function() {
-  if (!has_data()) {
+need_exuberdata <- function() {
+  if (!has_exuberdata()) {
     stop_glue(
-      "To use stored simulated critical values you must have `exuberdata` installed.
-      To install run `install_exuberdata()")
+      "To use stored simulated critical values that exceed 600",
+      " observations you must have `exuberdata` installed. ",
+      " To install run 'install_exuberdata()'.")
   }
 }
-
 
 # Set Global Variables to avoid NOTES in cmdchecks
 if (getRversion() >= "2.15.1") {

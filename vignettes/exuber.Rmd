@@ -20,7 +20,7 @@ library(exuber)
 # install_exuberdata()
 ```
 
-For our analysis we are going to use the `datasets::EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX (Ibis), Switzerland SMI, France CAC, and UK FTSE(see `?EuStockMarkets`). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372. 
+For our analysis we are going to use the `datasets::EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE (see `?EuStockMarkets`). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372. 
 
 ```{r dataset}
 stocks <- aggregate(EuStockMarkets, nfrequency = 52, mean)
@@ -36,37 +36,46 @@ est_stocks <- radf(stocks, lag = 1)
 
 ## Report
 
-The summary will print the t-stat and the critical values for 90, 95 and 99 significance level. The package provides simulated critical values, so we use them by not specifying the `cv` argument into the `summary` function. 
+The summary will print the t-stat and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the `cv` argument in the `summary` function. 
 
 ```{r summary}
 summary(est_stocks)
 ```
 
-It seems that all stocks exhibit exuberant behaviour but we can also use a `diagnostics()` to do it for us. This is extremely useful when we deal a lot of series.
+It seems that all stocks exhibit exuberant behaviour but we can also verify it using `diagnostics()`. This function is particularly useful when we deal a large number of series.
 
 ```{r diagnostics}
 diagnostics(est_stocks)
 ```
 
-The `autoplot.radf` function returns a list of ggplot2, thus we need to grob the list into a
-single graph. Function `ggarrange` does this for us, while we can specify the arrangement of the graphs by supplying nrow and ncol arguments.
 
-```{r datestamp, fig.width = 9}
+If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner with `summary()` and `diagnostics()`. The user still has to specify the critical values, however we can still utilize the package's critical values by leaving the cv-argument blank.
+
+```{r datestamp}
+# Minimum duration of an explosive period 
+rot = psy_ds(stocks) # log(n) ~ rule of thumb
+
+dstamp_stocks <- datestamp(est_stocks, min_duration = rot)
+dstamp_stocks
+```
+We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance. Recent studies Pavlidies et al (2018) & Pavlidis and Vasilopoulos (2020) use the datestamp in a probit model, thus ...
+
+```{r datestamp-dummy}
+dummy <- attr(dstamp_stocks, "dummy")
+tail(dummy)
+```
+
+## Plotting
+
+The `autoplot.radf` method returns a faceted ggplot2 object of all the series the reject the null hypothesis 5% significance level.
+
+```{r plot-radf, fig.width = 9}
 autoplot(est_stocks)
 ```
 
-If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner, where the user has to specify the critical values, however we can still utilize the package's critical values by leaving the cv-argument blank.
+Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.
 
-```{r}
-# Minimum duration of an explosive period 
-rot = round(log(nrow(stocks))) # log(n) ~ rule of thumb
-
-datestamp(est_stocks, min_duration = rot)
-```
-
-Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot  of series, and we are interested to identify explosive patterns.
-
-```{r fig.width = 7, fig.height=2}
+```{r plot-datestaemp, fig.width = 7, fig.height=2}
 datestamp(est_stocks) %>% 
   autoplot()
 ```
