@@ -28,15 +28,14 @@ A list that contains the t-statistic (sequence) for:
 test.
 }
 \examples{
-\donttest{
-# Simulate bubble processes
-dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
+# We will use simulated data that are stored with the name `sim_data`
+sim_data
 
-rfd <- radf(dta)
+rsim <- radf(sim_data)
 
 # For lag = 1 and minimum window = 20
-rfd <- radf(dta, minw = 20, lag = 1)
-}
+rsim_20 <- radf(sim_data, minw = 20, lag = 1)
+
 }
 \references{
 Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
