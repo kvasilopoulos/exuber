@@ -1,6 +1,11 @@
 title: exuber
 url: https://kvasilopoulos.github.io/exuber/
 
+development:
+  destination: dev
+  version_label: danger
+  version_tooltip: "Custom message here"
+
 template:
   params:
     bootswatch: cosmo
