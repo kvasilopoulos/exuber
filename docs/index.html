@@ -76,6 +76,12 @@
 <li>
       <a href="articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -113,33 +119,149 @@
 </h1></div>
 
 <p>Testing for and dating periods of explosive dynamics (exuberance) in time series using the univariate and panel recursive unit root tests proposed by <a href="https://doi.org/10.1111/iere.12132">Phillips et al. (2015)</a> and <a href="https://doi.org/10.1007/s11146-015-9531-2">Pavlidis et al. (2016)</a>. The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix inversion which results in significant speed improvements. Simulation of a variety of periodically-collapsing bubble processes.</p>
+<div id="overview" class="section level3">
+<h3 class="hasAnchor">
+<a href="#overview" class="anchor"></a>Overview</h3>
+<p>Testing for explosive dynamics is comprised of two distinct parts :</p>
+<ul>
+<li>estimation: which we name <code>object</code>.</li>
+<li>critical values: which we name <code>cv</code>.</li>
+</ul>
+<p><strong>Some Context:</strong> Conventional testing techniques compute critical values,and p-values from a standard distribution, where the user does not need to specify critical values explicitly. However, the recent literature in explosive dynamics require the use of non-standard distributions, which require the use of techniques that sample empirical distributions in order to calculate the critical values.</p>
+<div id="estimation--object" class="section level4">
+<h4 class="hasAnchor">
+<a href="#estimation--object" class="anchor"></a>Estimation ~ <code>object</code>
+</h4>
+<p>The workhorse function of the package is:</p>
+<ul>
+<li>
+<code><a href="reference/radf.html">radf()</a></code>: Recursive Augmented Dickey-Fuller Test.</li>
+</ul>
+<p>This function offers a vectorized estimation (i.e. single and/or multiple time-series) for individual and panel estimation. The estimation can parse data from multiple classes and handle dates as index.</p>
+</div>
+<div id="critical-values--cv" class="section level4">
+<h4 class="hasAnchor">
+<a href="#critical-values--cv" class="anchor"></a>Critical Values ~ <code>cv</code>
+</h4>
+<p>There are several options for generating critical values:</p>
+<ul>
+<li>
+<code><a href="reference/mc_cv.html">mc_cv()</a></code>: Monte Carlo</li>
+<li>
+<code><a href="reference/wb_cv.html">wb_cv()</a></code>: Wild Bootstrap</li>
+<li>
+<code><a href="reference/sb_cv.html">sb_cv()</a></code>: Sieve Bootsrap (Panel)</li>
+</ul>
+<p>On default <code>exuber</code> will use Monte Carlo simulated critical values if no other option is provided. The package offers these critical values in the form of <code>data</code> (up to 600 observations), that are obtain with the <code><a href="reference/mc_cv.html">mc_cv()</a></code> function.</p>
+</div>
+</div>
+<div id="analysis" class="section level3">
+<h3 class="hasAnchor">
+<a href="#analysis" class="anchor"></a>Analysis</h3>
+<p>For the analysis you should include both the <code>object</code> and <code>cv</code>. The below methods break the process into small simple steps:</p>
+<ul>
+<li>
+<code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> summarizes the model.</li>
+<li>
+<code><a href="reference/diagnostics.html">diagnostics()</a></code> shows which series reject the null hupothesis .</li>
+<li>
+<code><a href="reference/datestamp.html">datestamp()</a></code> computes the origination, termination and duration of episodes (if any).</li>
+</ul>
+<p>These combined provide a comprehensive analysis on the exuberant behavior of the model.</p>
+</div>
 <div id="installation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Install release version from CRAN</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"exuber"</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3"></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co"># Install development version from GitHub</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co"># install.packages("devtools")</span></a>
-<a class="sourceLine" id="cb1-6" title="6">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"kvasilopoulos/exuber"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"exuber"</span>)</a></code></pre></div>
+<div id="development-version" class="section level4">
+<h4 class="hasAnchor">
+<a href="#development-version" class="anchor"></a>Development version</h4>
+<p>You can install the development version of exuber from GitHub.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb2-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"kvasilopoulos/exuber"</span>)</a></code></pre></div>
 <p>If you encounter a clear bug, please file a reproducible example on <a href="https://github.com/kvasilopoulos/exuber/issues">GitHub</a>.</p>
+</div>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
-<p>{exuber} is based on two principles when testing for explosive dynamics in time series — estimating statistics and generating critical values.</p>
-<div id="estimation" class="section level4">
-<h4 class="hasAnchor">
-<a href="#estimation" class="anchor"></a>Estimation</h4>
-<p>The <code><a href="reference/radf.html">radf()</a></code> function offers a vectorized estimation (i.e. single and multiple time-series) for individual and panel estimation. The estimation can parse data from multiple classes and handle dates as index.</p>
-</div>
-<div id="critical-values" class="section level4">
-<h4 class="hasAnchor">
-<a href="#critical-values" class="anchor"></a>Critical Values</h4>
-<p>There are several options for generating critical values. On default {exuber} will use Monte Carlo simulated critical values if no other option is provided. The package offers these critical values in the form of <code>data</code> (up to 700 observations), that are obtain with the <code><a href="reference/mc_cv.html">mc_cv()</a></code> function. Alternatively, {exuber} accommodates Wild Bootstrapped and Sieve Bootstrapped (panel) critical values through <code><a href="reference/wb_cv.html">wb_cv()</a></code> and <code><a href="reference/sb_cv.html">sb_cv()</a></code> respectively.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(exuber)</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4">rsim_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/radf.html">radf</a></span>(sim_data)</a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(rsim_data)</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt; -- Summary (minw = 19, lag = 0) -------------------------- Monte Carlo (nrep = 2000) --</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;  sim_psy1 </span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;         tstat      90%       95%     99%</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; ADF    -2.655  -0.4275  -0.07364  0.5121</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; SADF    3.066   0.9024   1.20175  1.7137</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; GSADF   3.602   1.6033   1.89674  2.5226</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt;  sim_psy2 </span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt;         tstat      90%       95%     99%</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt; ADF    -1.935  -0.4275  -0.07364  0.5121</span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; SADF    5.448   0.9024   1.20175  1.7137</span></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="co">#&gt; GSADF   5.492   1.6033   1.89674  2.5226</span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="co">#&gt;  sim_evans </span></a>
+<a class="sourceLine" id="cb3-24" title="24"><span class="co">#&gt;        tstat      90%       95%     99%</span></a>
+<a class="sourceLine" id="cb3-25" title="25"><span class="co">#&gt; ADF    -4.78  -0.4275  -0.07364  0.5121</span></a>
+<a class="sourceLine" id="cb3-26" title="26"><span class="co">#&gt; SADF   24.38   0.9024   1.20175  1.7137</span></a>
+<a class="sourceLine" id="cb3-27" title="27"><span class="co">#&gt; GSADF  36.10   1.6033   1.89674  2.5226</span></a>
+<a class="sourceLine" id="cb3-28" title="28"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-29" title="29"><span class="co">#&gt;  sim_div </span></a>
+<a class="sourceLine" id="cb3-30" title="30"><span class="co">#&gt;          tstat      90%       95%     99%</span></a>
+<a class="sourceLine" id="cb3-31" title="31"><span class="co">#&gt; ADF    -2.4290  -0.4275  -0.07364  0.5121</span></a>
+<a class="sourceLine" id="cb3-32" title="32"><span class="co">#&gt; SADF   -1.2494   0.9024   1.20175  1.7137</span></a>
+<a class="sourceLine" id="cb3-33" title="33"><span class="co">#&gt; GSADF  -0.3741   1.6033   1.89674  2.5226</span></a>
+<a class="sourceLine" id="cb3-34" title="34"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="co">#&gt;  sim_blan </span></a>
+<a class="sourceLine" id="cb3-36" title="36"><span class="co">#&gt;         tstat      90%       95%     99%</span></a>
+<a class="sourceLine" id="cb3-37" title="37"><span class="co">#&gt; ADF    -5.244  -0.4275  -0.07364  0.5121</span></a>
+<a class="sourceLine" id="cb3-38" title="38"><span class="co">#&gt; SADF   -2.294   0.9024   1.20175  1.7137</span></a>
+<a class="sourceLine" id="cb3-39" title="39"><span class="co">#&gt; GSADF   3.209   1.6033   1.89674  2.5226</span></a>
+<a class="sourceLine" id="cb3-40" title="40"></a>
+<a class="sourceLine" id="cb3-41" title="41"><span class="kw"><a href="reference/diagnostics.html">diagnostics</a></span>(rsim_data)</a>
+<a class="sourceLine" id="cb3-42" title="42"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-43" title="43"><span class="co">#&gt; -- Diagnostics (option = gsadf) ---------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb3-44" title="44"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-45" title="45"><span class="co">#&gt; sim_psy1:  Rejects H0 for significance level of 1% </span></a>
+<a class="sourceLine" id="cb3-46" title="46"><span class="co">#&gt; sim_psy2:  Rejects H0 for significance level of 1% </span></a>
+<a class="sourceLine" id="cb3-47" title="47"><span class="co">#&gt; sim_evans: Rejects H0 for significance level of 1% </span></a>
+<a class="sourceLine" id="cb3-48" title="48"><span class="co">#&gt; sim_div:   Cannot reject H0! </span></a>
+<a class="sourceLine" id="cb3-49" title="49"><span class="co">#&gt; sim_blan:  Rejects H0 for significance level of 1%</span></a>
+<a class="sourceLine" id="cb3-50" title="50"></a>
+<a class="sourceLine" id="cb3-51" title="51"><span class="kw"><a href="reference/datestamp.html">datestamp</a></span>(rsim_data)</a>
+<a class="sourceLine" id="cb3-52" title="52"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-53" title="53"><span class="co">#&gt; -- Datestamp (min_duration = 0) ---------------------------------------- Monte Carlo --</span></a>
+<a class="sourceLine" id="cb3-54" title="54"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-55" title="55"><span class="co">#&gt; sim_psy1 :</span></a>
+<a class="sourceLine" id="cb3-56" title="56"><span class="co">#&gt;   Start End Duration</span></a>
+<a class="sourceLine" id="cb3-57" title="57"><span class="co">#&gt; 1    47  55        9</span></a>
+<a class="sourceLine" id="cb3-58" title="58"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-59" title="59"><span class="co">#&gt; sim_psy2 :</span></a>
+<a class="sourceLine" id="cb3-60" title="60"><span class="co">#&gt;   Start End Duration</span></a>
+<a class="sourceLine" id="cb3-61" title="61"><span class="co">#&gt; 1    24  40       17</span></a>
+<a class="sourceLine" id="cb3-62" title="62"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-63" title="63"><span class="co">#&gt; sim_evans :</span></a>
+<a class="sourceLine" id="cb3-64" title="64"><span class="co">#&gt;   Start End Duration</span></a>
+<a class="sourceLine" id="cb3-65" title="65"><span class="co">#&gt; 1    49  55        7</span></a>
+<a class="sourceLine" id="cb3-66" title="66"><span class="co">#&gt; 2    94  98        5</span></a>
+<a class="sourceLine" id="cb3-67" title="67"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-68" title="68"><span class="co">#&gt; sim_blan :</span></a>
+<a class="sourceLine" id="cb3-69" title="69"><span class="co">#&gt;   Start End Duration</span></a>
+<a class="sourceLine" id="cb3-70" title="70"><span class="co">#&gt; 1    61  62        2</span></a>
+<a class="sourceLine" id="cb3-71" title="71"><span class="co">#&gt; 2    94  95        2</span></a>
+<a class="sourceLine" id="cb3-72" title="72"></a>
+<a class="sourceLine" id="cb3-73" title="73"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(rsim_data)</a></code></pre></div>
+<p><img src="reference/figures/usage-1.png"><!-- --></p>
 <hr>
 <p>Please note that the ‘exuber’ project is released with a <a href="https://kvasilopoulos.github.io/exuber/CODE_OF_CONDUCT">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
-</div>
 </div>
 </div>
   </div>

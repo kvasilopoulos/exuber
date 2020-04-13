@@ -20,28 +20,28 @@
 #' @export
 #'
 #' @examples
-#'\donttest{
-#' autoplot(radf_dta)
+#' rsim_data <- radf(sim_data)
+#'
+#' autoplot(rsim_data)
 #'
 #' # Modify facet_wrap options through ellipsis
-#' autoplot(radf_dta, scales = "free", direction  = "v")
+#' autoplot(rsim_data, scales = "free", direction  = "v")
 #'
-#' autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3))
+#' autoplot(rsim_data, shade_opt = shade(shade_color = "pink", opacity = 0.3))
 #'
 #' # Change (overwrite) color, size or linetype
-#' autoplot(radf_dta) +
+#' autoplot(rsim_data) +
 #'   scale_color_manual(values = c("black", "black")) +
 #'   scale_size_manual(values = c(1.2, 1)) +
 #'   scale_linetype_manual(values = c("solid", "solid"))
 #'
 #' # Change names through ellipsis
 #' custom_labels <- c("psy1" = "new_name_for_psy1", "psy2" = "new_name_for_psy2")
-#' autoplot(radf_dta, labeller = labeller(id = as_labeller(custom_labels)))
+#' autoplot(rsim_data, labeller = labeller(id = as_labeller(custom_labels)))
 #'
 #' # Change Theme options
-#' autoplot(radf_dta) +
+#' autoplot(rsim_data) +
 #'   theme(legend.position = "right")
-#'}
 autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
                           select_series = NULL, option = c("gsadf", "sadf"),
                           shade_opt = shade(),
@@ -84,37 +84,34 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     gg <- gg + shade_opt(ds_data)
   }
 
-  # h <- list()
-  # for (i in 1:length(series)) {
-  #   h[[i]] <- gg +
-  #     ggforce::facet_grid_paginate(~id, ncol = 1, nrow = 1, page = i)
-  # }
-  # h
-  if (is.null(dots$scales)) {
-    h <- gg + facet_wrap( ~ id, scales = "free", ...)
+  if (length(series) > 1) {
+    if (is.null(dots$scales)) {
+      gg <- gg + facet_wrap( ~ id, scales = "free", ...)
+    }else{
+      gg <- gg <- facet_wrap( ~ id, ...)
+    }
   }else{
-    h <- gg <- facet_wrap( ~ id, ...)
+    gg <- gg + ggtitle(series) # = 1 for ggtitle to work in single plot
   }
-  h
+  gg
 }
-
-
 
 #' @rdname autoplot.radf
 #' @param min_duration the minimum duration.
-#' @param shade_color the shade color that indicates the exuberance periods.
+#' @param fill the shade color that indicates the exuberance periods.
 #' @param opacity the opacity of the shade color aka alpha.
 #' @export
-shade <- function(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...) {
+shade <- function(min_duration = NULL, fill = "grey70", opacity = 0.5, ...) {
   function(ds_data) {
   filter(ds_data, Duration >= min_duration %||% 0) %>%
     geom_rect(
-      data = ., inherit.aes = FALSE, fill = shade_color, alpha = opacity,
+      data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
       aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
     )
   }
 }
 
+#' @export
 scale_exuber_manual <- function(
   color_values = c("red", "blue"), linetype_values = c(2,1),
   size_values = c(0.8, 0.7)) {
@@ -125,7 +122,9 @@ scale_exuber_manual <- function(
   )
 }
 
+
 #' @importFrom ggplot2 `%+replace%`
+#' @export
 theme_exuber <- function(
   base_size = 11, base_family = "", base_line_size = base_size/22,
   base_rect_size = base_size/22) {

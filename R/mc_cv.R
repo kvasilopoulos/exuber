@@ -41,14 +41,14 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
     rls_gsadf(yxmat, min_win = minw)
   }
 
-  point <- n - minw
+  n_minw <- n - minw
 
-  adf_crit   <- results[point + 1, ]
-  sadf_crit  <- results[point + 2, ]
-  gsadf_crit <- results[point + 3, ]
+  adf_crit   <- results[n_minw + 1, ]
+  sadf_crit  <- results[n_minw + 2, ]
+  gsadf_crit <- results[n_minw + 3, ]
 
-  badf_crit  <- results[1:point, ]
-  bsadf_crit <- results[-c(1:(point + 3)), ]
+  badf_crit  <- results[1:n_minw, ]
+  bsadf_crit <- results[-c(1:(n_minw + 3)), ]
 
   list(
     adf = adf_crit,
@@ -79,7 +79,7 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' should be initialized. Either NULL or an integer will be used in a call to
 #' `set.seed` before simulation. If set, the value is save as "seed" attribute
 #' of the returned value. The default, NULL will note change the rng state, and
-#' return .Random.seed as the "seed" attribute. Results between seeds in parallell
+#' return .Random.seed as the "seed" attribute. Results between seeds in parallel
 #' and non-parallel differ.
 #' @param opt_bsadf Options for bsadf critical value calculation. "conventional"
 #' corresponds to the max of the quantile of the simulated distribution, while
@@ -105,12 +105,13 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Default minimum window
 #' mc <- mc_cv(n = 100)
 #'
 #' # Change the minimum window and the number of simulations
-#' mc <- mc_cv(n = 100, nrep = 2500, minw = 20)
+#' mc <- mc_cv(n = 100, nrep = 1500, minw = 20)
+#' tidy(mc)
 #'
 #' mdist <- mc_distr(n = 100)
 #' autoplot(mdist)

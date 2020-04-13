@@ -2,7 +2,7 @@
 % Please edit documentation in R/zzz.R
 \name{install_exuberdata}
 \alias{install_exuberdata}
-\title{convenience function to install exuberdata package}
+\title{Convenience function to install exuberdata package}
 \usage{
 install_exuberdata()
 }

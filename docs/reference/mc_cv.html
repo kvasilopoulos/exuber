@@ -114,6 +114,12 @@ root tests. mc_dist computes the distribution." />
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -189,7 +195,7 @@ root tests. <code>mc_dist</code> computes the distribution.</p>
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is save as "seed" attribute
 of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallell
+return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.</p></td>
     </tr>
     <tr>
@@ -217,16 +223,21 @@ t-statistics.</p>
 <code><a href='sb_cv.html'>sb_cv</a></code> for Sieve Bootstrapped critical values</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
 <span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 
 <span class='co'># Change the minimum window and the number of simulations</span>
-<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2500</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
-
+<span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1500</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 4
+#&gt;   sig       adf  sadf gsadf
+#&gt;   &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 90    -0.396  0.890  1.61
+#&gt; 2 95    -0.0259 1.24   1.92
+#&gt; 3 99     0.588  1.80   2.55</div><div class='input'>
 <span class='no'>mdist</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_distr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>mdist</span>)
-}</div></pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>mdist</span>)</div><div class='img'><img src='mc_cv-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

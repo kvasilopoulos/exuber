@@ -123,20 +123,11 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #'
 #'
 #' @examples
-#' \dontrun{
-#'
-#' # Simulate bubble processes
-#' set.seed(4441)
-#' dta <- data.frame(
-#'   "psy1" = sim_psy1(100),
-#'   "psy2" = sim_psy2(100),
-#'   "evans" = sim_evans(100),
-#'   "div" = sim_div(100),
-#'   "blan" = sim_blan(100)
-#' )
+#' \donttest{
 #'
 #' # Panel critical vales should have the same lag length with the estimation
 #' sb <- sb_cv(dta, lag = 1)
+#' tidy(sb)
 #'
 #' dta %>%
 #'   radf(lag = 1) %>%
@@ -147,7 +138,8 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #'   autoplot(cv = sb)
 #'
 #'# Simulate distribution
-#'sb_dist(dta, lag = 1)
+#'sdist <- sb_dist(dta, lag = 1)
+#'autoplot(sdist)
 #' }
 sb_cv <- function(data, minw = NULL, lag = 0L,
                   nboot = 1000L, seed = NULL) {

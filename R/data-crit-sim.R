@@ -29,3 +29,23 @@ print.crit <- function(x, ...) {
   # we dont want to overwhelm the console
   print(tibble::enframe(x), ...)
 }
+
+#' Simulated dataset
+#'
+#' A dataset containing commonly known data generated processes (DGPs) used in the explosive
+#' time series literature.
+#'
+#' @seealso sim_psy1 sim_psy1 sim_evans sim_div sim_blan
+#'
+#' @examples
+#' # The dataset can be easily replicated with the code belows
+#' set.seed(1234)
+#' sim_data <- tibble(
+#'   sim_psy1 = sim_psy1(100),
+#'   sim_psy2 = sim_psy2(100),
+#'   sim_evans = sim_evans(100),
+#'   sim_div = sim_div(100),
+#'   sim_blan = sim_blan(100)
+#' )
+#'
+"sim_data"

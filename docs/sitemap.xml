@@ -73,6 +73,9 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/sim_blan.html</loc>
   </url>
   <url>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/sim_data.html</loc>
+  </url>
+  <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/sim_div.html</loc>
   </url>
   <url>
@@ -107,5 +110,8 @@
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//articles/simulation.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber//articles/Tidy.html</loc>
   </url>
 </urlset>
