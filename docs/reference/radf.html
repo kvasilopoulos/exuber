@@ -114,6 +114,12 @@ test." />
     <li>
       <a href="../articles/simulation.html">Simulation</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Plotting</a>
+    </li>
+    <li>
+      <a href="../articles/tidy.html">Available tidy methods</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -196,15 +202,25 @@ Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># Simulate bubble processes</span>
-<span class='no'>dta</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>), <span class='kw'>psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>))
-
-<span class='no'>rfd</span> <span class='kw'>&lt;-</span> <span class='fu'>radf</span>(<span class='no'>dta</span>)
+    <pre class="examples"><div class='input'><span class='co'># We will use simulated data that are stored with the name `sim_data`</span>
+<span class='no'>sim_data</span></div><div class='output co'>#&gt; # A tibble: 100 x 5
+#&gt;    sim_psy1  sim_psy2 sim_evans sim_div  sim_blan  
+#&gt;    &lt;sim&gt;     &lt;sim&gt;    &lt;sim&gt;     &lt;sim&gt;    &lt;sim&gt;     
+#&gt;  1 100.00000 100.0000 0.5000000 68.41200 0.10000000
+#&gt;  2  91.80402 114.4024 0.4725939 65.41532 0.16518950
+#&gt;  3  93.68777 117.2170 0.5077747 62.06814 0.26969613
+#&gt;  4 101.05112 113.9937 0.5513757 44.43701 0.45638652
+#&gt;  5  85.12384 114.4418 0.5836097 49.64608 0.71412318
+#&gt;  6  88.03759 111.0299 0.6338480 44.17303 0.02129179
+#&gt;  7  91.47371 105.4214 0.6751490 43.12535 0.05347824
+#&gt;  8  87.57123 106.5553 0.7354604 31.27811 0.07291401
+#&gt;  9  83.85960 100.4696 0.8456961 36.36857 0.06355781
+#&gt; 10  80.02697 101.6116 0.9375952 52.12095 0.01475503
+#&gt; # ... with 90 more rows</div><div class='input'>
+<span class='no'>rsim</span> <span class='kw'>&lt;-</span> <span class='fu'>radf</span>(<span class='no'>sim_data</span>)
 
 <span class='co'># For lag = 1 and minimum window = 20</span>
-<span class='no'>rfd</span> <span class='kw'>&lt;-</span> <span class='fu'>radf</span>(<span class='no'>dta</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-<span class='co'># }</span></div></pre>
+<span class='no'>rsim_20</span> <span class='kw'>&lt;-</span> <span class='fu'>radf</span>(<span class='no'>sim_data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

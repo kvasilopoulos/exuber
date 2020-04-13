@@ -17,7 +17,7 @@
   ...
 )
 
-shade(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...)
+shade(min_duration = NULL, fill = "grey70", opacity = 0.5, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
@@ -41,7 +41,7 @@ shade(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...)
 
 \item{min_duration}{the minimum duration.}
 
-\item{shade_color}{the shade color that indicates the exuberance periods.}
+\item{fill}{the shade color that indicates the exuberance periods.}
 
 \item{opacity}{the opacity of the shade color aka alpha.}
 }
@@ -50,26 +50,26 @@ shade(min_duration = NULL, shade_color = "grey70", opacity = 0.5, ...)
 \code{shade}
 }
 \examples{
-\donttest{
-autoplot(radf_dta)
+rsim_data <- radf(sim_data)
+
+autoplot(rsim_data)
 
 # Modify facet_wrap options through ellipsis
-autoplot(radf_dta, scales = "free", direction  = "v")
+autoplot(rsim_data, scales = "free", direction  = "v")
 
-autoplot(radf_dta, shade_opt = shade(shade_color = "pink", opacity = 0.3))
+autoplot(rsim_data, shade_opt = shade(shade_color = "pink", opacity = 0.3))
 
 # Change (overwrite) color, size or linetype
-autoplot(radf_dta) +
+autoplot(rsim_data) +
   scale_color_manual(values = c("black", "black")) +
   scale_size_manual(values = c(1.2, 1)) +
   scale_linetype_manual(values = c("solid", "solid"))
 
 # Change names through ellipsis
 custom_labels <- c("psy1" = "new_name_for_psy1", "psy2" = "new_name_for_psy2")
-autoplot(radf_dta, labeller = labeller(id = as_labeller(custom_labels)))
+autoplot(rsim_data, labeller = labeller(id = as_labeller(custom_labels)))
 
 # Change Theme options
-autoplot(radf_dta) +
+autoplot(rsim_data) +
   theme(legend.position = "right")
-}
 }

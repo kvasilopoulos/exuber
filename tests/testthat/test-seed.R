@@ -1,5 +1,8 @@
 context("seed")
 
+# avail_cores <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+options(exuber.ncores = 2)
+
 test_that("seed gets the same results",{
   skip_on_cran()
   options(exuber.parallel = TRUE)
@@ -34,6 +37,7 @@ test_that("seed gets the same results - wb",{
 # })
 
 test_that("local options", {
+  skip_on_cran()
   options(exuber.global_seed = NA)
   expect_false(
     isTRUE(
@@ -54,6 +58,7 @@ test_that("local options", {
 })
 
 test_that("global options works", {
+  skip_on_cran()
   options(exuber.global_seed = 124)
   expect_true(
     isTRUE(
@@ -67,6 +72,7 @@ test_that("global options works", {
 })
 
 test_that("local options overwrite global", {
+  skip_on_cran()
   options(exuber.global_seed = 124)
   expect_true(
     isTRUE(
@@ -76,7 +82,6 @@ test_that("local options overwrite global", {
       )
     )
   )
-
   expect_false(
     isTRUE(
       all.equal(
