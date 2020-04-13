@@ -81,13 +81,6 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' of the returned value. The default, NULL will note change the rng state, and
 #' return .Random.seed as the "seed" attribute. Results between seeds in parallel
 #' and non-parallel differ.
-#' @param opt_bsadf Options for bsadf critical value calculation. "conventional"
-#' corresponds to the max of the quantile of the simulated distribution, while
-#' "conservative" corresponds to the quantile of the max which is more conservative
-#' in nature, thus the name.
-#' @param opt_badf Options for badf critical value calculation. "fixed" corresponds
-#' to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
-#' simulated to the monte carlo simulations.
 #'
 #' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
 #' t-statistics.
@@ -116,57 +109,32 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' mdist <- mc_distr(n = 100)
 #' autoplot(mdist)
 #' }
-mc_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL,
-                  opt_badf = c("fixed", "asymptotic", "simulated"),
-                  opt_bsadf = c("conservative", "conventional")) {
+mc_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 
-  opt_badf <- match.arg(opt_badf)
-  opt_bsadf <- match.arg(opt_bsadf)
-
-  pr <- c(0.9, 0.95, 0.99)
+  pcnt <- c(0.9, 0.95, 0.99)
 
   results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
 
-  adf_crit <- quantile(results$adf, probs = pr, drop = FALSE)
-  sadf_crit <- quantile(results$sadf, probs = pr, drop = FALSE)
-  gsadf_crit <- quantile(results$gsadf, probs = pr, drop = FALSE)
+  adf_crit <- quantile(results$adf, probs = pcnt, drop = FALSE)
+  sadf_crit <- quantile(results$sadf, probs = pcnt, drop = FALSE)
+  gsadf_crit <- quantile(results$gsadf, probs = pcnt, drop = FALSE)
 
-  bsadf_crit <-
-    if (opt_bsadf == "conventional") {
-      apply(results$bsadf, 1, quantile, probs = pr) %>%
-        t() %>% apply(2, cummax)
-    } else if (opt_bsadf == "conservative") {
-      apply(results$badf, 2, cummax) %>%
-        apply(1, quantile, probs = pr) %>% t()
-    }
-
-  if (opt_badf == "fixed") {
-    temp <- log(log(n * seq(get_minw(results) + 1, n))) / 100
-    badf_crit <- matrix(
-      rep(temp, 3), ncol = 3, dimnames = list(NULL, paste(pr))
-    )
-  } else if (opt_badf == "asymptotic") {
-    temp <- c(-0.44, -0.08, 0.6) %>% rep(each = 100) # values taken from PWY
-    badf_crit <- matrix(temp, ncol = 3, dimnames = list(NULL, paste(pr))
-    )
-  } else if (opt_badf == "simulated") {
-    badf_crit <- apply(results$badf, 1, quantile, probs = pr) %>%
-      t() %>% apply(2, cummax)
-  }
+  bsadf_crit <- apply(results$badf, 2, cummax) %>%
+    apply(1, quantile, probs = pr) %>% t()
+  asy_adf_crit <- c(-0.44, -0.08, 0.6) %>% rep(each = 100) # values taken from PWY
+  badf_crit <- matrix(asy_adf_crit, ncol = 3, dimnames = list(NULL, paste(pr)))
 
   list(adf_cv = adf_crit,
        sadf_cv = sadf_crit,
        gsadf_cv = gsadf_crit,
        badf_cv = badf_crit,
        bsadf_cv = bsadf_crit) %>%
-    inherit_attrs(results) %>%
-    add_attr(opt_badf = opt_badf,
-             opt_bsadf = opt_bsadf) %>%
+    inherit_attrs(results)
     add_class("mc_cv", "cv")
 
 }
 
-#' @rdname mc_cv
+  #' @rdname mc_cv
 #' @inheritParams mc_cv
 #' @export
 mc_distr <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
