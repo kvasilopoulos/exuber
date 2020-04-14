@@ -49,6 +49,7 @@ get_rng_state <- function(seed) {
 # get crit data --------------------------------------------------------
 
 retrieve_crit <- function(x) {
+  message("using 'mc_cv'")
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(exuber::radf_crit)) {
     return(exuber::radf_crit[[nr]])

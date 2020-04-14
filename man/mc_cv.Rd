@@ -33,15 +33,17 @@ t-statistics.
 root tests. \code{mc_dist} computes the distribution.
 }
 \examples{
-\dontrun{
+\donttest{
 # Default minimum window
 mc <- mc_cv(n = 100)
+
 tidy(mc)
 
 # Change the minimum window and the number of simulations
 mc2 <- mc_cv(n = 100, nrep = 600, minw = 20)
 
 mdist <- mc_distr(n = 100)
+
 autoplot(mdist)
 }
 }
