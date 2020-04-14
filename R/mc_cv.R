@@ -98,15 +98,17 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Default minimum window
 #' mc <- mc_cv(n = 100)
+#'
 #' tidy(mc)
 #'
 #' # Change the minimum window and the number of simulations
 #' mc2 <- mc_cv(n = 100, nrep = 600, minw = 20)
 #'
 #' mdist <- mc_distr(n = 100)
+#'
 #' autoplot(mdist)
 #' }
 mc_cv <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
