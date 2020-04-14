@@ -23,6 +23,5 @@ calc_pvalue(radf_psy1)
 # Using the Wild-Bootstrapped
 wb_psy1 <- wb_dist(sim_psy1(100))
 calc_pvalue(radf_psy1, wb_psy1)
-
 }
 }

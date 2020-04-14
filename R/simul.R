@@ -79,7 +79,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 
   y %>%
     add_attr(seed = rng_state) %>%
-    add_class("sim")
+    add_class(class = "sim")
 }
 
 
@@ -411,6 +411,13 @@ print.sim <- function(x, ...) {
   print(x)
 }
 
+#' @importFrom vctrs vec_data
+format.sim <- function(x, ...) {
+  out <- signif(vec_data(x), 3)
+  out[is.na(x)] <- NA
+  out
+}
+
 #' @export
 #' @keywords internal
 autoplot.sim <- function(object, ...) {
@@ -419,5 +426,5 @@ autoplot.sim <- function(object, ...) {
     ggplot(aes(name, value)) +
     geom_line() +
     theme_bw() +
-    labs(x = "", y = "")
+    labs(x = NULL, y = NULL)
 }

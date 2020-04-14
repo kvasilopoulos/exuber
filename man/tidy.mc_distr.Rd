@@ -4,7 +4,7 @@
 \alias{tidy.mc_distr}
 \alias{tidy.wb_distr}
 \alias{tidy.sb_distr}
-\title{Tidying *_dist objects}
+\title{Tidying *_distr objects}
 \usage{
 \method{tidy}{mc_distr}(x, ...)
 
@@ -21,7 +21,7 @@
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-tidy \verb{*_dist} takes an \code{mc_distr}, \code{wb_distr} or \code{sb_distr} object and returns
+tidy \verb{*_distr} takes an \code{mc_distr}, \code{wb_distr} or \code{sb_distr} object and returns
 a tibble.
 }
 \examples{

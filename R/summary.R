@@ -13,29 +13,27 @@
 #' @examples
 #' \dontrun{
 #' # Simulate bubble processes, compute the t-stat and critical values
-#' set.seed(4441)
-#' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
-#' rfd <- radf(dta)
+#' rsim_data <- radf(sim_data)
 #'
 #' # Summary, diagnostics and datestamp (default)
-#' summary(rfd)
-#' diagnostics(rfd)
-#' datestamp(rfd)
+#' summary(rsim_data)
+#' diagnostics(rsim_data)
+#' datestamp(rsim_data)
 #'
 #' #' # Diagnostics for 'sadf'
-#' diagnostics(rfd, option = "sadf")
+#' diagnostics(rsim_data, option = "sadf")
 #'
 #' # Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived
-#' rot <- round(log(NROW(rfd)) / NROW(rfd))
-#' datestamp(rfd, min_duration = rot)
+#' rot <- psy_ds(sim_data)
+#' datestamp(rsim_data, min_duration = rot)
 #'
 #' # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
 #'
-#' wb <- wb_cv(dta)
+#' wb <- wb_cv(rsim_data)
 #'
-#' summary(rfd, cv = wb)
-#' diagnostics(rfd, cv = wb)
-#' datestamp(rfd, cv = wb)
+#' summary(rsim_data, cv = wb)
+#' diagnostics(rsim_data, cv = wb)
+#' datestamp(rsim_data, cv = wb)
 #' }
 #' @export
 summary.radf <- function(object, cv = NULL, ...) {
@@ -136,7 +134,6 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
 #' # Using the Wild-Bootstrapped
 #' wb_psy1 <- wb_dist(sim_psy1(100))
 #' calc_pvalue(radf_psy1, wb_psy1)
-#'
 #' }
 calc_pvalue <- function(x, dist = NULL) {
 

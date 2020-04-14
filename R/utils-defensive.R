@@ -26,31 +26,6 @@ message_glue <-  function(..., .sep = "", .envir = parent.frame(),
   )
 }
 
-# predicates --------------------------------------------------------------
-
-#' @importFrom rlang is_bare_numeric
-is_n <- function(x) {
-  is_scalar_atomic(x) && is_bare_numeric(x) && x == trunc(x) && x > 0
-}
-
-is_identical <- function(x, y) {
-  if (identical(x, y)) TRUE else FALSE
-}
-
-#' @importFrom rlang %||%
-is_mc <- function(y) {
-  get_method(y) %||% FALSE == "Monte Carlo"
-}
-
-is_wb <- function(y) {
-  get_method(y) %||% FALSE == "Wild Bootstrap"
-
-}
-
-is_sb <- function(y) {
-  get_method(y) %||% FALSE == "Sieve Bootstrap"
-}
-
 # asserts ------ ------------------------------------------------------
 
 assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
@@ -111,3 +86,15 @@ assert_match <- function(x, y, panel = FALSE) {
       stop_glue("lag value does not match")
   }
 }
+
+# predicates --------------------------------------------------------------
+
+#' @importFrom rlang is_bare_numeric
+is_n <- function(x) {
+  is_scalar_atomic(x) && is_bare_numeric(x) && x == trunc(x) && x > 0
+}
+
+is_identical <- function(x, y) {
+  if (identical(x, y)) TRUE else FALSE
+}
+

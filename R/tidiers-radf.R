@@ -118,7 +118,7 @@ glance.radf <- function(x, format = c("wide", "long"), ...) {
   if (format == "long") {
     tbl_radf <-
       tbl_radf %>%
-      gather(name, tstat)
+      gather(id, tstat)
   }
   tbl_radf
 }

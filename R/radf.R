@@ -27,44 +27,49 @@
 #' @export
 #'
 #' @examples
-#' # We will use simulated data that are stored with the name `sim_data`
+#' # We will use simulated data that are stored as data with the name `sim_data`
 #' sim_data
 #'
 #' rsim <- radf(sim_data)
+#' str(rsim)
+#'
+#' # We would also use data that contain a Date column
+#' sim_data_wdate
+#'
+#' rsim_wdate <- radf(sim_data_wdate)
+#' str(rsim_wdate)
+#' index(rsim_wdate)
 #'
 #' # For lag = 1 and minimum window = 20
 #' rsim_20 <- radf(sim_data, minw = 20, lag = 1)
+#' str(rsim_20)
 #'
 radf <- function(data, minw = NULL, lag = 0L) {
 
   x <- parse_data(data)
-
-  if (is.null(minw)) {
-    minw <- psy_minw(data)
-  }
-
+  minw <- minw %||% psy_minw(data)
   nc <- ncol(x)
 
   assert_na(x)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
 
-  point <- nrow(x) - minw - lag
+  pointer <- nrow(x) - minw - lag
 
   adf <- sadf <- gsadf <-
     drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
   badf <- bsadf <-
-    matrix(0, point, nc, dimnames = list(NULL, colnames(x)))
+    matrix(0, pointer, nc, dimnames = list(NULL, colnames(x)))
 
   for (i in 1:nc) {
     yxmat <- unroot(x[, i], lag = lag)
     results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
 
-    badf[, i]  <- results[1:point]
-    adf[i]     <- results[point + 1]
-    sadf[i]    <- results[point + 2]
-    gsadf[i]   <- results[point + 3]
-    bsadf[, i] <- results[-c(1:(point + 3))]
+    badf[, i]  <- results[1:pointer]
+    adf[i]     <- results[pointer + 1]
+    sadf[i]    <- results[pointer + 2]
+    gsadf[i]   <- results[pointer + 3]
+    bsadf[, i] <- results[-c(1:(pointer + 3))]
   }
 
   bsadf_panel <- apply(bsadf, 1, mean)
