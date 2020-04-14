@@ -49,8 +49,9 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       .inorder = FALSE
     ) %fun% {
       set_rng(seed)
-      if (show_pb && !do_par)
+      if (show_pb && !do_par) {
         setTxtProgressBar(pb, i)
+      }
       if (dist_rad) {
         w <- sample(c(-1, 1), nr - 1, replace = TRUE)
       } else {
