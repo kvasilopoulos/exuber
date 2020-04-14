@@ -58,7 +58,7 @@ rot = psy_ds(stocks) # log(n) ~ rule of thumb
 dstamp_stocks <- datestamp(est_stocks, min_duration = rot)
 dstamp_stocks
 ```
-We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance. Recent studies Pavlidies et al (2018) & Pavlidis and Vasilopoulos (2020) use the datestamp in a probit model, thus ...
+We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance. Recent studies Pavlidis et al (2018) & Pavlidis and Vasilopoulos (2020) use the datestamp in a probit model, thus ...
 
 ```{r datestamp-dummy}
 dummy <- attr(dstamp_stocks, "dummy")

@@ -69,7 +69,9 @@ reference:
       - tidy.radf
       - tidy.mc_cv
       - tidy.mc_distr
-      - augment_join
+
+  - title: Tidying & Joining
+      - tidy_join
 
 
 navbar:

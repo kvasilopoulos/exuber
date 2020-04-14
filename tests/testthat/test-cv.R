@@ -1,8 +1,8 @@
 context("cv")
 
 test_that("exuberdata::crit as data", {
-  # skip_on_cran()
-  # skip_if(!"exuberdata" %in% loadedNamespaces())
+  skip_on_cran()
+  skip_if(!"exuberdata" %in% loadedNamespaces())
   # crit <- exuberdata::crit
   # expect_error(capture.output(print(crit)), NA)
   # expect_error(crit, NA)
@@ -78,10 +78,6 @@ test_that("distribution_rad works", {
   )), regexp = NA)
 })
 
-test_that("opt_badf", {
-  expect_error(mc_cv(100, nrep = 10, opt_badf = "asymptotic"), NA)
-  expect_error(mc_cv(100, nrep = 10, opt_badf = "simulated"), NA)
-})
 
 # test_that("show_progress", {
 #   options(exuber.show_progress = TRUE)
