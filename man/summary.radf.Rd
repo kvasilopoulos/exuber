@@ -43,7 +43,9 @@ datestamp(rsim_data, min_duration = rot)
 wb <- wb_cv(rsim_data)
 
 summary(rsim_data, cv = wb)
+
 diagnostics(rsim_data, cv = wb)
+
 datestamp(rsim_data, cv = wb)
 }
 }
