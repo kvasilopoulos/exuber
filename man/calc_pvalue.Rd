@@ -4,12 +4,12 @@
 \alias{calc_pvalue}
 \title{Calculate p-values}
 \usage{
-calc_pvalue(x, dist = NULL)
+calc_pvalue(x, distr = NULL)
 }
 \arguments{
 \item{x}{An 'radf' object}
 
-\item{dist}{Which type of distribution to use to calculate the p-values}
+\item{distr}{Which type of distribution to use to calculate the p-values}
 }
 \description{
 Calculate p-values
@@ -18,10 +18,12 @@ Calculate p-values
 
 \dontrun{
 radf_psy1 <- radf(sim_psy1(100))
+
 calc_pvalue(radf_psy1)
 
 # Using the Wild-Bootstrapped
 wb_psy1 <- wb_dist(sim_psy1(100))
+
 calc_pvalue(radf_psy1, wb_psy1)
 }
 }
