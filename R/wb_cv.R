@@ -131,32 +131,32 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Default minimum window
 #' wb <- wb_cv(sim_data)
+#' tidy(wb)
 #'
 #' # Change the minimum window and the number of bootstraps
-#' wb <- wb_cv(im_data, nboot = 500, minw = 20)
-#' tidy(wdist)
+#' wb2 <- wb_cv(sim_data, nboot = 600, minw = 20)
 #'
 #' # Simulate distribution
 #' wdist <- wb_distr(im_data)
 #' autoplot(wdist)
 #' }
-wb_cv <- function(data, minw = NULL, nboot = 1000L,
+wb_cv <- function(data, minw = NULL, nboot = 500L,
                   dist_rad = FALSE, seed = NULL) {
 
   results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
 
-  pr <- c(0.9, 0.95, 0.99)
+  pcnt <- c(0.9, 0.95, 0.99)
 
-  adf_crit   <- apply(results$adf, 2, quantile, probs = pr) %>% t()
-  sadf_crit  <- apply(results$sadf, 2, quantile, probs = pr) %>% t()
-  gsadf_crit <- apply(results$gsadf, 2, quantile, probs = pr) %>% t()
+  adf_crit   <- apply(results$adf, 2, quantile, probs = pcnt) %>% t()
+  sadf_crit  <- apply(results$sadf, 2, quantile, probs = pcnt) %>% t()
+  gsadf_crit <- apply(results$gsadf, 2, quantile, probs = pcnt) %>% t()
 
-  badf_crit  <- apply(results$badf, c(1,3), quantile, probs = pr) %>%
+  badf_crit  <- apply(results$badf, c(1,3), quantile, probs = pcnt) %>%
     apply(c(1,3), t)
-  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, probs = pr) %>%
+  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, probs = pcnt) %>%
     apply(c(1,3), t)
 
   list(adf_cv = adf_crit,
@@ -172,7 +172,7 @@ wb_cv <- function(data, minw = NULL, nboot = 1000L,
 #' @rdname wb_cv
 #' @inheritParams wb_cv
 #' @export
-wb_distr <- function(data, minw = NULL, nboot = 1000L,
+wb_distr <- function(data, minw = NULL, nboot = 500L,
                     dist_rad = FALSE, seed = NULL) {
 
   results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)

@@ -20,12 +20,9 @@ diagnostics.default <- function(object, cv = NULL, ...) {
   )
 }
 
-#' Diagnostics on `radf` object
-#'
-#' Finds the series from a `radf` object that reject the null for at the 5\% significance level.
-#'
+
+#' @rdname diagnostics
 #' @importFrom dplyr case_when
-#' @inheritParams diagnostics
 #' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".
 #' @export
 diagnostics.radf <- function(object, cv = NULL,

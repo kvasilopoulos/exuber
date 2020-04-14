@@ -20,14 +20,17 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' rsim_data <- radf(sim_data)
 #'
 #' autoplot(rsim_data)
 #'
 #' # Modify facet_wrap options through ellipsis
-#' autoplot(rsim_data, scales = "free", direction  = "v")
+#' #'autoplot(rsim_data, scales = "free", dir  = "v")
 #'
-#' autoplot(rsim_data, shade_opt = shade(shade_color = "pink", opacity = 0.3))
+#' autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.3))
+#'
+#' library(ggplot2)
 #'
 #' # Change (overwrite) color, size or linetype
 #' autoplot(rsim_data) +
@@ -42,6 +45,7 @@
 #' # Change Theme options
 #' autoplot(rsim_data) +
 #'   theme(legend.position = "right")
+#'  }
 autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
                           select_series = NULL, option = c("gsadf", "sadf"),
                           shade_opt = shade(),
@@ -68,7 +72,7 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
 
   dots <- rlang::dots_list(...)
   plot_data <- augment_join(object, cv) %>%
-    filter(id %in% series, sig == 0.95, name == option) %>%
+    filter(id %in% series, sig == 95, name == option) %>%
     droplevels() %>%
     pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "stat")
   gg <-  plot_data %>%
@@ -76,6 +80,7 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     geom_line() +
     scale_exuber_manual() +
     theme_exuber()
+
 
   if (!is.null(shade_opt)) {
     ds_data <- tidy(datestamp(object, cv)) %>%
@@ -111,6 +116,17 @@ shade <- function(min_duration = NULL, fill = "grey70", opacity = 0.5, ...) {
   }
 }
 
+
+#' Exuber scale and theme functions
+#'
+#' `scale_exuber_manual` allow you to specify your own color size and linetype in
+#' `autoplot.radf` mappings. `theme_exuber` is a complete theme themes which control all non-data display.
+#'
+#' @param color_values a set of color values to map data values to.
+#' @param linetype_values a set of linetype values to map data values to.
+#' @param size_values a set of size values to map data values to.
+#'
+#' @importFrom ggplot2 scale_color_manual scale_size_manual scale_linetype_manual
 #' @export
 scale_exuber_manual <- function(
   color_values = c("red", "blue"), linetype_values = c(2,1),
@@ -122,7 +138,8 @@ scale_exuber_manual <- function(
   )
 }
 
-
+#' @rdname scale_exuber_manual
+#' @inheritParams ggplot2::theme_bw
 #' @importFrom ggplot2 `%+replace%`
 #' @export
 theme_exuber <- function(

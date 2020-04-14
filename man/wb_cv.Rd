@@ -5,9 +5,9 @@
 \alias{wb_distr}
 \title{Wild Bootstrap Critical values}
 \usage{
-wb_cv(data, minw = NULL, nboot = 1000L, dist_rad = FALSE, seed = NULL)
+wb_cv(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 
-wb_distr(data, minw = NULL, nboot = 1000L, dist_rad = FALSE, seed = NULL)
+wb_distr(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -44,13 +44,13 @@ to construct the bootstrap analogue of the Phillips et al. (2015) test which
 is asymptotically robust to non-stationary volatility.
 }
 \examples{
-\donttest{
+\dontrun{
 # Default minimum window
 wb <- wb_cv(sim_data)
+tidy(wb)
 
 # Change the minimum window and the number of bootstraps
-wb <- wb_cv(im_data, nboot = 500, minw = 20)
-tidy(wdist)
+wb2 <- wb_cv(sim_data, nboot = 600, minw = 20)
 
 # Simulate distribution
 wdist <- wb_distr(im_data)

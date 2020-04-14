@@ -5,9 +5,9 @@
 \alias{sb_distr}
 \title{Panel Sieve Bootstrap Critical Values}
 \usage{
-sb_cv(data, minw = NULL, lag = 0L, nboot = 1000L, seed = NULL)
+sb_cv(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL)
 
-sb_distr(data, minw = NULL, lag = 0L, nboot = 1000L, seed = NULL)
+sb_distr(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
@@ -37,22 +37,21 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{sb_dist}
 computes the distribution.
 }
 \examples{
-\donttest{
-
+\dontrun{
 # Panel critical vales should have the same lag length with the estimation
-sb <- sb_cv(dta, lag = 1)
+sb <- sb_cv(sim_data, lag = 1)
 tidy(sb)
 
-dta \%>\%
+sim_data \%>\%
   radf(lag = 1) \%>\%
   summary(cv = sb)
 
-dta \%>\%
+sim_data \%>\%
   radf(lag = 1) \%>\%
   autoplot(cv = sb)
 
 # Simulate distribution
-sdist <- sb_dist(dta, lag = 1)
+sdist <- sb_dist(sim_data, lag = 1)
 autoplot(sdist)
 }
 }

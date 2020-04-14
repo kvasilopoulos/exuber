@@ -28,13 +28,22 @@ A list that contains the t-statistic (sequence) for:
 test.
 }
 \examples{
-# We will use simulated data that are stored with the name `sim_data`
+# We will use simulated data that are stored as data with the name `sim_data`
 sim_data
 
 rsim <- radf(sim_data)
+str(rsim)
+
+# We would also use data that contain a Date column
+sim_data_wdate
+
+rsim_wdate <- radf(sim_data_wdate)
+str(rsim_wdate)
+index(rsim_wdate)
 
 # For lag = 1 and minimum window = 20
 rsim_20 <- radf(sim_data, minw = 20, lag = 1)
+str(rsim_20)
 
 }
 \references{
