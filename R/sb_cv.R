@@ -123,26 +123,25 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #'
 #'
 #' @examples
-#' \donttest{
-#'
+#' \dontrun{
 #' # Panel critical vales should have the same lag length with the estimation
-#' sb <- sb_cv(dta, lag = 1)
+#' sb <- sb_cv(sim_data, lag = 1)
 #' tidy(sb)
 #'
-#' dta %>%
+#' sim_data %>%
 #'   radf(lag = 1) %>%
 #'   summary(cv = sb)
 #'
-#' dta %>%
+#' sim_data %>%
 #'   radf(lag = 1) %>%
 #'   autoplot(cv = sb)
 #'
-#'# Simulate distribution
-#'sdist <- sb_dist(dta, lag = 1)
-#'autoplot(sdist)
+#' # Simulate distribution
+#' sdist <- sb_dist(sim_data, lag = 1)
+#' autoplot(sdist)
 #' }
 sb_cv <- function(data, minw = NULL, lag = 0L,
-                  nboot = 1000L, seed = NULL) {
+                  nboot = 500L, seed = NULL) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
@@ -161,7 +160,7 @@ sb_cv <- function(data, minw = NULL, lag = 0L,
 #' @rdname sb_cv
 #' @inheritParams sb_cv
 #' @export
-sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 1000L, seed = NULL) {
+sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL) {
 
   results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 

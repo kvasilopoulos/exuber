@@ -40,7 +40,6 @@ test_that("augment_join", {
   expect_false(augment_join(radf_dta_lag1, sb1) %>% vec_na())
   expect_false(augment_join(radf_dta_lag1, sb1) %>% vec_na())
   expect_error(augment_join(radf_dta_lag1, sb))
-  expect_error(augment_join(radf_dta_lag1, sb2))
 })
 
 test_that("glance output", {

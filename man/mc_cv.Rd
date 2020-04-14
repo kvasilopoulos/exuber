@@ -5,16 +5,9 @@
 \alias{mc_distr}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(
-  n,
-  minw = NULL,
-  nrep = 2000L,
-  seed = NULL,
-  opt_badf = c("fixed", "asymptotic", "simulated"),
-  opt_bsadf = c("conservative", "conventional")
-)
+mc_cv(n, minw = NULL, nrep = 500L, seed = NULL)
 
-mc_distr(n, minw = NULL, nrep = 2000L, seed = NULL)
+mc_distr(n, minw = NULL, nrep = 500L, seed = NULL)
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
@@ -30,15 +23,6 @@ should be initialized. Either NULL or an integer will be used in a call to
 of the returned value. The default, NULL will note change the rng state, and
 return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
-
-\item{opt_badf}{Options for badf critical value calculation. "fixed" corresponds
-to log(log(n*s))/100 rule, "asymptotic" to asymptotic critical values and
-simulated to the monte carlo simulations.}
-
-\item{opt_bsadf}{Options for bsadf critical value calculation. "conventional"
-corresponds to the max of the quantile of the simulated distribution, while
-"conservative" corresponds to the quantile of the max which is more conservative
-in nature, thus the name.}
 }
 \value{
 A list that contains the critical values for ADF, BADF, BSADF and GSADF
@@ -49,13 +33,13 @@ t-statistics.
 root tests. \code{mc_dist} computes the distribution.
 }
 \examples{
-\donttest{
+\dontrun{
 # Default minimum window
 mc <- mc_cv(n = 100)
+tidy(mc)
 
 # Change the minimum window and the number of simulations
-mc <- mc_cv(n = 100, nrep = 1500, minw = 20)
-tidy(mc)
+mc2 <- mc_cv(n = 100, nrep = 600, minw = 20)
 
 mdist <- mc_distr(n = 100)
 autoplot(mdist)

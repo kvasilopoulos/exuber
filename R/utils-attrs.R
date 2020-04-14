@@ -59,3 +59,5 @@ get_min_dur <- function(y) {
 get_panel <- function(y) {
   attr(y, "panel")
 }
+
+

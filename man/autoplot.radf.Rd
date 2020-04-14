@@ -50,14 +50,17 @@ shade(min_duration = NULL, fill = "grey70", opacity = 0.5, ...)
 \code{shade}
 }
 \examples{
+\dontrun{
 rsim_data <- radf(sim_data)
 
 autoplot(rsim_data)
 
 # Modify facet_wrap options through ellipsis
-autoplot(rsim_data, scales = "free", direction  = "v")
+#'autoplot(rsim_data, scales = "free", dir  = "v")
 
-autoplot(rsim_data, shade_opt = shade(shade_color = "pink", opacity = 0.3))
+autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.3))
+
+library(ggplot2)
 
 # Change (overwrite) color, size or linetype
 autoplot(rsim_data) +
@@ -72,4 +75,5 @@ autoplot(rsim_data, labeller = labeller(id = as_labeller(custom_labels)))
 # Change Theme options
 autoplot(rsim_data) +
   theme(legend.position = "right")
+ }
 }

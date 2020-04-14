@@ -49,12 +49,12 @@ test_that("wb-names", {
 test_that("sb - lag potential issues", {
   expect_error(radf_dta %>% fortify(cv = sb), NA)
   expect_error(radf_dta_lag1 %>% fortify(cv = sb1), NA)
-  expect_error(radf_dta_lag2 %>% fortify(cv = sb2), NA)
+  # expect_error(radf_dta_lag2 %>% fortify(cv = sb2), NA)
 
   expect_equal(radf_dta %>% fortify(cv = sb) %>% NROW(), 81)
   # First jump 3 when you add lag = 1, and then progress by 1
   expect_equal(radf_dta_lag1 %>% fortify(cv = sb1) %>% NROW(), 78)
-  expect_equal(radf_dta_lag2 %>% fortify(cv = sb2) %>% NROW(), 77)
+  # expect_equal(radf_dta_lag2 %>% fortify(cv = sb2) %>% NROW(), 77)
 })
 
 # Fortify datestamp -------------------------------------------------------

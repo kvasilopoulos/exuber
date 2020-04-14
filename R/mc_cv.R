@@ -98,18 +98,18 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Default minimum window
 #' mc <- mc_cv(n = 100)
+#' tidy(mc)
 #'
 #' # Change the minimum window and the number of simulations
-#' mc <- mc_cv(n = 100, nrep = 1500, minw = 20)
-#' tidy(mc)
+#' mc2 <- mc_cv(n = 100, nrep = 600, minw = 20)
 #'
 #' mdist <- mc_distr(n = 100)
 #' autoplot(mdist)
 #' }
-mc_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
+mc_cv <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -120,16 +120,23 @@ mc_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   gsadf_crit <- quantile(results$gsadf, probs = pcnt, drop = FALSE)
 
   bsadf_crit <- apply(results$badf, 2, cummax) %>%
-    apply(1, quantile, probs = pr) %>% t()
-  asy_adf_crit <- c(-0.44, -0.08, 0.6) %>% rep(each = 100) # values taken from PWY
-  badf_crit <- matrix(asy_adf_crit, ncol = 3, dimnames = list(NULL, paste(pr)))
+    apply(1, quantile, probs = pcnt) %>% t()
+  # values taken from PWY
+  asy_adf_crit <- rep(
+    c(-0.44, -0.08, 0.6),
+    each = nrow(bsadf_crit)
+  )
+  badf_crit <- matrix(
+    asy_adf_crit, ncol = 3,
+    dimnames = list(NULL, paste0(pcnt*100, "%"))
+  )
 
   list(adf_cv = adf_crit,
        sadf_cv = sadf_crit,
        gsadf_cv = gsadf_crit,
        badf_cv = badf_crit,
        bsadf_cv = bsadf_crit) %>%
-    inherit_attrs(results)
+    inherit_attrs(results) %>%
     add_class("mc_cv", "cv")
 
 }
@@ -137,7 +144,7 @@ mc_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   #' @rdname mc_cv
 #' @inheritParams mc_cv
 #' @export
-mc_distr <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
+mc_distr <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
 
   results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
 

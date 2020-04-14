@@ -2,9 +2,18 @@
 % Please edit documentation in R/datestamp.R
 \name{datestamp}
 \alias{datestamp}
+\alias{datestamp.radf}
 \title{Date-stamping periods of mildly explosive behavior}
 \usage{
 datestamp(object, cv = NULL, min_duration = 0L, ...)
+
+\method{datestamp}{radf}(
+  object,
+  cv = NULL,
+  min_duration = 0L,
+  option = c("gsadf", "sadf"),
+  ...
+)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
@@ -16,6 +25,8 @@ datestamp(object, cv = NULL, min_duration = 0L, ...)
 reported. Default is 0.}
 
 \item{...}{further arguments passed to methods.}
+
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
 }
 \value{
 Returns a list of values for each explosive sub-period, giving the origin

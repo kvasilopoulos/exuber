@@ -21,13 +21,13 @@
 #' \dontrun{
 #' all.equal(crit[[50]], mc_cv(50, seed = 123))
 #' }
-"crit"
+"radf_crit"
 
 
 #' @importFrom tibble enframe
 print.crit <- function(x, ...) {
   # we dont want to overwhelm the console
-  print(tibble::enframe(x), ...)
+  print(tibble::enframe(unclass(x)), ...)
 }
 
 #' Simulated dataset
@@ -38,7 +38,9 @@ print.crit <- function(x, ...) {
 #' @seealso sim_psy1 sim_psy1 sim_evans sim_div sim_blan
 #'
 #' @examples
+#' \dontrun{
 #' # The dataset can be easily replicated with the code belows
+#' library(tibble)
 #' set.seed(1234)
 #' sim_data <- tibble(
 #'   sim_psy1 = sim_psy1(100),
@@ -47,5 +49,15 @@ print.crit <- function(x, ...) {
 #'   sim_div = sim_div(100),
 #'   sim_blan = sim_blan(100)
 #' )
-#'
+#' sim_data <- tibble(
+#'   psy1 = sim_psy1(100),
+#'   psy2 = sim_psy2(100),
+#'   evans = sim_evans(100),
+#'   div = sim_div(100),
+#'   blan = sim_blan(100)
+#' )
+#'}
 "sim_data"
+
+#'@rdname sim_data
+"sim_data_wdate"

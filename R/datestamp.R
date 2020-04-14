@@ -34,19 +34,14 @@ datestamp.default <- function(object, cv, ...) {
     "method 'datestamp' is not available for objects of class '{class(object)}'.")
 }
 
-#' This is a topic
-#'
-#' This is a description
-#'
-#' @inheritParams datestamp
+#' @rdname datestamp
 #' @inheritParams diagnostics.radf
-#'
 #' @importFrom rlang sym !! %||%
 #' @importFrom dplyr filter
 #' @importFrom purrr map map_lgl
 #' @export
-datestamp.radf <- function(object, cv = NULL, option = c("gsadf", "sadf"),
-                           min_duration = 0L, ...) {
+datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
+                           option = c("gsadf", "sadf"), ...) {
 
   assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)

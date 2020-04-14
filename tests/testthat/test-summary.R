@@ -1,5 +1,10 @@
 context("summary")
 
+# Different minw
+mc_minw20 <- mc_cv(100, nrep = 100, minw = 20)
+wb_minw20 <- wb_cv(dta, nboot = 100, minw = 20)
+sb_minw20 <- sb_cv(dta, nboot = 100, minw = 20)
+
 # skip("refactoring")
 
 test_that("printing coverage", {
@@ -19,26 +24,31 @@ test_that("class checks", {
   expect_error(datestamp(radf_dta, dta), msgy)
 })
 
+capture_print <- function(x, msg = "Cannot reject H0") {
+   any(grepl(msg, capture.output(print(x))))
+}
+
+
 test_that("error diagnostics", {
-  expect_message(print(
-    diagnostics(radf_div, mc)), "Cannot reject H0")
-  expect_message(
-    print(diagnostics(radf_95, mc)),
-    " Rejects H0 for significance level of 10% "
+  expect_true(capture_print(diagnostics(radf_div, mc)))
+  expect_true(
+    capture_print(
+      diagnostics(radf_95, mc),
+      msg = "Rejects H0 for significance level of 10%")
   )
 })
 
 test_that("different minw", {
   msg <- "minimum window does not match"
-  expect_error(summary(radf_dta, mc2_minw20), msg)
-  expect_error(diagnostics(radf_dta, mc2_minw20), msg)
-  expect_error(datestamp(radf_dta, mc2_minw20), msg)
-  expect_error(summary(radf_dta, wb2_minw20), msg)
-  expect_error(diagnostics(radf_dta, wb2_minw20), msg)
-  expect_error(datestamp(radf_dta, wb2_minw20), msg)
-  expect_error(summary(radf_dta, sb2_minw20), msg)
-  expect_error(diagnostics(radf_dta, sb2_minw20), msg)
-  expect_error(datestamp(radf_dta, sb2_minw20), msg)
+  expect_error(summary(radf_dta, mc_minw20), msg)
+  expect_error(diagnostics(radf_dta, mc_minw20), msg)
+  expect_error(datestamp(radf_dta, mc_minw20), msg)
+  expect_error(summary(radf_dta, wb_minw20), msg)
+  expect_error(diagnostics(radf_dta, wb_minw20), msg)
+  expect_error(datestamp(radf_dta, wb_minw20), msg)
+  expect_error(summary(radf_dta, sb_minw20), msg)
+  expect_error(diagnostics(radf_dta, sb_minw20), msg)
+  expect_error(datestamp(radf_dta, sb_minw20), msg)
 })
 
 test_that("Correct output in summary/datestamp", {

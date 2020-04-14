@@ -1,7 +1,7 @@
 context("seed")
-
+skip(TRUE)
 # avail_cores <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-options(exuber.ncores = 2)
+# options(exuber.ncores = 2)
 
 test_that("seed gets the same results",{
   skip_on_cran()
@@ -92,3 +92,4 @@ test_that("local options overwrite global", {
   )
   options(exuber.global_seed = NA)
 })
+
