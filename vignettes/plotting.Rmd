@@ -30,7 +30,7 @@ options(exuber.parallel = FALSE)
 
 ### The plotting API has changed in exuber 0.3.1
 
-The new design offers full flexibility and customization to produce publication-ready plots. `exuber` used to plot graph individually in a list, and then you had the option to modify each plot and arrange into a single grob with `ggarrange()`(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to manipule the aesthetics and themes.
+The new design offers full flexibility and customization to produce publication-ready plots. `exuber` used to plot graph individually in a list, and then you had the option to modify each plot and arrange into a single grob with `ggarrange()`(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.
 
 Let's start by simulating some data.
 
@@ -58,7 +58,7 @@ autoplot(estimation, crit_values)
 
 ### Change color and theme
 
-The custom color for autoplot are "blue and "red", however the use may overide this
+The custom color for autoplot are "blue and "red", however the use may override this
 option easily with scale_col
 
 ```{r autoplot-color-theme}
@@ -138,7 +138,7 @@ joined %>%
 # Distributions
 
 In addition to critical values, we can also calculate the empirical distribution
-by utilizing the family of *_distr fucntions. For example if we can simulate
+by utilizing the family of *_distr functions. For example if we can simulate
 the distribution of the supADF tests with Monte Carlo method.
 
 ```{r distributions, cache=TRUE}

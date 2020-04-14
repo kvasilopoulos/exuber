@@ -110,7 +110,7 @@ augment.mc_cv <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 
-    tbl_cv <- bind_cols(
+    tbl_cv <- inner_join(
       x %>%
         pluck("badf_cv") %>%
         as_tibble() %>%
@@ -119,8 +119,10 @@ augment.mc_cv <- function(x, format = c("wide", "long"), ...) {
       x %>%
         pluck("bsadf_cv") %>%
         as_tibble() %>%
-        gather(sig, bsadf) %>%
-        select(-sig)) %>%
+        add_key(x) %>%
+        gather(sig, bsadf, -key),
+      by = c("key", "sig")
+      ) %>%
       mutate(sig = sub("%$", "", sig) %>% as.factor())
 
     if (format == "long") {
@@ -198,9 +200,9 @@ augment.sb_cv <- function(x, format = c("wide", "long"), ...) {
 
 # mc_distr -----------------------------------------------------------------
 
-#' Tidying *_dist objects
+#' Tidying *_distr objects
 #'
-#' tidy `*_dist` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
+#' tidy `*_distr` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
 #' a tibble.
 #'
 #' @param x An `*_dist` object

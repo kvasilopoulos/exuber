@@ -2,9 +2,12 @@
 % Please edit documentation in R/diagnostics.R
 \name{diagnostics}
 \alias{diagnostics}
+\alias{diagnostics.radf}
 \title{Diagnostics}
 \usage{
 diagnostics(object, cv = NULL, ...)
+
+\method{diagnostics}{radf}(object, cv = NULL, option = c("gsadf", "sadf"), ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=radf]{radf()}}.}
@@ -13,6 +16,8 @@ diagnostics(object, cv = NULL, ...)
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
 \item{...}{further arguments passed to methods.}
+
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
 }
 \value{
 Returns a list with the series that reject and the series that do not reject the Null Hypothesis
