@@ -5,6 +5,7 @@ AppVeyor
 autoplot
 badf
 BADF
+blan
 behaviour
 bsadf
 BSADF
@@ -17,10 +18,12 @@ DAX
 distr
 doi
 dgp
+DGPs
 Econometrica
 et
 exuber’
 exuberdata
+evans
 FTSE
 García
 Grossman
@@ -33,6 +36,7 @@ gridExtra
 iere
 Leybourne
 lifecycle
+linetype
 Martínez
 mc
 monte
@@ -45,8 +49,10 @@ pre
 progressbar
 Progressbar
 PSY
+psy
 Rademacher
 radf
+rect
 reproducibility
 rng
 sadf
@@ -56,6 +62,7 @@ scalability
 sig
 Shi
 SMI
+supADF
 datestamp
 Datestamp
 Sollis

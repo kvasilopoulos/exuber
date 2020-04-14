@@ -50,9 +50,9 @@ get_rng_state <- function(seed) {
 
 retrieve_crit <- function(x) {
   nr <- NROW(index(x))
-  if (nr > 5 && nr <= length(exuber::crit)) {
-    return(exuber::crit[[nr]])
-  } else if (nr > length(exuber::crit) && nr <= 2000) {
+  if (nr > 5 && nr <= length(exuber::radf_crit)) {
+    return(exuber::radf_crit[[nr]])
+  } else if (nr > length(exuber::radf_crit) && nr <= 2000) {
     need_exuberdata()
     return(exuberdata::radf_crit[[nr]])
   }else {
@@ -114,6 +114,21 @@ add_key <- function(x, attr_from) {
   x %>% add_column(key = (nkey + 1):(nrow(.) + nkey))
 }
 
+# predicates --------------------------------------------------------------
+
+#' @importFrom rlang %||%
+is_mc <- function(y) {
+  get_method(y) %||% FALSE == "Monte Carlo"
+}
+
+is_wb <- function(y) {
+  get_method(y) %||% FALSE == "Wild Bootstrap"
+}
+
+is_sb <- function(y) {
+  get_method(y) %||% FALSE == "Sieve Bootstrap"
+}
+
 
 # seq ---------------------------------------------------------------------
 
@@ -137,6 +152,9 @@ extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
   }
   out
 }
+
+
+
 
 
 # printing ----------------------------------------------------------------

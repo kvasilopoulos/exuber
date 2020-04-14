@@ -3,19 +3,26 @@
 \docType{data}
 \name{sim_data}
 \alias{sim_data}
+\alias{sim_data_wdate}
 \title{Simulated dataset}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 100 rows and 5 columns.
+
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 100 rows and 6 columns.
 }
 \usage{
 sim_data
+
+sim_data_wdate
 }
 \description{
 A dataset containing commonly known data generated processes (DGPs) used in the explosive
 time series literature.
 }
 \examples{
+\dontrun{
 # The dataset can be easily replicated with the code belows
+library(tibble)
 set.seed(1234)
 sim_data <- tibble(
   sim_psy1 = sim_psy1(100),
@@ -24,7 +31,14 @@ sim_data <- tibble(
   sim_div = sim_div(100),
   sim_blan = sim_blan(100)
 )
-
+sim_data <- tibble(
+  psy1 = sim_psy1(100),
+  psy2 = sim_psy2(100),
+  evans = sim_evans(100),
+  div = sim_div(100),
+  blan = sim_blan(100)
+)
+}
 }
 \seealso{
 sim_psy1 sim_psy1 sim_evans sim_div sim_blan
