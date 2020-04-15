@@ -85,8 +85,8 @@ diagnostics.radf <- function(object, cv = NULL,
   )
 
   if (is_sb(y)) {
-    accepted <- ifelse(length(dummy), "Panel", NA)
-    rejected <- ifelse(length(dummy), NA, "Panel")
+    accepted <- ifelse(length(dummy), "panel", NA)
+    rejected <- ifelse(length(dummy), NA, "panel")
   } else {
     accepted <- series_names(x)[as.logical(dummy)]
     rejected <- series_names(x)[!as.logical(dummy)]
