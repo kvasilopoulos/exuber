@@ -3,7 +3,7 @@ library(dplyr)
 
 # sim-data ----------------------------------------------------------------
 
-set.seed(1234)
+set.seed(1122)
 sim_data <- tibble(
   psy1 = sim_psy1(100),
   psy2 = sim_psy2(100),

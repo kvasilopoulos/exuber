@@ -386,7 +386,8 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   d <- stats::filter(mu + c(initval, rnorm(n - 1, 0, sigma)),
     c(1),
     init = 1.3, method = "recursive"
-  )
+  ) %>%
+    as.numeric() # filter coerces to time-series
 
   if (log) {
     g <- exp(mu + sigma ^ 2 / 2) - 1
@@ -426,6 +427,5 @@ autoplot.sim <- function(object, ...) {
     enframe() %>%
     ggplot(aes(name, value)) +
     geom_line() +
-    theme_bw() +
-    labs(x = NULL, y = NULL)
+    theme_exuber()
 }
