@@ -65,10 +65,10 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
 
   ds <- vector("list", length(acc))
   if (is_sb(y)) {
-    if (get_lag(y) != 0) {
+    if (get_lag(y) > 0) {
       tstat <- x$bsadf_panel[-c(1:2)] #remove 2 cause of the differnce in the regression
       dating <- dating[-c(1:2)]
-    } else if (get_lag(y) > 0) {
+    } else if (get_lag(y) == 0) {
       tstat <- x$bsadf_panel
     }
     ds <- list(which(tstat > y$bsadf_panel_cv[, 2]) + get_minw(x) + get_lag(x))
@@ -130,7 +130,7 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
     stop_glue("Argument 'min_duration' excludes all explosive periods")
   }
 
-  dms <- list(seq_along(index(x)), if (is_sb(y)) "Panel" else series_names(x)[reps])
+  dms <- list(seq_along(index(x)), if (is_sb(y)) "panel" else series_names(x)[reps])
   dummy <- matrix(0, nrow = length(index(x)), ncol = length(acc), dimnames = dms)
   for (z in seq_along(acc)) {
     dummy[ds[[z]], z] <- 1

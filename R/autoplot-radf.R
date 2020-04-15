@@ -15,7 +15,7 @@
 #' @importFrom dplyr filter
 #' @importFrom tidyr pivot_longer
 #' @import ggplot2
-#' @importFrom rlang dots_list
+#' @importFrom rlang dots_list is_missing is_null
 #'
 #' @export
 #'
@@ -64,13 +64,27 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
 
   deprecate_arg_warn(include, include_rejected)
   deprecate_arg_warn(select, select_series)
-
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "cv")
+
   option <- match.arg(option)
+  if (!is_mc(cv) && option == "sadf") {
+    stop_glue("argument 'option' can be set to 'sadf'",
+                 "only when cv is of class 'mc_cv'")
+  }
   option <- if (option == "gsadf") "bsadf" else if (option == "sadf") "badf"
+
+  if (is_sb(cv)) {
+    if (!is.null(select_series)) {
+      stop_glue("argument 'select_series' have to be set to NULL ",
+                "when cv is of class 'sb_cv'")
+    }
+
+    option <- "bsadf_panel" # overwrite option
+    select_series <- "panel"
+  }
   acc_series <- if (include_rejected) {
-    series_names(object)
+    if (is_sb(cv)) "panel" else series_names(object)
   } else {
     diagnostics(object, cv)$accepted
   }
@@ -91,7 +105,6 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     geom_line() +
     scale_exuber_manual() +
     theme_exuber()
-
 
   if (!is.null(shade_opt)) {
     ds_data <- tidy(datestamp(object, cv)) %>%
@@ -126,7 +139,6 @@ shade <- function(min_duration = NULL, fill = "grey70", opacity = 0.5, ...) {
     )
   }
 }
-
 
 #' Exuber scale and theme functions
 #'

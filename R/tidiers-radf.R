@@ -62,15 +62,17 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
   if (panel) {
     tbl_radf <- tibble(
       index = index(x, trunc = TRUE),
-      "panel" = pluck(x, "bsadf_panel")
+      bsadf_panel = pluck(x, "bsadf_panel")
       ) %>%
       add_key(x) %>%
-      select(key, index, panel)
+      select(key, index, bsadf_panel)
 
     if (format == "long") {
       tbl_radf <-
         tbl_radf %>%
-        gather(name, tstat, -index, -key, factor_key = TRUE)
+        gather(name, tstat, -index, -key, factor_key = TRUE) %>%
+        mutate(id = "panel") %>%
+        select(key, index, id, name, tstat)
     }
   }else{
     tbl_radf <- x %>%
