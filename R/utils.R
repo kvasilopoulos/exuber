@@ -55,9 +55,9 @@ retrieve_crit <- function(x) {
     return(exuber::radf_crit[[nr]])
   } else if (nr > length(exuber::radf_crit) && nr <= 2000) {
     need_exuberdata()
-    return(exuberdata::radf_crit[[nr]])
+    return(exuberdata::radf_crit2[[nr]])
   }else {
-    stop_glue("cannot provide MC critical values see help(crit)")
+    stop_glue("cannot provide MC critical values see help(radf_crit)")
   }
 }
 

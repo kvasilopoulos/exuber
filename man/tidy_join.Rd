@@ -10,10 +10,10 @@ tidy_join(x, y = NULL)
 augment_join(x, y = NULL)
 }
 \arguments{
-\item{x}{An object of class \code{radf}}
+\item{x}{An object of class \code{radf}.}
 
-\item{y}{An object of class \code{cv}}
+\item{y}{An object of class \code{cv}.}
 }
 \description{
-Tidy and join objects of class \code{radf} and \code{cv}.
+Tidy and join or augment and join objects of class \code{radf} and \code{cv}.
 }

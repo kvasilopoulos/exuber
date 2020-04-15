@@ -24,15 +24,14 @@ Plotting datestamp with \link[=ggplot2]{geom_segment()}
 }
 \examples{
 \donttest{
-dta <- cbind(sim_psy1(n = 100), sim_psy2(n = 100))
 
-dta \%>\%
+sim_data_wdate \%>\%
   radf() \%>\%
   datestamp() \%>\%
   autoplot()
 
 # Change the colour manually
-dta \%>\%
+sim_data_wdate \%>\%
   radf() \%>\%
   datestamp() \%>\%
   autoplot() +
