@@ -178,10 +178,11 @@ calc_pvalue <- function(x, distr = NULL) {
     mutate(pval = map2_dbl(value_x, value_y, xy_pvalue)) %>%
     select(id, stat, pval) %>%
     spread(stat, pval) %>%
-    when(is_sb(distr) ~ ., ~ select(., id, adf, sadf, gsadf))
+    when(is_sb(distr) ~ ., ~ select(., id, adf, sadf, gsadf)) %>%
+    add_class("pval")
 }
 
-
+# TODO: format.pval()
 
 
 

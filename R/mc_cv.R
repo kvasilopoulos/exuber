@@ -133,11 +133,13 @@ mc_cv <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
     dimnames = list(NULL, paste0(pcnt*100, "%"))
   )
 
-  list(adf_cv = adf_crit,
-       sadf_cv = sadf_crit,
-       gsadf_cv = gsadf_crit,
-       badf_cv = badf_crit,
-       bsadf_cv = bsadf_crit) %>%
+  list(
+    adf_cv = adf_crit,
+    sadf_cv = sadf_crit,
+    gsadf_cv = gsadf_crit,
+    badf_cv = badf_crit,
+    bsadf_cv = bsadf_crit
+  ) %>%
     inherit_attrs(results) %>%
     add_class("mc_cv", "cv")
 
@@ -150,9 +152,11 @@ mc_distr <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
 
   results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
 
-  list(adf_cv = results$adf,
-       sadf_cv = results$sadf,
-       gsadf_cv = results$gsadf) %>%
+  list(
+    adf_cv = results$adf,
+    sadf_cv = results$sadf,
+    gsadf_cv = results$gsadf
+  ) %>%
     inherit_attrs(results) %>%
     add_class("mc_distr", "distr")
 

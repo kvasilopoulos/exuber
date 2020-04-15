@@ -16,7 +16,7 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   nc <- ncol(y)
   nr <- nrow(y)
 
-  point <- nr - minw - lag
+  pointer <- nr - minw - lag
 
   initmat <- matrix(0, nc, 1 + lag)
   resmat  <- matrix(0, nr - 2 - lag, nc)
@@ -73,7 +73,7 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
       y_boot <- cumsum(c(y[1, j], dy_boot))
       yxmat_boot <- unroot(x = y_boot, lag)
       aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-      bsadf_boot <- aux_boot[-c(1:(point + 3))]
+      bsadf_boot <- aux_boot[-c(1:(pointer + 3))]
     }
     bsadf_boot / nc
   }
@@ -145,10 +145,10 @@ sb_cv <- function(data, minw = NULL, lag = 0L,
 
   results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
-  pr <- c(0.9, 0.95, 0.99)
+  pcnt <- c(0.9, 0.95, 0.99)
 
-  bsadf_crit <- apply(results$bsadf_panel, 1, quantile, probs = pr) %>% t()
-  gsadf_crit <- quantile(results$gsadf_panel, probs = pr)
+  bsadf_crit <- apply(results$bsadf_panel, 1, quantile, probs = pcnt) %>% t()
+  gsadf_crit <- quantile(results$gsadf_panel, probs = pcnt)
 
     list(gsadf_panel_cv = gsadf_crit,
          bsadf_panel_cv = bsadf_crit) %>%

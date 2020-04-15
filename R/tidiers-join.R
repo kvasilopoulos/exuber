@@ -1,11 +1,12 @@
 #' Tidy into a joint model
 #'
-#' Tidy and join objects of class `radf` and `cv`.
+#' Tidy and join or augment and join objects of class `radf` and `cv`.
 #'
-#' @param x An object of class `radf`
-#' @param y An object of class `cv`
+#' @param x An object of class `radf`.
+#' @param y An object of class `cv`.
 #'
 #' @importFrom dplyr full_join case_when
+#' @export
 tidy_join <- function(x, y = NULL) {
 
   assert_class(x, "radf")
@@ -28,7 +29,7 @@ tidy_join <- function(x, y = NULL) {
     tbl <- inner_join(
       glance(x, format = "long"),
       tidy(y, format = "long"),
-      by = c("id"))
+      by = c("id", "name"))
   }
   tbl %>%
     arrange(name)
