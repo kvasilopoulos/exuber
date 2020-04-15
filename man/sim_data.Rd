@@ -23,7 +23,7 @@ time series literature.
 \dontrun{
 # The dataset can be easily replicated with the code belows
 library(tibble)
-set.seed(1234)
+set.seed(1122)
 sim_data <- tibble(
   sim_psy1 = sim_psy1(100),
   sim_psy2 = sim_psy2(100),
@@ -31,12 +31,13 @@ sim_data <- tibble(
   sim_div = sim_div(100),
   sim_blan = sim_blan(100)
 )
-sim_data <- tibble(
+sim_data_wdate <- tibble(
   psy1 = sim_psy1(100),
   psy2 = sim_psy2(100),
   evans = sim_evans(100),
   div = sim_div(100),
-  blan = sim_blan(100)
+  blan = sim_blan(100),
+    date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 )
 }
 }
