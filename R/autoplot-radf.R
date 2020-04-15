@@ -20,27 +20,38 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' rsim_data <- radf(sim_data)
+#' \donttest{
+#' rsim_data <- radf(sim_data_wdate)
 #'
 #' autoplot(rsim_data)
 #'
 #' # Modify facet_wrap options through ellipsis
-#' #'autoplot(rsim_data, scales = "free", dir  = "v")
+#' autoplot(rsim_data, scales = "free", dir  = "v")
 #'
-#' autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.3))
+#' autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.5))
 #'
+#' # We will need ggplot2 from here on out
 #' library(ggplot2)
 #'
 #' # Change (overwrite) color, size or linetype
 #' autoplot(rsim_data) +
 #'   scale_color_manual(values = c("black", "black")) +
-#'   scale_size_manual(values = c(1.2, 1)) +
+#'   scale_size_manual(values = c(0.9, 1)) +
 #'   scale_linetype_manual(values = c("solid", "solid"))
 #'
-#' # Change names through ellipsis
+#' # Change names through labeller (first way)
 #' custom_labels <- c("psy1" = "new_name_for_psy1", "psy2" = "new_name_for_psy2")
-#' autoplot(rsim_data, labeller = labeller(id = as_labeller(custom_labels)))
+#' autoplot(rsim_data, labeller = labeller(.default = label_value, id = as_labeller(custom_labels)))
+#'
+#' # Change names through labeller (second way)
+#' custom_labels2 <- series_names(rsim_data)
+#' names(custom_labels2) <- custom_labels2
+#' custom_labels2[c(3,5)] <- c("Evans", "Blanchard")
+#' autoplot(rsim_data, labeller = labeller(id = custom_labels2))
+#'
+#' # Or change names before plotting
+#' series_names(rsim_data) <- LETTERS[1:5]
+#' autoplot(rsim_data)
 #'
 #' # Change Theme options
 #' autoplot(rsim_data) +
@@ -93,7 +104,7 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     if (is.null(dots$scales)) {
       gg <- gg + facet_wrap( ~ id, scales = "free", ...)
     }else{
-      gg <- gg <- facet_wrap( ~ id, ...)
+      gg <- gg + facet_wrap( ~ id, ...)
     }
   }else{
     gg <- gg + ggtitle(series) # = 1 for ggtitle to work in single plot
