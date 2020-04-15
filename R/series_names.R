@@ -35,6 +35,9 @@ series_names.default <- function(x, ...) {
 
 #' @export
 `series_names<-.default` <- function(x, value) {
+  if (is.null(attr(x, "series_names"))) {
+    return(NULL)
+  }
   if (length(series_names(x)) != length(value)) {
     stop("length of series_names vectors does not match", call. = FALSE)
   }
@@ -54,6 +57,21 @@ series_names.default <- function(x, ...) {
     imap(~ `colnames<-`(.x, value))
   x[cv] <- x[cv] %>%
     imap(~ set_names(.x, value))
+  attr(x, "series_names") <- value
+  x
+}
+
+#' @export
+`series_names<-.wb_cv` <- function(x, value) {
+  if (length(series_names(x)) != length(value)) {
+    stop("length of series_names vectors does not match", call. = FALSE)
+  }
+  cv <- c("adf_cv", "sadf_cv", "gsadf_cv")
+  x[cv] <- x[cv] %>%
+    imap(~ `rownames<-`(.x, value))
+  seq_cv <- c("badf_cv", "bsadf_cv")
+  x[seq_cv] <- x[seq_cv] %>%
+    imap(~ `dimnames<-`(.x, list(NULL, c("90%", "95%", "99%"), value)))
   attr(x, "series_names") <- value
   x
 }
