@@ -112,13 +112,14 @@ glance.radf <- function(x, format = c("wide", "long"), ...) {
   format <- match.arg(format)
   tbl_radf <- x %>%
     pluck("gsadf_panel") %>%
-    enframe(name = NULL) %>%
-    set_names("panel")
+    enframe(name = NULL, value = "gsadf_panel")
 
   if (format == "long") {
     tbl_radf <-
       tbl_radf %>%
-      gather(id, tstat)
+      gather(name, tstat) %>%
+      mutate(id = "panel") %>%
+      select(id, name, tstat)
   }
   tbl_radf
 }

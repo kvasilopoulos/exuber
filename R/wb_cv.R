@@ -11,19 +11,15 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
   assert_positive_int(minw, greater_than = 2)
   stopifnot(is.logical(dist_rad))
 
-
   nc <- ncol(y)
   nr <- nrow(y)
 
-  point <- nr - minw
-
+  pointer <- nr - minw
+  snames <- colnames(y)
   adf_crit <- sadf_crit <- gsadf_crit <-
-    array(NA, dim = c(nboot, nc),
-          dimnames = list(NULL, colnames(y)))
-
+    array(NA, dim = c(nboot, nc), dimnames = list(NULL, snames))
   badf_crit <- bsadf_crit <-
-    array(NA, dim = c(point, nboot, nc),
-          dimnames = list(NULL, NULL, colnames(y)))
+    array(NA, dim = c(pointer, nboot, nc), dimnames = list(NULL, NULL, snames))
 
   show_pb <- getOption("exuber.show_progress")
   pb <- set_pb(nboot, width = getOption("width") - 15)
@@ -66,12 +62,12 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
     if (show_pb)
       cat(paste0(" ", j, "/", nc))
 
-    adf_crit[, j] <- results[point + 1, ]
-    sadf_crit[, j] <- results[point + 2, ]
-    gsadf_crit[, j] <- results[point + 3, ]
+    adf_crit[, j] <- results[pointer + 1, ]
+    sadf_crit[, j] <- results[pointer + 2, ]
+    gsadf_crit[, j] <- results[pointer + 3, ]
 
-    badf_crit[, , j] <- results[1:point, ]
-    bsadf_crit[, , j] <- results[-c(1:(point + 3)), ]
+    badf_crit[, , j] <- results[1:pointer, ]
+    bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
   }
 
     list(
@@ -86,6 +82,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       n = nrow(y),
       minw = minw,
       iter = nboot,
+      series_names = snames,
       seed = get_rng_state(seed),
       parallel = do_par
       )
@@ -160,11 +157,13 @@ wb_cv <- function(data, minw = NULL, nboot = 500L,
   bsadf_crit <- apply(results$bsadf, c(1,3), quantile, probs = pcnt) %>%
     apply(c(1,3), t)
 
-  list(adf_cv = adf_crit,
-       sadf_cv = sadf_crit,
-       gsadf_cv = gsadf_crit,
-       badf_cv = badf_crit,
-       bsadf_cv = bsadf_crit) %>%
+  list(
+    adf_cv = adf_crit,
+    sadf_cv = sadf_crit,
+    gsadf_cv = gsadf_crit,
+    badf_cv = badf_crit,
+    bsadf_cv = bsadf_crit
+  ) %>%
     inherit_attrs(results) %>%
     add_class("wb_cv", "cv")
 
@@ -178,10 +177,12 @@ wb_distr <- function(data, minw = NULL, nboot = 500L,
 
   results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
 
-    list(adf_cv = results$adf,
-         sadf_cv = results$sadf,
-         gsadf_cv = results$gsadf) %>%
-      inherit_attrs(results) %>%
-      add_class("wb_distr", "distr")
+  list(
+    adf_cv = results$adf,
+    sadf_cv = results$sadf,
+    gsadf_cv = results$gsadf
+  ) %>%
+    inherit_attrs(results) %>%
+    add_class("wb_distr", "distr")
 }
 

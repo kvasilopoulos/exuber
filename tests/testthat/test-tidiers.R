@@ -44,5 +44,5 @@ test_that("augment_join", {
 
 test_that("glance output", {
   # Glance
-  expect_equal(names(glance(radf_dta)), "panel")
+  expect_equal(names(glance(radf_dta)), "gsadf_panel")
 })

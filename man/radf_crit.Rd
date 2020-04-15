@@ -29,7 +29,7 @@ can be obtained with the \code{\link[=mc_cv]{mc_cv()}} function, using the \code
 }
 \examples{
 \dontrun{
-all.equal(crit[[50]], mc_cv(50, seed = 123))
+all.equal(radf_crit[[50]], mc_cv(50, nrep = 2000, seed = 123))
 }
 }
 \keyword{datasets}
