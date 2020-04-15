@@ -83,6 +83,7 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     option <- "bsadf_panel" # overwrite option
     select_series <- "panel"
   }
+
   acc_series <- if (include_rejected) {
     if (is_sb(cv)) "panel" else series_names(object)
   } else {
@@ -106,7 +107,8 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     scale_exuber_manual() +
     theme_exuber()
 
-  if (!is.null(shade_opt)) {
+  check_rejected <- all(series %in% diagnostics(object, cv)$rejected)
+  if (!is.null(shade_opt) && !check_rejected) {
     ds_data <- tidy(datestamp(object, cv)) %>%
       filter(id %in% series) %>%
       droplevels()
