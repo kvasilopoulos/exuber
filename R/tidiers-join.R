@@ -45,6 +45,8 @@ augment_join <- function(x, y = NULL) {
   assert_class(y, "cv")
   assert_match(x, y)
 
+  #TODO reformat this code to make it smaller
+
   if (is_mc(y)) {
     tbl <- inner_join(
       augment(x, "long"),
@@ -55,14 +57,14 @@ augment_join <- function(x, y = NULL) {
     tbl <- inner_join(
       augment(x, "long"),
       augment(y, "long"),
-      by = c("key","index", "name", "id")
+      by = c("key","index", "id", "name")
     ) %>%
       arrange(id, name, sig)
   } else if (is_sb(y)) {
     tbl <- inner_join(
       augment(x, "long", panel = TRUE),
       augment(y, "long"),
-      by = c("key", "name", "index")
+      by = c("key", "index", "id", "name")
     )
   }
   tbl %>%
