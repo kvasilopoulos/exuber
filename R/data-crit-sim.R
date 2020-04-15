@@ -43,7 +43,7 @@ print.crit <- function(x, ...) {
 #' \dontrun{
 #' # The dataset can be easily replicated with the code belows
 #' library(tibble)
-#' set.seed(1234)
+#' set.seed(1122)
 #' sim_data <- tibble(
 #'   sim_psy1 = sim_psy1(100),
 #'   sim_psy2 = sim_psy2(100),
