@@ -19,15 +19,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' all.equal(crit[[50]], mc_cv(50, seed = 123))
+#' all.equal(radf_crit[[50]], mc_cv(50, nrep = 2000, seed = 123))
 #' }
 "radf_crit"
 
 
 #' @importFrom tibble enframe
+#' @export
 print.crit <- function(x, ...) {
   # we dont want to overwhelm the console
-  print(tibble::enframe(unclass(x)), ...)
+  print(x[1:10], ...)
+  cat("[ truncated list ]")
 }
 
 #' Simulated dataset
@@ -49,15 +51,16 @@ print.crit <- function(x, ...) {
 #'   sim_div = sim_div(100),
 #'   sim_blan = sim_blan(100)
 #' )
-#' sim_data <- tibble(
+#' sim_data_wdate <- tibble(
 #'   psy1 = sim_psy1(100),
 #'   psy2 = sim_psy2(100),
 #'   evans = sim_evans(100),
 #'   div = sim_div(100),
-#'   blan = sim_blan(100)
+#'   blan = sim_blan(100),
+#'     date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 #' )
 #'}
 "sim_data"
 
-#'@rdname sim_data
+#' @rdname sim_data
 "sim_data_wdate"

@@ -59,11 +59,9 @@ radf <- function(data, minw = NULL, lag = 0L) {
   assert_positive_int(lag, strictly = FALSE)
 
   pointer <- nrow(x) - minw - lag
-
-  adf <- sadf <- gsadf <-
-    drop(matrix(0, 1, nc, dimnames = list(NULL, colnames(x))))
-  badf <- bsadf <-
-    matrix(0, pointer, nc, dimnames = list(NULL, colnames(x)))
+  snames <- colnames(x)
+  adf <- sadf <- gsadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, snames)))
+  badf <- bsadf <- matrix(0, pointer, nc, dimnames = list(NULL, snames))
 
   for (i in 1:nc) {
     yxmat <- unroot(x[, i], lag = lag)
@@ -93,7 +91,7 @@ radf <- function(data, minw = NULL, lag = 0L) {
     n = nrow(x),
     minw = minw,
     lag = lag,
-    series_names = colnames(x),
+    series_names = snames,
     class = "radf"
   )
 

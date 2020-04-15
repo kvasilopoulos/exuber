@@ -412,6 +412,7 @@ print.sim <- function(x, ...) {
 }
 
 #' @importFrom vctrs vec_data
+#' @export
 format.sim <- function(x, ...) {
   out <- signif(vec_data(x), 3)
   out[is.na(x)] <- NA
