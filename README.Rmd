@@ -72,8 +72,6 @@ These combined provide a comprehensive analysis on the exuberant behavior of the
 install.packages("exuber")
 ```
 
-#### Development version
-
 You can install the development version of exuber from GitHub.
 
 ```{r installation-dev, eval = FALSE}

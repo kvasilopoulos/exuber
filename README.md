@@ -82,8 +82,6 @@ behavior of the model.
 install.packages("exuber")
 ```
 
-#### Development version
-
 You can install the development version of exuber from GitHub.
 
 ``` r
@@ -103,42 +101,44 @@ library(exuber)
 rsim_data <- radf(sim_data)
 
 summary(rsim_data)
+#> using 'radf_crit'
 #> 
-#> -- Summary (minw = 19, lag = 0) ------------------- Monte Carlo (nrep = 2000) --
+#> -- Summary (minw = 19, lag = 0) ----------------------------------- Monte Carlo (nrep = 2000) --
 #> 
 #>  psy1 
 #>         tstat      90%       95%     99%
-#> ADF    -1.897  -0.4275  -0.07364  0.5121
-#> SADF    3.584   0.9024   1.20175  1.7137
-#> GSADF   4.099   1.6033   1.89674  2.5226
+#> ADF    -2.461  -0.4127  -0.08117  0.6521
+#> SADF    1.946   0.9879   1.29458  1.9157
+#> GSADF   5.190   1.7099   1.97410  2.5708
 #> 
 #>  psy2 
 #>         tstat      90%       95%     99%
-#> ADF    -2.703  -0.4275  -0.07364  0.5121
-#> SADF    4.751   0.9024   1.20175  1.7137
-#> GSADF   6.096   1.6033   1.89674  2.5226
+#> ADF    -2.858  -0.4127  -0.08117  0.6521
+#> SADF    7.880   0.9879   1.29458  1.9157
+#> GSADF   7.880   1.7099   1.97410  2.5708
 #> 
 #>  evans 
 #>         tstat      90%       95%     99%
-#> ADF    -3.308  -0.4275  -0.07364  0.5121
-#> SADF   -2.423   0.9024   1.20175  1.7137
-#> GSADF   8.456   1.6033   1.89674  2.5226
+#> ADF    -5.830  -0.4127  -0.08117  0.6521
+#> SADF    5.283   0.9879   1.29458  1.9157
+#> GSADF   5.985   1.7099   1.97410  2.5708
 #> 
 #>  div 
-#>           tstat      90%       95%     99%
-#> ADF    -2.32848  -0.4275  -0.07364  0.5121
-#> SADF   -0.09609   0.9024   1.20175  1.7137
-#> GSADF   0.48195   1.6033   1.89674  2.5226
+#>         tstat      90%       95%     99%
+#> ADF    -1.950  -0.4127  -0.08117  0.6521
+#> SADF    1.113   0.9879   1.29458  1.9157
+#> GSADF   1.335   1.7099   1.97410  2.5708
 #> 
 #>  blan 
 #>         tstat      90%       95%     99%
-#> ADF    -5.083  -0.4275  -0.07364  0.5121
-#> SADF    1.287   0.9024   1.20175  1.7137
-#> GSADF   3.076   1.6033   1.89674  2.5226
+#> ADF    -5.146  -0.4127  -0.08117  0.6521
+#> SADF    3.930   0.9879   1.29458  1.9157
+#> GSADF  10.951   1.7099   1.97410  2.5708
 
 diagnostics(rsim_data)
+#> using 'radf_crit'
 #> 
-#> -- Diagnostics (option = gsadf) --------------------------------- Monte Carlo --
+#> -- Diagnostics (option = gsadf) ------------------------------------------------- Monte Carlo --
 #> 
 #> psy1:     Rejects H0 for significance level of 1% 
 #> psy2:     Rejects H0 for significance level of 1% 
@@ -147,31 +147,32 @@ diagnostics(rsim_data)
 #> blan:     Rejects H0 for significance level of 1%
 
 datestamp(rsim_data)
+#> using 'radf_crit'
 #> 
-#> -- Datestamp (min_duration = 0) --------------------------------- Monte Carlo --
+#> -- Datestamp (min_duration = 0) ------------------------------------------------- Monte Carlo --
 #> 
 #> psy1 :
 #>   Start End Duration
-#> 1    38  41        4
-#> 2    46  55       10
+#> 1    44  55       12
 #> 
 #> psy2 :
 #>   Start End Duration
-#> 1    25  40       16
-#> 2    66  70        5
+#> 1    22  40       19
+#> 2    62  70        9
 #> 
 #> evans :
 #>   Start End Duration
-#> 1    49  51        3
-#> 2    99 100        2
+#> 1    20  21        2
+#> 2    44  45        2
+#> 3    66  67        2
 #> 
 #> blan :
 #>   Start End Duration
-#> 1    24  25        2
-#> 2    56  57        2
-#> 3    77  78        2
+#> 1    34  36        3
+#> 2    84  86        3
 
 autoplot(rsim_data)
+#> using 'radf_crit'
 ```
 
 ![](man/figures/usage-1.png)<!-- -->
