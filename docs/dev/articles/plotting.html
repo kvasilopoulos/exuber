@@ -190,18 +190,18 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">joined &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tidy_join.html">augment_join</a></span>(estimation, crit_values)</a>
 <a class="sourceLine" id="cb7-2" title="2">joined</a>
 <a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; # A tibble: 1,920 x 6</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt;    index id       name  tstat sig    crit</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt;    &lt;dbl&gt; &lt;fct&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;  1    21 sim_psy1 badf  -2.08 90    -0.44</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;  2    21 sim_psy1 badf  -2.08 95    -0.08</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt;  3    21 sim_psy1 badf  -2.08 99     0.6 </span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt;  4    22 sim_psy1 badf  -2.31 90    -0.44</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt;  5    22 sim_psy1 badf  -2.31 95    -0.08</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt;  6    22 sim_psy1 badf  -2.31 99     0.6 </span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt;  7    23 sim_psy1 badf  -2.39 90    -0.44</span></a>
-<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt;  8    23 sim_psy1 badf  -2.39 95    -0.08</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt;  9    23 sim_psy1 badf  -2.39 99     0.6 </span></a>
-<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt; 10    24 sim_psy1 badf  -2.26 90    -0.44</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt;    index id       name   tstat sig    crit</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt;    &lt;dbl&gt; &lt;fct&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;  1    21 sim_psy1 badf  -2.08  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;  2    22 sim_psy1 badf  -2.31  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt;  3    23 sim_psy1 badf  -2.39  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt;  4    24 sim_psy1 badf  -2.26  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt;  5    25 sim_psy1 badf  -2.08  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt;  6    26 sim_psy1 badf  -1.79  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt;  7    27 sim_psy1 badf  -1.00  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt;  8    28 sim_psy1 badf  -1.34  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt;  9    29 sim_psy1 badf  -1.28  90    -0.44</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt; 10    30 sim_psy1 badf  -0.800 90    -0.44</span></a>
 <a class="sourceLine" id="cb7-16" title="16"><span class="co">#&gt; # ... with 1,910 more rows</span></a></code></pre></div>
 <p>The output of <code>augment_join</code> returns data in tidy format and the offers full flexibility to the user. After this point plotting becomes extremely trivial.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">joined <span class="op">%&gt;%</span><span class="st"> </span></a>
