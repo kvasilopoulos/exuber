@@ -1,0 +1,13 @@
+pandoc: '2.2'
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  Tidy: Tidy.html
+  exuber: exuber.html
+  plotting: plotting.html
+  simulation: simulation.html
+last_built: 2020-04-17T20:33Z
+urls:
+  reference: https://kvasilopoulos.github.io/exuber//reference
+  article: https://kvasilopoulos.github.io/exuber//articles
+
