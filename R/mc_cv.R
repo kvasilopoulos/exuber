@@ -1,5 +1,4 @@
 #' @importFrom rlang is_scalar_atomic
-#' @importFrom doRNG `%dorng%`
 mc_ <- function(n, minw, nrep, seed = NULL) {
 
   if (!is_n(n)) { # case of providiing data in 'n'
