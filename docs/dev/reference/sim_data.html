@@ -179,7 +179,7 @@ time series literature.</p>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># The dataset can be easily replicated with the code belows</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tibble</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1234</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1122</span>)
 <span class='no'>sim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(
   <span class='kw'>sim_psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>),
   <span class='kw'>sim_psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='fl'>100</span>),
@@ -187,12 +187,13 @@ time series literature.</p>
   <span class='kw'>sim_div</span> <span class='kw'>=</span> <span class='fu'><a href='sim_div.html'>sim_div</a></span>(<span class='fl'>100</span>),
   <span class='kw'>sim_blan</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>)
 )
-<span class='no'>sim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(
+<span class='no'>sim_data_wdate</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span>(
   <span class='kw'>psy1</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>),
   <span class='kw'>psy2</span> <span class='kw'>=</span> <span class='fu'><a href='sim_psy2.html'>sim_psy2</a></span>(<span class='fl'>100</span>),
   <span class='kw'>evans</span> <span class='kw'>=</span> <span class='fu'><a href='sim_evans.html'>sim_evans</a></span>(<span class='fl'>100</span>),
   <span class='kw'>div</span> <span class='kw'>=</span> <span class='fu'><a href='sim_div.html'>sim_div</a></span>(<span class='fl'>100</span>),
-  <span class='kw'>blan</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>)
+  <span class='kw'>blan</span> <span class='kw'>=</span> <span class='fu'><a href='sim_blan.html'>sim_blan</a></span>(<span class='fl'>100</span>),
+    <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='st'>"2000-01-01"</span>), <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"month"</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 )
 }</div></pre>
   </div>
