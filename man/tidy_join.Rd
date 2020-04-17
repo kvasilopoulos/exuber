@@ -3,17 +3,24 @@
 \name{tidy_join}
 \alias{tidy_join}
 \alias{augment_join}
+\alias{glance_join}
 \title{Tidy into a joint model}
 \usage{
 tidy_join(x, y = NULL)
 
 augment_join(x, y = NULL)
+
+glance_join(x, y)
 }
 \arguments{
 \item{x}{An object of class \code{radf}.}
 
-\item{y}{An object of class \code{cv}.}
+\item{y}{An object of class \code{cv}. The output will depend on the type of
+critical value.}
 }
 \description{
-Tidy and join or augment and join objects of class \code{radf} and \code{cv}.
+Tidy, augment or glance, and then join objects of class \code{radf} and \code{cv}. The
+object of reference should be the \code{radf}. For example, using \code{glance} in an
+radf object returns the panel statistic, so \code{glance_join} returns the panel
+statistic together with the critical values.
 }

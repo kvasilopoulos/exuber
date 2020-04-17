@@ -36,7 +36,6 @@ reference:
       - sb_cv
       - calc_pvalue
 
-
   - title: Report
     contents:
       - summary.radf
@@ -70,8 +69,8 @@ reference:
       - tidy.mc_distr
 
   - title: Tidying & Joining
+    contents:
       - tidy_join
-
 
 navbar:
   type: default
