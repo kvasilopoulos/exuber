@@ -71,6 +71,16 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129604855-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129604855-4');
+</script>
+
 
   </head>
 
@@ -286,66 +296,10 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 #&gt; </div><div class='input'>
 <span class='co'># Summary, diagnostics and datestamp (Wild Bootstrapped critical values)</span>
 
-<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wb_cv.html'>wb_cv</a></span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
-#&gt; ── Summary (minw = 19, lag = 0) ──────────────── Wild Bootstrap (nboot = 500) ──
-#&gt; 
-#&gt;  psy1 
-#&gt;        t-stat      90%     95%      99%
-#&gt; ADF    -2.461  -0.5391  -0.369  0.02854
-#&gt; SADF    1.946   1.4169   1.971  2.69363
-#&gt; GSADF   5.190   2.7187   3.203  4.49386
-#&gt; 
-#&gt;  psy2 
-#&gt;        t-stat      90%      95%      99%
-#&gt; ADF    -2.858  -0.6383  -0.4793  -0.2611
-#&gt; SADF    7.880   2.9424   3.5892   5.3489
-#&gt; GSADF   7.880   3.8446   5.0388   7.2181
-#&gt; 
-#&gt;  evans 
-#&gt;        t-stat      90%     95%       99%
-#&gt; ADF    -5.830  -0.5895  -0.373  -0.07454
-#&gt; SADF    5.283   5.2183   7.081  13.18804
-#&gt; GSADF   5.985   8.3715   9.848  14.85232
-#&gt; 
-#&gt;  div 
-#&gt;        t-stat      90%     95%     99%
-#&gt; ADF    -1.950  -0.3637  0.1666  0.7718
-#&gt; SADF    1.113   0.9281  1.2198  1.9276
-#&gt; GSADF   1.335   1.7193  2.0346  2.4493
-#&gt; 
-#&gt;  blan 
-#&gt;        t-stat      90%       95%      99%
-#&gt; ADF    -5.146  -0.2207  -0.08826   0.4698
-#&gt; SADF    3.930   3.1165   3.89335   6.4947
-#&gt; GSADF  10.951   6.3960   7.67078  10.0894
-#&gt; </div><div class='input'>
-<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
-#&gt; ── Diagnostics (option = gsadf) ────────────────────────────── Wild Bootstrap ──
-#&gt; 
-#&gt; psy1:     Rejects H0 for significance level of 1% 
-#&gt; psy2:     Rejects H0 for significance level of 1% 
-#&gt; evans:    Cannot reject H0! 
-#&gt; div:      Cannot reject H0! 
-#&gt; blan:     Rejects H0 for significance level of 1% 
-#&gt; </div><div class='input'>
-<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
-#&gt; ── Datestamp (min_duration = 0) ────────────────────────────── Wild Bootstrap ──
-#&gt; 
-#&gt; psy1 :
-#&gt;   Start End Duration
-#&gt; 1    44  55       12
-#&gt; 
-#&gt; psy2 :
-#&gt;   Start End Duration
-#&gt; 1    23  40       18
-#&gt; 2    62  70        9
-#&gt; 
-#&gt; blan :
-#&gt;   Start End Duration
-#&gt; 1    34  36        3
-#&gt; 2    84  86        3
-#&gt; </div><div class='input'># }
+<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wb_cv.html'>wb_cv</a></span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error in wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed): object '%dorng%' not found</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is_null(x): object 'wb' not found</span></div><div class='input'>
+<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is_null(x): object 'wb' not found</span></div><div class='input'>
+<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in is_null(x): object 'wb' not found</span></div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -362,7 +316,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

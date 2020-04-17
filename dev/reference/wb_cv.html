@@ -74,6 +74,16 @@ computes the distribution." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129604855-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129604855-4');
+</script>
+
 
   </head>
 
@@ -231,48 +241,14 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
-<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)</div><div class='output co'>#&gt; # A tibble: 15 x 5
-#&gt;    id    sig       adf   sadf gsadf
-#&gt;    &lt;chr&gt; &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-#&gt;  1 psy1  90    -0.566   1.47   2.62
-#&gt;  2 psy2  90    -0.625   2.83   3.86
-#&gt;  3 evans 90    -0.554   5.27   8.36
-#&gt;  4 div   90    -0.322   0.952  1.73
-#&gt;  5 blan  90    -0.315   3.43   6.33
-#&gt;  6 psy1  95    -0.420   1.97   3.25
-#&gt;  7 psy2  95    -0.465   3.49   4.84
-#&gt;  8 evans 95    -0.416   7.40   9.81
-#&gt;  9 div   95    -0.0262  1.35   2.07
-#&gt; 10 blan  95    -0.0947  4.45   7.85
-#&gt; 11 psy1  99    -0.0632  3.25   4.53
-#&gt; 12 psy2  99    -0.264   5.06   6.63
-#&gt; 13 evans 99    -0.0611 12.9   15.7 
-#&gt; 14 div   99     0.723   1.88   2.84
-#&gt; 15 blan  99     0.293   7.86  11.1 </div><div class='input'>
+<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error in wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed): object '%dorng%' not found</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)</div><div class='output co'>#&gt; <span class='error'>Error in tidy(wb): object 'wb' not found</span></div><div class='input'>
 <span class='co'># Change the minimum window and the number of bootstraps</span>
-<span class='no'>wb2</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb2</span>)</div><div class='output co'>#&gt; # A tibble: 15 x 5
-#&gt;    id    sig        adf   sadf gsadf
-#&gt;    &lt;chr&gt; &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-#&gt;  1 psy1  90    -0.608    1.49   2.74
-#&gt;  2 psy2  90    -0.618    3.09   3.91
-#&gt;  3 evans 90    -0.652    5.38   8.30
-#&gt;  4 div   90    -0.430    0.941  1.75
-#&gt;  5 blan  90    -0.138    3.29   6.14
-#&gt;  6 psy1  95    -0.409    2.00   3.15
-#&gt;  7 psy2  95    -0.508    3.84   4.76
-#&gt;  8 evans 95    -0.358    7.81  10.2 
-#&gt;  9 div   95    -0.160    1.19   2.10
-#&gt; 10 blan  95     0.128    4.31   7.52
-#&gt; 11 psy1  99    -0.00375  2.74   4.37
-#&gt; 12 psy2  99    -0.313    5.15   6.15
-#&gt; 13 evans 99    -0.0622  11.7   13.4 
-#&gt; 14 div   99     0.359    1.78   2.71
-#&gt; 15 blan  99     0.633    7.10  11.1 </div><div class='input'>
+<span class='no'>wb2</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt; <span class='error'>Error in wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed): object '%dorng%' not found</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb2</span>)</div><div class='output co'>#&gt; <span class='error'>Error in tidy(wb2): object 'wb2' not found</span></div><div class='input'>
 <span class='co'># Simulate distribution</span>
-<span class='no'>wdist</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_distr</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>wdist</span>)</div><div class='img'><img src='wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+<span class='no'>wdist</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_distr</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error in wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed): object '%dorng%' not found</span></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>wdist</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(wdist): object 'wdist' not found</span></div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -289,7 +265,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
