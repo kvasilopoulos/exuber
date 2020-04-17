@@ -238,8 +238,9 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
   <span class='fu'><a href='radf.html'>radf</a></span>(<span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='img'><img src='sb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Simulate distribution</span>
-<span class='no'>sdist</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_dist</span>(<span class='no'>sim_data</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</div><div class='output co'>#&gt; <span class='error'>Error in sb_dist(sim_data, lag = 1, nrep = 1000): could not find function "sb_dist"</span></div><div class='input'>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>sdist</span>)</div><div class='output co'>#&gt; <span class='error'>Error in autoplot(sdist): object 'sdist' not found</span></div><div class='input'># }
+<span class='no'>sdist</span> <span class='kw'>&lt;-</span> <span class='fu'>sb_distr</span>(<span class='no'>sim_data</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>sdist</span>)</div><div class='img'><img src='sb_cv-2.png' alt='' width='700' height='433' /></div><div class='input'># }
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

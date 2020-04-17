@@ -61,6 +61,10 @@ where \eqn{\theta} is an indicator function taking a value of 0 with probability
 In this secondary phase there is a probability (\eqn{1-\pi}) that the bubble collapses to \code{delta} and the process starts again.
 By modifying the values of \code{delta}, \code{alpha} and \code{pi} the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.
 }
+\examples{
+sim_evans(100, seed = 123) \%>\%
+  autoplot()
+}
 \references{
 Evans, G. W. (1991). Pitfalls in testing for explosive
 bubbles in asset prices. The American Economic Review, 81(4), 922-930.
