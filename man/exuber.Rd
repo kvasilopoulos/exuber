@@ -48,15 +48,4 @@ Useful links:
 }
 
 }
-\author{
-\strong{Maintainer}: Kostas Vasilopoulos \email{k.vasilopoulo@gmail.com}
-
-Authors:
-\itemize{
-  \item Efthymios Pavlidis \email{e.pavlidis@lancaster.ac.uk}
-  \item Simon Spavound \email{simon.spavound@googlemail.com}
-  \item Enrique Martínez-García \email{emg.economics@gmail.com}
-}
-
-}
 \keyword{internal}

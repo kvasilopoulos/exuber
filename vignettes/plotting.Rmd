@@ -34,7 +34,7 @@ The new design offers full flexibility and customization to produce publication-
 
 Let's start by simulating some data.
 
-```{r tstats-cv, cache=TRUE}
+```{r tstats-cv}
 set.seed(123)
 sims <- tibble(
   sim_psy1 = sim_psy1(100),
@@ -141,7 +141,7 @@ In addition to critical values, we can also calculate the empirical distribution
 by utilizing the family of *_distr functions. For example if we can simulate
 the distribution of the supADF tests with Monte Carlo method.
 
-```{r distributions, cache=TRUE}
+```{r distributions}
 distr <- mc_distr(n = 300, nrep = 500)
 autoplot(distr)
 ```
