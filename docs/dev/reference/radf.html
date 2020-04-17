@@ -203,20 +203,20 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># We will use simulated data that are stored as data with the name `sim_data`</span>
-<span class='no'>sim_data</span></div><div class='output co'>#&gt; # A tibble: 100 x 5
+<span class='no'>sim_data</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 100 x 5</span><span>
 #&gt;    psy1  psy2  evans div   blan  
-#&gt;    &lt;sim&gt; &lt;sim&gt; &lt;sim&gt; &lt;sim&gt; &lt;sim&gt; 
-#&gt;  1 100   100   0.5   68.4  0.1   
-#&gt;  2 90.3  102   0.563 66    0.0408
-#&gt;  3 93.4  110   0.583 78.9  0.121 
-#&gt;  4 92.9  116   0.575 75.6  0.0195
-#&gt;  5 106   127   0.545 74.8  0.0216
-#&gt;  6 102   114   0.577 77.7  0.0117
-#&gt;  7 109   120   0.658 80.8  0.0265
-#&gt;  8 105   130   0.7   91.4  0.0238
-#&gt;  9 112   128   0.684 87.4  0.0332
-#&gt; 10 124   131   0.735 72.2  0.0342
-#&gt; # ... with 90 more rows</div><div class='input'>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> 
+#&gt; </span><span style='color: #555555;'> 1</span><span> 100   100   0.5   68.4  0.1   
+#&gt; </span><span style='color: #555555;'> 2</span><span> 90.3  102   0.563 66    0.0408
+#&gt; </span><span style='color: #555555;'> 3</span><span> 93.4  110   0.583 78.9  0.121 
+#&gt; </span><span style='color: #555555;'> 4</span><span> 92.9  116   0.575 75.6  0.0195
+#&gt; </span><span style='color: #555555;'> 5</span><span> 106   127   0.545 74.8  0.0216
+#&gt; </span><span style='color: #555555;'> 6</span><span> 102   114   0.577 77.7  0.0117
+#&gt; </span><span style='color: #555555;'> 7</span><span> 109   120   0.658 80.8  0.0265
+#&gt; </span><span style='color: #555555;'> 8</span><span> 105   130   0.7   91.4  0.0238
+#&gt; </span><span style='color: #555555;'> 9</span><span> 112   128   0.684 87.4  0.0332
+#&gt; </span><span style='color: #555555;'>10</span><span> 124   131   0.735 72.2  0.0342
+#&gt; </span><span style='color: #555555;'># ... with 90 more rows</span><span></div><div class='input'>
 <span class='no'>rsim</span> <span class='kw'>&lt;-</span> <span class='fu'>radf</span>(<span class='no'>sim_data</span>)
 
 <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>rsim</span>)</div><div class='output co'>#&gt; List of 7
@@ -243,20 +243,20 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt;  - attr(*, "series_names")= chr [1:5] "psy1" "psy2" "evans" "div" ...
 #&gt;  - attr(*, "class")= chr "radf"</div><div class='input'>
 <span class='co'># We would also use data that contain a Date column</span>
-<span class='no'>sim_data_wdate</span></div><div class='output co'>#&gt; # A tibble: 100 x 6
+<span class='no'>sim_data_wdate</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 6</span><span>
 #&gt;    psy1  psy2  evans div   blan   date      
-#&gt;    &lt;sim&gt; &lt;sim&gt; &lt;sim&gt; &lt;sim&gt; &lt;sim&gt;  &lt;date&gt;    
-#&gt;  1 100   100   0.5   68.4  0.1    2000-01-01
-#&gt;  2 90.3  102   0.563 66    0.0408 2000-02-01
-#&gt;  3 93.4  110   0.583 78.9  0.121  2000-03-01
-#&gt;  4 92.9  116   0.575 75.6  0.0195 2000-04-01
-#&gt;  5 106   127   0.545 74.8  0.0216 2000-05-01
-#&gt;  6 102   114   0.577 77.7  0.0117 2000-06-01
-#&gt;  7 109   120   0.658 80.8  0.0265 2000-07-01
-#&gt;  8 105   130   0.7   91.4  0.0238 2000-08-01
-#&gt;  9 112   128   0.684 87.4  0.0332 2000-09-01
-#&gt; 10 124   131   0.735 72.2  0.0342 2000-10-01
-#&gt; # ... with 90 more rows</div><div class='input'>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;sim&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;date&gt;</span><span>    
+#&gt; </span><span style='color: #555555;'> 1</span><span> 100   100   0.5   68.4  0.1    2000-01-01
+#&gt; </span><span style='color: #555555;'> 2</span><span> 90.3  102   0.563 66    0.0408 2000-02-01
+#&gt; </span><span style='color: #555555;'> 3</span><span> 93.4  110   0.583 78.9  0.121  2000-03-01
+#&gt; </span><span style='color: #555555;'> 4</span><span> 92.9  116   0.575 75.6  0.0195 2000-04-01
+#&gt; </span><span style='color: #555555;'> 5</span><span> 106   127   0.545 74.8  0.0216 2000-05-01
+#&gt; </span><span style='color: #555555;'> 6</span><span> 102   114   0.577 77.7  0.0117 2000-06-01
+#&gt; </span><span style='color: #555555;'> 7</span><span> 109   120   0.658 80.8  0.0265 2000-07-01
+#&gt; </span><span style='color: #555555;'> 8</span><span> 105   130   0.7   91.4  0.0238 2000-08-01
+#&gt; </span><span style='color: #555555;'> 9</span><span> 112   128   0.684 87.4  0.0332 2000-09-01
+#&gt; </span><span style='color: #555555;'>10</span><span> 124   131   0.735 72.2  0.0342 2000-10-01
+#&gt; </span><span style='color: #555555;'># ... with 90 more rows</span><span></div><div class='input'>
 <span class='no'>rsim_wdate</span> <span class='kw'>&lt;-</span> <span class='fu'>radf</span>(<span class='no'>sim_data_wdate</span>)</div><div class='output co'>#&gt; <span class='message'>Using `date` as index variable.</span></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>rsim_wdate</span>)</div><div class='output co'>#&gt; List of 7
 #&gt;  $ adf        : Named num [1:5] -2.46 -2.86 -5.83 -1.95 -5.15
@@ -327,7 +327,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt;  - attr(*, "minw")= num 20
 #&gt;  - attr(*, "series_names")= chr [1:5] "psy1" "psy2" "evans" "div" ...
 #&gt;  - attr(*, "class")= chr "radf"</div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

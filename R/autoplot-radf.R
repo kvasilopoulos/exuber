@@ -68,9 +68,9 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
   assert_class(cv, "cv")
 
   option <- match.arg(option)
-  if (!is_mc(cv) && option == "sadf") {
-    stop_glue("argument 'option' can be set to 'sadf'",
-                 "only when cv is of class 'mc_cv'")
+  if (is_sb(cv) && option == "sadf") {
+    stop_glue("argument 'option' cannot  be be set to 'sadf' ",
+                 "when cv is of class 'sb_cv'")
   }
   option <- if (option == "gsadf") "bsadf" else if (option == "sadf") "badf"
 

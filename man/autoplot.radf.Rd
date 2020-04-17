@@ -56,7 +56,7 @@ rsim_data <- radf(sim_data_wdate)
 autoplot(rsim_data)
 
 # Modify facet_wrap options through ellipsis
-autoplot(rsim_data, scales = "free", dir  = "v")
+autoplot(rsim_data, scales = "free_y", dir  = "v")
 
 autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.5))
 

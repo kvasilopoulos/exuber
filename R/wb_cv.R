@@ -129,16 +129,20 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Default minimum window
 #' wb <- wb_cv(sim_data)
+#'
 #' tidy(wb)
 #'
 #' # Change the minimum window and the number of bootstraps
 #' wb2 <- wb_cv(sim_data, nboot = 600, minw = 20)
 #'
+#'tidy(wb2)
+#'
 #' # Simulate distribution
-#' wdist <- wb_distr(im_data)
+#' wdist <- wb_distr(sim_data)
+#'
 #' autoplot(wdist)
 #' }
 wb_cv <- function(data, minw = NULL, nboot = 500L,

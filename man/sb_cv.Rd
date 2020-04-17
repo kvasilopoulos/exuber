@@ -37,9 +37,10 @@ the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{sb_dist}
 computes the distribution.
 }
 \examples{
-\dontrun{
+\donttest{
 # Panel critical vales should have the same lag length with the estimation
 sb <- sb_cv(sim_data, lag = 1)
+
 tidy(sb)
 
 sim_data \%>\%
@@ -51,7 +52,8 @@ sim_data \%>\%
   autoplot(cv = sb)
 
 # Simulate distribution
-sdist <- sb_dist(sim_data, lag = 1)
+sdist <- sb_dist(sim_data, lag = 1, nrep = 1000)
+
 autoplot(sdist)
 }
 }

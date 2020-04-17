@@ -207,19 +207,25 @@ t-statistics.</p>
 <span class='co'># Default minimum window</span>
 <span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 4
-#&gt;   sig       adf  sadf gsadf
-#&gt;   &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1 90    -0.407   1.02  1.62
-#&gt; 2 95    -0.0356  1.28  1.83
-#&gt; 3 99     0.487   1.77  2.33</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 4</span><span>
+#&gt;   sig      adf  sadf gsadf
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> 90    -</span><span style='color: #BB0000;'>0.202</span><span>  1.02  1.60
+#&gt; </span><span style='color: #555555;'>2</span><span> 95     0.179  1.32  1.92
+#&gt; </span><span style='color: #555555;'>3</span><span> 99     0.566  1.90  2.55</div><div class='input'>
 <span class='co'># Change the minimum window and the number of simulations</span>
 <span class='no'>mc2</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 
-<span class='no'>mdist</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_distr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc2</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 3 x 4</span><span>
+#&gt;   sig      adf  sadf gsadf
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> 90    -</span><span style='color: #BB0000;'>0.474</span><span> 0.966  1.60
+#&gt; </span><span style='color: #555555;'>2</span><span> 95    -</span><span style='color: #BB0000;'>0.155</span><span> 1.25   1.95
+#&gt; </span><span style='color: #555555;'>3</span><span> 99     0.487 1.77   2.67</div><div class='input'>
+<span class='no'>mdist</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_distr</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
 
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>mdist</span>)</div><div class='img'><img src='mc_cv-1.png' alt='' width='700' height='433' /></div><div class='input'># }
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
