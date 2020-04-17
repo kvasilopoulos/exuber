@@ -27,6 +27,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # We will use simulated data that are stored as data with the name `sim_data`
 #' sim_data
 #'
@@ -45,12 +46,11 @@
 #'
 #' glance(rsim_wdate)
 #'
-#' ihead(ndex(rsim_wdate))
+#' head(index(rsim_wdate))
 #'
 #' # For lag = 1 and minimum window = 20
 #' rsim_20 <- radf(sim_data, minw = 20, lag = 1)
-#'
-#'
+#'}
 radf <- function(data, minw = NULL, lag = 0L) {
 
   x <- parse_data(data)
