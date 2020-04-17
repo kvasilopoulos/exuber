@@ -22,13 +22,15 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.
 \code{summary} method for class "radf"
 }
 \examples{
-\dontrun{
+\donttest{
 # Simulate bubble processes, compute the t-stat and critical values
 rsim_data <- radf(sim_data)
 
 # Summary, diagnostics and datestamp (default)
 summary(rsim_data)
+
 diagnostics(rsim_data)
+
 datestamp(rsim_data)
 
 #' # Diagnostics for 'sadf'
