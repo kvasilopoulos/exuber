@@ -40,14 +40,17 @@ sim_data_wdate
 
 rsim_wdate <- radf(sim_data_wdate)
 
-str(rsim_wdate)
+tidy(rsim_wdate)
 
-index(rsim_wdate)
+augment(rsim_wdate)
+
+glance(rsim_wdate)
+
+ihead(ndex(rsim_wdate))
 
 # For lag = 1 and minimum window = 20
 rsim_20 <- radf(sim_data, minw = 20, lag = 1)
 
-str(rsim_20)
 
 }
 \references{
