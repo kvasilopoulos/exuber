@@ -34,6 +34,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 
   `%fun%` <- if (do_par) `%dorng%` else `%do%`
 
+  set_rng(seed)
   for (j in 1:nc) {
 
     dy <- diff(y[, j])
@@ -44,7 +45,6 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       .options.snow = pb_opts,
       .inorder = FALSE
     ) %fun% {
-      set_rng(seed)
       if (show_pb && !do_par) {
         setTxtProgressBar(pb, i)
       }
