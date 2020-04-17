@@ -1,6 +1,6 @@
 #' Tidy into a joint model
 #'
-#' Tidy, agument or glance, and then join objects of class `radf` and `cv`. The
+#' Tidy, augment or glance, and then join objects of class `radf` and `cv`. The
 #' object of reference should be the `radf`. For example, using `glance` in an
 #' radf object returns the panel statistic, so `glance_join` returns the panel
 #' statistic together with the critical values.

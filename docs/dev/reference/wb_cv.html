@@ -226,18 +226,54 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 <code><a href='sb_cv.html'>sb_cv</a></code> for Sieve Bootstrapped critical values</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)
 
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 15 x 5</span><span>
+#&gt;    id    sig       adf   sadf gsadf
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.621</span><span>   1.56   2.79
+#&gt; </span><span style='color: #555555;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.607</span><span>   2.97   3.68
+#&gt; </span><span style='color: #555555;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.610</span><span>   5.07   7.53
+#&gt; </span><span style='color: #555555;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.364</span><span>   0.975  1.78
+#&gt; </span><span style='color: #555555;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.266</span><span>   3.05   6.49
+#&gt; </span><span style='color: #555555;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.458</span><span>   2.03   3.34
+#&gt; </span><span style='color: #555555;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.409</span><span>   3.53   4.21
+#&gt; </span><span style='color: #555555;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.414</span><span>   7.23   9.34
+#&gt; </span><span style='color: #555555;'> 9</span><span> div   95     0.021</span><span style='text-decoration: underline;'>3</span><span>  1.32   2.08
+#&gt; </span><span style='color: #555555;'>10</span><span> blan  95    -</span><span style='color: #BB0000;'>0.011</span><span style='color: #BB0000;text-decoration: underline;'>8</span><span>  4.59   7.54
+#&gt; </span><span style='color: #555555;'>11</span><span> psy1  99     0.112   2.62   4.93
+#&gt; </span><span style='color: #555555;'>12</span><span> psy2  99    -</span><span style='color: #BB0000;'>0.236</span><span>   4.61   5.90
+#&gt; </span><span style='color: #555555;'>13</span><span> evans 99    -</span><span style='color: #BB0000;'>0.122</span><span>  10.5   13.1 
+#&gt; </span><span style='color: #555555;'>14</span><span> div   99     0.562   2.04   2.75
+#&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.272   7.36   9.83</div><div class='input'>
 <span class='co'># Change the minimum window and the number of bootstraps</span>
 <span class='no'>wb2</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb2</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 15 x 5</span><span>
+#&gt;    id    sig        adf   sadf gsadf
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.616</span><span>    1.51   2.66
+#&gt; </span><span style='color: #555555;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.639</span><span>    3.44   4.09
+#&gt; </span><span style='color: #555555;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.553</span><span>    5.27   7.49
+#&gt; </span><span style='color: #555555;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.370</span><span>    0.889  1.61
+#&gt; </span><span style='color: #555555;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.286</span><span>    3.19   6.12
+#&gt; </span><span style='color: #555555;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.456</span><span>    1.85   3.30
+#&gt; </span><span style='color: #555555;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.486</span><span>    4.50   5.02
+#&gt; </span><span style='color: #555555;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.346</span><span>    7.59   9.77
+#&gt; </span><span style='color: #555555;'> 9</span><span> div   95     0.037</span><span style='text-decoration: underline;'>6</span><span>   1.19   1.99
+#&gt; </span><span style='color: #555555;'>10</span><span> blan  95     0.033</span><span style='text-decoration: underline;'>3</span><span>   4.51   8.30
+#&gt; </span><span style='color: #555555;'>11</span><span> psy1  99     0.035</span><span style='text-decoration: underline;'>8</span><span>   2.75   4.27
+#&gt; </span><span style='color: #555555;'>12</span><span> psy2  99    -</span><span style='color: #BB0000;'>0.293</span><span>    5.69   6.40
+#&gt; </span><span style='color: #555555;'>13</span><span> evans 99    -</span><span style='color: #BB0000;'>0.003</span><span style='color: #BB0000;text-decoration: underline;'>47</span><span> 12.4   12.7 
+#&gt; </span><span style='color: #555555;'>14</span><span> div   99     0.691    1.71   2.76
+#&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.400    8.56  12.4 </div><div class='input'>
 <span class='co'># Simulate distribution</span>
-<span class='no'>wdist</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_distr</span>(<span class='no'>im_data</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>wdist</span>)
-}</div></pre>
+<span class='no'>wdist</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_distr</span>(<span class='no'>sim_data</span>)
+
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>wdist</span>)</div><div class='img'><img src='wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
