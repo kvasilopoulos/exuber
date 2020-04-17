@@ -160,7 +160,7 @@
     <p>Calculate p-values</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calc_pvalue</span>(<span class='no'>x</span>, <span class='kw'>dist</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>calc_pvalue</span>(<span class='no'>x</span>, <span class='kw'>distr</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,7 +170,7 @@
       <td><p>An 'radf' object</p></td>
     </tr>
     <tr>
-      <th>dist</th>
+      <th>distr</th>
       <td><p>Which type of distribution to use to calculate the p-values</p></td>
     </tr>
     </table>
@@ -180,10 +180,12 @@
     <pre class="examples"><div class='input'>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='no'>radf_psy1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>))
+
 <span class='fu'>calc_pvalue</span>(<span class='no'>radf_psy1</span>)
 
 <span class='co'># Using the Wild-Bootstrapped</span>
 <span class='no'>wb_psy1</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_dist</span>(<span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>))
+
 <span class='fu'>calc_pvalue</span>(<span class='no'>radf_psy1</span>, <span class='no'>wb_psy1</span>)
 }</div></pre>
   </div>

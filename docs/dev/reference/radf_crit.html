@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tidy into a joint model — tidy_join • exuber</title>
+<title>Simulated Monte Carlo critical values — radf_crit • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -50,8 +50,11 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Tidy into a joint model — tidy_join" />
-<meta property="og:description" content="Tidy and join or augment and join objects of class radf and cv." />
+<meta property="og:title" content="Simulated Monte Carlo critical values — radf_crit" />
+<meta property="og:description" content="A dataset containing simulated critical values for up to 600 observations
+based on default minimum window. The critical values have been simulated and
+stored as data to save computation time for the user. The stored critical values
+can be obtained with the mc_cv() function, using the seed = 123." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -151,38 +154,48 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tidy into a joint model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/tidiers-join.R'><code>R/tidiers-join.R</code></a></small>
-    <div class="hidden name"><code>tidy_join.Rd</code></div>
+    <h1>Simulated Monte Carlo critical values</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/data-crit-sim.R'><code>R/data-crit-sim.R</code></a></small>
+    <div class="hidden name"><code>radf_crit.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Tidy and join or augment and join objects of class <code>radf</code> and <code>cv</code>.</p>
+    <p>A dataset containing simulated critical values for up to 600 observations
+based on default minimum window. The critical values have been simulated and
+stored as data to save computation time for the user. The stored critical values
+can be obtained with the <code><a href='mc_cv.html'>mc_cv()</a></code> function, using the <code>seed = 123</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_join</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>augment_join</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>An object of class <code>radf</code>.</p></td>
-    </tr>
-    <tr>
-      <th>y</th>
-      <td><p>An object of class <code>cv</code>.</p></td>
-    </tr>
-    </table>
+    <pre class="usage"><span class='no'>radf_crit</span></pre>
 
 
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A list with lower level lists that contain</p><dl class='dl-horizontal'>
+<dt>adf_cv:</dt><dd><p>Augmented Dickey-Fuller</p></dd>
+<dt>badf_cv:</dt><dd><p>Backward Augmented Dickey-Fuller</p></dd>
+<dt>sadf_cv:</dt><dd><p>Supremum Augmented Dickey-Fuller</p></dd>
+<dt>bsadf_cv:</dt><dd><p>Backward Supremum Augmented Dickey-Fuller</p></dd>
+<dt>gsadf_cv:</dt><dd><p>Generalized Supremum Augmented Dickey Fuller</p></dd>
+
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>simulated from exuber package function <code><a href='mc_cv.html'>mc_cv()</a></code></p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>radf_crit</span><span class='kw'>[[</span><span class='fl'>50</span>]], <span class='fu'><a href='mc_cv.html'>mc_cv</a></span>(<span class='fl'>50</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>))
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#format">Format</a></li>
+      <li><a href="#source">Source</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

@@ -16,9 +16,6 @@
     <loc>https://kvasilopoulos.github.io/exuber//reference/calc_pvalue.html</loc>
   </url>
   <url>
-    <loc>https://kvasilopoulos.github.io/exuber//reference/crit.html</loc>
-  </url>
-  <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/datestamp.html</loc>
   </url>
   <url>
@@ -50,6 +47,9 @@
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/radf.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber//reference/radf_crit.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber//reference/reexports.html</loc>
