@@ -51,14 +51,14 @@ get_rng_state <- function(seed) {
 retrieve_crit <- function(x) {
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(exuber::radf_crit)) {
-    message("using 'radf_crit'")
+    message("Using 'radf_crit' as 'cv'argument..")
     return(exuber::radf_crit[[nr]])
   } else if (nr > length(exuber::radf_crit) && nr <= 2000) {
-    message("using 'radf_crit2'")
+    message("Using 'radf_crit2' as 'cv'argument..")
     need_exuberdata()
     return(exuberdata::radf_crit2[[nr]])
   }else {
-    stop_glue("cannot provide MC critical values see help(radf_crit)")
+    stop_glue("Cannot provide MC critical values see help(radf_crit).")
   }
 }
 
