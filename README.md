@@ -8,11 +8,10 @@
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Build
-Status](https://travis-ci.org/kvasilopoulos/exuber.svg?branch=master)](https://travis-ci.org/kvasilopoulos/exuber)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/kvasilopoulos/exuber?branch=master&svg=true)](https://ci.appveyor.com/project/kvasilopoulos/exuber)
-[![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exuber)
+[![R build
+status](https://github.com/kvasilopoulos/exuber/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/exuber/actions)1
+[![Codecov test
+coverage](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exuber?branch=master)
 
 Testing for and dating periods of explosive dynamics (exuberance) in
 time series using the univariate and panel recursive unit root tests
@@ -101,7 +100,7 @@ library(exuber)
 rsim_data <- radf(sim_data)
 
 summary(rsim_data)
-#> using 'radf_crit'
+#> Using 'radf_crit' as 'cv'argument..
 #> 
 #> -- Summary (minw = 19, lag = 0) ----------------------------------- Monte Carlo (nrep = 2000) --
 #> 
@@ -136,7 +135,7 @@ summary(rsim_data)
 #> GSADF  10.951   1.7099   1.97410  2.5708
 
 diagnostics(rsim_data)
-#> using 'radf_crit'
+#> Using 'radf_crit' as 'cv'argument..
 #> 
 #> -- Diagnostics (option = gsadf) ------------------------------------------------- Monte Carlo --
 #> 
@@ -147,7 +146,7 @@ diagnostics(rsim_data)
 #> blan:     Rejects H0 for significance level of 1%
 
 datestamp(rsim_data)
-#> using 'radf_crit'
+#> Using 'radf_crit' as 'cv'argument..
 #> 
 #> -- Datestamp (min_duration = 0) ------------------------------------------------- Monte Carlo --
 #> 
@@ -172,7 +171,7 @@ datestamp(rsim_data)
 #> 2    84  86        3
 
 autoplot(rsim_data)
-#> using 'radf_crit'
+#> Using 'radf_crit' as 'cv'argument..
 ```
 
 ![](man/figures/usage-1.png)<!-- -->
