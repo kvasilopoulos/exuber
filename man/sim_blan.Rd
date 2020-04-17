@@ -43,7 +43,8 @@ With probability \eqn{1 - \pi}:
 where \code{r} is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
 }
 \examples{
-sim_blan(n = 100)
+sim_blan(n = 100, seed = 123) \%>\%
+  autoplot()
 }
 \references{
 Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.

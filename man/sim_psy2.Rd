@@ -85,10 +85,12 @@ For further details the user can refer to Phillips et al., (2015) p. 1055.
 }
 \examples{
 # 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
-sim_psy2(n = 100)
+sim_psy2(n = 100, seed = 123) \%>\%
+ autoplot()
 
 # 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
-sim_psy2(n = 200)
+sim_psy2(n = 200, seed = 123) \%>\%
+  autoplot()
 }
 \references{
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:

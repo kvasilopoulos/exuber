@@ -52,7 +52,7 @@ sim_data \%>\%
   autoplot(cv = sb)
 
 # Simulate distribution
-sdist <- sb_dist(sim_data, lag = 1, nrep = 1000)
+sdist <- sb_distr(sim_data, lag = 1, nboot = 1000)
 
 autoplot(sdist)
 }
