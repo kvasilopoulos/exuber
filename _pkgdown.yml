@@ -2,7 +2,7 @@ title: exuber
 url: https://kvasilopoulos.github.io/exuber/
 
 development:
-  mode: devel
+  mode: development
 
 template:
   params:
