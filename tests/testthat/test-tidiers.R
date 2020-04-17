@@ -21,13 +21,14 @@ test_that("augment output",{
                c("key", "index", "id", "name", "tstat"))
   expect_equal(names(augment(mc)), c("key", "sig", "badf", "bsadf"))
   expect_equal(names(augment(mc, format = "long")), c("key", "name", "sig", "crit"))
+
   id_nms <- c("psy1", "psy2", "evans", "div", "blan")
   expect_equal(names(augment(wb)), c("key", "index", "sig", "name", id_nms))
   expect_equal(names(augment(wb, format = "long")),
-               c("key", "index", "sig", "name", "id", "crit"))
+               c("key", "index", "id", "name", "sig", "crit"))
   expect_equal(names(augment(sb)), c("key", "index", "sig", "bsadf_panel"))
   expect_equal(names(augment(sb, format = "long")),
-               c("key", "index", "sig", "name", "crit"))
+               c("key", "index", "id", "name","sig", "crit"))
 
 })
 
