@@ -4,10 +4,13 @@
 .onLoad <- function(libname, pkgname) {
   op <- options()
 
-  ncores <- parallel::detectCores() - 1
+  mc_cores <- Sys.getenv("MC_CORES") # CRAN env uses only 2 cores
+  sys_cores <- if (interactive()) parallel::detectCores() - 1 else 2
+  # not possible to use more than system cores
+  ncores <- if (mc_cores == "") sys_cores else min(mc_cores, sys_cores)
 
   op.exuber <- list(
-    exuber.show_progress = if (interactive()) TRUE else FALSE,
+    exuber.show_progress = TRUE,
     exuber.parallel = TRUE,
     exuber.ncores = ncores,
     exuber.global_seed = NA

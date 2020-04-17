@@ -11,8 +11,6 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   assert_positive_int(lag, strictly = FALSE)
   assert_positive_int(nboot, greater_than = 2)
 
-  rng_state <- set_rng(seed = seed)
-
   nc <- ncol(y)
   nr <- nrow(y)
 
@@ -22,6 +20,7 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   resmat  <- matrix(0, nr - 2 - lag, nc)
   coefmat <- matrix(0, nc, 2 + lag)
 
+  set_rng(seed)
   for (j in 1:nc) {
     ys <- y[, j]
     dy <- ys[-1] - ys[-nr]

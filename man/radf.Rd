@@ -28,6 +28,7 @@ A list that contains the t-statistic (sequence) for:
 test.
 }
 \examples{
+\donttest{
 # We will use simulated data that are stored as data with the name `sim_data`
 sim_data
 
@@ -46,12 +47,11 @@ augment(rsim_wdate)
 
 glance(rsim_wdate)
 
-ihead(ndex(rsim_wdate))
+head(index(rsim_wdate))
 
 # For lag = 1 and minimum window = 20
 rsim_20 <- radf(sim_data, minw = 20, lag = 1)
-
-
+}
 }
 \references{
 Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
