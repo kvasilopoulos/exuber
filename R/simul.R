@@ -44,13 +44,16 @@
 #'
 #' @examples
 #' # 100 periods with bubble origination date 40 and termination date 55
-#' sim_psy1(n = 100)
+#' sim_psy1(n = 100, seed = 123) %>%
+#'   autoplot()
 #'
 #' # 200 periods with bubble origination date 80 and termination date 110
-#' sim_psy1(n = 200)
+#' sim_psy1(n = 200, seed = 123) %>%
+#'   autoplot()
 #'
 #' # 200 periods with bubble origination date 100 and termination date 150
-#' sim_psy1(n = 200, te = 100, tf = 150)
+#' sim_psy1(n = 200, te = 100, tf = 150, seed = 123) %>%
+#'   autoplot()
 sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
                      alpha = 0.6, sigma = 6.79, seed = NULL) {
   assert_positive_int(n)
@@ -141,10 +144,12 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #'
 #' @examples
 #' # 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
-#' sim_psy2(n = 100)
+#' sim_psy2(n = 100, seed = 123) %>%
+#'  autoplot()
 #'
 #' # 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
-#' sim_psy2(n = 200)
+#' sim_psy2(n = 200, seed = 123) %>%
+#'   autoplot()
 sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
                      te2 = 0.6 * n, tf2 = 0.1 * n + te2,
                      c = 1, alpha = 0.6, sigma = 6.79, seed = NULL) {
@@ -216,7 +221,8 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' @seealso \code{\link{sim_psy1}}, \code{\link{sim_psy2}}, \code{\link{sim_evans}}
 #'
 #' @examples
-#' sim_blan(n = 100)
+#' sim_blan(n = 100, seed = 123) %>%
+#'   autoplot()
 sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
                      seed = NULL) {
 
@@ -288,6 +294,9 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
 #' @references Evans, G. W. (1991). Pitfalls in testing for explosive
 #' bubbles in asset prices. The American Economic Review, 81(4), 922-930.
 #'
+#' @examples
+#' sim_evans(100, seed = 123) %>%
+#'   autoplot()
 sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
                       r = 0.05, b1 = delta, seed = NULL) {
 
@@ -365,9 +374,11 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
 #' @examples
 #' # Price is the sum of the bubble and fundamental components
 #' # 20 is the scaling factor
-#' pf <- sim_div(100, r = 0.05, output = "pf")
-#' pb <- sim_evans(100, r = 0.05)
+#' pf <- sim_div(100, r = 0.05, output = "pf", seed = 123)
+#' pb <- sim_evans(100, r = 0.05, seed = 123)
 #' p <- pf + 20 * pb
+#'
+#' autoplot(p)
 sim_div <- function(n, mu, sigma, r = 0.05,
                     log = FALSE, output = c("pf", "d"), seed = NULL) {
   initval <- 1.3

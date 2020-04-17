@@ -64,13 +64,16 @@ For further details the user can refer to Phillips et al. (2015) p. 1054.
 }
 \examples{
 # 100 periods with bubble origination date 40 and termination date 55
-sim_psy1(n = 100)
+sim_psy1(n = 100, seed = 123) \%>\%
+  autoplot()
 
 # 200 periods with bubble origination date 80 and termination date 110
-sim_psy1(n = 200)
+sim_psy1(n = 200, seed = 123) \%>\%
+  autoplot()
 
 # 200 periods with bubble origination date 100 and termination date 150
-sim_psy1(n = 200, te = 100, tf = 150)
+sim_psy1(n = 200, te = 100, tf = 150, seed = 123) \%>\%
+  autoplot()
 }
 \references{
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:

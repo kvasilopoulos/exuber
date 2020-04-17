@@ -67,9 +67,11 @@ All default parameter values are those suggested by West (1988).
 \examples{
 # Price is the sum of the bubble and fundamental components
 # 20 is the scaling factor
-pf <- sim_div(100, r = 0.05, output = "pf")
-pb <- sim_evans(100, r = 0.05)
+pf <- sim_div(100, r = 0.05, output = "pf", seed = 123)
+pb <- sim_evans(100, r = 0.05, seed = 123)
 p <- pf + 20 * pb
+
+autoplot(p)
 }
 \references{
 West, K. D. (1988). Dividend innovations and stock price volatility.

@@ -42,7 +42,7 @@ datestamp(rsim_data, min_duration = rot)
 
 # Summary, diagnostics and datestamp (Wild Bootstrapped critical values)
 
-wb <- wb_cv(rsim_data)
+wb <- wb_cv(sim_data)
 
 summary(rsim_data, cv = wb)
 
