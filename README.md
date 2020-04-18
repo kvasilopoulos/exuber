@@ -3,15 +3,18 @@
 
 # exuber <a href='https://kvasilopoulos.github.io/exuber'><img src='man/figures/logo.png' align="right" height="127.5" /></a>
 
+<!-- badges: start -->
+
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/exuber)](https://cran.r-project.org/package=exuber)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![R build
-status](https://github.com/kvasilopoulos/exuber/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/exuber/actions)1
+status](https://github.com/kvasilopoulos/exuber/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/exuber/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exuber?branch=master)
+<!-- badges: end -->
 
 Testing for and dating periods of explosive dynamics (exuberance) in
 time series using the univariate and panel recursive unit root tests
