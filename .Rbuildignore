@@ -19,3 +19,4 @@
 ^Makefile$
 ^doc$
 ^Meta$
+^\.covrignore$

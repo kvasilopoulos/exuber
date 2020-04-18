@@ -24,17 +24,6 @@
   invisible()
 }
 
-# .onAttach <- function(libname, pkgname) {
-#   if (!has_data()) {
-#     msg <- paste(
-#       "To use this package more efficiently, you need to install",
-#       "the {exuberdata} package which contains simulated critical values.",
-#       "To install run `install_exuberdata()"
-#     )
-#     packageStartupMessage(msg)
-#   }
-# }
-
 #' Convenience function to install exuberdata package
 #'
 #' This function wraps the \code{install.packages} function and offers a faster
@@ -70,6 +59,20 @@ if (getRversion() >= "2.15.1") {
       "value", "value_x", "value_y", "stat", "pval", "panel", "Duration")
   )
 }
+
+
+# use exuberdata ----------------------------------------------------------
+
+# .onAttach <- function(libname, pkgname) {
+#   if (!has_data()) {
+#     msg <- paste(
+#       "To use this package more efficiently, you need to install",
+#       "the {exuberdata} package which contains simulated critical values.",
+#       "To install run `install_exuberdata()"
+#     )
+#     packageStartupMessage(msg)
+#   }
+# }
 
 # citation ----------------------------------------------------------------
 
