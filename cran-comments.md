@@ -1,8 +1,8 @@
 ## Test environments
 
-* local OS MS install, R 3.6.0
+* local OS MS install, R 3.6.3
 * Continuous Integration
-  * GitHub actions (ubuntu-16.04): 3.2, 3.3, oldrel, release, devel
+  * GitHub actions (ubuntu-16.04): oldrel, release, devel
   * GitHub actions (windows): release
   * Github actions (OS X): release, devel
 * Rhub
