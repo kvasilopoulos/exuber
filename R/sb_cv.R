@@ -46,17 +46,17 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
     registerDoSNOW(cl)
     on.exit(parallel::stopCluster(cl))
   }
+  set_rng(seed)
 
   `%fun%` <- if (do_par) `%dopar%` else `%do%`
 
   edf_bsadf_panel <- foreach(
     i = 1:nboot,
-    .export = c("rls_gsadf", "unroot", "set_rng"),
+    .export = c("rls_gsadf", "unroot"),
     .combine = "cbind",
     .options.snow = pb_opts,
     .inorder = FALSE
   ) %fun% {
-    set_rng(seed)
     boot_index <- sample(1:nres, replace = TRUE)
     if (show_pb && !do_par) setTxtProgressBar(pb, i)
     for (j in 1:nc) {
