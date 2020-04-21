@@ -87,7 +87,7 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
   acc_series <- if (include_rejected) {
     if (is_sb(cv)) "panel" else series_names(object)
   } else {
-    diagnostics(object, cv)$accepted
+    diagnostics_internal(object, cv)$accepted
   }
 
   sel_series <- select_series %||% series_names(object)
