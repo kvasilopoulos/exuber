@@ -20,7 +20,6 @@ diagnostics.default <- function(object, cv = NULL, ...) {
   )
 }
 
-
 #' @rdname diagnostics
 #' @importFrom dplyr case_when
 #' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".
@@ -34,62 +33,38 @@ diagnostics.radf <- function(object, cv = NULL,
   assert_match(object, cv)
   option <- match.arg(option)
 
-  x <- object
-  y <- cv
-
-  if (option == "gsadf") {
-    tstat <- if (is_sb(y)) x$gsadf_panel else x$gsadf
-
-    if (is_mc(y)) {
-      cv1 <- y$gsadf_cv[1]
-      cv2 <- y$gsadf_cv[2]
-      cv3 <- y$gsadf_cv[3]
-    } else if (is_wb(y)) {
-      cv1 <- y$gsadf_cv[, 1]
-      cv2 <- y$gsadf_cv[, 2]
-      cv3 <- y$gsadf_cv[, 3]
-    } else if (is_sb(y)) {
-      cv1 <- y$gsadf_panel_cv[1]
-      cv2 <- y$gsadf_panel_cv[2]
-      cv3 <- y$gsadf_panel_cv[3]
-    }
-  } else if (option == "sadf") {
-
-    if (is_sb(y)) {
-      stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
-    }
-    tstat <- x$sadf
-
-    if (is_mc(y)) {
-      cv1 <- y$sadf_cv[1]
-      cv2 <- y$sadf_cv[2]
-      cv3 <- y$sadf_cv[3]
-    } else if (is_wb(y)) {
-      cv1 <- y$sadf_cv[, 1]
-      cv2 <- y$sadf_cv[, 2]
-      cv3 <- y$sadf_cv[, 3]
-    }
+  if (option == "sadf" && is_sb(cv)) {
+    stop_glue("'sadf' does not apply for sieve bootstrapped critical values")
+  }
+  snames <- series_names(object)
+  if (is_sb(cv)) {
+    out <- glance_join(object, cv) %>%
+      pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv")
+  } else {
+    out <- tidy_join(object, cv) %>%
+      pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv") %>%
+      filter(name  == option)
   }
 
   # in case of simulation exercises
   dummy <- case_when(
-    tstat < cv2 ~ 0,
-    tstat >= cv2 ~ 1
+    out$tstat < out$cv95 ~ 0,
+    out$tstat >= out$cv95 ~ 1
   )
 
   sig <- case_when(
-    tstat < cv1 ~ "Reject",
-    tstat >= cv1 & tstat < cv2 ~ "10%",
-    tstat >= cv2 & tstat < cv3 ~ "5%",
-    tstat >= cv3 ~ "1%"
+    out$tstat < out$cv90 ~ "Reject",
+    out$tstat >= out$cv90 & out$tstat < out$cv95 ~ "10%",
+    out$tstat >= out$cv95 & out$tstat < out$cv99 ~ "5%",
+    out$tstat >= out$cv99 ~ "1%"
   )
 
-  if (is_sb(y)) {
+  if (is_sb(cv)) {
     accepted <- ifelse(length(dummy), "panel", NA)
     rejected <- ifelse(length(dummy), NA, "panel")
   } else {
-    accepted <- series_names(x)[as.logical(dummy)]
-    rejected <- series_names(x)[!as.logical(dummy)]
+    accepted <- series_names(object)[as.logical(dummy)]
+    rejected <- series_names(object)[!as.logical(dummy)]
   }
 
   structure(
@@ -99,9 +74,9 @@ diagnostics.radf <- function(object, cv = NULL,
       sig = sig,
       dummy = dummy
     ),
-    panel = is_sb(y),
-    series_names = if (!is_sb(y)) series_names(x),
-    method = get_method(y),
+    panel = is_sb(cv),
+    series_names = if (!is_sb(cv)) series_names(object),
+    method = get_method(cv),
     option = option,
     class = "diagnostics"
   )
@@ -119,6 +94,17 @@ tidy.diagnostics <- function(x, ...) {
   )
 }
 
+diagnostics_internal <- function(...) {
+  dg <- diagnostics(...)
+  if (all(dg$dummy == 0)) {
+    stop_glue("Cannot reject H0 for significance level of 5%")
+  }
+  if (purrr::is_bare_character(dg$accepted, n = 0)) {
+    stop_glue("Cannot reject H0")
+  }
+  dg
+}
+
 
 #' @importFrom cli cat_line cat_rule
 #' @importFrom glue glue
@@ -126,12 +112,7 @@ tidy.diagnostics <- function(x, ...) {
 #' @export
 print.diagnostics <- function(x, ...) {
 
-  # if (all(x$dummy == 0)) {
-  #   return(message_glue("Cannot reject H0 for significance level of 5%"))
-  # }
-  # if (purrr::is_bare_character(x$accepted, n = 0)) {
-  #   return(message_glue("Cannot reject H0"))
-  # }
+
 
   cli::cat_line()
   cli::cat_rule(

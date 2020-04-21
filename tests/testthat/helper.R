@@ -19,6 +19,7 @@ dta_na[1, 3] <- NA
 radf_dta <- radf(dta)
 radf_dta_lag1 <- radf(dta, lag = 1)
 radf_dta_lag2 <- radf(dta, lag = 2)
+radf_dta_wdate <- radf(dta_df)
 
 # Create a series "Reject"
 set.seed(1333)

@@ -10,6 +10,8 @@
 #' @return Returns a list of summary statistics,
 #' the t-statistic and the critical values of the ADF, SADF and GSADF.
 #'
+#' @importFrom tidyr pivot_wider
+#' @importFrom dplyr filter select
 #' @examples
 #' \donttest{
 #' # Simulate bubble processes, compute the t-stat and critical values
@@ -46,47 +48,27 @@ summary.radf <- function(object, cv = NULL, ...) {
   assert_class(cv, "cv")
   assert_match(object, cv)
 
-  x <- object
-  y <- cv
-
   ret <- list()
-  if (is_wb(y)) {
-    for (i in seq_along(series_names(x))) {
-      df1 <- c(x$adf[i], y$adf_cv[i, ])
-      df2 <- c(x$sadf[i], y$sadf_cv[i, ])
-      df3 <- c(x$gsadf[i], y$gsadf_cv[i, ])
-      df <- data.frame(
-        rbind(df1, df2, df3),
-        row.names = c("ADF", "SADF", "GSADF")
-      )
-      colnames(df) <- c("t-stat", "90%", "95%", "99%")
-      ret[[i]] <- df
+  if (is_sb(cv)) {
+    ret[["panel"]] <- glance_join(object, cv) %>%
+      pivot_wider(names_from = sig, values_from = crit) %>%
+      select(-id)
+  } else{
+    series <- series_names(object)
+    sm <- tidy_join(object, cv) %>%
+      pivot_wider(names_from = sig, values_from = crit)
+    for (nms in series) {
+      ret[[nms]] <- filter(sm, id == nms) %>%
+        select(-id)
     }
-    names(ret) <- series_names(x)
-  } else if (is_mc(y)) {
-    for (i in seq_along(series_names(x))) {
-      df1 <- c(x$adf[i], y$adf_cv)
-      df2 <- c(x$sadf[i], y$sadf_cv)
-      df3 <- c(x$gsadf[i], y$gsadf_cv)
-      df <- data.frame(
-        rbind(df1, df2, df3),
-        row.names = c("ADF", "SADF", "GSADF")
-      )
-      colnames(df) <- c("tstat", "90%", "95%", "99%")
-      ret[[i]] <- df
-    }
-    names(ret) <- series_names(x)
-  } else if (is_sb(y)) {
-    ret <- cbind(x$gsadf_panel, t(y$gsadf_panel_cv))
-    colnames(ret) <- c("t-stat", "90%", "95%", "99%")
   }
 
  ret %>%
    add_attr(
-     minw = get_minw(x),
-     lag = get_lag(x),
-     method = get_method(y),
-     iter = get_iter(y)
+     minw = get_minw(object),
+     lag = get_lag(object),
+     method = get_method(cv),
+     iter = get_iter(cv)
    ) %>%
    add_class("summary.radf")
 
@@ -94,8 +76,7 @@ summary.radf <- function(object, cv = NULL, ...) {
 
 #' @importFrom glue glue
 #' @export
-print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
-                             ...) {
+print.summary.radf <- function(x, ...) {
 
   iter_char <- if (is_mc(x)) "nrep" else "nboot"
   cat_line()
@@ -103,19 +84,8 @@ print.summary.radf <- function(x, digits = max(3L, getOption("digits") - 3L),
     left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
     right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})")
   )
-  if (is_sb(x)) {
-    cat("\n Panel\n")
-    pp <- x[1, , drop = FALSE]
-    rownames(pp) <- "GSADF"
-    print(format(pp, digits = digits), print.gap = 2L, quote = FALSE)
-  } else {
-    # cat_line()
-    for (i in seq_along(x)) {
-      cat("\n", names(x)[i], "\n")
-      print(format(x[[i]], digits = digits), print.gap = 2L)
-    }
-  }
   cat_line()
+  print.listof(x, ...)
 }
 
 
