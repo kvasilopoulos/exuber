@@ -7,9 +7,7 @@ fix_author:
 
 cran_check:
 	Rscript -e "devtools::check_win_devel(quiet = TRUE)"
-	Rscript -e "rhub::check_for_cran()"
-	Rscript -e "rhub::check(platform = 'ubuntu-rchk')"
-	Rscript -e "rhub::check_with_sanitizers()"
+	Rscript -e "devtools::check_rhub(interactive = FALSE)"
 
 check_resolve:
 	git diff -S "<<<<<<< HEAD" -S "=======" -S ">>>>>>> $(git name-rev --name-only MERGE_HEAD)" HEAD
