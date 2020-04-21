@@ -195,19 +195,19 @@
 <p>Custom plotting is also very easy with the <code>augment_join</code> function, that merge the estimation and and critical values results in a ggplot2-friendly way.</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tidy_join.html">augment_join</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)
 <span class="no">joined</span>
-<span class="co">#&gt; # A tibble: 1,920 x 6</span>
-<span class="co">#&gt;    index id       name   tstat sig    crit</span>
-<span class="co">#&gt;    &lt;dbl&gt; &lt;fct&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1    21 sim_psy1 badf  -2.08  90    -0.44</span>
-<span class="co">#&gt;  2    22 sim_psy1 badf  -2.31  90    -0.44</span>
-<span class="co">#&gt;  3    23 sim_psy1 badf  -2.39  90    -0.44</span>
-<span class="co">#&gt;  4    24 sim_psy1 badf  -2.26  90    -0.44</span>
-<span class="co">#&gt;  5    25 sim_psy1 badf  -2.08  90    -0.44</span>
-<span class="co">#&gt;  6    26 sim_psy1 badf  -1.79  90    -0.44</span>
-<span class="co">#&gt;  7    27 sim_psy1 badf  -1.00  90    -0.44</span>
-<span class="co">#&gt;  8    28 sim_psy1 badf  -1.34  90    -0.44</span>
-<span class="co">#&gt;  9    29 sim_psy1 badf  -1.28  90    -0.44</span>
-<span class="co">#&gt; 10    30 sim_psy1 badf  -0.800 90    -0.44</span>
+<span class="co">#&gt; # A tibble: 1,920 x 7</span>
+<span class="co">#&gt;      key index id       name   tstat sig    crit</span>
+<span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1    21    21 sim_psy1 badf  -2.08  90    -0.44</span>
+<span class="co">#&gt;  2    22    22 sim_psy1 badf  -2.31  90    -0.44</span>
+<span class="co">#&gt;  3    23    23 sim_psy1 badf  -2.39  90    -0.44</span>
+<span class="co">#&gt;  4    24    24 sim_psy1 badf  -2.26  90    -0.44</span>
+<span class="co">#&gt;  5    25    25 sim_psy1 badf  -2.08  90    -0.44</span>
+<span class="co">#&gt;  6    26    26 sim_psy1 badf  -1.79  90    -0.44</span>
+<span class="co">#&gt;  7    27    27 sim_psy1 badf  -1.00  90    -0.44</span>
+<span class="co">#&gt;  8    28    28 sim_psy1 badf  -1.34  90    -0.44</span>
+<span class="co">#&gt;  9    29    29 sim_psy1 badf  -1.28  90    -0.44</span>
+<span class="co">#&gt; 10    30    30 sim_psy1 badf  -0.800 90    -0.44</span>
 <span class="co">#&gt; # … with 1,910 more rows</span></pre></body></html></div>
 <p>The output of <code>augment_join</code> returns data in tidy format and the offers full flexibility to the user. After this point plotting becomes extremely trivial.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">%&gt;%</span>
