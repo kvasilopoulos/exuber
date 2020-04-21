@@ -82,7 +82,7 @@ arma::vec rls_gsadf(const arma::mat & yxmat, int min_win, int lag = 0) {
           b -= g * tsxn * as_scalar(sxn * b - syn);
         }
         res = sy - sx * b;
-        sqres = sum(square(res));
+        sqres = sum(trans(res)*res);
         vares = sqres/(start+i-j-nc);
         sb = sqrt(as_scalar(vares) * diagvec(g));
         tstat(i, j) = (b(1) - 1)/ sb(1);
