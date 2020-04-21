@@ -2,7 +2,7 @@
 
 * local OS MS install, R 3.6.3
 * Continuous Integration
-  * GitHub actions (ubuntu-16.04): oldrel, release, devel
+  * GitHub actions (ubuntu-16.04): release
   * GitHub actions (windows): release
   * Github actions (OS X): release, devel
 * Rhub
@@ -25,10 +25,18 @@ There were no ERRORs and WARNINGs, with local checks or on remote checks.
 
 * checking CRAN incoming feasibility (26.4s) ... NOTE
 Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
-   
-  - Uses the superseded package: 'doSNOW (>= 1.0.16)' 
+
+Suggests or Enhances not in mainstream repositories:
+  exuberdata
+Availability using Additional_repositories specification:
+  exuberdata   yes   https://kvasilopoulos.github.io/drat
+
+Uses the superseded package: 'doSNOW (>= 1.0.16)'
+
+  **(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)**
   
-  *(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)*
+* checking package dependencies ... NOTE
+Package suggested but not available for checking: 'exuberdata'
 
 ## Reverse dependencies
 
