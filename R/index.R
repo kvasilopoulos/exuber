@@ -45,7 +45,7 @@ index.datestamp <- index.radf <- function(x, trunc = FALSE, ...) {
 #' @export
 index.cv <- function(x, trunc = FALSE, ...) {
   if (is_mc(x)) {
-    stop_glue("method `index` is not suppoted for {get_method(x)}")
+    stop_glue("`index` is not suppoted for class `mc_cv`.")
   }
   value <- attr(x, "index")
   if (trunc) {

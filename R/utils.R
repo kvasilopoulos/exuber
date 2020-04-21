@@ -51,10 +51,10 @@ get_rng_state <- function(seed) {
 retrieve_crit <- function(x) {
   nr <- NROW(index(x))
   if (nr > 5 && nr <= length(exuber::radf_crit)) {
-    message("Using 'radf_crit' as 'cv'argument..")
+    message("Using 'radf_crit' as 'cv'argument.")
     return(exuber::radf_crit[[nr]])
   } else if (nr > length(exuber::radf_crit) && nr <= 2000) {
-    message("Using 'radf_crit2' as 'cv'argument..")
+    message("Using 'exuberdata::radf_crit2' as 'cv'argument.")
     need_exuberdata()
     return(exuberdata::radf_crit2[[nr]])
   }else {
@@ -130,52 +130,3 @@ is_wb <- function(y) {
 is_sb <- function(y) {
   get_method(y) %||% FALSE == "Sieve Bootstrap"
 }
-
-
-# seq ---------------------------------------------------------------------
-
-extract_cv <- function(y, which = "bsadf_cv", lg = 0) {
-
-  if (is_sb(y)) {
-    stop_glue("cannot extract from `sb_cv()`")
-  }
-  out <- pluck(y, which)
-  if (lg != 0) {
-    if (is_wb(y)) {
-      out <- out[-c(1:lg), , ]
-    }else{
-      out <- out[-c(1:lg), ]
-    }
-  }
-  if (is_wb(y)) {
-    out <- out[, 2, ]
-  }else{
-    out <- out[, 2]
-  }
-  out
-}
-
-
-
-
-
-# printing ----------------------------------------------------------------
-
-# cat_line <- function(...) {
-#   glue::glue_collapse(..., sep  = "")
-# }
-
-# width <- getOption("width")
-# line <- paste(rep("-", width), collapse = "")
-#
-# rule <- function(left = "", right = "") {
-#   res <- if (nchar(left) && nchar(right)) {
-#     paste0()
-#   }else if (nchar(left)) {
-#
-#   }else{
-#     cat(line)
-#   }
-#   res
-# }
-
