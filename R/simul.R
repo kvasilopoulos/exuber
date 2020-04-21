@@ -63,7 +63,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
 
-  rng_state <- set_rng(seed = seed)
+  set_rng(seed)
 
   delta <- 1 + c * n ^ (-alpha)
   y <- 100
@@ -81,7 +81,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   }
 
   y %>%
-    add_attr(seed = rng_state) %>%
+    add_attr(seed = get_rng_state(seed)) %>%
     add_class(class = "sim")
 }
 
@@ -161,7 +161,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
 
-  rng_state <- set_rng(seed = seed)
+  set_rng(seed)
 
   delta <- 1 + c * n ^ (-alpha)
   y <- 100
@@ -185,7 +185,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
   }
 
   y %>%
-    add_attr(seed = rng_state) %>%
+    add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
 }
 
@@ -231,7 +231,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
   stopifnot(sigma >= 0)
   stopifnot(r >= 0)
 
-  rng_state <- set_rng(seed = seed)
+  set_rng(seed)
 
   b <- b0
   theta <- rbinom(n, 1, pi)
@@ -250,7 +250,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
   }
 
   b %>%
-    add_attr(seed = rng_state) %>%
+    add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
 }
 
@@ -309,7 +309,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
   assert_between(pi, 0, 1)
   stopifnot(r >= 0)
 
-  rng_state <- set_rng(seed = seed)
+  set_rng(seed)
 
   y <- rnorm(n, 0, tau)
   u <- exp(y - tau ^ 2 / 2)
@@ -326,7 +326,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
   }
 
   b %>%
-    add_attr(seed = rng_state) %>%
+    add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
 }
 
@@ -392,8 +392,7 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   stopifnot(is.logical(log))
   return <- match.arg(output)
 
-  rng_state <- set_rng(seed = seed)
-
+  set_rng(seed)
   d <- stats::filter(mu + c(initval, rnorm(n - 1, 0, sigma)),
     c(1),
     init = 1.3, method = "recursive"
@@ -410,7 +409,7 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   out <- if (return == "pf") pf else d
 
   out %>%
-    add_attr(seed = rng_state) %>%
+    add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
 
 }

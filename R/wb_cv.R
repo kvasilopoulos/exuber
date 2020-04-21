@@ -40,7 +40,7 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
     dy <- diff(y[, j])
     results <- foreach(
       i = 1:nboot,
-      .export = c("rls_gsadf", "unroot", "set_rng"),
+      .export = c("rls_gsadf", "unroot"),
       .combine = "cbind",
       .options.snow = pb_opts,
       .inorder = FALSE

@@ -29,7 +29,7 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
   set_rng(seed)
   results <- foreach(
     i = 1:nrep,
-    .export = c("rls_gsadf", "unroot", "set_rng"),
+    .export = c("rls_gsadf", "unroot"),
     .combine = "cbind",
     .options.snow = pb_opts,
     .inorder = FALSE
