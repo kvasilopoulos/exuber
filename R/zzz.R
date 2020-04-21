@@ -56,7 +56,8 @@ if (getRversion() >= "2.15.1") {
   utils::globalVariables(
     c("adf", "sadf", "gsadf", "badf", "bsadf", "bsadf_panel", "gsadf_panel",
       "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
-      "value", "value_x", "value_y", "stat", "pval", "panel", "Duration")
+      "value", "value_x", "value_y", "stat", "pval", "panel", "Duration",
+      "ds_lgl")
   )
 }
 
