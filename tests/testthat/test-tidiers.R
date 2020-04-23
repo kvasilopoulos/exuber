@@ -8,7 +8,7 @@ test_that("tidy output", {
   expect_equal(names(tidy(mc, format = "long")), c("name", "sig", "crit"))
   expect_equal(names(tidy(wb)), c("id", "sig", nms))
   expect_equal(names(tidy(wb, format = "long")), c("id", "name", "sig", "crit"))
-  expect_equal(names(tidy(sb)), c("sig", "gsadf_panel"))
+  expect_equal(names(tidy(sb)), c("id","sig", "gsadf_panel"))
   expect_equal(names(tidy(sb, format = "long")), c("id", "name", "sig", "crit"))
 
 })

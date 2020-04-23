@@ -36,15 +36,16 @@ tidy.radf <- function(x, format = c("wide", "long"), ...) {
     keep(names(.) %in% c("adf", "sadf", "gsadf")) %>%
     map(enframe) %>%
     reduce(full_join, by = "name") %>%
-    set_names(c("id", "adf", "sadf", "gsadf"))
+    set_names(c("id", "adf", "sadf", "gsadf")) %>%
+    mutate(id = factor(id, series_names(x)))
 
   if (format == "long") {
     tbl_radf <-
       tbl_radf %>%
       gather(name, tstat, -id) %>%
+      mutate(name = factor(name, levels = c("adf", "sadf", "gsadf"))) %>%
       arrange(id)
   }
-
   tbl_radf
 }
 
@@ -71,7 +72,7 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
       tbl_radf <-
         tbl_radf %>%
         gather(name, tstat, -index, -key, factor_key = TRUE) %>%
-        mutate(id = "panel") %>%
+        mutate(id = factor("panel")) %>%
         select(key, index, id, name, tstat)
     }
   }else{
@@ -96,6 +97,7 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
       tbl_radf <-
         tbl_radf %>%
         gather(name, tstat, -index, -id, -key) %>%
+        mutate(name = factor(name, levels = c("badf", "bsadf"))) %>%
         arrange(id, name)
     }
   }
@@ -120,14 +122,12 @@ glance.radf <- function(x, format = c("wide", "long"), ...) {
     tbl_radf <-
       tbl_radf %>%
       gather(name, tstat) %>%
-      mutate(id = "panel") %>%
+      mutate(
+        id = factor("panel"),
+        name = factor(name)) %>%
       select(id, name, tstat)
   }
   tbl_radf
 }
-
-
-
-
 
 

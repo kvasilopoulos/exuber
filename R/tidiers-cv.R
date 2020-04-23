@@ -43,6 +43,7 @@ tidy.mc_cv <- function(x, format = c("wide", "long"), ...) {
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
         gather(name, crit, -sig) %>%
+        mutate(name = factor(name, levels = c("adf", "sadf", "gsadf"))) %>%
         select(name, sig, crit)
     }
 
@@ -64,11 +65,13 @@ tidy.wb_cv <- function(x, format = c("wide", "long"), ...) {
             gather(name, value, -rowname)) %>%
       reduce(full_join, by = c("rowname", "name")) %>%
       set_names(c("id", "sig", "adf", "sadf", "gsadf")) %>%
-      mutate(sig = gsub("%", "", sig) %>% as.factor())
+      mutate(sig = gsub("%", "", sig) %>% as.factor()) %>%
+      mutate(id = factor(id, levels = series_names(x)))
 
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
         gather(name, crit, -id, -sig) %>%
+        mutate(name = factor(name, levels = c("adf", "sadf", "gsadf"))) %>%
         select(id, name, sig, crit)
     }
 
@@ -85,13 +88,14 @@ tidy.sb_cv <- function(x, format = c("wide", "long"), ...) {
       pluck("gsadf_panel_cv") %>%
       enframe(name = "sig", value = "gsadf_panel") %>%
       mutate(sig = sub("%$", "", sig) %>% as.factor()) %>%
-      select(sig, gsadf_panel)
+      mutate(id = factor("panel")) %>%
+      select(id, sig, gsadf_panel)
 
     if (format == "long") {
 
       tbl_cv <- tbl_cv %>%
-        mutate(id = "panel") %>%
         gather(name, crit, -id, -sig) %>%
+        mutate(name = factor(name)) %>%
         select(id, name, sig, crit)
     }
 
@@ -128,6 +132,7 @@ augment.mc_cv <- function(x, format = c("wide", "long"), ...) {
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
         gather(name, crit, -sig, -key) %>%
+        mutate(name = factor(name, levels = c("badf", "bsadf"))) %>%
         select(key, name, sig, crit)
     }
     tbl_cv
@@ -169,6 +174,7 @@ augment.wb_cv <- function(x, format = c("wide", "long"), ...) {
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
         gather(id, crit, -key, -index, -sig, -name, factor_key = TRUE) %>%
+        mutate(name = factor(name, levels = c("badf", "bsadf"))) %>%
         select(key, index, id, name, sig, crit)
     }
     tbl_cv
@@ -192,7 +198,7 @@ augment.sb_cv <- function(x, format = c("wide", "long"), ...) {
     if (format == "long") {
       tbl_cv <- tbl_cv %>%
         gather(name, crit, -sig, -index, -key, factor_key = TRUE) %>%
-        mutate(id = "panel") %>%
+        mutate(id = factor("panel"), name = as.factor(name)) %>%
         select(key, index, id, name, sig, crit)
     }
   tbl_cv
@@ -203,10 +209,10 @@ augment.sb_cv <- function(x, format = c("wide", "long"), ...) {
 
 #' Tidying *_distr objects
 #'
-#' tidy `*_distr` takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
+#' tidy `distr` objects. Takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
 #' a tibble.
 #'
-#' @param x An `*_dist` object
+#' @param x An `*_distr` object
 #' @param ... Additional arguments. Not used.
 #'
 #' @return A [tibble::tibble()]
