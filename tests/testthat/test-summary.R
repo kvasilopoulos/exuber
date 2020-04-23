@@ -16,12 +16,12 @@ test_that("printing coverage", {
 
 test_that("class checks", {
   # msgx <- "Argument 'object' should be of class 'radf'"
-  msgy <- "Argument 'cv' should be of class 'cv'"
+  msg_y <- "Argument 'cv' should be of class 'cv'"
   # expect_error(diagnostics(dta, mc), NA, class = "error")
   # expect_error(datestamp(dta, mc), msgx)
-  expect_error(diagnostics(radf_dta, dta), msgy)
-  expect_error(summary(radf_dta, dta), msgy)
-  expect_error(datestamp(radf_dta, dta), msgy)
+  expect_error(diagnostics(radf_dta, dta), msg_y)
+  expect_error(summary(radf_dta, dta), msg_y)
+  expect_error(datestamp(radf_dta, dta), msg_y)
 })
 
 capture_print <- function(x, msg = "Cannot reject H0") {
@@ -34,7 +34,7 @@ test_that("error diagnostics", {
   expect_true(
     capture_print(
       diagnostics(radf_95, mc),
-      msg = "Rejects H0 for significance level of 10%")
+      msg = "Rejects H0 at the 10% significance level.")
   )
 })
 
@@ -72,7 +72,7 @@ withr::with_options(
     expect_error(datestamp(radf_dta, mc, option = "sadf"), regexp = NA)
     expect_error(autoplot(radf_dta, mc), regexp = NA)
 
-    # wokr here ---------------------------------------------------------------
+    # work here ---------------------------------------------------------------
 
     expect_error(autoplot(radf_dta, mc, option = "sadf"), regexp = NA)
   })

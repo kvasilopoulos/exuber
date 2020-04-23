@@ -5,11 +5,11 @@
 #'
 #' @inheritParams datestamp.radf
 #'
-#' @param include_rejected If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
+#' @param include_negative If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
 #' @param select_series If not NULL, only plot with names or column number matching this regular expression will be executed.
 #' @param shade_opt options for the shading of the graph, usually used through \code{shade} functions.
 #' @param ... further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
-#' @param include argument name is deprecated and substituted with `include_rejected`.
+#' @param include argument name is deprecated and substituted with `include_negative`.
 #' @param select argument name is deprecated and substituted with `select_series`.
 #'
 #' @importFrom dplyr filter
@@ -57,12 +57,14 @@
 #' autoplot(rsim_data) +
 #'   theme(legend.position = "right")
 #'  }
-autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
-                          select_series = NULL, option = c("gsadf", "sadf"),
+autoplot.radf <- function(object, cv = NULL,
+                          option = c("gsadf", "sadf"),
+                          select_series = NULL,
+                          include_negative = FALSE,
                           shade_opt = shade(),
                           include = "DEPRECATED", select = "DEPRECATED", ...) {
 
-  deprecate_arg_warn(include, include_rejected)
+  deprecate_arg_warn(include, include_negative)
   deprecate_arg_warn(select, select_series)
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "cv")
@@ -84,15 +86,15 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     select_series <- "panel"
   }
 
-  acc_series <- if (include_rejected) {
+  pos_series <- if (include_negative) {
     if (is_sb(cv)) "panel" else series_names(object)
   } else {
-    diagnostics_internal(object, cv)$accepted
+    diagnostics_internal(object, cv)$positive
   }
 
   sel_series <- select_series %||% series_names(object)
-  series <- intersect(acc_series, sel_series)
-  if (rlang::is_bare_character(acc_series, n = 0)) {
+  series <- intersect(pos_series, sel_series)
+  if (rlang::is_bare_character(pos_series, n = 0)) {
     stop_glue("available series are not acceptable for plotting")
   }
 
@@ -107,8 +109,8 @@ autoplot.radf <- function(object, cv = NULL, include_rejected = FALSE,
     scale_exuber_manual() +
     theme_exuber()
 
-  check_rejected <- all(series %in% diagnostics(object, cv)$rejected)
-  if (!is.null(shade_opt) && !check_rejected) {
+  check_negative <- all(series %in% diagnostics(object, cv)$negative)
+  if (!is.null(shade_opt) && !check_negative) {
     ds_data <- tidy(datestamp(object, cv)) %>%
       filter(id %in% series) %>%
       droplevels()
