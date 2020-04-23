@@ -11,8 +11,8 @@
 #' @return Returns a list of values for each explosive sub-period, giving the origin
 #' and termination dates as well as the number of periods explosive behavior lasts.
 #' @details
-#' Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
-#' respectively, for all series in the time period. This output can be used as
+#' Datestamp also stores a vector in {0,1} that corresponds to {positive, negative}
+#' respectively, for all series throughout the time period. This output can be used as
 #' a dummy that indicates the occurrence of a bubble.
 #'
 #' Setting \code{min_duration} removes very short episode of exuberance.
@@ -53,7 +53,7 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
   idx <- index(object)
   snames <- series_names(object)
   ds <-  diagnostics_internal(object, cv, option = option)
-  acc <- ds[["accepted"]]
+  pos <- ds$positive
 
   option <- if (option == "gsadf") "bsadf" else  "badf"
   ds_tbl <- augment_join(object, cv) %>%
@@ -61,7 +61,7 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
     mutate(ds_lgl = tstat > crit)
 
   ds <- list()
-  for (nm in acc) {
+  for (nm in pos) {
     ds[[nm]] <- filter(ds_tbl, id == nm) %>%
       pull(ds_lgl) %>%
       which()
@@ -72,15 +72,15 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
   # min_duration may cause to exclude periods or the whole sample
   min_reject <- map_lgl(ds_stamp, ~ length(.x) == 0)
   res <- ds_stamp_index[!min_reject]
-  names(res) <- acc[!min_reject]
+  names(res) <- pos[!min_reject]
   if (length(res) == 0) {
     stop_glue("Argument 'min_duration' excludes all explosive periods")
   }
   # store to dummy {0, 1}
-  reps <- if (is_sb(cv)) 1 else match(acc, series_names(object))
+  reps <- if (is_sb(cv)) 1 else match(pos, series_names(object))
   dms <- list(seq_along(idx), if (is_sb(cv)) "panel" else snames[reps])
-  dummy <- matrix(0, nrow = length(idx), ncol = length(acc), dimnames = dms)
-  for (z in seq_along(acc)) {
+  dummy <- matrix(0, nrow = length(idx), ncol = length(pos), dimnames = dms)
+  for (z in seq_along(pos)) {
     dummy[ds[[z]], z] <- 1
   }
 
