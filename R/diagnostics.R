@@ -1,13 +1,15 @@
 #' Diagnostics
 #'
-#' Finds the series that reject the null for at the 5\% significance level.
+#' Finds the series that reject the null hypothesis.
 #'
 #' @inheritParams summary.radf
 #' @param ... further arguments passed to methods.
 #'
-#' @return Returns a list with the series that reject and the series that do not reject the Null Hypothesis
+#' @return Returns a list with the series that reject (positive) and the series
+#' that do not reject (negative) the null hypothesis, and at what significance level.
+#'
 #' @details
-#' Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
+#' Diagnostics also stores a vector in {0,1} that corresponds to {postive, negative} respectively.
 #'
 #' @export
 diagnostics <- function(object, cv = NULL, ...) {
@@ -60,22 +62,22 @@ diagnostics.radf <- function(object, cv = NULL,
   )
 
   if (is_sb(cv)) {
-    accepted <- ifelse(length(dummy), "panel", NA)
-    rejected <- ifelse(length(dummy), NA, "panel")
+    positive <- ifelse(length(dummy), "panel", NA)
+    negative <- ifelse(length(dummy), NA, "panel")
   } else {
-    accepted <- series_names(object)[as.logical(dummy)]
-    rejected <- series_names(object)[!as.logical(dummy)]
+    positive <- snames[as.logical(dummy)]
+    negative <- snames[!as.logical(dummy)]
   }
 
   structure(
     list(
-      accepted = accepted,
-      rejected = rejected,
+      positive = positive,
+      negative = negative,
       sig = sig,
       dummy = dummy
     ),
     panel = is_sb(cv),
-    series_names = if (!is_sb(cv)) series_names(object),
+    series_names = if (!is_sb(cv)) snames,
     method = get_method(cv),
     option = option,
     class = "diagnostics"
@@ -88,8 +90,8 @@ tidy.diagnostics <- function(x, ...) {
   sig <- gsub("%", "", x$sig)
   tibble(
     "series" = snames,
-    "accepted" = ifelse(snames %in% x$accepted, TRUE, FALSE),
-    "rejected" = ifelse(snames %in% x$rejected, TRUE, FALSE),
+    "positive" = ifelse(snames %in% x$positive, TRUE, FALSE),
+    "negative" = ifelse(snames %in% x$negative, TRUE, FALSE),
     "sig" = as.factor(ifelse(sig == "Reject", NA, sig))
   )
 }
@@ -99,7 +101,7 @@ diagnostics_internal <- function(...) {
   if (all(dg$dummy == 0)) {
     stop_glue("Cannot reject H0 for significance level of 5%")
   }
-  if (purrr::is_bare_character(dg$accepted, n = 0)) {
+  if (purrr::is_bare_character(dg$positive, n = 0)) {
     stop_glue("Cannot reject H0")
   }
   dg
@@ -112,30 +114,26 @@ diagnostics_internal <- function(...) {
 #' @export
 print.diagnostics <- function(x, ...) {
 
-
-
   cli::cat_line()
   cli::cat_rule(
     left = glue('Diagnostics (option = {attr(x, "option")})'),
     right = get_method(x)
   )
   cli::cat_line()
-
   if (attr(x, "panel")) {
-
     if (x$sig == "Reject")
-      cat(" Cannot rejeact H0! \n")
+      cat(" Cannot rejeact H0 \n")
     else
-      cat(" Rejects H0 for significance level of", x$sig, "\n")
+      cat(" Rejects H0 at the", cli::col_red(x$sig), "significance level.\n")
   } else {
     width <- nchar(series_names(x))
     ngaps <- max(8, width) - width
     for (i in seq_along(series_names(x))) {
       cat(series_names(x)[i], ":" , rep(" ", ngaps[i]), sep = "")
       if (x$sig[i] == "Reject")
-        cat(" Cannot reject H0! \n")
+        cat(" Cannot reject H0 \n")
       else
-        cat(" Rejects H0 for significance level of", x$sig[i], "\n")
+        cat(" Rejects H0 at the", cli::col_red(x$sig[i]), "significance level.\n")
     }
   }
   cli::cat_line()
