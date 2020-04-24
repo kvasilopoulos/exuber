@@ -8,9 +8,9 @@
 \method{autoplot}{radf}(
   object,
   cv = NULL,
-  include_rejected = FALSE,
-  select_series = NULL,
   option = c("gsadf", "sadf"),
+  select_series = NULL,
+  include_negative = FALSE,
   shade_opt = shade(),
   include = "DEPRECATED",
   select = "DEPRECATED",
@@ -25,15 +25,15 @@ shade(min_duration = NULL, fill = "grey70", opacity = 0.5, ...)
 \item{cv}{An object of class "cv". The output of \code{\link[=mc_cv]{mc_cv()}},
 \code{\link[=wb_cv]{wb_cv()}} or \code{\link[=sb_cv]{sb_cv()}}}
 
-\item{include_rejected}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
 
 \item{select_series}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
+\item{include_negative}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
 
 \item{shade_opt}{options for the shading of the graph, usually used through \code{shade} functions.}
 
-\item{include}{argument name is deprecated and substituted with \code{include_rejected}.}
+\item{include}{argument name is deprecated and substituted with \code{include_negative}.}
 
 \item{select}{argument name is deprecated and substituted with \code{select_series}.}
 

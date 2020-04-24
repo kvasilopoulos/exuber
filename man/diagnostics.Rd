@@ -20,11 +20,12 @@ diagnostics(object, cv = NULL, ...)
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
 }
 \value{
-Returns a list with the series that reject and the series that do not reject the Null Hypothesis
+Returns a list with the series that reject (positive) and the series
+that do not reject (negative) the null hypothesis, and at what significance level.
 }
 \description{
-Finds the series that reject the null for at the 5\\% significance level.
+Finds the series that reject the null hypothesis.
 }
 \details{
-Diagnostics also stores a vector in {0,1} that corresponds to {reject, accept} respectively.
+Diagnostics also stores a vector in {0,1} that corresponds to {positive, negative} respectively.
 }

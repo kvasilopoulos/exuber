@@ -36,7 +36,5 @@ wb <- wb_cv(dta, nboot = 100)
 sb <- sb_cv(dta, nboot = 100, lag = 0)
 sb1 <- sb_cv(dta, nboot = 100, lag = 1)
 # sb2 <- sb_cv(dta, nboot = 100, lag = 2)
-warn_include <- "argument 'include' is redundant"
-warn_select <- "argument 'select' is redundant"
 
 # }

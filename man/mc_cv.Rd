@@ -5,9 +5,9 @@
 \alias{mc_distr}
 \title{Monte Carlo Critical Values}
 \usage{
-mc_cv(n, minw = NULL, nrep = 500L, seed = NULL)
+mc_cv(n, minw = NULL, nrep = 1000L, seed = NULL)
 
-mc_distr(n, minw = NULL, nrep = 500L, seed = NULL)
+mc_distr(n, minw = NULL, nrep = 1000L, seed = NULL)
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}

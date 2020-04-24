@@ -13,7 +13,7 @@
 \method{tidy}{sb_distr}(x, ...)
 }
 \arguments{
-\item{x}{An \verb{*_dist} object}
+\item{x}{An \verb{*_distr} object}
 
 \item{...}{Additional arguments. Not used.}
 }
@@ -21,7 +21,7 @@
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-tidy \verb{*_distr} takes an \code{mc_distr}, \code{wb_distr} or \code{sb_distr} object and returns
+tidy \code{distr} objects. Takes an \code{mc_distr}, \code{wb_distr} or \code{sb_distr} object and returns
 a tibble.
 }
 \examples{

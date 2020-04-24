@@ -34,7 +34,7 @@ test_that("error diagnostics", {
   expect_true(
     capture_print(
       diagnostics(radf_95, mc),
-      msg = "Rejects H0 at the 10% significance level.")
+      msg = "Rejects H0 at the 10% significance level")
   )
 })
 
