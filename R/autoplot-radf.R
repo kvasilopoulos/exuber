@@ -59,6 +59,7 @@
 #'  }
 autoplot.radf <- function(object, cv = NULL,
                           option = c("gsadf", "sadf"),
+                          min_duration = 0L,
                           select_series = NULL,
                           include_negative = FALSE,
                           shade_opt = shade(),
@@ -117,7 +118,7 @@ autoplot.radf <- function(object, cv = NULL,
     ds_data <- tidy(datestamp(object, cv, option = option)) %>%
       filter(id %in% series) %>%
       droplevels()
-    gg <- gg + shade_opt(ds_data)
+    gg <- gg + shade_opt(ds_data, min_duration)
   }
 
   if (length(series) > 1) {
@@ -137,9 +138,9 @@ autoplot.radf <- function(object, cv = NULL,
 #' @param fill the shade color that indicates the exuberance periods.
 #' @param opacity the opacity of the shade color aka alpha.
 #' @export
-shade <- function(min_duration = NULL, fill = "grey70", opacity = 0.5, ...) {
-  function(ds_data) {
-  filter(ds_data, Duration >= min_duration %||% 0) %>%
+shade <- function(fill = "grey70", opacity = 0.5, ...) {
+  function(ds_data, min_duration) {
+  filter(ds_data, Duration >= min_duration) %>%
     geom_rect(
       data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
       aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...

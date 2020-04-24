@@ -5,12 +5,14 @@
 \alias{tidy.datestamp}
 \title{Plotting and tidying datestamp objects}
 \usage{
-\method{autoplot}{datestamp}(object, trunc = TRUE, ...)
+\method{autoplot}{datestamp}(object, min_duration = 0L, trunc = TRUE, ...)
 
 \method{tidy}{datestamp}(x, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
+
+\item{min_duration}{the minimum duration.}
 
 \item{trunc}{default FALSE. If TRUE the index formed by truncating the value
 in the minimum window.}
