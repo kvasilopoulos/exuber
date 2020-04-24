@@ -74,15 +74,18 @@ autoplot.radf <- function(object, cv = NULL,
     stop_glue("argument 'option' cannot  be be set to 'sadf' ",
                  "when cv is of class 'sb_cv'")
   }
-  option <- if (option == "gsadf") "bsadf" else if (option == "sadf") "badf"
+  filter_option <- if (option == "gsadf") "bsadf" else if (option == "sadf") "badf"
 
   if (is_sb(cv)) {
     if (!is.null(select_series)) {
-      stop_glue("argument 'select_series' have to be set to NULL ",
+      warning_glue("argument 'select_series' have to be set to NULL ",
                 "when cv is of class 'sb_cv'")
     }
-
-    option <- "bsadf_panel" # overwrite option
+    if (!isFALSE(include_negative)) {
+      warning_glue("argument 'include_negative' have to be set to 'FALSE' ",
+                "when cv is of class 'sb_cv'")
+    }
+    filter_option <- "bsadf_panel" # overwrite option
     select_series <- "panel"
   }
 
@@ -100,7 +103,7 @@ autoplot.radf <- function(object, cv = NULL,
 
   dots <- rlang::dots_list(...)
   plot_data <- augment_join(object, cv) %>%
-    filter(id %in% series, sig == 95, name == option) %>%
+    filter(id %in% series, sig == 95, name == filter_option) %>%
     droplevels() %>%
     pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "stat")
   gg <-  plot_data %>%
@@ -111,7 +114,7 @@ autoplot.radf <- function(object, cv = NULL,
 
   check_negative <- all(series %in% diagnostics(object, cv)$negative)
   if (!is.null(shade_opt) && !check_negative) {
-    ds_data <- tidy(datestamp(object, cv)) %>%
+    ds_data <- tidy(datestamp(object, cv, option = option)) %>%
       filter(id %in% series) %>%
       droplevels()
     gg <- gg + shade_opt(ds_data)

@@ -55,9 +55,9 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
   ds <-  diagnostics_internal(object, cv, option = option)
   pos <- ds$positive
 
-  option <- if (option == "gsadf") "bsadf" else  "badf"
+  filter_option <- if (option == "gsadf") "bsadf" else  "badf"
   ds_tbl <- augment_join(object, cv) %>%
-    filter(sig == 95, name %in% c(option, "bsadf_panel")) %>%
+    filter(sig == 95, name %in% c(filter_option, "bsadf_panel")) %>% # either {bsadf, badf} or bsadf_panel
     mutate(ds_lgl = tstat > crit)
 
   ds <- list()
