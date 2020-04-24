@@ -113,7 +113,7 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #'
 #' autoplot(mdist)
 #' }
-mc_cv <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
+mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -150,7 +150,7 @@ mc_cv <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
   #' @rdname mc_cv
 #' @inheritParams mc_cv
 #' @export
-mc_distr <- function(n, minw = NULL, nrep = 500L, seed = NULL) {
+mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
 
   results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
 

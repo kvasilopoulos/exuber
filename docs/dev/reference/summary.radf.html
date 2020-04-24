@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -53,7 +57,6 @@
 <meta property="og:title" content="Summarizing radf models — summary.radf" />
 <meta property="og:description" content="summary method for class &quot;radf&quot;" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 <meta name="robots" content="noindex">
@@ -81,7 +84,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -202,167 +205,183 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 <span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data</span>)
 
 <span class='co'># Summary, diagnostics and datestamp (default)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' as 'cv'argument..</span></div><div class='output co'>#&gt; 
-#&gt; -- Summary (minw = 19, lag = 0) ----------------------------------- Monte Carlo (nrep = 2000) --
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
+#&gt; -- Summary (minw = 19, lag = 0) -------------------------------- Monte Carlo (nrep = 2000) --
 #&gt; 
-#&gt;  psy1 
-#&gt;         tstat      90%       95%     99%
-#&gt; ADF    -2.461  -0.4127  -0.08117  0.6521
-#&gt; SADF    1.946   0.9879   1.29458  1.9157
-#&gt; GSADF   5.190   1.7099   1.97410  2.5708
+#&gt; psy1 :
+#&gt; <span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`    `95`  `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>2.46</span><span> -</span><span style='color: #BB0000;'>0.413</span><span> -</span><span style='color: #BB0000;'>0.081</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span> 0.652
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   1.95  0.988  1.29   1.92 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  5.19  1.71   1.97   2.57 
 #&gt; 
-#&gt;  psy2 
-#&gt;         tstat      90%       95%     99%
-#&gt; ADF    -2.858  -0.4127  -0.08117  0.6521
-#&gt; SADF    7.880   0.9879   1.29458  1.9157
-#&gt; GSADF   7.880   1.7099   1.97410  2.5708
+#&gt; psy2 :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`    `95`  `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>2.86</span><span> -</span><span style='color: #BB0000;'>0.413</span><span> -</span><span style='color: #BB0000;'>0.081</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span> 0.652
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   7.88  0.988  1.29   1.92 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  7.88  1.71   1.97   2.57 
 #&gt; 
-#&gt;  evans 
-#&gt;         tstat      90%       95%     99%
-#&gt; ADF    -5.830  -0.4127  -0.08117  0.6521
-#&gt; SADF    5.283   0.9879   1.29458  1.9157
-#&gt; GSADF   5.985   1.7099   1.97410  2.5708
+#&gt; evans :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`    `95`  `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>5.83</span><span> -</span><span style='color: #BB0000;'>0.413</span><span> -</span><span style='color: #BB0000;'>0.081</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span> 0.652
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   5.28  0.988  1.29   1.92 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  5.99  1.71   1.97   2.57 
 #&gt; 
-#&gt;  div 
-#&gt;         tstat      90%       95%     99%
-#&gt; ADF    -1.950  -0.4127  -0.08117  0.6521
-#&gt; SADF    1.113   0.9879   1.29458  1.9157
-#&gt; GSADF   1.335   1.7099   1.97410  2.5708
+#&gt; div :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`    `95`  `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>1.95</span><span> -</span><span style='color: #BB0000;'>0.413</span><span> -</span><span style='color: #BB0000;'>0.081</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span> 0.652
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   1.11  0.988  1.29   1.92 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  1.34  1.71   1.97   2.57 
 #&gt; 
-#&gt;  blan 
-#&gt;         tstat      90%       95%     99%
-#&gt; ADF    -5.146  -0.4127  -0.08117  0.6521
-#&gt; SADF    3.930   0.9879   1.29458  1.9157
-#&gt; GSADF  10.951   1.7099   1.97410  2.5708
+#&gt; blan :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`    `95`  `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>5.15</span><span> -</span><span style='color: #BB0000;'>0.413</span><span> -</span><span style='color: #BB0000;'>0.081</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span> 0.652
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   3.93  0.988  1.29   1.92 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf 11.0   1.71   1.97   2.57 
 #&gt; </div><div class='input'>
-<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' as 'cv'argument..</span></div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics (option = gsadf) ------------------------------------------------- Monte Carlo --
+<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
+#&gt; -- Diagnostics (option = gsadf) ---------------------------------------------- Monte Carlo --
 #&gt; 
-#&gt; psy1:     Rejects H0 for significance level of 1% 
-#&gt; psy2:     Rejects H0 for significance level of 1% 
-#&gt; evans:    Rejects H0 for significance level of 1% 
-#&gt; div:      Cannot reject H0! 
-#&gt; blan:     Rejects H0 for significance level of 1% 
+#&gt; psy1:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; psy2:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; evans:    Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; div:      Cannot reject H0 
+#&gt; blan:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
 #&gt; </div><div class='input'>
-<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' as 'cv'argument..</span></div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) ------------------------------------------------- Monte Carlo --
+<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
+#&gt; -- Datestamp (min_duration = 0) ---------------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       12
+#&gt; 1    44  55       11
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration
-#&gt; 1    22  40       19
-#&gt; 2    62  70        9
+#&gt; 1    22  40       18
+#&gt; 2    62  70        8
 #&gt; 
 #&gt; evans :
 #&gt;   Start End Duration
-#&gt; 1    20  21        2
-#&gt; 2    44  45        2
-#&gt; 3    66  67        2
+#&gt; 1    20  21        1
+#&gt; 2    44  45        1
+#&gt; 3    66  67        1
 #&gt; 
 #&gt; blan :
 #&gt;   Start End Duration
-#&gt; 1    34  36        3
-#&gt; 2    84  86        3
+#&gt; 1    34  36        2
+#&gt; 2    84  86        2
 #&gt; </div><div class='input'>
 <span class='co'>#' # Diagnostics for 'sadf'</span>
-<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' as 'cv'argument..</span></div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics (option = sadf) -------------------------------------------------- Monte Carlo --
+<span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
+#&gt; -- Diagnostics (option = sadf) ----------------------------------------------- Monte Carlo --
 #&gt; 
-#&gt; psy1:     Rejects H0 for significance level of 1% 
-#&gt; psy2:     Rejects H0 for significance level of 1% 
-#&gt; evans:    Rejects H0 for significance level of 1% 
-#&gt; div:      Rejects H0 for significance level of 10% 
-#&gt; blan:     Rejects H0 for significance level of 1% 
+#&gt; psy1:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; psy2:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; evans:    Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; div:      Rejects H0 at the </span><span style='color: #BB0000;'>10%</span><span> significance level
+#&gt; blan:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
 #&gt; </div><div class='input'>
 <span class='co'># Use log(T)/T rule of thumb to omit periods of explosiveness which are short-lived</span>
 <span class='no'>rot</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='psy_minw.html'>psy_ds</a></span>(<span class='no'>sim_data</span>)
-<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='no'>rot</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' as 'cv'argument..</span></div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 5) ------------------------------------------------- Monte Carlo --
+<span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='no'>rot</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
+#&gt; -- Datestamp (min_duration = 5) ---------------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       12
+#&gt; 1    44  55       11
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration
-#&gt; 1    22  40       19
-#&gt; 2    62  70        9
+#&gt; 1    22  40       18
+#&gt; 2    62  70        8
 #&gt; </div><div class='input'>
 <span class='co'># Summary, diagnostics and datestamp (Wild Bootstrapped critical values)</span>
 
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wb_cv.html'>wb_cv</a></span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Summary (minw = 19, lag = 0) -------------------------------- Wild Bootstrap (nboot = 500) --
+#&gt; -- Summary (minw = 19, lag = 0) ----------------------------- Wild Bootstrap (nboot = 500) --
 #&gt; 
-#&gt;  psy1 
-#&gt;        t-stat      90%     95%      99%
-#&gt; ADF    -2.461  -0.5391  -0.369  0.02854
-#&gt; SADF    1.946   1.4169   1.971  2.69363
-#&gt; GSADF   5.190   2.7187   3.203  4.49386
+#&gt; psy1 :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`   `95`   `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>2.46</span><span> -</span><span style='color: #BB0000;'>0.539</span><span> -</span><span style='color: #BB0000;'>0.369</span><span> 0.028</span><span style='text-decoration: underline;'>5</span><span>
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   1.95  1.42   1.97  2.69  
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  5.19  2.72   3.20  4.49  
 #&gt; 
-#&gt;  psy2 
-#&gt;        t-stat      90%      95%      99%
-#&gt; ADF    -2.858  -0.6383  -0.4793  -0.2611
-#&gt; SADF    7.880   2.9424   3.5892   5.3489
-#&gt; GSADF   7.880   3.8446   5.0388   7.2181
+#&gt; psy2 :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`   `95`   `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>2.86</span><span> -</span><span style='color: #BB0000;'>0.638</span><span> -</span><span style='color: #BB0000;'>0.479</span><span> -</span><span style='color: #BB0000;'>0.261</span><span>
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   7.88  2.94   3.59   5.35 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  7.88  3.84   5.04   7.22 
 #&gt; 
-#&gt;  evans 
-#&gt;        t-stat      90%     95%       99%
-#&gt; ADF    -5.830  -0.5895  -0.373  -0.07454
-#&gt; SADF    5.283   5.2183   7.081  13.18804
-#&gt; GSADF   5.985   8.3715   9.848  14.85232
+#&gt; evans :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`   `95`    `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>5.83</span><span> -</span><span style='color: #BB0000;'>0.589</span><span> -</span><span style='color: #BB0000;'>0.373</span><span> -</span><span style='color: #BB0000;'>0.074</span><span style='color: #BB0000;text-decoration: underline;'>5</span><span>
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   5.28  5.22   7.08  13.2   
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  5.99  8.37   9.85  14.9   
 #&gt; 
-#&gt;  div 
-#&gt;        t-stat      90%     95%     99%
-#&gt; ADF    -1.950  -0.3637  0.1666  0.7718
-#&gt; SADF    1.113   0.9281  1.2198  1.9276
-#&gt; GSADF   1.335   1.7193  2.0346  2.4493
+#&gt; div :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`  `95`  `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>1.95</span><span> -</span><span style='color: #BB0000;'>0.364</span><span> 0.167 0.772
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   1.11  0.928 1.22  1.93 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf  1.34  1.72  2.03  2.45 
 #&gt; 
-#&gt;  blan 
-#&gt;        t-stat      90%       95%      99%
-#&gt; ADF    -5.146  -0.2207  -0.08826   0.4698
-#&gt; SADF    3.930   3.1165   3.89335   6.4947
-#&gt; GSADF  10.951   6.3960   7.67078  10.0894
+#&gt; blan :
+#&gt; </span><span style='color: #555555;'># A tibble: 3 x 5</span><span>
+#&gt;   name  tstat   `90`    `95`   `99`
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> adf   -</span><span style='color: #BB0000;'>5.15</span><span> -</span><span style='color: #BB0000;'>0.221</span><span> -</span><span style='color: #BB0000;'>0.088</span><span style='color: #BB0000;text-decoration: underline;'>3</span><span>  0.470
+#&gt; </span><span style='color: #555555;'>2</span><span> sadf   3.93  3.12   3.89    6.49 
+#&gt; </span><span style='color: #555555;'>3</span><span> gsadf 11.0   6.40   7.67   10.1  
 #&gt; </div><div class='input'>
 <span class='fu'><a href='diagnostics.html'>diagnostics</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Diagnostics (option = gsadf) ---------------------------------------------- Wild Bootstrap --
+#&gt; -- Diagnostics (option = gsadf) ------------------------------------------- Wild Bootstrap --
 #&gt; 
-#&gt; psy1:     Rejects H0 for significance level of 1% 
-#&gt; psy2:     Rejects H0 for significance level of 1% 
-#&gt; evans:    Cannot reject H0! 
-#&gt; div:      Cannot reject H0! 
-#&gt; blan:     Rejects H0 for significance level of 1% 
+#&gt; psy1:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; psy2:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; evans:    Cannot reject H0 
+#&gt; div:      Cannot reject H0 
+#&gt; blan:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
 #&gt; </div><div class='input'>
 <span class='fu'><a href='datestamp.html'>datestamp</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) ---------------------------------------------- Wild Bootstrap --
+#&gt; -- Datestamp (min_duration = 0) ------------------------------------------- Wild Bootstrap --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       12
+#&gt; 1    44  55       11
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration
-#&gt; 1    23  40       18
-#&gt; 2    62  70        9
+#&gt; 1    23  40       17
+#&gt; 2    62  70        8
 #&gt; 
 #&gt; blan :
 #&gt;   Start End Duration
-#&gt; 1    34  36        3
-#&gt; 2    84  86        3
+#&gt; 1    34  36        2
+#&gt; 2    84  86        2
 #&gt; </div><div class='input'># }
-</div></pre>
+</div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -373,7 +392,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
