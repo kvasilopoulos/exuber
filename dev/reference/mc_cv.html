@@ -175,9 +175,9 @@ root tests. mc_dist computes the distribution." />
 root tests. <code>mc_dist</code> computes the distribution.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mc_cv</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>500L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>mc_cv</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>mc_distr</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>500L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>mc_distr</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -223,9 +223,9 @@ t-statistics.</p>
 <span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 4</span><span>
 #&gt;   sig       adf  sadf gsadf
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> 90    -</span><span style='color: #BB0000;'>0.407</span><span>   1.02  1.62
-#&gt; </span><span style='color: #555555;'>2</span><span> 95    -</span><span style='color: #BB0000;'>0.035</span><span style='color: #BB0000;text-decoration: underline;'>6</span><span>  1.28  1.83
-#&gt; </span><span style='color: #555555;'>3</span><span> 99     0.487   1.77  2.33</div><div class='input'>
+#&gt; </span><span style='color: #555555;'>1</span><span> 90    -</span><span style='color: #BB0000;'>0.390</span><span>  0.991  1.64
+#&gt; </span><span style='color: #555555;'>2</span><span> 95    -</span><span style='color: #BB0000;'>0.014</span><span style='color: #BB0000;text-decoration: underline;'>5</span><span> 1.27   1.87
+#&gt; </span><span style='color: #555555;'>3</span><span> 99     0.710  1.82   2.33</div><div class='input'>
 <span class='co'># Change the minimum window and the number of simulations</span>
 <span class='no'>mc2</span> <span class='kw'>&lt;-</span> <span class='fu'>mc_cv</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 

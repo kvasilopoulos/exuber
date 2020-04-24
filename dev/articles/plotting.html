@@ -170,18 +170,18 @@
 <p>To return to older functionality there are several ways.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gridExtra</span>)
 
-<span class="co"># To choose only accepted series (i.e. statistically significant for 5%)</span>
-<span class="no">accepted_series</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)$<span class="no">accepted</span>
+<span class="co"># To choose only positive series (i.e. statistically significant for 5%)</span>
+<span class="no">positive_series</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)$<span class="no">positive</span>
 
-<span class="co"># Through a loop on accepted series </span>
+<span class="co"># Through a loop on positive series </span>
 <span class="no">plot_list1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>()
-<span class="kw">for</span> (<span class="no">as</span> <span class="kw">in</span> <span class="no">accepted_series</span>) {
+<span class="kw">for</span> (<span class="no">as</span> <span class="kw">in</span> <span class="no">positive_series</span>) {
   <span class="no">plot_list1</span><span class="kw">[[</span><span class="no">as</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">select_series</span> <span class="kw">=</span> <span class="no">as</span>)
 }
 
 <span class="co"># Alternatively  with lapply</span>
-<span class="no">plot_list2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">accepted_series</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">select_series</span> <span class="kw">=</span> <span class="no">x</span>))
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">plot_list2</span>) <span class="kw">&lt;-</span> <span class="no">accepted_series</span>
+<span class="no">plot_list2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">positive_series</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">select_series</span> <span class="kw">=</span> <span class="no">x</span>))
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">plot_list2</span>) <span class="kw">&lt;-</span> <span class="no">positive_series</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="kw pkg">gridExtra</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>, <span class="no">plot_list1</span>)</pre></body></html></div>
 <p><img src="plotting_files/figure-html/lapply-arrange-1.png" width="960"></p>
@@ -197,7 +197,7 @@
 <span class="no">joined</span>
 <span class="co">#&gt; # A tibble: 1,920 x 7</span>
 <span class="co">#&gt;      key index id       name   tstat sig    crit</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt;  1    21    21 sim_psy1 badf  -2.08  90    -0.44</span>
 <span class="co">#&gt;  2    22    22 sim_psy1 badf  -2.31  90    -0.44</span>
 <span class="co">#&gt;  3    23    23 sim_psy1 badf  -2.39  90    -0.44</span>

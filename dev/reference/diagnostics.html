@@ -55,7 +55,7 @@
   
 
 <meta property="og:title" content="Diagnostics — diagnostics" />
-<meta property="og:description" content="Finds the series that reject the null for at the 5\" />
+<meta property="og:description" content="Finds the series that reject the null hypothesis." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -170,7 +170,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Finds the series that reject the null for at the 5\<!-- % significance level. --></p>
+    <p>Finds the series that reject the null hypothesis.</p>
     </div>
 
     <pre class="usage"><span class='fu'>diagnostics</span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
@@ -202,10 +202,11 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list with the series that reject and the series that do not reject the Null Hypothesis</p>
+    <p>Returns a list with the series that reject (positive) and the series
+that do not reject (negative) the null hypothesis, and at what significance level.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Diagnostics also stores a vector in 0,1 that corresponds to reject, accept respectively.</p>
+    <p>Diagnostics also stores a vector in 0,1 that corresponds to positive, negative respectively.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

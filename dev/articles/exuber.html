@@ -176,10 +176,10 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; DAX:      Rejects H0 for significance level of 1% </span>
-<span class="co">#&gt; SMI:      Rejects H0 for significance level of 1% </span>
-<span class="co">#&gt; CAC:      Rejects H0 for significance level of 1% </span>
-<span class="co">#&gt; FTSE:     Rejects H0 for significance level of 1%</span></pre></body></html></div>
+<span class="co">#&gt; DAX:      Rejects H0 at the 1% significance level</span>
+<span class="co">#&gt; SMI:      Rejects H0 at the 1% significance level</span>
+<span class="co">#&gt; CAC:      Rejects H0 at the 1% significance level</span>
+<span class="co">#&gt; FTSE:     Rejects H0 at the 1% significance level</span></pre></body></html></div>
 <p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner with <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. The user still has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># Minimum duration of an explosive period </span>
 <span class="no">rot</span> <span class="kw">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span>(<span class="no">stocks</span>) <span class="co"># log(n) ~ rule of thumb</span>
