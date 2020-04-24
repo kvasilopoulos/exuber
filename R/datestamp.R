@@ -133,6 +133,7 @@ stamp_to_index <- function(x, idx) {
 #' @name autoplot.datestamp
 #'
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
+#' @inheritParams autoplot.radf
 #' @param trunc default FALSE. If TRUE the index formed by truncating the value
 #' in the minimum window.
 #' @param ... further arguments passed to methods.
@@ -155,13 +156,15 @@ stamp_to_index <- function(x, idx) {
 #' }
 autoplot.datestamp <- function(object, trunc = TRUE, ...) {
 
-  dating <- index(object, trunc = trunc)
-  scale_custom <- if (lubridate::is.Date(dating)) scale_x_date else scale_x_continuous
+  stopifnot(is.logical(trunc))
+
+  idx <- index(object, trunc = trunc)
+  scale_custom <- if (lubridate::is.Date(idx)) scale_x_date else scale_x_continuous
 
   ggplot(tidy(object), aes_string(colour = "id")) +
     geom_segment(
-      aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7) +
-    scale_custom(limits = c(dating[1L], dating[length(dating)])) +
+      aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7, ...) +
+    scale_custom(limits = c(idx[1L], idx[length(idx)])) +
     theme_bw() +
     scale_color_grey() +
     labs(title = "", x = "", y = "") + #intentionally not in theme (for extra margin)
@@ -184,3 +187,4 @@ tidy.datestamp <- function(x, ...) {
     mutate(id = as.factor(id))
 }
 
+# TODO see ellipsis in autoplot.datestamp
