@@ -80,18 +80,18 @@ To return to older functionality there are several ways.
 ```{r lapply-arrange}
 library(gridExtra)
 
-# To choose only accepted series (i.e. statistically significant for 5%)
-accepted_series <- diagnostics(estimation, crit_values)$accepted 
+# To choose only positive series (i.e. statistically significant for 5%)
+positive_series <- diagnostics(estimation, crit_values)$positive 
 
-# Through a loop on accepted series 
+# Through a loop on positive series 
 plot_list1 <- list()
-for (as in accepted_series) {
+for (as in positive_series) {
   plot_list1[[as]] <- autoplot(estimation, crit_values, select_series = as)
 }
 
 # Alternatively  with lapply
-plot_list2 <- lapply(accepted_series, function(x) autoplot(estimation, crit_values, select_series = x))
-names(plot_list2) <- accepted_series
+plot_list2 <- lapply(positive_series, function(x) autoplot(estimation, crit_values, select_series = x))
+names(plot_list2) <- positive_series
 
 do.call(gridExtra::grid.arrange, plot_list1)
 ```

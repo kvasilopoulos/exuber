@@ -37,8 +37,8 @@ Computes the origination, termination and duration of
 episodes during which the time series display explosive dynamics.
 }
 \details{
-Datestamp also stores a vector in {0,1} that corresponds to {reject, accept}
-respectively, for all series in the time period. This output can be used as
+Datestamp also stores a vector in {0,1} that corresponds to {positive, negative}
+respectively, for all series throughout the time period. This output can be used as
 a dummy that indicates the occurrence of a bubble.
 
 Setting \code{min_duration} removes very short episode of exuberance.

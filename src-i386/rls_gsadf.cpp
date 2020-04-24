@@ -46,7 +46,7 @@ arma::vec rls_gsadf(const arma::mat & yxmat, int min_win, int lag = 0) {
         beta = (sxy/T-meanx*meany)/den;
         alpha = meany-beta*meanx;
         u = y.rows(j, start + i - 1) - alpha - beta*x.rows(j, start + i - 1);
-        suu = sum(u % u);
+        suu = as_scalar(trans(u) * u);
         sbeta = sqrt(suu/(T-2)/den/T);
         tstat(i, j) = (beta - 1)/ sbeta;
       }
@@ -58,10 +58,10 @@ arma::vec rls_gsadf(const arma::mat & yxmat, int min_win, int lag = 0) {
     arma::mat x = yxmat.cols(1, nc);
     arma::mat y = yxmat.col(0);
 
-    arma::mat sx, sy, tsx, g, b, syn, res, sqres, vares, sb;
+    arma::mat sx, sy, tsx, g, b, syn, res, sb;
+    double kaka, sqres, vares;
     arma::colvec tsxn;
     arma::rowvec sxn;
-    double kaka;
 
     for (int j = 0; j < total; ++j) {
       sx = x.rows(j, start + j - 1);
@@ -82,9 +82,9 @@ arma::vec rls_gsadf(const arma::mat & yxmat, int min_win, int lag = 0) {
           b -= g * tsxn * as_scalar(sxn * b - syn);
         }
         res = sy - sx * b;
-        sqres = sum(square(res));
+        sqres = as_scalar(trans(res) * res);
         vares = sqres/(start+i-j-nc);
-        sb = sqrt(as_scalar(vares) * diagvec(g));
+        sb = sqrt(vares * diagvec(g));
         tstat(i, j) = (b(1) - 1)/ sb(1);
       }
     }

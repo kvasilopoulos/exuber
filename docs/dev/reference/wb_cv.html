@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -56,7 +60,6 @@ scheme, which is asymptotically robust to non-stationary volatility, to
 generate critical values for the recursive unit root tests. wb_dist
 computes the distribution." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 <meta name="robots" content="noindex">
@@ -84,7 +87,7 @@ computes the distribution." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -239,60 +242,53 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)</div><div class='output co'>#&gt; # A tibble: 15 x 5
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 15 x 5</span><span>
 #&gt;    id    sig       adf   sadf gsadf
-#&gt;    &lt;chr&gt; &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-#&gt;  1 psy1  90    -0.566   1.47   2.62
-#&gt;  2 psy2  90    -0.625   2.83   3.86
-#&gt;  3 evans 90    -0.554   5.27   8.36
-#&gt;  4 div   90    -0.322   0.952  1.73
-#&gt;  5 blan  90    -0.315   3.43   6.33
-#&gt;  6 psy1  95    -0.420   1.97   3.25
-#&gt;  7 psy2  95    -0.465   3.49   4.84
-#&gt;  8 evans 95    -0.416   7.40   9.81
-#&gt;  9 div   95    -0.0262  1.35   2.07
-#&gt; 10 blan  95    -0.0947  4.45   7.85
-#&gt; 11 psy1  99    -0.0632  3.25   4.53
-#&gt; 12 psy2  99    -0.264   5.06   6.63
-#&gt; 13 evans 99    -0.0611 12.9   15.7 
-#&gt; 14 div   99     0.723   1.88   2.84
-#&gt; 15 blan  99     0.293   7.86  11.1 </div><div class='input'>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.566</span><span>   1.47   2.62
+#&gt; </span><span style='color: #555555;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.625</span><span>   2.83   3.86
+#&gt; </span><span style='color: #555555;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.554</span><span>   5.27   8.36
+#&gt; </span><span style='color: #555555;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.322</span><span>   0.952  1.73
+#&gt; </span><span style='color: #555555;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.315</span><span>   3.43   6.33
+#&gt; </span><span style='color: #555555;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.420</span><span>   1.97   3.25
+#&gt; </span><span style='color: #555555;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.465</span><span>   3.49   4.84
+#&gt; </span><span style='color: #555555;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.416</span><span>   7.40   9.81
+#&gt; </span><span style='color: #555555;'> 9</span><span> div   95    -</span><span style='color: #BB0000;'>0.026</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span>  1.35   2.07
+#&gt; </span><span style='color: #555555;'>10</span><span> blan  95    -</span><span style='color: #BB0000;'>0.094</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>  4.45   7.85
+#&gt; </span><span style='color: #555555;'>11</span><span> psy1  99    -</span><span style='color: #BB0000;'>0.063</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span>  3.25   4.53
+#&gt; </span><span style='color: #555555;'>12</span><span> psy2  99    -</span><span style='color: #BB0000;'>0.264</span><span>   5.06   6.63
+#&gt; </span><span style='color: #555555;'>13</span><span> evans 99    -</span><span style='color: #BB0000;'>0.061</span><span style='color: #BB0000;text-decoration: underline;'>1</span><span> 12.9   15.7 
+#&gt; </span><span style='color: #555555;'>14</span><span> div   99     0.723   1.88   2.84
+#&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.293   7.86  11.1 </div><div class='input'>
 <span class='co'># Change the minimum window and the number of bootstraps</span>
 <span class='no'>wb2</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_cv</span>(<span class='no'>sim_data</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb2</span>)</div><div class='output co'>#&gt; # A tibble: 15 x 5
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb2</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 15 x 5</span><span>
 #&gt;    id    sig        adf   sadf gsadf
-#&gt;    &lt;chr&gt; &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-#&gt;  1 psy1  90    -0.608    1.49   2.74
-#&gt;  2 psy2  90    -0.618    3.09   3.91
-#&gt;  3 evans 90    -0.652    5.38   8.30
-#&gt;  4 div   90    -0.430    0.941  1.75
-#&gt;  5 blan  90    -0.138    3.29   6.14
-#&gt;  6 psy1  95    -0.409    2.00   3.15
-#&gt;  7 psy2  95    -0.508    3.84   4.76
-#&gt;  8 evans 95    -0.358    7.81  10.2 
-#&gt;  9 div   95    -0.160    1.19   2.10
-#&gt; 10 blan  95     0.128    4.31   7.52
-#&gt; 11 psy1  99    -0.00375  2.74   4.37
-#&gt; 12 psy2  99    -0.313    5.15   6.15
-#&gt; 13 evans 99    -0.0622  11.7   13.4 
-#&gt; 14 div   99     0.359    1.78   2.71
-#&gt; 15 blan  99     0.633    7.10  11.1 </div><div class='input'>
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.608</span><span>    1.49   2.74
+#&gt; </span><span style='color: #555555;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.618</span><span>    3.09   3.91
+#&gt; </span><span style='color: #555555;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.652</span><span>    5.38   8.30
+#&gt; </span><span style='color: #555555;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.430</span><span>    0.941  1.75
+#&gt; </span><span style='color: #555555;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.138</span><span>    3.29   6.14
+#&gt; </span><span style='color: #555555;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.409</span><span>    2.00   3.15
+#&gt; </span><span style='color: #555555;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.508</span><span>    3.84   4.76
+#&gt; </span><span style='color: #555555;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.358</span><span>    7.81  10.2 
+#&gt; </span><span style='color: #555555;'> 9</span><span> div   95    -</span><span style='color: #BB0000;'>0.160</span><span>    1.19   2.10
+#&gt; </span><span style='color: #555555;'>10</span><span> blan  95     0.128    4.31   7.52
+#&gt; </span><span style='color: #555555;'>11</span><span> psy1  99    -</span><span style='color: #BB0000;'>0.003</span><span style='color: #BB0000;text-decoration: underline;'>75</span><span>  2.74   4.37
+#&gt; </span><span style='color: #555555;'>12</span><span> psy2  99    -</span><span style='color: #BB0000;'>0.313</span><span>    5.15   6.15
+#&gt; </span><span style='color: #555555;'>13</span><span> evans 99    -</span><span style='color: #BB0000;'>0.062</span><span style='color: #BB0000;text-decoration: underline;'>2</span><span>  11.7   13.4 
+#&gt; </span><span style='color: #555555;'>14</span><span> div   99     0.359    1.78   2.71
+#&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.633    7.10  11.1 </div><div class='input'>
 <span class='co'># Simulate distribution</span>
 <span class='no'>wdist</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_distr</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>wdist</span>)</div><div class='img'><img src='wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'># }
-</div></pre>
+</div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -303,7 +299,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

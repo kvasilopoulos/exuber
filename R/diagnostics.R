@@ -9,7 +9,7 @@
 #' that do not reject (negative) the null hypothesis, and at what significance level.
 #'
 #' @details
-#' Diagnostics also stores a vector in {0,1} that corresponds to {postive, negative} respectively.
+#' Diagnostics also stores a vector in {0,1} that corresponds to {positive, negative} respectively.
 #'
 #' @export
 diagnostics <- function(object, cv = NULL, ...) {
@@ -124,7 +124,7 @@ print.diagnostics <- function(x, ...) {
     if (x$sig == "Reject")
       cat(" Cannot rejeact H0 \n")
     else
-      cat(" Rejects H0 at the", cli::col_red(x$sig), "significance level.\n")
+      cat(" Rejects H0 at the", cli::col_red(x$sig), "significance level\n")
   } else {
     width <- nchar(series_names(x))
     ngaps <- max(8, width) - width
@@ -133,7 +133,7 @@ print.diagnostics <- function(x, ...) {
       if (x$sig[i] == "Reject")
         cat(" Cannot reject H0 \n")
       else
-        cat(" Rejects H0 at the", cli::col_red(x$sig[i]), "significance level.\n")
+        cat(" Rejects H0 at the", cli::col_red(x$sig[i]), "significance level\n")
     }
   }
   cli::cat_line()
