@@ -55,10 +55,7 @@
   
 
 <meta property="og:title" content="Tidy into a joint model — tidy_join" />
-<meta property="og:description" content="Tidy, augment or glance, and then join objects of class radf and cv. The
-object of reference should be the radf. For example, using glance in an
-radf object returns the panel statistic, so glance_join returns the panel
-statistic together with the critical values." />
+<meta property="og:description" content="Tidy, augment or glance, and then join objects" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -101,7 +98,7 @@ statistic together with the critical values." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.1</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.0</span>
       </span>
     </div>
 
@@ -173,29 +170,29 @@ statistic together with the critical values." />
     </div>
 
     <div class="ref-description">
-    <p>Tidy, augment or glance, and then join objects of class <code>radf</code> and <code>cv</code>. The
-object of reference should be the <code>radf</code>. For example, using <code>glance</code> in an
-radf object returns the panel statistic, so <code>glance_join</code> returns the panel
-statistic together with the critical values.</p>
+    <p>Tidy, augment or glance, and then join objects</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_join</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>tidy_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
 
-<span class='fu'>augment_join</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+<span class='fu'>augment_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
 
-<span class='fu'>glance_join</span>(<span class='no'>x</span>, <span class='no'>y</span>)</pre>
+<span class='fu'>glance_join</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object of class <code>radf</code>.</p></td>
+      <td><p>An object of class <code>obj</code>.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>An object of class <code>cv</code>. The output will depend on the type of
-critical value.</p></td>
+      <td><p>An object of class <code>cv</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>further arguments passed to methods.</p></td>
     </tr>
     </table>
 

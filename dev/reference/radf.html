@@ -99,7 +99,7 @@ test." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.1</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.0</span>
       </span>
     </div>
 
@@ -204,6 +204,8 @@ The estimation process cannot handle NA values.</p></td>
 <dt>sadf</dt><dd><p>Supremum Augmented Dickey-Fuller</p></dd>
 <dt>bsadf</dt><dd><p>Backward Supremum Augmented Dickey-Fuller</p></dd>
 <dt>gsadf</dt><dd><p>Generalized Supremum Augmented Dickey-Fuller</p></dd>
+<dt>bsadf_panel</dt><dd><p>Panel Backward Supremum Augmented Dickey-Fuller</p></dd>
+<dt>gsadf_panle</dt><dd><p>Panel Generalized Supremum Augmented Dickey-Fuller</p></dd>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -255,7 +257,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt;  - attr(*, "n")= int 100
 #&gt;  - attr(*, "minw")= num 19
 #&gt;  - attr(*, "series_names")= chr [1:5] "psy1" "psy2" "evans" "div" ...
-#&gt;  - attr(*, "class")= chr "radf"</div><div class='input'>
+#&gt;  - attr(*, "class")= chr [1:3] "radf_obj" "obj" "list"</div><div class='input'>
 <span class='co'># We would also use data that contain a Date column</span>
 <span class='no'>sim_data_wdate</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 100 x 6</span><span>
 #&gt;    psy1  psy2  evans div   blan   date      

@@ -99,7 +99,7 @@ and more convenient way to install exuberdata." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.1</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.0</span>
       </span>
     </div>
 
@@ -179,6 +179,231 @@ and more convenient way to install exuberdata.</p>
 
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='kw'>if</span>(<span class='st'>"exuberdata"</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>loadedNamespaces</a></span>()) {
+ <span class='kw pkg'>exuberdata</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/exuberdata/man/radf_crit.html'>radf_crit2</a></span>
+}</div><div class='output co'>#&gt; $`_nan1`
+#&gt; NULL
+#&gt; 
+#&gt; $`_nan2`
+#&gt; NULL
+#&gt; 
+#&gt; $`_nan3`
+#&gt; NULL
+#&gt; 
+#&gt; $`_nan4`
+#&gt; NULL
+#&gt; 
+#&gt; $`_nan5`
+#&gt; NULL
+#&gt; 
+#&gt; $n6
+#&gt; $adf_cv
+#&gt;        90%        95%        99% 
+#&gt; -0.0068133  0.4662707  1.5452103 
+#&gt; 
+#&gt; $sadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.4442197 0.9432907 2.5440024 
+#&gt; 
+#&gt; $gsadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.6254581 1.2105031 3.1001231 
+#&gt; 
+#&gt; $badf_cv
+#&gt;        90%   95% 99%
+#&gt; [1,] -0.44 -0.08 0.6
+#&gt; [2,] -0.44 -0.08 0.6
+#&gt; 
+#&gt; $bsadf_cv
+#&gt;            90%       95%      99%
+#&gt; [1,] 0.1268111 0.7049998 2.103603
+#&gt; [2,] 0.4442197 0.9432907 2.544002
+#&gt; 
+#&gt; attr(,"method")
+#&gt; [1] "Monte Carlo"
+#&gt; attr(,"n")
+#&gt; [1] 6
+#&gt; attr(,"minw")
+#&gt; [1] 4
+#&gt; attr(,"iter")
+#&gt; [1] 2000
+#&gt; attr(,"seed")
+#&gt; [1] 123
+#&gt; attr(,"parallel")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mc_cv" "cv"    "list" 
+#&gt; 
+#&gt; $n7
+#&gt; $adf_cv
+#&gt;         90%         95%         99% 
+#&gt; -0.08932631  0.29149050  1.10816740 
+#&gt; 
+#&gt; $sadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.5938162 1.1332356 2.8780413 
+#&gt; 
+#&gt; $gsadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.9622054 1.6757737 4.0718132 
+#&gt; 
+#&gt; $badf_cv
+#&gt;        90%   95% 99%
+#&gt; [1,] -0.44 -0.08 0.6
+#&gt; [2,] -0.44 -0.08 0.6
+#&gt; [3,] -0.44 -0.08 0.6
+#&gt; 
+#&gt; $bsadf_cv
+#&gt;            90%       95%      99%
+#&gt; [1,] 0.1268111 0.7049998 2.103603
+#&gt; [2,] 0.4442197 0.9432907 2.544002
+#&gt; [3,] 0.5938162 1.1332356 2.878041
+#&gt; 
+#&gt; attr(,"method")
+#&gt; [1] "Monte Carlo"
+#&gt; attr(,"n")
+#&gt; [1] 7
+#&gt; attr(,"minw")
+#&gt; [1] 4
+#&gt; attr(,"iter")
+#&gt; [1] 2000
+#&gt; attr(,"seed")
+#&gt; [1] 123
+#&gt; attr(,"parallel")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mc_cv" "cv"    "list" 
+#&gt; 
+#&gt; $n8
+#&gt; $adf_cv
+#&gt;        90%        95%        99% 
+#&gt; -0.2158200  0.1775116  0.9301616 
+#&gt; 
+#&gt; $sadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.4231389 0.8451185 2.0005111 
+#&gt; 
+#&gt; $gsadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.6140541 1.0892703 2.4648524 
+#&gt; 
+#&gt; $badf_cv
+#&gt;        90%   95% 99%
+#&gt; [1,] -0.44 -0.08 0.6
+#&gt; [2,] -0.44 -0.08 0.6
+#&gt; [3,] -0.44 -0.08 0.6
+#&gt; 
+#&gt; $bsadf_cv
+#&gt;             90%       95%      99%
+#&gt; [1,] -0.0068133 0.4662707 1.545210
+#&gt; [2,]  0.2991290 0.6934075 1.730407
+#&gt; [3,]  0.4231389 0.8451185 2.000511
+#&gt; 
+#&gt; attr(,"method")
+#&gt; [1] "Monte Carlo"
+#&gt; attr(,"n")
+#&gt; [1] 8
+#&gt; attr(,"minw")
+#&gt; [1] 5
+#&gt; attr(,"iter")
+#&gt; [1] 2000
+#&gt; attr(,"seed")
+#&gt; [1] 123
+#&gt; attr(,"parallel")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mc_cv" "cv"    "list" 
+#&gt; 
+#&gt; $n9
+#&gt; $adf_cv
+#&gt;        90%        95%        99% 
+#&gt; -0.2519856  0.1508576  1.0118724 
+#&gt; 
+#&gt; $sadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.5082703 0.9443890 2.0320946 
+#&gt; 
+#&gt; $gsadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.8220102 1.3413480 2.9098589 
+#&gt; 
+#&gt; $badf_cv
+#&gt;        90%   95% 99%
+#&gt; [1,] -0.44 -0.08 0.6
+#&gt; [2,] -0.44 -0.08 0.6
+#&gt; [3,] -0.44 -0.08 0.6
+#&gt; [4,] -0.44 -0.08 0.6
+#&gt; 
+#&gt; $bsadf_cv
+#&gt;             90%       95%      99%
+#&gt; [1,] -0.0068133 0.4662707 1.545210
+#&gt; [2,]  0.2991290 0.6934075 1.730407
+#&gt; [3,]  0.4231389 0.8451185 2.000511
+#&gt; [4,]  0.5082703 0.9443890 2.032095
+#&gt; 
+#&gt; attr(,"method")
+#&gt; [1] "Monte Carlo"
+#&gt; attr(,"n")
+#&gt; [1] 9
+#&gt; attr(,"minw")
+#&gt; [1] 5
+#&gt; attr(,"iter")
+#&gt; [1] 2000
+#&gt; attr(,"seed")
+#&gt; [1] 123
+#&gt; attr(,"parallel")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mc_cv" "cv"    "list" 
+#&gt; 
+#&gt; $n10
+#&gt; $adf_cv
+#&gt;         90%         95%         99% 
+#&gt; -0.32109757  0.04648878  0.75005583 
+#&gt; 
+#&gt; $sadf_cv
+#&gt;       90%       95%       99% 
+#&gt; 0.5828047 0.9981259 2.0937113 
+#&gt; 
+#&gt; $gsadf_cv
+#&gt;      90%      95%      99% 
+#&gt; 1.012245 1.521549 3.012246 
+#&gt; 
+#&gt; $badf_cv
+#&gt;        90%   95% 99%
+#&gt; [1,] -0.44 -0.08 0.6
+#&gt; [2,] -0.44 -0.08 0.6
+#&gt; [3,] -0.44 -0.08 0.6
+#&gt; [4,] -0.44 -0.08 0.6
+#&gt; [5,] -0.44 -0.08 0.6
+#&gt; 
+#&gt; $bsadf_cv
+#&gt;             90%       95%      99%
+#&gt; [1,] -0.0068133 0.4662707 1.545210
+#&gt; [2,]  0.2991290 0.6934075 1.730407
+#&gt; [3,]  0.4231389 0.8451185 2.000511
+#&gt; [4,]  0.5082703 0.9443890 2.032095
+#&gt; [5,]  0.5828047 0.9981259 2.093711
+#&gt; 
+#&gt; attr(,"method")
+#&gt; [1] "Monte Carlo"
+#&gt; attr(,"n")
+#&gt; [1] 10
+#&gt; attr(,"minw")
+#&gt; [1] 5
+#&gt; attr(,"iter")
+#&gt; [1] 2000
+#&gt; attr(,"seed")
+#&gt; [1] 123
+#&gt; attr(,"parallel")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "mc_cv" "cv"    "list" 
+#&gt; 
+#&gt; [ truncated list ]</div><div class='input'># }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

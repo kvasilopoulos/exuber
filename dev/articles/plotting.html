@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.3.1</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">0.4.0</span>
       </span>
     </div>
 
@@ -124,10 +124,10 @@
 
     
     
-<div id="the-plotting-api-has-changed-in-exuber-0-3-1" class="section level3">
+<div id="the-plotting-api-has-changed-in-exuber-0-4-0" class="section level3">
 <h3 class="hasAnchor">
-<a href="#the-plotting-api-has-changed-in-exuber-0-3-1" class="anchor"></a>The plotting API has changed in exuber 0.3.1</h3>
-<p>The new design offers full flexibility and customization to produce publication-ready plots. <code>exuber</code> used to plot graph individually in a list, and then you had the option to modify each plot and arrange into a single grob with <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code>(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.</p>
+<a href="#the-plotting-api-has-changed-in-exuber-0-4-0" class="anchor"></a>The plotting API has changed in exuber 0.4.0</h3>
+<p>The new design offers full flexibility and customization to produce publication-ready plots. <code>exuber</code> used to plot graph individually in a list, and then you could modify each plot and arrange them into a single grob with <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code>(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.</p>
 <p>Let’s start by simulating some data.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
 <span class="no">sims</span> <span class="kw">&lt;-</span> <span class="fu">tibble</span>(
@@ -140,18 +140,19 @@
 <span class="co"># Esimation</span>
 <span class="no">estimation</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span>(<span class="no">sims</span>, <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>)
 
-<span class="co"># Critical Values ~ Conservative</span>
-<span class="no">crit_values</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mc_cv.html">mc_cv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">sims</span>))</pre></body></html></div>
+<span class="co"># Critical Values</span>
+<span class="no">crit_values</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">sims</span>))</pre></body></html></div>
 </div>
-<div id="new-features" class="section level2">
+<div id="same-appearance-with-new-features" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features" class="anchor"></a>New Features</h2>
+<a href="#same-appearance-with-new-features" class="anchor"></a>Same Appearance with New Features</h2>
+<p>The visual output of autoplot in <code>v0.4.0</code> is exactly the same the autoplot <code>v0.3.0</code>.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)</pre></body></html></div>
-<p><img src="plotting_files/figure-html/autoplot-basic-1.png" width="960"></p>
+<p><img src="plotting_files/figure-html/autoplot-basic-1.png" width="960"> However, almost all aspects of the plot can be easily changed.</p>
 <div id="change-color-and-theme" class="section level3">
 <h3 class="hasAnchor">
 <a href="#change-color-and-theme" class="anchor"></a>Change color and theme</h3>
-<p>The custom color for autoplot are “blue and”red", however the use may override this option easily with scale_col</p>
+<p>The custom color for autoplot are “blue and”red", however the user may easily override this option with <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">ggplot2::scale_color_manual</a></code>.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>) +
   <span class="fu">scale_color_manual</span>(<span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"grey"</span>,<span class="st">"black"</span>)) +
   <span class="fu">theme_classic</span>()</pre></body></html></div>
@@ -160,15 +161,76 @@
 <div id="specify-the-shade_opt" class="section level3">
 <h3 class="hasAnchor">
 <a href="#specify-the-shade_opt" class="anchor"></a>Specify the shade_opt</h3>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">shade_opt</span> <span class="kw">=</span> <span class="fu"><a href="../reference/autoplot.radf.html">shade</a></span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="st">"pink"</span>, <span class="kw">opacity</span> <span class="kw">=</span> <span class="fl">0.3</span>))</pre></body></html></div>
+<p><code>shade_opt</code> allows the user to manipulate the <code>geom_rect()</code> layer of the plot, using the <code>shade</code> function. Additionally, it can be omitted if it set to <code>NULL</code>.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">shade_opt</span> <span class="kw">=</span> <span class="fu"><a href="../reference/autoplot.radf_obj.html">shade</a></span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="st">"pink"</span>, <span class="kw">opacity</span> <span class="kw">=</span> <span class="fl">0.3</span>))</pre></body></html></div>
 <p><img src="plotting_files/figure-html/autoplot-shade-1.png" width="960"></p>
+</div>
+</div>
+<div id="custom-plotting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#custom-plotting" class="anchor"></a>Custom plotting</h2>
+<p>Custom plotting is also very easy with the <code>augment_join</code> function, that merge the estimation and and critical values results in a ggplot2-friendly way.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tidy_join.html">augment_join</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)
+<span class="no">joined</span>
+<span class="co">#&gt; # A tibble: 1,920 x 7</span>
+<span class="co">#&gt;      key index id       name   tstat sig    crit</span>
+<span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1    21    21 sim_psy1 badf  -2.08  90    -0.44</span>
+<span class="co">#&gt;  2    22    22 sim_psy1 badf  -2.31  90    -0.44</span>
+<span class="co">#&gt;  3    23    23 sim_psy1 badf  -2.39  90    -0.44</span>
+<span class="co">#&gt;  4    24    24 sim_psy1 badf  -2.26  90    -0.44</span>
+<span class="co">#&gt;  5    25    25 sim_psy1 badf  -2.08  90    -0.44</span>
+<span class="co">#&gt;  6    26    26 sim_psy1 badf  -1.79  90    -0.44</span>
+<span class="co">#&gt;  7    27    27 sim_psy1 badf  -1.00  90    -0.44</span>
+<span class="co">#&gt;  8    28    28 sim_psy1 badf  -1.34  90    -0.44</span>
+<span class="co">#&gt;  9    29    29 sim_psy1 badf  -1.28  90    -0.44</span>
+<span class="co">#&gt; 10    30    30 sim_psy1 badf  -0.800 90    -0.44</span>
+<span class="co">#&gt; # … with 1,910 more rows</span></pre></body></html></div>
+<p>The output of <code>augment_join</code> returns data in tidy format and the offers full flexibility to the user. After this point plotting becomes extremely trivial.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">%&gt;%</span>
+  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">index</span>)) +
+  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">tstat</span>)) +
+  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">crit</span>)) +
+  <span class="fu">facet_grid</span>(<span class="no">sig</span> + <span class="no">name</span> ~  <span class="no">id</span>  , <span class="kw">scales</span> <span class="kw">=</span> <span class="st">"free_y"</span>)</pre></body></html></div>
+<p><img src="plotting_files/figure-html/facet-joined-1.png" width="960"></p>
+<p>We also offer two functions <code>scale_exuber_manual</code> and <code>theme_exuber</code> that offer some extra functionality.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">%&gt;%</span>
+  <span class="fu">pivot_longer</span>(<span class="kw">cols</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"tstat"</span>, <span class="st">"crit"</span>), <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"nms"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">index</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">value</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="no">nms</span>)) +
+  <span class="fu">geom_line</span>() +
+  <span class="fu">facet_grid</span>(<span class="no">sig</span> + <span class="no">name</span> ~  <span class="no">id</span>  , <span class="kw">scales</span> <span class="kw">=</span> <span class="st">"free_y"</span>) +
+  <span class="fu"><a href="../reference/scale_exuber_manual.html">scale_exuber_manual</a></span>() +
+  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span>()</pre></body></html></div>
+<p><img src="plotting_files/figure-html/facet-joined-theme-exuber-1.png" width="960"></p>
+</div>
+<div id="distribution" class="section level2">
+<h2 class="hasAnchor">
+<a href="#distribution" class="anchor"></a>Distribution</h2>
+<p>In addition to critical values, we can also calculate the empirical distribution by utilizing the family of *_distr functions. For example if we can simulate the distribution of the supADF tests with Monte Carlo method.</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">distr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_distr</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fl">300</span>)
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">distr</span>)</pre></body></html></div>
+<p><img src="plotting_files/figure-html/distributions-1.png" width="960"></p>
+<div id="empirical-distribution" class="section level3">
+<h3 class="hasAnchor">
+<a href="#empirical-distribution" class="anchor"></a>Empirical distribution</h3>
+<p>This part is made just for fun.</p>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
+<span class="no">distr</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span>() <span class="kw">%&gt;%</span>
+  <span class="fu">rename_all</span>(~ <span class="kw pkg">stringr</span><span class="kw ns">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span>(<span class="no">.</span>)) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(<span class="no">Statistic</span>, <span class="no">value</span>, <span class="kw">factor_key</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="no">value</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">Statistic</span>)) +
+  <span class="fu">stat_ecdf</span>() +
+  <span class="fu">ggtitle</span>(<span class="st">"Empirical Cumulative Distribution"</span>) +
+  <span class="fu">geom_hline</span>(<span class="kw">yintercept</span> <span class="kw">=</span> <span class="fl">0.95</span>, <span class="kw">linetype</span> <span class="kw">=</span> <span class="st">"dashed"</span>) + <span class="fu">theme_bw</span>()</pre></body></html></div>
+<p><img src="plotting_files/figure-html/ecdf-1.png" width="960"></p>
 </div>
 </div>
 <div id="old-functionality" class="section level2">
 <h2 class="hasAnchor">
 <a href="#old-functionality" class="anchor"></a>Old Functionality</h2>
-<p>To return to older functionality there are several ways.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gridExtra</span>)
+<p>To return to the old functionality there are several ways.</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gridExtra</span>)
 
 <span class="co"># To choose only positive series (i.e. statistically significant for 5%)</span>
 <span class="no">positive_series</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)$<span class="no">positive</span>
@@ -186,69 +248,9 @@
 <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="kw pkg">gridExtra</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>, <span class="no">plot_list1</span>)</pre></body></html></div>
 <p><img src="plotting_files/figure-html/lapply-arrange-1.png" width="960"></p>
 <p>With the old functionality you had to make changes one at a time</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">plot_list1</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="no">plot_list1</span><span class="kw">[[</span><span class="fl">1</span>]] + <span class="fu">theme_classic</span>()</pre></body></html></div>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">plot_list1</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="no">plot_list1</span><span class="kw">[[</span><span class="fl">1</span>]] + <span class="fu">theme_classic</span>()</pre></body></html></div>
 <p>and then reconstruct the plot with <code>grid.arrange</code> or some other function that arranges all plots into a single grob.</p>
-</div>
-<div id="custom-plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#custom-plotting" class="anchor"></a>Custom plotting</h2>
-<p>Custom plotting is also very easy with the <code>augment_join</code> function, that merge the estimation and and critical values results in a ggplot2-friendly way.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/tidy_join.html">augment_join</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)
-<span class="no">joined</span>
-<span class="co">#&gt; # A tibble: 1,920 x 7</span>
-<span class="co">#&gt;      key index id       name   tstat sig    crit</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;    &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1    21    21 sim_psy1 badf  -2.08  90    -0.44</span>
-<span class="co">#&gt;  2    22    22 sim_psy1 badf  -2.31  90    -0.44</span>
-<span class="co">#&gt;  3    23    23 sim_psy1 badf  -2.39  90    -0.44</span>
-<span class="co">#&gt;  4    24    24 sim_psy1 badf  -2.26  90    -0.44</span>
-<span class="co">#&gt;  5    25    25 sim_psy1 badf  -2.08  90    -0.44</span>
-<span class="co">#&gt;  6    26    26 sim_psy1 badf  -1.79  90    -0.44</span>
-<span class="co">#&gt;  7    27    27 sim_psy1 badf  -1.00  90    -0.44</span>
-<span class="co">#&gt;  8    28    28 sim_psy1 badf  -1.34  90    -0.44</span>
-<span class="co">#&gt;  9    29    29 sim_psy1 badf  -1.28  90    -0.44</span>
-<span class="co">#&gt; 10    30    30 sim_psy1 badf  -0.800 90    -0.44</span>
-<span class="co">#&gt; # … with 1,910 more rows</span></pre></body></html></div>
-<p>The output of <code>augment_join</code> returns data in tidy format and the offers full flexibility to the user. After this point plotting becomes extremely trivial.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">%&gt;%</span>
-  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">index</span>)) +
-  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">tstat</span>)) +
-  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">crit</span>)) +
-  <span class="fu">facet_grid</span>(<span class="no">sig</span> + <span class="no">name</span> ~  <span class="no">id</span>  , <span class="kw">scales</span> <span class="kw">=</span> <span class="st">"free_y"</span>)</pre></body></html></div>
-<p><img src="plotting_files/figure-html/facet-joined-1.png" width="960"></p>
-<p>We also offer two functions <code>scale_exuber_manual</code> and <code>theme_exuber</code> that offer some extra functionality.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">joined</span> <span class="kw">%&gt;%</span>
-  <span class="fu">pivot_longer</span>(<span class="kw">cols</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"tstat"</span>, <span class="st">"crit"</span>), <span class="kw">names_to</span> <span class="kw">=</span> <span class="st">"nms"</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">index</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">value</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="no">nms</span>)) +
-  <span class="fu">geom_line</span>() +
-  <span class="fu">facet_grid</span>(<span class="no">sig</span> + <span class="no">name</span> ~  <span class="no">id</span>  , <span class="kw">scales</span> <span class="kw">=</span> <span class="st">"free_y"</span>) +
-  <span class="fu"><a href="../reference/scale_exuber_manual.html">scale_exuber_manual</a></span>() +
-  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span>()</pre></body></html></div>
-<p><img src="plotting_files/figure-html/facet-joined-theme-exuber-1.png" width="960"></p>
-</div>
-<div id="distributions" class="section level1">
-<h1 class="hasAnchor">
-<a href="#distributions" class="anchor"></a>Distributions</h1>
-<p>In addition to critical values, we can also calculate the empirical distribution by utilizing the family of *_distr functions. For example if we can simulate the distribution of the supADF tests with Monte Carlo method.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">distr</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/mc_cv.html">mc_distr</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fl">300</span>, <span class="kw">nrep</span> <span class="kw">=</span> <span class="fl">500</span>)
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">distr</span>)</pre></body></html></div>
-<p><img src="plotting_files/figure-html/distributions-1.png" width="960"></p>
-<div id="empirical-distribution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#empirical-distribution" class="anchor"></a>Empirical distribution</h2>
-<p>This part is made just for fun.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
-<span class="no">distr</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy</a></span>() <span class="kw">%&gt;%</span>
-  <span class="fu">rename_all</span>(~ <span class="kw pkg">stringr</span><span class="kw ns">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span>(<span class="no">.</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span>(<span class="no">Statistic</span>, <span class="no">value</span>, <span class="kw">factor_key</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="no">value</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">Statistic</span>)) +
-  <span class="fu">stat_ecdf</span>() +
-  <span class="fu">ggtitle</span>(<span class="st">"Empirical Cumulative Distribution"</span>) +
-  <span class="fu">geom_hline</span>(<span class="kw">yintercept</span> <span class="kw">=</span> <span class="fl">0.95</span>, <span class="kw">linetype</span> <span class="kw">=</span> <span class="st">"dashed"</span>) + <span class="fu">theme_bw</span>()</pre></body></html></div>
-<p><img src="plotting_files/figure-html/ecdf-1.png" width="960"></p>
 <p>Enjoy Plotting with <code>exuber</code> !!!</p>
-</div>
 </div>
   </div>
 
