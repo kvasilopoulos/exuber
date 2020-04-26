@@ -28,8 +28,9 @@ return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{
-A list that contains the panel critical values for BSADF and GSADF
-t-statistics.
+For \code{radf_sb_cv} A list that contains the panel critical values
+for BSADF and GSADF t-statistics. For \code{radf_wb_dist} a numeric vector
+that contains panel GSADF distribution.
 }
 \description{
 \code{sb_cv} computes p-values for the panel recursive unit root test using

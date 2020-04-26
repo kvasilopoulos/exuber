@@ -22,6 +22,8 @@ A list that contains the t-statistic (sequence) for:
 \item{sadf}{Supremum Augmented Dickey-Fuller}
 \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
 \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
+\item{bsadf_panel}{Panel Backward Supremum Augmented Dickey-Fuller}
+\item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
 \code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller

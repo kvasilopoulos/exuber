@@ -264,16 +264,16 @@ tidy_radf_distr.wb_distr <- function(x, ...) {
 
   list(
     x %>%
-      pluck("adf_cv") %>%
+      pluck("adf_distr") %>%
       as_tibble() %>%
       tidyr::gather(id, adf),
     x %>%
-      pluck("sadf_cv") %>%
+      pluck("sadf_distr") %>%
       as_tibble() %>%
       gather(id, sadf) %>%
       select(-id),
     x %>%
-      pluck("gsadf_cv") %>%
+      pluck("gsadf_distr") %>%
       as_tibble() %>%
       gather(id, gsadf) %>%
       select(-id)

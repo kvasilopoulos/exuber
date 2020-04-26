@@ -29,8 +29,9 @@ return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{
-A list that contains the critical values for ADF, BADF, BSADF and GSADF
-t-statistics.
+For \code{radf_wb_cv} a list that contains the critical values for ADF,
+BADF, BSADF and GSADF t-statistics. For \code{radf_wb_dist} a list that
+contains the ADF, SADF and GSADF distributions.
 }
 \description{
 \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
