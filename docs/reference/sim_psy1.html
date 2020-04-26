@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -54,7 +58,6 @@
 <meta property="og:description" content="The following function generates a time series which switches from a martingale to a mildly explosive
 process and then back to a martingale." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -69,10 +72,20 @@ process and then back to a martingale." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129604855-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129604855-4');
+</script>
+
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,7 +99,7 @@ process and then back to a martingale." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -239,98 +252,19 @@ Historical Episodes of Exuberance and Collapse in the S&amp;P 500. International
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># 100 periods with bubble origination date 40 and termination date 55</span>
-<span class='fu'>sim_psy1</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='output co'>#&gt;   [1] 100.00000 101.82002 104.78678 111.98502 115.05539 119.55851 111.84253
-#&gt;   [8] 109.32685 119.35548 111.04517 112.79746 115.54743 122.17313 119.80426
-#&gt;  [15] 120.88132 108.90882 111.20789 106.68191 105.06150  96.99658  99.61029
-#&gt;  [22] 104.13636 102.06803 114.45986 119.01296 125.45417 139.36962 134.94856
-#&gt;  [29] 140.43908 147.13796 147.09606 149.26243 142.39216 145.58460 140.82501
-#&gt;  [36] 146.34991 140.84030 143.00901 137.26112 144.25298 142.81081 152.69363
-#&gt;  [43] 169.01911 180.92775 180.35082 187.51676 210.59280 236.16889 243.09164
-#&gt;  [50] 255.93977 274.48959 293.97579 308.58650 321.58423 340.65650 151.10958
-#&gt;  [57] 151.27000 146.86310 143.43840 154.40012 151.36526 156.54723 166.54020
-#&gt;  [64] 169.55268 166.68919 166.41758 163.07500 171.41120 170.39573 180.92012
-#&gt;  [71] 177.10677 172.71284 173.68471 173.84895 170.42373 159.68604 159.89019
-#&gt;  [78] 155.02464 162.37557 155.90683 163.55565 159.14865 161.13452 167.23671
-#&gt;  [85] 163.71445 167.47909 166.88175 159.17365 157.33981 168.33818 166.88423
-#&gt;  [92] 161.33149 160.96467 163.20633 169.69299 177.46048 178.14302 186.05049
-#&gt;  [99] 180.86116 164.94192</div><div class='input'>
+<span class='fu'>sim_psy1</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='img'><img src='sim_psy1-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># 200 periods with bubble origination date 80 and termination date 110</span>
-<span class='fu'>sim_psy1</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>)</div><div class='output co'>#&gt;   [1] 100.00000  96.79727  93.29461  77.56873  81.38791  76.06608  74.53117
-#&gt;   [8]  63.75474  67.47243  80.31386  74.35172  73.58744  86.81920  93.15982
-#&gt;  [15] 106.14949 106.11395 105.08010 101.61971 111.36046 102.62962 104.71628
-#&gt;  [22] 104.40178 119.69178 115.56324 105.31517 106.89474 106.62552 100.92786
-#&gt;  [29] 101.82612  99.95531  95.34654  98.74721  96.49523  84.03571  66.03039
-#&gt;  [36]  62.08823  71.96216  77.65306  85.90327  92.57449  94.71852  84.48557
-#&gt;  [43]  85.88139  96.72657  73.66730  68.36191  75.84765  79.43783  84.79781
-#&gt;  [50]  87.90152  91.56020  91.65962  85.43666  77.10659  77.35207  74.49081
-#&gt;  [57]  68.38412  71.21855  72.26044  82.19613  74.58113  71.06535  70.55646
-#&gt;  [64]  60.99756  59.06441  54.25593  39.67346  37.74620  34.11985  41.81299
-#&gt;  [71]  37.71137  41.49687  42.46532  34.06704  36.60748  35.88715  37.01472
-#&gt;  [78]  41.48277  42.25658  54.77885  57.84378  51.73702  58.92798  53.07751
-#&gt;  [85]  42.25771  38.51733  35.06436  32.39904  44.65764  57.62235  64.95119
-#&gt;  [92]  59.00562  61.61905  67.49166  69.37076  73.42466  70.06600  64.23974
-#&gt;  [99]  76.47262  81.47146  82.08991  87.71571 105.37136 112.22023 126.47513
-#&gt; [106] 141.02562 144.13146 155.30897 157.35247 153.89656  46.61954  45.60973
-#&gt; [113]  57.81178  58.52344  53.07217  54.63641  59.37566  50.58124  43.41996
-#&gt; [120]  30.23645  21.61613  15.59042  13.60832  23.18285  29.21673  31.07023
-#&gt; [127]  27.22273  26.94972  30.66801  27.24563  34.43671  41.88842  33.96786
-#&gt; [134]  28.89633  37.09008  25.63386  28.48369  30.06915  51.76932  33.23479
-#&gt; [141]  27.52578  32.10244  43.47111  49.17259  39.47397  54.67941  42.74758
-#&gt; [148]  35.19020  34.89727  50.00901  53.44690  58.40629  70.13993  76.82659
-#&gt; [155]  68.51062  73.32966  72.58806  84.69197  83.03898  72.66992  76.00947
-#&gt; [162]  78.41655  78.29687  71.12290  65.42666  65.34094  72.38970  69.91504
-#&gt; [169]  63.99789  45.63636  48.99231  51.89395  60.78336  70.74241  69.77105
-#&gt; [176]  78.58796  78.59688  74.00406  68.24480  65.88907  67.43366  67.24760
-#&gt; [183]  68.61156  69.96238  74.81451  72.95961  84.06362  87.03556  78.93145
-#&gt; [190]  77.05300  80.55584  77.76478  80.10730  83.05684  91.90746  87.48244
-#&gt; [197]  87.36782  83.51319  75.85996  63.30545</div><div class='input'>
+<span class='fu'>sim_psy1</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='img'><img src='sim_psy1-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># 200 periods with bubble origination date 100 and termination date 150</span>
-<span class='fu'>sim_psy1</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>te</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>tf</span> <span class='kw'>=</span> <span class='fl'>150</span>)</div><div class='output co'>#&gt;   [1]  100.000000  101.327642  105.412270  109.752154  100.314103   92.643590
-#&gt;   [7]   84.895153   80.219074   81.374717   85.411259   79.877188   60.428273
-#&gt;  [13]   66.904734   71.082518   66.323606   59.033445   56.996505   57.730548
-#&gt;  [19]   62.641082   72.079827   66.315909   68.289917   77.348972   71.228859
-#&gt;  [25]   69.716296   57.688028   59.639625   55.285933   49.005606   43.709559
-#&gt;  [31]   46.727737   32.044573   29.155354   22.272211   15.739422   18.962192
-#&gt;  [37]   21.350603   20.623935   24.273677   20.185385    6.447194   14.285714
-#&gt;  [43]   12.719309   10.240356   11.309903   16.510583   19.403713   25.699845
-#&gt;  [49]   26.013099   22.588999   20.548948   26.136548   20.370012   13.895000
-#&gt;  [55]   16.023520   20.182214    8.699759   14.027863   14.108834   12.878111
-#&gt;  [61]   20.394331   30.439422   22.648580   29.517713   25.225964   26.124697
-#&gt;  [67]   29.390185   30.294461   20.361611   16.923143   27.377457   28.550725
-#&gt;  [73]   22.875481   18.421725   25.602599   27.952506   21.860609   21.903150
-#&gt;  [79]   25.954543   37.650669   31.663590   29.083757   35.847344   32.729913
-#&gt;  [85]   42.645118   49.728759   38.463871   41.342544   31.706428   21.761166
-#&gt;  [91]   22.239325   22.624306   22.402217   30.986687   32.989655   28.419395
-#&gt;  [97]   29.231399   25.738647   25.276170   18.533357   18.522347   19.992327
-#&gt; [103]   16.059722   17.008207   13.311082    9.492378    8.499383   12.186003
-#&gt; [109]   11.299039   13.064186   20.194482   19.098208   19.189647   23.459885
-#&gt; [115]   15.893542   20.247732   17.458195   10.457606   -1.111814   -6.012798
-#&gt; [121]  -14.208770  -22.801911  -12.701793  -21.461015  -15.581294  -12.527689
-#&gt; [127]  -19.056906  -24.000457  -27.784794  -27.648530  -31.164600  -26.847615
-#&gt; [133]  -29.952562  -45.902118  -48.466228  -63.058551  -59.315793  -66.861762
-#&gt; [139]  -77.217550  -84.448264  -83.989932 -100.513246 -102.973962 -113.862048
-#&gt; [145] -118.659665 -118.988495 -120.073911 -114.867197 -118.772360 -128.477607
-#&gt; [151]   33.157029   31.097987   36.581454   42.902886   45.991671   55.670278
-#&gt; [157]   54.251228   45.890003   43.441505   39.725926   41.953019   35.615913
-#&gt; [163]   40.238619   32.335857   44.255359   54.098397   51.051079   52.002136
-#&gt; [169]   49.465051   41.273363   23.202824   23.032432   22.799038   33.950656
-#&gt; [175]   20.401468   15.905328   21.880786   24.205597   25.032305   20.817338
-#&gt; [181]   22.181756   20.579959   21.351718   17.427579   25.497934   32.694902
-#&gt; [187]   41.771490   39.278411   37.211965   34.833566   44.164009   42.128907
-#&gt; [193]   42.791850   45.380117   49.985180   48.167678   64.096785   57.799096
-#&gt; [199]   48.112773   48.400008</div></pre>
+<span class='fu'>sim_psy1</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>te</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>tf</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='img'><img src='sim_psy1-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -341,7 +275,7 @@ Historical Episodes of Exuberance and Collapse in the S&amp;P 500. International
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

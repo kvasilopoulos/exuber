@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -52,7 +56,6 @@
 
 <meta property="og:title" content="Function reference" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -67,10 +70,20 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129604855-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129604855-4');
+</script>
+
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -84,7 +97,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -164,88 +177,138 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-overview" class="hasAnchor"><a href="#section-overview" class="anchor"></a>Overview</h2>
+          <h2 id="section-package" class="hasAnchor"><a href="#section-package" class="anchor"></a>Package</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
           <p><code><a href="exuber.html">exuber</a></code> </p>
         </td>
         <td><p>exuber: Econometric Analysis of Explosive Time Series</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="install_exuberdata.html">install_exuberdata()</a></code> </p>
+        </td>
+        <td><p>Convenience function to install exuberdata package</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-estimation" class="hasAnchor"><a href="#section-estimation" class="anchor"></a>Estimation</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-recursive-augmented-dickey-fuller" class="hasAnchor"><a href="#section-recursive-augmented-dickey-fuller" class="anchor"></a>Recursive Augmented Dickey Fuller</h2>
+          <p class="section-desc"><p>Estimation &amp; Critical Values</p></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
           <p><code><a href="radf.html">radf()</a></code> </p>
         </td>
         <td><p>Recursive Augmented Dickey-Fuller Test</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-critical-values-distributions" class="hasAnchor"><a href="#section-critical-values-distributions" class="anchor"></a>Critical Values &amp; Distributions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
+      </tr><tr>
         
         <td>
-          <p><code><a href="mc_cv.html">mc_cv()</a></code> <code><a href="mc_cv.html">mc_distr()</a></code> </p>
+          <p><code><a href="radf_mc_cv.html">radf_mc_cv()</a></code> <code><a href="radf_mc_cv.html">radf_mc_distr()</a></code> </p>
         </td>
         <td><p>Monte Carlo Critical Values</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="wb_cv.html">wb_cv()</a></code> <code><a href="wb_cv.html">wb_distr()</a></code> </p>
+          <p><code><a href="radf_wb_cv.html">radf_wb_cv()</a></code> <code><a href="radf_wb_cv.html">radf_wb_distr()</a></code> </p>
         </td>
         <td><p>Wild Bootstrap Critical values</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="sb_cv.html">sb_cv()</a></code> <code><a href="sb_cv.html">sb_distr()</a></code> </p>
+          <p><code><a href="radf_sb_cv.html">radf_sb_cv()</a></code> <code><a href="radf_sb_cv.html">radf_sb_distr()</a></code> </p>
         </td>
         <td><p>Panel Sieve Bootstrap Critical Values</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="calc_pvalue.html">calc_pvalue()</a></code> </p>
+          <p><code><a href="radf_crit.html">radf_crit</a></code> </p>
         </td>
-        <td><p>Calculate p-values</p></td>
+        <td><p>Simulated Monte Carlo critical values</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-report" class="hasAnchor"><a href="#section-report" class="anchor"></a>Report</h2>
+          <h2 id="section-analysis" class="hasAnchor"><a href="#section-analysis" class="anchor"></a>Analysis</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="summary.radf.html">summary(<i>&lt;radf&gt;</i>)</a></code> </p>
+          <p><code><a href="summary.radf_obj.html">summary(<i>&lt;radf_obj&gt;</i>)</a></code> </p>
         </td>
         <td><p>Summarizing radf models</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="diagnostics.radf.html">diagnostics(<i>&lt;radf&gt;</i>)</a></code> </p>
+          <p><code><a href="diagnostics.html">diagnostics()</a></code> </p>
         </td>
-        <td><p>Diagnostics on <code>radf</code> object</p></td>
+        <td><p>Diagnostics</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="datestamp.radf.html">datestamp(<i>&lt;radf&gt;</i>)</a></code> </p>
+          <p><code><a href="datestamp.html">datestamp()</a></code> </p>
         </td>
-        <td><p>This is a topic</p></td>
+        <td><p>Date-stamping periods of mildly explosive behavior</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-plotting" class="hasAnchor"><a href="#section-plotting" class="anchor"></a>Plotting</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="autoplot.radf_obj.html">autoplot(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="autoplot.radf_obj.html">shade()</a></code> </p>
+        </td>
+        <td><p>Plotting and tidying radf objects</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="scale_exuber_manual.html">scale_exuber_manual()</a></code> <code><a href="scale_exuber_manual.html">theme_exuber()</a></code> </p>
+        </td>
+        <td><p>Exuber scale and theme functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="autoplot.radf_distr.html">autoplot(<i>&lt;radf_distr&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plotting <code>distr</code> object</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="autoplot.ds_radf.html">autoplot(<i>&lt;ds_radf&gt;</i>)</a></code> <code><a href="autoplot.ds_radf.html">tidy(<i>&lt;ds_radf&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Plotting and tidying datestamp objects</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -254,6 +317,11 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
@@ -288,42 +356,21 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-plotting" class="hasAnchor"><a href="#section-plotting" class="anchor"></a>Plotting</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="autoplot.radf.html">autoplot(<i>&lt;radf&gt;</i>)</a></code> <code><a href="autoplot.radf.html">shade()</a></code> </p>
-        </td>
-        <td><p>Plotting and tidying radf objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="autoplot.datestamp.html">autoplot(<i>&lt;datestamp&gt;</i>)</a></code> <code><a href="autoplot.datestamp.html">tidy(<i>&lt;datestamp&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plotting and tidying datestamp objects</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="autoplot.mc_distr.html">autoplot(<i>&lt;mc_distr&gt;</i>)</a></code> <code><a href="autoplot.mc_distr.html">autoplot(<i>&lt;wb_distr&gt;</i>)</a></code> <code><a href="autoplot.mc_distr.html">autoplot(<i>&lt;sb_distr&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plotting <code>distr</code> object</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
           <h2 id="section-helpers" class="hasAnchor"><a href="#section-helpers" class="anchor"></a>Helpers</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="index-rd.html">index()</a></code> <code><a href="index-rd.html">`index<-`()</a></code> </p>
+          <p><code><a href="index-rd.html">index()</a></code> <code><a href="index-rd.html">`index&lt;-`()</a></code> </p>
         </td>
-        <td><p>Retrieve/Replace the index</p></td>
+        <td><p>Retrieve/Replace/Set the index</p></td>
       </tr><tr>
         
         <td>
@@ -333,9 +380,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="series_names.html">series_names()</a></code> <code><a href="series_names.html">`series_names<-`()</a></code> </p>
+          <p><code><a href="series_names.html">series_names()</a></code> <code><a href="series_names.html">`series_names&lt;-`()</a></code> </p>
         </td>
-        <td><p>Retrieve/Set column names</p></td>
+        <td><p>Retrieve/Replace/Set series names</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -344,28 +391,33 @@
           <p class="section-desc"></p>
         </th>
       </tr>
+      
+      
+    </tbody><tbody>
+      
+      
       <tr>
         
         <td>
-          <p><code><a href="tidy.radf.html">tidy(<i>&lt;radf&gt;</i>)</a></code> <code><a href="tidy.radf.html">augment(<i>&lt;radf&gt;</i>)</a></code> <code><a href="tidy.radf.html">glance(<i>&lt;radf&gt;</i>)</a></code> </p>
+          <p><code><a href="tidy.radf_obj.html">tidy(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="tidy.radf_obj.html">augment(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="tidy.radf_obj.html">glance(<i>&lt;radf_obj&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Tidy an radf object</p></td>
+        <td><p>Tidy an <code>radf</code> object</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tidy.mc_cv.html">tidy(<i>&lt;mc_cv&gt;</i>)</a></code> <code><a href="tidy.mc_cv.html">tidy(<i>&lt;wb_cv&gt;</i>)</a></code> <code><a href="tidy.mc_cv.html">tidy(<i>&lt;sb_cv&gt;</i>)</a></code> <code><a href="tidy.mc_cv.html">augment(<i>&lt;mc_cv&gt;</i>)</a></code> <code><a href="tidy.mc_cv.html">augment(<i>&lt;wb_cv&gt;</i>)</a></code> <code><a href="tidy.mc_cv.html">augment(<i>&lt;sb_cv&gt;</i>)</a></code> </p>
+          <p><code><a href="tidy.radf_cv.html">tidy(<i>&lt;radf_cv&gt;</i>)</a></code> <code><a href="tidy.radf_cv.html">augment(<i>&lt;radf_cv&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Tidy an cv object</p></td>
+        <td><p>Turn an <code>radf_cv</code> object</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="tidy.mc_distr.html">tidy(<i>&lt;mc_distr&gt;</i>)</a></code> <code><a href="tidy.mc_distr.html">tidy(<i>&lt;wb_distr&gt;</i>)</a></code> <code><a href="tidy.mc_distr.html">tidy(<i>&lt;sb_distr&gt;</i>)</a></code> </p>
+          <p><code><a href="tidy.radf_distr.html">tidy(<i>&lt;radf_distr&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Tidying *_dist objects</p></td>
+        <td><p>Tidying *_distr objects</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="augment_join.html">augment_join()</a></code> </p>
+          <p><code><a href="tidy_join.radf_obj.html">tidy_join(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="tidy_join.radf_obj.html">augment_join(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="tidy_join.radf_obj.html">glance_join(<i>&lt;radf_obj&gt;</i>)</a></code> </p>
         </td>
         <td><p>Tidy into a joint model</p></td>
       </tr>
@@ -373,18 +425,10 @@
     </table>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-overview">Overview</a></li>
-      <li><a href="#section-estimation">Estimation</a></li>
-      <li><a href="#section-critical-values-distributions">Critical Values &amp; Distributions</a></li>
-      <li><a href="#section-report">Report</a></li>
-      <li><a href="#section-simulation">Simulation</a></li>
-      <li><a href="#section-plotting">Plotting</a></li>
-      <li><a href="#section-helpers">Helpers</a></li>
-      <li><a href="#section-tidying">Tidying</a></li>
-    </ul>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -395,7 +439,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
