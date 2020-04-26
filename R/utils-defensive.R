@@ -72,6 +72,15 @@ assert_na <- function(x) {
   }
 }
 
+
+# Model matching ----------------------------------------------------------
+
+assert_n <- function(x) {
+  if (!is_n(x)) { # case of providiing data in 'n'
+    stop_glue("Argument 'n' should be a positive integer")
+  }
+}
+
 assert_match <- function(x, y, panel = FALSE) {
   attr_x <- attributes(x)
   attr_y <- attributes(y)
@@ -86,6 +95,14 @@ assert_match <- function(x, y, panel = FALSE) {
       stop_glue("lag value does not match")
   }
 }
+
+assert_model <- function(x, y) {
+  assert_class(x, "obj") # is this necessay since s3
+  assert_class(y, "cv")
+  assert_match(x, y)
+}
+
+# TODO validate with NextMethods() ???
 
 # predicates --------------------------------------------------------------
 

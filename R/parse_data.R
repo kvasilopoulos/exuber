@@ -1,5 +1,7 @@
 
-idx_seq <- function(x) seq(1, NROW(x), 1)
+idx_seq <- function(x) {
+  seq(1, NROW(x), 1)
+}
 
 parse_dt <- function(x) {
   UseMethod("parse_dt")
@@ -57,5 +59,6 @@ parse_data <- function(x) {
     colnames(matx) <- paste0("series", seq(1, ncol(matx), 1))
   }
   matx %>%
-    add_attr(index = lst$index)
+    add_attr(index = lst$index) %>%
+    add_attr(series_names = colnames(matx))
 }

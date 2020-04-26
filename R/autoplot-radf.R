@@ -1,9 +1,9 @@
 #' Plotting and tidying radf objects
 #'
-#' \code{autoplot.radf} takes an \code{radf} object and returns a faceted ggplot object.
+#' \code{autoplot.radf_obj} takes an \code{radf_obj} object and returns a faceted ggplot object.
 #' \code{shade}
 #'
-#' @inheritParams datestamp.radf
+#' @inheritParams datestamp.radf_obj
 #'
 #' @param include_negative If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
 #' @param select_series If not NULL, only plot with names or column number matching this regular expression will be executed.
@@ -57,7 +57,7 @@
 #' autoplot(rsim_data) +
 #'   theme(legend.position = "right")
 #'  }
-autoplot.radf <- function(object, cv = NULL,
+autoplot.radf_obj <- function(object, cv = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0L,
                           select_series = NULL,
@@ -68,32 +68,24 @@ autoplot.radf <- function(object, cv = NULL,
   deprecate_arg_warn(include, include_negative)
   deprecate_arg_warn(select, select_series)
   cv <- cv %||% retrieve_crit(object)
-  assert_class(cv, "cv")
+  assert_class(cv, "radf_cv")
 
   option <- match.arg(option)
-  if (is_sb(cv) && option == "sadf") {
-    stop_glue("argument 'option' cannot  be be set to 'sadf' ",
-                 "when cv is of class 'sb_cv'")
-  }
-  filter_option <- if (option == "gsadf") "bsadf" else if (option == "sadf") "badf"
-
   if (is_sb(cv)) {
     if (!is.null(select_series)) {
-      warning_glue("argument 'select_series' have to be set to NULL ",
-                "when cv is of class 'sb_cv'")
-    }
-    if (!isFALSE(include_negative)) {
-      warning_glue("argument 'include_negative' have to be set to 'FALSE' ",
+      stop_glue("argument 'select_series' have to be set to NULL ",
                 "when cv is of class 'sb_cv'")
     }
     filter_option <- "bsadf_panel" # overwrite option
     select_series <- "panel"
+  }else{
+    filter_option <- if (option == "gsadf") "bsadf" else "badf"
   }
 
   pos_series <- if (include_negative) {
     if (is_sb(cv)) "panel" else series_names(object)
   } else {
-    diagnostics_internal(object, cv)$positive
+    diagnostics_internal(object, cv)$positive # internal to make the check here
   }
 
   sel_series <- select_series %||% series_names(object)
@@ -113,8 +105,8 @@ autoplot.radf <- function(object, cv = NULL,
     scale_exuber_manual() +
     theme_exuber()
 
-  check_negative <- all(series %in% diagnostics(object, cv)$negative)
-  if (!is.null(shade_opt) && !check_negative) {
+  all_negative <- all(series %in% diagnostics(object, cv)$negative)
+  if (!is.null(shade_opt) && !all_negative) {
     ds_data <- tidy(datestamp(object, cv, option = option)) %>%
       filter(id %in% series) %>%
       droplevels()
@@ -133,7 +125,7 @@ autoplot.radf <- function(object, cv = NULL,
   gg
 }
 
-#' @rdname autoplot.radf
+#' @rdname autoplot.radf_obj
 #' @param min_duration the minimum duration.
 #' @param fill the shade color that indicates the exuberance periods.
 #' @param opacity the opacity of the shade color aka alpha.
@@ -151,7 +143,7 @@ shade <- function(fill = "grey70", opacity = 0.5, ...) {
 #' Exuber scale and theme functions
 #'
 #' `scale_exuber_manual` allow you to specify your own color size and linetype in
-#' `autoplot.radf` mappings. `theme_exuber` is a complete theme themes which control all non-data display.
+#' `autoplot.radf_obj` mappings. `theme_exuber` is a complete theme themes which control all non-data display.
 #'
 #' @param color_values a set of color values to map data values to.
 #' @param linetype_values a set of linetype values to map data values to.
@@ -199,3 +191,5 @@ theme_exuber <- function(
           vjust = 1, margin = margin(b = half_line)),
     )
 }
+
+

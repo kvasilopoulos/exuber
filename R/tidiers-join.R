@@ -1,28 +1,52 @@
 #' Tidy into a joint model
 #'
-#' Tidy, augment or glance, and then join objects of class `radf` and `cv`. The
-#' object of reference should be the `radf`. For example, using `glance` in an
+ #' Tidy, augment or glance, and then join objects
+#'
+#' @param x An object of class `obj`.
+#' @param y An object of class `cv`.
+#' @param ... further arguments passed to methods.
+#' @export
+tidy_join <- function(x, y, ...) {
+  UseMethod("tidy_join")
+}
+
+#' @rdname tidy_join
+#' @export
+augment_join <- function(x, y, ...) {
+  UseMethod("augment_join")
+}
+
+#' @rdname tidy_join
+#' @export
+glance_join <- function(x, y, ...) {
+  UseMethod("glance_join")
+}
+
+
+#' Tidy into a joint model
+#'
+#' Tidy, augment or glance, and then join objects of class `radf_obj` and `radf_cv`. The
+#' object of reference should be the `radf_obj`. For example, using `glance` in an
 #' radf object returns the panel statistic, so `glance_join` returns the panel
 #' statistic together with the critical values.
 #'
-#' @param x An object of class `radf`.
-#' @param y An object of class `cv`. The output will depend on the type of
+#' @param x An object of class `radf_obj`.
+#' @param y An object of class `radf_cv`. The output will depend on the type of
 #' critical value.
+#' @inheritDotParams tidy_join
 #'
+#' @details `tidy_join` also calls `augment_join` when `cv` is of class `sb_cv`.
 #'
 #' @importFrom dplyr full_join case_when select_at
 #' @export
-tidy_join <- function(x, y = NULL) {
+tidy_join.radf_obj <- function(x, y = NULL, ...) {
 
-  assert_class(x, "radf")
   y <- y %||% retrieve_crit(x)
-  assert_class(y, "cv")
-  if (is_sb(y)) {
-    stop_glue(
-      "argument 'y' should not be of class 'sb_cv', ",
-      "do you need 'glance_join'")
-  }
+  assert_class(y, "radf_cv")
   assert_match(x, y)
+  if (is_sb(y)) {
+    return(glance_join(x, y))
+  }
 
   join_by <- if (!is_mc(y)) c("id") else NULL
   inner_join(
@@ -35,15 +59,13 @@ tidy_join <- function(x, y = NULL) {
     arrange(id,name)
 }
 
-
-#' @rdname tidy_join
-#' @importFrom dplyr inner_join select case_when
 #' @export
-augment_join <- function(x, y = NULL) {
+#' @rdname tidy_join.radf_obj
+#' @importFrom dplyr inner_join select case_when
+augment_join.radf_obj <- function(x, y = NULL, ...) {
 
-  assert_class(x, "radf")
   y <- y %||% retrieve_crit(x)
-  assert_class(y, "cv")
+  assert_class(y, "radf_cv")
   assert_match(x, y)
 
   panel_arg <- is_sb(y)
@@ -71,10 +93,11 @@ all_of <- function(x) {
   x
 }
 
-#' @rdname tidy_join
-#' @importFrom dplyr inner_join select case_when
 #' @export
-glance_join <- function(x, y) {
+#' @rdname tidy_join.radf_obj
+#' @importFrom dplyr inner_join select case_when
+glance_join.radf_obj <- function(x, y, ...) {
+
   if (!is_sb(y)) {
     stop_glue("argument 'y' should be of class 'sb_cv'")
   }
@@ -84,3 +107,4 @@ glance_join <- function(x, y) {
     by = c("id", "name")) %>%
     arrange(name)
 }
+

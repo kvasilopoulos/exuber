@@ -1,4 +1,4 @@
-#' Tidy an radf object
+#' Tidy an `radf` object
 #'
 #' @param x An `radf` object
 #' @param format Long or wide format
@@ -27,7 +27,7 @@
 #' # Get the panel t-stat
 #' glance(mc)
 #' }
-tidy.radf <- function(x, format = c("wide", "long"), ...) {
+tidy.radf_obj <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
 
@@ -49,13 +49,13 @@ tidy.radf <- function(x, format = c("wide", "long"), ...) {
   tbl_radf
 }
 
-#' @rdname tidy.radf
+#' @rdname tidy.radf_obj
 #' @param panel Either univariate or panel bsadf.
 #'
 #' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather
 #' @export
-augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
+augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 
   format <- match.arg(format)
   stopifnot(is.logical(panel))
@@ -104,14 +104,14 @@ augment.radf <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
   tbl_radf
 }
 
-#' @rdname tidy.radf
+#' @rdname tidy.radf_obj
 #'
 #' @importFrom purrr pluck
 #' @importFrom rlang set_names
 #' @importFrom dplyr full_join
 #' @importFrom tibble enframe
 #' @export
-glance.radf <- function(x, format = c("wide", "long"), ...) {
+glance.radf_obj <- function(x, format = c("wide", "long"), ...) {
 
   format <- match.arg(format)
   tbl_radf <- x %>%

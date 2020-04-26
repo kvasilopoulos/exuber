@@ -28,13 +28,13 @@ radf_div <- radf(sim_div(100))
 # Create a series that do not reject at 95 sig level
 set.seed(1132)
 radf_95 <- radf(sim_psy1(100, alpha = 0.66))
-mc <- mc_cv(100, nrep = 100)
+mc <- radf_mc_cv(100, nrep = 100)
 set.seed(1333)
-wb <- wb_cv(dta, nboot = 100)
+wb <- radf_wb_cv(dta, nboot = 100)
 
 # # Panel critical values
-sb <- sb_cv(dta, nboot = 100, lag = 0)
-sb1 <- sb_cv(dta, nboot = 100, lag = 1)
-# sb2 <- sb_cv(dta, nboot = 100, lag = 2)
+sb <- radf_sb_cv(dta, nboot = 100, lag = 0)
+sb1 <- radf_sb_cv(dta, nboot = 100, lag = 1)
+sb2 <- radf_sb_cv(dta, nboot = 100, lag = 2)
 
 # }

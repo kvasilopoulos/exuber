@@ -28,9 +28,9 @@ library(tidyr)
 options(exuber.parallel = FALSE)
 ```
 
-### The plotting API has changed in exuber 0.3.1
+### The plotting API has changed in exuber 0.4.0
 
-The new design offers full flexibility and customization to produce publication-ready plots. `exuber` used to plot graph individually in a list, and then you had the option to modify each plot and arrange into a single grob with `ggarrange()`(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.
+The new design offers full flexibility and customization to produce publication-ready plots. `exuber` used to plot graph individually in a list, and then you could modify each plot and arrange them into a single grob with `ggarrange()`(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.
 
 Let's start by simulating some data.
 
@@ -46,20 +46,23 @@ sims <- tibble(
 # Esimation
 estimation <- radf(sims, lag = 1)
   
-# Critical Values ~ Conservative
-crit_values <- mc_cv(nrow(sims))
+# Critical Values
+crit_values <- radf_mc_cv(nrow(sims))
 ```
 
-## New Features
+## Same Appearance with New Features
+
+The visual output of autoplot in `v0.4.0` is exactly the same the autoplot `v0.3.0`.
 
 ```{r autoplot-basic}
 autoplot(estimation, crit_values)
 ```
+However, almost all aspects of the plot can be easily changed.
 
 ### Change color and theme
 
-The custom color for autoplot are "blue and "red", however the use may override this
-option easily with scale_col
+The custom color for autoplot are "blue and "red", however the user may easily override 
+this option with `ggplot2::scale_color_manual`.
 
 ```{r autoplot-color-theme}
 autoplot(estimation, crit_values) +
@@ -69,38 +72,12 @@ autoplot(estimation, crit_values) +
 
 ### Specify the shade_opt
 
+`shade_opt` allows the user to manipulate the `geom_rect()` layer of the plot, using
+the `shade` function. Additionally, it can be omitted if it set to `NULL`.
+
 ```{r autoplot-shade}
 autoplot(estimation, crit_values, shade_opt = shade(fill = "pink", opacity = 0.3))
 ```
-
-## Old Functionality
-
-To return to older functionality there are several ways.
-
-```{r lapply-arrange}
-library(gridExtra)
-
-# To choose only positive series (i.e. statistically significant for 5%)
-positive_series <- diagnostics(estimation, crit_values)$positive 
-
-# Through a loop on positive series 
-plot_list1 <- list()
-for (as in positive_series) {
-  plot_list1[[as]] <- autoplot(estimation, crit_values, select_series = as)
-}
-
-# Alternatively  with lapply
-plot_list2 <- lapply(positive_series, function(x) autoplot(estimation, crit_values, select_series = x))
-names(plot_list2) <- positive_series
-
-do.call(gridExtra::grid.arrange, plot_list1)
-```
-
-With the old functionality you had to make changes one at a time
-```{r example-old}
-plot_list1[[1]] <- plot_list1[[1]] + theme_classic()
-```
-and then reconstruct the plot with `grid.arrange` or some other function that arranges all plots into a single grob.
 
 ## Custom plotting
 
@@ -135,18 +112,18 @@ joined %>%
   theme_exuber()
 ```
 
-# Distributions
+## Distribution
 
 In addition to critical values, we can also calculate the empirical distribution
 by utilizing the family of *_distr functions. For example if we can simulate
 the distribution of the supADF tests with Monte Carlo method.
 
 ```{r distributions}
-distr <- mc_distr(n = 300, nrep = 500)
+distr <- radf_mc_distr(n = 300)
 autoplot(distr)
 ```
 
-## Empirical distribution
+### Empirical distribution
 
 This part is made just for fun.
 
@@ -161,5 +138,35 @@ distr %>%
   ggtitle("Empirical Cumulative Distribution") +
   geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw()
 ```
+
+## Old Functionality
+
+To return to the old functionality there are several ways.
+
+```{r lapply-arrange}
+library(gridExtra)
+
+# To choose only positive series (i.e. statistically significant for 5%)
+positive_series <- diagnostics(estimation, crit_values)$positive 
+
+# Through a loop on positive series 
+plot_list1 <- list()
+for (as in positive_series) {
+  plot_list1[[as]] <- autoplot(estimation, crit_values, select_series = as)
+}
+
+# Alternatively  with lapply
+plot_list2 <- lapply(positive_series, function(x) autoplot(estimation, crit_values, select_series = x))
+names(plot_list2) <- positive_series
+
+do.call(gridExtra::grid.arrange, plot_list1)
+```
+
+With the old functionality you had to make changes one at a time
+```{r example-old}
+plot_list1[[1]] <- plot_list1[[1]] + theme_classic()
+```
+and then reconstruct the plot with `grid.arrange` or some other function that arranges all plots into a single grob.
+
 
 Enjoy Plotting with `exuber` !!!

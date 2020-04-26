@@ -51,9 +51,9 @@ for individual and panel estimation. The estimation can parse data from multiple
 
 There are several options for generating critical values:
 
-* `mc_cv()`: Monte Carlo
-* `wb_cv()`: Wild Bootstrap
-* `sb_cv()`: Sieve Bootstrap (Panel)
+* `radf_mc_cv()`: Monte Carlo
+* `radf_wb_cv()`: Wild Bootstrap
+* `radf_sb_cv()`: Sieve Bootstrap (Panel)
 
 On default `exuber` will use Monte Carlo simulated critical values if no other option is provided. The package offers these critical values in the form of `data` (up to 600 observations), that are obtained with the `mc_cv()` function.
 

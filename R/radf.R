@@ -15,6 +15,8 @@
 #'   \item{sadf}{Supremum Augmented Dickey-Fuller}
 #'   \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
 #'   \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
+#'   \item{bsadf_panel}{Panel Backward Supremum Augmented Dickey-Fuller}
+#'   \item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
 #' in The 1990s Nasdaq: When Did Exuberance Escalate Asset Values? International
@@ -80,24 +82,24 @@ radf <- function(data, minw = NULL, lag = 0L) {
   bsadf_panel <- apply(bsadf, 1, mean)
   gsadf_panel <- max(bsadf_panel)
 
-  structure(
-    list(
-      adf = adf,
-      badf = badf,
-      sadf = sadf,
-      bsadf = bsadf,
-      gsadf = gsadf,
-      bsadf_panel = bsadf_panel,
-      gsadf_panel = gsadf_panel),
-    index = attr(x, "index"),
-    lag = lag,
-    n = nrow(x),
-    minw = minw,
-    lag = lag,
-    series_names = snames,
-    class = "radf"
-  )
 
+  list(
+    adf = adf,
+    badf = badf,
+    sadf = sadf,
+    bsadf = bsadf,
+    gsadf = gsadf,
+    bsadf_panel = bsadf_panel,
+    gsadf_panel = gsadf_panel) %>%
+    add_attr(
+      index = attr(x, "index"),
+      lag = lag,
+      n = nrow(x),
+      minw = minw,
+      lag = lag,
+      series_names = snames,
+    ) %>%
+    add_class("radf_obj", "obj")
 }
 
 #' @importFrom stats embed
@@ -116,54 +118,3 @@ unroot <- function(x, lag = 0) {
 }
 
 
-# Helpers -----------------------------------------------------------------
-
-#' Helper functions in accordance to PSY(2015)
-#'
-#' \code{psy_minw} proposes a minimum window and \code{psy_ds} proposes a rule of
-#' thumb to exclude periods of exuberance.
-#'
-#' @inheritParams mc_cv
-#' @export
-#' @importFrom rlang is_scalar_atomic
-#' @examples
-#' psy_minw(100)
-#' psy_ds(100)
-psy_minw <- function(n) {
-
-  if (!is_n(n)) {
-    n <- NROW(n)
-  }
-
-  floor( (0.01 + 1.8 / sqrt(n)) * n)
-}
-
-#' @rdname psy_minw
-#' @param rule Rule 1 corresponds to log(T), while rule 2 log(T)/T
-#' @param delta Frequency-dependent parameter
-#'
-#' @details \code{delta } depends on the frequency of the data and the minimal
-#' duration condition. For example, for a 30-year period, we set arbitrarily duration
-#' to exceed periods such as one year. Then, delta should is 0.7 for yearly data
-#' and 5 for monthly data.
-#'
-#' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
-#' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
-#' S&P 500. International Economic Review, 56(4), 1043-1078.
-#'
-#' @export
-psy_ds <- function(n, rule = 1, delta = 1) {
-
-  if (!is_n(n)) {
-    n <- NROW(n)
-  }
-  stopifnot(rule == 1 || rule == 2)
-  stopifnot(delta > 0)
-
-  if (rule == 1) {
-    round(delta * log(n))
-  } else if (rule == 2) {
-    round(delta * log(n) / n)
-  }
-
-}

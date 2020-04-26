@@ -3,24 +3,15 @@
 \name{exuber-defunct}
 \alias{exuber-defunct}
 \alias{ggarrange}
-\alias{plot.radf}
-\alias{fortify.radf}
-\alias{fortify.datestamp}
+\alias{fortify.radf_obj}
+\alias{fortify.ds_radf}
 \title{Defunct functions in package \pkg{exuber}.}
 \usage{
 ggarrange(...)
 
-\method{plot}{radf}(
-  x,
-  y,
-  option = c("gsadf", "sadf"),
-  min_duration = 0,
-  plot_type = c("multiple", "single")
-)
+\method{fortify}{radf_obj}(model, data, ...)
 
-\method{fortify}{radf}(model, data, ...)
-
-\method{fortify}{datestamp}(model, data, ...)
+\method{fortify}{ds_radf}(model, data, ...)
 }
 \description{
 The functions listed below are defunct. Help pages for defunct

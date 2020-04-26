@@ -22,26 +22,34 @@ authors:
 
 reference:
 
-  - title: Overview
+  - title: Package
     contents:
       - exuber
+      - install_exuberdata
 
-  - title: Estimation
+  - title: Recursive Augmented Dickey Fuller
+    desc: >
+      Estimation & Critical Values
     contents:
       - radf
+      - radf_mc_cv
+      - radf_wb_cv
+      - radf_sb_cv
+      - radf_crit
 
-  - title: Critical Values & Distributions
+  - title: Analysis
     contents:
-      - mc_cv
-      - wb_cv
-      - sb_cv
-      - calc_pvalue
+      - summary.radf_obj
+      - diagnostics
+      - datestamp
 
-  - title: Report
+  - title: Plotting
     contents:
-      - summary.radf
-      - diagnostics.radf
-      - datestamp.radf
+      - autoplot.radf_obj
+      - scale_exuber_manual
+      - theme_exuber
+      - autoplot.radf_distr
+      - autoplot.ds_radf
 
   - title: Simulation
     contents:
@@ -51,12 +59,6 @@ reference:
       - sim_evans
       - sim_div
 
-  - title: Plotting
-    contents:
-      - autoplot.radf
-      - autoplot.datestamp
-      - autoplot.mc_distr
-
   - title: Helpers
     contents:
       - index
@@ -65,13 +67,11 @@ reference:
 
   - title: Tidying
     contents:
-      - tidy.radf
-      - tidy.mc_cv
-      - tidy.mc_distr
+      - tidy.radf_obj
+      - tidy.radf_cv
+      - tidy.radf_distr
+      - tidy_join.radf_obj
 
-  - title: Tidying & Joining
-    contents:
-      - tidy_join
 
 navbar:
   type: default

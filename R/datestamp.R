@@ -1,3 +1,4 @@
+
 #' Date-stamping periods of mildly explosive behavior
 #'
 #' Computes the origination, termination and duration of
@@ -28,32 +29,37 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
   UseMethod("datestamp")
 }
 
-#' @export
-datestamp.default <- function(object, cv, ...) {
-  stop_glue(
-    "method 'datestamp' is not available for objects of class '{class(object)}'.")
-}
-
 #' @rdname datestamp
-#' @inheritParams diagnostics.radf
+#' @inheritParams diagnostics.radf_obj
 #' @importFrom rlang sym !! %||%
 #' @importFrom dplyr filter pull
 #' @importFrom purrr map map_lgl
 #' @export
-datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
+#'
+#' @examples
+#'
+#' rsim_data <- radf(sim_data)
+#'
+#' ds_data <- datestamp(rsim_data)
+#' ds_data
+#'
+#' # Choose minimum window
+#' datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
+#'
+#' autoplot(ds_data)
+datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
                            option = c("gsadf", "sadf"), ...) {
 
-  assert_class(object, "radf")
+  # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
-  assert_class(cv, "cv")
+  assert_class(cv, "radf_cv")
   option <- match.arg(option)
   assert_positive_int(min_duration, strictly = FALSE)
   assert_match(object, cv)
 
   idx <- index(object)
   snames <- series_names(object)
-  ds <-  diagnostics_internal(object, cv, option = option)
-  pos <- ds$positive
+  pos <- diagnostics_internal(object, cv, option = option)$positive
 
   filter_option <- if (option == "gsadf") "bsadf" else  "badf"
   ds_tbl <- augment_join(object, cv) %>%
@@ -88,18 +94,19 @@ datestamp.radf <- function(object, cv = NULL, min_duration = 0L,
     res,
     dummy = dummy,
     index = idx,
+    series_names = snames,
     panel = is_sb(cv),
     minw = get_minw(object),
     lag = get_lag(object),
     min_duration = min_duration,
     option = option,
     method = get_method(cv),
-    class = c("datestamp", "list")
+    class = c("ds_radf", "ds", "list")
   )
 }
 
 #' @export
-print.datestamp <- function(x, ...) {
+print.ds_radf <- function(x, ...) {
   cli::cat_line()
   cli::cat_rule(
     left = glue("Datestamp (min_duration = {get_min_dur(x)})"),
@@ -126,18 +133,20 @@ stamp_to_index <- function(x, idx) {
   )
 }
 
+
 #' Plotting and tidying datestamp objects
 #'
 #' Plotting datestamp with \link[=ggplot2]{geom_segment()}
 #'
-#' @name autoplot.datestamp
+#' @name autoplot.ds_radf
 #'
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
-#' @inheritParams autoplot.radf
 #' @param trunc default FALSE. If TRUE the index formed by truncating the value
 #' in the minimum window.
 #' @param ... further arguments passed to methods.
 #' @export
+#'
+#' @importFrom stats reorder
 #'
 #' @examples
 #' \donttest{
@@ -154,14 +163,16 @@ stamp_to_index <- function(x, idx) {
 #'   autoplot() +
 #'   ggplot2::scale_colour_manual(values = rep("black", 4))
 #' }
-autoplot.datestamp <- function(object, trunc = TRUE, ...) {
+autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
 
   stopifnot(is.logical(trunc))
 
   idx <- index(object, trunc = trunc)
   scale_custom <- if (lubridate::is.Date(idx)) scale_x_date else scale_x_continuous
 
-  ggplot(tidy(object), aes_string(colour = "id")) +
+  tidy(object) %>%
+    mutate(id = reorder(id, dplyr::desc(id))) %>%
+    ggplot(aes(color = id)) +
     geom_segment(
       aes_string(x = "Start", xend = "End", y = "id", yend = "id"), size = 7, ...) +
     scale_custom(limits = c(idx[1L], idx[length(idx)])) +
@@ -176,15 +187,19 @@ autoplot.datestamp <- function(object, trunc = TRUE, ...) {
     )
 }
 
-#' @rdname autoplot.datestamp
+#' @rdname autoplot.ds_radf
 #' @param x An object of class \code{\link[=datestamp]{datestamp()}}
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @export
-tidy.datestamp <- function(x, ...) {
+tidy.ds_radf <- function(x, ...) {
+  fct_lvls <- if (attr(x, "panel")) "panel" else series_names(x)
   bind_rows(x, .id = "id") %>%
     as_tibble() %>%
-    mutate(id = as.factor(id))
+    mutate(id = factor(id, levels = fct_lvls))
 }
 
-# TODO see ellipsis in autoplot.datestamp
+# TODO see ellipsis in autoplot.ds_radf
+# TODO name/title in tidy.datestamp
+# TODO store the peak in datestamp
+# TODO https://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_segment.html

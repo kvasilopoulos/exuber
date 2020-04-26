@@ -9,7 +9,7 @@
 #' @param c A positive scalar determining the autoregressive coefficient in the explosive regime.
 #' @param alpha A positive scalar in (0, 1) determining the value of the expansion rate in the autoregressive coefficient.
 #' @param sigma A positive scalar indicating the standard deviation of the innovations.
-#' @inheritParams mc_cv
+#' @inheritParams radf_mc_cv
 #'
 #' @details
 #' The data generating process is described by the following equation:

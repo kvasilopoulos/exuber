@@ -31,6 +31,12 @@
 #'
 #' @importFrom utils install.packages
 #' @export
+#' @examples
+#' \donttest{
+#' if("exuberdata" %in% loadedNamespaces()) {
+#'  exuberdata::radf_crit2
+#' }
+#' }
 install_exuberdata <- function() {
     install.packages(
       'exuberdata',
