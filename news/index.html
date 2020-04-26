@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -42,7 +46,7 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
@@ -52,7 +56,6 @@
 
 <meta property="og:title" content="Changelog" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -67,10 +70,20 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129604855-4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-129604855-4');
+</script>
+
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -84,7 +97,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -150,12 +163,12 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
+      <h1 data-toc-skip>Changelog <small></small></h1>
       <small>Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div id="exuber-040" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.0">
 <a href="#exuber-040" class="anchor"></a>exuber 0.4.0<small> Unreleased </small>
 </h1>
 <div id="removed-critical-values" class="section level2">
@@ -184,7 +197,7 @@
 </div>
 </div>
     <div id="exuber-030" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.3.0">
 <a href="#exuber-030" class="anchor"></a>exuber 0.3.0<small> 2019-07-15 </small>
 </h1>
 <div id="breaking-changes-1" class="section level2">
@@ -193,9 +206,9 @@
 <ul>
 <li>Changed <code>opt_bsadf = conservative</code> for the simulated critical values (<code>crit</code>), also reduced the size of the <code>crit</code> from 700 to 600 due to package size restrictions.</li>
 <li>
-<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
+<code>sim_dgp1()</code> and <code>sim_dgp2()</code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
 <li>
-<code><a href="../reference/exuber-deprecated.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-deprecated.html">sim_dgp2()</a></code> have been soft-deprecated.</li>
+<code>sim_dgp1()</code> and <code>sim_dgp2()</code> have been soft-deprecated.</li>
 <li>
 <code>autoplot_radf()</code> arranges automatically multiple graphs, to return to previous behavior we included the optional argument <code>arrange</code> which is set to TRUE by default.</li>
 </ul>
@@ -220,7 +233,7 @@
 <li>
 <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code> methods for objects of class <code>radf</code> and <code>cv</code>.</li>
 <li>
-<code><a href="../reference/augment_join.html">augment_join()</a></code> to combine object <code>radf</code> and <code>cv</code> into a single data.frame.</li>
+<code><a href="../reference/tidy_join.html">augment_join()</a></code> to combine object <code>radf</code> and <code>cv</code> into a single data.frame.</li>
 <li>
 <code><a href="https://rdrr.io/pkg/generics/man/glance.html">glance()</a></code> method for objects of class <code>radf</code>.</li>
 </ul>
@@ -230,7 +243,7 @@
 <a href="#improvements-1" class="anchor"></a>Improvements</h2>
 <ul>
 <li>New printing output for the functions <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code><a href="../reference/diagnostics.html">diagnostics()</a></code> and <code><a href="../reference/datestamp.html">datestamp()</a></code>.</li>
-<li>New improved progressbar with more succinct printing for <code><a href="../reference/wb_cv.html">wb_cv()</a></code>
+<li>New improved progressbar with more succinct printing for <code>wb_cv()</code>
 </li>
 <li>
 <code>seed</code> argument to functions that are using rng. Also the option to declare a global seed for reproducibility with the <code>option(exuber.global_seed = ###)</code>
@@ -242,12 +255,12 @@
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
-<code><a href="../reference/sb_cv.html">sb_cv()</a></code> and <code><a href="../reference/wb_cv.html">wb_cv()</a></code>now can parse data that contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing.</li>
+<code>sb_cv()</code> and <code>wb_cv()</code>now can parse data that contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing.</li>
 </ul>
 </div>
 </div>
     <div id="exuber-0219000" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.2.1.9000">
 <a href="#exuber-0219000" class="anchor"></a>exuber 0.2.1.9000<small> Unreleased </small>
 </h1>
 <ul>
@@ -255,7 +268,7 @@
 </ul>
 </div>
     <div id="exuber-021" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.2.1">
 <a href="#exuber-021" class="anchor"></a>exuber 0.2.1<small> 2019-03-01 </small>
 </h1>
 <ul>
@@ -266,7 +279,7 @@
 </ul>
 </div>
     <div id="exuber-020" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.2.0">
 <a href="#exuber-020" class="anchor"></a>exuber 0.2.0<small> 2019-02-04 </small>
 </h1>
 <div id="options" class="section level2">
@@ -288,8 +301,8 @@
 <ul>
 <li>Panel estimation in <code><a href="../reference/radf.html">radf()</a></code>
 </li>
-<li>Added <code><a href="../reference/sb_cv.html">sb_cv()</a></code> function: Panel Sieve Bootstrapped critical values</li>
-<li>Default critical values are supplied directly into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code>diagnostics</code>, <code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>, without having to specify argument cv. The critical values have been simulated from <code><a href="../reference/mc_cv.html">mc_cv()</a></code> function and stored as data. Custom critical values should be provided by the user with the option <code>cv</code>.</li>
+<li>Added <code>sb_cv()</code> function: Panel Sieve Bootstrapped critical values</li>
+<li>Default critical values are supplied directly into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code>diagnostics</code>, <code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>, without having to specify argument cv. The critical values have been simulated from <code>mc_cv()</code> function and stored as data. Custom critical values should be provided by the user with the option <code>cv</code>.</li>
 <li>Added <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> function, that can arrange a list of ggplot objects into a single grob.</li>
 <li>Added <code>fortify</code> to arrange a data.frame from <code><a href="../reference/radf.html">radf()</a></code> function.</li>
 </ul>
@@ -303,11 +316,11 @@
 <li>
 <code><a href="../reference/radf.html">radf()</a></code> can parse date from <code>ts</code> objects.</li>
 <li>
-<code><a href="../reference/exuber-deprecated.html">report()</a></code> has been renamed into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>.</li>
+<code>report()</code> has been renamed into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>.</li>
 <li>
 <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> has been renamed into <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>.</li>
 <li>
-<code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> and <code><a href="../reference/exuber-deprecated.html">report()</a></code> are soft deprecated.</li>
+<code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code> and <code>report()</code> are soft deprecated.</li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
@@ -321,17 +334,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#exuber-040">0.4.0</a></li>
-        <li><a href="#exuber-030">0.3.0</a></li>
-        <li><a href="#exuber-0219000">0.2.1.9000</a></li>
-        <li><a href="#exuber-021">0.2.1</a></li>
-        <li><a href="#exuber-020">0.2.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -343,7 +349,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
