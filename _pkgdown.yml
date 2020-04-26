@@ -1,9 +1,6 @@
 title: exuber
 url: https://kvasilopoulos.github.io/exuber/
 
-development:
-  mode: devel
-
 template:
   params:
     ganalytics: UA-129604855-4
