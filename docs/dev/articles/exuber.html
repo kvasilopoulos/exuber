@@ -132,13 +132,13 @@
 <p>We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">est_stocks</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span>(<span class="no">stocks</span>, <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
 </div>
-<div id="report" class="section level2">
+<div id="analysis" class="section level2">
 <h2 class="hasAnchor">
-<a href="#report" class="anchor"></a>Report</h2>
+<a href="#analysis" class="anchor"></a>Analysis</h2>
 <p>The summary will print the t-stat and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the <code>cv</code> argument in the <code>summary</code> function.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">est_stocks</span>)
 <span class="co">#&gt; </span>
-<span class="co">#&gt; -- Summary (minw = 38, lag = 1) -------------------------------- Monte Carlo (nrep = 2000) --</span>
+<span class="co">#&gt; -- Summary (minw = 38, lag = 1) ------------------------------------- Monte Carlo (nrep = 2000) --</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX :</span>
 <span class="co">#&gt; # A tibble: 3 x 5</span>
@@ -174,7 +174,7 @@
 <p>It seems that all stocks exhibit exuberant behaviour but we can also verify it using <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. This function is particularly useful when we deal a large number of series.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span>(<span class="no">est_stocks</span>)
 <span class="co">#&gt; </span>
-<span class="co">#&gt; -- Diagnostics (option = gsadf) ---------------------------------------------- Monte Carlo --</span>
+<span class="co">#&gt; -- Diagnostics (option = gsadf) --------------------------------------------------- Monte Carlo --</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX:      Rejects H0 at the 1% significance level</span>
 <span class="co">#&gt; SMI:      Rejects H0 at the 1% significance level</span>
@@ -187,7 +187,7 @@
 <span class="no">dstamp_stocks</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span>(<span class="no">est_stocks</span>, <span class="kw">min_duration</span> <span class="kw">=</span> <span class="no">rot</span>)
 <span class="no">dstamp_stocks</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; -- Datestamp (min_duration = 6) ---------------------------------------------- Monte Carlo --</span>
+<span class="co">#&gt; -- Datestamp (min_duration = 6) --------------------------------------------------- Monte Carlo --</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX :</span>
 <span class="co">#&gt;        Start        End Duration</span>

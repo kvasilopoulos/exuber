@@ -1,4 +1,5 @@
 ADF
+adf
 al
 arrangeGrob
 AppVeyor
@@ -43,6 +44,7 @@ monte
 Nasdaq
 ncol
 ncores
+nrep
 nrow
 Paya
 pre

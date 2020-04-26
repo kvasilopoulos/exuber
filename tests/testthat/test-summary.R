@@ -1,9 +1,9 @@
 context("summary")
 
 # Different minw
-mc_minw20 <- mc_cv(100, nrep = 100, minw = 20)
-wb_minw20 <- wb_cv(dta, nboot = 100, minw = 20)
-sb_minw20 <- sb_cv(dta, nboot = 100, minw = 20)
+mc_minw20 <- radf_mc_cv(100, nrep = 10, minw = 20)
+wb_minw20 <- radf_wb_cv(dta, nboot = 10, minw = 20)
+sb_minw20 <- radf_sb_cv(dta, nboot = 10, minw = 20)
 
 # skip("refactoring")
 
@@ -16,7 +16,7 @@ test_that("printing coverage", {
 
 test_that("class checks", {
   # msgx <- "Argument 'object' should be of class 'radf'"
-  msg_y <- "Argument 'cv' should be of class 'cv'"
+  msg_y <- "Argument 'cv' should be of class 'radf_cv'"
   # expect_error(diagnostics(dta, mc), NA, class = "error")
   # expect_error(datestamp(dta, mc), msgx)
   expect_error(diagnostics(radf_dta, dta), msg_y)
@@ -156,3 +156,4 @@ withr::with_options(
     expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), regexp = NA)
   })
 )
+

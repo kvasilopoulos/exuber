@@ -54,19 +54,19 @@ index.
 
 There are several options for generating critical values:
 
-  - `mc_cv()`: Monte Carlo
-  - `wb_cv()`: Wild Bootstrap
-  - `sb_cv()`: Sieve Bootstrap (Panel)
+  - `radf_mc_cv()`: Monte Carlo
+  - `radf_wb_cv()`: Wild Bootstrap
+  - `radf_sb_cv()`: Sieve Bootstrap (Panel)
 
 On default `exuber` will use Monte Carlo simulated critical values if no
 other option is provided. The package offers these critical values in
 the form of `data` (up to 600 observations), that are obtained with the
-`mc_cv()` function.
+`radf_mc_cv()` function.
 
 ### Analysis
 
 For the analysis you should include both the output from estimation
-(`object`) and critical values (`cv`). The below methods break the
+(`object`) and the critical values (`cv`). The below methods break the
 process into small simple steps:
 
   - `summary()` summarizes the model.
@@ -103,78 +103,88 @@ library(exuber)
 rsim_data <- radf(sim_data)
 
 summary(rsim_data)
-#> Using 'radf_crit' as 'cv'argument..
+#> Using 'radf_crit' for 'cv'.
 #> 
-#> -- Summary (minw = 19, lag = 0) ----------------------------------- Monte Carlo (nrep = 2000) --
+#> -- Summary (minw = 19, lag = 0) ------------------------------------- Monte Carlo (nrep = 2000) --
 #> 
-#>  psy1 
-#>         tstat      90%       95%     99%
-#> ADF    -2.461  -0.4127  -0.08117  0.6521
-#> SADF    1.946   0.9879   1.29458  1.9157
-#> GSADF   5.190   1.7099   1.97410  2.5708
+#> psy1 :
+#> # A tibble: 3 x 5
+#>   name  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -2.46 -0.413 -0.0812 0.652
+#> 2 sadf   1.95  0.988  1.29   1.92 
+#> 3 gsadf  5.19  1.71   1.97   2.57 
 #> 
-#>  psy2 
-#>         tstat      90%       95%     99%
-#> ADF    -2.858  -0.4127  -0.08117  0.6521
-#> SADF    7.880   0.9879   1.29458  1.9157
-#> GSADF   7.880   1.7099   1.97410  2.5708
+#> psy2 :
+#> # A tibble: 3 x 5
+#>   name  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -2.86 -0.413 -0.0812 0.652
+#> 2 sadf   7.88  0.988  1.29   1.92 
+#> 3 gsadf  7.88  1.71   1.97   2.57 
 #> 
-#>  evans 
-#>         tstat      90%       95%     99%
-#> ADF    -5.830  -0.4127  -0.08117  0.6521
-#> SADF    5.283   0.9879   1.29458  1.9157
-#> GSADF   5.985   1.7099   1.97410  2.5708
+#> evans :
+#> # A tibble: 3 x 5
+#>   name  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -5.83 -0.413 -0.0812 0.652
+#> 2 sadf   5.28  0.988  1.29   1.92 
+#> 3 gsadf  5.99  1.71   1.97   2.57 
 #> 
-#>  div 
-#>         tstat      90%       95%     99%
-#> ADF    -1.950  -0.4127  -0.08117  0.6521
-#> SADF    1.113   0.9879   1.29458  1.9157
-#> GSADF   1.335   1.7099   1.97410  2.5708
+#> div :
+#> # A tibble: 3 x 5
+#>   name  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -1.95 -0.413 -0.0812 0.652
+#> 2 sadf   1.11  0.988  1.29   1.92 
+#> 3 gsadf  1.34  1.71   1.97   2.57 
 #> 
-#>  blan 
-#>         tstat      90%       95%     99%
-#> ADF    -5.146  -0.4127  -0.08117  0.6521
-#> SADF    3.930   0.9879   1.29458  1.9157
-#> GSADF  10.951   1.7099   1.97410  2.5708
+#> blan :
+#> # A tibble: 3 x 5
+#>   name  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -5.15 -0.413 -0.0812 0.652
+#> 2 sadf   3.93  0.988  1.29   1.92 
+#> 3 gsadf 11.0   1.71   1.97   2.57
 
 diagnostics(rsim_data)
-#> Using 'radf_crit' as 'cv'argument..
+#> Using 'radf_crit' for 'cv'.
 #> 
-#> -- Diagnostics (option = gsadf) ------------------------------------------------- Monte Carlo --
+#> -- Diagnostics (option = gsadf) --------------------------------------------------- Monte Carlo --
 #> 
-#> psy1:     Rejects H0 for significance level of 1% 
-#> psy2:     Rejects H0 for significance level of 1% 
-#> evans:    Rejects H0 for significance level of 1% 
-#> div:      Cannot reject H0! 
-#> blan:     Rejects H0 for significance level of 1%
+#> psy1:     Rejects H0 at the 1% significance level
+#> psy2:     Rejects H0 at the 1% significance level
+#> evans:    Rejects H0 at the 1% significance level
+#> div:      Cannot reject H0 
+#> blan:     Rejects H0 at the 1% significance level
 
 datestamp(rsim_data)
-#> Using 'radf_crit' as 'cv'argument..
+#> Using 'radf_crit' for 'cv'.
 #> 
-#> -- Datestamp (min_duration = 0) ------------------------------------------------- Monte Carlo --
+#> -- Datestamp (min_duration = 0) --------------------------------------------------- Monte Carlo --
 #> 
 #> psy1 :
 #>   Start End Duration
-#> 1    44  55       12
+#> 1    44  55       11
 #> 
 #> psy2 :
 #>   Start End Duration
-#> 1    22  40       19
-#> 2    62  70        9
+#> 1    22  40       18
+#> 2    62  70        8
 #> 
 #> evans :
 #>   Start End Duration
-#> 1    20  21        2
-#> 2    44  45        2
-#> 3    66  67        2
+#> 1    20  21        1
+#> 2    44  45        1
+#> 3    66  67        1
 #> 
 #> blan :
 #>   Start End Duration
-#> 1    34  36        3
-#> 2    84  86        3
+#> 1    34  36        2
+#> 2    84  86        2
 
 autoplot(rsim_data)
-#> Using 'radf_crit' as 'cv'argument..
+#> Using 'radf_crit' for 'cv'.
 ```
 
 ![](man/figures/usage-1.png)<!-- -->

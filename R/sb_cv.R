@@ -1,19 +1,15 @@
-sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
+radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 
   y <- parse_data(data)
-
-  if (is.null(minw)) {
-    minw <- psy_minw(data)
-  }
-
   assert_na(y)
+  minw <- minw %||% psy_minw(data)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
   assert_positive_int(nboot, greater_than = 2)
 
   nc <- ncol(y)
   nr <- nrow(y)
-
+  snames <- colnames(y)
   pointer <- nr - minw - lag
 
   initmat <- matrix(0, nc, 1 + lag)
@@ -83,12 +79,13 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   list(bsadf_panel = bsadf_crit,
        gsadf_panel = gsadf_crit) %>%
     add_attr(
-      method = "Sieve Bootstrap",
       index = attr(y, "index"),
-      n = nrow(data),
+      series_names = snames,
+      method = "Sieve Bootstrap",
+      n = nr,
       minw = minw,
-      iter = nboot,
       lag = lag,
+      iter = nboot,
       seed = get_rng_state(seed),
       parallel = do_par)
 }
@@ -101,10 +98,7 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #' computes the distribution.
 #'
 #' @inheritParams radf
-#' @inheritParams wb_cv
-#'
-#' @return A list that contains the panel critical values for BSADF and GSADF
-#' t-statistics.
+#' @inheritParams radf_wb_cv
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
@@ -117,34 +111,36 @@ sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 #' in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
 #'
-#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
-#' \code{\link{wb_cv}} for Wild Bootstrapped critical values
+#' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
+#' \code{\link{radf_wb_cv}} for Wild Bootstrapped critical values
 #'
+#' @return  For \code{radf_sb_cv} A list that contains the panel critical values
+#' for BSADF and GSADF t-statistics. For \code{radf_wb_dist} a numeric vector
+#' that contains panel GSADF distribution.
 #'
 #' @examples
 #' \donttest{
+#'
+#' rsim_data <- radf(sim_data, lag = 1)
+#'
 #' # Panel critical vales should have the same lag length with the estimation
-#' sb <- sb_cv(sim_data, lag = 1)
+#' sb <- radf_sb_cv(sim_data, lag = 1)
 #'
 #' tidy(sb)
 #'
-#' sim_data %>%
-#'   radf(lag = 1) %>%
-#'   summary(cv = sb)
+#' summary(rsim_data, cv = sb)
 #'
-#' sim_data %>%
-#'   radf(lag = 1) %>%
-#'   autoplot(cv = sb)
+#' autoplot(rsim_data, cv = sb)
 #'
 #' # Simulate distribution
-#' sdist <- sb_distr(sim_data, lag = 1, nboot = 1000)
+#' sdist <- radf_sb_distr(sim_data, lag = 1, nboot = 1000)
 #'
 #' autoplot(sdist)
 #' }
-sb_cv <- function(data, minw = NULL, lag = 0L,
+radf_sb_cv <- function(data, minw = NULL, lag = 0L,
                   nboot = 500L, seed = NULL) {
 
-  results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
+  results <- radf_sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -154,18 +150,18 @@ sb_cv <- function(data, minw = NULL, lag = 0L,
     list(gsadf_panel_cv = gsadf_crit,
          bsadf_panel_cv = bsadf_crit) %>%
       inherit_attrs(results) %>%
-      add_class("sb_cv", "cv")
+      add_class("radf_cv", "sb_cv","cv")
 
 }
 
-#' @rdname sb_cv
-#' @inheritParams sb_cv
+#' @rdname radf_sb_cv
+#' @inheritParams radf_sb_cv
 #' @export
-sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL) {
+radf_sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL) {
 
-  results <- sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
+  results <- radf_sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
 
   c(results$gsadf_panel) %>%
     inherit_attrs(results) %>%
-    add_class("sb_distr", "distr")
+    add_class("radf_distr", "sb_distr","distr")
 }

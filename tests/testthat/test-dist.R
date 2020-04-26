@@ -1,25 +1,20 @@
 context("test-dist")
 
 test_that("run properly", {
-  expect_error(mc_distr(100, nrep = 10), regexp = NA)
-  expect_error(wb_distr(dta, nboot = 10), regexp = NA)
-  expect_error(sb_distr(dta, nboot = 10), regexp = NA)
+  expect_error(radf_mc_distr(100, nrep = 10), regexp = NA)
+  expect_error(radf_wb_distr(dta, nboot = 10), regexp = NA)
+  expect_error(radf_sb_distr(dta, nboot = 10), regexp = NA)
 })
 
 test_that("tidy methods work",{
 
-  mcd <- mc_distr(100, nrep = 10)
-  wbd <- wb_distr(dta, nboot = 10)
-  sbd <- sb_distr(dta, nboot = 10)
+  mcd <- radf_mc_distr(100, nrep = 10)
+  wbd <- radf_wb_distr(dta, nboot = 10)
+  sbd <- radf_sb_distr(dta, nboot = 10)
 
   expect_error(tidy(mcd), regexp = NA)
   expect_error(tidy(wbd), regexp = NA)
   expect_error(tidy(sbd), regexp = NA)
-
-  # glance_warning <- function(x)
-  #   glue("No glance method for objects of class {class(x)}")
-  # augment_warning <- function(x)
-  #   glue("No augment method for objects of class {class(x)}")
 
   expect_error(glance(mcd))
   expect_error(glance(wbd))
@@ -40,9 +35,9 @@ test_that("tidy methods work",{
 
 test_that("autoplot works",{
 
-  mcd <- mc_distr(100, nrep = 10)
-  wbd <- wb_distr(dta, nboot = 10)
-  sbd <- sb_distr(dta, nboot = 10)
+  mcd <- radf_mc_distr(100, nrep = 10)
+  wbd <- radf_wb_distr(dta, nboot = 10)
+  sbd <- radf_sb_distr(dta, nboot = 10)
 
   expect_error(autoplot(mcd), regexp = NA)
   expect_error(autoplot(wbd), regexp = NA)

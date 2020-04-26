@@ -1,14 +1,10 @@
-wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
+radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 
   y <- parse_data(data)
-
-  if (is.null(minw)) {
-    minw <- psy_minw(data)
-  }
-
   assert_na(y)
-  assert_positive_int(nboot, greater_than = 2)
+  minw <- minw %||% psy_minw(data)
   assert_positive_int(minw, greater_than = 2)
+  assert_positive_int(nboot, greater_than = 2)
   stopifnot(is.logical(dist_rad))
 
   nc <- ncol(y)
@@ -77,12 +73,12 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       badf = badf_crit,
       bsadf = bsadf_crit) %>%
     add_attr(
-      method = "Wild Bootstrap",
       index = attr(y, "index"),
+      series_names = snames,
+      method = "Wild Bootstrap",
       n = nrow(y),
       minw = minw,
       iter = nboot,
-      series_names = snames,
       seed = get_rng_state(seed),
       parallel = do_par
       )
@@ -98,13 +94,14 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' computes the distribution.
 #'
 #' @inheritParams radf
-#' @inheritParams mc_cv
+#' @inheritParams radf_mc_cv
 #' @param nboot A positive integer indicating the number of bootstraps. Default is 1000 repetitions.
 #' @param dist_rad Logical. If \code{TRUE} then  the Rademacher distribution
 #' will be used.
 #'
-#' @return  A list that contains the critical values for ADF, BADF, BSADF and GSADF
-#' t-statistics.
+#' @return  For \code{radf_wb_cv} a list that contains the critical values for ADF,
+#' BADF, BSADF and GSADF t-statistics. For \code{radf_wb_dist} a list that
+#' contains the ADF, SADF and GSADF distributions.
 #'
 #' @details This approach involves applying a wild bootstrap re-sampling scheme
 #' to construct the bootstrap analogue of the Phillips et al. (2015) test which
@@ -118,8 +115,8 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
-#' @seealso \code{\link{mc_cv}} for Monte Carlo critical values and
-#' \code{\link{sb_cv}} for Sieve Bootstrapped critical values
+#' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
+#' \code{\link{radf_sb_cv}} for Sieve Bootstrapped critical values
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
@@ -131,24 +128,24 @@ wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' @examples
 #' \donttest{
 #' # Default minimum window
-#' wb <- wb_cv(sim_data)
+#' wb <- radf_wb_cv(sim_data)
 #'
 #' tidy(wb)
 #'
 #' # Change the minimum window and the number of bootstraps
-#' wb2 <- wb_cv(sim_data, nboot = 600, minw = 20)
+#' wb2 <- radf_wb_cv(sim_data, nboot = 600, minw = 20)
 #'
 #'tidy(wb2)
 #'
 #' # Simulate distribution
-#' wdist <- wb_distr(sim_data)
+#' wdist <- radf_wb_distr(sim_data)
 #'
 #' autoplot(wdist)
 #' }
-wb_cv <- function(data, minw = NULL, nboot = 500L,
+radf_wb_cv <- function(data, minw = NULL, nboot = 500L,
                   dist_rad = FALSE, seed = NULL) {
 
-  results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
+  results <- radf_wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -169,24 +166,24 @@ wb_cv <- function(data, minw = NULL, nboot = 500L,
     bsadf_cv = bsadf_crit
   ) %>%
     inherit_attrs(results) %>%
-    add_class("wb_cv", "cv")
+    add_class("radf_cv", "wb_cv", "cv")
 
 }
 
-#' @rdname wb_cv
-#' @inheritParams wb_cv
+#' @rdname radf_wb_cv
+#' @inheritParams radf_wb_cv
 #' @export
-wb_distr <- function(data, minw = NULL, nboot = 500L,
+radf_wb_distr <- function(data, minw = NULL, nboot = 500L,
                     dist_rad = FALSE, seed = NULL) {
 
-  results <- wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
+  results <- radf_wb_(data, minw = minw, nboot = nboot, dist_rad = dist_rad, seed = seed)
 
   list(
-    adf_cv = results$adf,
-    sadf_cv = results$sadf,
-    gsadf_cv = results$gsadf
+    adf_distr = results$adf,
+    sadf_distr = results$sadf,
+    gsadf_distr = results$gsadf
   ) %>%
     inherit_attrs(results) %>%
-    add_class("wb_distr", "distr")
+    add_class("radf_distr", "wb_distr", "distr")
 }
 
