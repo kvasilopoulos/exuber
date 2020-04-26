@@ -1,36 +1,30 @@
 #' @importFrom ggplot2 fortify
-#' @seealso \code{\link[=fortify.radf]{fortify.radf()}}
-#' \code{\link[=fortify.datestamp]{fortify.datestamp()}}
+#' @seealso \code{\link[=fortify.radf_obj]{fortify.radf_obj()}}
+#' \code{\link[=fortify.ds_radf]{fortify.ds_radf()}}
 #' @export
 ggplot2::fortify
 
 #' @importFrom ggplot2 autoplot
-#' @seealso \code{\link[=autoplot.radf]{autoplot.radf()}}
-#' \code{\link[=autoplot.datestamp]{autoplot.datestamp()}}
+#' @seealso \code{\link[=autoplot.radf_obj]{autoplot.radf_obj()}}
+#' \code{\link[=autoplot.ds_radf]{autoplot.ds_radf()}}
 #' @export
 ggplot2::autoplot
 
 #' @importFrom generics tidy
-#' @seealso \code{\link[=tidy.radf]{tidy.radf()}}
-#'  \code{\link[=tidy.mc_cv]{tidy.mc_cv()}}
-#'  \code{\link[=tidy.wb_cv]{tidy.wb_cv()}}
-#'  \code{\link[=tidy.sb_cv]{tidy.sb_cv()}}
-#'  \code{\link[=tidy.mc_distr]{tidy.mc_distr()}}
-#'  \code{\link[=tidy.wb_distr]{tidy.wb_distr()}}
-#'  \code{\link[=tidy.sb_distr]{tidy.sb_distr()}}
+#' @seealso \code{\link[=tidy.radf_obj]{tidy.radf_obj()}}
+#'  \code{\link[=tidy.radf_cv]{tidy.radf_cv()}}
+#'  \code{\link[=tidy.radf_distr]{tidy.radf_distr()}}
 #' @export
 generics::tidy
 
 #' @importFrom generics augment
-#' @seealso \code{\link[=augment.radf]{augment.radf()}}
-#'  \code{\link[=augment.mc_cv]{augment.mc_cv()}}
-#'  \code{\link[=augment.wb_cv]{augment.wb_cv()}}
-#'  \code{\link[=augment.sb_cv]{augment.sb_cv()}}
+#' @seealso \code{\link[=augment.radf_obj]{augment.radf_obj()}}
+#'  \code{\link[=augment.radf_cv]{augment.radf_cv()}}
 #' @export
 generics::augment
 
 #' @importFrom generics glance
-#' @seealso \code{\link[=glance.radf]{glance.radf()}}
+#' @seealso \code{\link[=glance.radf_obj]{glance.radf_obj()}}
 #' @export
 generics::glance
 

@@ -1,7 +1,7 @@
 Type: Package
 Package: exuber
 Title: Econometric Analysis of Explosive Time Series
-Version: 0.3.1
+Version: 0.4.0
 Authors@R: 
     c(person(given = "Kostas", 
              family = "Vasilopoulos",

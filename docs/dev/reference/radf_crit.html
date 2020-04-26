@@ -58,7 +58,8 @@
 <meta property="og:description" content="A dataset containing simulated critical values for up to 600 observations
 based on default minimum window. The critical values have been simulated and
 stored as data to save computation time for the user. The stored critical values
-can be obtained with the mc_cv() function, using the seed = 123." />
+can be obtained with the radf_mc_cv() function, using
+nrep = 2000 and the seed = 123." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -176,7 +177,8 @@ can be obtained with the mc_cv() function, using the seed = 123." />
     <p>A dataset containing simulated critical values for up to 600 observations
 based on default minimum window. The critical values have been simulated and
 stored as data to save computation time for the user. The stored critical values
-can be obtained with the <code><a href='mc_cv.html'>mc_cv()</a></code> function, using the <code>seed = 123</code>.</p>
+can be obtained with the <code><a href='radf_mc_cv.html'>radf_mc_cv()</a></code> function, using
+nrep = <code>2000</code> and the <code>seed = 123</code>.</p>
     </div>
 
     <pre class="usage"><span class='no'>radf_crit</span></pre>
@@ -196,11 +198,11 @@ can be obtained with the <code><a href='mc_cv.html'>mc_cv()</a></code> function,
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p>simulated from exuber package function <code><a href='mc_cv.html'>mc_cv()</a></code></p>
+    <p>simulated from exuber package function <code><a href='radf_mc_cv.html'>radf_mc_cv()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>radf_crit</span><span class='kw'>[[</span><span class='fl'>50</span>]], <span class='fu'><a href='mc_cv.html'>mc_cv</a></span>(<span class='fl'>50</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>radf_crit</span><span class='kw'>[[</span><span class='fl'>50</span>]], <span class='fu'><a href='radf_mc_cv.html'>radf_mc_cv</a></span>(<span class='fl'>50</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>2000</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>))
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

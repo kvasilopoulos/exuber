@@ -1,7 +1,7 @@
 context("radf")
 
 test_that("Right output", {
-  expect_s3_class(radf_dta, class = "radf")
+  expect_s3_class(radf_dta, class = "radf_obj")
   nm <- c("adf", "badf", "sadf", "bsadf", "gsadf", "bsadf_panel", "gsadf_panel")
   expect_output(str(radf_dta), "List of 7")
   expect_equal(names(radf_dta), nm)

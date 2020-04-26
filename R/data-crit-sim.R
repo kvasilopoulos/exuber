@@ -3,7 +3,8 @@
 #' A dataset containing simulated critical values for up to 600 observations
 #' based on default minimum window. The critical values have been simulated and
 #' stored as data to save computation time for the user. The stored critical values
-#' can be obtained with the \code{\link[=mc_cv]{mc_cv()}} function, using the `seed = 123`.
+#' can be obtained with the \code{\link[=radf_mc_cv]{radf_mc_cv()}} function, using
+#' nrep = `2000` and the `seed = 123`.
 #'
 #'
 #' @format A list with lower level lists that contain
@@ -15,11 +16,11 @@
 #'   \item{gsadf_cv:}{Generalized Supremum Augmented Dickey Fuller}
 #'
 #' }
-#' @source simulated from exuber package function \code{\link[=mc_cv]{mc_cv()}}
+#' @source simulated from exuber package function \code{\link[=radf_mc_cv]{radf_mc_cv()}}
 #'
 #' @examples
 #' \dontrun{
-#' all.equal(radf_crit[[50]], mc_cv(50, nrep = 2000, seed = 123))
+#' all.equal(radf_crit[[50]], radf_mc_cv(50, nrep = 2000, seed = 123))
 #' }
 "radf_crit"
 

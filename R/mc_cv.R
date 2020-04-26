@@ -1,16 +1,11 @@
 #' @importFrom rlang is_scalar_atomic
 #' @importFrom doRNG `%dorng%`
-mc_ <- function(n, minw, nrep, seed = NULL) {
+radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 
-  if (!is_n(n)) { # case of providiing data in 'n'
-    stop_glue("Argument 'n' should be a positive integer")
-  }
-  if (is.null(minw)) {
-    minw <- psy_minw(n)
-  }
-
+  assert_n(n)
   assert_positive_int(n, greater_than = 5)
   assert_positive_int(nrep)
+  minw <- minw %||% psy_minw(n)
   assert_positive_int(minw, greater_than = 2)
 
   show_pb <- getOption("exuber.show_progress")
@@ -57,6 +52,7 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
     badf = badf_crit,
     bsadf = bsadf_crit) %>%
     add_attr(
+      index = 1:n,
       method = "Monte Carlo",
       n = n,
       minw = minw,
@@ -69,8 +65,8 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 
 #'  Monte Carlo Critical Values
 #'
-#' \code{mc_cv} computes Monte Carlo critical values for the recursive unit
-#' root tests. \code{mc_dist} computes the distribution.
+#' \code{radf_mc_cv} computes Monte Carlo critical values for the recursive unit
+#' root tests. \code{radf_mc_dist} computes the distribution.
 #'
 #' @inheritParams radf
 #' @param n A positive integer. The sample size.
@@ -82,11 +78,12 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' return .Random.seed as the "seed" attribute. Results between seeds in parallel
 #' and non-parallel differ.
 #'
-#' @return A list that contains the critical values for ADF, BADF, BSADF and GSADF
-#' t-statistics.
+#' @return For \code{radf_mc_cv} a list that contains the critical values for ADF,
+#' BADF, BSADF and GSADF t-statistics. For \code{radf_mc_dist} a list that
+#' contains the ADF, SADF and GSADF distributions.
 #'
-#' @seealso \code{\link{wb_cv}} for Wild Bootstrapped critical values and
-#' \code{\link{sb_cv}} for Sieve Bootstrapped critical values
+#' @seealso \code{\link{radf_wb_cv}} for Wild Bootstrapped critical values and
+#' \code{\link{radf_sb_cv}} for Sieve Bootstrapped critical values
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
@@ -100,24 +97,24 @@ mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @examples
 #' \donttest{
 #' # Default minimum window
-#' mc <- mc_cv(n = 100)
+#' mc <- radf_mc_cv(n = 100)
 #'
 #' tidy(mc)
 #'
 #' # Change the minimum window and the number of simulations
-#' mc2 <- mc_cv(n = 100, nrep = 600, minw = 20)
+#' mc2 <- radf_mc_cv(n = 100, nrep = 600, minw = 20)
 #'
 #' tidy(mc2)
 #'
-#' mdist <- mc_distr(n = 100, nrep = 1000)
+#' mdist <- radf_mc_distr(n = 100, nrep = 1000)
 #'
 #' autoplot(mdist)
 #' }
-mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
+radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
 
   pcnt <- c(0.9, 0.95, 0.99)
 
-  results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
+  results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed)
 
   adf_crit <- quantile(results$adf, probs = pcnt, drop = FALSE)
   sadf_crit <- quantile(results$sadf, probs = pcnt, drop = FALSE)
@@ -143,23 +140,23 @@ mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
     bsadf_cv = bsadf_crit
   ) %>%
     inherit_attrs(results) %>%
-    add_class("mc_cv", "cv")
+    add_class("radf_cv", "mc_cv","cv")
 
 }
 
-  #' @rdname mc_cv
-#' @inheritParams mc_cv
+#' @rdname radf_mc_cv
+#' @inheritParams radf_mc_cv
 #' @export
-mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
+radf_mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
 
-  results <- mc_(n, minw = minw, nrep = nrep, seed = seed)
+  results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed)
 
   list(
-    adf_cv = results$adf,
-    sadf_cv = results$sadf,
-    gsadf_cv = results$gsadf
+    adf_distr = results$adf,
+    sadf_distr = results$sadf,
+    gsadf_distr = results$gsadf
   ) %>%
     inherit_attrs(results) %>%
-    add_class("mc_distr", "distr")
+    add_class("radf_distr", "mc_distr", "distr")
 
 }

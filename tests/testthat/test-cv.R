@@ -20,28 +20,28 @@ test_that("exuberdata::crit as data", {
 
 test_that("n positive integer", {
   msg <- "Argument 'n' should be a positive integer"
-  expect_error(mc_cv(dta, minw = 0), msg)
-  expect_error(mc_cv(0, minw = 0), msg)
-  expect_error(mc_cv(-1, minw = 0), msg)
+  expect_error(radf_mc_cv(dta, minw = 0), msg)
+  expect_error(radf_mc_cv(0, minw = 0), msg)
+  expect_error(radf_mc_cv(-1, minw = 0), msg)
 })
 
 test_that("nboot positive integer", {
   msg <- "Argument 'nboot' should be a positive integer"
-  expect_error(sb_cv(dta, nboot = 0), msg)
-  expect_error(sb_cv(dta, nboot = -2), msg)
-  expect_error(wb_cv(dta, nboot = 0), msg)
-  expect_error(wb_cv(dta, nboot = -2), msg)
+  expect_error(radf_sb_cv(dta, nboot = 0), msg)
+  expect_error(radf_sb_cv(dta, nboot = -2), msg)
+  expect_error(radf_wb_cv(dta, nboot = 0), msg)
+  expect_error(radf_wb_cv(dta, nboot = -2), msg)
 })
 
 test_that("minw positive integer", {
   msg <- "Argument 'minw' should be a positive integer"
-  expect_error(mc_cv(100, minw = -1), msg)
-  expect_error(mc_cv(100, minw = 0), msg)
+  expect_error(radf_mc_cv(100, minw = -1), msg)
+  expect_error(radf_mc_cv(100, minw = 0), msg)
 
-  expect_error(wb_cv(dta, minw = -1), msg)
-  expect_error(wb_cv(dta, minw = 0), msg)
-  expect_error(sb_cv(dta, minw = -1), msg)
-  expect_error(sb_cv(dta, minw = 0), msg)
+  expect_error(radf_wb_cv(dta, minw = -1), msg)
+  expect_error(radf_wb_cv(dta, minw = 0), msg)
+  expect_error(radf_sb_cv(dta, minw = -1), msg)
+  expect_error(radf_sb_cv(dta, minw = 0), msg)
 })
 
 test_that("n/nboot/minw too small", {
@@ -49,32 +49,32 @@ test_that("n/nboot/minw too small", {
   msg_minw <- "Argument 'minw' should be greater than '2'"
   msg_nboot <- "Argument 'nboot' should be greater than '2'"
 
-  expect_error(mc_cv(2), msg_n)
+  expect_error(radf_mc_cv(2), msg_n)
 
-  expect_error(mc_cv(100, minw = 2), msg_minw)
-  expect_error(wb_cv(dta, minw = 2), msg_minw)
-  expect_error(sb_cv(dta, minw = 2), msg_minw)
+  expect_error(radf_mc_cv(100, minw = 2), msg_minw)
+  expect_error(radf_wb_cv(dta, minw = 2), msg_minw)
+  expect_error(radf_sb_cv(dta, minw = 2), msg_minw)
 
-  expect_error(wb_cv(dta, nboot = 2), msg_nboot)
-  expect_error(sb_cv(dta, nboot = 2), msg_nboot)
+  expect_error(radf_wb_cv(dta, nboot = 2), msg_nboot)
+  expect_error(radf_sb_cv(dta, nboot = 2), msg_nboot)
 })
 
 test_that("minw too small", {
   msg <- "Argument 'minw' should be greater than '2'"
-  expect_error(mc_cv(100, minw = 2), msg)
-  expect_error(wb_cv(dta, minw = 2), msg)
-  expect_error(sb_cv(dta, minw = 2), msg)
+  expect_error(radf_mc_cv(100, minw = 2), msg)
+  expect_error(radf_wb_cv(dta, minw = 2), msg)
+  expect_error(radf_sb_cv(dta, minw = 2), msg)
 })
 
 test_that("NA handling", {
   msg <- "rls estimation cannot handle NA"
-  expect_error(wb_cv(dta_na), msg)
-  expect_error(sb_cv(dta_na), msg)
+  expect_error(radf_wb_cv(dta_na), msg)
+  expect_error(radf_sb_cv(dta_na), msg)
 })
 
 test_that("distribution_rad works", {
   expect_error(invisible(capture.output(
-    wb_cv(dta, nboot = 10, dist_rad = TRUE)
+    radf_wb_cv(dta, nboot = 10, dist_rad = TRUE)
   )), regexp = NA)
 })
 
