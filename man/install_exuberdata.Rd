@@ -10,3 +10,10 @@ install_exuberdata()
 This function wraps the \code{install.packages} function and offers a faster
 and more convenient way to install exuberdata.
 }
+\examples{
+\donttest{
+if("exuberdata" \%in\% loadedNamespaces()) {
+ exuberdata::radf_crit2
+}
+}
+}

@@ -25,12 +25,13 @@ return .Random.seed as the "seed" attribute. Results between seeds in parallel
 and non-parallel differ.}
 }
 \value{
-A list that contains the critical values for ADF, BADF, BSADF and GSADF
-t-statistics.
+For \code{radf_mc_cv} a list that contains the critical values for ADF,
+BADF, BSADF and GSADF t-statistics. For \code{radf_mc_dist} a list that
+contains the ADF, SADF and GSADF distributions.
 }
 \description{
-\code{mc_cv} computes Monte Carlo critical values for the recursive unit
-root tests. \code{mc_dist} computes the distribution.
+\code{radf_mc_cv} computes Monte Carlo critical values for the recursive unit
+root tests. \code{radf_mc_dist} computes the distribution.
 }
 \examples{
 \donttest{
