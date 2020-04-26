@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidiers-cv.R
 \name{autoplot.radf_distr}
 \alias{autoplot.radf_distr}
-\title{Plotting \code{distr} object}
+\title{Plotting \code{radf_distr}}
 \usage{
 \method{autoplot}{radf_distr}(object, ...)
 }

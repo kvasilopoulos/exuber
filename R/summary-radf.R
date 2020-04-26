@@ -1,6 +1,6 @@
 #' Summarizing radf models
 #'
-#' \code{summary} method for class "radf"
+#' \code{summary} method for radf models that consist of `radf_obj` and `radf_cv`.
 #'
 #' @param object An object of class \code{\link[=radf]{radf()}}.
 #' @param cv An object of class "cv". The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},

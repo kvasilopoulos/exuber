@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plotting and tidying datestamp objects — autoplot.ds_radf • exuber</title>
+<title>Plotting <code>ds_radf</code> — autoplot.ds_radf • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,8 +54,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Plotting and tidying datestamp objects — autoplot.ds_radf" />
-<meta property="og:description" content="Plotting datestamp with geom_segment()" />
+<meta property="og:title" content="Plotting <code>ds_radf</code> — autoplot.ds_radf" />
+<meta property="og:description" content="Takes ds_radfobjects and returns a ggplot2 object, with the
+geom_segment() layer." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -164,20 +165,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plotting and tidying datestamp objects</h1>
+    <h1>Plotting <code>ds_radf</code></h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/datestamp.R'><code>R/datestamp.R</code></a></small>
     <div class="hidden name"><code>autoplot.ds_radf.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plotting datestamp with geom_segment()</p>
+    <p>Takes <code>ds_radf</code>objects and returns a ggplot2 object, with the
+geom_segment() layer.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for ds_radf</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='kw'>trunc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for ds_radf</span>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>object</span>, <span class='kw'>trunc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -194,10 +193,6 @@ in the minimum window.</p></td>
     <tr>
       <th>...</th>
       <td><p>further arguments passed to methods.</p></td>
-    </tr>
-    <tr>
-      <th>x</th>
-      <td><p>An object of class <code><a href='datestamp.html'>datestamp()</a></code></p></td>
     </tr>
     </table>
 

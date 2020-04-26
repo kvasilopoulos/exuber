@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plotting and tidying radf objects — autoplot.radf_obj • exuber</title>
+<title>Plotting <code>radf_obj</code> — autoplot.radf_obj • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,9 +54,10 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Plotting and tidying radf objects — autoplot.radf_obj" />
+<meta property="og:title" content="Plotting <code>radf_obj</code> — autoplot.radf_obj" />
 <meta property="og:description" content="autoplot.radf_obj takes an radf_obj object and returns a faceted ggplot object.
-shade" />
+shade is used as an input to shape_opt argument in autoplot.radf_obj.
+shade modifies the  geom_rect layer that indicates the exuberamce periods." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -165,14 +166,15 @@ shade" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plotting and tidying radf objects</h1>
+    <h1>Plotting <code>radf_obj</code></h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot-radf.R'><code>R/autoplot-radf.R</code></a></small>
     <div class="hidden name"><code>autoplot.radf_obj.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p><code>autoplot.radf_obj</code> takes an <code>radf_obj</code> object and returns a faceted ggplot object.
-<code>shade</code></p>
+<code>shade</code> is used as an input to <code>shape_opt</code> argument in <code>autoplot.radf_obj</code>.
+<code>shade</code> modifies the  geom_rect layer that indicates the exuberamce periods.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf_obj</span>
