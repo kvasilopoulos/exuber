@@ -3,7 +3,7 @@
 \docType{data}
 \name{radf_crit}
 \alias{radf_crit}
-\title{Simulated Monte Carlo critical values}
+\title{Simulated Monte Carlo Critical Values}
 \format{
 A list with lower level lists that contain
 \describe{

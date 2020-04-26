@@ -3,18 +3,18 @@
 \name{tidy.radf_cv}
 \alias{tidy.radf_cv}
 \alias{augment.radf_cv}
-\title{Turn an \code{radf_cv} object}
+\title{Tidy \code{radf_cv} object}
 \usage{
 \method{tidy}{radf_cv}(x, format = c("wide", "long"), ...)
 
 \method{augment}{radf_cv}(x, format = c("wide", "long"), ...)
 }
 \arguments{
-\item{x}{An \code{radf_cv} object}
+\item{x}{An object of class \code{radf_cv}.}
 
 \item{format}{Long or wide format}
 
-\item{...}{Additional arguments. Not used.}
+\item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}

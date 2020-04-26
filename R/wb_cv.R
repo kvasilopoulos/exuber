@@ -86,7 +86,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 
 }
 
-#' Wild Bootstrap Critical values
+#' Wild Bootstrap Critical Values
 #'
 #' \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
 #' scheme, which is asymptotically robust to non-stationary volatility, to

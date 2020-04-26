@@ -3,7 +3,7 @@
 \name{radf_wb_cv}
 \alias{radf_wb_cv}
 \alias{radf_wb_distr}
-\title{Wild Bootstrap Critical values}
+\title{Wild Bootstrap Critical Values}
 \usage{
 radf_wb_cv(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 

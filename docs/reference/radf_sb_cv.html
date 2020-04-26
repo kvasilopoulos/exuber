@@ -236,27 +236,27 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='co'># Panel critical vales should have the same lag length with the estimation</span>
 <span class='no'>sb</span> <span class='kw'>&lt;-</span> <span class='fu'>radf_sb_cv</span>(<span class='no'>sim_data</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>sb</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 3
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>sb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 3</span><span>
 #&gt;   id    sig   gsadf_panel
-#&gt;   &lt;fct&gt; &lt;fct&gt;       &lt;dbl&gt;
-#&gt; 1 panel 90          0.356
-#&gt; 2 panel 95          0.442
-#&gt; 3 panel 99          0.554</div><div class='input'>
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> panel 90          0.381
+#&gt; </span><span style='color: #555555;'>2</span><span> panel 95          0.437
+#&gt; </span><span style='color: #555555;'>3</span><span> panel 99          0.680</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; 
 #&gt; -- Summary (minw = 19, lag = 1) --------------------------------- Sieve Bootstrap (nboot = 500) --
 #&gt; 
 #&gt; panel :
-#&gt; # A tibble: 1 x 5
+#&gt; </span><span style='color: #555555;'># A tibble: 1 x 5</span><span>
 #&gt;   name        tstat  `90`  `95`  `99`
-#&gt;   &lt;fct&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-#&gt; 1 gsadf_panel  1.89 0.356 0.442 0.554
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span> gsadf_panel  1.89 0.381 0.437 0.680
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='img'><img src='radf_sb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Simulate distribution</span>
 <span class='no'>sdist</span> <span class='kw'>&lt;-</span> <span class='fu'>radf_sb_distr</span>(<span class='no'>sim_data</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
 
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>sdist</span>)</div><div class='img'><img src='radf_sb_cv-2.png' alt='' width='700' height='433' /></div><div class='input'># }
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

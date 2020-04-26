@@ -2,12 +2,9 @@
 % Please edit documentation in R/datestamp.R
 \name{autoplot.ds_radf}
 \alias{autoplot.ds_radf}
-\alias{tidy.ds_radf}
-\title{Plotting and tidying datestamp objects}
+\title{Plotting \code{ds_radf}}
 \usage{
 \method{autoplot}{ds_radf}(object, trunc = TRUE, ...)
-
-\method{tidy}{ds_radf}(x, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link[=datestamp]{datestamp()}}}
@@ -16,11 +13,10 @@
 in the minimum window.}
 
 \item{...}{further arguments passed to methods.}
-
-\item{x}{An object of class \code{\link[=datestamp]{datestamp()}}}
 }
 \description{
-Plotting datestamp with \link[=ggplot2]{geom_segment()}
+Takes \code{ds_radf}objects and returns a ggplot2 object, with the
+\link[=ggplot2]{geom_segment()} layer.
 }
 \examples{
 \donttest{

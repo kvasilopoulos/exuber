@@ -3,7 +3,7 @@
 \name{diagnostics}
 \alias{diagnostics}
 \alias{diagnostics.radf_obj}
-\title{Diagnostics}
+\title{Diagnostics on hypothesis testing}
 \usage{
 diagnostics(object, cv = NULL, ...)
 

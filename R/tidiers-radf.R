@@ -1,8 +1,8 @@
-#' Tidy an `radf` object
+#' Tidy `radf_obj` object
 #'
-#' @param x An `radf` object
+#' @param x An object of class `radf_obj`.
 #' @param format Long or wide format
-#' @param ... Additional arguments. Not used.
+#' @param ... Further arguments passed to methods. Not used.
 #'
 #' @importFrom purrr keep map reduce
 #' @importFrom dplyr full_join arrange

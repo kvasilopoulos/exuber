@@ -4,7 +4,7 @@
 \alias{tidy.radf_obj}
 \alias{augment.radf_obj}
 \alias{glance.radf_obj}
-\title{Tidy an \code{radf} object}
+\title{Tidy \code{radf_obj} object}
 \usage{
 \method{tidy}{radf_obj}(x, format = c("wide", "long"), ...)
 
@@ -13,11 +13,11 @@
 \method{glance}{radf_obj}(x, format = c("wide", "long"), ...)
 }
 \arguments{
-\item{x}{An \code{radf} object}
+\item{x}{An object of class \code{radf_obj}.}
 
 \item{format}{Long or wide format}
 
-\item{...}{Additional arguments. Not used.}
+\item{...}{Further arguments passed to methods. Not used.}
 
 \item{panel}{Either univariate or panel bsadf.}
 }
@@ -25,7 +25,7 @@
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-Tidy an \code{radf} object
+Tidy \code{radf_obj} object
 }
 \examples{
 \dontrun{

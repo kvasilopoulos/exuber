@@ -1,4 +1,4 @@
-#' Diagnostics
+#' Diagnostics on hypothesis testing
 #'
 #' Finds the series that reject the null hypothesis.
 #'

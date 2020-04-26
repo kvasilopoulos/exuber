@@ -134,9 +134,10 @@ stamp_to_index <- function(x, idx) {
 }
 
 
-#' Plotting and tidying datestamp objects
+#' Plotting `ds_radf`
 #'
-#' Plotting datestamp with \link[=ggplot2]{geom_segment()}
+#' Takes `ds_radf`objects and returns a ggplot2 object, with the
+#' \link[=ggplot2]{geom_segment()} layer.
 #'
 #' @name autoplot.ds_radf
 #'
@@ -187,10 +188,14 @@ autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
     )
 }
 
-#' @rdname autoplot.ds_radf
-#' @param x An object of class \code{\link[=datestamp]{datestamp()}}
+#' Tidy `ds_radf` object
+#'
+#' @param x An object of class `ds_radf`.
+#' @param ... Further arguments passed to methods. Not used.
+#'
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_rows
+#'
 #' @export
 tidy.ds_radf <- function(x, ...) {
   fct_lvls <- if (attr(x, "panel")) "panel" else series_names(x)
