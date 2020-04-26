@@ -19,7 +19,7 @@ Returns a list of summary statistics,
 the t-statistic and the critical values of the ADF, SADF and GSADF.
 }
 \description{
-\code{summary} method for class "radf"
+\code{summary} method for radf models that consist of \code{radf_obj} and \code{radf_cv}.
 }
 \examples{
 \donttest{

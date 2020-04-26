@@ -1,11 +1,11 @@
 
 # tidy_radf_cv ---------------------------------------------------------------
 
-#' Turn an `radf_cv` object
+#' Tidy `radf_cv` object
 #'
 #' Summarizes information about the adf, sadf, and gsadf of a `radf_cv` object.
 #'
-#' @param x An `radf_cv` object
+#' @param x An object of class `radf_cv`.
 #' @inheritParams tidy.radf_obj
 #'
 #' @return A [tibble::tibble()]
@@ -221,13 +221,10 @@ augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
 # Tidying distr -----------------------------------------------------------
 
 
-#' Tidying *_distr objects
+#' Tidy `radf_distr` objects
 #'
-#' tidy `distr` objects. Takes an `mc_distr`, `wb_distr` or `sb_distr` object and returns
-#' a tibble.
-#'
-#' @param x An `*_distr` object
-#' @param ... Additional arguments. Not used.
+#' @param x An `radf_distr` object
+#' @param ... Further arguments passed to methods. Not used.
 #'
 #' @return A [tibble::tibble()]
 #'
@@ -293,7 +290,7 @@ tidy_radf_distr.sb_distr <- function(x, ...) {
 # Plotting distr ----------------------------------------------------------
 
 
-#' Plotting `distr` object
+#' Plotting `radf_distr`
 #'
 #' Takes `distr`objects and returns a ggplot2 object
 #'

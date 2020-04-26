@@ -2,21 +2,20 @@
 % Please edit documentation in R/tidiers-cv.R
 \name{tidy.radf_distr}
 \alias{tidy.radf_distr}
-\title{Tidying *_distr objects}
+\title{Tidy \code{radf_distr} objects}
 \usage{
 \method{tidy}{radf_distr}(x, ...)
 }
 \arguments{
-\item{x}{An \verb{*_distr} object}
+\item{x}{An \code{radf_distr} object}
 
-\item{...}{Additional arguments. Not used.}
+\item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-tidy \code{distr} objects. Takes an \code{mc_distr}, \code{wb_distr} or \code{sb_distr} object and returns
-a tibble.
+Tidy \code{radf_distr} objects
 }
 \examples{
 \dontrun{

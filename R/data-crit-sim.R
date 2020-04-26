@@ -1,4 +1,4 @@
-#' Simulated Monte Carlo critical values
+#' Simulated Monte Carlo Critical Values
 #'
 #' A dataset containing simulated critical values for up to 600 observations
 #' based on default minimum window. The critical values have been simulated and

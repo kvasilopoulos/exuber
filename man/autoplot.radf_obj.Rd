@@ -3,7 +3,7 @@
 \name{autoplot.radf_obj}
 \alias{autoplot.radf_obj}
 \alias{shade}
-\title{Plotting and tidying radf objects}
+\title{Plotting \code{radf_obj}}
 \usage{
 \method{autoplot}{radf_obj}(
   object,
@@ -47,7 +47,8 @@ shade(fill = "grey70", opacity = 0.5, ...)
 }
 \description{
 \code{autoplot.radf_obj} takes an \code{radf_obj} object and returns a faceted ggplot object.
-\code{shade}
+\code{shade} is used as an input to \code{shape_opt} argument in \code{autoplot.radf_obj}.
+\code{shade} modifies the  geom_rect layer that indicates the exuberamce periods.
 }
 \examples{
 \donttest{

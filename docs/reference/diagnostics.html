@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Diagnostics — diagnostics • exuber</title>
+<title>Diagnostics on hypothesis testing — diagnostics • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,7 +54,7 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Diagnostics — diagnostics" />
+<meta property="og:title" content="Diagnostics on hypothesis testing — diagnostics" />
 <meta property="og:description" content="Finds the series that reject the null hypothesis." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -164,7 +164,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Diagnostics</h1>
+    <h1>Diagnostics on hypothesis testing</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/diagnostics.R'><code>R/diagnostics.R</code></a></small>
     <div class="hidden name"><code>diagnostics.Rd</code></div>
     </div>
@@ -213,21 +213,21 @@ that do not reject (negative) the null hypothesis, and at what significance leve
 <span class='fu'>diagnostics</span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
 #&gt; -- Diagnostics (option = gsadf) --------------------------------------------------- Monte Carlo --
 #&gt; 
-#&gt; psy1:     Rejects H0 at the 1% significance level
-#&gt; psy2:     Rejects H0 at the 1% significance level
-#&gt; evans:    Rejects H0 at the 1% significance level
+#&gt; psy1:     Rejects H0 at the <span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; psy2:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; evans:    Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
 #&gt; div:      Cannot reject H0 
-#&gt; blan:     Rejects H0 at the 1% significance level
+#&gt; blan:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
 #&gt; </div><div class='input'>
 <span class='fu'>diagnostics</span>(<span class='no'>rsim_data</span>, <span class='kw'>option</span> <span class='kw'>=</span> <span class='st'>"sadf"</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
 #&gt; -- Diagnostics (option = sadf) ---------------------------------------------------- Monte Carlo --
 #&gt; 
-#&gt; psy1:     Rejects H0 at the 1% significance level
-#&gt; psy2:     Rejects H0 at the 1% significance level
-#&gt; evans:    Rejects H0 at the 1% significance level
-#&gt; div:      Rejects H0 at the 10% significance level
-#&gt; blan:     Rejects H0 at the 1% significance level
-#&gt; </div></pre>
+#&gt; psy1:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; psy2:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; evans:    Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; div:      Rejects H0 at the </span><span style='color: #BB0000;'>10%</span><span> significance level
+#&gt; blan:     Rejects H0 at the </span><span style='color: #BB0000;'>1%</span><span> significance level
+#&gt; </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
