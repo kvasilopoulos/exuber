@@ -5,6 +5,9 @@
 \alias{ggarrange}
 \alias{fortify.radf_obj}
 \alias{fortify.ds_radf}
+\alias{report}
+\alias{sim_dgp1}
+\alias{sim_dgp2}
 \title{Defunct functions in package \pkg{exuber}.}
 \usage{
 ggarrange(...)
@@ -12,9 +15,33 @@ ggarrange(...)
 \method{fortify}{radf_obj}(model, data, ...)
 
 \method{fortify}{ds_radf}(model, data, ...)
+
+report(x, y, panel = FALSE, ...)
+
+sim_dgp1(
+  n,
+  te = 0.4 * n,
+  tf = 0.15 * n + te,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+)
+
+sim_dgp2(
+  n,
+  te1 = 0.2 * n,
+  tf1 = 0.2 * n + te1,
+  te2 = 0.6 * n,
+  tf2 = 0.1 * n + te2,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+)
 }
 \description{
 The functions listed below are defunct. Help pages for defunct
-functions are  available at \code{help("-defunct")}.
+functions are  available at \code{help("exuber-defunct")}.
 }
 \keyword{internal}

@@ -1,4 +1,4 @@
-#' Summarizing radf models
+#' Summarizing `radf` models
 #'
 #' \code{summary} method for radf models that consist of `radf_obj` and `radf_cv`.
 #'

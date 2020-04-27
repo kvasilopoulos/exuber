@@ -1,9 +1,9 @@
 
 # tidy_radf_cv ---------------------------------------------------------------
 
-#' Tidy `radf_cv` object
+#' Tidy `radf_cv` objects
 #'
-#' Summarizes information about the adf, sadf, and gsadf of a `radf_cv` object.
+#' Summarizes information of `radf_cv` objects.
 #'
 #' @param x An object of class `radf_cv`.
 #' @inheritParams tidy.radf_obj
@@ -25,7 +25,7 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' mc <- radf_mc_cv(100)
 #'
 #' # Get the critical values
@@ -223,6 +223,8 @@ augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
 
 #' Tidy `radf_distr` objects
 #'
+#' Summarizes information of `radf_distr` objects.
+#'
 #' @param x An `radf_distr` object
 #' @param ... Further arguments passed to methods. Not used.
 #'
@@ -292,10 +294,10 @@ tidy_radf_distr.sb_distr <- function(x, ...) {
 
 #' Plotting `radf_distr`
 #'
-#' Takes `distr`objects and returns a ggplot2 object
+#' Takes `radf_distr`objects and returns a ggplot2 object.
 #'
 #' @param object An `*_dist` object.
-#' @param ... Additional arguments, used only in `wb_distr` facet options.
+#' @param ... Further arguments passed to methods, used only in `wb_distr` facet options.
 #'
 #' @export
 autoplot.radf_distr <- function(object, ...) {

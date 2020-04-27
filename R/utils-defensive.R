@@ -96,13 +96,11 @@ assert_match <- function(x, y, panel = FALSE) {
   }
 }
 
-assert_model <- function(x, y) {
-  assert_class(x, "obj") # is this necessay since s3
-  assert_class(y, "cv")
-  assert_match(x, y)
-}
-
-# TODO validate with NextMethods() ???
+# assert_model <- function(x, y) {
+#   assert_class(x, "obj") # is this necessay since s3
+#   assert_class(y, "cv")
+#   assert_match(x, y)
+# }
 
 # predicates --------------------------------------------------------------
 

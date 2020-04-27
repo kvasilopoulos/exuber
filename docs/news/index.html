@@ -206,9 +206,9 @@
 <ul>
 <li>Changed <code>opt_bsadf = conservative</code> for the simulated critical values (<code>crit</code>), also reduced the size of the <code>crit</code> from 700 to 600 due to package size restrictions.</li>
 <li>
-<code>sim_dgp1()</code> and <code>sim_dgp2()</code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
+<code><a href="../reference/exuber-defunct.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-defunct.html">sim_dgp2()</a></code> have been renamed to <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> and <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> to better describe the origination of the dgp.</li>
 <li>
-<code>sim_dgp1()</code> and <code>sim_dgp2()</code> have been soft-deprecated.</li>
+<code><a href="../reference/exuber-defunct.html">sim_dgp1()</a></code> and <code><a href="../reference/exuber-defunct.html">sim_dgp2()</a></code> have been soft-deprecated.</li>
 <li>
 <code>autoplot_radf()</code> arranges automatically multiple graphs, to return to previous behavior we included the optional argument <code>arrange</code> which is set to TRUE by default.</li>
 </ul>
@@ -243,7 +243,7 @@
 <a href="#improvements-1" class="anchor"></a>Improvements</h2>
 <ul>
 <li>New printing output for the functions <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code><a href="../reference/diagnostics.html">diagnostics()</a></code> and <code><a href="../reference/datestamp.html">datestamp()</a></code>.</li>
-<li>New improved progressbar with more succinct printing for <code>wb_cv()</code>
+<li>New improved progressbar with more succinct printing for <code><a href="../reference/exuber-deprecated.html">wb_cv()</a></code>
 </li>
 <li>
 <code>seed</code> argument to functions that are using rng. Also the option to declare a global seed for reproducibility with the <code>option(exuber.global_seed = ###)</code>
@@ -255,7 +255,7 @@
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h2>
 <ul>
 <li>
-<code>sb_cv()</code> and <code>wb_cv()</code>now can parse data that contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing.</li>
+<code><a href="../reference/exuber-deprecated.html">sb_cv()</a></code> and <code><a href="../reference/exuber-deprecated.html">wb_cv()</a></code>now can parse data that contain a date-column. Similarly, to what <code><a href="../reference/radf.html">radf()</a></code> is doing.</li>
 </ul>
 </div>
 </div>
@@ -301,8 +301,8 @@
 <ul>
 <li>Panel estimation in <code><a href="../reference/radf.html">radf()</a></code>
 </li>
-<li>Added <code>sb_cv()</code> function: Panel Sieve Bootstrapped critical values</li>
-<li>Default critical values are supplied directly into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code>diagnostics</code>, <code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>, without having to specify argument cv. The critical values have been simulated from <code>mc_cv()</code> function and stored as data. Custom critical values should be provided by the user with the option <code>cv</code>.</li>
+<li>Added <code><a href="../reference/exuber-deprecated.html">sb_cv()</a></code> function: Panel Sieve Bootstrapped critical values</li>
+<li>Default critical values are supplied directly into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, <code>diagnostics</code>, <code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>, without having to specify argument cv. The critical values have been simulated from <code><a href="../reference/exuber-deprecated.html">mc_cv()</a></code> function and stored as data. Custom critical values should be provided by the user with the option <code>cv</code>.</li>
 <li>Added <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> function, that can arrange a list of ggplot objects into a single grob.</li>
 <li>Added <code>fortify</code> to arrange a data.frame from <code><a href="../reference/radf.html">radf()</a></code> function.</li>
 </ul>
@@ -316,11 +316,11 @@
 <li>
 <code><a href="../reference/radf.html">radf()</a></code> can parse date from <code>ts</code> objects.</li>
 <li>
-<code>report()</code> has been renamed into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>.</li>
+<code><a href="../reference/exuber-defunct.html">report()</a></code> has been renamed into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>.</li>
 <li>
 <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> has been renamed into <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>.</li>
 <li>
-<code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> and <code>report()</code> are soft deprecated.</li>
+<code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> and <code><a href="../reference/exuber-defunct.html">report()</a></code> are soft deprecated.</li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
