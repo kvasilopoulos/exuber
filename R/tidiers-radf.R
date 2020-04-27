@@ -1,4 +1,6 @@
-#' Tidy `radf_obj` object
+#' Tidy `radf_obj` objects
+#'
+#' Summarizes information of `radf_obj` objects.
 #'
 #' @param x An object of class `radf_obj`.
 #' @param format Long or wide format
@@ -13,10 +15,10 @@
 #'
 #' @export
 #' @examples
-#' \dontrun{
+#' \dottest{
 #' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 #'
-#' rfd <- radf(data)
+#' rfd <- radf(dta)
 #'
 #' # Get the t-stat
 #' tidy(rfd)
@@ -25,7 +27,7 @@
 #' augment(rfd)
 #'
 #' # Get the panel t-stat
-#' glance(mc)
+#' glance(rfd)
 #' }
 tidy.radf_obj <- function(x, format = c("wide", "long"), ...) {
 

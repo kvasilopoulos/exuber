@@ -4,7 +4,7 @@
 #'
 #' @param x An object of class `obj`.
 #' @param y An object of class `cv`.
-#' @param ... further arguments passed to methods.
+#' @param ... Further arguments passed to methods.
 #' @export
 tidy_join <- function(x, y, ...) {
   UseMethod("tidy_join")
@@ -33,7 +33,7 @@ glance_join <- function(x, y, ...) {
 #' @param x An object of class `radf_obj`.
 #' @param y An object of class `radf_cv`. The output will depend on the type of
 #' critical value.
-#' @inheritDotParams tidy_join
+#' @param  ... Further arguments passed to methods. Not used.
 #'
 #' @details `tidy_join` also calls `augment_join` when `cv` is of class `sb_cv`.
 #'

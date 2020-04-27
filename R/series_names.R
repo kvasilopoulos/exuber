@@ -20,10 +20,7 @@ series_names <- function(x, ...) {
   UseMethod("series_names<-")
 }
 
-
-
 # Methods -----------------------------------------------------------------
-
 
 
 #' @export
@@ -70,6 +67,7 @@ series_names.default <- function(x, ...) {
   x
 }
 
+#' @rdname series_names
 #' @export
 `series_names<-.wb_cv` <- function(x, value) {
   if (length(series_names(x)) != length(value)) {
@@ -85,4 +83,19 @@ series_names.default <- function(x, ...) {
   x
 }
 
-#TODO `series_names<-.sb_cv`
+#' @rdname series_names
+#' @export
+`series_names<-.sb_cv` <- function(x, value) {
+  if (length(series_names(x)) != length(value)) {
+    stop("length of series_names vectors does not match", call. = FALSE)
+  }
+  cv <- c("gsadf_panel")
+  x[cv] <- x[cv] %>%
+    imap(~ `rownames<-`(.x, value))
+  seq_cv <- c("bsadf_panel")
+  x[seq_cv] <- x[seq_cv] %>%
+    imap(~ `dimnames<-`(.x, list(NULL, c("90%", "95%", "99%"), value)))
+  attr(x, "series_names") <- value
+  x
+}
+

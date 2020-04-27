@@ -3,14 +3,23 @@
 \name{exuber-deprecated}
 \alias{exuber-deprecated}
 \alias{col_names}
+\alias{mc_cv}
+\alias{wb_cv}
+\alias{sb_cv}
 \title{Deprecated functions in package \pkg{exuber}.}
 \usage{
 col_names(x)
+
+mc_cv(n, minw = NULL, nrep = 1000L, seed = NULL)
+
+wb_cv(data, minw = NULL, nboot = 1000L, seed = NULL)
+
+sb_cv(data, minw = NULL, nboot = 1000L, seed = NULL)
 }
 \description{
 The functions listed below are deprecated and will be defunct in
 the near future. When possible, alternative functions with similar
 functionality are also mentioned. Help pages for deprecated functions are
-available at \code{help("-deprecated")}.
+available at \code{help("exuber-deprecated")}.
 }
 \keyword{internal}
