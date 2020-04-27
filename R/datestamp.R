@@ -208,3 +208,24 @@ tidy.ds_radf <- function(x, ...) {
 
 # TODO store the peak in datestamp
 # TODO https://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_segment.html
+
+
+# additional style for autoplot.ds ----------------------------------------
+
+
+# tidy(datestamp(radf(sim_data))) %>%
+#   ggplot() +
+#   geom_segment(aes_string(x = "Start", xend = "End", y = "id", yend = "id"), color = "grey", size = 1) +
+#   geom_point(aes(x = Start, y = id), size = 2, color = "red") +
+#   geom_point(aes(x = Start + 5, y = id), size = 2, color = "green") +
+#   geom_point(aes(x = End, y = id), size = 2, color = "blue") +
+#   geom_text(aes(x = Start + 5, y = id, label = Duration), size = 4, color = "white") +
+#   labs(title = "", x = "", y = "") + #intentionally not in theme (for extra margin)
+#   theme_bw() +
+#   scale_y_discrete(drop = FALSE) +
+#   theme(
+#     axis.text.y = element_text(face = "bold", size = 8, hjust = 0),
+#     legend.position = "none",
+#     panel.grid.major.y = element_blank(),
+#     plot.margin = margin(0.5, 1, 0, 0.5, "cm")
+#   )
