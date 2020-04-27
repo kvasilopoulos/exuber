@@ -23,7 +23,6 @@ if (isTRUE(is_equal)) {
   usethis::use_data(radf_crit, overwrite = TRUE , compress = "xz")
 }
 
-
 for (i in 6:600) {
   store_attrs <- attributes(radf_crit[[i]])
   attributes(radf_crit[[i]]) <- NULL

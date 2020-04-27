@@ -206,6 +206,5 @@ tidy.ds_radf <- function(x, ...) {
     mutate(id = factor(id, levels = fct_lvls))
 }
 
-# TODO name/title in tidy.datestamp
 # TODO store the peak in datestamp
 # TODO https://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_segment.html
