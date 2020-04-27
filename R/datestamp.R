@@ -144,7 +144,7 @@ stamp_to_index <- function(x, idx) {
 #' @param object An object of class \code{\link[=datestamp]{datestamp()}}
 #' @param trunc default FALSE. If TRUE the index formed by truncating the value
 #' in the minimum window.
-#' @param ... further arguments passed to methods.
+#' @param ... further arguments passed to methods. Not used.
 #' @export
 #'
 #' @importFrom stats reorder
@@ -188,7 +188,9 @@ autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
     )
 }
 
-#' Tidy `ds_radf` object
+#' Tidy `ds_radf` objects
+#'
+#' Summarizes information of `ds_radf` objects.
 #'
 #' @param x An object of class `ds_radf`.
 #' @param ... Further arguments passed to methods. Not used.
@@ -204,7 +206,6 @@ tidy.ds_radf <- function(x, ...) {
     mutate(id = factor(id, levels = fct_lvls))
 }
 
-# TODO see ellipsis in autoplot.ds_radf
 # TODO name/title in tidy.datestamp
 # TODO store the peak in datestamp
 # TODO https://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_segment.html

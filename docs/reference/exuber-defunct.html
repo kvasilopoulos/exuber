@@ -56,7 +56,7 @@
 
 <meta property="og:title" content="Defunct functions in package <span class="pkg">exuber</span>. — exuber-defunct" />
 <meta property="og:description" content="The functions listed below are defunct. Help pages for defunct
-functions are  available at help(&quot;-defunct&quot;)." />
+functions are  available at help(&quot;exuber-defunct&quot;)." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -172,7 +172,7 @@ functions are  available at help(&quot;-defunct&quot;)." />
 
     <div class="ref-description">
     <p>The functions listed below are defunct. Help pages for defunct
-functions are  available at <code>help("-defunct")</code>.</p>
+functions are  available at <code>help("exuber-defunct")</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>ggarrange</span>(<span class='no'>...</span>)
@@ -181,7 +181,31 @@ functions are  available at <code>help("-defunct")</code>.</p>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for ds_radf</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify</a></span>(<span class='no'>model</span>, <span class='no'>data</span>, <span class='no'>...</span>)
+
+<span class='fu'>report</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
+<span class='fu'>sim_dgp1</span>(
+  <span class='no'>n</span>,
+  <span class='kw'>te</span> <span class='kw'>=</span> <span class='fl'>0.4</span> * <span class='no'>n</span>,
+  <span class='kw'>tf</span> <span class='kw'>=</span> <span class='fl'>0.15</span> * <span class='no'>n</span> + <span class='no'>te</span>,
+  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)
+
+<span class='fu'>sim_dgp2</span>(
+  <span class='no'>n</span>,
+  <span class='kw'>te1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span>,
+  <span class='kw'>tf1</span> <span class='kw'>=</span> <span class='fl'>0.2</span> * <span class='no'>n</span> + <span class='no'>te1</span>,
+  <span class='kw'>te2</span> <span class='kw'>=</span> <span class='fl'>0.6</span> * <span class='no'>n</span>,
+  <span class='kw'>tf2</span> <span class='kw'>=</span> <span class='fl'>0.1</span> * <span class='no'>n</span> + <span class='no'>te2</span>,
+  <span class='kw'>c</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.6</span>,
+  <span class='kw'>sigma</span> <span class='kw'>=</span> <span class='fl'>6.79</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
 
 
