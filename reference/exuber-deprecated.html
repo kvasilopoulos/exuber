@@ -58,7 +58,7 @@
 <meta property="og:description" content="The functions listed below are deprecated and will be defunct in
 the near future. When possible, alternative functions with similar
 functionality are also mentioned. Help pages for deprecated functions are
-available at help(&quot;-deprecated&quot;)." />
+available at help(&quot;exuber-deprecated&quot;)." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -176,10 +176,16 @@ available at help(&quot;-deprecated&quot;)." />
     <p>The functions listed below are deprecated and will be defunct in
 the near future. When possible, alternative functions with similar
 functionality are also mentioned. Help pages for deprecated functions are
-available at <code>help("-deprecated")</code>.</p>
+available at <code>help("exuber-deprecated")</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>col_names</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'>col_names</span>(<span class='no'>x</span>)
+
+<span class='fu'>mc_cv</span>(<span class='no'>n</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nrep</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>wb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+
+<span class='fu'>sb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>1000L</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
 
 
