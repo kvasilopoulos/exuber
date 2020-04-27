@@ -49,8 +49,6 @@ psy_ds <- function(n, rule = 1, delta = 1) {
   }
 }
 
-# TODO export lag_selection
-
 lag_selection <- function(data, criterion = c("aic", "bic"), max_lag = 8) {
   criterion <- match.arg(criterion)
   tbl <- lag_selection_table(data, max_lag)
