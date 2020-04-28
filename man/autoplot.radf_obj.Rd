@@ -3,7 +3,7 @@
 \name{autoplot.radf_obj}
 \alias{autoplot.radf_obj}
 \alias{shade}
-\title{Plotting \code{radf_obj}}
+\title{Plotting a \code{radf_obj} object}
 \usage{
 \method{autoplot}{radf_obj}(
   object,
@@ -25,7 +25,7 @@ shade(fill = "grey70", opacity = 0.5, ...)
 
 \item{cv}{An object of class \code{cv}.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 
 \item{min_duration}{the minimum duration.}
 
@@ -47,8 +47,8 @@ shade(fill = "grey70", opacity = 0.5, ...)
 }
 \description{
 \code{autoplot.radf_obj} takes an \code{radf_obj} object and returns a faceted ggplot object.
-\code{shade} is used as an input to \code{shape_opt} argument in \code{autoplot.radf_obj}.
-\code{shade} modifies the  geom_rect layer that indicates the exuberamce periods.
+\code{shade} is used as an input to \code{shape_opt} argument in. \code{shade} modifies the
+geom_rect layer that demarcates the exuberance periods.
 }
 \examples{
 \donttest{

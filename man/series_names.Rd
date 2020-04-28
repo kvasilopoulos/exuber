@@ -4,13 +4,19 @@
 \alias{series_names}
 \alias{series_names<-}
 \alias{series_names<-.radf_obj}
-\title{Retrieve/Replace/Set series names}
+\alias{series_names<-.wb_cv}
+\alias{series_names<-.sb_cv}
+\title{Retrieve/Replace series names}
 \usage{
 series_names(x, ...)
 
 series_names(x) <- value
 
 \method{series_names}{radf_obj}(x) <- value
+
+\method{series_names}{wb_cv}(x) <- value
+
+\method{series_names}{sb_cv}(x) <- value
 }
 \arguments{
 \item{x}{An object.}
@@ -20,7 +26,7 @@ series_names(x) <- value
 \item{value}{n ordered vector of the same length as the "index" attribute of x.}
 }
 \description{
-Retrieve, replace or set the series names of an object.
+Retrieve or replace the series names of an object.
 }
 \examples{
 

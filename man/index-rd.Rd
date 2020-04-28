@@ -4,7 +4,7 @@
 \alias{index-rd}
 \alias{index}
 \alias{index<-}
-\title{Retrieve/Replace/Set the index}
+\title{Retrieve/Replace the index}
 \usage{
 index(x, ...)
 

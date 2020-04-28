@@ -4,7 +4,7 @@
 \alias{tidy.radf_obj}
 \alias{augment.radf_obj}
 \alias{glance.radf_obj}
-\title{Tidy \code{radf_obj} object}
+\title{Tidy a \code{radf_obj} object}
 \usage{
 \method{tidy}{radf_obj}(x, format = c("wide", "long"), ...)
 
@@ -15,7 +15,7 @@
 \arguments{
 \item{x}{An object of class \code{radf_obj}.}
 
-\item{format}{Long or wide format}
+\item{format}{Long or wide format (default = "wide").}
 
 \item{...}{Further arguments passed to methods. Not used.}
 
@@ -25,13 +25,13 @@
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-Tidy \code{radf_obj} object
+Summarizes information about \code{radf_obj} object.
 }
 \examples{
-\dontrun{
+\donttest{
 dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 
-rfd <- radf(data)
+rfd <- radf(dta)
 
 # Get the t-stat
 tidy(rfd)
@@ -40,6 +40,6 @@ tidy(rfd)
 augment(rfd)
 
 # Get the panel t-stat
-glance(mc)
+glance(rfd)
 }
 }

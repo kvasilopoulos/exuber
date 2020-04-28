@@ -73,10 +73,10 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
 #' @param seed An object specifying if and how the random number generator(rng)
 #' should be initialized. Either NULL or an integer will be used in a call to
-#' `set.seed` before simulation. If set, the value is save as "seed" attribute
-#' of the returned value. The default, NULL will note change the rng state, and
-#' return .Random.seed as the "seed" attribute. Results between seeds in parallel
-#' and non-parallel differ.
+#' `set.seed` before simulation. If set, the value is saved as "seed" attribute
+#' of the returned value. The default, NULL, will not change ng state, and
+#' return .Random.seed as the "seed" attribute. Results are differnt between
+#' in parallel and non-parallel, even if they have the same seed.
 #'
 #' @return For \code{radf_mc_cv} a list that contains the critical values for ADF,
 #' BADF, BSADF and GSADF t-statistics. For \code{radf_mc_dist} a list that

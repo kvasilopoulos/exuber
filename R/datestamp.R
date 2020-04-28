@@ -6,7 +6,7 @@
 #'
 #' @inheritParams diagnostics
 #' @param min_duration The minimum duration of an explosive period for it to be
-#' reported. Default is 0.
+#' reported (default = 0).
 #' @param ... further arguments passed to methods.
 #'
 #' @return Returns a list of values for each explosive sub-period, giving the origin
@@ -14,7 +14,7 @@
 #' @details
 #' Datestamp also stores a vector in {0,1} that corresponds to {positive, negative}
 #' respectively, for all series throughout the time period. This output can be used as
-#' a dummy that indicates the occurrence of a bubble.
+#' a dummy which indicates the occurrence of a bubble.
 #'
 #' Setting \code{min_duration} removes very short episode of exuberance.
 #' Phillips et al. (2015) propose two simple rules of thumb to remove short
@@ -86,8 +86,9 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
   reps <- if (is_sb(cv)) 1 else match(pos, series_names(object))
   dms <- list(seq_along(idx), if (is_sb(cv)) "panel" else snames[reps])
   dummy <- matrix(0, nrow = length(idx), ncol = length(pos), dimnames = dms)
+  zadj <- get_minw(object) + get_lag(object)
   for (z in seq_along(pos)) {
-    dummy[ds[[z]], z] <- 1
+    dummy[ds[[z]] + zadj, z] <- 1
   }
 
   structure(
@@ -134,9 +135,9 @@ stamp_to_index <- function(x, idx) {
 }
 
 
-#' Plotting `ds_radf`
+#' Plotting a `ds_radf` object
 #'
-#' Takes `ds_radf`objects and returns a ggplot2 object, with the
+#' Takes `ds_radf`objects and returns a ggplot2 object, with a
 #' \link[=ggplot2]{geom_segment()} layer.
 #'
 #' @name autoplot.ds_radf

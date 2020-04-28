@@ -12,17 +12,17 @@ radf_mc_distr(n, minw = NULL, nrep = 1000L, seed = NULL)
 \arguments{
 \item{n}{A positive integer. The sample size.}
 
-\item{minw}{A positive integer. The minimum window size, which defaults to
-\eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+\item{minw}{A positive integer. The minimum window size (default =
+\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
 
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{seed}{An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is save as "seed" attribute
-of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallel
-and non-parallel differ.}
+\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
+of the returned value. The default, NULL, will not change ng state, and
+return .Random.seed as the "seed" attribute. Results are differnt between
+in parallel and non-parallel, even if they have the same seed.}
 }
 \value{
 For \code{radf_mc_cv} a list that contains the critical values for ADF,

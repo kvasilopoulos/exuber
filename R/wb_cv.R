@@ -88,14 +88,14 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 
 #' Wild Bootstrap Critical Values
 #'
-#' \code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
+#' \code{radf_wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
 #' scheme, which is asymptotically robust to non-stationary volatility, to
-#' generate critical values for the recursive unit root tests. \code{wb_dist}
+#' generate critical values for the recursive unit root tests. \code{radf_wb_dist}
 #' computes the distribution.
 #'
 #' @inheritParams radf
 #' @inheritParams radf_mc_cv
-#' @param nboot A positive integer indicating the number of bootstraps. Default is 1000 repetitions.
+#' @param nboot A positive integer. Number of bootstraps (default = 500L).
 #' @param dist_rad Logical. If \code{TRUE} then  the Rademacher distribution
 #' will be used.
 #'
