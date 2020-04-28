@@ -200,7 +200,7 @@ episodes during which the time series display explosive dynamics.</p>
     <tr>
       <th>min_duration</th>
       <td><p>The minimum duration of an explosive period for it to be
-reported. Default is 0.</p></td>
+reported (default = 0).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -208,7 +208,7 @@ reported. Default is 0.</p></td>
     </tr>
     <tr>
       <th>option</th>
-      <td><p>Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".</p></td>
+      <td><p>Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").</p></td>
     </tr>
     </table>
 
@@ -220,7 +220,7 @@ and termination dates as well as the number of periods explosive behavior lasts.
 
     <p>Datestamp also stores a vector in 0,1 that corresponds to positive, negative
 respectively, for all series throughout the time period. This output can be used as
-a dummy that indicates the occurrence of a bubble.</p>
+a dummy which indicates the occurrence of a bubble.</p>
 <p>Setting <code>min_duration</code> removes very short episode of exuberance.
 Phillips et al. (2015) propose two simple rules of thumb to remove short
 periods of explosive dynamics, "log(T)/T", where T is the number of observations.</p>

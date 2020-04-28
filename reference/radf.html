@@ -55,8 +55,8 @@
   
 
 <meta property="og:title" content="Recursive Augmented Dickey-Fuller Test — radf" />
-<meta property="og:description" content="radf returns the t-statistics from a recursive Augmented Dickey-Fuller
-test." />
+<meta property="og:description" content="radf returns the univariate and panel t-statistics from a recursive augmented
+Dickey-Fuller test." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -171,8 +171,8 @@ test." />
     </div>
 
     <div class="ref-description">
-    <p><code>radf</code> returns the t-statistics from a recursive Augmented Dickey-Fuller
-test.</p>
+    <p><code>radf</code> returns the univariate and panel t-statistics from a recursive augmented
+Dickey-Fuller test.</p>
     </div>
 
     <pre class="usage"><span class='fu'>radf</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0L</span>)</pre>
@@ -182,17 +182,17 @@ test.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A univariate or multivariate numeric ts object, data.frame or matrix.
-The estimation process cannot handle NA values.</p></td>
+      <td><p>A univariate or multivariate numeric time series object, or a numeric
+vector or matrix, or a data.frame. The object should not have any NA values.</p></td>
     </tr>
     <tr>
       <th>minw</th>
-      <td><p>A positive integer. The minimum window size, which defaults to
-\((0.01 + 1.8/\sqrt(T))*T\).</p></td>
+      <td><p>A positive integer. The minimum window size (default =
+\((0.01 + 1.8/\sqrt(T))T\), where T denotes the sample size).</p></td>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p>A non-negative integer. The lag of the Augmented Dickey-Fuller regression.</p></td>
+      <td><p>A non-negative integer. The lag of the Augmented Dickey-Fuller regression (default = 0L).</p></td>
     </tr>
     </table>
 
@@ -207,6 +207,12 @@ The estimation process cannot handle NA values.</p></td>
 <dt>bsadf_panel</dt><dd><p>Panel Backward Supremum Augmented Dickey-Fuller</p></dd>
 <dt>gsadf_panle</dt><dd><p>Panel Generalized Supremum Augmented Dickey-Fuller</p></dd>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The <code>radf()</code> function is vectorized, i.e., it can handle multiple series
+at once, to improve efficiency. This property also enables the computation of panel
+statistics internally as a by-product of the univariate estimations with minimal
+additional cost incurred.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Phillips, P. C. B., Wu, Y., &amp; Yu, J. (2011). Explosive Behavior
@@ -215,6 +221,10 @@ Economic Review, 52(1), 201-226.</p>
 <p>Phillips, P. C. B., Shi, S., &amp; Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
+<p>Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
+E., Mack, A., &amp; Grossman, V. (2016). Episodes of exuberance in housing markets:
+in search of the smoking gun. The Journal of Real Estate Finance and Economics,
+53(4), 419-449.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
