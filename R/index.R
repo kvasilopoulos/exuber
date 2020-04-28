@@ -1,7 +1,7 @@
 
-#' Retrieve/Replace/Set the index
+#' Retrieve/Replace the index
 #'
-#' @description  Retrieve or replace the index of an object.
+#' @description Retrieve or replace the index of an object.
 #'
 #' @param x An object.
 #' @param ... Further arguments passed to methods.

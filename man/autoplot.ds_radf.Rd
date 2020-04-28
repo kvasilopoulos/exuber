@@ -2,7 +2,7 @@
 % Please edit documentation in R/datestamp.R
 \name{autoplot.ds_radf}
 \alias{autoplot.ds_radf}
-\title{Plotting \code{ds_radf}}
+\title{Plotting a \code{ds_radf} object}
 \usage{
 \method{autoplot}{ds_radf}(object, trunc = TRUE, ...)
 }
@@ -12,10 +12,10 @@
 \item{trunc}{default FALSE. If TRUE the index formed by truncating the value
 in the minimum window.}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{further arguments passed to methods. Not used.}
 }
 \description{
-Takes \code{ds_radf}objects and returns a ggplot2 object, with the
+Takes \code{ds_radf}objects and returns a ggplot2 object, with a
 \link[=ggplot2]{geom_segment()} layer.
 }
 \examples{

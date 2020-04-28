@@ -2,17 +2,17 @@
 % Please edit documentation in R/summary-radf.R
 \name{summary.radf_obj}
 \alias{summary.radf_obj}
-\title{Summarizing radf models}
+\title{Summarizing \code{radf} models}
 \usage{
 \method{summary}{radf_obj}(object, cv = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{\link[=radf]{radf()}}.}
+\item{object}{An object of class \code{radf_obj}. The output of\code{\link[=radf]{radf()}}.}
 
-\item{cv}{An object of class "cv". The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\item{cv}{An object of class \code{radf_cv}. The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},
 \code{\link[=radf_wb_cv]{radf_wb_cv()}} or \code{\link[=radf_sb_cv]{radf_sb_cv()}}}
 
-\item{...}{further arguments passed to methods, not used.}
+\item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
 Returns a list of summary statistics,

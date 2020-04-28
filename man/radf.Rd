@@ -7,13 +7,13 @@
 radf(data, minw = NULL, lag = 0L)
 }
 \arguments{
-\item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
-The estimation process cannot handle NA values.}
+\item{data}{A univariate or multivariate numeric time series object, or a numeric
+vector or matrix, or a data.frame. The object should not have any NA values.}
 
-\item{minw}{A positive integer. The minimum window size, which defaults to
-\eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+\item{minw}{A positive integer. The minimum window size (default =
+\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
 
-\item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression.}
+\item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression (default = 0L).}
 }
 \value{
 A list that contains the t-statistic (sequence) for:
@@ -26,8 +26,14 @@ A list that contains the t-statistic (sequence) for:
 \item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
-\code{radf} returns the t-statistics from a recursive Augmented Dickey-Fuller
-test.
+\code{radf} returns the univariate and panel t-statistics from a recursive augmented
+Dickey-Fuller test.
+}
+\details{
+The \code{radf()} function is vectorized, i.e., it can handle multiple series
+at once, to improve efficiency. This property also enables the computation of panel
+statistics internally as a by-product of the univariate estimations with minimal
+additional cost incurred.
 }
 \examples{
 \donttest{
@@ -63,4 +69,9 @@ Economic Review, 52(1), 201-226.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&P 500. International Economic Review, 56(4), 1043-1078.
+
+Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
+E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
+in search of the smoking gun. The Journal of Real Estate Finance and Economics,
+53(4), 419-449.
 }

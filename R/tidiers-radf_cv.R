@@ -1,9 +1,9 @@
 
 # tidy_radf_cv ---------------------------------------------------------------
 
-#' Tidy `radf_cv` objects
+#' Tidy a `radf_cv` object
 #'
-#' Summarizes information of `radf_cv` objects.
+#' Summarizes information about `radf_cv` object.
 #'
 #' @param x An object of class `radf_cv`.
 #' @inheritParams tidy.radf_obj
@@ -11,7 +11,7 @@
 #' @return A [tibble::tibble()]
 #'
 #' \itemize{
-#' \item id: the series names
+#' \item id: the series names.
 #' \item sig: The significance level.
 #' \item name: The name of the series (when format is "long")
 #' \item crit: The critical value (when format is "long")
@@ -221,11 +221,11 @@ augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
 # Tidying distr -----------------------------------------------------------
 
 
-#' Tidy `radf_distr` objects
+#' Tidy a `radf_distr` object
 #'
-#' Summarizes information of `radf_distr` objects.
+#' Summarizes information about `radf_distr` object.
 #'
-#' @param x An `radf_distr` object
+#' @param x An object of class `radf_distr`.
 #' @param ... Further arguments passed to methods. Not used.
 #'
 #' @return A [tibble::tibble()]
@@ -292,12 +292,14 @@ tidy_radf_distr.sb_distr <- function(x, ...) {
 # Plotting distr ----------------------------------------------------------
 
 
-#' Plotting `radf_distr`
+#' Plotting a `radf_distr` object
 #'
-#' Takes `radf_distr`objects and returns a ggplot2 object.
+#' Takes a `radf_distr`object and returns a ggplot2 object.
 #'
-#' @param object An `*_dist` object.
+#' @param object An object of class `radf_dist`.
 #' @param ... Further arguments passed to methods, used only in `wb_distr` facet options.
+#'
+#' @return A [ggplot2::ggplot()]
 #'
 #' @export
 autoplot.radf_distr <- function(object, ...) {
@@ -320,7 +322,7 @@ autoplot_radf_distr.mc_distr <- function(object, ...) {
     geom_density(alpha = 0.2) +
     theme_bw() +
     labs(x = "", y = "",
-         title = "Distributions of the ADF and supADF statistics")
+         title = "Distributions of unit root test statistics")
 }
 
 #' @importFrom tidyr gather
@@ -348,5 +350,5 @@ autoplot_radf_distr.sb_distr <- function(object, ...) {
     scale_x_continuous() +
     geom_density(fill = "lightblue") +
     theme_bw() +
-    labs(x = "", y = "", title = "Distribution of the Panel supADF statistic")
+    labs(x = "", y = "", title = "Distribution of the panel GSADF statistic")
 }

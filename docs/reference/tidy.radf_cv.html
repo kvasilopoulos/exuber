@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tidy <code>radf_cv</code> object — tidy.radf_cv • exuber</title>
+<title>Tidy a <code>radf_cv</code> object — tidy.radf_cv • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,8 +54,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Tidy <code>radf_cv</code> object — tidy.radf_cv" />
-<meta property="og:description" content="Summarizes information about the adf, sadf, and gsadf of a radf_cv object." />
+<meta property="og:title" content="Tidy a <code>radf_cv</code> object — tidy.radf_cv" />
+<meta property="og:description" content="Summarizes information about radf_cv object." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -164,13 +164,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Tidy <code>radf_cv</code> object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/tidiers-cv.R'><code>R/tidiers-cv.R</code></a></small>
+    <h1>Tidy a <code>radf_cv</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/tidiers-radf_cv.R'><code>R/tidiers-radf_cv.R</code></a></small>
     <div class="hidden name"><code>tidy.radf_cv.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Summarizes information about the adf, sadf, and gsadf of a <code>radf_cv</code> object.</p>
+    <p>Summarizes information about <code>radf_cv</code> object.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf_cv</span>
@@ -188,7 +188,7 @@
     </tr>
     <tr>
       <th>format</th>
-      <td><p>Long or wide format</p></td>
+      <td><p>Long or wide format (default = "wide").</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -200,7 +200,7 @@
 
     <p>A <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble::tibble()</a></code></p>
 <ul>
-<li><p>id: the series names</p></li>
+<li><p>id: the series names.</p></li>
 <li><p>sig: The significance level.</p></li>
 <li><p>name: The name of the series (when format is "long")</p></li>
 <li><p>crit: The critical value (when format is "long")</p></li>
@@ -208,16 +208,33 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='no'>mc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf_mc_cv.html'>radf_mc_cv</a></span>(<span class='fl'>100</span>)
 
 <span class='co'># Get the critical values</span>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc</span>)
-
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>mc</span>)</div><div class='output co'>#&gt; # A tibble: 3 x 4
+#&gt;   sig       adf  sadf gsadf
+#&gt;   &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1 90    -0.419  0.929  1.68
+#&gt; 2 95    -0.0571 1.30   1.98
+#&gt; 3 99     0.385  1.82   2.62</div><div class='input'>
 <span class='co'># Get the critical value sequences</span>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/augment.html'>augment</a></span>(<span class='no'>mc</span>)
-
-}</div></pre>
+<span class='fu'><a href='https://rdrr.io/pkg/generics/man/augment.html'>augment</a></span>(<span class='no'>mc</span>)</div><div class='output co'>#&gt; # A tibble: 243 x 4
+#&gt;      key sig    badf      bsadf
+#&gt;    &lt;int&gt; &lt;fct&gt; &lt;dbl&gt;      &lt;dbl&gt;
+#&gt;  1    20 90    -0.44 -0.316    
+#&gt;  2    21 90    -0.44 -0.157    
+#&gt;  3    22 90    -0.44 -0.0725   
+#&gt;  4    23 90    -0.44  0.0000609
+#&gt;  5    24 90    -0.44  0.0621   
+#&gt;  6    25 90    -0.44  0.121    
+#&gt;  7    26 90    -0.44  0.186    
+#&gt;  8    27 90    -0.44  0.229    
+#&gt;  9    28 90    -0.44  0.271    
+#&gt; 10    29 90    -0.44  0.279    
+#&gt; # ... with 233 more rows</div><div class='input'>
+# }
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

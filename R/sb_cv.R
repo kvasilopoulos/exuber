@@ -93,8 +93,8 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 
 #' Panel Sieve Bootstrap Critical Values
 #'
-#' \code{sb_cv} computes p-values for the panel recursive unit root test using
-#' the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{sb_dist}
+#' \code{radf_sb_cv} computes critical values for the panel recursive unit root test using
+#' the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{radf_sb_dist}
 #' computes the distribution.
 #'
 #' @inheritParams radf

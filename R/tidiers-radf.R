@@ -1,9 +1,9 @@
-#' Tidy `radf_obj` objects
+#' Tidy a `radf_obj` object
 #'
-#' Summarizes information of `radf_obj` objects.
+#' Summarizes information about `radf_obj` object.
 #'
 #' @param x An object of class `radf_obj`.
-#' @param format Long or wide format
+#' @param format Long or wide format (default = "wide").
 #' @param ... Further arguments passed to methods. Not used.
 #'
 #' @importFrom purrr keep map reduce
@@ -15,7 +15,7 @@
 #'
 #' @export
 #' @examples
-#' \dottest{
+#' \donttest{
 #' dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 #'
 #' rfd <- radf(dta)

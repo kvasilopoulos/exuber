@@ -166,7 +166,7 @@ there are two episodes of mildly explosive dynamics." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Simulation of a two-bubble process</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/simul.R'><code>R/simul.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/sim.R'><code>R/sim.R</code></a></small>
     <div class="hidden name"><code>sim_psy2.Rd</code></div>
     </div>
 
@@ -226,10 +226,10 @@ there are two episodes of mildly explosive dynamics.</p>
       <th>seed</th>
       <td><p>An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
-<code>set.seed</code> before simulation. If set, the value is save as "seed" attribute
-of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallel
-and non-parallel differ.</p></td>
+<code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
+of the returned value. The default, NULL, will not change ng state, and
+return .Random.seed as the "seed" attribute. Results are differnt between
+in parallel and non-parallel, even if they have the same seed.</p></td>
     </tr>
     </table>
 
@@ -238,30 +238,34 @@ and non-parallel differ.</p></td>
     <p>A numeric vector of length <code>n</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The data generating process is described by:</p>
+    <p>The data generating process is following from <code><a href='sim_psy1.html'>sim_psy1</a></code> and is described by:</p>
 <p>$$X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
-\left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} $$</p>
-<p>$$ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
+\left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X_{\tau_{1f}}\right) 1\{t \in N_1\} $$</p>
+<p>$$ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X_{\tau_{2f}}\right) 1\{t \in N_2\} +
 \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}$$</p>
 <p>where the autoregressive coefficient \(\delta_T\) is given:</p>
 <p>$$\delta_T = 1 + cT^{-a}$$</p>
 <p>with \(c&gt;0\), \(\alpha \in (0,1)\),
-\(\epsilon \sim iid(0, \sigma^2)\),
-\(X_{\tau_{1f}} = X_{\tau_{1e}} + X^*\) and
-\(X_{\tau_{2f}} = X_{\tau_{2e}} + X^*\).
+\(\epsilon \sim iid(0, \sigma^2)\).
 We use the notation
 \(N_0 = [1, \tau_{1e})\),
 \(B_1 = [\tau_{1e}, \tau_{1f}]\),
 \(N_1 = (\tau_{1f}, \tau_{2e})\),
 \(B_2 = [\tau_{2e}, \tau_{2f}]\),
-\(N_2 = (\tau_{2f}, \tau]\), where \(\tau\) is the last observation of the sample.
+\(N_2 = (\tau_{2f}, \tau]\),
+where \(\tau\) is the last observation of the sample.
+The observations \(\tau_{1e} = [T r_{1e}]\) and
+and \(\tau_{1f} = [T r_{1f}]\)
+are the origination and terminationdates of the first bubble;
+\(\tau_{2e} = [T r_{2e}]\) and \(\tau_{2f} = [T r_{2f}]\)
+are the origination and termination dates of the second bubble.
 After the collapse of the first bubble, \(X_t\) resumes a martingale path until time
 \(\tau_{2e}-1\), and a second episode of exuberance begins at \(\tau_{2e}\).
 The expansion process lasts until \(\tau_{2f}\) and collapses to a value of
-\(X^*_{\tau_{2f}}\). The process then continues on a martingale path until the end of the
+\(X_{\tau_{2f}}\). The process then continues on a martingale path until the end of the
 sample period \(\tau\). The expansion duration of the first bubble is assumed to be longer than
 that of the second bubble, i.e. \(\tau_{1f}-\tau_{1e}&gt;\tau_{2f}-\tau_{2e}\).</p>
-<p>For further details the user can refer to Phillips et al., (2015) p. 1055.</p>
+<p>For further details you can refer to Phillips et al., (2015) p. 1055.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Phillips, P. C. B., Shi, S., &amp; Yu, J. (2015). Testing for Multiple Bubbles:

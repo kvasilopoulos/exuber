@@ -10,23 +10,23 @@ radf_wb_cv(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 radf_wb_distr(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 }
 \arguments{
-\item{data}{A univariate or multivariate numeric ts object, data.frame or matrix.
-The estimation process cannot handle NA values.}
+\item{data}{A univariate or multivariate numeric time series object, or a numeric
+vector or matrix, or a data.frame. The object should not have any NA values.}
 
-\item{minw}{A positive integer. The minimum window size, which defaults to
-\eqn{(0.01 + 1.8/\sqrt(T))*T}{(0.01 + 1.8 / \sqrtT)*T}.}
+\item{minw}{A positive integer. The minimum window size (default =
+\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
 
-\item{nboot}{A positive integer indicating the number of bootstraps. Default is 1000 repetitions.}
+\item{nboot}{A positive integer. Number of bootstraps (default = 500L).}
 
 \item{dist_rad}{Logical. If \code{TRUE} then  the Rademacher distribution
 will be used.}
 
 \item{seed}{An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is save as "seed" attribute
-of the returned value. The default, NULL will note change the rng state, and
-return .Random.seed as the "seed" attribute. Results between seeds in parallel
-and non-parallel differ.}
+\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
+of the returned value. The default, NULL, will not change ng state, and
+return .Random.seed as the "seed" attribute. Results are differnt between
+in parallel and non-parallel, even if they have the same seed.}
 }
 \value{
 For \code{radf_wb_cv} a list that contains the critical values for ADF,
@@ -34,9 +34,9 @@ BADF, BSADF and GSADF t-statistics. For \code{radf_wb_dist} a list that
 contains the ADF, SADF and GSADF distributions.
 }
 \description{
-\code{wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
+\code{radf_wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
 scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests. \code{wb_dist}
+generate critical values for the recursive unit root tests. \code{radf_wb_dist}
 computes the distribution.
 }
 \details{

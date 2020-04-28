@@ -24,10 +24,10 @@
   invisible()
 }
 
-#' Convenience function to install exuberdata package
+#' Install `exuberdata` Package
 #'
 #' This function wraps the \code{install.packages} function and offers a faster
-#' and more convenient way to install exuberdata.
+#' and more convenient way to install `exuberdata.`
 #'
 #' @importFrom utils install.packages
 #' @export

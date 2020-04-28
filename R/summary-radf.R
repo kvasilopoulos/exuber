@@ -2,10 +2,10 @@
 #'
 #' \code{summary} method for radf models that consist of `radf_obj` and `radf_cv`.
 #'
-#' @param object An object of class \code{\link[=radf]{radf()}}.
-#' @param cv An object of class "cv". The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},
+#' @param object An object of class `radf_obj`. The output of\code{\link[=radf]{radf()}}.
+#' @param cv An object of class `radf_cv`. The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},
 #' \code{\link[=radf_wb_cv]{radf_wb_cv()}} or \code{\link[=radf_sb_cv]{radf_sb_cv()}}
-#' @param ... further arguments passed to methods, not used.
+#' @param ... Further arguments passed to methods. Not used.
 #'
 #' @return Returns a list of summary statistics,
 #' the t-statistic and the critical values of the ADF, SADF and GSADF.

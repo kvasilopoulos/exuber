@@ -57,17 +57,13 @@ reference:
 
   - title: Helpers
     contents:
-      - index
       - psy_minw
+      - index
       - series_names
 
-  - title: Tidying
+  - title: Extra tidying methods
     contents:
-      - tidy.radf_obj
-      - tidy.radf_cv
-      - tidy.radf_distr
-      - tidy_join.radf_obj
-      - tidy.ds_radf
+      - tidy_join
 
 
 navbar:

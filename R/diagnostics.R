@@ -19,7 +19,7 @@ diagnostics <- function(object, cv = NULL, ...) {
 
 #' @rdname diagnostics
 #' @importFrom dplyr case_when
-#' @param option Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".
+#' @param option Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").
 #' @export
 #' @examples
 #'

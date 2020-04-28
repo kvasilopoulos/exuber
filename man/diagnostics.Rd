@@ -16,7 +16,7 @@ diagnostics(object, cv = NULL, ...)
 
 \item{...}{further arguments passed to methods.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 }
 \value{
 Returns a list with the series that reject (positive) and the series

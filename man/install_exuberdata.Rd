@@ -2,13 +2,13 @@
 % Please edit documentation in R/zzz.R
 \name{install_exuberdata}
 \alias{install_exuberdata}
-\title{Convenience function to install exuberdata package}
+\title{Install \code{exuberdata} Package}
 \usage{
 install_exuberdata()
 }
 \description{
 This function wraps the \code{install.packages} function and offers a faster
-and more convenient way to install exuberdata.
+and more convenient way to install \code{exuberdata.}
 }
 \examples{
 \donttest{

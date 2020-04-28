@@ -2,7 +2,7 @@
 % Please edit documentation in R/datestamp.R
 \name{tidy.ds_radf}
 \alias{tidy.ds_radf}
-\title{Tidy \code{ds_radf} object}
+\title{Tidy \code{ds_radf} objects}
 \usage{
 \method{tidy}{ds_radf}(x, ...)
 }
@@ -12,5 +12,5 @@
 \item{...}{Further arguments passed to methods. Not used.}
 }
 \description{
-Tidy \code{ds_radf} object
+Summarizes information of \code{ds_radf} objects.
 }

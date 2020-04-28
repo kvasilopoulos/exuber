@@ -1,8 +1,8 @@
-#' Plotting `radf_obj`
+#' Plotting a `radf_obj` object
 #'
 #' \code{autoplot.radf_obj} takes an \code{radf_obj} object and returns a faceted ggplot object.
-#' \code{shade} is used as an input to \code{shape_opt} argument in \code{autoplot.radf_obj}.
-#' \code{shade} modifies the  geom_rect layer that indicates the exuberance periods.
+#' \code{shade} is used as an input to \code{shape_opt} argument in. \code{shade} modifies the
+#' geom_rect layer that demarcates the exuberance periods.
 #'
 #' @inheritParams datestamp.radf_obj
 #'
