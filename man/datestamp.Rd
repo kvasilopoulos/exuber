@@ -21,11 +21,11 @@ datestamp(object, cv = NULL, min_duration = 0L, ...)
 \item{cv}{An object of class \code{cv}.}
 
 \item{min_duration}{The minimum duration of an explosive period for it to be
-reported. Default is 0.}
+reported (default = 0).}
 
 \item{...}{further arguments passed to methods.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology. Default is "gsadf".}
+\item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 }
 \value{
 Returns a list of values for each explosive sub-period, giving the origin
@@ -38,7 +38,7 @@ episodes during which the time series display explosive dynamics.
 \details{
 Datestamp also stores a vector in {0,1} that corresponds to {positive, negative}
 respectively, for all series throughout the time period. This output can be used as
-a dummy that indicates the occurrence of a bubble.
+a dummy which indicates the occurrence of a bubble.
 
 Setting \code{min_duration} removes very short episode of exuberance.
 Phillips et al. (2015) propose two simple rules of thumb to remove short

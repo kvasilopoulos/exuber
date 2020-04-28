@@ -1,8 +1,8 @@
 
 
-#' Retrieve/Replace/Set series names
+#' Retrieve/Replace series names
 #'
-#' Retrieve, replace or set the series names of an object.
+#' Retrieve or replace the series names of an object.
 #'
 #' @param x An object.
 #' @param ... further arguments passed to methods.

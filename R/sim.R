@@ -14,9 +14,9 @@
 #' @details
 #' The data generating process is described by the following equation:
 #' \deqn{X_t = X_{t-1}1\{t < \tau_e\}+ \delta_T X_{t-1}1\{\tau_e \leq t\leq \tau_f\} +
-#' \left(\sum_{k=\tau_f+1}^t \epsilon_k + X^*_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}}{X[t] =
-#' X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
-#' (\sum[k=tf+1]^t \epsilon[k] + X'[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf},}
+#' \left(\sum_{k=\tau_f+1}^t \epsilon_k + X_{\tau_f}\right) 1\{t > \tau_f\} + \epsilon_t 1\{t \leq \tau_f\}
+#' }{X[t] = X[t-1] 1{t < te}+ \delta[T] * X[t-1] 1{te \le t \le tf} +
+#' (\sum [k=tf+1]^t \epsilon[k] + X[tf]) 1{t > tf} + \epsilon[t] 1{t \le tf},}
 #'
 #' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given by:
 #'
@@ -24,14 +24,17 @@
 #'
 #' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 #' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
-#' \eqn{X_{\tau_f} = X_{\tau_e} + X^*}{X[tf] = X[te] + X'}.
-#' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)}, X is a pure random walk process.
-#' During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a mildly explosive process with expansion rate given by the autoregressive
+#' \eqn{X_{\tau_f} = X_{\tau_e} + X'}{X[tf] = X[te] + X'} with \eqn{X' = O_p(1)}{X'= 0p(1)},
+#' \eqn{\tau_e = [T r_e]}{te = [T re]} dates the origination of the bubble,
+#'  and \eqn{\tau_f = [T r_f]}{tf = [T rf]} dates the termination of the bubble collapse.
+#' During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)},
+#' X is a pure random walk process. During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a
+#' mildly explosive process with expansion rate given by the autoregressive
 #' coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
 #' \eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
 #'
 #'
-#' For further details the user can refer to Phillips et al. (2015) p. 1054.
+#' For further details you can refer to Phillips et al. (2015) p. 1054.
 #'
 #' @return A numeric vector of length n.
 #' @export
@@ -98,15 +101,15 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' @param tf2 A scalar in (te2, n) specifying the observation in which the second bubble collapses.
 #'
 #' @details
-#' The data generating process is described by:
+#' The data generating process is following from \code{\link{sim_psy1}} and is described by:
 #'
 #' \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
-#' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X^*_{\tau_{1f}}\right) 1\{t \in N_1\} }{X[t]=X[t-1]
-#' 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
+#' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X_{\tau_{1f}}\right) 1\{t \in N_1\} }{
+#' X[t]=X[t-1] 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
 #' (\sum[k=t1f+1]^t \epsilon[k] + X'[t1f]) 1{t in N[1]} +
 #' }
 #'
-#' \deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X^*_{\tau_{2f}}\right) 1\{t \in N_2\} +
+#' \deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X_{\tau_{2f}}\right) 1\{t \in N_2\} +
 #' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 #' \epsilon[t] 1{t in N[0] union B[1] union B[2]},}
 #'
@@ -115,23 +118,27 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a},}
 #'
 #' with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
-#' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)},
-#' \eqn{X_{\tau_{1f}} = X_{\tau_{1e}} + X^*}{X[t1f] = X[t1e] + X'} and
-#' \eqn{X_{\tau_{2f}} = X_{\tau_{2e}} + X^*}{X[t2f] = X[t2e] + X'}.
+#' \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
 #' We use the notation
 #' \eqn{N_0 = [1, \tau_{1e})}{N0 = [1, t1e)},
 #' \eqn{B_1 = [\tau_{1e}, \tau_{1f}]}{B1 = [te1, t1f]},
 #' \eqn{N_1 = (\tau_{1f}, \tau_{2e})}{N0 = (t1f, t2e)},
 #' \eqn{B_2 = [\tau_{2e}, \tau_{2f}]}{N0 = [t2e, t2f]},
-#' \eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]}, where \eqn{\tau}{t} is the last observation of the sample.
+#' \eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]},
+#' where \eqn{\tau}{t} is the last observation of the sample.
+#' The observations \eqn{\tau_{1e} = [T r_{1e}]}{te1 = [T re1]} and
+#' and \eqn{\tau_{1f} = [T r_{1f}]}{tf = [T r1f]}
+#' are the origination and terminationdates of the first bubble;
+#' \eqn{\tau_{2e} = [T r_{2e}]}{te2 = [T re2]} and \eqn{\tau_{2f} = [T r_{2f}]}{tf = [T r2f]}
+#' are the origination and termination dates of the second bubble.
 #' After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 #' \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
 #' The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
-#' \eqn{X^*_{\tau_{2f}}}{X'[t2f]}. The process then continues on a martingale path until the end of the
+#' \eqn{X_{\tau_{2f}}}{X[t2f]}. The process then continues on a martingale path until the end of the
 #' sample period \eqn{\tau}{t}. The expansion duration of the first bubble is assumed to be longer than
 #' that of the second bubble, i.e. \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
 #'
-#' For further details the user can refer to Phillips et al., (2015) p. 1055.
+#' For further details you can refer to Phillips et al., (2015) p. 1055.
 #'
 #' @return A numeric vector of length \code{n}.
 #' @export

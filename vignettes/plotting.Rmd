@@ -52,7 +52,7 @@ crit_values <- radf_mc_cv(nrow(sims))
 
 ## Same Appearance with New Features
 
-The visual output of autoplot in `v0.4.0` is exactly the same the autoplot `v0.3.0`.
+The visual output of autoplot in `v0.4.0` is exactly the same as before.
 
 ```{r autoplot-basic}
 autoplot(estimation, crit_values)
@@ -61,7 +61,7 @@ However, almost all aspects of the plot can be easily changed.
 
 ### Change color and theme
 
-The custom color for autoplot are "blue and "red", however the user may easily override 
+The custom color for autoplot are "blue and "red", however the user can easily override 
 this option with `ggplot2::scale_color_manual`.
 
 ```{r autoplot-color-theme}
@@ -70,10 +70,10 @@ autoplot(estimation, crit_values) +
   theme_classic()
 ```
 
-### Specify the shade_opt
+### Changed the shaded region with shade_opt
 
-`shade_opt` allows the user to manipulate the `geom_rect()` layer of the plot, using
-the `shade` function. Additionally, it can be omitted if it set to `NULL`.
+`shade_opt` allows the user to manipulate the `geom_rect()` layer of the ggplot, using
+the `shade` function. Alternatively, it can be omitted if it set to `NULL`.
 
 ```{r autoplot-shade}
 autoplot(estimation, crit_values, shade_opt = shade(fill = "pink", opacity = 0.3))
@@ -81,15 +81,16 @@ autoplot(estimation, crit_values, shade_opt = shade(fill = "pink", opacity = 0.3
 
 ## Custom plotting
 
-Custom plotting is also very easy with the `augment_join` function, that merge
-the estimation and and critical values results in a ggplot2-friendly way.
+Custom plotting is also very easy with the `augment_join()`, that merge the output 
+of the estimation and and critical values in a ggplot2-friendly way.
 
 ```{r join-sets}
 joined <- augment_join(estimation, crit_values)
 joined
 ```
 
-The output of `augment_join` returns data in tidy format and the offers full flexibility to the user. After this point plotting becomes extremely trivial.
+The output of `augment_join` returns data in tidy format and offers full flexibility to the user. 
+After this point plotting becomes extremely trivial.
 
 ```{r facet-joined}
 joined %>% 
