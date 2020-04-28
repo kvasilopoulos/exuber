@@ -1,6 +1,6 @@
 ## Test environments
 
-* local OS MS install, R 3.6.3
+* local OS MS install, R 4.0.0
 * Continuous Integration
   * GitHub actions (ubuntu-16.04): release
   * GitHub actions (windows): release
@@ -23,15 +23,15 @@ There were no ERRORs and WARNINGs, with local checks or on remote checks.
 
 0 ERRORS √ | 0 WARNINGS √ | 1 NOTE
 
-* checking CRAN incoming feasibility (26.4s) ... NOTE
-Maintainer: 'Kostas Vasilopoulos <k.vasilopoulo@gmail.com>'
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Kostas Vasilopoulos <k.vasilopoulo@gmail.com>’
 
 Suggests or Enhances not in mainstream repositories:
   exuberdata
 Availability using Additional_repositories specification:
   exuberdata   yes   https://kvasilopoulos.github.io/drat
 
-Uses the superseded package: 'doSNOW (>= 1.0.16)'
+Uses the superseded package: ‘doSNOW (>= 1.0.16)’
 
   **(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)**
   
