@@ -171,28 +171,54 @@
 <h1 class="page-header" data-toc-text="0.4.0">
 <a href="#exuber-040" class="anchor"></a>exuber 0.4.0<small> Unreleased </small>
 </h1>
-<div id="removed-critical-values" class="section level2">
+<div id="design" class="section level2">
 <h2 class="hasAnchor">
-<a href="#removed-critical-values" class="anchor"></a>Removed critical values</h2>
-<ul>
-<li>Due to scalability issues we removed the critical values from the package, but instead we created a new package called <code>exuberdata</code> that the through package {drat} can install the critical values with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('exuberdata', repos = 'https://kvasilopoulos.github.io/drat/', type = 'source')</a></code> or through <code>install_exuberdata</code> function that is provided in {exuber}.</li>
-<li>The critical values have been extended to 1000 observations and include both <code>coventional</code> and <code>conservative</code> critical values.</li>
-</ul>
+<a href="#design" class="anchor"></a>Design</h2>
+<p>We have the following design in mind for future scalability. If you want make inference about <code>radf</code> models, then the estimation can be achieved with <code><a href="../reference/radf.html">radf()</a></code> function and return an object of class <code>radf_obj</code>, and the critical values can be achieved with <code>radf_*_cv()</code> and return an object of class <code>radf_cv</code>.</p>
 </div>
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
 <ul>
-<li>Changed the name of the function <code>col_names</code> into <code>series_names</code>. <code>col_names</code> is now defunct.</li>
 <li>
-<code>autoplot</code> has been refactored and new features have been added for more flexibility and conformity with the {ggplot} mindset.</li>
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> for <code>radf</code> models has been refactored and new features have been added for more flexibility and conformity with the {ggplot} mindset.</li>
+<li>Because of the change in <code>autoplot</code>, <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> is now defunct.</li>
+<li>
+<code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods have been replaced by <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code>, <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code>, <code><a href="https://rdrr.io/pkg/generics/man/glance.html">glance()</a></code> and <code><a href="../reference/tidy_join.html">tidy_join()</a></code> methods. <code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods are now defunct.</li>
+<li>Changed the names of:
+<ul>
+<li>
+<code><a href="../reference/exuber-deprecated.html">mc_cv()</a></code> to <code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code>. <code><a href="../reference/exuber-deprecated.html">mc_cv()</a></code> is now deprecated.</li>
+<li>
+<code>mc_distr()</code> to <code><a href="../reference/radf_mc_cv.html">radf_mc_distr()</a></code>. <code>mc_distr()</code> is now deprecated.</li>
+<li>
+<code><a href="../reference/exuber-deprecated.html">wb_cv()</a></code> to <code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code>. <code><a href="../reference/exuber-deprecated.html">wb_cv()</a></code> is now deprecated.</li>
+<li>
+<code>wb_distr()</code> to <code><a href="../reference/radf_wb_cv.html">radf_wb_distr()</a></code>. <code>wb_distr()</code> is now deprecated.</li>
+<li>
+<code><a href="../reference/exuber-deprecated.html">sb_cv()</a></code> to <code><a href="../reference/radf_sb_cv.html">radf_sb_cv()</a></code>. <code><a href="../reference/exuber-deprecated.html">sb_cv()</a></code> is now deprecated.</li>
+<li>
+<code>sb_distr()</code> to <code><a href="../reference/radf_sb_cv.html">radf_sb_distr()</a></code>. <code>sb_distr()</code> is now deprecated.</li>
+<li>
+<code>crit</code> dataset to <code>radf_crit</code>.</li>
+<li>
+<code><a href="../reference/exuber-deprecated.html">col_names()</a></code> to <code><a href="../reference/series_names.html">series_names()</a></code>. <code><a href="../reference/exuber-deprecated.html">col_names()</a></code> is now deprecated.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="exuberdata" class="section level2">
+<h2 class="hasAnchor">
+<a href="#exuberdata" class="anchor"></a>exuberdata</h2>
+<ul>
+<li>We created a new package called <code>exuberdata</code> that accomodates critical values for up to 2000 observations. Critical values can be examined with <code><a href="https://rdrr.io/pkg/exuberdata/man/radf_crit.html">exuberdata::radf_crit2</a></code>. The package is created through <code>drat</code> R archive Template, and can be easily installed with <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('exuberdata', repos = 'https://kvasilopoulos.github.io/drat/', type = 'source')</a></code> or through <code>install_exuberdata</code> wrapper function that is provided in <code>exuber</code>.</li>
 </ul>
 </div>
 <div id="improvements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#improvements" class="anchor"></a>Improvements</h2>
 <ul>
-<li>The package {zoo} has been used as a dependency to import the method <code>index</code>. We made the decision to remove {zoo} and create a new method <code>index</code> internally.</li>
+<li>The package <code>zoo</code> has been used as a dependency to import the method <code><a href="../reference/index-rd.html">index()</a></code>. We made the decision to remove <code>zoo</code> and create a new method <code><a href="../reference/index-rd.html">index()</a></code> internally.</li>
 </ul>
 </div>
 </div>
