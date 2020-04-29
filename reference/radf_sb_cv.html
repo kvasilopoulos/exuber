@@ -131,9 +131,6 @@ computes the distribution." />
     <li>
       <a href="../articles/plotting.html">Plotting</a>
     </li>
-    <li>
-      <a href="../articles/tidy.html">Available tidy methods</a>
-    </li>
   </ul>
 </li>
       </ul>
@@ -239,9 +236,9 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>sb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 3</span><span>
 #&gt;   id    sig   gsadf_panel
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> panel 90          0.348
-#&gt; </span><span style='color: #555555;'>2</span><span> panel 95          0.426
-#&gt; </span><span style='color: #555555;'>3</span><span> panel 99          0.525</div><div class='input'>
+#&gt; </span><span style='color: #555555;'>1</span><span> panel 90          0.375
+#&gt; </span><span style='color: #555555;'>2</span><span> panel 95          0.458
+#&gt; </span><span style='color: #555555;'>3</span><span> panel 99          0.618</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; 
 #&gt; ── Summary (minw = 19, lag = 1) ─────────────── Sieve Bootstrap (nboot = 500) ──
 #&gt; 
@@ -249,7 +246,7 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 #&gt; </span><span style='color: #555555;'># A tibble: 1 x 5</span><span>
 #&gt;   name        tstat  `90`  `95`  `99`
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> gsadf_panel  1.89 0.348 0.426 0.525
+#&gt; </span><span style='color: #555555;'>1</span><span> gsadf_panel  1.89 0.375 0.458 0.618
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; <span class='error'>Error: The series 'panel' doesn't exist.</span></div><div class='input'>
 <span class='co'># Simulate distribution</span>
