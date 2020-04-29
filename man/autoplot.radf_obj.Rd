@@ -29,17 +29,18 @@ shade(fill = "grey70", opacity = 0.5, ...)
 
 \item{min_duration}{the minimum duration.}
 
-\item{select_series}{If not NULL, only plot with names or column number matching this regular expression will be executed.}
+\item{select_series}{A vector of column names or numbers to keep, drop the rest. The order that the series
+are specified do not determine the order in the result.}
 
-\item{include_negative}{If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
+\item{include_negative}{If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
 
-\item{shade_opt}{options for the shading of the graph, usually used through \code{shade} functions.}
+\item{shade_opt}{Options for the shading of the graph, usually used through \code{shade} functions.}
 
-\item{include}{argument name is deprecated and substituted with \code{include_negative}.}
+\item{include}{Argument name is deprecated and substituted with \code{include_negative}.}
 
-\item{select}{argument name is deprecated and substituted with \code{select_series}.}
+\item{select}{Argument name is deprecated and substituted with \code{select_series}.}
 
-\item{...}{further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
+\item{...}{Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
 
 \item{fill}{the shade color that indicates the exuberance periods.}
 

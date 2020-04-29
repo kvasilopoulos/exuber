@@ -14,16 +14,20 @@ psy_ds(n, rule = 1, delta = 1)
 
 \item{rule}{Rule 1 corresponds to log(T), while rule 2 log(T)/T}
 
-\item{delta}{Frequency-dependent parameter}
+\item{delta}{Frequency-dependent parameter. See details.}
 }
 \description{
 \code{psy_minw} proposes a minimum window and \code{psy_ds} proposes a rule of
 thumb to exclude periods of exuberance.
 }
 \details{
+Rules are specified as follows:
+
+\deqn{rule_1 = \delta \log(n) \quad\& \quad rule_2 = \delta \log(n)/n}{rule_1 = d*log(n) & rule 2 = d*log(n)/n}
+
 \code{delta } depends on the frequency of the data and the minimal
 duration condition. For example, for a 30-year period, we set arbitrarily duration
-to exceed periods such as one year. Then, delta should is 0.7 for yearly data
+to exceed periods such as one year. Then, delta should be 0.7 for yearly data
 and 5 for monthly data.
 }
 \examples{
