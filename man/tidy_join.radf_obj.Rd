@@ -3,14 +3,11 @@
 \name{tidy_join.radf_obj}
 \alias{tidy_join.radf_obj}
 \alias{augment_join.radf_obj}
-\alias{glance_join.radf_obj}
 \title{Tidy into a joint model}
 \usage{
 \method{tidy_join}{radf_obj}(x, y = NULL, ...)
 
 \method{augment_join}{radf_obj}(x, y = NULL, ...)
-
-\method{glance_join}{radf_obj}(x, y, ...)
 }
 \arguments{
 \item{x}{An object of class \code{radf_obj}.}
@@ -21,10 +18,9 @@ critical value.}
 \item{...}{Further arguments passed to methods. Not used.}
 }
 \description{
-Tidy, augment or glance, and then join objects of class \code{radf_obj} and \code{radf_cv}. The
-object of reference should be the \code{radf_obj}. For example, using \code{glance} in an
-radf object returns the panel statistic, so \code{glance_join} returns the panel
-statistic together with the critical values.
+Tidy or augment  and then join objects of class \code{radf_obj} and \code{radf_cv}. The
+object of reference is the \code{radf_cv}. For example, if panel critical values
+are provided the function will return the panel t-statistics.
 }
 \details{
 \code{tidy_join} also calls \code{augment_join} when \code{cv} is of class \code{sb_cv}.

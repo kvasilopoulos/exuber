@@ -4,12 +4,14 @@
 #'
 #' @param x An object of class `radf_obj`.
 #' @param format Long or wide format (default = "wide").
+#' @param panel If TRUE then return the panel statistics
 #' @param ... Further arguments passed to methods. Not used.
 #'
-#' @importFrom purrr keep map reduce
+#' @importFrom purrr keep map reduce pluck
 #' @importFrom dplyr full_join arrange
 #' @importFrom rlang set_names
 #' @importFrom tidyr gather
+#' @importFrom tibble enframe
 #'
 #' @return A [tibble::tibble()]
 #'
@@ -27,32 +29,48 @@
 #' augment(rfd)
 #'
 #' # Get the panel t-stat
-#' glance(rfd)
+#' tidy(rfd, panel = TRUE)
 #' }
-tidy.radf_obj <- function(x, format = c("wide", "long"), ...) {
+tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 
   format <- match.arg(format)
 
-  tbl_radf <-
-    x %>%
-    keep(names(.) %in% c("adf", "sadf", "gsadf")) %>%
-    map(enframe) %>%
-    reduce(full_join, by = "name") %>%
-    set_names(c("id", "adf", "sadf", "gsadf")) %>%
-    mutate(id = factor(id, series_names(x)))
+  if (panel) {
+    format <- match.arg(format)
+    tbl_radf <- x %>%
+      pluck("gsadf_panel") %>%
+      enframe(name = NULL, value = "gsadf_panel")
 
-  if (format == "long") {
+    if (format == "long") {
+      tbl_radf <-
+        tbl_radf %>%
+        gather(name, tstat) %>%
+        mutate(
+          id = factor("panel"),
+          name = factor(name)) %>%
+        select(id, name, tstat)
+    }
+  }else{
     tbl_radf <-
-      tbl_radf %>%
-      gather(name, tstat, -id) %>%
-      mutate(name = factor(name, levels = c("adf", "sadf", "gsadf"))) %>%
-      arrange(id)
+      x %>%
+      keep(names(.) %in% c("adf", "sadf", "gsadf")) %>%
+      map(enframe) %>%
+      reduce(full_join, by = "name") %>%
+      set_names(c("id", "adf", "sadf", "gsadf")) %>%
+      mutate(id = factor(id, series_names(x)))
+
+    if (format == "long") {
+      tbl_radf <-
+        tbl_radf %>%
+        gather(name, tstat, -id) %>%
+        mutate(name = factor(name, levels = c("adf", "sadf", "gsadf"))) %>%
+        arrange(id)
+    }
   }
   tbl_radf
 }
 
 #' @rdname tidy.radf_obj
-#' @param panel Either univariate or panel bsadf.
 #'
 #' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather
@@ -105,31 +123,4 @@ augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) 
   }
   tbl_radf
 }
-
-#' @rdname tidy.radf_obj
-#'
-#' @importFrom purrr pluck
-#' @importFrom rlang set_names
-#' @importFrom dplyr full_join
-#' @importFrom tibble enframe
-#' @export
-glance.radf_obj <- function(x, format = c("wide", "long"), ...) {
-
-  format <- match.arg(format)
-  tbl_radf <- x %>%
-    pluck("gsadf_panel") %>%
-    enframe(name = NULL, value = "gsadf_panel")
-
-  if (format == "long") {
-    tbl_radf <-
-      tbl_radf %>%
-      gather(name, tstat) %>%
-      mutate(
-        id = factor("panel"),
-        name = factor(name)) %>%
-      select(id, name, tstat)
-  }
-  tbl_radf
-}
-
 

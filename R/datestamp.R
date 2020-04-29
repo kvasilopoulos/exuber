@@ -73,7 +73,8 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
       which()
   }
   ds_stamp <- map(ds, ~ stamp(.x) %>% filter(Duration >= min_duration) %>% as.matrix())
-  ds_stamp_index <- map(ds_stamp, stamp_to_index, index(object, trunc = TRUE))
+  idx_trunc <- if (is_sb(cv)) index(cv, trunc = TRUE) else index(object, trunc = TRUE)
+  ds_stamp_index <- map(ds_stamp, stamp_to_index, idx_trunc) # index has to from cv to iclude sb_cv(+2)
 
   # min_duration may cause to exclude periods or the whole sample
   min_reject <- map_lgl(ds_stamp, ~ length(.x) == 0)
@@ -121,7 +122,7 @@ stamp <- function(x) {
   start <- x[c(TRUE, diff(x) != 1)] # diff reduces length by 1
   end <- x[c(diff(x) != 1, TRUE)]
   end[end - start == 0] <- end[end - start == 0] + 1
-  duration <- end - start
+  duration <- end - start + 1
   tibble("Start" = start, "End" = end, "Duration" = duration)
 }
 
@@ -134,6 +135,12 @@ stamp_to_index <- function(x, idx) {
   )
 }
 
+# TODO: Include Peak
+# peak <- numeric()
+# for(i in length(start)) {
+#   interval <- y[start[i]:end[i]]
+#   peak <- start[i] + which.max(interval)
+# }
 
 #' Plotting a `ds_radf` object
 #'
@@ -207,7 +214,6 @@ tidy.ds_radf <- function(x, ...) {
     mutate(id = factor(id, levels = fct_lvls))
 }
 
-# TODO store the peak in datestamp
 # TODO https://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_segment.html
 
 

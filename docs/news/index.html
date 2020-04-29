@@ -181,7 +181,8 @@
 <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> for <code>radf</code> models has been refactored and new features have been added for more flexibility and conformity with the {ggplot} mindset.</li>
 <li>Because of the change in <code>autoplot</code>, <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> is now defunct.</li>
 <li>
-<code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods have been replaced by <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code>, <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code>, <code><a href="https://rdrr.io/pkg/generics/man/glance.html">glance()</a></code> and <code><a href="../reference/tidy_join.html">tidy_join()</a></code> methods. <code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods are now defunct.</li>
+<code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods have been replaced by <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code>, <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code>, <code><a href="../reference/tidy_join.html">tidy_join()</a></code> and <code>glance_join()</code> methods. <code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods are now defunct.</li>
+<li>Also <code>glance()</code> is now defunct. The user can use <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> with <code>panel=TRUE</code> instead.</li>
 <li>Changed the names of:
 <ul>
 <li>
@@ -258,7 +259,7 @@
 <li>
 <code><a href="../reference/tidy_join.html">augment_join()</a></code> to combine object <code>radf</code> and <code>cv</code> into a single data.frame.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/generics/man/glance.html">glance()</a></code> method for objects of class <code>radf</code>.</li>
+<code>glance()</code> method for objects of class <code>radf</code>.</li>
 </ul>
 </div>
 <div id="improvements-1" class="section level2">

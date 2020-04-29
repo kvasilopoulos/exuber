@@ -13,7 +13,6 @@ test_that("tidy output", {
 
 })
 
-
 test_that("augment output",{
   expect_equal(names(augment(radf_dta)),
                c("key", "index", "id", "badf", "bsadf"))
@@ -45,5 +44,5 @@ test_that("augment_join", {
 
 test_that("glance output", {
   # Glance
-  expect_equal(names(glance(radf_dta)), "gsadf_panel")
+  expect_equal(names(tidy(radf_dta, panel = TRUE)), "gsadf_panel")
 })

@@ -16,10 +16,10 @@ test_that("tidy methods work",{
   expect_error(tidy(wbd), regexp = NA)
   expect_error(tidy(sbd), regexp = NA)
 
+  # No glance or augment methods in radf_distr
   expect_error(glance(mcd))
   expect_error(glance(wbd))
   expect_error(glance(sbd))
-
   expect_error(augment(mcd))
   expect_error(augment(wbd))
   expect_error(augment(sbd))

@@ -23,11 +23,6 @@ generics::tidy
 #' @export
 generics::augment
 
-#' @importFrom generics glance
-#' @seealso \code{\link[=glance.radf_obj]{glance.radf_obj()}}
-#' @export
-generics::glance
-
 #' Pipe operator
 #'
 #' @name %>%
