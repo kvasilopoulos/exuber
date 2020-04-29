@@ -92,8 +92,6 @@ navbar:
         href: articles/simulation.html
       - text: Plotting
         href: articles/plotting.html
-      - text: Available tidy methods
-        href: articles/tidy.html
     reference:
       text: Reference
       href: reference/index.html
