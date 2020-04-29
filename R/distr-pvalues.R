@@ -1,3 +1,5 @@
+# TODO revisit this function if you have time
+
 #' Calculate p-values
 #'
 #' @param x An 'radf' object
@@ -29,7 +31,7 @@ calc_pvalue <- function(x, distr = NULL) {
   assert_class(distr, "distr"
   )
   if (is_sb(distr)) {
-    tbl_x <- glance(x) %>%
+    tbl_x <- tidy(x, panel = TRUE) %>%
       mutate(id = "panel", stat = "gsadf_panel") %>%
       nest(value_x = panel)
   } else{

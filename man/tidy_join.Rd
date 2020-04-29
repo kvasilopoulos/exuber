@@ -3,14 +3,11 @@
 \name{tidy_join}
 \alias{tidy_join}
 \alias{augment_join}
-\alias{glance_join}
 \title{Tidy into a joint model}
 \usage{
 tidy_join(x, y, ...)
 
 augment_join(x, y, ...)
-
-glance_join(x, y, ...)
 }
 \arguments{
 \item{x}{An object of class \code{obj}.}
@@ -20,5 +17,5 @@ glance_join(x, y, ...)
 \item{...}{Further arguments passed to methods.}
 }
 \description{
-Tidy, augment or glance, and then join objects.
+Tidy, augment or and then join objects.
 }

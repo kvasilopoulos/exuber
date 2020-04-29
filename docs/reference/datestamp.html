@@ -232,40 +232,40 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 <span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data</span>)
 
 <span class='no'>ds_data</span> <span class='kw'>&lt;-</span> <span class='fu'>datestamp</span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='input'><span class='no'>ds_data</span></div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) -------------------- Monte Carlo --
+#&gt; -- Datestamp (min_duration = 0) -------------------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       11
+#&gt; 1    44  55       12
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration
-#&gt; 1    22  40       18
-#&gt; 2    62  70        8
+#&gt; 1    22  40       19
+#&gt; 2    62  70        9
 #&gt; 
 #&gt; evans :
 #&gt;   Start End Duration
-#&gt; 1    20  21        1
-#&gt; 2    44  45        1
-#&gt; 3    66  67        1
+#&gt; 1    20  21        2
+#&gt; 2    44  45        2
+#&gt; 3    66  67        2
 #&gt; 
 #&gt; blan :
 #&gt;   Start End Duration
-#&gt; 1    34  36        2
-#&gt; 2    84  86        2
+#&gt; 1    34  36        3
+#&gt; 2    84  86        3
 #&gt; </div><div class='input'>
 <span class='co'># Choose minimum window</span>
 <span class='fu'>datestamp</span>(<span class='no'>rsim_data</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fu'><a href='psy_minw.html'>psy_ds</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>sim_data</span>)))</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 5) -------------------- Monte Carlo --
+#&gt; -- Datestamp (min_duration = 5) -------------------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
-#&gt; 1    44  55       11
+#&gt; 1    44  55       12
 #&gt; 
 #&gt; psy2 :
 #&gt;   Start End Duration
-#&gt; 1    22  40       18
-#&gt; 2    62  70        8
+#&gt; 1    22  40       19
+#&gt; 2    62  70        9
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>ds_data</span>)</div><div class='img'><img src='datestamp-1.png' alt='' width='700' height='433' /></div></pre>
   </div>

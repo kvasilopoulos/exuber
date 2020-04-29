@@ -37,7 +37,7 @@
 #' }
 tidy.radf_cv <- function(x, format = c("wide", "long"), ...) {
   format <- match.arg(format)
-  tidy_radf_cv(x, format, ...)
+  tidy_radf_cv(x, format)
 }
 
 tidy_radf_cv <- function(x, ...) {

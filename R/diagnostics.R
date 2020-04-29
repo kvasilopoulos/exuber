@@ -41,13 +41,11 @@ diagnostics.radf_obj <- function(object, cv = NULL,
   }
   snames <- series_names(object)
   if (is_sb(cv)) {
-    out <- glance_join(object, cv) %>%
-      pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv")
-  } else {
-    out <- tidy_join(object, cv) %>%
-      pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv") %>%
-      filter(name  == option)
+    option <- "gsadf_panel"
   }
+  out <- tidy_join(object, cv) %>%
+    pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv") %>%
+    filter(name  == option)
   # in case of simulation exercises
   dummy <- case_when(
     out$tstat < out$cv95 ~ 0,

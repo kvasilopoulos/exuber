@@ -7,7 +7,7 @@ build_reference:
 
 build_site:
 	Rscript -e "pkgdown::build_site()"
-	fix_author
+	sed -i 's/MartÃ­nez-GarcÃ­a/Martínez-García/g' docs/authors.html
 
 check:
 	Rscript -e "devtools::check()"

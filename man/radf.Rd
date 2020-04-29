@@ -53,7 +53,7 @@ tidy(rsim_wdate)
 
 augment(rsim_wdate)
 
-glance(rsim_wdate)
+tidy(rsim_wdate, panel = TRUE)
 
 head(index(rsim_wdate))
 

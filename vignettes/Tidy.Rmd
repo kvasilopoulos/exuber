@@ -38,9 +38,8 @@ method_df <- function(x) {
 
 method_tidy <- method_df("tidy") 
 method_augment <- method_df("augment")
-method_glance <- method_df("glance")
 
-list(method_tidy, method_augment, method_glance) %>% 
+list(method_tidy, method_augment) %>% 
   purrr::reduce(full_join) %>% 
   mutate(class = as.factor(class) %>% forcats::fct_relevel("radf")) %>%
   arrange(class) %>% 

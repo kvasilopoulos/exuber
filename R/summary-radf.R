@@ -52,7 +52,7 @@ summary_radf <- function(cv, ...){
 
 summary_radf.sb_cv <- function(cv, object, ...) {
   ret <- list()
-  ret[["panel"]] <- glance_join(object, cv) %>%
+  ret[["panel"]] <- tidy_join(object, cv, panel = TRUE) %>%
     pivot_wider(names_from = sig, values_from = crit) %>%
     select(-id)
   ret
