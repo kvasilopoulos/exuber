@@ -6,12 +6,13 @@
 #'
 #' @inheritParams datestamp.radf_obj
 #'
-#' @param include_negative If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
-#' @param select_series If not NULL, only plot with names or column number matching this regular expression will be executed.
-#' @param shade_opt options for the shading of the graph, usually used through \code{shade} functions.
-#' @param ... further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
-#' @param include argument name is deprecated and substituted with `include_negative`.
-#' @param select argument name is deprecated and substituted with `select_series`.
+#' @param include_negative If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
+#' @param select_series 	A vector of column names or numbers to keep, drop the rest. The order that the series
+#' are specified do not determine the order in the result.
+#' @param shade_opt Options for the shading of the graph, usually used through \code{shade} functions.
+#' @param ... Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
+#' @param include Argument name is deprecated and substituted with `include_negative`.
+#' @param select Argument name is deprecated and substituted with `select_series`.
 #'
 #' @importFrom dplyr filter
 #' @importFrom tidyr pivot_longer
@@ -70,6 +71,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
   deprecate_arg_warn(select, select_series)
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
+  snames <- series_names(object)
 
   option <- match.arg(option)
   if (is_sb(cv)) {
@@ -84,12 +86,19 @@ autoplot.radf_obj <- function(object, cv = NULL,
   }
 
   pos_series <- if (include_negative) {
-    if (is_sb(cv)) "panel" else series_names(object)
+    if (is_sb(cv)) "panel" else snames
   } else {
     diagnostics_internal(object, cv)$positive # internal to make the check here
   }
 
-  sel_series <- select_series %||% series_names(object)
+  if (is.numeric(select_series)) {
+    select_series <- snames[select_series]
+  }
+  sel_series <- select_series %||% snames
+  not_exist <- sel_series %ni% snames
+  if (any(not_exist)){
+    stop_glue("The series '{sel_series[not_exist][1]}' doesn't exist.") # only the fitst
+  }
   series <- intersect(pos_series, sel_series)
   if (rlang::is_bare_character(pos_series, n = 0)) {
     stop_glue("available series are not acceptable for plotting")
