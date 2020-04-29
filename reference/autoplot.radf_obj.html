@@ -214,27 +214,28 @@ geom_rect layer that demarcates the exuberance periods.</p>
     </tr>
     <tr>
       <th>select_series</th>
-      <td><p>If not NULL, only plot with names or column number matching this regular expression will be executed.</p></td>
+      <td><p>A vector of column names or numbers to keep, drop the rest. The order that the series
+are specified do not determine the order in the result.</p></td>
     </tr>
     <tr>
       <th>include_negative</th>
-      <td><p>If not FALSE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.</p></td>
+      <td><p>If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.</p></td>
     </tr>
     <tr>
       <th>shade_opt</th>
-      <td><p>options for the shading of the graph, usually used through <code>shade</code> functions.</p></td>
+      <td><p>Options for the shading of the graph, usually used through <code>shade</code> functions.</p></td>
     </tr>
     <tr>
       <th>include</th>
-      <td><p>argument name is deprecated and substituted with <code>include_negative</code>.</p></td>
+      <td><p>Argument name is deprecated and substituted with <code>include_negative</code>.</p></td>
     </tr>
     <tr>
       <th>select</th>
-      <td><p>argument name is deprecated and substituted with <code>select_series</code>.</p></td>
+      <td><p>Argument name is deprecated and substituted with <code>select_series</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>ggplot2::facet_wrap</a></code> and <code><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>ggplot2::geom_rect</a></code> for <code>shade</code>.</p></td>
+      <td><p>Further arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>ggplot2::facet_wrap</a></code> and <code><a href='https://ggplot2.tidyverse.org/reference/geom_tile.html'>ggplot2::geom_rect</a></code> for <code>shade</code>.</p></td>
     </tr>
     <tr>
       <th>fill</th>

@@ -192,15 +192,17 @@ thumb to exclude periods of exuberance.</p>
     </tr>
     <tr>
       <th>delta</th>
-      <td><p>Frequency-dependent parameter</p></td>
+      <td><p>Frequency-dependent parameter. See details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>delta </code> depends on the frequency of the data and the minimal
+    <p>Rules are specified as follows:</p>
+<p>$$rule_1 = \delta \log(n) \quad\&amp; \quad rule_2 = \delta \log(n)/n$$</p>
+<p><code>delta </code> depends on the frequency of the data and the minimal
 duration condition. For example, for a 30-year period, we set arbitrarily duration
-to exceed periods such as one year. Then, delta should is 0.7 for yearly data
+to exceed periods such as one year. Then, delta should be 0.7 for yearly data
 and 5 for monthly data.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
