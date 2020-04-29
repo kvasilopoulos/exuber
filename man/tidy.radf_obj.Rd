@@ -3,23 +3,20 @@
 \name{tidy.radf_obj}
 \alias{tidy.radf_obj}
 \alias{augment.radf_obj}
-\alias{glance.radf_obj}
 \title{Tidy a \code{radf_obj} object}
 \usage{
-\method{tidy}{radf_obj}(x, format = c("wide", "long"), ...)
+\method{tidy}{radf_obj}(x, format = c("wide", "long"), panel = FALSE, ...)
 
 \method{augment}{radf_obj}(x, format = c("wide", "long"), panel = FALSE, ...)
-
-\method{glance}{radf_obj}(x, format = c("wide", "long"), ...)
 }
 \arguments{
 \item{x}{An object of class \code{radf_obj}.}
 
 \item{format}{Long or wide format (default = "wide").}
 
-\item{...}{Further arguments passed to methods. Not used.}
+\item{panel}{If TRUE then return the panel statistics}
 
-\item{panel}{Either univariate or panel bsadf.}
+\item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}
@@ -40,6 +37,6 @@ tidy(rfd)
 augment(rfd)
 
 # Get the panel t-stat
-glance(rfd)
+tidy(rfd, panel = TRUE)
 }
 }

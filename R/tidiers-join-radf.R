@@ -1,6 +1,6 @@
 #' Tidy into a joint model
 #'
-#' Tidy, augment or glance, and then join objects.
+#' Tidy, augment or and then join objects.
 #'
 #' @param x An object of class `obj`.
 #' @param y An object of class `cv`.
@@ -16,19 +16,13 @@ augment_join <- function(x, y, ...) {
   UseMethod("augment_join")
 }
 
-#' @rdname tidy_join
-#' @export
-glance_join <- function(x, y, ...) {
-  UseMethod("glance_join")
-}
 
 
 #' Tidy into a joint model
 #'
-#' Tidy, augment or glance, and then join objects of class `radf_obj` and `radf_cv`. The
-#' object of reference should be the `radf_obj`. For example, using `glance` in an
-#' radf object returns the panel statistic, so `glance_join` returns the panel
-#' statistic together with the critical values.
+#' Tidy or augment  and then join objects of class `radf_obj` and `radf_cv`. The
+#' object of reference is the `radf_cv`. For example, if panel critical values
+#' are provided the function will return the panel t-statistics.
 #'
 #' @param x An object of class `radf_obj`.
 #' @param y An object of class `radf_cv`. The output will depend on the type of
@@ -45,7 +39,12 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
   assert_class(y, "radf_cv")
   assert_match(x, y)
   if (is_sb(y)) {
-    return(glance_join(x, y))
+    tbl <- inner_join(
+      tidy(x, format = "long", panel = TRUE),
+      tidy(y, format = "long"),
+      by = c("id", "name")) %>%
+      arrange(name)
+    return(tbl)
   }
 
   join_by <- if (!is_mc(y)) c("id") else NULL
@@ -68,16 +67,16 @@ augment_join.radf_obj <- function(x, y = NULL, ...) {
   assert_class(y, "radf_cv")
   assert_match(x, y)
 
-  panel_arg <- is_sb(y)
+  is_panel <- is_sb(y)
   join_by <- if (!is_mc(y)) c("id") else NULL
   is_idx_date <- is.Date(index(x))
   if (!is_idx_date && !is_mc(y)) join_by <- c("index", join_by)
   idx_if_date <- if (is_idx_date && !is_mc(y)) "index"  else NULL
   key_if_date <- if (is_idx_date) "key"  else NULL
-  id_lvls <- if (is_sb(y)) "panel" else series_names(x)
+  id_lvls <- if (is_panel) "panel" else series_names(x)
 
   inner_join(
-    augment(x, "long", panel = panel_arg),
+    augment(x, "long", panel = is_panel),
     augment(y, "long") %>% select_at(vars(-all_of(idx_if_date))),
     by = c("key", "name", join_by)) %>%
     mutate(id = factor(id, levels = id_lvls)) %>%
@@ -93,18 +92,8 @@ all_of <- function(x) {
   x
 }
 
-#' @export
-#' @rdname tidy_join.radf_obj
-#' @importFrom dplyr inner_join select case_when
-glance_join.radf_obj <- function(x, y, ...) {
 
-  if (!is_sb(y)) {
-    stop_glue("argument 'y' should be of class 'sb_cv'")
-  }
-  inner_join(
-    glance(x, format = "long"),
-    tidy(y, format = "long"),
-    by = c("id", "name")) %>%
-    arrange(name)
-}
+
+
+
 

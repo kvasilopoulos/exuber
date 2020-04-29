@@ -8,7 +8,8 @@ We have the following design in mind for future scalability. If you want make in
 
 * `autoplot()` for `radf` models has been refactored and new features have been added for more flexibility and conformity with the {ggplot} mindset.
 * Because of the change in `autoplot`, `ggarrange()` is now defunct.
-* `fortify()` methods have been replaced by `tidy()`, `augment()`, `glance()` and `tidy_join()` methods. `fortify()` methods are now defunct.
+* `fortify()` methods have been replaced by `tidy()`, `augment()`, `tidy_join()` and `glance_join()` methods. `fortify()` methods are now defunct.
+* Also `glance()` is now defunct. The user can use `tidy()` with `panel=TRUE` instead.
 * Changed the names of:
   - `mc_cv()` to `radf_mc_cv()`. `mc_cv()` is now deprecated.
   - `mc_distr()` to `radf_mc_distr()`. `mc_distr()` is now deprecated.

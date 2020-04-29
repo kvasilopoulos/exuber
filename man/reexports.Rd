@@ -7,7 +7,6 @@
 \alias{autoplot}
 \alias{tidy}
 \alias{augment}
-\alias{glance}
 \title{Objects exported from other packages}
 \seealso{
 \code{\link[=fortify.radf_obj]{fortify.radf_obj()}}
@@ -22,8 +21,6 @@
 
 \code{\link[=augment.radf_obj]{augment.radf_obj()}}
 \code{\link[=augment.radf_cv]{augment.radf_cv()}}
-
-\code{\link[=glance.radf_obj]{glance.radf_obj()}}
 }
 \keyword{internal}
 \description{
@@ -31,7 +28,7 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{generics}{\code{\link[generics]{augment}}, \code{\link[generics]{glance}}, \code{\link[generics]{tidy}}}
+  \item{generics}{\code{\link[generics]{augment}}, \code{\link[generics]{tidy}}}
 
   \item{ggplot2}{\code{\link[ggplot2]{autoplot}}, \code{\link[ggplot2]{fortify}}}
 }}
