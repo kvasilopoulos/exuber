@@ -21,7 +21,7 @@ psy_ds(n, rule = 1, delta = 1)
 thumb to exclude periods of exuberance.
 }
 \details{
-Rules are specified as follows:
+Rules for \code{psy_ds()} are specified as follows:
 
 \deqn{rule_1 = \delta \log(n) \quad\& \quad rule_2 = \delta \log(n)/n}{rule_1 = d*log(n) & rule 2 = d*log(n)/n}
 

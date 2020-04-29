@@ -24,7 +24,7 @@ psy_minw <- function(n) {
 #' @param rule Rule 1 corresponds to log(T), while rule 2 log(T)/T
 #' @param delta Frequency-dependent parameter. See details.
 #'
-#' @details Rules are specified as follows:
+#' @details Rules for `psy_ds()` are specified as follows:
 #'
 #' \deqn{rule_1 = \delta \log(n) \quad\& \quad rule_2 = \delta \log(n)/n}{rule_1 = d*log(n) & rule 2 = d*log(n)/n}
 #'

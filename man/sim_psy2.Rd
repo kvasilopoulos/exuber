@@ -36,8 +36,8 @@ sim_psy2(
 \item{seed}{An object specifying if and how the random number generator(rng)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change ng state, and
-return .Random.seed as the "seed" attribute. Results are differnt between
+of the returned value. The default, NULL, will not change rng state, and
+return .Random.seed as the "seed" attribute. Results are different between
 in parallel and non-parallel, even if they have the same seed.}
 }
 \value{
@@ -75,7 +75,7 @@ We use the notation
 where \eqn{\tau}{t} is the last observation of the sample.
 The observations \eqn{\tau_{1e} = [T r_{1e}]}{te1 = [T re1]} and
 and \eqn{\tau_{1f} = [T r_{1f}]}{tf = [T r1f]}
-are the origination and terminationdates of the first bubble;
+are the origination and termination dates of the first bubble;
 \eqn{\tau_{2e} = [T r_{2e}]}{te2 = [T re2]} and \eqn{\tau_{2f} = [T r_{2f}]}{tf = [T r2f]}
 are the origination and termination dates of the second bubble.
 After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
