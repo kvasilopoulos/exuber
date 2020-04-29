@@ -95,9 +95,9 @@ autoplot.radf_obj <- function(object, cv = NULL,
     select_series <- snames[select_series]
   }
   sel_series <- select_series %||% snames
-  not_exist <- sel_series %ni% snames
+  not_exist <- sel_series %ni% c(snames, "panel")
   if (any(not_exist)){
-    stop_glue("The series '{sel_series[not_exist][1]}' doesn't exist.") # only the fitst
+    stop_glue("The series '{sel_series[not_exist][1]}' doesn't exist.") # only the first
   }
   series <- intersect(pos_series, sel_series)
   if (rlang::is_bare_character(pos_series, n = 0)) {

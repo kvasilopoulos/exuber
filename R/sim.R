@@ -128,7 +128,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' where \eqn{\tau}{t} is the last observation of the sample.
 #' The observations \eqn{\tau_{1e} = [T r_{1e}]}{te1 = [T re1]} and
 #' and \eqn{\tau_{1f} = [T r_{1f}]}{tf = [T r1f]}
-#' are the origination and terminationdates of the first bubble;
+#' are the origination and termination dates of the first bubble;
 #' \eqn{\tau_{2e} = [T r_{2e}]}{te2 = [T re2]} and \eqn{\tau_{2f} = [T r_{2f}]}{tf = [T r2f]}
 #' are the origination and termination dates of the second bubble.
 #' After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time

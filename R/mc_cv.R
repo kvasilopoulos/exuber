@@ -74,8 +74,8 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @param seed An object specifying if and how the random number generator(rng)
 #' should be initialized. Either NULL or an integer will be used in a call to
 #' `set.seed` before simulation. If set, the value is saved as "seed" attribute
-#' of the returned value. The default, NULL, will not change ng state, and
-#' return .Random.seed as the "seed" attribute. Results are differnt between
+#' of the returned value. The default, NULL, will not change rng state, and
+#' return .Random.seed as the "seed" attribute. Results are different between
 #' in parallel and non-parallel, even if they have the same seed.
 #'
 #' @return For \code{radf_mc_cv} a list that contains the critical values for ADF,
