@@ -44,7 +44,7 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   }
   set_rng(seed)
 
-  `%fun%` <- if (do_par) `%dopar%` else `%do%`
+  `%fun%` <- if (do_par) `%dorng%` else `%do%`
 
   edf_bsadf_panel <- foreach(
     i = 1:nboot,
