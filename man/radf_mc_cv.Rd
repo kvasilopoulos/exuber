@@ -17,21 +17,21 @@ radf_mc_distr(n, minw = NULL, nrep = 1000L, seed = NULL)
 
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
-\item{seed}{An object specifying if and how the random number generator(rng)
+\item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.}
+the parallel and non-parallel option, even if they have the same seed.}
 }
 \value{
 For \code{radf_mc_cv} a list that contains the critical values for ADF,
-BADF, BSADF and GSADF t-statistics. For \code{radf_mc_dist} a list that
+BADF, BSADF and GSADF t-statistics. For \code{radf_mc_distr} a list that
 contains the ADF, SADF and GSADF distributions.
 }
 \description{
 \code{radf_mc_cv} computes Monte Carlo critical values for the recursive unit
-root tests. \code{radf_mc_dist} computes the distribution.
+root tests. \code{radf_mc_distr} computes the distribution.
 }
 \examples{
 \donttest{

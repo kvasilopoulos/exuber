@@ -20,3 +20,9 @@
 ^doc$
 ^Meta$
 ^\.covrignore$
+^examples_i386$
+^examples_x64$
+^exuber-Ex_i386.Rout$
+^exuber-Ex_x64.Rout$
+^tests_i386$
+^tests_x64$

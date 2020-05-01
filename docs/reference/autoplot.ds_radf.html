@@ -55,7 +55,7 @@
   
 
 <meta property="og:title" content="Plotting a <code>ds_radf</code> object — autoplot.ds_radf" />
-<meta property="og:description" content="Takes ds_radfobjects and returns a ggplot2 object, with a
+<meta property="og:description" content="Takes a ds_radf object and returns a ggplot2 object, with a
 geom_segment() layer." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -168,7 +168,7 @@ geom_segment() layer." />
     </div>
 
     <div class="ref-description">
-    <p>Takes <code>ds_radf</code>objects and returns a ggplot2 object, with a
+    <p>Takes a <code>ds_radf</code> object and returns a ggplot2 object, with a
 geom_segment() layer.</p>
     </div>
 
@@ -180,19 +180,21 @@ geom_segment() layer.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class <code><a href='datestamp.html'>datestamp()</a></code></p></td>
+      <td><p>An object of class <code>ds_radf</code>. The output of <code><a href='datestamp.html'>datestamp()</a></code></p></td>
     </tr>
     <tr>
       <th>trunc</th>
-      <td><p>default FALSE. If TRUE the index formed by truncating the value
-in the minimum window.</p></td>
+      <td><p>Whether to remove the period of the minimum window from the plot (default = TRUE).</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to methods. Not used.</p></td>
+      <td><p>Further arguments passed to methods. Not used.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plotting a <code>radf_obj</code> object — autoplot.radf_obj • exuber</title>
+<title>Plotting <code>radf</code> models — autoplot.radf_obj • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,9 +54,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Plotting a <code>radf_obj</code> object — autoplot.radf_obj" />
-<meta property="og:description" content="autoplot.radf_obj takes an radf_obj object and returns a faceted ggplot object.
-shade is used as an input to shape_opt argument in. shade modifies the
+<meta property="og:title" content="Plotting <code>radf</code> models — autoplot.radf_obj" />
+<meta property="og:description" content="autoplot.radf_obj takes radf_obj and radf_cv and returns a faceted ggplot object.
+shade is used as an input to shape_opt argument. shade modifies the
 geom_rect layer that demarcates the exuberance periods." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -163,14 +163,14 @@ geom_rect layer that demarcates the exuberance periods." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plotting a <code>radf_obj</code> object</h1>
+    <h1>Plotting <code>radf</code> models</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot-radf.R'><code>R/autoplot-radf.R</code></a></small>
     <div class="hidden name"><code>autoplot.radf_obj.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>autoplot.radf_obj</code> takes an <code>radf_obj</code> object and returns a faceted ggplot object.
-<code>shade</code> is used as an input to <code>shape_opt</code> argument in. <code>shade</code> modifies the
+    <p><code>autoplot.radf_obj</code> takes <code>radf_obj</code> and <code>radf_cv</code> and returns a faceted ggplot object.
+<code>shade</code> is used as an input to <code>shape_opt</code> argument. <code>shade</code> modifies the
 geom_rect layer that demarcates the exuberance periods.</p>
     </div>
 
@@ -212,7 +212,7 @@ geom_rect layer that demarcates the exuberance periods.</p>
     <tr>
       <th>select_series</th>
       <td><p>A vector of column names or numbers to keep, drop the rest. The order that the series
-are specified do not determine the order in the result.</p></td>
+are specified do not determine the order in the plot</p></td>
     </tr>
     <tr>
       <th>include_negative</th>
@@ -244,6 +244,9 @@ are specified do not determine the order in the result.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>

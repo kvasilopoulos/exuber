@@ -14,7 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 # exuber <a href='https://kvasilopoulos.github.io/exuber'><img src='man/figures/logo.png' align="right" height="127.5" /></a>
 
 <!-- badges: start -->

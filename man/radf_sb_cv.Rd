@@ -20,12 +20,12 @@ vector or matrix, or a data.frame. The object should not have any NA values.}
 
 \item{nboot}{A positive integer. Number of bootstraps (default = 500L).}
 
-\item{seed}{An object specifying if and how the random number generator(rng)
+\item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.}
+the parallel and non-parallel option, even if they have the same seed.}
 }
 \value{
 For \code{radf_sb_cv} A list that contains the panel critical values
@@ -34,7 +34,7 @@ that contains panel GSADF distribution.
 }
 \description{
 \code{radf_sb_cv} computes critical values for the panel recursive unit root test using
-the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{radf_sb_dist}
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{radf_sb_distr}
 computes the distribution.
 }
 \examples{

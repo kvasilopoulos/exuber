@@ -1,9 +1,9 @@
 # TODO revisit this function if you have time
 
-#' Calculate p-values
+#' Calculate p-values from `distr` object
 #'
-#' @param x An 'radf' object
-#' @param distr Which type of distribution to use to calculate the p-values
+#' @param x A `radf_obj` object.
+#' @param distr A `radf_distr` object. Which type of distribution to use to calculate the p-values.
 #'
 #' @export
 #' @importFrom tidyr nest spread
@@ -17,7 +17,7 @@
 #' calc_pvalue(radf_psy1)
 #'
 #' # Using the Wild-Bootstrapped
-#' wb_psy1 <- wb_dist(sim_psy1(100))
+#' wb_psy1 <- wb_distr(sim_psy1(100))
 #'
 #' calc_pvalue(radf_psy1, wb_psy1)
 #' }

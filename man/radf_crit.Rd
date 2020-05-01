@@ -16,7 +16,7 @@ A list with lower level lists that contain
 }
 }
 \source{
-simulated from exuber package function \code{\link[=radf_mc_cv]{radf_mc_cv()}}
+Simulated from exuber package function \code{\link[=radf_mc_cv]{radf_mc_cv()}}.
 }
 \usage{
 radf_crit

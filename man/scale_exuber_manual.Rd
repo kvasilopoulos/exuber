@@ -34,6 +34,6 @@ theme_exuber(
 \item{base_rect_size}{base size for rect elements}
 }
 \description{
-\code{scale_exuber_manual} allow you to specify your own color size and linetype in
-\code{autoplot.radf_obj} mappings. \code{theme_exuber} is a complete theme themes which control all non-data display.
+\code{scale_exuber_manual} allow you to specify your own color, size and linetype in
+\code{autoplot.radf_obj} mappings. \code{theme_exuber} is a complete theme which control all non-data display.
 }

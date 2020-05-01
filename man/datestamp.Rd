@@ -39,10 +39,6 @@ episodes during which the time series display explosive dynamics.
 Datestamp also stores a vector in {0,1} that corresponds to {positive, negative}
 respectively, for all series throughout the time period. This output can be used as
 a dummy which indicates the occurrence of a bubble.
-
-Setting \code{min_duration} removes very short episode of exuberance.
-Phillips et al. (2015) propose two simple rules of thumb to remove short
-periods of explosive dynamics, "log(T)/T", where T is the number of observations.
 }
 \examples{
 
