@@ -134,7 +134,7 @@
 <p>The summary will print the t-stat and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the <code>cv</code> argument in the <code>summary</code> function.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">est_stocks</span>)
 <span class="co">#&gt; </span>
-<span class="co">#&gt; -- Summary (minw = 38, lag = 1) ------------------------------------ Monte Carlo (nrep = 2000) --</span>
+<span class="co">#&gt; -- Summary (minw = 38, lag = 1) ---------------------------------------------- Monte Carlo (nrep = 2000) --</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX :</span>
 <span class="co">#&gt; # A tibble: 3 x 5</span>
@@ -170,7 +170,7 @@
 <p>It seems that all stocks exhibit exuberant behaviour but we can also verify it using <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. This function is particularly useful when we deal a large number of series.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span>(<span class="no">est_stocks</span>)
 <span class="co">#&gt; </span>
-<span class="co">#&gt; -- Diagnostics (option = gsadf) -------------------------------------------------- Monte Carlo --</span>
+<span class="co">#&gt; -- Diagnostics (option = gsadf) ------------------------------------------------------------ Monte Carlo --</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX:      Rejects H0 at the 1% significance level</span>
 <span class="co">#&gt; SMI:      Rejects H0 at the 1% significance level</span>
@@ -183,30 +183,30 @@
 <span class="no">dstamp_stocks</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span>(<span class="no">est_stocks</span>, <span class="kw">min_duration</span> <span class="kw">=</span> <span class="no">rot</span>)
 <span class="no">dstamp_stocks</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; -- Datestamp (min_duration = 6) -------------------------------------------------- Monte Carlo --</span>
+<span class="co">#&gt; -- Datestamp (min_duration = 6) ------------------------------------------------------------ Monte Carlo --</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX :</span>
 <span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1997-02-10 1997-10-28       38</span>
-<span class="co">#&gt; 2 1998-01-27 1998-08-19       30</span>
+<span class="co">#&gt; 1 1997-02-10 1997-11-04       38</span>
+<span class="co">#&gt; 2 1998-01-27       &lt;NA&gt;       30</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SMI :</span>
 <span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1993-12-02 1994-02-10       11</span>
-<span class="co">#&gt; 2 1997-04-14 1997-08-26       20</span>
-<span class="co">#&gt; 3 1997-09-09 1997-10-28        8</span>
-<span class="co">#&gt; 4 1997-11-25 1998-08-19       39</span>
+<span class="co">#&gt; 1 1993-12-02 1994-02-17       11</span>
+<span class="co">#&gt; 2 1997-04-14 1997-09-02       20</span>
+<span class="co">#&gt; 3 1997-09-09 1997-11-04        8</span>
+<span class="co">#&gt; 4 1997-11-25       &lt;NA&gt;       39</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; CAC :</span>
 <span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1997-07-08 1997-08-12        6</span>
-<span class="co">#&gt; 2 1998-03-10 1998-08-05       22</span>
+<span class="co">#&gt; 1 1997-07-08 1997-08-19        6</span>
+<span class="co">#&gt; 2 1998-03-10 1998-08-12       22</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; FTSE :</span>
 <span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1997-07-08 1997-10-28       17</span>
-<span class="co">#&gt; 2 1998-02-10 1998-06-17       19</span></pre></body></html></div>
-<p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance. Recent studies Pavlidis et al (2018) &amp; Pavlidis and Vasilopoulos (2020) use the datestamp in a probit model, thus …</p>
+<span class="co">#&gt; 1 1997-07-08 1997-11-04       17</span>
+<span class="co">#&gt; 2 1998-02-10 1998-06-24       19</span></pre></body></html></div>
+<p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">dummy</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">dstamp_stocks</span>, <span class="st">"dummy"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>(<span class="no">dummy</span>)
 <span class="co">#&gt;     DAX SMI CAC FTSE</span>
@@ -220,12 +220,14 @@
 <div id="plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h2>
-<p>The <code>autoplot.radf</code> method returns a faceted ggplot2 object of all the series the reject the null hypothesis 5% significance level.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">est_stocks</span>)</pre></body></html></div>
+<p>The <code>autoplot</code> function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.</p>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">est_stocks</span>)
+<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_rect).</span></pre></body></html></div>
 <p><img src="exuber_files/figure-html/plot-radf-1.png" width="864"></p>
 <p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span>(<span class="no">est_stocks</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>()</pre></body></html></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>()
+<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_segment).</span></pre></body></html></div>
 <p><img src="exuber_files/figure-html/plot-datestaemp-1.png" width="672"></p>
 </div>
   </div>

@@ -294,9 +294,9 @@ tidy_radf_distr.sb_distr <- function(x, ...) {
 
 #' Plotting a `radf_distr` object
 #'
-#' Takes a `radf_distr`object and returns a ggplot2 object.
+#' Takes a `radf_distr` object and returns a ggplot2 object.
 #'
-#' @param object An object of class `radf_dist`.
+#' @param object An object of class `radf_distr`.
 #' @param ... Further arguments passed to methods, used only in `wb_distr` facet options.
 #'
 #' @return A [ggplot2::ggplot()]

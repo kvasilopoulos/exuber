@@ -17,5 +17,5 @@ augment_join(x, y, ...)
 \item{...}{Further arguments passed to methods.}
 }
 \description{
-Tidy, augment or and then join objects.
+Tidy or augment and then join objects.
 }

@@ -56,7 +56,7 @@
 
 <meta property="og:title" content="Panel Sieve Bootstrap Critical Values — radf_sb_cv" />
 <meta property="og:description" content="radf_sb_cv computes critical values for the panel recursive unit root test using
-the sieve bootstrap procedure outlined in Pavlidis et al. (2016). radf_sb_dist
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016). radf_sb_distr
 computes the distribution." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -170,7 +170,7 @@ computes the distribution." />
 
     <div class="ref-description">
     <p><code>radf_sb_cv</code> computes critical values for the panel recursive unit root test using
-the sieve bootstrap procedure outlined in Pavlidis et al. (2016). <code>radf_sb_dist</code>
+the sieve bootstrap procedure outlined in Pavlidis et al. (2016). <code>radf_sb_distr</code>
 computes the distribution.</p>
     </div>
 
@@ -201,12 +201,12 @@ vector or matrix, or a data.frame. The object should not have any NA values.</p>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>An object specifying if and how the random number generator(rng)
+      <td><p>An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.</p></td>
+the parallel and non-parallel option, even if they have the same seed.</p></td>
     </tr>
     </table>
 
@@ -236,17 +236,17 @@ in search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>sb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 3</span><span>
 #&gt;   id    sig   gsadf_panel
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> panel 90          0.349
-#&gt; </span><span style='color: #555555;'>2</span><span> panel 95          0.425
-#&gt; </span><span style='color: #555555;'>3</span><span> panel 99          0.595</div><div class='input'>
+#&gt; </span><span style='color: #555555;'>1</span><span> panel 90          0.322
+#&gt; </span><span style='color: #555555;'>2</span><span> panel 95          0.395
+#&gt; </span><span style='color: #555555;'>3</span><span> panel 99          0.599</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='output co'>#&gt; 
-#&gt; -- Summary (minw = 19, lag = 1) -------------------------------- Sieve Bootstrap (nboot = 500) --
+#&gt; -- Summary (minw = 19, lag = 1) ------------------------------------------ Sieve Bootstrap (nboot = 500) --
 #&gt; 
 #&gt; panel :
 #&gt; </span><span style='color: #555555;'># A tibble: 1 x 5</span><span>
 #&gt;   name        tstat  `90`  `95`  `99`
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> gsadf_panel  1.89 0.349 0.425 0.595
+#&gt; </span><span style='color: #555555;'>1</span><span> gsadf_panel  1.89 0.322 0.395 0.599
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>sb</span>)</div><div class='img'><img src='radf_sb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Simulate distribution</span>

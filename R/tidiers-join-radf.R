@@ -1,6 +1,6 @@
 #' Tidy into a joint model
 #'
-#' Tidy, augment or and then join objects.
+#' Tidy or augment and then join objects.
 #'
 #' @param x An object of class `obj`.
 #' @param y An object of class `cv`.

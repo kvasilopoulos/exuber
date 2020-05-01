@@ -16,7 +16,7 @@
 #'   \item{gsadf_cv:}{Generalized Supremum Augmented Dickey Fuller}
 #'
 #' }
-#' @source simulated from exuber package function \code{\link[=radf_mc_cv]{radf_mc_cv()}}
+#' @source Simulated from exuber package function \code{\link[=radf_mc_cv]{radf_mc_cv()}}.
 #'
 #' @examples
 #' \dontrun{
@@ -58,7 +58,7 @@ print.crit <- function(x, ...) {
 #'   evans = sim_evans(100),
 #'   div = sim_div(100),
 #'   blan = sim_blan(100),
-#'     date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
+#'   date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 #' )
 #'}
 "sim_data"
