@@ -7,7 +7,7 @@
 \method{autoplot}{radf_distr}(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{radf_dist}.}
+\item{object}{An object of class \code{radf_distr}.}
 
 \item{...}{Further arguments passed to methods, used only in \code{wb_distr} facet options.}
 }
@@ -15,5 +15,5 @@
 A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
 }
 \description{
-Takes a \code{radf_distr}object and returns a ggplot2 object.
+Takes a \code{radf_distr} object and returns a ggplot2 object.
 }

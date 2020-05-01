@@ -16,9 +16,6 @@
 #' respectively, for all series throughout the time period. This output can be used as
 #' a dummy which indicates the occurrence of a bubble.
 #'
-#' Setting \code{min_duration} removes very short episode of exuberance.
-#' Phillips et al. (2015) propose two simple rules of thumb to remove short
-#' periods of explosive dynamics, "log(T)/T", where T is the number of observations.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
@@ -120,9 +117,9 @@ print.ds_radf <- function(x, ...) {
 # identification of periods
 stamp <- function(x) {
   start <- x[c(TRUE, diff(x) != 1)] # diff reduces length by 1
-  end <- x[c(diff(x) != 1, TRUE)]
-  end[end - start == 0] <- end[end - start == 0] + 1
-  duration <- end - start + 1
+  end <- x[c(diff(x) != 1, TRUE)] + 1
+  end[end - start == 0] <- end[end - start == 0]
+  duration <- end - start
   tibble("Start" = start, "End" = end, "Duration" = duration)
 }
 
@@ -144,18 +141,19 @@ stamp_to_index <- function(x, idx) {
 
 #' Plotting a `ds_radf` object
 #'
-#' Takes `ds_radf`objects and returns a ggplot2 object, with a
+#' Takes a `ds_radf` object and returns a ggplot2 object, with a
 #' \link[=ggplot2]{geom_segment()} layer.
 #'
 #' @name autoplot.ds_radf
 #'
-#' @param object An object of class \code{\link[=datestamp]{datestamp()}}
-#' @param trunc default FALSE. If TRUE the index formed by truncating the value
-#' in the minimum window.
-#' @param ... further arguments passed to methods. Not used.
+#' @param object An object of class \code{ds_radf}. The output of \code{\link[=datestamp]{datestamp()}}
+#' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
+#' @param ... Further arguments passed to methods. Not used.
 #' @export
 #'
 #' @importFrom stats reorder
+#'
+#' @return A [ggplot2::ggplot()]
 #'
 #' @examples
 #' \donttest{
@@ -196,9 +194,9 @@ autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
     )
 }
 
-#' Tidy `ds_radf` objects
+#' Tidy a `ds_radf` object
 #'
-#' Summarizes information of `ds_radf` objects.
+#' Summarizes information about `ds_radf` object.
 #'
 #' @param x An object of class `ds_radf`.
 #' @param ... Further arguments passed to methods. Not used.

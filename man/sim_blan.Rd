@@ -17,12 +17,12 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
 
 \item{b0}{The initial value of the bubble}
 
-\item{seed}{An object specifying if and how the random number generator(rng)
+\item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.}
+the parallel and non-parallel option, even if they have the same seed.}
 }
 \value{
 A numeric vector of length \code{n}.

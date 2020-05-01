@@ -3,7 +3,7 @@
 \name{autoplot.radf_obj}
 \alias{autoplot.radf_obj}
 \alias{shade}
-\title{Plotting a \code{radf_obj} object}
+\title{Plotting \code{radf} models}
 \usage{
 \method{autoplot}{radf_obj}(
   object,
@@ -30,7 +30,7 @@ shade(fill = "grey70", opacity = 0.5, ...)
 \item{min_duration}{the minimum duration.}
 
 \item{select_series}{A vector of column names or numbers to keep, drop the rest. The order that the series
-are specified do not determine the order in the result.}
+are specified do not determine the order in the plot}
 
 \item{include_negative}{If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
 
@@ -46,9 +46,12 @@ are specified do not determine the order in the result.}
 
 \item{opacity}{the opacity of the shade color aka alpha.}
 }
+\value{
+A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
+}
 \description{
-\code{autoplot.radf_obj} takes an \code{radf_obj} object and returns a faceted ggplot object.
-\code{shade} is used as an input to \code{shape_opt} argument in. \code{shade} modifies the
+\code{autoplot.radf_obj} takes \code{radf_obj} and \code{radf_cv} and returns a faceted ggplot object.
+\code{shade} is used as an input to \code{shape_opt} argument. \code{shade} modifies the
 geom_rect layer that demarcates the exuberance periods.
 }
 \examples{

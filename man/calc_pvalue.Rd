@@ -2,17 +2,17 @@
 % Please edit documentation in R/distr-pvalues.R
 \name{calc_pvalue}
 \alias{calc_pvalue}
-\title{Calculate p-values}
+\title{Calculate p-values from \code{distr} object}
 \usage{
 calc_pvalue(x, distr = NULL)
 }
 \arguments{
-\item{x}{An 'radf' object}
+\item{x}{A \code{radf_obj} object.}
 
-\item{distr}{Which type of distribution to use to calculate the p-values}
+\item{distr}{A \code{radf_distr} object. Which type of distribution to use to calculate the p-values.}
 }
 \description{
-Calculate p-values
+Calculate p-values from \code{distr} object
 }
 \examples{
 
@@ -22,7 +22,7 @@ radf_psy1 <- radf(sim_psy1(100))
 calc_pvalue(radf_psy1)
 
 # Using the Wild-Bootstrapped
-wb_psy1 <- wb_dist(sim_psy1(100))
+wb_psy1 <- wb_distr(sim_psy1(100))
 
 calc_pvalue(radf_psy1, wb_psy1)
 }

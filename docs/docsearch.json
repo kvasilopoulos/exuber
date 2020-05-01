@@ -2,21 +2,21 @@
   "index_name": "exuber",
   "start_urls": [
     {
-      "url": "https://kvasilopoulos.github.io/exuber//index.html",
+      "url": "https://kvasilopoulos.github.io/exuber/index.html",
       "selectors_key": "homepage",
       "tags": [
         "homepage"
       ]
     },
     {
-      "url": "https://kvasilopoulos.github.io/exuber//reference",
+      "url": "https://kvasilopoulos.github.io/exuber/reference",
       "selectors_key": "reference",
       "tags": [
         "reference"
       ]
     },
     {
-      "url": "https://kvasilopoulos.github.io/exuber//articles",
+      "url": "https://kvasilopoulos.github.io/exuber/articles",
       "selectors_key": "articles",
       "tags": [
         "articles"
@@ -30,7 +30,7 @@
     "/articles/index.html"
   ],
   "sitemap_urls": [
-    "https://kvasilopoulos.github.io/exuber//sitemap.xml"
+    "https://kvasilopoulos.github.io/exuber/sitemap.xml"
   ],
   "selectors": {
     "homepage": {

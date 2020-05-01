@@ -37,7 +37,7 @@ sim_data_wdate <- tibble(
   evans = sim_evans(100),
   div = sim_div(100),
   blan = sim_blan(100),
-    date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
+  date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 )
 }
 }

@@ -90,7 +90,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #'
 #' \code{radf_wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
 #' scheme, which is asymptotically robust to non-stationary volatility, to
-#' generate critical values for the recursive unit root tests. \code{radf_wb_dist}
+#' generate critical values for the recursive unit root tests. \code{radf_wb_distr}
 #' computes the distribution.
 #'
 #' @inheritParams radf
@@ -100,7 +100,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' will be used.
 #'
 #' @return  For \code{radf_wb_cv} a list that contains the critical values for ADF,
-#' BADF, BSADF and GSADF t-statistics. For \code{radf_wb_dist} a list that
+#' BADF, BSADF and GSADF t-statistics. For \code{radf_wb_distr} a list that
 #' contains the ADF, SADF and GSADF distributions.
 #'
 #' @details This approach involves applying a wild bootstrap re-sampling scheme

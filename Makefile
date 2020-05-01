@@ -9,6 +9,9 @@ build_site:
 	Rscript -e "pkgdown::build_site()"
 	sed -i 's/MartÃ­nez-GarcÃ­a/Martínez-García/g' docs/authors.html
 
+build_manual:
+	Rscript -e "devtools::build_manual"
+
 check:
 	Rscript -e "devtools::check()"
 

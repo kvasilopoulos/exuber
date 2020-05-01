@@ -61,12 +61,12 @@ There are several options for generating critical values:
 On default `exuber` will use Monte Carlo simulated critical values if no
 other option is provided. The package offers these critical values in
 the form of `data` (up to 600 observations), that are obtained with the
-`radf_mc_cv()` function.
+`mc_cv()` function.
 
 ### Analysis
 
 For the analysis you should include both the output from estimation
-(`object`) and the critical values (`cv`). The below methods break the
+(`object`) and critical values (`cv`). The below methods break the
 process into small simple steps:
 
   - `summary()` summarizes the model.
@@ -105,7 +105,7 @@ rsim_data <- radf(sim_data)
 summary(rsim_data)
 #> Using 'radf_crit' for 'cv'.
 #> 
-#> -- Summary (minw = 19, lag = 0) ------------------------------------- Monte Carlo (nrep = 2000) --
+#> -- Summary (minw = 19, lag = 0) ---------------------------------------------- Monte Carlo (nrep = 2000) --
 #> 
 #> psy1 :
 #> # A tibble: 3 x 5
@@ -150,7 +150,7 @@ summary(rsim_data)
 diagnostics(rsim_data)
 #> Using 'radf_crit' for 'cv'.
 #> 
-#> -- Diagnostics (option = gsadf) --------------------------------------------------- Monte Carlo --
+#> -- Diagnostics (option = gsadf) ------------------------------------------------------------ Monte Carlo --
 #> 
 #> psy1:     Rejects H0 at the 1% significance level
 #> psy2:     Rejects H0 at the 1% significance level
@@ -161,27 +161,27 @@ diagnostics(rsim_data)
 datestamp(rsim_data)
 #> Using 'radf_crit' for 'cv'.
 #> 
-#> -- Datestamp (min_duration = 0) --------------------------------------------------- Monte Carlo --
+#> -- Datestamp (min_duration = 0) ------------------------------------------------------------ Monte Carlo --
 #> 
 #> psy1 :
 #>   Start End Duration
-#> 1    44  55       11
+#> 1    44  56       12
 #> 
 #> psy2 :
 #>   Start End Duration
-#> 1    22  40       18
-#> 2    62  70        8
+#> 1    22  41       19
+#> 2    62  71        9
 #> 
 #> evans :
 #>   Start End Duration
 #> 1    20  21        1
 #> 2    44  45        1
-#> 3    66  67        1
+#> 3    66  68        2
 #> 
 #> blan :
 #>   Start End Duration
-#> 1    34  36        2
-#> 2    84  86        2
+#> 1    34  37        3
+#> 2    84  87        3
 
 autoplot(rsim_data)
 #> Using 'radf_crit' for 'cv'.

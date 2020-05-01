@@ -57,7 +57,7 @@ rot = psy_ds(stocks) # log(n) ~ rule of thumb
 dstamp_stocks <- datestamp(est_stocks, min_duration = rot)
 dstamp_stocks
 ```
-We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance. Recent studies Pavlidis et al (2018) & Pavlidis and Vasilopoulos (2020) use the datestamp in a probit model, thus ...
+We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.
 
 ```{r datestamp-dummy}
 dummy <- attr(dstamp_stocks, "dummy")
@@ -66,7 +66,7 @@ tail(dummy)
 
 ## Plotting
 
-The `autoplot.radf` method returns a faceted ggplot2 object of all the series the reject the null hypothesis 5% significance level.
+The `autoplot` function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.
 
 ```{r plot-radf, fig.width = 9}
 autoplot(est_stocks)
