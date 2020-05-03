@@ -15,7 +15,7 @@ sim_psy1(
 )
 }
 \arguments{
-\item{n}{A strictly positive integer specifying the length of the simulated output series.}
+\item{n}{A positive integer specifying the length of the simulated output series.}
 
 \item{te}{A scalar in (0, tf) specifying the observation in which the bubble originates.}
 
@@ -56,14 +56,14 @@ with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)} and
 \eqn{X_{\tau_f} = X_{\tau_e} + X'}{X[tf] = X[te] + X'} with \eqn{X' = O_p(1)}{X'= 0p(1)},
 \eqn{\tau_e = [T r_e]}{te = [T re]} dates the origination of the bubble,
-and \eqn{\tau_f = [T r_f]}{tf = [T rf]} dates the termination of the bubble collapse.
-During the pre- and post- bubble periods, \eqn{N_0 = [1, \tau_e)}{N0 = [1, te)},
-X is a pure random walk process. During the bubble expansion period \eqn{B = [\tau_e, \tau_f]}{B = [te,tf]} is a
-mildly explosive process with expansion rate given by the autoregressive
-coefficient \eqn{\delta_T}{\delta[T]}, and continues its martingale path for the subsequent period
-\eqn{N_1 = (\tau_f, \tau]}{N1 = (tf, t]}.
+and \eqn{\tau_f = [T r_f]}{tf = [T rf]} dates the collapse of the bubble.
+During the pre- and post- bubble periods, \eqn{[1, \tau_e)}{[1, te)},
+\eqn{X_t}{Xt} is a pure random walk process. During the bubble expansion period
+\eqn{\tau_e, \tau_f]}{[te,tf]} becomes a mildly explosive process with expansion rate
+given by the autoregressive coefficient \eqn{\delta_T}{\delta[T]}; and, finally
+during the post-bubble period, \eqn{(\tau_f, \tau]}{(tf, t]}  \eqn{X_t}{Xt} reverts to a martingale.
 
-For further details you can refer to Phillips et al. (2015) p. 1054.
+For further details see Phillips et al. (2015) p. 1054.
 }
 \examples{
 # 100 periods with bubble origination date 40 and termination date 55

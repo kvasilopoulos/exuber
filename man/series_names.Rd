@@ -21,7 +21,7 @@ series_names(x) <- value
 \arguments{
 \item{x}{An object.}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{Further arguments passed to methods.}
 
 \item{value}{n ordered vector of the same length as the "index" attribute of x.}
 }
