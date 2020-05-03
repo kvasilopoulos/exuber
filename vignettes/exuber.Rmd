@@ -35,7 +35,7 @@ est_stocks <- radf(stocks, lag = 1)
 
 ## Analysis
 
-The summary will print the t-stat and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the `cv` argument in the `summary` function. 
+The summary will print the test statistic and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the `cv` argument in the `summary` function. 
 
 ```{r summary}
 summary(est_stocks)

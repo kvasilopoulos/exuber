@@ -22,7 +22,7 @@ augment_join <- function(x, y, ...) {
 #'
 #' Tidy or augment  and then join objects of class `radf_obj` and `radf_cv`. The
 #' object of reference is the `radf_cv`. For example, if panel critical values
-#' are provided the function will return the panel t-statistics.
+#' are provided the function will return the panel test statistic.
 #'
 #' @param x An object of class `radf_obj`.
 #' @param y An object of class `radf_cv`. The output will depend on the type of

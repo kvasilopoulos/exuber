@@ -5,7 +5,7 @@
 #' Retrieve or replace the series names of an object.
 #'
 #' @param x An object.
-#' @param ... further arguments passed to methods.
+#' @param ... Further arguments passed to methods.
 #' @export
 #'
 series_names <- function(x, ...) {
