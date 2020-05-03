@@ -79,11 +79,11 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #'  the parallel and non-parallel option, even if they have the same seed.
 #'
 #' @return For \code{radf_mc_cv} a list that contains the critical values for ADF,
-#' BADF, BSADF and GSADF t-statistics. For \code{radf_mc_distr} a list that
+#' BADF, BSADF and GSADF test statistics. For \code{radf_mc_distr} a list that
 #' contains the ADF, SADF and GSADF distributions.
 #'
-#' @seealso \code{\link{radf_wb_cv}} for Wild Bootstrapped critical values and
-#' \code{\link{radf_sb_cv}} for Sieve Bootstrapped critical values
+#' @seealso \code{\link{radf_wb_cv}} for wild bootstrap critical values and
+#' \code{\link{radf_sb_cv}} for sieve bootstrap critical values
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster

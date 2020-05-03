@@ -11,10 +11,10 @@
 #' @return A [tibble::tibble()]
 #'
 #' \itemize{
-#' \item id: the series names.
+#' \item id: The series names.
 #' \item sig: The significance level.
-#' \item name: The name of the series (when format is "long")
-#' \item crit: The critical value (when format is "long")
+#' \item name: The name of the series (when format is "long").
+#' \item crit: The critical value (when format is "long").
 #' }
 #'
 #'

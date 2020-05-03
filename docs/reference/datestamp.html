@@ -229,7 +229,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 <span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data</span>)
 
 <span class='no'>ds_data</span> <span class='kw'>&lt;-</span> <span class='fu'>datestamp</span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='input'><span class='no'>ds_data</span></div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 0) ------------------------------------------------------------ Monte Carlo --
+#&gt; -- Datestamp (min_duration = 0) -------------------------------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
@@ -253,7 +253,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt; </div><div class='input'>
 <span class='co'># Choose minimum window</span>
 <span class='fu'>datestamp</span>(<span class='no'>rsim_data</span>, <span class='kw'>min_duration</span> <span class='kw'>=</span> <span class='fu'><a href='psy_minw.html'>psy_ds</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>sim_data</span>)))</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
-#&gt; -- Datestamp (min_duration = 5) ------------------------------------------------------------ Monte Carlo --
+#&gt; -- Datestamp (min_duration = 5) -------------------------------------------------------------- Monte Carlo --
 #&gt; 
 #&gt; psy1 :
 #&gt;   Start End Duration
