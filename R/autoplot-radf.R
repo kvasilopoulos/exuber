@@ -1,15 +1,15 @@
 #' Plotting `radf` models
 #'
 #' \code{autoplot.radf_obj} takes \code{radf_obj} and \code{radf_cv} and returns a faceted ggplot object.
-#' \code{shade} is used as an input to \code{shape_opt} argument. \code{shade} modifies the
+#' \code{shade} is used as an input to \code{shape_opt}. \code{shade} modifies the
 #' geom_rect layer that demarcates the exuberance periods.
 #'
 #' @inheritParams datestamp.radf_obj
 #'
 #' @param include_negative If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
-#' @param select_series 	A vector of column names or numbers to keep, drop the rest. The order that the series
-#' are specified do not determine the order in the plot
-#' @param shade_opt Options for the shading of the graph, usually used through \code{shade} functions.
+#' @param select_series 	A vector of column names or numbers specifying the series to be used in plotting.
+#' Note that the order of the series does not alter the order used in plotting.
+#' @param shade_opt Shading options, typically set using \code{shade} function.
 #' @param ... Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
 #' @param include Argument name is deprecated and substituted with `include_negative`.
 #' @param select Argument name is deprecated and substituted with `select_series`.
@@ -138,9 +138,9 @@ autoplot.radf_obj <- function(object, cv = NULL,
 }
 
 #' @rdname autoplot.radf_obj
-#' @param min_duration the minimum duration.
-#' @param fill the shade color that indicates the exuberance periods.
-#' @param opacity the opacity of the shade color aka alpha.
+#' @inheritParams datestamp
+#' @param fill The shade color that indicates the exuberance periods.
+#' @param opacity The opacity of the shade color aka alpha.
 #' @export
 shade <- function(fill = "grey70", opacity = 0.5, ...) {
   function(ds_data, min_duration) {
@@ -154,7 +154,7 @@ shade <- function(fill = "grey70", opacity = 0.5, ...) {
 
 #' Exuber scale and theme functions
 #'
-#' `scale_exuber_manual` allow you to specify your own color, size and linetype in
+#' `scale_exuber_manual` allows specifying the color, size and linetype in
 #' `autoplot.radf_obj` mappings. `theme_exuber` is a complete theme which control all non-data display.
 #'
 #' @param color_values a set of color values to map data values to.

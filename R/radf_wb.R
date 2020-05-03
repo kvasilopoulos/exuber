@@ -99,8 +99,8 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' @param dist_rad Logical. If \code{TRUE} then  the Rademacher distribution
 #' will be used.
 #'
-#' @return  For \code{radf_wb_cv} a list that contains the critical values for ADF,
-#' BADF, BSADF and GSADF t-statistics. For \code{radf_wb_distr} a list that
+#' @return  For \code{radf_wb_cv} a list that contains the critical values for the ADF,
+#' BADF, BSADF and GSADF tests. For \code{radf_wb_distr} a list that
 #' contains the ADF, SADF and GSADF distributions.
 #'
 #' @details This approach involves applying a wild bootstrap re-sampling scheme
@@ -116,7 +116,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
-#' \code{\link{radf_sb_cv}} for Sieve Bootstrapped critical values
+#' \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster

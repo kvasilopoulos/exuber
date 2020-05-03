@@ -3,7 +3,7 @@
 #' Calculate p-values from `distr` object
 #'
 #' @param x A `radf_obj` object.
-#' @param distr A `radf_distr` object. Which type of distribution to use to calculate the p-values.
+#' @param distr A `radf_distr` object.
 #'
 #' @export
 #' @importFrom tidyr nest spread

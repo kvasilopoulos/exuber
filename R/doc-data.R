@@ -1,7 +1,7 @@
-#' Simulated Monte Carlo Critical Values
+#' Stored Monte Carlo Critical Values
 #'
-#' A dataset containing simulated critical values for up to 600 observations
-#' based on default minimum window. The critical values have been simulated and
+#' A dataset containing Monte Carlo critical values for up to 600 observations
+#' generated using the deault minimum window. The critical values have been simulated and
 #' stored as data to save computation time for the user. The stored critical values
 #' can be obtained with the \code{\link[=radf_mc_cv]{radf_mc_cv()}} function, using
 #' nrep = `2000` and the `seed = 123`.
@@ -35,14 +35,14 @@ print.crit <- function(x, ...) {
 
 #' Simulated dataset
 #'
-#' A dataset containing commonly known data generated processes (DGPs) used in the explosive
-#' time series literature.
+#' An artificial dataset containing series simulated from data generating processes
+#' widely used in the literature on speculative bubbles.
 #'
 #' @seealso sim_psy1 sim_psy1 sim_evans sim_div sim_blan
 #'
 #' @examples
 #' \dontrun{
-#' # The dataset can be easily replicated with the code belows
+#' # The dataset can be easily replicated with the code below
 #' library(tibble)
 #' set.seed(1122)
 #' sim_data <- tibble(

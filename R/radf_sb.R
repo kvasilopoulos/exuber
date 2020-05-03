@@ -109,21 +109,21 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #'
 #' @references Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
-#' in search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
+#' In search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
 #'
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
-#' \code{\link{radf_wb_cv}} for Wild Bootstrapped critical values
+#' \code{\link{radf_wb_cv}} for wild Bootstrap critical values
 #'
-#' @return  For \code{radf_sb_cv} A list that contains the panel critical values
-#' for BSADF and GSADF t-statistics. For \code{radf_wb_dist} a numeric vector
-#' that contains panel GSADF distribution.
+#' @return  For \code{radf_sb_cv} A list A list that contains the critical values
+#' for the panel BSADF and panel GSADF test statistics. For \code{radf_wb_dist} a numeric vector
+#' that contains the distribution of the panel GSADF statistic.
 #'
 #' @examples
 #' \donttest{
 #'
 #' rsim_data <- radf(sim_data, lag = 1)
 #'
-#' # Panel critical vales should have the same lag length with the estimation
+#' # Critical vales should have the same lag length with \code{radf()}
 #' sb <- radf_sb_cv(sim_data, lag = 1)
 #'
 #' tidy(sb)

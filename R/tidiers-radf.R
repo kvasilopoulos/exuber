@@ -4,7 +4,7 @@
 #'
 #' @param x An object of class `radf_obj`.
 #' @param format Long or wide format (default = "wide").
-#' @param panel If TRUE then return the panel statistics
+#' @param panel If TRUE then returns the panel statistics
 #' @param ... Further arguments passed to methods. Not used.
 #'
 #' @importFrom purrr keep map reduce pluck
@@ -22,13 +22,13 @@
 #'
 #' rfd <- radf(dta)
 #'
-#' # Get the t-stat
+#' # Get the test statistic
 #' tidy(rfd)
 #'
-#' # Get the t-stat sequences
+#' # Get the test statisticsequences
 #' augment(rfd)
 #'
-#' # Get the panel t-stat
+#' # Get the panel test statistic
 #' tidy(rfd, panel = TRUE)
 #' }
 tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {

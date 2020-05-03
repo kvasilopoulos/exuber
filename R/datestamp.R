@@ -9,13 +9,12 @@
 #' reported (default = 0).
 #' @param ... further arguments passed to methods.
 #'
-#' @return Returns a list of values for each explosive sub-period, giving the origin
-#' and termination dates as well as the number of periods explosive behavior lasts.
+#' @return Returns a list containing the estimated origination and termination
+#' dates of  episodes of explosive behaviour and the corresponding duration.
 #' @details
-#' Datestamp also stores a vector in {0,1} that corresponds to {positive, negative}
-#' respectively, for all series throughout the time period. This output can be used as
-#' a dummy which indicates the occurrence of a bubble.
-#'
+#' Datestamp also stores a vector whose elements take the value of 1 when there is
+#' a period of explosive behaviour and 0 otherwise. This output can serve as a
+#' dummy variable for the occurrence of exuberance.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the

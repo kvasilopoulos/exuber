@@ -1,16 +1,18 @@
 #' Diagnostics on hypothesis testing
 #'
-#' Finds the series that reject the null hypothesis.
+#' Provides information on whether the null hypothesis of a unit root is rejected
+#' against the alternative of explosive behaviour for each series in a dataset.
 #'
 #' @param object  An object of class `obj`.
 #' @param cv An object of class `cv`.
-#' @param ... further arguments passed to methods.
+#' @param ... Further arguments passed to methods.
 #'
 #' @return Returns a list with the series that reject (positive) and the series
 #' that do not reject (negative) the null hypothesis, and at what significance level.
 #'
 #' @details
-#' Diagnostics also stores a vector in {0,1} that corresponds to {positive, negative} respectively.
+#' Diagnostics also stores a vector whose elements take the value of 1 when
+#' there is a period of explosive behaviour and 0 otherwise.
 #'
 #' @export
 diagnostics <- function(object, cv = NULL, ...) {
