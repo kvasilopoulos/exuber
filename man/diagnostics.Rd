@@ -14,7 +14,7 @@ diagnostics(object, cv = NULL, ...)
 
 \item{cv}{An object of class \code{cv}.}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{Further arguments passed to methods.}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 }
@@ -23,10 +23,12 @@ Returns a list with the series that reject (positive) and the series
 that do not reject (negative) the null hypothesis, and at what significance level.
 }
 \description{
-Finds the series that reject the null hypothesis.
+Provides information on whether the null hypothesis of a unit root is rejected
+against the alternative of explosive behaviour for each series in a dataset.
 }
 \details{
-Diagnostics also stores a vector in {0,1} that corresponds to {positive, negative} respectively.
+Diagnostics also stores a vector whose elements take the value of 1 when
+there is a period of explosive behaviour and 0 otherwise.
 }
 \examples{
 

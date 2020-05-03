@@ -7,7 +7,7 @@
 sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
 }
 \arguments{
-\item{n}{A strictly positive integer specifying the length of the simulated output series.}
+\item{n}{A positive integer specifying the length of the simulated output series.}
 
 \item{pi}{A positive value in (0, 1) which governs the probability of the bubble continuing to grow.}
 
@@ -15,7 +15,7 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
 
 \item{r}{A positive scalar that determines the growth rate of the bubble process.}
 
-\item{b0}{The initial value of the bubble}
+\item{b0}{The initial value of the bubble.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to

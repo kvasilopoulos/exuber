@@ -16,12 +16,12 @@ sim_data
 sim_data_wdate
 }
 \description{
-A dataset containing commonly known data generated processes (DGPs) used in the explosive
-time series literature.
+An artificial dataset containing series simulated from data generating processes
+widely used in the literature on speculative bubbles.
 }
 \examples{
 \dontrun{
-# The dataset can be easily replicated with the code belows
+# The dataset can be easily replicated with the code below
 library(tibble)
 set.seed(1122)
 sim_data <- tibble(

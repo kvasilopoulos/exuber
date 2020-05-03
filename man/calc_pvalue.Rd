@@ -9,7 +9,7 @@ calc_pvalue(x, distr = NULL)
 \arguments{
 \item{x}{A \code{radf_obj} object.}
 
-\item{distr}{A \code{radf_distr} object. Which type of distribution to use to calculate the p-values.}
+\item{distr}{A \code{radf_distr} object.}
 }
 \description{
 Calculate p-values from \code{distr} object

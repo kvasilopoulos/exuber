@@ -20,7 +20,7 @@ critical value.}
 \description{
 Tidy or augment  and then join objects of class \code{radf_obj} and \code{radf_cv}. The
 object of reference is the \code{radf_cv}. For example, if panel critical values
-are provided the function will return the panel t-statistics.
+are provided the function will return the panel test statistic.
 }
 \details{
 \code{tidy_join} also calls \code{augment_join} when \code{cv} is of class \code{sb_cv}.

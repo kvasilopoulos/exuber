@@ -14,7 +14,7 @@
 
 \item{format}{Long or wide format (default = "wide").}
 
-\item{panel}{If TRUE then return the panel statistics}
+\item{panel}{If TRUE then returns the panel statistics}
 
 \item{...}{Further arguments passed to methods. Not used.}
 }
@@ -30,13 +30,13 @@ dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
 
 rfd <- radf(dta)
 
-# Get the t-stat
+# Get the test statistic
 tidy(rfd)
 
-# Get the t-stat sequences
+# Get the test statisticsequences
 augment(rfd)
 
-# Get the panel t-stat
+# Get the panel test statistic
 tidy(rfd, panel = TRUE)
 }
 }

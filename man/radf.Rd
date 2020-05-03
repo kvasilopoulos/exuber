@@ -7,16 +7,16 @@
 radf(data, minw = NULL, lag = 0L)
 }
 \arguments{
-\item{data}{A univariate or multivariate numeric time series object, or a numeric
+\item{data}{A univariate or multivariate numeric time series object, a numeric
 vector or matrix, or a data.frame. The object should not have any NA values.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
 
-\item{lag}{A non-negative integer. The lag of the Augmented Dickey-Fuller regression (default = 0L).}
+\item{lag}{A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).}
 }
 \value{
-A list that contains the t-statistic (sequence) for:
+A list that contains the unit root test statistics (sequence):
 \item{adf}{Augmented Dickey-Fuller}
 \item{badf}{Backward Augmented Dickey-Fuller}
 \item{sadf}{Supremum Augmented Dickey-Fuller}
@@ -26,8 +26,7 @@ A list that contains the t-statistic (sequence) for:
 \item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
-\code{radf} returns the univariate and panel t-statistics from a recursive augmented
-Dickey-Fuller test.
+\code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics
 }
 \details{
 The \code{radf()} function is vectorized, i.e., it can handle multiple series

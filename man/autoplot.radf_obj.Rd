@@ -27,14 +27,15 @@ shade(fill = "grey70", opacity = 0.5, ...)
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 
-\item{min_duration}{the minimum duration.}
+\item{min_duration}{The minimum duration of an explosive period for it to be
+reported (default = 0).}
 
-\item{select_series}{A vector of column names or numbers to keep, drop the rest. The order that the series
-are specified do not determine the order in the plot}
+\item{select_series}{A vector of column names or numbers specifying the series to be used in plotting.
+Note that the order of the series does not alter the order used in plotting.}
 
 \item{include_negative}{If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
 
-\item{shade_opt}{Options for the shading of the graph, usually used through \code{shade} functions.}
+\item{shade_opt}{Shading options, typically set using \code{shade} function.}
 
 \item{include}{Argument name is deprecated and substituted with \code{include_negative}.}
 
@@ -42,16 +43,16 @@ are specified do not determine the order in the plot}
 
 \item{...}{Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
 
-\item{fill}{the shade color that indicates the exuberance periods.}
+\item{fill}{The shade color that indicates the exuberance periods.}
 
-\item{opacity}{the opacity of the shade color aka alpha.}
+\item{opacity}{The opacity of the shade color aka alpha.}
 }
 \value{
 A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
 }
 \description{
 \code{autoplot.radf_obj} takes \code{radf_obj} and \code{radf_cv} and returns a faceted ggplot object.
-\code{shade} is used as an input to \code{shape_opt} argument. \code{shade} modifies the
+\code{shade} is used as an input to \code{shape_opt}. \code{shade} modifies the
 geom_rect layer that demarcates the exuberance periods.
 }
 \examples{
