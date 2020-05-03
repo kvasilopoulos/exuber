@@ -15,7 +15,7 @@ sim_div(
 )
 }
 \arguments{
-\item{n}{A strictly positive integer specifying the length of the simulated output series.}
+\item{n}{A positive integer specifying the length of the simulated output series.}
 
 \item{mu}{A scalar indicating the drift.}
 
@@ -23,7 +23,7 @@ sim_div(
 
 \item{r}{A positive value indicating the discount factor.}
 
-\item{log}{A logical. If true dividends follow a lognormal distribution.}
+\item{log}{Logical. If true dividends follow a lognormal distribution.}
 
 \item{output}{A character string giving the fundamental price("pf") or
 dividend series("d"). Default is `pf'.}
@@ -42,7 +42,7 @@ A numeric vector of length n.
 Simulate (log) dividends from a random walk with drift.
 }
 \details{
-If log is set to FALSE (default value) the dividends follow:
+If log is set to FALSE (default value) dividends follow:
 
 \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t],}
 
@@ -57,7 +57,7 @@ If log is set to TRUE then dividends follow a lognormal distribution or log(divi
 \deqn{\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t}{ln(d[t]) = \mu + ln(d[t-1]) + \epsilon[t],}
 
 where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. Default parameters are
-\eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price for this case is:
+\eqn{\mu = 0.013}, \eqn{\sigma^2 = 0.16}. The fundamental price in this case is:
 
 \deqn{F_t = \frac{1+g}{r-g}d_t}{F[t] = (1 + g)/(r -g) * d[t],}
 

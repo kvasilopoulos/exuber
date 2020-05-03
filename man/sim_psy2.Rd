@@ -17,7 +17,7 @@ sim_psy2(
 )
 }
 \arguments{
-\item{n}{A strictly positive integer specifying the length of the simulated output series.}
+\item{n}{A positive integer specifying the length of the simulated output series.}
 
 \item{te1}{A scalar in (0, n) specifying the observation in which the first bubble originates.}
 
@@ -48,7 +48,7 @@ The following data generating process is similar to  \code{\link{sim_psy1}}, wit
 there are two episodes of mildly explosive dynamics.
 }
 \details{
-The data generating process is following from \code{\link{sim_psy1}} and is described by:
+The two-bubble data generating process is given by (see also \code{sim_psy1}):
 
 \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X_{\tau_{1f}}\right) 1\{t \in N_1\} }{
@@ -60,39 +60,38 @@ X[t]=X[t-1] 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
 \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 \epsilon[t] 1{t in N[0] union B[1] union B[2]},}
 
-where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is given:
+where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is:
 
 \deqn{\delta_T = 1 + cT^{-a}}{\delta[T] = 1 + c*T^{-a},}
 
 with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
-\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
-We use the notation
+\eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)},
 \eqn{N_0 = [1, \tau_{1e})}{N0 = [1, t1e)},
 \eqn{B_1 = [\tau_{1e}, \tau_{1f}]}{B1 = [te1, t1f]},
 \eqn{N_1 = (\tau_{1f}, \tau_{2e})}{N0 = (t1f, t2e)},
 \eqn{B_2 = [\tau_{2e}, \tau_{2f}]}{N0 = [t2e, t2f]},
 \eqn{N_2 = (\tau_{2f}, \tau]}{N0 = [t2f, t]},
 where \eqn{\tau}{t} is the last observation of the sample.
-The observations \eqn{\tau_{1e} = [T r_{1e}]}{te1 = [T re1]} and
+The observations \eqn{\tau_{1e} = [T r_{1e}]}{te1 = [T re1]}
 and \eqn{\tau_{1f} = [T r_{1f}]}{tf = [T r1f]}
 are the origination and termination dates of the first bubble;
 \eqn{\tau_{2e} = [T r_{2e}]}{te2 = [T re2]} and \eqn{\tau_{2f} = [T r_{2f}]}{tf = [T r2f]}
 are the origination and termination dates of the second bubble.
 After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
-The expansion process lasts until \eqn{\tau_{2f}}{t2f} and collapses to a value of
+Exuberance lasts lasts until \eqn{\tau_{2f}}{t2f} at which point the process collapses to a value of
 \eqn{X_{\tau_{2f}}}{X[t2f]}. The process then continues on a martingale path until the end of the
-sample period \eqn{\tau}{t}. The expansion duration of the first bubble is assumed to be longer than
+sample period \eqn{\tau}{t}. The duration of the first bubble is assumed to be longer than
 that of the second bubble, i.e. \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
 
 For further details you can refer to Phillips et al., (2015) p. 1055.
 }
 \examples{
-# 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively
+# 100 periods with bubble origination dates 20/60 and termination dates 40/70
 sim_psy2(n = 100, seed = 123) \%>\%
  autoplot()
 
-# 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively
+# 200 periods with bubble origination dates 40/120 and termination dates 80/140
 sim_psy2(n = 200, seed = 123) \%>\%
   autoplot()
 }

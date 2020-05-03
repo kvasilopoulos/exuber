@@ -17,18 +17,16 @@ psy_ds(n, rule = 1, delta = 1)
 \item{delta}{Frequency-dependent parameter. See details.}
 }
 \description{
-\code{psy_minw} proposes a minimum window and \code{psy_ds} proposes a rule of
-thumb to exclude periods of exuberance.
+\code{psy_minw} and \code{psy_ds} use the rules-of- thumb proposed by
+Phillips et al. (reference) to compute the minimum window size and the
+minimum duration of an episode of exuberance, respectively.
 }
 \details{
-Rules for \code{psy_ds()} are specified as follows:
+For the minimum duration period, \code{psy_ds} allows the user to choose from two rules:
 
 \deqn{rule_1 = \delta \log(n) \quad\& \quad rule_2 = \delta \log(n)/n}{rule_1 = d*log(n) & rule 2 = d*log(n)/n}
 
-\code{delta } depends on the frequency of the data and the minimal
-duration condition. For example, for a 30-year period, we set arbitrarily duration
-to exceed periods such as one year. Then, delta should be 0.7 for yearly data
-and 5 for monthly data.
+\code{delta } depends on the frequency of the data and the minimal duration condition.
 }
 \examples{
 psy_minw(100)
