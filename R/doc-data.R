@@ -1,7 +1,7 @@
 #' Stored Monte Carlo Critical Values
 #'
 #' A dataset containing Monte Carlo critical values for up to 600 observations
-#' generated using the deault minimum window. The critical values have been simulated and
+#' generated using the default minimum window. The critical values have been simulated and
 #' stored as data to save computation time for the user. The stored critical values
 #' can be obtained with the \code{\link[=radf_mc_cv]{radf_mc_cv()}} function, using
 #' nrep = `2000` and the `seed = 123`.

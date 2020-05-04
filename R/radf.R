@@ -1,6 +1,6 @@
 #' Recursive Augmented Dickey-Fuller Test
 #'
-#' \code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics
+#' \code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics.
 #'
 #' @param data A univariate or multivariate numeric time series object, a numeric
 #' vector or matrix, or a data.frame. The object should not have any NA values.
