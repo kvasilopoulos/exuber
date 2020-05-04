@@ -13,16 +13,22 @@
 
 ## R CMD check results 
 
-### devtools::check()  
+### devtools::check(args = c('--as-cran'))  
 
-There were no ERRORs and WARNINGs, with local checks or on remote checks.
+```r
+> checking for non-standard things in the check directory ... NOTE
+  Found the following files/directories:
+    'examples_i386' 'examples_x64' 'exuber-Ex_i386.Rout'
+    'exuber-Ex_x64.Rout' 'tests_i386' 'tests_x64'
+```
+0 errors √ | 0 warnings √ | 1 note x
 
-0 errors √ | 0 warnings √ | 0 notes √
-      
+   
 ### rhub::check_for_cran() & devtools::check_win_devel()
 
 0 ERRORS √ | 0 WARNINGS √ | 1 NOTE
 
+```r
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: ‘Kostas Vasilopoulos <k.vasilopoulo@gmail.com>’
 
@@ -32,11 +38,12 @@ Availability using Additional_repositories specification:
   exuberdata   yes   https://kvasilopoulos.github.io/drat
 
 Uses the superseded package: ‘doSNOW (>= 1.0.16)’
-
+```
   **(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)**
-  
+```r
 * checking package dependencies ... NOTE
 Package suggested but not available for checking: 'exuberdata'
+```
 
 ## Reverse dependencies
 
