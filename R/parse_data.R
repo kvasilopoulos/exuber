@@ -55,6 +55,9 @@ parse_dt.numeric <- function(x) {
 parse_data <- function(x) {
   lst <- parse_dt(x)
   matx <- as.matrix(lst$data)
+  if (is.character(matx)) {
+    stop_glue("non-numeric argument to data argument.")
+  }
   if (is.null(colnames(matx))) {
     colnames(matx) <- paste0("series", seq(1, ncol(matx), 1))
   }
