@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   message=FALSE
 )
+options(cli.width = 80)
 ```
 
 ```{r echo=FALSE, message=FALSE}
