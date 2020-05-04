@@ -55,8 +55,7 @@
   
 
 <meta property="og:title" content="Recursive Augmented Dickey-Fuller Test — radf" />
-<meta property="og:description" content="radf returns the univariate and panel t-statistics from a recursive augmented
-Dickey-Fuller test." />
+<meta property="og:description" content="radf returns the recursive univariate and panel Augmented Dickey-Fuller test statistics" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -168,8 +167,7 @@ Dickey-Fuller test." />
     </div>
 
     <div class="ref-description">
-    <p><code>radf</code> returns the univariate and panel t-statistics from a recursive augmented
-Dickey-Fuller test.</p>
+    <p><code>radf</code> returns the recursive univariate and panel Augmented Dickey-Fuller test statistics</p>
     </div>
 
     <pre class="usage"><span class='fu'>radf</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>lag</span> <span class='kw'>=</span> <span class='fl'>0L</span>)</pre>
@@ -179,7 +177,7 @@ Dickey-Fuller test.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A univariate or multivariate numeric time series object, or a numeric
+      <td><p>A univariate or multivariate numeric time series object, a numeric
 vector or matrix, or a data.frame. The object should not have any NA values.</p></td>
     </tr>
     <tr>
@@ -189,13 +187,13 @@ vector or matrix, or a data.frame. The object should not have any NA values.</p>
     </tr>
     <tr>
       <th>lag</th>
-      <td><p>A non-negative integer. The lag of the Augmented Dickey-Fuller regression (default = 0L).</p></td>
+      <td><p>A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list that contains the t-statistic (sequence) for:</p>
+    <p>A list that contains the unit root test statistics (sequence):</p>
 <dt>adf</dt><dd><p>Augmented Dickey-Fuller</p></dd>
 <dt>badf</dt><dd><p>Backward Augmented Dickey-Fuller</p></dd>
 <dt>sadf</dt><dd><p>Supremum Augmented Dickey-Fuller</p></dd>

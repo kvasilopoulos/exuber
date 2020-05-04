@@ -55,8 +55,9 @@
   
 
 <meta property="og:title" content="Helper functions in accordance to PSY(2015) — psy_minw" />
-<meta property="og:description" content="psy_minw proposes a minimum window and psy_ds proposes a rule of
-thumb to exclude periods of exuberance." />
+<meta property="og:description" content="psy_minw and psy_ds use the rules-of- thumb proposed by
+Phillips et al. (reference) to compute the minimum window size and the
+minimum duration of an episode of exuberance, respectively." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -168,8 +169,9 @@ thumb to exclude periods of exuberance." />
     </div>
 
     <div class="ref-description">
-    <p><code>psy_minw</code> proposes a minimum window and <code>psy_ds</code> proposes a rule of
-thumb to exclude periods of exuberance.</p>
+    <p><code>psy_minw</code> and <code>psy_ds</code> use the rules-of- thumb proposed by
+Phillips et al. (reference) to compute the minimum window size and the
+minimum duration of an episode of exuberance, respectively.</p>
     </div>
 
     <pre class="usage"><span class='fu'>psy_minw</span>(<span class='no'>n</span>)
@@ -195,12 +197,9 @@ thumb to exclude periods of exuberance.</p>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Rules for <code>psy_ds()</code> are specified as follows:</p>
+    <p>For the minimum duration period, <code>psy_ds</code> allows the user to choose from two rules:</p>
 <p>$$rule_1 = \delta \log(n) \quad\&amp; \quad rule_2 = \delta \log(n)/n$$</p>
-<p><code>delta </code> depends on the frequency of the data and the minimal
-duration condition. For example, for a 30-year period, we set arbitrarily duration
-to exceed periods such as one year. Then, delta should be 0.7 for yearly data
-and 5 for monthly data.</p>
+<p><code>delta </code> depends on the frequency of the data and the minimal duration condition.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Phillips, P. C. B., Shi, S., &amp; Yu, J. (2015). Testing for

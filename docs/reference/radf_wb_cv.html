@@ -165,7 +165,7 @@ computes the distribution." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Wild Bootstrap Critical Values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/wb_cv.R'><code>R/wb_cv.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/radf_wb.R'><code>R/radf_wb.R</code></a></small>
     <div class="hidden name"><code>radf_wb_cv.Rd</code></div>
     </div>
 
@@ -185,7 +185,7 @@ computes the distribution.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A univariate or multivariate numeric time series object, or a numeric
+      <td><p>A univariate or multivariate numeric time series object, a numeric
 vector or matrix, or a data.frame. The object should not have any NA values.</p></td>
     </tr>
     <tr>
@@ -215,8 +215,8 @@ the parallel and non-parallel option, even if they have the same seed.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>For <code>radf_wb_cv</code> a list that contains the critical values for ADF,
-BADF, BSADF and GSADF t-statistics. For <code>radf_wb_distr</code> a list that
+    <p>For <code>radf_wb_cv</code> a list that contains the critical values for the ADF,
+BADF, BSADF and GSADF tests. For <code>radf_wb_distr</code> a list that
 contains the ADF, SADF and GSADF distributions.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -234,7 +234,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='radf_mc_cv.html'>radf_mc_cv</a></code> for Monte Carlo critical values and
-<code><a href='radf_sb_cv.html'>radf_sb_cv</a></code> for Sieve Bootstrapped critical values</p></div>
+<code><a href='radf_sb_cv.html'>radf_sb_cv</a></code> for sieve bootstrap critical values.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
