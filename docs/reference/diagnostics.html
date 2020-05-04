@@ -55,7 +55,8 @@
   
 
 <meta property="og:title" content="Diagnostics on hypothesis testing — diagnostics" />
-<meta property="og:description" content="Finds the series that reject the null hypothesis." />
+<meta property="og:description" content="Provides information on whether the null hypothesis of a unit root is rejected
+against the alternative of explosive behaviour for each series in a dataset." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -167,7 +168,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Finds the series that reject the null hypothesis.</p>
+    <p>Provides information on whether the null hypothesis of a unit root is rejected
+against the alternative of explosive behaviour for each series in a dataset.</p>
     </div>
 
     <pre class="usage"><span class='fu'>diagnostics</span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
@@ -188,7 +190,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to methods.</p></td>
+      <td><p>Further arguments passed to methods.</p></td>
     </tr>
     <tr>
       <th>option</th>
@@ -202,7 +204,8 @@
 that do not reject (negative) the null hypothesis, and at what significance level.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Diagnostics also stores a vector in 0,1 that corresponds to positive, negative respectively.</p>
+    <p>Diagnostics also stores a vector whose elements take the value of 1 when
+there is a period of explosive behaviour and 0 otherwise.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>

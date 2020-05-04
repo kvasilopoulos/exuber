@@ -6,6 +6,7 @@ build_reference:
 	Rscript -e "pkgdown::build_reference()"
 
 build_site:
+	Rscript -e "devtools::document(roclets = c('rd', 'collate', 'namespace'))"
 	Rscript -e "pkgdown::build_site()"
 	sed -i 's/MartÃ­nez-GarcÃ­a/Martínez-García/g' docs/authors.html
 

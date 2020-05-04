@@ -187,7 +187,7 @@ process and then back to a martingale.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>A strictly positive integer specifying the length of the simulated output series.</p></td>
+      <td><p>A positive integer specifying the length of the simulated output series.</p></td>
     </tr>
     <tr>
       <th>te</th>
@@ -235,13 +235,13 @@ $$</p>
 \(\epsilon \sim iid(0, \sigma^2)\) and
 \(X_{\tau_f} = X_{\tau_e} + X'\) with \(X' = O_p(1)\),
 \(\tau_e = [T r_e]\) dates the origination of the bubble,
-and \(\tau_f = [T r_f]\) dates the termination of the bubble collapse.
-During the pre- and post- bubble periods, \(N_0 = [1, \tau_e)\),
-X is a pure random walk process. During the bubble expansion period \(B = [\tau_e, \tau_f]\) is a
-mildly explosive process with expansion rate given by the autoregressive
-coefficient \(\delta_T\), and continues its martingale path for the subsequent period
-\(N_1 = (\tau_f, \tau]\).</p>
-<p>For further details you can refer to Phillips et al. (2015) p. 1054.</p>
+and \(\tau_f = [T r_f]\) dates the collapse of the bubble.
+During the pre- and post- bubble periods, \([1, \tau_e)\),
+\(X_t\) is a pure random walk process. During the bubble expansion period
+\(\tau_e, \tau_f]\) becomes a mildly explosive process with expansion rate
+given by the autoregressive coefficient \(\delta_T\); and, finally
+during the post-bubble period, \((\tau_f, \tau]\)  \(X_t\) reverts to a martingale.</p>
+<p>For further details see Phillips et al. (2015) p. 1054.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Phillips, P. C. B., Shi, S., &amp; Yu, J. (2015). Testing for Multiple Bubbles:
