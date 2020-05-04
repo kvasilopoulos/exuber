@@ -29,21 +29,21 @@ col_names <- function(x) {
 #' @export
 mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
   .Deprecated(new = "radf_mc_cv()", package = "exuber")
-  radf_mc_cv(n, minw = NULL, nrep = 1000L, seed = NULL)
+  radf_mc_cv(n, minw = minw, nrep = nrep, seed = seed)
 }
 
 #' @rdname exuber-deprecated
 #' @export
 wb_cv <- function(data, minw = NULL, nboot = 1000L, seed = NULL) {
   .Deprecated(new = "radf_wb_cv()", package = "exuber")
-  radf_wb_cv(data, minw = NULL, nboot = 1000L, seed = NULL)
+  radf_wb_cv(data, minw = minw, nboot = nboot, seed = seed)
 }
 
 #' @rdname exuber-deprecated
 #' @export
 sb_cv <- function(data, minw = NULL, nboot = 1000L, seed = NULL) {
   .Deprecated(new = "radf_sb_cv()", package = "exuber")
-  radf_sb_cv(data, minw = NULL, nboot = 1000L, seed = NULL)
+  radf_sb_cv(data, minw = minw, nboot = nboot, seed = seed)
 }
 
 
