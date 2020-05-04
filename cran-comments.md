@@ -6,9 +6,7 @@
   * GitHub actions (windows): release
   * Github actions (OS X): release, devel
 * Rhub
-  * Windows Server 2008 R2 SP1, R-devel, 32/64 bit
   * Debian Linux, R-devel, GCC ASAN/UBSAN
-  * Ubuntu Linux 16.04 LTS, R-release, GCC
   * Fedora Linux, R-devel, clang, gfortran
 * win-builder (devel)
 
@@ -27,7 +25,7 @@
    
 ### rhub::check_for_cran() & devtools::check_win_devel()
 
-0 ERRORS √ | 0 WARNINGS √ | 1 NOTE
+0 ERRORS √ | 0 WARNINGS √ | 2 NOTEs
 
 ```r
 * checking CRAN incoming feasibility ... NOTE

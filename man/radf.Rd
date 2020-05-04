@@ -36,7 +36,7 @@ additional cost incurred.
 }
 \examples{
 \donttest{
-# We will use simulated data that are stored as data with the name `sim_data`
+# We will use simulated data that are stored as data
 sim_data
 
 rsim <- radf(sim_data)
