@@ -26,7 +26,7 @@ A list that contains the unit root test statistics (sequence):
 \item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
-\code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics
+\code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics.
 }
 \details{
 The \code{radf()} function is vectorized, i.e., it can handle multiple series
