@@ -56,7 +56,7 @@
 
 <meta property="og:title" content="Plotting <code>radf</code> models — autoplot.radf_obj" />
 <meta property="og:description" content="autoplot.radf_obj takes radf_obj and radf_cv and returns a faceted ggplot object.
-shade is used as an input to shape_opt argument. shade modifies the
+shade is used as an input to shape_opt. shade modifies the
 geom_rect layer that demarcates the exuberance periods." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -170,7 +170,7 @@ geom_rect layer that demarcates the exuberance periods." />
 
     <div class="ref-description">
     <p><code>autoplot.radf_obj</code> takes <code>radf_obj</code> and <code>radf_cv</code> and returns a faceted ggplot object.
-<code>shade</code> is used as an input to <code>shape_opt</code> argument. <code>shade</code> modifies the
+<code>shade</code> is used as an input to <code>shape_opt</code>. <code>shade</code> modifies the
 geom_rect layer that demarcates the exuberance periods.</p>
     </div>
 
@@ -207,12 +207,13 @@ geom_rect layer that demarcates the exuberance periods.</p>
     </tr>
     <tr>
       <th>min_duration</th>
-      <td><p>the minimum duration.</p></td>
+      <td><p>The minimum duration of an explosive period for it to be
+reported (default = 0).</p></td>
     </tr>
     <tr>
       <th>select_series</th>
-      <td><p>A vector of column names or numbers to keep, drop the rest. The order that the series
-are specified do not determine the order in the plot</p></td>
+      <td><p>A vector of column names or numbers specifying the series to be used in plotting.
+Note that the order of the series does not alter the order used in plotting.</p></td>
     </tr>
     <tr>
       <th>include_negative</th>
@@ -220,7 +221,7 @@ are specified do not determine the order in the plot</p></td>
     </tr>
     <tr>
       <th>shade_opt</th>
-      <td><p>Options for the shading of the graph, usually used through <code>shade</code> functions.</p></td>
+      <td><p>Shading options, typically set using <code>shade</code> function.</p></td>
     </tr>
     <tr>
       <th>include</th>
@@ -236,11 +237,11 @@ are specified do not determine the order in the plot</p></td>
     </tr>
     <tr>
       <th>fill</th>
-      <td><p>the shade color that indicates the exuberance periods.</p></td>
+      <td><p>The shade color that indicates the exuberance periods.</p></td>
     </tr>
     <tr>
       <th>opacity</th>
-      <td><p>the opacity of the shade color aka alpha.</p></td>
+      <td><p>The opacity of the shade color aka alpha.</p></td>
     </tr>
     </table>
 
