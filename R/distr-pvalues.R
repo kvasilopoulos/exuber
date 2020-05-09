@@ -25,7 +25,7 @@ calc_pvalue <- function(x, distr = NULL) {
 
   assert_class(x, "radf")
   if (is.null(distr)) {
-    message_glue("Using 'mc_distr' for 'distr'.")
+    message_glue("Using `radf_mc_distr` for `distr`.")
     distr <- radf_mc_distr(attr(x, "n"), minw = attr(x, "minw"))
   }
   assert_class(distr, "distr"

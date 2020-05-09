@@ -1,3 +1,7 @@
+# exuber 0.4.1
+
+Maintenance release for compatibility with dplyr v1.0.0.
+
 # exuber 0.4.0
 
 ## Design

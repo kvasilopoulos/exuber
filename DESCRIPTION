@@ -42,7 +42,6 @@ Imports:
     ggplot2 (>= 3.1.1),
     glue (>= 1.3.1),
     lubridate (>= 1.7.4),
-    magrittr (>= 1.5),
     parallel,
     purrr (>= 0.3.2),
     Rcpp (>= 0.12.17),
@@ -51,6 +50,7 @@ Imports:
     tidyr (>= 0.8.3),
     vctrs (>= 0.2.4)
 Suggests:
+    magrittr (>= 1.5),
     clisymbols (>= 1.2.0),
     covr (>= 3.2.1),
     exuberdata (>= 0.1.0),
