@@ -87,7 +87,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #'
 #' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar% %do%
+#' @importFrom foreach foreach %do%
 #' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats quantile rnorm runif
 #' @importFrom lubridate is.Date
