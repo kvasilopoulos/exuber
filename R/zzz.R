@@ -21,6 +21,10 @@
   has_exuberdata <- requireNamespace("exuberdata", quietly = TRUE)
   .pkgenv[["has_exuberdata"]] <- has_exuberdata
 
+  repos <- getOption("repos")
+  repos["kvasilopoulos"] = "https://kvasilopoulos.github.io/drat/"
+  options(repos = repos)
+
   invisible()
 }
 
