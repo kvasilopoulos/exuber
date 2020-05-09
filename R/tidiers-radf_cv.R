@@ -157,9 +157,13 @@ augment_radf_cv.mc_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv
 }
 
+#' @importFrom rlang as_function
 augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
 
   iternames <- x %>% pluck("badf_cv") %>% dimnames() %>% `[[`(3)
+  iternames_lgl <- c(FALSE, rep(TRUE, length(iternames) - 1))
+
+  rm_duplicate_sig <- rlang::as_function(~ if(.y) .x[,-1] else .x)
 
   tbl_cv <-
     bind_rows(
@@ -168,6 +172,7 @@ augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
         set_names(iternames) %>%
         map(as_tibble) %>%
         map2(iternames, ~ .x %>% gather(sig, !!(.y))) %>%
+        map2(iternames_lgl, rm_duplicate_sig) %>%
         reduce(bind_cols) %>%
         mutate(name = "badf") %>%
         select(sig, name, iternames),
@@ -176,6 +181,7 @@ augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
         set_names(iternames) %>%
         map(as_tibble) %>%
         map2(iternames, ~ .x %>% gather(sig, !!(.y))) %>%
+        map2(iternames_lgl, rm_duplicate_sig) %>%
         reduce(bind_cols) %>%
         mutate(name = "bsadf") %>%
         select(sig, name, iternames)
