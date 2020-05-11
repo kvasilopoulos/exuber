@@ -1,6 +1,9 @@
+
+Maintenance release for compatibility with the upcoming release of dplyr v1.0.0.
+
 ## Test environments
 
-* local OS MS install, R 4.0.0
+* local OS MS install, R 4.0.1
 * Continuous Integration
   * GitHub actions (ubuntu-16.04): release
   * GitHub actions (windows): release
