@@ -95,7 +95,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Default minimum window
 #' mc <- radf_mc_cv(n = 100)
 #'
