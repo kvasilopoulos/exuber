@@ -98,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -186,7 +186,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>A strictly positive integer specifying the length of the simulated output series.</p></td>
+      <td><p>A positive integer specifying the length of the simulated output series.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
@@ -214,12 +214,12 @@
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>An object specifying if and how the random number generator(rng)
+      <td><p>An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.</p></td>
+the parallel and non-parallel option, even if they have the same seed.</p></td>
     </tr>
     </table>
 
@@ -234,10 +234,10 @@ The default value of <code>r</code> is 0.05.
 The function checks whether <code>alpha</code> and <code>delta</code> satisfy this condition and will return an error if not.</p>
 <p>The Evans bubble has two regimes. If \(B_t \leq \alpha\) the bubble grows at an average rate of \(1 + r\):</p>
 <p>$$B_{t+1} = (1+r) B_t u_{t+1},$$</p>
-<p>When \(B_t &gt; \alpha\) the bubble expands at an increased rate of \((1+r)\pi^{-1}\):</p>
+<p>When \(B_t &gt; \alpha\) the bubble expands at the increased rate of \((1+r)\pi^{-1}\):</p>
 <p>$$B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )]u_{t+1},$$</p>
-<p>where \(\theta\) is an indicator function taking a value of 0 with probability \(1-\pi\) and 1 with probability \(\pi\).
-In this secondary phase there is a probability (\(1-\pi\)) that the bubble collapses to <code>delta</code> and the process starts again.
+<p>where \(\theta\) theta is a binary variable that takes the value 0 with probability \(1-\pi\) and 1 with probability \(\pi\).
+In the second phase, there is a (\(1-\pi\))  probability of the bubble process collapsing to <code>delta</code>.
 By modifying the values of <code>delta</code>, <code>alpha</code> and <code>pi</code> the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 

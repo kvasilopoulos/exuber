@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -143,7 +143,8 @@
 <h2 class="hasAnchor">
 <a href="#same-appearance-with-new-features" class="anchor"></a>Same Appearance with New Features</h2>
 <p>The visual output of autoplot in <code>v0.4.0</code> is exactly the same as before.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>)
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_rect).</span></pre></body></html></div>
 <p><img src="plotting_files/figure-html/autoplot-basic-1.png" width="960"> However, almost all aspects of the plot can be easily changed.</p>
 <div id="change-color-and-theme" class="section level3">
 <h3 class="hasAnchor">
@@ -151,14 +152,16 @@
 <p>The custom color for autoplot are “blue and”red", however the user can easily override this option with <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">ggplot2::scale_color_manual</a></code>.</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>) +
   <span class="fu">scale_color_manual</span>(<span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"grey"</span>,<span class="st">"black"</span>)) +
-  <span class="fu">theme_classic</span>()</pre></body></html></div>
+  <span class="fu">theme_classic</span>()
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_rect).</span></pre></body></html></div>
 <p><img src="plotting_files/figure-html/autoplot-color-theme-1.png" width="960"></p>
 </div>
 <div id="changed-the-shaded-region-with-shade_opt" class="section level3">
 <h3 class="hasAnchor">
 <a href="#changed-the-shaded-region-with-shade_opt" class="anchor"></a>Changed the shaded region with shade_opt</h3>
 <p><code>shade_opt</code> allows the user to manipulate the <code>geom_rect()</code> layer of the ggplot, using the <code>shade</code> function. Alternatively, it can be omitted if it set to <code>NULL</code>.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">shade_opt</span> <span class="kw">=</span> <span class="fu"><a href="../reference/autoplot.radf_obj.html">shade</a></span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="st">"pink"</span>, <span class="kw">opacity</span> <span class="kw">=</span> <span class="fl">0.3</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">shade_opt</span> <span class="kw">=</span> <span class="fu"><a href="../reference/autoplot.radf_obj.html">shade</a></span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="st">"pink"</span>, <span class="kw">opacity</span> <span class="kw">=</span> <span class="fl">0.3</span>))
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_rect).</span></pre></body></html></div>
 <p><img src="plotting_files/figure-html/autoplot-shade-1.png" width="960"></p>
 </div>
 </div>
@@ -241,7 +244,8 @@
 <span class="no">plot_list2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">positive_series</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">estimation</span>, <span class="no">crit_values</span>, <span class="kw">select_series</span> <span class="kw">=</span> <span class="no">x</span>))
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">plot_list2</span>) <span class="kw">&lt;-</span> <span class="no">positive_series</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="kw pkg">gridExtra</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>, <span class="no">plot_list1</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="kw pkg">gridExtra</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>, <span class="no">plot_list1</span>)
+<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_rect).</span></pre></body></html></div>
 <p><img src="plotting_files/figure-html/lapply-arrange-1.png" width="960"></p>
 <p>With the old functionality you had to make changes one at a time</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">plot_list1</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="no">plot_list1</span><span class="kw">[[</span><span class="fl">1</span>]] + <span class="fu">theme_classic</span>()</pre></body></html></div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate p-values — calc_pvalue • exuber</title>
+<title>Calculate p-values from <code>distr</code> object — calc_pvalue • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,8 +54,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Calculate p-values — calc_pvalue" />
-<meta property="og:description" content="Calculate p-values" />
+<meta property="og:title" content="Calculate p-values from <code>distr</code> object — calc_pvalue" />
+<meta property="og:description" content="Calculate p-values from distr object" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -98,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -161,13 +161,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate p-values</h1>
+    <h1>Calculate p-values from <code>distr</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/distr-pvalues.R'><code>R/distr-pvalues.R</code></a></small>
     <div class="hidden name"><code>calc_pvalue.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate p-values</p>
+    <p>Calculate p-values from <code>distr</code> object</p>
     </div>
 
     <pre class="usage"><span class='fu'>calc_pvalue</span>(<span class='no'>x</span>, <span class='kw'>distr</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
@@ -177,11 +177,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An 'radf' object</p></td>
+      <td><p>A <code>radf_obj</code> object.</p></td>
     </tr>
     <tr>
       <th>distr</th>
-      <td><p>Which type of distribution to use to calculate the p-values</p></td>
+      <td><p>A <code>radf_distr</code> object.</p></td>
     </tr>
     </table>
 
@@ -194,7 +194,7 @@
 <span class='fu'>calc_pvalue</span>(<span class='no'>radf_psy1</span>)
 
 <span class='co'># Using the Wild-Bootstrapped</span>
-<span class='no'>wb_psy1</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_dist</span>(<span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>))
+<span class='no'>wb_psy1</span> <span class='kw'>&lt;-</span> <span class='fu'>wb_distr</span>(<span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span>(<span class='fl'>100</span>))
 
 <span class='fu'>calc_pvalue</span>(<span class='no'>radf_psy1</span>, <span class='no'>wb_psy1</span>)
 }</div></pre>

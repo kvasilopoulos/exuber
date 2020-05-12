@@ -98,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -185,7 +185,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>A strictly positive integer specifying the length of the simulated output series.</p></td>
+      <td><p>A positive integer specifying the length of the simulated output series.</p></td>
     </tr>
     <tr>
       <th>mu</th>
@@ -201,7 +201,7 @@
     </tr>
     <tr>
       <th>log</th>
-      <td><p>A logical. If true dividends follow a lognormal distribution.</p></td>
+      <td><p>Logical. If true dividends follow a lognormal distribution.</p></td>
     </tr>
     <tr>
       <th>output</th>
@@ -210,12 +210,12 @@ dividend series("d"). Default is `pf'.</p></td>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>An object specifying if and how the random number generator(rng)
+      <td><p>An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.</p></td>
+the parallel and non-parallel option, even if they have the same seed.</p></td>
     </tr>
     </table>
 
@@ -224,7 +224,7 @@ in parallel and non-parallel, even if they have the same seed.</p></td>
     <p>A numeric vector of length n.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If log is set to FALSE (default value) the dividends follow:</p>
+    <p>If log is set to FALSE (default value) dividends follow:</p>
 <p>$$d_t = \mu + d_{t-1} + \epsilon_t$$</p>
 <p>where \(\epsilon \sim \mathcal{N}(0, \sigma^2)\). The default parameters
 are \(\mu = 0.0373\), \(\sigma^2 = 0.1574\) and \(d[0] = 1.3\) (the initial value of the dividend sequence).
@@ -233,7 +233,7 @@ The above equation can be solved to yield the fundamental price:</p>
 <p>If log is set to TRUE then dividends follow a lognormal distribution or log(dividends) follow:</p>
 <p>$$\ln(d_t) = \mu + \ln(d_{t-1}) + \epsilon_t$$</p>
 <p>where \(\epsilon \sim \mathcal{N}(0, \sigma^2)\). Default parameters are
-\(\mu = 0.013\), \(\sigma^2 = 0.16\). The fundamental price for this case is:</p>
+\(\mu = 0.013\), \(\sigma^2 = 0.16\). The fundamental price in this case is:</p>
 <p>$$F_t = \frac{1+g}{r-g}d_t$$</p>
 <p>where \(1+g=\exp(\mu+\sigma^2/2)\).
 All default parameter values are those suggested by West (1988).</p>

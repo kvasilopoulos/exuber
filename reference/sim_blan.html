@@ -98,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>A strictly positive integer specifying the length of the simulated output series.</p></td>
+      <td><p>A positive integer specifying the length of the simulated output series.</p></td>
     </tr>
     <tr>
       <th>pi</th>
@@ -193,16 +193,16 @@
     </tr>
     <tr>
       <th>b0</th>
-      <td><p>The initial value of the bubble</p></td>
+      <td><p>The initial value of the bubble.</p></td>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>An object specifying if and how the random number generator(rng)
+      <td><p>An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.</p></td>
+the parallel and non-parallel option, even if they have the same seed.</p></td>
     </tr>
     </table>
 

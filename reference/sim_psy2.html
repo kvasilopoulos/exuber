@@ -99,7 +99,7 @@ there are two episodes of mildly explosive dynamics." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -189,7 +189,7 @@ there are two episodes of mildly explosive dynamics.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>n</th>
-      <td><p>A strictly positive integer specifying the length of the simulated output series.</p></td>
+      <td><p>A positive integer specifying the length of the simulated output series.</p></td>
     </tr>
     <tr>
       <th>te1</th>
@@ -221,12 +221,12 @@ there are two episodes of mildly explosive dynamics.</p>
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>An object specifying if and how the random number generator(rng)
+      <td><p>An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 <code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
-in parallel and non-parallel, even if they have the same seed.</p></td>
+the parallel and non-parallel option, even if they have the same seed.</p></td>
     </tr>
     </table>
 
@@ -235,32 +235,31 @@ in parallel and non-parallel, even if they have the same seed.</p></td>
     <p>A numeric vector of length <code>n</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The data generating process is following from <code><a href='sim_psy1.html'>sim_psy1</a></code> and is described by:</p>
+    <p>The two-bubble data generating process is given by (see also <code>sim_psy1</code>):</p>
 <p>$$X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
 \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X_{\tau_{1f}}\right) 1\{t \in N_1\} $$</p>
 <p>$$ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X_{\tau_{2f}}\right) 1\{t \in N_2\} +
 \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}$$</p>
-<p>where the autoregressive coefficient \(\delta_T\) is given:</p>
+<p>where the autoregressive coefficient \(\delta_T\) is:</p>
 <p>$$\delta_T = 1 + cT^{-a}$$</p>
 <p>with \(c&gt;0\), \(\alpha \in (0,1)\),
-\(\epsilon \sim iid(0, \sigma^2)\).
-We use the notation
+\(\epsilon \sim iid(0, \sigma^2)\),
 \(N_0 = [1, \tau_{1e})\),
 \(B_1 = [\tau_{1e}, \tau_{1f}]\),
 \(N_1 = (\tau_{1f}, \tau_{2e})\),
 \(B_2 = [\tau_{2e}, \tau_{2f}]\),
 \(N_2 = (\tau_{2f}, \tau]\),
 where \(\tau\) is the last observation of the sample.
-The observations \(\tau_{1e} = [T r_{1e}]\) and
+The observations \(\tau_{1e} = [T r_{1e}]\)
 and \(\tau_{1f} = [T r_{1f}]\)
 are the origination and termination dates of the first bubble;
 \(\tau_{2e} = [T r_{2e}]\) and \(\tau_{2f} = [T r_{2f}]\)
 are the origination and termination dates of the second bubble.
 After the collapse of the first bubble, \(X_t\) resumes a martingale path until time
 \(\tau_{2e}-1\), and a second episode of exuberance begins at \(\tau_{2e}\).
-The expansion process lasts until \(\tau_{2f}\) and collapses to a value of
+Exuberance lasts lasts until \(\tau_{2f}\) at which point the process collapses to a value of
 \(X_{\tau_{2f}}\). The process then continues on a martingale path until the end of the
-sample period \(\tau\). The expansion duration of the first bubble is assumed to be longer than
+sample period \(\tau\). The duration of the first bubble is assumed to be longer than
 that of the second bubble, i.e. \(\tau_{1f}-\tau_{1e}&gt;\tau_{2f}-\tau_{2e}\).</p>
 <p>For further details you can refer to Phillips et al., (2015) p. 1055.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -273,10 +272,10 @@ Historical Episodes of Exuberance and Collapse in the S&amp;P 500. International
     <div class='dont-index'><p><code><a href='sim_psy1.html'>sim_psy1</a></code>, <code><a href='sim_blan.html'>sim_blan</a></code>, <code><a href='sim_evans.html'>sim_evans</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># 100 periods with bubble origination dates 20/60 and termination dates 40/70 respectively</span>
+    <pre class="examples"><div class='input'><span class='co'># 100 periods with bubble origination dates 20/60 and termination dates 40/70</span>
 <span class='fu'>sim_psy2</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>) <span class='kw'>%&gt;%</span>
  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='img'><img src='sim_psy2-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># 200 periods with bubble origination dates 40/120 and termination dates 80/140 respectively</span>
+<span class='co'># 200 periods with bubble origination dates 40/120 and termination dates 80/140</span>
 <span class='fu'>sim_psy2</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>123</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='img'><img src='sim_psy2-2.png' alt='' width='700' height='433' /></div></pre>
   </div>

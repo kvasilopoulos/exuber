@@ -55,10 +55,9 @@
   
 
 <meta property="og:title" content="Tidy into a joint model — tidy_join.radf_obj" />
-<meta property="og:description" content="Tidy, augment or glance, and then join objects of class radf_obj and radf_cv. The
-object of reference should be the radf_obj. For example, using glance in an
-radf object returns the panel statistic, so glance_join returns the panel
-statistic together with the critical values." />
+<meta property="og:description" content="Tidy or augment  and then join objects of class radf_obj and radf_cv. The
+object of reference is the radf_cv. For example, if panel critical values
+are provided the function will return the panel test statistic." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -101,7 +100,7 @@ statistic together with the critical values." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -170,20 +169,16 @@ statistic together with the critical values." />
     </div>
 
     <div class="ref-description">
-    <p>Tidy, augment or glance, and then join objects of class <code>radf_obj</code> and <code>radf_cv</code>. The
-object of reference should be the <code>radf_obj</code>. For example, using <code>glance</code> in an
-radf object returns the panel statistic, so <code>glance_join</code> returns the panel
-statistic together with the critical values.</p>
+    <p>Tidy or augment  and then join objects of class <code>radf_obj</code> and <code>radf_cv</code>. The
+object of reference is the <code>radf_cv</code>. For example, if panel critical values
+are provided the function will return the panel test statistic.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf_obj</span>
 <span class='fu'><a href='tidy_join.html'>tidy_join</a></span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for radf_obj</span>
-<span class='fu'><a href='tidy_join.html'>augment_join</a></span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for radf_obj</span>
-<span class='fu'><a href='tidy_join.html'>glance_join</a></span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='tidy_join.html'>augment_join</a></span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

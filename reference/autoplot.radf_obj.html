@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plotting a <code>radf_obj</code> object — autoplot.radf_obj • exuber</title>
+<title>Plotting <code>radf</code> models — autoplot.radf_obj • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -54,9 +54,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Plotting a <code>radf_obj</code> object — autoplot.radf_obj" />
-<meta property="og:description" content="autoplot.radf_obj takes an radf_obj object and returns a faceted ggplot object.
-shade is used as an input to shape_opt argument in. shade modifies the
+<meta property="og:title" content="Plotting <code>radf</code> models — autoplot.radf_obj" />
+<meta property="og:description" content="autoplot.radf_obj takes radf_obj and radf_cv and returns a faceted ggplot object.
+shade is used as an input to shape_opt. shade modifies the
 geom_rect layer that demarcates the exuberance periods." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -100,7 +100,7 @@ geom_rect layer that demarcates the exuberance periods." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -163,14 +163,14 @@ geom_rect layer that demarcates the exuberance periods." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plotting a <code>radf_obj</code> object</h1>
+    <h1>Plotting <code>radf</code> models</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot-radf.R'><code>R/autoplot-radf.R</code></a></small>
     <div class="hidden name"><code>autoplot.radf_obj.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>autoplot.radf_obj</code> takes an <code>radf_obj</code> object and returns a faceted ggplot object.
-<code>shade</code> is used as an input to <code>shape_opt</code> argument in. <code>shade</code> modifies the
+    <p><code>autoplot.radf_obj</code> takes <code>radf_obj</code> and <code>radf_cv</code> and returns a faceted ggplot object.
+<code>shade</code> is used as an input to <code>shape_opt</code>. <code>shade</code> modifies the
 geom_rect layer that demarcates the exuberance periods.</p>
     </div>
 
@@ -207,12 +207,13 @@ geom_rect layer that demarcates the exuberance periods.</p>
     </tr>
     <tr>
       <th>min_duration</th>
-      <td><p>the minimum duration.</p></td>
+      <td><p>The minimum duration of an explosive period for it to be
+reported (default = 0).</p></td>
     </tr>
     <tr>
       <th>select_series</th>
-      <td><p>A vector of column names or numbers to keep, drop the rest. The order that the series
-are specified do not determine the order in the result.</p></td>
+      <td><p>A vector of column names or numbers specifying the series to be used in plotting.
+Note that the order of the series does not alter the order used in plotting.</p></td>
     </tr>
     <tr>
       <th>include_negative</th>
@@ -220,7 +221,7 @@ are specified do not determine the order in the result.</p></td>
     </tr>
     <tr>
       <th>shade_opt</th>
-      <td><p>Options for the shading of the graph, usually used through <code>shade</code> functions.</p></td>
+      <td><p>Shading options, typically set using <code>shade</code> function.</p></td>
     </tr>
     <tr>
       <th>include</th>
@@ -236,22 +237,25 @@ are specified do not determine the order in the result.</p></td>
     </tr>
     <tr>
       <th>fill</th>
-      <td><p>the shade color that indicates the exuberance periods.</p></td>
+      <td><p>The shade color that indicates the exuberance periods.</p></td>
     </tr>
     <tr>
       <th>opacity</th>
-      <td><p>the opacity of the shade color aka alpha.</p></td>
+      <td><p>The opacity of the shade color aka alpha.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data_wdate</span>)</div><div class='output co'>#&gt; <span class='message'>Using `date` as index variable.</span></div><div class='input'>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Modify facet_wrap options through ellipsis</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free_y"</span>, <span class='kw'>dir</span>  <span class='kw'>=</span> <span class='st'>"v"</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.5</span>))</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free_y"</span>, <span class='kw'>dir</span>  <span class='kw'>=</span> <span class='st'>"v"</span>)</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>shade_opt</span> <span class='kw'>=</span> <span class='fu'>shade</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>opacity</span> <span class='kw'>=</span> <span class='fl'>0.5</span>))</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># We will need ggplot2 from here on out</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)
 
@@ -259,24 +263,24 @@ are specified do not determine the order in the result.</p></td>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>) +
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_color_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"black"</span>, <span class='st'>"black"</span>)) +
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_size_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.9</span>, <span class='fl'>1</span>)) +
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_linetype_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"solid"</span>, <span class='st'>"solid"</span>))</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_linetype_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"solid"</span>, <span class='st'>"solid"</span>))</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
 #&gt; <span class='message'>which will replace the existing scale.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'size' is already present. Adding another scale for 'size', which</span>
 #&gt; <span class='message'>will replace the existing scale.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'linetype' is already present. Adding another scale for 'linetype',</span>
 #&gt; <span class='message'>which will replace the existing scale.</span></div><div class='img'><img src='autoplot.radf_obj-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change names through labeller (first way)</span>
 <span class='no'>custom_labels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"psy1"</span> <span class='kw'>=</span> <span class='st'>"new_name_for_psy1"</span>, <span class='st'>"psy2"</span> <span class='kw'>=</span> <span class='st'>"new_name_for_psy2"</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller</a></span>(<span class='kw'>.default</span> <span class='kw'>=</span> <span class='no'>label_value</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/as_labeller.html'>as_labeller</a></span>(<span class='no'>custom_labels</span>)))</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller</a></span>(<span class='kw'>.default</span> <span class='kw'>=</span> <span class='no'>label_value</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/as_labeller.html'>as_labeller</a></span>(<span class='no'>custom_labels</span>)))</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change names through labeller (second way)</span>
 <span class='no'>custom_labels2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='series_names.html'>series_names</a></span>(<span class='no'>rsim_data</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>custom_labels2</span>) <span class='kw'>&lt;-</span> <span class='no'>custom_labels2</span>
 <span class='no'>custom_labels2</span>[<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>3</span>,<span class='fl'>5</span>)] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Evans"</span>, <span class='st'>"Blanchard"</span>)
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>custom_labels2</span>))</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>labeller</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller</a></span>(<span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>custom_labels2</span>))</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Or change names before plotting</span>
 <span class='fu'><a href='series_names.html'>series_names</a></span>(<span class='no'>rsim_data</span>) <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>5</span>]
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-7.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change Theme options</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>rsim_data</span>) +
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.radf_obj-8.png' alt='' width='700' height='433' /></div><div class='input'> # }
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span>(<span class='kw'>legend.position</span> <span class='kw'>=</span> <span class='st'>"right"</span>)</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-8.png' alt='' width='700' height='433' /></div><div class='input'> # }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

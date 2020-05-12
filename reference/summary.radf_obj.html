@@ -98,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -178,12 +178,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class <code>radf_obj</code>. The output of<code><a href='radf.html'>radf()</a></code>.</p></td>
+      <td><p>An object of class <code>radf_obj</code>. The output of <code><a href='radf.html'>radf()</a></code>.</p></td>
     </tr>
     <tr>
       <th>cv</th>
       <td><p>An object of class <code>radf_cv</code>. The output of <code><a href='radf_mc_cv.html'>radf_mc_cv()</a></code>,
-<code><a href='radf_wb_cv.html'>radf_wb_cv()</a></code> or <code><a href='radf_sb_cv.html'>radf_sb_cv()</a></code></p></td>
+<code><a href='radf_wb_cv.html'>radf_wb_cv()</a></code> or <code><a href='radf_sb_cv.html'>radf_sb_cv()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -193,16 +193,16 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list of summary statistics,
-the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
+    <p>Returns a list of summary statistics, which include the estimated ADF,
+SADF, and GSADF test statistics and the corresponding critical values</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='co'># Simulate bubble processes, compute the t-stat and critical values</span>
+<span class='co'># Simulate bubble processes, compute the test statistics and critical values</span>
 <span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data</span>)
 
 <span class='co'># Summary, diagnostics and datestamp (default)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='output co'>#&gt; 
 #&gt; ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──
 #&gt; 
 #&gt; psy1 :
@@ -245,7 +245,7 @@ the t-statistic and the critical values of the ADF, SADF and GSADF.</p>
 #&gt; </span><span style='color: #555555;'>2</span><span> sadf   3.93  0.988  1.29   1.92 
 #&gt; </span><span style='color: #555555;'>3</span><span> gsadf 11.0   1.71   1.97   2.57 
 #&gt; </div><div class='input'>
-<span class='co'>#Summary, diagnostics and datestamp (Wild Bootstrapped critical values)</span>
+<span class='co'>#Summary, diagnostics and datestamp (wild bootstrap critical values)</span>
 
 <span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf_wb_cv.html'>radf_wb_cv</a></span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 

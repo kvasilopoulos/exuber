@@ -55,7 +55,7 @@
   
 
 <meta property="og:title" content="Plotting a <code>ds_radf</code> object — autoplot.ds_radf" />
-<meta property="og:description" content="Takes ds_radfobjects and returns a ggplot2 object, with a
+<meta property="og:description" content="Takes a ds_radf object and returns a ggplot2 object, with a
 geom_segment() layer." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -99,7 +99,7 @@ geom_segment() layer." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -168,7 +168,7 @@ geom_segment() layer." />
     </div>
 
     <div class="ref-description">
-    <p>Takes <code>ds_radf</code>objects and returns a ggplot2 object, with a
+    <p>Takes a <code>ds_radf</code> object and returns a ggplot2 object, with a
 geom_segment() layer.</p>
     </div>
 
@@ -180,19 +180,21 @@ geom_segment() layer.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class <code><a href='datestamp.html'>datestamp()</a></code></p></td>
+      <td><p>An object of class <code>ds_radf</code>. The output of <code><a href='datestamp.html'>datestamp()</a></code></p></td>
     </tr>
     <tr>
       <th>trunc</th>
-      <td><p>default FALSE. If TRUE the index formed by truncating the value
-in the minimum window.</p></td>
+      <td><p>Whether to remove the period of the minimum window from the plot (default = TRUE).</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>further arguments passed to methods. Not used.</p></td>
+      <td><p>Further arguments passed to methods. Not used.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot()</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
@@ -200,13 +202,13 @@ in the minimum window.</p></td>
 <span class='no'>sim_data_wdate</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='datestamp.html'>datestamp</a></span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='output co'>#&gt; <span class='message'>Using `date` as index variable.</span></div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='img'><img src='autoplot.ds_radf-1.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>()</div><div class='output co'>#&gt; <span class='message'>Using `date` as index variable.</span></div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.ds_radf-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change the colour manually</span>
 <span class='no'>sim_data_wdate</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='radf.html'>radf</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='datestamp.html'>datestamp</a></span>() <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>() +
-  <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_colour_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"black"</span>, <span class='fl'>4</span>))</div><div class='output co'>#&gt; <span class='message'>Using `date` as index variable.</span></div><div class='output co'>#&gt; <span class='message'>Using 'radf_crit' for 'cv'.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
+  <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_colour_manual</a></span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"black"</span>, <span class='fl'>4</span>))</div><div class='output co'>#&gt; <span class='message'>Using `date` as index variable.</span></div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
 #&gt; <span class='message'>which will replace the existing scale.</span></div><div class='img'><img src='autoplot.ds_radf-2.png' alt='' width='700' height='433' /></div><div class='input'># }
 </div></pre>
   </div>
