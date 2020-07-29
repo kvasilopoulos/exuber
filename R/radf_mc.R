@@ -140,7 +140,7 @@ radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
     bsadf_cv = bsadf_crit
   ) %>%
     inherit_attrs(results) %>%
-    add_class("radf_cv", "mc_cv","cv")
+    add_class("radf_cv", "mc_cv")
 
 }
 
@@ -157,6 +157,6 @@ radf_mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
     gsadf_distr = results$gsadf
   ) %>%
     inherit_attrs(results) %>%
-    add_class("radf_distr", "mc_distr", "distr")
+    add_class("radf_distr", "mc_distr")
 
 }
