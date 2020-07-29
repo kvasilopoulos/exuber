@@ -111,6 +111,23 @@ radf <- function(data, minw = NULL, lag = 0L) {
     add_class("radf_obj", "obj")
 }
 
+#' @export
+print.radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+  cat_line()
+  cat_rule(
+    left = glue("radf (minw = {get_minw(x)}, lag = {get_lag(x)})")
+  )
+  cat_line()
+
+  print(format(as.data.frame(tidy(x)),
+               digits = digits), print.gap = 2L, row.names = FALSE)
+  cat_line()
+
+  print(format(as.data.frame(tidy(x, panel = TRUE)),
+               digits = digits), print.gap = 2L, row.names = FALSE)
+}
+
+
 #' @importFrom stats embed
 unroot <- function(x, lag = 0) {
   if (lag == 0) {

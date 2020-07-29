@@ -25,7 +25,7 @@ theme_exuber(
 
 \item{size_values}{a set of size values to map data values to.}
 
-\item{base_size}{base font size}
+\item{base_size}{base font size, given in pts.}
 
 \item{base_family}{base font family}
 
