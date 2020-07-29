@@ -108,7 +108,7 @@ radf <- function(data, minw = NULL, lag = 0L) {
       lag = lag,
       series_names = snames,
     ) %>%
-    add_class("radf_obj", "obj")
+    add_class("radf_obj")
 }
 
 #' @export
