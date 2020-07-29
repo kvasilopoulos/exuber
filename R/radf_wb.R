@@ -166,7 +166,7 @@ radf_wb_cv <- function(data, minw = NULL, nboot = 500L,
     bsadf_cv = bsadf_crit
   ) %>%
     inherit_attrs(results) %>%
-    add_class("radf_cv", "wb_cv", "cv")
+    add_class("radf_cv", "wb_cv")
 
 }
 
@@ -184,6 +184,6 @@ radf_wb_distr <- function(data, minw = NULL, nboot = 500L,
     gsadf_distr = results$gsadf
   ) %>%
     inherit_attrs(results) %>%
-    add_class("radf_distr", "wb_distr", "distr")
+    add_class("radf_distr", "wb_distr")
 }
 
