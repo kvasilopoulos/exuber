@@ -30,7 +30,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
     .inorder = FALSE
   ) %fun% {
     if (show_pb && !do_par)
-      setTxtProgressBar(pb, i)
+      pb$tick()
     y <- cumsum(rnorm(n))
     yxmat <- unroot(y)
     rls_gsadf(yxmat, min_win = minw)

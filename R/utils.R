@@ -72,15 +72,16 @@ show_pb <- function() {
     !isTRUE(getOption("knitr.in.progress"))
 }
 
-set_pb <- function(iter, width = getOption("width") - 10L) {
+#' @importFrom progress progress_bar
+set_pb <- function(iter,width = getOption("width") - 10L) {
   if (show_pb()) {
-    txtProgressBar(min = 1, max = iter - 1, style = 3, char = "-", width = width)
+    progress_bar$new(format = "[:bar] (:percent)", total = iter, width = width)
   }
 }
 
 set_pb_opts <- function(pb) {
   if (show_pb()) {
-    list(progress = function(n) setTxtProgressBar(pb, n))
+    list(progress = function(n) pb$tick())
   }else{
     list(progress = NULL)
   }

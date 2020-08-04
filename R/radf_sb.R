@@ -54,7 +54,8 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
     .inorder = FALSE
   ) %fun% {
     boot_index <- sample(1:nres, replace = TRUE)
-    if (show_pb && !do_par) setTxtProgressBar(pb, i)
+    if (show_pb && !do_par)
+      pb$tick()
     for (j in 1:nc) {
       boot_res <- resmat[boot_index, j]
       dboot_res <- boot_res - mean(boot_res)
