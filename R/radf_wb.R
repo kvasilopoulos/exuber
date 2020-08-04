@@ -18,7 +18,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
     array(NA, dim = c(pointer, nboot, nc), dimnames = list(NULL, NULL, snames))
 
   show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(nboot, width = getOption("width") - 15)
+  pb <- set_pb(nboot*nc)
   pb_opts <- set_pb_opts(pb)
 
   do_par <- getOption("exuber.parallel")
@@ -42,7 +42,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       .inorder = FALSE
     ) %fun% {
       if (show_pb && !do_par) {
-        setTxtProgressBar(pb, i)
+        pb$tick()
       }
       if (dist_rad) {
         w <- sample(c(-1, 1), nr - 1, replace = TRUE)
@@ -54,9 +54,6 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
       yxmat <- unroot(ystar)
       rls_gsadf(yxmat, min_win = minw)
     }
-
-    if (show_pb)
-      cat(paste0(" ", j, "/", nc))
 
     adf_crit[, j] <- results[pointer + 1, ]
     sadf_crit[, j] <- results[pointer + 2, ]
