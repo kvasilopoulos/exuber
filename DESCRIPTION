@@ -1,7 +1,7 @@
 Type: Package
 Package: exuber
 Title: Econometric Analysis of Explosive Time Series
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: 
     c(person(given = "Kostas", 
              family = "Vasilopoulos",
@@ -36,7 +36,7 @@ Imports:
     cli (>= 1.1.0),
     doRNG (>= 1.8.2),
     doSNOW (>= 1.0.16),
-    dplyr (>= 0.8.0.1),
+    dplyr (>= 1.0.0),
     foreach (>= 1.4.4),
     generics (>= 0.0.2),
     ggplot2 (>= 3.1.1),
@@ -46,9 +46,10 @@ Imports:
     purrr (>= 0.3.2),
     Rcpp (>= 0.12.17),
     rlang (>= 0.3.4),
-    tibble (>= 2.1.1),
+    tibble (>= 3.0.2),
     tidyr (>= 0.8.3),
-    vctrs (>= 0.2.4)
+    vctrs (>= 0.2.4),
+    progress (>= 1.2.2)
 Suggests:
     magrittr (>= 1.5),
     clisymbols (>= 1.2.0),
