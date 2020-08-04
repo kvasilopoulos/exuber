@@ -125,6 +125,7 @@ print.radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 
   print(format(as.data.frame(tidy(x, panel = TRUE)),
                digits = digits), print.gap = 2L, row.names = FALSE)
+  cat_line()
 }
 
 

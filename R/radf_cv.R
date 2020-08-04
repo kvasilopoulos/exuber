@@ -11,4 +11,5 @@ print.radf_cv <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 
   print(format(as.data.frame(tidy(x)),
                digits = digits), print.gap = 2L, row.names = FALSE)
+  cat_line()
 }
