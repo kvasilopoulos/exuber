@@ -23,7 +23,7 @@ A list that contains the unit root test statistics (sequence):
 \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
 \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
 \item{bsadf_panel}{Panel Backward Supremum Augmented Dickey-Fuller}
-\item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
+\item{gsadf_panel}{Panel Generalized Supremum Augmented Dickey-Fuller}
 }
 \description{
 \code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics.

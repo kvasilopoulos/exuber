@@ -155,7 +155,8 @@ shade <- function(fill = "grey70", opacity = 0.5, ...) {
 #' Exuber scale and theme functions
 #'
 #' `scale_exuber_manual` allows specifying the color, size and linetype in
-#' `autoplot.radf_obj` mappings. `theme_exuber` is a complete theme which control all non-data display.
+#' `autoplot.radf_obj` mappings. `theme_exuber` is a complete theme which control
+#' all non-data display.
 #'
 #' @param color_values a set of color values to map data values to.
 #' @param linetype_values a set of linetype values to map data values to.

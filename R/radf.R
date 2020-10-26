@@ -20,7 +20,7 @@
 #'   \item{bsadf}{Backward Supremum Augmented Dickey-Fuller}
 #'   \item{gsadf}{Generalized Supremum Augmented Dickey-Fuller}
 #'   \item{bsadf_panel}{Panel Backward Supremum Augmented Dickey-Fuller}
-#'   \item{gsadf_panle}{Panel Generalized Supremum Augmented Dickey-Fuller}
+#'   \item{gsadf_panel}{Panel Generalized Supremum Augmented Dickey-Fuller}
 #'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
 #' in The 1990s Nasdaq: When Did Exuberance Escalate Asset Values? International

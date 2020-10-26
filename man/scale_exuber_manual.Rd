@@ -35,5 +35,6 @@ theme_exuber(
 }
 \description{
 \code{scale_exuber_manual} allows specifying the color, size and linetype in
-\code{autoplot.radf_obj} mappings. \code{theme_exuber} is a complete theme which control all non-data display.
+\code{autoplot.radf_obj} mappings. \code{theme_exuber} is a complete theme which control
+all non-data display.
 }
