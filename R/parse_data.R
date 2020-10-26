@@ -15,7 +15,7 @@ parse_dt.data.frame <- function(x) {
   date_index <- purrr::detect_index(x, lubridate::is.Date)
   if (as.logical(date_index)) {
     index <- x[, date_index, drop = TRUE]
-    message(glue("Using `{colnames(x)[date_index]}` as index variable."))
+    message_glue("Using `{colnames(x)[date_index]}` as index variable.")
     x <- x[, -date_index, drop = FALSE]
   } else {
     index <- idx_seq(x)
@@ -47,6 +47,16 @@ parse_dt.numeric <- function(x) {
   list(data = x, index = idx_seq(x))
 }
 
+is_wide <- function(index) {
+  if(is_duplicate(index)) {
+    return(FALSE)
+  }
+  TRUE
+}
+is_duplicate <- function(x) {
+  any(duplicated(x))
+}
+
 
 #' @importFrom stats frequency time
 #' @importFrom lubridate date_decimal round_date
@@ -54,6 +64,9 @@ parse_dt.numeric <- function(x) {
 #' @importFrom stats is.ts
 parse_data <- function(x) {
   lst <- parse_dt(x)
+  if(!is_wide(lst$index)) {
+    stop_glue("duplicated index - data do not have the appropriate format.")
+  }
   matx <- as.matrix(lst$data)
   if (is.character(matx)) {
     stop_glue("non-numeric argument to data argument.")
