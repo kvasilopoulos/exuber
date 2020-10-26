@@ -79,9 +79,7 @@ diagnostics.radf_obj <- function(object, cv = NULL,
       method = get_method(cv),
       option = option,
     ) %>%
-    add_class(
-      "dg_radf", "dg"
-    )
+    add_class("dg_radf")
 }
 
 #' @export

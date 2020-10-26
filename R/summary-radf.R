@@ -43,7 +43,7 @@ summary.radf_obj <- function(object, cv = NULL, ...) {
       method = get_method(cv),
       iter = get_iter(cv)
     ) %>%
-    add_class("sm_radf", "sm")
+    add_class("sm_radf")
 }
 
 summary_radf <- function(cv, ...){
