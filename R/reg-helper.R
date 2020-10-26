@@ -3,7 +3,7 @@
 #' Helper functions in accordance to PSY(2015)
 #'
 #' \code{psy_minw} and \code{psy_ds} use the rules-of- thumb proposed by
-#' Phillips et al. (reference) to compute the minimum window size and the
+#' Phillips et al. (2015) to compute the minimum window size and the
 #' minimum duration of an episode of exuberance, respectively.
 #'
 #' @inheritParams radf_mc_cv
@@ -17,13 +17,13 @@ psy_minw <- function(n) {
   if (!is_n(n)) {
     n <- NROW(n)
   }
-
   floor( (0.01 + 1.8 / sqrt(n)) * n)
 }
 
 #' @rdname psy_minw
-#' @param rule Rule 1 corresponds to log(T), while rule 2 log(T)/T
-#' @param delta Frequency-dependent parameter. See details.
+#' @param rule Rule to compute the minimum duration of an episode (default: rule = 1,
+#' where T denotes the sample size). Rule 1 corresponds to log(T), while rule 2 to log(T)/T.
+#' @param delta Frequency-dependent parameter (default; delta = 1). See details.
 #'
 #' @details For the minimum duration period, \code{psy_ds} allows the user to choose from two rules:
 #'

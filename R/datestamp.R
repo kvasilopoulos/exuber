@@ -99,7 +99,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
     min_duration = min_duration,
     option = option,
     method = get_method(cv),
-    class = c("ds_radf", "ds", "list")
+    class = c("ds_radf", "list")
   )
 }
 
