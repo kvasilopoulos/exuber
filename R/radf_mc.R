@@ -3,9 +3,8 @@
 radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 
   if(!is.null(dim(n))) {
-    message_glue("Using `NROW(n)` instead.")
+    message_glue("Did you use `data` instead of `n`? Using `NROW(n)` instead.")
     n <- NROW(n)
-    warning_glue("Did you use `data` instead of `n`?")
   }
   assert_n(n)
   assert_positive_int(n, greater_than = 5)

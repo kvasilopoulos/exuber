@@ -18,9 +18,12 @@ test_that("exuberdata::crit as data", {
   # )
 })
 
+test_that("data instead of n", {
+  expect_message(radf_mc_cv(dta), "Did you use")
+})
+
 test_that("n positive integer", {
   msg <- "Argument 'n' should be a positive integer"
-  expect_error(radf_mc_cv(dta, minw = 0), msg)
   expect_error(radf_mc_cv(0, minw = 0), msg)
   expect_error(radf_mc_cv(-1, minw = 0), msg)
 })
