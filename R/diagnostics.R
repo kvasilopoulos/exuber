@@ -103,7 +103,7 @@ diagnostics_internal <- function(...) {
   if (purrr::is_bare_character(dg$positive, n = 0)) {
     stop_glue("Cannot reject H0")
   }
-  dg
+  unclass(dg)
 }
 
 
