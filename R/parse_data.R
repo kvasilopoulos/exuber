@@ -3,6 +3,11 @@ idx_seq <- function(x) {
   seq(1, NROW(x), 1)
 }
 
+
+is.index <- function(x) {
+  lubridate::is.Date(x) || is.POSIXt(x)
+}
+
 parse_dt <- function(x) {
   UseMethod("parse_dt")
 }
@@ -12,11 +17,16 @@ parse_dt.default <- function(x) {
 }
 
 parse_dt.data.frame <- function(x) {
-  date_index <- purrr::detect_index(x, lubridate::is.Date)
-  if (as.logical(date_index)) {
-    index <- x[, date_index, drop = TRUE]
-    message_glue("Using `{colnames(x)[date_index]}` as index variable.")
-    x <- x[, -date_index, drop = FALSE]
+  date_index <- vapply(x, is.index, logical(1))
+  n_index <- sum(date_index, na.rm = TRUE)
+  if(n_index > 1) {
+    stop_glue("The `index` match to multiple variables.")
+  }
+  if (n_index == 1) {
+    num_index <- which(date_index)
+    index <- x[, num_index, drop = TRUE]
+    message_glue("Using `{colnames(x)[num_index]}` as index variable.")
+    x <- x[, -num_index, drop = FALSE]
   } else {
     index <- idx_seq(x)
   }
@@ -35,6 +45,7 @@ parse_dt.ts <- function(x) {
     if (frequency(x) %in% c(1, 4, 12)) {
       index <- round_date(index, "month")
     } else if (frequency(x) == 52) {
+      #empty no further modification
     } else {
       index <- round_date(index, "day")
     }
