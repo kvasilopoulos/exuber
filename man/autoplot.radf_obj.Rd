@@ -64,7 +64,11 @@ autoplot(rsim_data)
 # Modify facet_wrap options through ellipsis
 autoplot(rsim_data, scales = "free_y", dir  = "v")
 
+# Modify the shading options
 autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.5))
+
+# Or remove the shading completely
+autoplot(rsim_data, shade_opt = shade(opacity = 0))
 
 # We will need ggplot2 from here on out
 library(ggplot2)
