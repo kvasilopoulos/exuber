@@ -124,12 +124,13 @@ stamp <- function(x) {
 
 stamp_to_index <- function(x, idx) {
   data.frame(
-    "Start" = idx[x[, 1]],
-    "End" = idx[x[, 2]],
-    "Duration" = x[, 3],
+    "Start" = idx[x[, "Start"]],
+    "End" = idx[x[, "End"]],
+    "Duration" = x[, "Duration"],
     row.names = NULL
   )
 }
+
 
 # TODO: Include Peak
 # peak <- numeric()
