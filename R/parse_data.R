@@ -3,7 +3,6 @@ idx_seq <- function(x) {
   seq(1, NROW(x), 1)
 }
 
-
 is.index <- function(x) {
   lubridate::is.Date(x) || is.POSIXt(x)
 }
@@ -70,7 +69,7 @@ is_duplicate <- function(x) {
 
 
 #' @importFrom stats frequency time
-#' @importFrom lubridate date_decimal round_date
+#' @importFrom lubridate date_decimal round_date is.Date is.POSIXt
 #' @importFrom purrr detect_index
 #' @importFrom stats is.ts
 parse_data <- function(x) {
