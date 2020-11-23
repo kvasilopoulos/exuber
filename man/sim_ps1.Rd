@@ -26,15 +26,15 @@ sim_ps1(
 
 \item{tf}{A scalar in (te, n) specifying the observation in which the bubble collapses.}
 
-\item{tr}{asdfsadf}
+\item{tr}{A scalar in  (tf, n) specifying the observation in which market recovers}
 
-\item{c}{A positive scale determining the drift in the normal market periods.}
+\item{c}{A positive scalar determining the drift in the normal market periods.}
 
 \item{c1}{A positive scalar determining the autoregressive coefficient in the explosive regime.}
 
 \item{c2}{A positive scalar determining the autoregressive coefficient in the collapse regime.}
 
-\item{eta}{asdfasd}
+\item{eta}{A positive scalar (>0.5) determining the drift in the normal market periods.}
 
 \item{alpha}{A positive scalar in (0, 1) determining the autoregressive coefficient in the bubble period.}
 
