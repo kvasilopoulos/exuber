@@ -231,7 +231,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' and reverse regression." Econometric Theory 34.4 (2018): 705-753.
 #'
 #' @seealso \code{\link{sim_psy1}}
-#'
+#' @export
 #' @examples
 #' # Disturbing collapse (default)
 #' disturbing <- sim_ps1(100)
