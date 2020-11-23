@@ -51,8 +51,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Wild Bootstrap Critical Values — radf_wb_cv" />
 <meta property="og:description" content="radf_wb_cv performs the Harvey et al. (2016) wild bootstrap re-sampling
@@ -101,7 +99,7 @@ computes the distribution." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -176,9 +174,9 @@ generate critical values for the recursive unit root tests. <code>radf_wb_distr<
 computes the distribution.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>radf_wb_cv</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>500L</span>, <span class='kw'>dist_rad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>data</span>, minw <span class='op'>=</span> <span class='cn'>NULL</span>, nboot <span class='op'>=</span> <span class='fl'>500L</span>, dist_rad <span class='op'>=</span> <span class='cn'>FALSE</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
-<span class='fu'>radf_wb_distr</span>(<span class='no'>data</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>500L</span>, <span class='kw'>dist_rad</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+<span class='fu'>radf_wb_distr</span><span class='op'>(</span><span class='va'>data</span>, minw <span class='op'>=</span> <span class='cn'>NULL</span>, nboot <span class='op'>=</span> <span class='fl'>500L</span>, dist_rad <span class='op'>=</span> <span class='cn'>FALSE</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -239,8 +237,10 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
-<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'>radf_wb_cv</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 15 x 5</span><span>
+<span class='va'>wb</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>wb</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 15 x 5</span><span>
 #&gt;    id    sig       adf   sadf gsadf
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.550</span><span>   1.47   2.82
@@ -259,8 +259,10 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt; </span><span style='color: #555555;'>14</span><span> div   99     0.562   1.94   2.59
 #&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.320   8.45  12.1 </div><div class='input'>
 <span class='co'># Change the minimum window and the number of bootstraps</span>
-<span class='no'>wb2</span> <span class='kw'>&lt;-</span> <span class='fu'>radf_wb_cv</span>(<span class='no'>sim_data</span>, <span class='kw'>nboot</span> <span class='kw'>=</span> <span class='fl'>600</span>, <span class='kw'>minw</span> <span class='kw'>=</span> <span class='fl'>20</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/generics/man/tidy.html'>tidy</a></span>(<span class='no'>wb2</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 15 x 5</span><span>
+<span class='va'>wb2</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>sim_data</span>, nboot <span class='op'>=</span> <span class='fl'>600</span>, minw <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>wb2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 15 x 5</span><span>
 #&gt;    id    sig       adf   sadf gsadf
 #&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.591</span><span>   1.41   2.73
@@ -279,8 +281,10 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt; </span><span style='color: #555555;'>14</span><span> div   99     0.541   1.69   2.67
 #&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.504   6.52  13.2 </div><div class='input'>
 <span class='co'># Simulate distribution</span>
-<span class='no'>wdist</span> <span class='kw'>&lt;-</span> <span class='fu'>radf_wb_distr</span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span>(<span class='no'>wdist</span>)</div><div class='img'><img src='radf_wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'># }
+<span class='va'>wdist</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_distr</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>wdist</span><span class='op'>)</span>
+</div><div class='img'><img src='radf_wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -297,7 +301,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

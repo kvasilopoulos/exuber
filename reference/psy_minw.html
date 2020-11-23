@@ -51,12 +51,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Helper functions in accordance to PSY(2015) — psy_minw" />
 <meta property="og:description" content="psy_minw and psy_ds use the rules-of- thumb proposed by
-Phillips et al. (reference) to compute the minimum window size and the
+Phillips et al. (2015) to compute the minimum window size and the
 minimum duration of an episode of exuberance, respectively." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -100,7 +98,7 @@ minimum duration of an episode of exuberance, respectively." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -170,13 +168,13 @@ minimum duration of an episode of exuberance, respectively." />
 
     <div class="ref-description">
     <p><code>psy_minw</code> and <code>psy_ds</code> use the rules-of- thumb proposed by
-Phillips et al. (reference) to compute the minimum window size and the
+Phillips et al. (2015) to compute the minimum window size and the
 minimum duration of an episode of exuberance, respectively.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>psy_minw</span>(<span class='no'>n</span>)
+    <pre class="usage"><span class='fu'>psy_minw</span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span>
 
-<span class='fu'>psy_ds</span>(<span class='no'>n</span>, <span class='kw'>rule</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>delta</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+<span class='fu'>psy_ds</span><span class='op'>(</span><span class='va'>n</span>, rule <span class='op'>=</span> <span class='fl'>1</span>, delta <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,11 +185,12 @@ minimum duration of an episode of exuberance, respectively.</p>
     </tr>
     <tr>
       <th>rule</th>
-      <td><p>Rule 1 corresponds to log(T), while rule 2 log(T)/T</p></td>
+      <td><p>Rule to compute the minimum duration of an episode (default: rule = 1,
+where T denotes the sample size). Rule 1 corresponds to log(T), while rule 2 to log(T)/T.</p></td>
     </tr>
     <tr>
       <th>delta</th>
-      <td><p>Frequency-dependent parameter. See details.</p></td>
+      <td><p>Frequency-dependent parameter (default; delta = 1). See details.</p></td>
     </tr>
     </table>
 
@@ -207,7 +206,9 @@ Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>psy_minw</span>(<span class='fl'>100</span>)</div><div class='output co'>#&gt; [1] 19</div><div class='input'><span class='fu'>psy_ds</span>(<span class='fl'>100</span>)</div><div class='output co'>#&gt; [1] 5</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>psy_minw</span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 19</div><div class='input'><span class='fu'>psy_ds</span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 5</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -223,7 +224,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

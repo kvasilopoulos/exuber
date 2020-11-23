@@ -51,8 +51,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Changelog" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
@@ -97,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -164,9 +162,19 @@
       <small>Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="exuber-042" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.2">
+<a href="#exuber-042" class="anchor"></a>exuber 0.4.2<small> Unreleased </small>
+</h1>
+<ul>
+<li>Include printing methods for <code>radf_obj</code> and <code>radf_cv</code>.</li>
+<li>Removed unused class definitions.</li>
+<li>Using <code>progress</code> package form progress_bar.</li>
+</ul>
+</div>
     <div id="exuber-041" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.1">
-<a href="#exuber-041" class="anchor"></a>exuber 0.4.1<small> Unreleased </small>
+<a href="#exuber-041" class="anchor"></a>exuber 0.4.1<small> 2020-05-12 </small>
 </h1>
 <p>Maintenance release for compatibility with dplyr v1.0.0.</p>
 </div>
@@ -187,8 +195,8 @@
 <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> for <code>radf</code> models has been refactored and new features have been added for more flexibility and conformity with the {ggplot} mindset.</li>
 <li>Because of the change in <code>autoplot</code>, <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> is now defunct.</li>
 <li>
-<code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods have been replaced by <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code>, <code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code>, <code><a href="../reference/tidy_join.html">tidy_join()</a></code> and <code>glance_join()</code> methods. <code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods are now defunct.</li>
-<li>Also <code>glance()</code> is now defunct. The user can use <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> with <code>panel=TRUE</code> instead.</li>
+<code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods have been replaced by <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code>, <code><a href="https://generics.r-lib.org/reference/augment.html">augment()</a></code>, <code><a href="../reference/tidy_join.html">tidy_join()</a></code> and <code>glance_join()</code> methods. <code><a href="https://ggplot2.tidyverse.org/reference/fortify.html">fortify()</a></code> methods are now defunct.</li>
+<li>Also <code>glance()</code> is now defunct. The user can use <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> with <code>panel=TRUE</code> instead.</li>
 <li>Changed the names of:
 <ul>
 <li>
@@ -252,16 +260,16 @@
 <code>sb_dist()</code>: Sieve Bootstrap</li>
 </ul>
 <p>and a function that can calculate the p-values <code><a href="../reference/calc_pvalue.html">calc_pvalue()</a></code> given the above distributions as argument.</p>
-<p>Also methods <code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> have been added to turn the object into a tidy tibble and draw a particular plot with ggplot2, respectively.</p>
+<p>Also methods <code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> have been added to turn the object into a tidy tibble and draw a particular plot with ggplot2, respectively.</p>
 </div>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>New features</h2>
 <ul>
 <li>
-<code><a href="https://rdrr.io/pkg/generics/man/tidy.html">tidy()</a></code> methods for objects of class <code>radf</code>, <code>cv</code>.</li>
+<code><a href="https://generics.r-lib.org/reference/tidy.html">tidy()</a></code> methods for objects of class <code>radf</code>, <code>cv</code>.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/generics/man/augment.html">augment()</a></code> methods for objects of class <code>radf</code> and <code>cv</code>.</li>
+<code><a href="https://generics.r-lib.org/reference/augment.html">augment()</a></code> methods for objects of class <code>radf</code> and <code>cv</code>.</li>
 <li>
 <code><a href="../reference/tidy_join.html">augment_join()</a></code> to combine object <code>radf</code> and <code>cv</code> into a single data.frame.</li>
 <li>
@@ -348,9 +356,9 @@
 <li>
 <code><a href="../reference/exuber-defunct.html">report()</a></code> has been renamed into <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>.</li>
 <li>
-<code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> has been renamed into <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>.</li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> has been renamed into <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code>.</li>
 <li>
-<code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> and <code><a href="../reference/exuber-defunct.html">report()</a></code> are soft deprecated.</li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> and <code><a href="../reference/exuber-defunct.html">report()</a></code> are soft deprecated.</li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
@@ -379,7 +387,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Install <code>exuberdata</code> Package — install_exuberdata • exuber</title>
+<title>Install exuberdata Package — install_exuberdata • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -51,10 +51,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
-<meta property="og:title" content="Install <code>exuberdata</code> Package — install_exuberdata" />
+<meta property="og:title" content="Install exuberdata Package — install_exuberdata" />
 <meta property="og:description" content="This function wraps the install.packages function and offers a faster
 and more convenient way to install exuberdata." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
@@ -99,7 +97,7 @@ and more convenient way to install exuberdata." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -172,15 +170,16 @@ and more convenient way to install exuberdata." />
 and more convenient way to install <code>exuberdata.</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>install_exuberdata</span>()</pre>
+    <pre class="usage"><span class='fu'>install_exuberdata</span><span class='op'>(</span><span class='op'>)</span></pre>
 
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='kw'>if</span>(<span class='st'>"exuberdata"</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>loadedNamespaces</a></span>()) {
- <span class='kw pkg'>exuberdata</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/exuberdata/man/radf_crit.html'>radf_crit2</a></span>
-}</div><div class='output co'>#&gt; $`_nan1`
+<span class='kw'>if</span><span class='op'>(</span><span class='st'>"exuberdata"</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>loadedNamespaces</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+ <span class='fu'>exuberdata</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/exuberdata/man/radf_crit.html'>radf_crit2</a></span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; $`_nan1`
 #&gt; NULL
 #&gt; 
 #&gt; $`_nan2`
@@ -196,210 +195,56 @@ and more convenient way to install <code>exuberdata.</code></p>
 #&gt; NULL
 #&gt; 
 #&gt; $n6
-#&gt; $adf_cv
-#&gt;        90%        95%        99% 
-#&gt; -0.0068133  0.4662707  1.5452103 
 #&gt; 
-#&gt; $sadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.4442197 0.9432907 2.5440024 
+#&gt; ── Monte Carlo (minw = 4, nrep = 2000) ─────────────────────────────────────────
 #&gt; 
-#&gt; $gsadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.6254581 1.2105031 3.1001231 
+#&gt;   sig        adf    sadf   gsadf
+#&gt;    90  -0.006813  0.4442  0.6255
+#&gt;    95   0.466271  0.9433  1.2105
+#&gt;    99   1.545210  2.5440  3.1001
 #&gt; 
-#&gt; $badf_cv
-#&gt;        90%   95% 99%
-#&gt; [1,] -0.44 -0.08 0.6
-#&gt; [2,] -0.44 -0.08 0.6
-#&gt; 
-#&gt; $bsadf_cv
-#&gt;            90%       95%      99%
-#&gt; [1,] 0.1268111 0.7049998 2.103603
-#&gt; [2,] 0.4442197 0.9432907 2.544002
-#&gt; 
-#&gt; attr(,"method")
-#&gt; [1] "Monte Carlo"
-#&gt; attr(,"n")
-#&gt; [1] 6
-#&gt; attr(,"minw")
-#&gt; [1] 4
-#&gt; attr(,"iter")
-#&gt; [1] 2000
-#&gt; attr(,"seed")
-#&gt; [1] 123
-#&gt; attr(,"parallel")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "mc_cv" "cv"    "list" 
 #&gt; 
 #&gt; $n7
-#&gt; $adf_cv
-#&gt;         90%         95%         99% 
-#&gt; -0.08932631  0.29149050  1.10816740 
 #&gt; 
-#&gt; $sadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.5938162 1.1332356 2.8780413 
+#&gt; ── Monte Carlo (minw = 4, nrep = 2000) ─────────────────────────────────────────
 #&gt; 
-#&gt; $gsadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.9622054 1.6757737 4.0718132 
+#&gt;   sig       adf    sadf   gsadf
+#&gt;    90  -0.08933  0.5938  0.9622
+#&gt;    95   0.29149  1.1332  1.6758
+#&gt;    99   1.10817  2.8780  4.0718
 #&gt; 
-#&gt; $badf_cv
-#&gt;        90%   95% 99%
-#&gt; [1,] -0.44 -0.08 0.6
-#&gt; [2,] -0.44 -0.08 0.6
-#&gt; [3,] -0.44 -0.08 0.6
-#&gt; 
-#&gt; $bsadf_cv
-#&gt;            90%       95%      99%
-#&gt; [1,] 0.1268111 0.7049998 2.103603
-#&gt; [2,] 0.4442197 0.9432907 2.544002
-#&gt; [3,] 0.5938162 1.1332356 2.878041
-#&gt; 
-#&gt; attr(,"method")
-#&gt; [1] "Monte Carlo"
-#&gt; attr(,"n")
-#&gt; [1] 7
-#&gt; attr(,"minw")
-#&gt; [1] 4
-#&gt; attr(,"iter")
-#&gt; [1] 2000
-#&gt; attr(,"seed")
-#&gt; [1] 123
-#&gt; attr(,"parallel")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "mc_cv" "cv"    "list" 
 #&gt; 
 #&gt; $n8
-#&gt; $adf_cv
-#&gt;        90%        95%        99% 
-#&gt; -0.2158200  0.1775116  0.9301616 
 #&gt; 
-#&gt; $sadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.4231389 0.8451185 2.0005111 
+#&gt; ── Monte Carlo (minw = 5, nrep = 2000) ─────────────────────────────────────────
 #&gt; 
-#&gt; $gsadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.6140541 1.0892703 2.4648524 
+#&gt;   sig      adf    sadf   gsadf
+#&gt;    90  -0.2158  0.4231  0.6141
+#&gt;    95   0.1775  0.8451  1.0893
+#&gt;    99   0.9302  2.0005  2.4649
 #&gt; 
-#&gt; $badf_cv
-#&gt;        90%   95% 99%
-#&gt; [1,] -0.44 -0.08 0.6
-#&gt; [2,] -0.44 -0.08 0.6
-#&gt; [3,] -0.44 -0.08 0.6
-#&gt; 
-#&gt; $bsadf_cv
-#&gt;             90%       95%      99%
-#&gt; [1,] -0.0068133 0.4662707 1.545210
-#&gt; [2,]  0.2991290 0.6934075 1.730407
-#&gt; [3,]  0.4231389 0.8451185 2.000511
-#&gt; 
-#&gt; attr(,"method")
-#&gt; [1] "Monte Carlo"
-#&gt; attr(,"n")
-#&gt; [1] 8
-#&gt; attr(,"minw")
-#&gt; [1] 5
-#&gt; attr(,"iter")
-#&gt; [1] 2000
-#&gt; attr(,"seed")
-#&gt; [1] 123
-#&gt; attr(,"parallel")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "mc_cv" "cv"    "list" 
 #&gt; 
 #&gt; $n9
-#&gt; $adf_cv
-#&gt;        90%        95%        99% 
-#&gt; -0.2519856  0.1508576  1.0118724 
 #&gt; 
-#&gt; $sadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.5082703 0.9443890 2.0320946 
+#&gt; ── Monte Carlo (minw = 5, nrep = 2000) ─────────────────────────────────────────
 #&gt; 
-#&gt; $gsadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.8220102 1.3413480 2.9098589 
+#&gt;   sig      adf    sadf  gsadf
+#&gt;    90  -0.2520  0.5083  0.822
+#&gt;    95   0.1509  0.9444  1.341
+#&gt;    99   1.0119  2.0321  2.910
 #&gt; 
-#&gt; $badf_cv
-#&gt;        90%   95% 99%
-#&gt; [1,] -0.44 -0.08 0.6
-#&gt; [2,] -0.44 -0.08 0.6
-#&gt; [3,] -0.44 -0.08 0.6
-#&gt; [4,] -0.44 -0.08 0.6
-#&gt; 
-#&gt; $bsadf_cv
-#&gt;             90%       95%      99%
-#&gt; [1,] -0.0068133 0.4662707 1.545210
-#&gt; [2,]  0.2991290 0.6934075 1.730407
-#&gt; [3,]  0.4231389 0.8451185 2.000511
-#&gt; [4,]  0.5082703 0.9443890 2.032095
-#&gt; 
-#&gt; attr(,"method")
-#&gt; [1] "Monte Carlo"
-#&gt; attr(,"n")
-#&gt; [1] 9
-#&gt; attr(,"minw")
-#&gt; [1] 5
-#&gt; attr(,"iter")
-#&gt; [1] 2000
-#&gt; attr(,"seed")
-#&gt; [1] 123
-#&gt; attr(,"parallel")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "mc_cv" "cv"    "list" 
 #&gt; 
 #&gt; $n10
-#&gt; $adf_cv
-#&gt;         90%         95%         99% 
-#&gt; -0.32109757  0.04648878  0.75005583 
 #&gt; 
-#&gt; $sadf_cv
-#&gt;       90%       95%       99% 
-#&gt; 0.5828047 0.9981259 2.0937113 
+#&gt; ── Monte Carlo (minw = 5, nrep = 2000) ─────────────────────────────────────────
 #&gt; 
-#&gt; $gsadf_cv
-#&gt;      90%      95%      99% 
-#&gt; 1.012245 1.521549 3.012246 
+#&gt;   sig       adf    sadf  gsadf
+#&gt;    90  -0.32110  0.5828  1.012
+#&gt;    95   0.04649  0.9981  1.522
+#&gt;    99   0.75006  2.0937  3.012
 #&gt; 
-#&gt; $badf_cv
-#&gt;        90%   95% 99%
-#&gt; [1,] -0.44 -0.08 0.6
-#&gt; [2,] -0.44 -0.08 0.6
-#&gt; [3,] -0.44 -0.08 0.6
-#&gt; [4,] -0.44 -0.08 0.6
-#&gt; [5,] -0.44 -0.08 0.6
 #&gt; 
-#&gt; $bsadf_cv
-#&gt;             90%       95%      99%
-#&gt; [1,] -0.0068133 0.4662707 1.545210
-#&gt; [2,]  0.2991290 0.6934075 1.730407
-#&gt; [3,]  0.4231389 0.8451185 2.000511
-#&gt; [4,]  0.5082703 0.9443890 2.032095
-#&gt; [5,]  0.5828047 0.9981259 2.093711
-#&gt; 
-#&gt; attr(,"method")
-#&gt; [1] "Monte Carlo"
-#&gt; attr(,"n")
-#&gt; [1] 10
-#&gt; attr(,"minw")
-#&gt; [1] 5
-#&gt; attr(,"iter")
-#&gt; [1] 2000
-#&gt; attr(,"seed")
-#&gt; [1] 123
-#&gt; attr(,"parallel")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "mc_cv" "cv"    "list" 
-#&gt; 
-#&gt; [ truncated list ]</div><div class='input'># }
+#&gt; [ truncated list ]</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -416,7 +261,7 @@ and more convenient way to install <code>exuberdata.</code></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

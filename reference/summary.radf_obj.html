@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarizing <code>radf</code> models — summary.radf_obj • exuber</title>
+<title>Summarizing radf models — summary.radf_obj • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -51,10 +51,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
-<meta property="og:title" content="Summarizing <code>radf</code> models — summary.radf_obj" />
+<meta property="og:title" content="Summarizing radf models — summary.radf_obj" />
 <meta property="og:description" content="summary method for radf models that consist of radf_obj and radf_cv." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -98,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -171,7 +169,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for radf_obj</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>object</span>, cv <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -199,10 +197,11 @@ SADF, and GSADF test statistics and the corresponding critical values</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Simulate bubble processes, compute the test statistics and critical values</span>
-<span class='no'>rsim_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span>(<span class='no'>sim_data</span>)
+<span class='va'>rsim_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='radf.html'>radf</a></span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
 
 <span class='co'># Summary, diagnostics and datestamp (default)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>)</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='output co'>#&gt; 
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>rsim_data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='output co'>#&gt; 
 #&gt; ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──
 #&gt; 
 #&gt; psy1 :
@@ -247,8 +246,10 @@ SADF, and GSADF test statistics and the corresponding critical values</p>
 #&gt; </div><div class='input'>
 <span class='co'>#Summary, diagnostics and datestamp (wild bootstrap critical values)</span>
 
-<span class='no'>wb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='radf_wb_cv.html'>radf_wb_cv</a></span>(<span class='no'>sim_data</span>)</div><div class='output co'>#&gt;  1/5 2/5 3/5 4/5 5/5</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>rsim_data</span>, <span class='kw'>cv</span> <span class='kw'>=</span> <span class='no'>wb</span>)</div><div class='output co'>#&gt; 
+<span class='va'>wb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='radf_wb_cv.html'>radf_wb_cv</a></span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, cv <span class='op'>=</span> <span class='va'>wb</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt; ── Summary (minw = 19, lag = 0) ──────────────── Wild Bootstrap (nboot = 500) ──
 #&gt; 
 #&gt; psy1 :
@@ -291,7 +292,7 @@ SADF, and GSADF test statistics and the corresponding critical values</p>
 #&gt; </span><span style='color: #555555;'>2</span><span> sadf   3.93  3.12   3.89    6.49 
 #&gt; </span><span style='color: #555555;'>3</span><span> gsadf 11.0   6.40   7.67   10.1  
 #&gt; </div><div class='input'>
-# }
+<span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -308,7 +309,7 @@ SADF, and GSADF test statistics and the corresponding critical values</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

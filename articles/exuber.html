@@ -19,8 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Intro to exuber">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Intro to exuber">
 <meta property="og:description" content="exuber">
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -47,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -107,7 +106,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="exuber_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="exuber_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="exuber_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Intro to exuber</h1>
@@ -121,18 +121,21 @@
     
     
 <p>For our analysis we are going to use the <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">datasets::EuStockMarkets</a></code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE (see <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">?EuStockMarkets</a></code>). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">stocks</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span>(<span class="no">EuStockMarkets</span>, <span class="kw">nfrequency</span> <span class="kw">=</span> <span class="fl">52</span>, <span class="no">mean</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">EuStockMarkets</span>, nfrequency <span class="op">=</span> <span class="fl">52</span>, <span class="va">mean</span><span class="op">)</span></code></pre></div>
 <div id="estimation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#estimation" class="anchor"></a>Estimation</h2>
 <p>We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">est_stocks</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span>(<span class="no">stocks</span>, <span class="kw">lag</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">est_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">stocks</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>Analysis</h2>
 <p>The summary will print the test statistic and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the <code>cv</code> argument in the <code>summary</code> function.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">est_stocks</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Summary (minw = 38, lag = 1) ─────────────────── Monte Carlo (nrep = 2000) ──</span>
 <span class="co">#&gt; </span>
@@ -166,22 +169,24 @@
 <span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 adf   0.194 -0.437 -0.0900 0.511</span>
 <span class="co">#&gt; 2 sadf  2.56   1.14   1.42   2.04 </span>
-<span class="co">#&gt; 3 gsadf 2.67   1.90   2.14   2.60</span></pre></body></html></div>
+<span class="co">#&gt; 3 gsadf 2.67   1.90   2.14   2.60</span></code></pre></div>
 <p>It seems that all stocks exhibit exuberant behaviour but we can also verify it using <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. This function is particularly useful when we deal a large number of series.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span>(<span class="no">est_stocks</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX:      Rejects H0 at the 1% significance level</span>
 <span class="co">#&gt; SMI:      Rejects H0 at the 1% significance level</span>
 <span class="co">#&gt; CAC:      Rejects H0 at the 1% significance level</span>
-<span class="co">#&gt; FTSE:     Rejects H0 at the 1% significance level</span></pre></body></html></div>
+<span class="co">#&gt; FTSE:     Rejects H0 at the 1% significance level</span></code></pre></div>
 <p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner with <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. The user still has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># Minimum duration of an explosive period </span>
-<span class="no">rot</span> <span class="kw">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span>(<span class="no">stocks</span>) <span class="co"># log(n) ~ rule of thumb</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Minimum duration of an explosive period </span>
+<span class="va">rot</span> <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span> <span class="co"># log(n) ~ rule of thumb</span>
 
-<span class="no">dstamp_stocks</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span>(<span class="no">est_stocks</span>, <span class="kw">min_duration</span> <span class="kw">=</span> <span class="no">rot</span>)
-<span class="no">dstamp_stocks</span>
+<span class="va">dstamp_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span>, min_duration <span class="op">=</span> <span class="va">rot</span><span class="op">)</span>
+<span class="va">dstamp_stocks</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── Datestamp (min_duration = 6) ───────────────────────────────── Monte Carlo ──</span>
 <span class="co">#&gt; </span>
@@ -205,29 +210,32 @@
 <span class="co">#&gt; FTSE :</span>
 <span class="co">#&gt;        Start        End Duration</span>
 <span class="co">#&gt; 1 1997-07-08 1997-11-04       17</span>
-<span class="co">#&gt; 2 1998-02-10 1998-06-24       19</span></pre></body></html></div>
+<span class="co">#&gt; 2 1998-02-10 1998-06-24       19</span></code></pre></div>
 <p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">dummy</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span>(<span class="no">dstamp_stocks</span>, <span class="st">"dummy"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span>(<span class="no">dummy</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">dstamp_stocks</span>, <span class="st">"dummy"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">dummy</span><span class="op">)</span>
 <span class="co">#&gt;     DAX SMI CAC FTSE</span>
 <span class="co">#&gt; 367   1   1   1    1</span>
 <span class="co">#&gt; 368   1   1   1    1</span>
 <span class="co">#&gt; 369   1   1   1    1</span>
 <span class="co">#&gt; 370   1   1   1    0</span>
 <span class="co">#&gt; 371   1   1   0    0</span>
-<span class="co">#&gt; 372   1   1   0    0</span></pre></body></html></div>
+<span class="co">#&gt; 372   1   1   0    0</span></code></pre></div>
 </div>
 <div id="plotting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h2>
 <p>The <code>autoplot</code> function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>(<span class="no">est_stocks</span>)
-<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_rect).</span></pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_rect).</span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-radf-1.png" width="864"></p>
 <p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span>(<span class="no">est_stocks</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span>()
-<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_segment).</span></pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_segment).</span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-datestaemp-1.png" width="672"></p>
 </div>
   </div>
@@ -247,7 +255,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
