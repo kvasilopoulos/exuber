@@ -227,7 +227,7 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #' @return A numeric vector of length \code{n}.
 #'
-#' @references Phillips, Peter CB, and Shu Ping Shi. "Financial bubble implosion
+#' @references Phillips, Peter CB, and Shu-Ping Shi. "Financial bubble implosion
 #' and reverse regression." Econometric Theory 34.4 (2018): 705-753.
 #'
 #' @seealso \code{\link{sim_psy1}}
