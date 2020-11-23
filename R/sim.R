@@ -71,15 +71,15 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   delta <- 1 + c * n ^ (-alpha)
   y <- 100
 
-  for (i in 2:n) {
-    if (i < te) {
-      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
-    } else if (i >= te & i <= tf) {
-      y[i ] <- delta * y[i - 1] + rnorm(1, sd = sigma)
-    } else if (i == tf + 1) {
-      y[i] <- y[te] + rnorm(1, sd = sigma)
+  for (t in 2:n) {
+    if (t < te) {
+      y[t] <- y[t - 1] + rnorm(1, sd = sigma)
+    } else if (t >= te & t <= tf) {
+      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma)
+    } else if (t == tf + 1) {
+      y[t] <- y[te] + rnorm(1, sd = sigma)
     } else {
-      y[i] <- y[i - 1] + rnorm(1, sd = sigma)
+      y[t] <- y[t - 1] + rnorm(1, sd = sigma)
     }
   }
 
@@ -194,6 +194,140 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
     add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
 }
+
+#' Simulation of a single-bubble process with multiple forms of collapse regime
+#'
+#' @description
+#'
+#' The new generating process considered here differs from the `sim_psy1` model in
+#' three respects - Phillips and Shi (2018):
+#'
+#' \emph{First, it includes an asymptotically negligible drift in the martingale
+#' path during normal periods. Second, the collapse process is modeled directly as
+#' a transient mildly integrated process that covers an explicit period of market collapse.
+#' Third, a market recovery date is introduced to capture the return to normal market behavior.
+#' }
+#' * `sudden:` with `beta = 0.1` and `tr =  tf + 0.01*n`
+#' * `disturbing:` with `beta = 0.5` and `tr =  tf + 0.1*n`
+#' * `smooth:` with `beta = 0.9` and `tr =  tf + 0.2*n`
+#'
+#' In order to provide the duration of the collapse period `tr` as `tr = tf + 0.2n`,
+#' you have to provide `tf` as well.
+#'
+#'
+#' @inheritParams sim_psy1
+#' @param tr asdfsadf
+#' @param c A positive scale determining the drift in the normal market periods.
+#' @param c1 A positive scalar determining the autoregressive coefficient in the explosive regime.
+#' @param c2 A positive scalar determining the autoregressive coefficient in the collapse regime.
+#' @param eta asdfasd
+#' @param alpha A positive scalar in (0, 1) determining the autoregressive coefficient in the bubble period.
+#' @param beta A positive scalar in (0, 1) determining the autoregressive coefficient in the collapse period.
+#'
+#'
+#' @return A numeric vector of length \code{n}.
+#'
+#' @references Phillips, Peter CB, and Shu Ping Shi. "Financial bubble implosion
+#' and reverse regression." Econometric Theory 34.4 (2018): 705-753.
+#'
+#' @seealso \code{\link{sim_psy1}}
+#'
+#' @examples
+#' # Disturbing collapse (default)
+#' disturbing <- sim_ps1(100)
+#' autoplot(disturbing)
+#'
+#' # Sudden collapse
+#' sudden <- sim_ps1(100, te = 40, tf= 60, tr = 61, beta = 0.1)
+#' autoplot(sudden)
+#'
+sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
+                    c = 1, c1 = 1, c2 = 1, eta = 0.6, alpha = 0.6, beta = 0.5,
+                    sigma = 6.79, seed = NULL) {
+
+  assert_positive_int(n)
+  assert_between(te, 0, n)
+  assert_between(tf, te, n)
+  assert_between(tr, tf, n)
+  assert_positive_int(c)
+  assert_positive_int(c1)
+  assert_positive_int(c2)
+  assert_between(alpha, 0, 1)
+  assert_between(beta, 0, 1)
+  stopifnot(eta > 0.5, sigma >= 0)
+
+  drift <- c*n^(-eta)
+  delta <- 1 + c1 * n^(-alpha)
+  gamma <- 1 - c2 * n^(-beta)
+  y <- 100
+
+  for (t in 2:n) {
+    if (t < te) {
+      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma)
+    } else if (t >= te & t <= tf) {
+      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma)
+    } else if (t > tf & t <= tr ) {
+      y[t] <- gamma * y[t - 1] + rnorm(1, sd = sigma)
+    } else {
+      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma)
+    }
+  }
+  y %>%
+    add_attr(seed = get_rng_state(seed)) %>%
+    add_class("sim")
+}
+
+
+sim_ps2 <- function(n,
+                    te1 = 0.2 * n, tf1 = te1 + 0.2 * n , tr1 = tf1 + 0.1*n,
+                    te2 = 0.6 * n, tf2 = te2 + 0.15 * n , tr2 = tf2 + 0.1*n,
+                    c = 1, c1 = 1, c2 = 1, eta = 0.6, alpha = 0.6, beta = 0.5,
+                    sigma = 6.79, seed = NULL) {
+
+  assert_positive_int(n)
+  assert_between(te1, 0, n)
+  assert_between(tf1, te1, n)
+  assert_between(tr1, tf1, n)
+  assert_between(te2, tf1, n)
+  assert_between(tf2, te2, n)
+  assert_between(tr2, tf2, n)
+  assert_between(alpha, 0, 1)
+  assert_positive_int(c)
+  assert_positive_int(c1)
+  assert_positive_int(c2)
+  assert_between(alpha, 0, 1)
+  assert_between(beta, 0, 1)
+  stopifnot(eta > 0.5, sigma >= 0)
+
+  drift <- c*n^(-eta)
+  delta <- 1 + c1 * n^(-alpha)
+  gamma <- 1 - c2 * n^(-beta)
+  y <- 100
+
+  for (t in 2:n) {
+    if (t < te1) {
+      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma) # normal
+    } else if (t >= te1 & t <= tf1) {
+      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma) # bubble1
+    } else if (t > tf1 & t <= tr1 ) {
+      y[t] <- gamma * y[t - 1] + rnorm(1, sd = sigma) # collapse 1
+    }  else if (t > tr1 + 1 & t < te2) {
+      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma) # normal 2
+    }  else if (t >= te2 + 1 & t <= tf2) {
+      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma) # bubble 2
+    }  else if (t > tf2 + 1 & t <= tr2) {
+      y[t] <- gamma * y[t - 1] + rnorm(1, sd = sigma) # collapse 2
+    } else {
+      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma) # normal 3
+    }
+  }
+  y %>%
+    add_attr(seed = get_rng_state(seed)) %>%
+    add_class("sim")
+}
+
+
+
 
 #' Simulation of a Blanchard (1979) bubble process
 #'
@@ -419,8 +553,6 @@ sim_div <- function(n, mu, sigma, r = 0.05,
     add_class("sim")
 
 }
-
-# IDEA maybe add ps1 for smooth collapse, although sim_psy1 is nested in that case
 
 #' @export
 print.sim <- function(x, ...) {
