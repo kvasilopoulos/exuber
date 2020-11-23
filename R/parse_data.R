@@ -33,7 +33,7 @@ parse_dt.data.frame <- function(x) {
 }
 
 parse_dt.ts <- function(x) {
-  sim_index <- seq(1, NROW(x), 1)
+  sim_index <- idx_seq(x)
   vec_time <- as.vector(time(x))
   if (identical(time(x), sim_index)) {
     index <- sim_index
@@ -75,7 +75,7 @@ is_duplicate <- function(x) {
 parse_data <- function(x) {
   lst <- parse_dt(x)
   if(!is_wide(lst$index)) {
-    stop_glue("duplicated index - data do not have the appropriate format.")
+    stop_glue("The data do not have the appropriate format.")
   }
   matx <- as.matrix(lst$data)
   if (is.character(matx)) {
