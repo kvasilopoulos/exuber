@@ -216,11 +216,11 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #'
 #' @inheritParams sim_psy1
-#' @param tr asdfsadf
-#' @param c A positive scale determining the drift in the normal market periods.
+#' @param tr A scalar in  (tf, n) specifying the observation in which market recovers
+#' @param c A positive scalar determining the drift in the normal market periods.
 #' @param c1 A positive scalar determining the autoregressive coefficient in the explosive regime.
 #' @param c2 A positive scalar determining the autoregressive coefficient in the collapse regime.
-#' @param eta asdfasd
+#' @param eta A positive scalar (>0.5) determining the drift in the normal market periods.
 #' @param alpha A positive scalar in (0, 1) determining the autoregressive coefficient in the bubble period.
 #' @param beta A positive scalar in (0, 1) determining the autoregressive coefficient in the collapse period.
 #'
