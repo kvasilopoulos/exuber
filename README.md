@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# exuber <a href='https://kvasilopoulos.github.io/exuber'><img src='man/figures/logo.png' align="right" height="127.5" /></a>
+# exuber <a href='https://kvasilopoulos.github.io/exuber/'><img src='man/figures/logo.png' align="right" height="127.5" /></a>
 
 <!-- badges: start -->
 
