@@ -1,3 +1,5 @@
+# TODO maybe use radf_wb_cv2 Phillips and Shi Bootstrap scheme
+
 radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 
   y <- parse_data(data)
