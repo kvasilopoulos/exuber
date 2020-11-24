@@ -62,12 +62,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
     filter(sig == 95, name %in% c(filter_option, "bsadf_panel")) %>% # either {bsadf, badf} or bsadf_panel
     mutate(ds_lgl = tstat > crit)
 
-  ds <- list()
-  for (nm in pos) {
-    ds[[nm]] <- filter(ds_tbl, id == nm) %>%
-      pull(ds_lgl) %>%
-      which()
-  }
+  ds <- map(pos, ~ filter(ds_tbl, id == .x) %>% pull(ds_lgl) %>% which())
   ds_stamp <- map(ds, ~ stamp(.x) %>% filter(Duration >= min_duration) %>% as.matrix())
   idx_trunc <- if (is_sb(cv)) index(cv, trunc = TRUE) else index(object, trunc = TRUE)
   ds_stamp_index <- map(ds_stamp, stamp_to_index, idx_trunc) # index has to from cv to iclude sb_cv(+2)
