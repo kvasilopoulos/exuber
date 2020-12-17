@@ -3,27 +3,17 @@ Maintenance release for compatibility with the upcoming release of dplyr v1.0.0.
 
 ## Test environments
 
-* local OS MS install, R 4.0.0
+* local OS MS install, R 4.0.3
 * Continuous Integration
-  * GitHub actions (ubuntu-16.04): release
+  * GitHub actions (ubuntu-20.04): release, devel
   * GitHub actions (windows): release
-  * Github actions (OS X): release, devel
+  * Github actions (OS X): release
 * Rhub
   * Debian Linux, R-devel, GCC ASAN/UBSAN
   * Fedora Linux, R-devel, clang, gfortran
 * win-builder (devel)
 
 ## R CMD check results 
-
-### devtools::check(args = c('--as-cran'))  
-
-```r
-> checking for non-standard things in the check directory ... NOTE
-  Found the following files/directories:
-    'examples_i386' 'examples_x64' 'exuber-Ex_i386.Rout'
-    'exuber-Ex_x64.Rout' 'tests_i386' 'tests_x64'
-```
-0 errors √ | 0 warnings √ | 1 note x
 
    
 ### rhub::check_for_cran() & devtools::check_win_devel()
