@@ -2,7 +2,7 @@
 
 * Include printing methods for `radf_obj` and `radf_cv`.
 * Removed unused class definitions.
-* Using `progress` package form progress_bar.
+* Using `progress` package for progress_bar.
 
 # exuber 0.4.1
 
