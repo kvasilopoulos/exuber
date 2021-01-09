@@ -26,7 +26,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
   do_par <- getOption("exuber.parallel")
   if (do_par) {
     cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
+    registerDoParallel(cl)
     on.exit(parallel::stopCluster(cl))
   }
 
@@ -117,10 +117,8 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
 #'
-#' @importFrom doSNOW registerDoSNOW
 #' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom foreach foreach %dopar% %do%
-#' @importFrom utils setTxtProgressBar txtProgressBar
 #' @importFrom stats quantile rnorm
 #' @export
 #'
