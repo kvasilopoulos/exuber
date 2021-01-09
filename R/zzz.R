@@ -25,7 +25,7 @@
   repos["kvasilopoulos"] = "https://kvasilopoulos.github.io/drat/"
   options(repos = repos)
 
-  invisible()
+  invisible(repos)
 }
 
 #' Install `exuberdata` Package
