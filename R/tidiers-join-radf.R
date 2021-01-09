@@ -60,7 +60,7 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
 
 #' @export
 #' @rdname tidy_join.radf_obj
-#' @importFrom dplyr inner_join select case_when
+#' @importFrom dplyr inner_join select case_when all_of
 augment_join.radf_obj <- function(x, y = NULL, ...) {
 
   y <- y %||% retrieve_crit(x)
@@ -81,15 +81,7 @@ augment_join.radf_obj <- function(x, y = NULL, ...) {
     by = c("key", "name", join_by)) %>%
     mutate(id = factor(id, levels = id_lvls)) %>%
     arrange(sig, id, name) %>%
-    select_at(vars(-all_of(key_if_date)))
-}
-
-#' @importFrom vctrs vec_as_location
-all_of <- function(x) {
-  if (is.function(x)) {
-    vctrs::vec_as_location(x, 0L)
-  }
-  x
+    select_at(vars(-dplyr::all_of(key_if_date)))
 }
 
 
