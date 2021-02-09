@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate p-values from distr object — calc_pvalue • exuber</title>
+<title>Calculate p-values — calc_pvalue • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,9 @@
 
 
 
-<meta property="og:title" content="Calculate p-values from distr object — calc_pvalue" />
-<meta property="og:description" content="Calculate p-values from distr object" />
+<meta property="og:title" content="Calculate p-values — calc_pvalue" />
+<meta property="og:description" content="
+Calculate p-values from distr object" />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
 
@@ -159,13 +160,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate p-values from <code>distr</code> object</h1>
+    <h1>Calculate p-values</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/distr-pvalues.R'><code>R/distr-pvalues.R</code></a></small>
     <div class="hidden name"><code>calc_pvalue.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate p-values from <code>distr</code> object</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a></p>
+<p>Calculate p-values from <code>distr</code> object</p>
     </div>
 
     <pre class="usage"><span class='fu'>calc_pvalue</span><span class='op'>(</span><span class='va'>x</span>, distr <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -192,9 +194,14 @@
 <span class='fu'>calc_pvalue</span><span class='op'>(</span><span class='va'>radf_psy1</span><span class='op'>)</span>
 
 <span class='co'># Using the Wild-Bootstrapped</span>
-<span class='va'>wb_psy1</span> <span class='op'>&lt;-</span> <span class='fu'>wb_distr</span><span class='op'>(</span><span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>wb_psy1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='radf_wb_cv.html'>radf_wb_distr</a></span><span class='op'>(</span><span class='fu'><a href='sim_psy1.html'>sim_psy1</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'>calc_pvalue</span><span class='op'>(</span><span class='va'>radf_psy1</span>, <span class='va'>wb_psy1</span><span class='op'>)</span>
+
+<span class='va'>sb_psy1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='radf_sb_cv.html'>radf_sb_distr</a></span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
+
+<span class='fu'>calc_pvalue</span><span class='op'>(</span><span class='fu'><a href='radf.html'>radf</a></span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>, <span class='va'>sb_psy1</span><span class='op'>)</span>
+
 <span class='op'>}</span>
 </div></pre>
   </div>

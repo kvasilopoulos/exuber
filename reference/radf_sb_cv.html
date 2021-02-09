@@ -230,7 +230,7 @@ In search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 
 <span class='co'># Critical vales should have the same lag length with \code{radf()}</span>
 <span class='va'>sb</span> <span class='op'>&lt;-</span> <span class='fu'>radf_sb_cv</span><span class='op'>(</span><span class='va'>sim_data</span>, lag <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='input'>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>sb</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 3</span><span>
 #&gt;   id    sig   gsadf_panel
@@ -252,7 +252,7 @@ In search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 </div><div class='img'><img src='radf_sb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Simulate distribution</span>
 <span class='va'>sdist</span> <span class='op'>&lt;-</span> <span class='fu'>radf_sb_distr</span><span class='op'>(</span><span class='va'>sim_data</span>, lag <span class='op'>=</span> <span class='fl'>1</span>, nboot <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>sdist</span><span class='op'>)</span>
 </div><div class='img'><img src='radf_sb_cv-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></span></pre>

@@ -238,7 +238,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
 <span class='va'>wb</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='input'>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>wb</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 15 x 5</span><span>
 #&gt;    id    sig       adf   sadf gsadf
@@ -260,7 +260,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.320   8.45  12.1 </div><div class='input'>
 <span class='co'># Change the minimum window and the number of bootstraps</span>
 <span class='va'>wb2</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>sim_data</span>, nboot <span class='op'>=</span> <span class='fl'>600</span>, minw <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='input'>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>wb2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 15 x 5</span><span>
 #&gt;    id    sig       adf   sadf gsadf
@@ -282,7 +282,7 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
 #&gt; </span><span style='color: #555555;'>15</span><span> blan  99     0.504   6.52  13.2 </div><div class='input'>
 <span class='co'># Simulate distribution</span>
 <span class='va'>wdist</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_distr</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='output co'>#&gt; <span class='warning'>Warning: ignoring unrecognized snow option(s): progress</span></div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>wdist</span><span class='op'>)</span>
 </div><div class='img'><img src='radf_wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
