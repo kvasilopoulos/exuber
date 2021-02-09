@@ -26,7 +26,7 @@ radf_wb_ <- function(data, minw, nboot, dist_rad, seed = NULL) {
   do_par <- getOption("exuber.parallel")
   if (do_par) {
     cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoParallel(cl)
+    registerDoSNOW(cl)
     on.exit(parallel::stopCluster(cl))
   }
 

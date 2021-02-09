@@ -2,6 +2,14 @@
 options(exuber.show_progress = FALSE)
 options(exuber.parallel = FALSE)
 
+# Set options
+# options(exuber.show_progress = TRUE)
+# options(exuber.parallel = TRUE)
+#
+# getOption("exuber.parallel")
+# getOption("exuber.show_progress")
+
+
 sim_data_mat <- as.matrix(sim_data)
 
 # not have helpers in interactive mode (take too much to load)
