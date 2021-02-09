@@ -35,7 +35,7 @@ Depends:
 Imports: 
     cli (>= 1.1.0),
     doRNG (>= 1.8.2),
-    doParallel (>= 1.0.16),
+    doSNOW (>= 1.0.16),
     dplyr (>= 1.0.0),
     foreach (>= 1.4.4),
     generics (>= 0.0.2),
