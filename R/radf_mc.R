@@ -2,7 +2,7 @@
 
 #' @importFrom rlang is_scalar_atomic
 #' @importFrom doRNG `%dorng%`
-#' @importFrom doParallel registerDoParallel
+#' @importFrom doSNOW registerDoSNOW
 radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 
   if(!is.null(dim(n))) {
@@ -22,7 +22,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
   do_par <- getOption("exuber.parallel")
   if (do_par) {
     cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoParallel(cl)
+    registerDoSNOW(cl)
     on.exit(parallel::stopCluster(cl))
   }
 
