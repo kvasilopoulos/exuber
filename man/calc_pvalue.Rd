@@ -2,7 +2,7 @@
 % Please edit documentation in R/distr-pvalues.R
 \name{calc_pvalue}
 \alias{calc_pvalue}
-\title{Calculate p-values from \code{distr} object}
+\title{Calculate p-values}
 \usage{
 calc_pvalue(x, distr = NULL)
 }
@@ -12,6 +12,8 @@ calc_pvalue(x, distr = NULL)
 \item{distr}{A \code{radf_distr} object.}
 }
 \description{
+\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
+
 Calculate p-values from \code{distr} object
 }
 \examples{
@@ -22,8 +24,13 @@ radf_psy1 <- radf(sim_psy1(100))
 calc_pvalue(radf_psy1)
 
 # Using the Wild-Bootstrapped
-wb_psy1 <- wb_distr(sim_psy1(100))
+wb_psy1 <- radf_wb_distr(sim_psy1(100))
 
 calc_pvalue(radf_psy1, wb_psy1)
+
+sb_psy1 <- radf_sb_distr(sim_data)
+
+calc_pvalue(radf(sim_data), sb_psy1)
+
 }
 }

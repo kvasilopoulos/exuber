@@ -39,6 +39,12 @@ test_that("autoplot works",{
   wbd <- radf_wb_distr(dta, nboot = 10)
   sbd <- radf_sb_distr(dta, nboot = 10)
 
+  # Calculate pvalue
+  expect_error(calc_pvalue(radf_dta, mcd), NA)
+  expect_error(calc_pvalue(radf_dta, wbd), NA)
+  expect_error(calc_pvalue(radf_dta, sbd), NA)
+
+  # Plotting
   expect_error(autoplot(mcd), regexp = NA)
   expect_error(autoplot(wbd), regexp = NA)
   expect_error(autoplot(sbd), regexp = NA)
