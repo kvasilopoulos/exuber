@@ -129,20 +129,3 @@ print.radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 }
 
 
-#' @importFrom stats embed
-unroot <- function(x, lag = 0) {
-  if (lag == 0) {
-    x_embed <- embed(x, 2)
-    yxmat <- cbind(x_embed[, 1], x_embed[, 2])
-  } else {
-    x_embed <- embed(x, lag + 2)
-    dx_embed <- embed(diff(x), lag + 1)[, -1]
-    names(dx_embed) <- paste0("dx_embed", 1:lag)
-    x_lev <- x_embed[, 1]
-    x_lag <- x_embed[, 2]
-    yxmat <- cbind(x_lev, ct = 1, x_lag, dx_embed)
-  }
-  yxmat
-}
-
-
