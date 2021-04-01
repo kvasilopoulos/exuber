@@ -137,11 +137,12 @@ unroot <- function(x, lag = 0) {
   } else {
     x_embed <- embed(x, lag + 2)
     dx_embed <- embed(diff(x), lag + 1)[, -1]
+    names(dx_embed) <- paste0("dx_embed", 1:lag)
     x_lev <- x_embed[, 1]
     x_lag <- x_embed[, 2]
-    yxmat <- cbind(x_lev, 1, x_lag, dx_embed)
+    yxmat <- cbind(x_lev, ct = 1, x_lag, dx_embed)
   }
-  return(yxmat)
+  yxmat
 }
 
 
