@@ -23,7 +23,8 @@
 #       panel.grid.major = element_line(linetype = "dashed")
 #     )
 # }
-#
+
+
 # autoplot_ds_radf_style2 <- function(x) {
 #   tidy(datestamp(radf_dta)) %>%
 #     ggplot() +
@@ -35,3 +36,22 @@
 #
 # }
 #
+
+# autoplot_ds_radf_style3 <- function(x) {
+#   filter(x, name == "bsadf", sig == "95") %>%
+#     mutate(area = ifelse(tstat > crit, tstat, 0)) %>%
+#     ggplot(aes(index, area)) +
+#     geom_area() +
+#     facet_wrap(~id, ncol = 1, strip.position = "left", scales = "free_y") +
+#     # scale_y_continuous(position = "right") +
+#     theme_bw() +
+#     theme(
+#       axis.text.y = element_blank(),
+#       axis.ticks.y = element_blank(),
+#       panel.grid = element_blank(),
+#       axis.title = element_blank(),
+#       strip.background = element_blank(),
+#       strip.text.y.left = element_text(angle = 0),
+#
+#     )
+# }

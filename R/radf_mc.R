@@ -1,5 +1,4 @@
-# TODO use doParallel instead of doSNOW
-
+#
 #' @importFrom rlang is_scalar_atomic
 #' @importFrom doRNG `%dorng%`
 #' @importFrom doSNOW registerDoSNOW
