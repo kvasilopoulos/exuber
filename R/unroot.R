@@ -18,10 +18,11 @@ unroot_adf <- function(x, lag) {
   dy <- dx_embed[,1]
   if(lag == 0) {
     yxmat <- cbind(dy, 1, x_lag)
+    colnames(yxmat) <- c("dy", "ct", "y")
   }else{
     dx_lags <- dx_embed[,-1]
-    yxmat <- cbind(dy, x_lag, dx_lags)
-    colnames(yxmat) <- c("dy", "y", paste0("dy_lags", 1:lag))
+    yxmat <- cbind(dy, 1, x_lag, dx_lags)
+    colnames(yxmat) <- c("dy", "ct", "y", paste0("dy_lags", 1:lag))
   }
   yxmat
 }
