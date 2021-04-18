@@ -126,7 +126,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
     ds_data <- tidy(datestamp(object, cv, option = option)) %>%
       filter(id %in% series) %>%
       droplevels()
-    gg <- gg + shade_opt(ds_data, min_duration)
+    gg <- gg + shade_opt(ds_data, min_duration, nend = length(index(object)))
   }
 
   if (length(series) > 1) {
@@ -145,13 +145,23 @@ autoplot.radf_obj <- function(object, cv = NULL,
 #' @inheritParams datestamp
 #' @param fill The shade color that indicates the exuberance periods.
 #' @param opacity The opacity of the shade color aka alpha.
+#' @param fill_end The shade color that indicates the exuberance period during the
+#' end of the sample. If it is NA then the the end of sample periods is not marked.
 #' @export
-shade <- function(fill = "grey70", opacity = 0.5, ...) {
-  function(ds_data, min_duration) {
-  filter(ds_data, Duration >= min_duration) %>%
-    geom_rect(
-      data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
-      aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+shade <- function(fill = "grey70", fill_end = fill, opacity = 0.5, ...) {
+  function(ds_data, min_duration, nend) {
+    list(
+      filter(ds_data, Duration >= min_duration) %>%
+        geom_rect(
+          data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
+          aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+        ),
+      filter(ds_data, Duration >= min_duration, is.na(End)) %>%
+        mutate(End = nend) %>%
+        geom_rect(
+          data = ., inherit.aes = FALSE, fill = fill_end, alpha = opacity,
+          aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+        )
     )
   }
 }
