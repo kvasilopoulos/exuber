@@ -122,11 +122,12 @@ autoplot.radf_obj <- function(object, cv = NULL,
     theme_exuber()
 
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
+  idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
     ds_data <- tidy(datestamp(object, cv, option = option)) %>%
       filter(id %in% series) %>%
       droplevels()
-    gg <- gg + shade_opt(ds_data, min_duration, nend = length(index(object)))
+    gg <- gg + shade_opt(ds_data, min_duration, nend = idx[length(idx)])
   }
 
   if (length(series) > 1) {
