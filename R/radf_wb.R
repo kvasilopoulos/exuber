@@ -2,6 +2,7 @@
 
 # DGP_PS ------------------------------------------------------------------
 
+#' @importFrom stats coefficients residuals
 adf_res <- function(x, adflag = 0, type = c("fixed", "aic", "bic")) {
   x <- as.matrix(x)
   type <- match.arg(type)
@@ -58,6 +59,7 @@ radf_wb_dgp_ps <- function(y, adflag = 1, type = "fixed", tb = NULL) {
   yb
 }
 
+
 lag_select <- function(data, criterion = c("aic", "bic"), max_lag = 8) {
   criterion <- match.arg(criterion)
   tbl <- lag_select_table(data, max_lag)
@@ -66,6 +68,7 @@ lag_select <- function(data, criterion = c("aic", "bic"), max_lag = 8) {
   as.integer(criterion_vec[min_idx])
 }
 
+#' @importFrom stats AIC BIC
 lag_select_table <- function(data, max_lag = 8) {
   x <- parse_data(data)
   nc <- ncol(x)
@@ -226,10 +229,12 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #'
 #' autoplot(wdist)
 #' }
-radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0, type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
+radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
+                        type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
 
   type <- match.arg(type)
-  results <- radf_wb_ps(data, minw = minw, nboot = nboot, adflag = adflag, type = type, tb = tb, seed = seed)
+  results <- radf_wb_ps(data, minw = minw, nboot = nboot, adflag = adflag,
+                        type = type, tb = tb, seed = seed)
 
   pcnt <- c(0.9, 0.95, 0.99)
   adf_crit   <- apply(results$adf, 2, quantile, probs = pcnt) %>% t()
@@ -274,9 +279,11 @@ radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0, type = c("f
 #' @rdname radf_wb_cv2
 #' @inheritParams radf_wb_cv
 #' @export
-radf_wb_distr2 <- function(data, minw = NULL, nboot = 500L, seed = NULL, ...) {
+radf_wb_distr2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
+                           type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
 
-  results <- radf_wb_ps(data, minw = minw, nboot = nboot, seed = seed, ...)
+  results <- radf_wb_ps(data, minw = minw, nboot = nboot,
+                        adflag = adflag, type = type, tb = tb, seed = seed)
 
   list(
     adf_distr = results$adf,
@@ -432,9 +439,10 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
 #'
 #' autoplot(wdist)
 #' }
-radf_wb_cv <- function(data, minw = NULL, nboot = 500L, seed = NULL, ...) {
+radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL) {
 
-  results <- radf_wb_hlst(data, minw = minw, nboot = nboot, seed = seed, ...)
+  results <- radf_wb_hlst(data, minw = minw, nboot = nboot,
+                          dist_rad = dist_rad, seed = seed)
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -462,9 +470,10 @@ radf_wb_cv <- function(data, minw = NULL, nboot = 500L, seed = NULL, ...) {
 #' @rdname radf_wb_cv
 #' @inheritParams radf_wb_cv
 #' @export
-radf_wb_distr <- function(data, minw = NULL, nboot = 500L, seed = NULL, ...) {
+radf_wb_distr <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL) {
 
-  results <- radf_wb_hlst(data, minw = minw, nboot = nboot, seed = seed, ...)
+  results <- radf_wb_hlst(data, minw = minw, nboot = nboot,
+                          dist_rad = dist_rad, seed = seed)
 
   list(
     adf_distr = results$adf,
