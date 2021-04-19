@@ -18,6 +18,7 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 
   set_rng(seed)
   for (j in 1:nc) {
+    # TODO make this more robust maybe se unroot
     ys <- y[, j]
     dy <- ys[-1] - ys[-nr]
     ym <- embed(dy, lag + 2)
