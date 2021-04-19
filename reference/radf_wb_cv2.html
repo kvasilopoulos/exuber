@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wild Bootstrap Critical Values — radf_wb_cv • exuber</title>
+<title>Wild Bootstrap Critical Values — radf_wb_cv2 • exuber</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,10 +52,10 @@
 
 
 
-<meta property="og:title" content="Wild Bootstrap Critical Values — radf_wb_cv" />
-<meta property="og:description" content="radf_wb_cv performs the Harvey et al. (2016) wild bootstrap re-sampling
+<meta property="og:title" content="Wild Bootstrap Critical Values — radf_wb_cv2" />
+<meta property="og:description" content="radf_wb_cv performs the Phillips &amp;amp; Shi (2020) wild bootstrap re-sampling
 scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests. radf_wb_distr
+generate critical values for the recursive unit root tests. radf_wb_distr2
 computes the distribution." />
 <meta property="og:image" content="https://kvasilopoulos.github.io/exuber/logo.png" />
 
@@ -164,19 +164,27 @@ computes the distribution." />
     <div class="page-header">
     <h1>Wild Bootstrap Critical Values</h1>
     <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/radf_wb.R'><code>R/radf_wb.R</code></a></small>
-    <div class="hidden name"><code>radf_wb_cv.Rd</code></div>
+    <div class="hidden name"><code>radf_wb_cv2.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>radf_wb_cv</code> performs the Harvey et al. (2016) wild bootstrap re-sampling
+    <p><code>radf_wb_cv</code> performs the Phillips &amp; Shi (2020) wild bootstrap re-sampling
 scheme, which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests. <code>radf_wb_distr</code>
+generate critical values for the recursive unit root tests. <code>radf_wb_distr2</code>
 computes the distribution.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>data</span>, minw <span class='op'>=</span> <span class='cn'>NULL</span>, nboot <span class='op'>=</span> <span class='fl'>500L</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>radf_wb_cv2</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  minw <span class='op'>=</span> <span class='cn'>NULL</span>,
+  nboot <span class='op'>=</span> <span class='fl'>500L</span>,
+  adflag <span class='op'>=</span> <span class='fl'>0</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"fixed"</span>, <span class='st'>"aic"</span>, <span class='st'>"bic"</span><span class='op'>)</span>,
+  tb <span class='op'>=</span> <span class='cn'>NULL</span>,
+  seed <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span>
 
-<span class='fu'>radf_wb_distr</span><span class='op'>(</span><span class='va'>data</span>, minw <span class='op'>=</span> <span class='cn'>NULL</span>, nboot <span class='op'>=</span> <span class='fl'>500L</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>radf_wb_distr2</span><span class='op'>(</span><span class='va'>data</span>, minw <span class='op'>=</span> <span class='cn'>NULL</span>, nboot <span class='op'>=</span> <span class='fl'>500L</span>, seed <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,6 +204,20 @@ vector or matrix, or a data.frame. The object should not have any NA values.</p>
       <td><p>A positive integer. Number of bootstraps (default = 500L).</p></td>
     </tr>
     <tr>
+      <th>adflag</th>
+      <td><p>A positive integer. Number of lags when type is "fixed" or number
+of max lags when type is either "aic" or "bic".</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>Character. "fixed" for fixed lag, "aic" or "bic" for automatic lag
+selection according to the criterion.</p></td>
+    </tr>
+    <tr>
+      <th>tb</th>
+      <td><p>A positive integer. The simulated sample size.</p></td>
+    </tr>
+    <tr>
       <th>seed</th>
       <td><p>An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
@@ -204,27 +226,17 @@ of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
 the parallel and non-parallel option, even if they have the same seed.</p></td>
     </tr>
-    <tr>
-      <th>dist_rad</th>
-      <td><p>Logical. If TRUE then the Rademacher distribution will be used.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>For <code>radf_wb_cv</code> a list that contains the critical values for the ADF,
+    <p>For <code>radf_wb_cv2</code> a list that contains the critical values for the ADF,
 BADF, BSADF and GSADF tests. For <code>radf_wb_distr</code> a list that
 contains the ADF, SADF and GSADF distributions.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This approach involves applying a wild bootstrap re-sampling scheme
-to construct the bootstrap analogue of the Phillips et al. (2015) test which
-is asymptotically robust to non-stationary volatility.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Harvey, D. I., Leybourne, S. J., Sollis, R., &amp; Taylor, A. M. R.
-(2016). Tests for explosive financial bubbles in the presence of
-non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.</p>
+    <p>Phillips, P. C., &amp; Shi, S. (2020). Real time monitoring of
+asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42, pp. 61-80). Elsevier.</p>
 <p>Phillips, P. C. B., Shi, S., &amp; Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
@@ -236,54 +248,54 @@ S&amp;P 500. International Economic Review, 56(4), 1043-1078.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='co'># Default minimum window</span>
-<span class='va'>wb</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
+<span class='va'>wb</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv2</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>wb</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 15 x 5</span><span>
-#&gt;    id    sig       adf   sadf gsadf
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.550</span><span>   1.47   2.82
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.609</span><span>   3.21   3.82
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.576</span><span>   6.19   8.44
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.419</span><span>   0.854  1.66
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.288</span><span>   2.85   5.99
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.388</span><span>   1.97   3.32
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.446</span><span>   3.62   4.48
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.321</span><span>   8.09  10.1 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> div   95    -</span><span style='color: #BB0000;'>0.035</span><span style='color: #BB0000;text-decoration: underline;'>4</span><span>  1.16   2.03
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> blan  95    -</span><span style='color: #BB0000;'>0.057</span><span style='color: #BB0000;text-decoration: underline;'>9</span><span>  3.97   7.42
-#&gt; </span><span style='color: #BCBCBC;'>11</span><span> psy1  99     0.168   2.95   4.51
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span> psy2  99    -</span><span style='color: #BB0000;'>0.243</span><span>   5.21   6.12
-#&gt; </span><span style='color: #BCBCBC;'>13</span><span> evans 99    -</span><span style='color: #BB0000;'>0.052</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span> 11.7   15.3 
-#&gt; </span><span style='color: #BCBCBC;'>14</span><span> div   99     0.562   1.94   2.59
-#&gt; </span><span style='color: #BCBCBC;'>15</span><span> blan  99     0.320   8.45  12.1 </div><div class='input'>
+#&gt;    id    sig       adf  sadf gsadf
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.433</span><span>   1.23  2.17
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.369</span><span>   1.31  2.37
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.387</span><span>   1.49  2.68
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.532</span><span>   1.01  2.18
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.382</span><span>   1.25  2.33
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.192</span><span>   1.79  2.60
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.069</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>  1.82  2.92
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.010</span><span style='color: #BB0000;text-decoration: underline;'>9</span><span>  2.13  3.45
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> div   95    -</span><span style='color: #BB0000;'>0.177</span><span>   1.39  2.78
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> blan  95    -</span><span style='color: #BB0000;'>0.066</span><span style='color: #BB0000;text-decoration: underline;'>3</span><span>  1.73  3.03
+#&gt; </span><span style='color: #BCBCBC;'>11</span><span> psy1  99     0.856   2.67  3.62
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span> psy2  99     0.629   2.97  4.05
+#&gt; </span><span style='color: #BCBCBC;'>13</span><span> evans 99     0.537   3.49  6.09
+#&gt; </span><span style='color: #BCBCBC;'>14</span><span> div   99     0.633   2.36  3.76
+#&gt; </span><span style='color: #BCBCBC;'>15</span><span> blan  99     0.439   3.04  4.62</div><div class='input'>
 <span class='co'># Change the minimum window and the number of bootstraps</span>
-<span class='va'>wb2</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv</span><span class='op'>(</span><span class='va'>sim_data</span>, nboot <span class='op'>=</span> <span class='fl'>600</span>, minw <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>wb2</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_cv2</span><span class='op'>(</span><span class='va'>sim_data</span>, nboot <span class='op'>=</span> <span class='fl'>600</span>, minw <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>wb2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 15 x 5</span><span>
-#&gt;    id    sig       adf   sadf gsadf
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.591</span><span>   1.41   2.73
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.596</span><span>   3.00   3.97
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.605</span><span>   5.52   7.86
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.495</span><span>   0.864  1.73
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.294</span><span>   3.24   6.18
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.455</span><span>   1.95   3.29
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.424</span><span>   3.63   4.69
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.417</span><span>   7.35  10.1 
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> div   95    -</span><span style='color: #BB0000;'>0.107</span><span>   1.12   2.09
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> blan  95    -</span><span style='color: #BB0000;'>0.021</span><span style='color: #BB0000;text-decoration: underline;'>1</span><span>  4.54   7.63
-#&gt; </span><span style='color: #BCBCBC;'>11</span><span> psy1  99    -</span><span style='color: #BB0000;'>0.108</span><span>   2.75   4.00
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span> psy2  99    -</span><span style='color: #BB0000;'>0.139</span><span>   5.31   6.66
-#&gt; </span><span style='color: #BCBCBC;'>13</span><span> evans 99    -</span><span style='color: #BB0000;'>0.039</span><span style='color: #BB0000;text-decoration: underline;'>9</span><span> 12.5   13.9 
-#&gt; </span><span style='color: #BCBCBC;'>14</span><span> div   99     0.541   1.69   2.67
-#&gt; </span><span style='color: #BCBCBC;'>15</span><span> blan  99     0.504   6.52  13.2 </div><div class='input'>
+#&gt;    id    sig       adf  sadf gsadf
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> psy1  90    -</span><span style='color: #BB0000;'>0.436</span><span>  1.20   1.97
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> psy2  90    -</span><span style='color: #BB0000;'>0.360</span><span>  1.51   2.33
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> evans 90    -</span><span style='color: #BB0000;'>0.480</span><span>  1.59   2.78
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> div   90    -</span><span style='color: #BB0000;'>0.468</span><span>  0.983  1.88
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> blan  90    -</span><span style='color: #BB0000;'>0.399</span><span>  1.39   2.48
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> psy1  95    -</span><span style='color: #BB0000;'>0.104</span><span>  1.70   2.35
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> psy2  95    -</span><span style='color: #BB0000;'>0.131</span><span>  1.91   2.87
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> evans 95    -</span><span style='color: #BB0000;'>0.166</span><span>  2.04   3.38
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> div   95    -</span><span style='color: #BB0000;'>0.151</span><span>  1.35   2.21
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span> blan  95    -</span><span style='color: #BB0000;'>0.080</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span> 1.95   3.33
+#&gt; </span><span style='color: #BCBCBC;'>11</span><span> psy1  99     0.554  2.64   3.83
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span> psy2  99     0.672  2.92   3.80
+#&gt; </span><span style='color: #BCBCBC;'>13</span><span> evans 99     0.525  3.48   4.84
+#&gt; </span><span style='color: #BCBCBC;'>14</span><span> div   99     0.506  1.94   3.08
+#&gt; </span><span style='color: #BCBCBC;'>15</span><span> blan  99     0.568  2.74   4.70</div><div class='input'>
 <span class='co'># Simulate distribution</span>
-<span class='va'>wdist</span> <span class='op'>&lt;-</span> <span class='fu'>radf_wb_distr</span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
+<span class='va'>wdist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='radf_wb_cv.html'>radf_wb_distr</a></span><span class='op'>(</span><span class='va'>sim_data</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>wdist</span><span class='op'>)</span>
-</div><div class='img'><img src='radf_wb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='img'><img src='radf_wb_cv2-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
