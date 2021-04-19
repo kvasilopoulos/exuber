@@ -5,9 +5,9 @@
 \alias{radf_wb_distr}
 \title{Wild Bootstrap Critical Values}
 \usage{
-radf_wb_cv(data, minw = NULL, nboot = 500L, seed = NULL, ...)
+radf_wb_cv(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 
-radf_wb_distr(data, minw = NULL, nboot = 500L, seed = NULL, ...)
+radf_wb_distr(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -18,14 +18,14 @@ vector or matrix, or a data.frame. The object should not have any NA values.}
 
 \item{nboot}{A positive integer. Number of bootstraps (default = 500L).}
 
+\item{dist_rad}{Logical. If TRUE then the Rademacher distribution will be used.}
+
 \item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are different between
 the parallel and non-parallel option, even if they have the same seed.}
-
-\item{dist_rad}{Logical. If TRUE then the Rademacher distribution will be used.}
 }
 \value{
 For \code{radf_wb_cv} a list that contains the critical values for the ADF,

@@ -15,7 +15,15 @@ radf_wb_cv2(
   seed = NULL
 )
 
-radf_wb_distr2(data, minw = NULL, nboot = 500L, seed = NULL, ...)
+radf_wb_distr2(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
