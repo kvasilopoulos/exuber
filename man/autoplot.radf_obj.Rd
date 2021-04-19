@@ -18,7 +18,7 @@
   ...
 )
 
-shade(fill = "grey70", opacity = 0.5, ...)
+shade(fill = "grey70", fill_end = fill, opacity = 0.5, ...)
 }
 \arguments{
 \item{object}{An object of class \code{obj}.}
@@ -44,6 +44,9 @@ Note that the order of the series does not alter the order used in plotting.}
 \item{...}{Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
 
 \item{fill}{The shade color that indicates the exuberance periods.}
+
+\item{fill_end}{The shade color that indicates the exuberance period during the
+end of the sample. If it is NA then the the end of sample periods is not marked.}
 
 \item{opacity}{The opacity of the shade color aka alpha.}
 }

@@ -151,21 +151,29 @@ autoplot.radf_obj <- function(object, cv = NULL,
 #' @export
 shade <- function(fill = "grey70", fill_end = fill, opacity = 0.5, ...) {
   function(ds_data, min_duration, nend) {
-    list(
-      filter(ds_data, Duration >= min_duration) %>%
-        geom_rect(
-          data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
-          aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
-        ),
-      filter(ds_data, Duration >= min_duration, is.na(End)) %>%
-        mutate(End = nend) %>%
-        geom_rect(
-          data = ., inherit.aes = FALSE, fill = fill_end, alpha = opacity,
-          aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
-        )
-    )
+
+    x1 <- filter(ds_data, Duration >= min_duration) %>%
+      geom_rect(
+        data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
+        aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+      )
+    any_end <- any(is.na(ds_data$End))
+    x2 <- filter(ds_data, Duration >= min_duration, is.na(End)) %>%
+      mutate(End = nend) %>%
+      geom_rect(
+        data = ., inherit.aes = FALSE, fill = fill_end, alpha = opacity,
+        aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+      )
+
+    if(any_end) {
+      list(x1, x2)
+    }else{
+      list(x1)
+    }
   }
 }
+
+
 
 #' Exuber scale and theme functions
 #'
