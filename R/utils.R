@@ -5,6 +5,15 @@
   else x
 }
 
+
+`%NULL%` <- function(cond, x) {
+  if(isTRUE(cond)) {
+    x
+  } else{
+    NULL
+  }
+}
+
 "%ni%" <- Negate("%in%")
 
 # For simulation ----------------------------------------------------------
