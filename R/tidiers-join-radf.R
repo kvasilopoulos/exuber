@@ -72,16 +72,17 @@ augment_join.radf_obj <- function(x, y = NULL, ...) {
   is_idx_date <- is.Date(index(x))
   if (!is_idx_date && !is_mc(y)) join_by <- c("index", join_by)
   idx_if_date <- if (is_idx_date && !is_mc(y)) "index"  else NULL
-  key_if_date <- if (is_idx_date) "key"  else NULL
+  # key_if_date <- if (is_idx_date) "key"  else NULL
   id_lvls <- if (is_panel) "panel" else series_names(x)
 
   inner_join(
     augment(x, "long", panel = is_panel),
     augment(y, "long") %>% select_at(vars(-all_of(idx_if_date))),
-    by = c("key", "name", join_by)) %>%
+    by = c("key", "name", join_by)
+  ) %>%
     mutate(id = factor(id, levels = id_lvls)) %>%
-    arrange(sig, id, name) %>%
-    select_at(vars(-dplyr::all_of(key_if_date)))
+    arrange(sig, id, name) #%>%
+  # select_at(vars(-dplyr::all_of(key_if_date)))
 }
 
 
