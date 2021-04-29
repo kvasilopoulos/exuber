@@ -124,10 +124,11 @@ autoplot.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, option = option)) %>%
+    ds_data <- datestamp(object, cv, option = option, nonrejected = include_negative) %>%
+      tidy() %>%
       filter(id %in% series) %>%
       droplevels()
-    gg <- gg + shade_opt(ds_data, min_duration, nend = idx[length(idx)])
+    gg <- gg + shade_opt(plot_data, ds_data, min_duration, nend = idx[length(idx)])
   }
 
   if (length(series) > 1) {
@@ -137,43 +138,82 @@ autoplot.radf_obj <- function(object, cv = NULL,
       gg <- gg + facet_wrap( ~ id, ...)
     }
   }else{
-    gg <- gg + ggtitle(series) # = 1 for ggtitle to work in single plot
+    # = 1 for ggtitle to work in single plot
+    gg <- gg + ggtitle(series)
   }
   gg
 }
 
 #' @rdname autoplot.radf_obj
 #' @inheritParams datestamp
-#' @param fill The shade color that indicates the exuberance periods.
+#' @param fill_positive The shade color that indicates the exuberance periods with positive signal
+#' @param fill_negative The shade color that indicates the exuberance periods with positive signal
+#' @param fill_ongoing The shade color that indicates the exuberance periods that are ongoing
+#' @param fill_nonrejected The shade color that indicates the exuberance periods that do not reject
+#' the null hypothesis.
+#' @param fill If it is not NULL, that shade color will overwrite all other parameters.
+#'
 #' @param opacity The opacity of the shade color aka alpha.
-#' @param fill_end The shade color that indicates the exuberance period during the
-#' end of the sample. If it is NA then the the end of sample periods is not marked.
 #' @export
-shade <- function(fill = "grey70", fill_end = fill, opacity = 0.5, ...) {
-  function(ds_data, min_duration, nend) {
+shade <- function(fill_positive = "grey55", fill_negative = "yellow2",
+                  fill_ongoing = "pink2", fill_nonrejected = "green2",
+                  opacity = 0.3, fill = NULL, ...) {
+  function(plot_data, ds_data, min_duration, nend) {
 
-    x1 <- filter(ds_data, Duration >= min_duration) %>%
+    ds_data <- plot_data %>%
+      group_by(id) %>%
+      dplyr::summarise(
+        across(value, list(minv = min, maxv = max), .names = "{.fn}"),
+        .groups = "drop"
+      ) %>%
+      full_join(ds_data, by = "id")
+
+    if(!is.null(fill)) {
+      fill_positive <- fill_negative <- fill_ongoing <- fill_nonrejected <- fill
+      message_glue("`fill` overwriting individual parameters.")
+    }
+
+    any_pos <- any(ds_data$Signal == "positive")
+    x1 <- filter(ds_data, Duration >= min_duration, Signal == "positive") %>%
       geom_rect(
-        data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
-        aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+        data = .,  inherit.aes = FALSE, fill = fill_positive, alpha = opacity,
+        aes_string(xmin = "Start", xmax = "End", ymin = "minv", ymax = "maxv"), ...
       )
-    any_end <- any(is.na(ds_data$End))
-    x2 <- filter(ds_data, Duration >= min_duration, is.na(End)) %>%
+
+    any_neg <- any(ds_data$Signal == "negative")
+    x2 <- filter(ds_data, Duration >= min_duration, Signal == "negative") %>%
+      geom_rect(
+        data = ., inherit.aes = FALSE, fill = fill_negative, alpha = opacity,
+        aes_string(xmin = "Start", xmax = "End", ymin = "minv", ymax = "maxv"), ...
+      )
+
+    any_ongoing <- any(ds_data$Ongoing)
+    x3 <- filter(ds_data, Duration >= min_duration, is.na(End)) %>%
       mutate(End = nend) %>%
       geom_rect(
-        data = ., inherit.aes = FALSE, fill = fill_end, alpha = opacity,
-        aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+        data = ., inherit.aes = FALSE, fill = fill_ongoing, alpha = opacity,
+        aes_string(xmin = "Start", xmax = "End", ymin = "minv", ymax = "maxv"), ...
       )
 
-    if(any_end) {
-      list(x1, x2)
+    any_nonrejected <- "Nonrejected" %in% colnames(ds_data)
+    if(any_nonrejected) {
+      x4 <- filter(ds_data, Nonrejected == TRUE) %>%
+        geom_rect(
+          data = ., inherit.aes = FALSE, fill = fill_nonrejected, alpha = opacity,
+          aes_string(xmin = "Start", xmax = "End", ymin = "minv", ymax = "maxv"), ...
+        )
     }else{
-      list(x1)
+      x4 <- NULL
     }
+
+    list(
+      any_pos %NULL% x1,
+      any_neg %NULL% x2,
+      any_ongoing %NULL% x3,
+      any_nonrejected %NULL% x4
+    )
   }
 }
-
-
 
 #' Exuber scale and theme functions
 #'
