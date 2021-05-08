@@ -61,7 +61,7 @@ index.radf_cv <- function(x, trunc = FALSE, ...) {
 }
 
 index_radf_cv <- function(x, ...) {
-  UseMethod(index_radf_cv())
+  UseMethod("index_radf_cv")
 }
 
 index_radf_cv.mc_cv <- function(x, trunc, ...) {
@@ -101,4 +101,23 @@ index_radf_cv.sb_cv <- function(x, trunc, ...) {
   attr(x, "index") <- value
   x
 }
+
+
+# mat ---------------------------------------------------------------------
+
+# TODO make it a method
+
+# mat <- function(x, ...) {
+#   UseMethod("mat")
+# }
+
+mat <- function(x, ...) {
+  attr(x, "mat")
+}
+
+# mat.radf_obj <- function(x, ...) {
+#   mat <- attr(x, "mat")
+#   attributes(mat) <- NULL
+#   mat
+# }
 
