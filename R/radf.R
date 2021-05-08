@@ -22,6 +22,14 @@
 #'   \item{bsadf_panel}{Panel Backward Supremum Augmented Dickey-Fuller}
 #'   \item{gsadf_panel}{Panel Generalized Supremum Augmented Dickey-Fuller}
 #'
+#'And attributes:
+#'   \item{mat}{The matrix used in the estimation.}
+#'   \item{index}{The index parsed from the dataset.}
+#'   \item{lag}{The lag used in the estimation.}
+#'   \item{n}{The number of rows.}
+#'   \item{minw}{The minimum window used in the estimation.}
+#'   \item{series_names}{The series names.}
+#'
 #' @references Phillips, P. C. B., Wu, Y., & Yu, J. (2011). Explosive Behavior
 #' in The 1990s Nasdaq: When Did Exuberance Escalate Asset Values? International
 #' Economic Review, 52(1), 201-226.
@@ -91,7 +99,6 @@ radf <- function(data, minw = NULL, lag = 0L) {
   bsadf_panel <- apply(bsadf, 1, mean)
   gsadf_panel <- max(bsadf_panel)
 
-
   list(
     adf = adf,
     badf = badf,
@@ -101,12 +108,12 @@ radf <- function(data, minw = NULL, lag = 0L) {
     bsadf_panel = bsadf_panel,
     gsadf_panel = gsadf_panel) %>%
     add_attr(
-      index = attr(x, "index"),
-      lag = lag,
-      n = nrow(x),
+      mat = x,
+      index = index(x),
+      series_names = snames,
       minw = minw,
       lag = lag,
-      series_names = snames,
+      n = nrow(x)
     ) %>%
     add_class("radf_obj")
 }
@@ -124,6 +131,22 @@ print.radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
 
   print(format(as.data.frame(tidy(x, panel = TRUE)),
+               digits = digits), print.gap = 2L, row.names = FALSE)
+  cat_line()
+}
+
+#' @export
+print.radf_cv <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+
+  iter_char <- if (is_mc(x)) "nrep" else "nboot"
+  lag_str <- if(is_sb(x)) paste0(", lag = ", get_lag(x)) else ""
+  cat_line()
+  cat_rule(
+    left = glue("{get_method(x)} (minw = {get_minw(x)}, {iter_char} = {get_iter(x)}{lag_str})")
+  )
+  cat_line()
+
+  print(format(as.data.frame(tidy(x)),
                digits = digits), print.gap = 2L, row.names = FALSE)
   cat_line()
 }
