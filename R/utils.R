@@ -111,7 +111,7 @@ array_to_list <- function(x, var) {
 }
 
 #' @importFrom tibble add_column
-add_key <- function(x, attr_from) {
+add_key <- function(x, attr_from, trunc = TRUE) {
   attr_lag <-  get_lag(attr_from) #else 0
   if (is.null(attr_lag)) {
     add_lag <- 0
@@ -123,7 +123,12 @@ add_key <- function(x, attr_from) {
     }
   }
   nkey <- get_minw(attr_from) + add_lag
-  x %>% add_column(key = (nkey + 1):(nrow(.) + nkey))
+  if(trunc){
+    wkey <- add_column(x , key = (nkey + 1):(nrow(x) + nkey))
+  }else{
+    wkey <- add_column(x, key = 1:nrow(x))
+  }
+  wkey
 }
 
 # predicates --------------------------------------------------------------
