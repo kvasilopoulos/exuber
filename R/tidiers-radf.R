@@ -73,9 +73,9 @@ tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 #' @rdname tidy.radf_obj
 #'
 #' @importFrom dplyr rename as_tibble everything
-#' @importFrom tidyr gather
+#' @importFrom tidyr gather pivot_longer drop_na
 #' @export
-augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
+augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc = TRUE, ...) {
 
   format <- match.arg(format)
   stopifnot(is.logical(panel))
@@ -96,31 +96,43 @@ augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) 
         select(key, index, id, name, tstat)
     }
   }else{
-    tbl_radf <- x %>%
-      pluck("badf") %>%
-      as_tibble() %>%
-      add_key(x) %>%
-      mutate(
-        index = index(x, trunc = TRUE)
-      ) %>%
-      gather(id, badf, -index, -key, factor_key = TRUE) %>%
-      bind_cols(
-        x %>%
-          pluck("bsadf") %>%
-          as_tibble() %>%
-          gather(name, bsadf) %>%
-          select(bsadf)
-      ) %>%
-      select(key, index, id, everything())
+    tbl_radf <- list(
+      extract_mat(x),
+      extract_stat(x, "badf"),
+      extract_stat(x, "bsadf")
+    ) %>%
+      reduce(full_join, by = c("key", "id"))
+
+    if(trunc) {
+      tbl_radf <- drop_na(tbl_radf, bsadf)
+    }
 
     if (format == "long") {
       tbl_radf <-
         tbl_radf %>%
-        gather(name, tstat, -index, -id, -key) %>%
+        pivot_longer(cols = c(badf, bsadf), values_to = "tstat") %>%
         mutate(name = factor(name, levels = c("badf", "bsadf"))) %>%
         arrange(id, name)
     }
   }
   tbl_radf
 }
+
+extract_stat <- function(x, stat) {
+  pluck(x, stat) %>%
+    as_tibble() %>%
+    add_key(x) %>%
+    pivot_longer(-key, names_to = "id", values_to = stat) %>%
+    select(key, everything())
+}
+
+extract_mat <- function(x) {
+  mat(x) %>%
+    as_tibble %>%
+    add_key(x, F) %>%
+    mutate(index = index(x, trunc = FALSE)) %>%
+    pivot_longer(cols = -c(key, index), names_to = "id", values_to = "data") %>%
+    select(key, index, everything())
+}
+
 
