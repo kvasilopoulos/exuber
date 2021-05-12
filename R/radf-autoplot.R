@@ -125,8 +125,9 @@ autoplot.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- datestamp(object, cv, option = option, nonrejected = include_negative)
-    gg <- gg + shade_opt(ds_data, min_duration)
+    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = include_negative)) %>%
+      filter(id %in% series)
+    gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
 
   if (length(series) > 1) {
@@ -203,8 +204,9 @@ autoplot2.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- datestamp(object, cv, option = option, nonrejected = include_negative)
-    gg <- gg + shade_opt(ds_data, min_duration)
+    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = include_negative)) %>%
+      filter(id %in% series)
+    gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
 
   if (length(series) > 1) {
@@ -231,10 +233,9 @@ autoplot2.radf_obj <- function(object, cv = NULL,
 #' @export
 shade <- function(fill = "grey55", fill_negative = fill,#"yellow2",
                   fill_ongoing = NULL, opacity = 0.3, ...) { #"pink2"
-  function(ds_data, min_duration) {
+  function(ds_data, min_duration, is_panel) {
 
-    is_panel <- "panel" %in% names(ds_data)
-    ds_data <- filter(tidy(ds_data), Duration >= min_duration)
+    ds_data <- filter(ds_data, Duration >= min_duration)
 
     if(is_panel) {
       ds_pos <- ds_data

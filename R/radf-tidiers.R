@@ -614,6 +614,7 @@ augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
       select_at(vars(-all_of(idx_if_date))),
     by = c("key", "stat", join_by)
   ) %>%
+    drop_na(index) %>%
     mutate(id = factor(id, levels = id_lvls)) %>%
     arrange(id, stat, sig) #%>%
   # select_at(vars(-dplyr::all_of(key_if_date)))
