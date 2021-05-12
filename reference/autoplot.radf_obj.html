@@ -98,7 +98,7 @@ geom_rect layer that demarcates the exuberance periods." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
       </span>
     </div>
 
@@ -162,7 +162,7 @@ geom_rect layer that demarcates the exuberance periods." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plotting <code>radf</code> models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/autoplot-radf.R'><code>R/autoplot-radf.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/radf-autoplot.R'><code>R/radf-autoplot.R</code></a></small>
     <div class="hidden name"><code>autoplot.radf_obj.Rd</code></div>
     </div>
 
@@ -181,12 +181,32 @@ geom_rect layer that demarcates the exuberance periods.</p>
   select_series <span class='op'>=</span> <span class='cn'>NULL</span>,
   include_negative <span class='op'>=</span> <span class='cn'>FALSE</span>,
   shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span><span class='op'>)</span>,
+  trunc <span class='op'>=</span> <span class='cn'>TRUE</span>,
   include <span class='op'>=</span> <span class='st'>"DEPRECATED"</span>,
   select <span class='op'>=</span> <span class='st'>"DEPRECATED"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
-<span class='fu'>shade</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"grey70"</span>, fill_end <span class='op'>=</span> <span class='va'>fill</span>, opacity <span class='op'>=</span> <span class='fl'>0.5</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='co'># S3 method for radf_obj</span>
+<span class='fu'><a href='autoplot2.html'>autoplot2</a></span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  cv <span class='op'>=</span> <span class='cn'>NULL</span>,
+  option <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span><span class='op'>)</span>,
+  min_duration <span class='op'>=</span> <span class='fl'>0L</span>,
+  select_series <span class='op'>=</span> <span class='cn'>NULL</span>,
+  include_negative <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  trunc <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>shade</span><span class='op'>(</span>
+  fill <span class='op'>=</span> <span class='st'>"grey55"</span>,
+  fill_negative <span class='op'>=</span> <span class='va'>fill</span>,
+  fill_ongoing <span class='op'>=</span> <span class='cn'>NULL</span>,
+  opacity <span class='op'>=</span> <span class='fl'>0.3</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -222,6 +242,10 @@ Note that the order of the series does not alter the order used in plotting.</p>
       <td><p>Shading options, typically set using <code>shade</code> function.</p></td>
     </tr>
     <tr>
+      <th>trunc</th>
+      <td><p>Whether to remove the period of the minimum window from the plot (default = TRUE).</p></td>
+    </tr>
+    <tr>
       <th>include</th>
       <td><p>Argument name is deprecated and substituted with <code>include_negative</code>.</p></td>
     </tr>
@@ -235,12 +259,16 @@ Note that the order of the series does not alter the order used in plotting.</p>
     </tr>
     <tr>
       <th>fill</th>
-      <td><p>The shade color that indicates the exuberance periods.</p></td>
+      <td><p>The shade color that indicates the exuberance periods with positive signal</p></td>
     </tr>
     <tr>
-      <th>fill_end</th>
-      <td><p>The shade color that indicates the exuberance period during the
-end of the sample. If it is NA then the the end of sample periods is not marked.</p></td>
+      <th>fill_negative</th>
+      <td><p>The shade color that indicates the exuberance periods with positive signal</p></td>
+    </tr>
+    <tr>
+      <th>fill_ongoing</th>
+      <td><p>The shade color that indicates the exuberance periods that are ongoing
+the null hypothesis.</p></td>
     </tr>
     <tr>
       <th>opacity</th>

@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX :</span>
 <span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   name  tstat   `90`    `95`  `99`</span>
+<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
 <span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 adf    1.45 -0.437 -0.0900 0.511</span>
 <span class="co">#&gt; 2 sadf   4.95  1.14   1.42   2.04 </span>
@@ -148,7 +148,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SMI :</span>
 <span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   name  tstat   `90`    `95`  `99`</span>
+<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
 <span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 adf    1.77 -0.437 -0.0900 0.511</span>
 <span class="co">#&gt; 2 sadf   4.28  1.14   1.42   2.04 </span>
@@ -156,7 +156,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; CAC :</span>
 <span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   name  tstat   `90`    `95`  `99`</span>
+<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
 <span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 adf   0.987 -0.437 -0.0900 0.511</span>
 <span class="co">#&gt; 2 sadf  2.91   1.14   1.42   2.04 </span>
@@ -164,7 +164,7 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; FTSE :</span>
 <span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   name  tstat   `90`    `95`  `99`</span>
+<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
 <span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 adf   0.194 -0.437 -0.0900 0.511</span>
 <span class="co">#&gt; 2 sadf  2.56   1.14   1.42   2.04 </span>
@@ -190,26 +190,26 @@
 <span class="co">#&gt; ── Datestamp (min_duration = 6) ───────────────────────────────── Monte Carlo ──</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; DAX :</span>
-<span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1997-02-10 1997-11-04       38</span>
-<span class="co">#&gt; 2 1998-01-27       &lt;NA&gt;       30</span>
+<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
+<span class="co">#&gt; 1 1997-02-10 1997-08-05 1997-11-04       38 positive   FALSE</span>
+<span class="co">#&gt; 2 1998-01-27 1998-07-22 1998-08-19       30 positive    TRUE</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; SMI :</span>
-<span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1993-12-02 1994-02-17       11</span>
-<span class="co">#&gt; 2 1997-04-14 1997-09-02       20</span>
-<span class="co">#&gt; 3 1997-09-09 1997-11-04        8</span>
-<span class="co">#&gt; 4 1997-11-25       &lt;NA&gt;       39</span>
+<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
+<span class="co">#&gt; 1 1993-12-02 1994-02-03 1994-02-17       11 positive   FALSE</span>
+<span class="co">#&gt; 2 1997-04-14 1997-07-15 1997-09-02       20 positive   FALSE</span>
+<span class="co">#&gt; 3 1997-09-09 1997-10-07 1997-11-04        8 positive   FALSE</span>
+<span class="co">#&gt; 4 1997-11-25 1998-04-07 1998-08-19       39 positive    TRUE</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; CAC :</span>
-<span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1997-07-08 1997-08-19        6</span>
-<span class="co">#&gt; 2 1998-03-10 1998-08-12       22</span>
+<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
+<span class="co">#&gt; 1 1997-07-08 1997-08-05 1997-08-19        6 positive   FALSE</span>
+<span class="co">#&gt; 2 1998-03-10 1998-07-15 1998-08-12       22 positive   FALSE</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; FTSE :</span>
-<span class="co">#&gt;        Start        End Duration</span>
-<span class="co">#&gt; 1 1997-07-08 1997-11-04       17</span>
-<span class="co">#&gt; 2 1998-02-10 1998-06-24       19</span></code></pre></div>
+<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
+<span class="co">#&gt; 1 1997-07-08 1997-10-07 1997-11-04       17 positive   FALSE</span>
+<span class="co">#&gt; 2 1998-02-10 1998-04-14 1998-06-24       19 positive   FALSE</span></code></pre></div>
 <p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">dstamp_stocks</span>, <span class="st">"dummy"</span><span class="op">)</span>
@@ -227,14 +227,12 @@
 <a href="#plotting" class="anchor"></a>Plotting</h2>
 <p>The <code>autoplot</code> function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_rect).</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-radf-1.png" width="864"></p>
 <p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_segment).</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-datestaemp-1.png" width="672"></p>
 </div>
   </div>

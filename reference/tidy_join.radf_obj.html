@@ -98,7 +98,7 @@ are provided the function will return the panel test statistic." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
       </span>
     </div>
 
@@ -162,7 +162,7 @@ are provided the function will return the panel test statistic." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Tidy into a joint model</h1>
-    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/tidiers-join-radf.R'><code>R/tidiers-join-radf.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/kvasilopoulos/exuber/blob/master/R/radf-tidiers.R'><code>R/radf-tidiers.R</code></a></small>
     <div class="hidden name"><code>tidy_join.radf_obj.Rd</code></div>
     </div>
 
@@ -176,7 +176,7 @@ are provided the function will return the panel test statistic.</p>
 <span class='fu'><a href='tidy_join.html'>tidy_join</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for radf_obj</span>
-<span class='fu'><a href='tidy_join.html'>augment_join</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='tidy_join.html'>augment_join</a></span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='cn'>NULL</span>, trunc <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,6 +193,10 @@ critical value.</p></td>
     <tr>
       <th>...</th>
       <td><p>Further arguments passed to methods. Not used.</p></td>
+    </tr>
+    <tr>
+      <th>trunc</th>
+      <td><p>Whether to remove the period of the minimum window from the plot (default = TRUE).</p></td>
     </tr>
     </table>
 
