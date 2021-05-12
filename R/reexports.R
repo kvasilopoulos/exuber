@@ -10,6 +10,23 @@ ggplot2::fortify
 #' @export
 ggplot2::autoplot
 
+#' Create a complete ggplot appropriate to a particular data type
+#'
+#' `autoplot2()` uses ggplot2 to draw a particular plot for an object of a
+#' particular class in a single command. This defines the S3 generic that
+#' other classes and packages can extend.
+#'
+#' @param object an object, whose class will determine the behaviour of autoplot
+#' @param ... other arguments passed to specific methods
+#'
+#' @export
+#' @seealso `autoplot()`
+autoplot2 <- function(object, ...) {
+  UseMethod("autoplot2")
+}
+
+# ggplot2::autolayer
+
 #' @importFrom generics tidy
 #' @seealso \code{\link[=tidy.radf_obj]{tidy.radf_obj()}}
 #'  \code{\link[=tidy.radf_cv]{tidy.radf_cv()}}

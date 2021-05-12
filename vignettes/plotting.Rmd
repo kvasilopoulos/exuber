@@ -97,7 +97,7 @@ joined %>%
   ggplot(aes(x = index)) +
   geom_line(aes(y = tstat)) +
   geom_line(aes(y = crit)) +
-  facet_grid(sig + name ~  id  , scales = "free_y")
+  facet_grid(sig + stat ~  id  , scales = "free_y")
 ```
 
 We also offer two functions `scale_exuber_manual` and `theme_exuber` that offer some
@@ -108,7 +108,7 @@ joined %>%
   pivot_longer(cols = c("tstat", "crit"), names_to = "nms") %>% 
   ggplot(aes(x = index, y = value, col = nms)) +
   geom_line() +
-  facet_grid(sig + name ~  id  , scales = "free_y") +
+  facet_grid(sig + stat ~  id  , scales = "free_y") +
   scale_exuber_manual() +
   theme_exuber()
 ```
