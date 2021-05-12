@@ -48,3 +48,25 @@ suppressMessages({
 })
 
 
+set.seed(123)
+sim_ds <- tibble(
+  ongoing = sim_psy1(100, te = 80, tf = 100, seed = 123),
+  negative = -1*sim_ps1(100, te = 30, tf = 60, tr =  80, beta = 0.5),
+  div = sim_div(100),
+  positive = sim_psy1(100)
+)
+suppressMessages({
+  radf_ds <- radf(sim_ds)
+})
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,10 +5,10 @@ test_that("Right output", {
   nm <- c("adf", "badf", "sadf", "bsadf", "gsadf", "bsadf_panel", "gsadf_panel")
   expect_output(str(radf_dta), "List of 7")
   expect_equal(names(radf_dta), nm)
-  expect_output(str(attributes(radf_dta)), "List of 7")
+  expect_output(str(attributes(radf_dta)), "List of 8")
   expect_equal(
     names(attributes(radf_dta)),
-    c("names", "index", "lag", "n", "minw", "series_names", "class")
+    c("names", "mat", "index", "series_names", "minw", "lag", "n","class")
   )
 })
 

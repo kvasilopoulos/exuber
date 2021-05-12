@@ -9,6 +9,7 @@
   # not possible to use more than system cores
   ncores <- if (mc_cores == "") sys_cores else min(mc_cores, sys_cores)
 
+  # TODO exuber.display
   op.exuber <- list(
     exuber.show_progress = TRUE,
     exuber.parallel = TRUE,
@@ -67,7 +68,8 @@ if (getRversion() >= "2.15.1") {
     c("adf", "sadf", "gsadf", "badf", "bsadf", "bsadf_panel", "gsadf_panel",
       "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
       "value", "value_x", "value_y", "stat", "pval", "panel", "End","Duration",
-      "ds_lgl", "rev_badf", "rev_bsadf", "rev_bsadf_panel")
+      "ds_lgl", "rev_badf", "rev_bsadf", "rev_bsadf_panel", "tstat_crit", "data",
+      "Signal", "Ongoing", "Start")
   )
 }
 
