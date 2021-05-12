@@ -63,6 +63,8 @@ series_names.default <- function(x, ...) {
     imap(~ `colnames<-`(.x, value))
   x[cv] <- x[cv] %>%
     imap(~ set_names(.x, value))
+  colnames(attr(x, "mat")) <- value
+  series_names(attr(x, "mat")) <- value
   attr(x, "series_names") <- value
   x
 }

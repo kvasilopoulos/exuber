@@ -36,12 +36,27 @@ add_class <- function(x, ...) {
 # Access attributes easily ------------------------------------------------
 
 
+get_trunc <- function(x) {
+  has_lag <- !is.null(get_lag(x))
+  if (is_sb(x) && get_lag(x) != 0) {
+    get_minw(x) + get_lag(x) + 2
+  }else if (has_lag){
+    get_minw(x) + get_lag(x)
+  }else{
+    get_minw(x)
+  }
+}
+
 get_minw <- function(x) {
   attr(x, "minw")
 }
 
 get_lag <- function(x, ...) {
   attr(x, "lag")
+}
+
+get_n <- function(x) {
+  attr(x, "n")
 }
 
 get_method <- function(y) {
@@ -59,5 +74,6 @@ get_min_dur <- function(y) {
 get_panel <- function(y) {
   attr(y, "panel")
 }
+
 
 
