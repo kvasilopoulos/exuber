@@ -332,7 +332,7 @@ theme_exuber <- function(
     theme(
       legend.key = element_rect(fill = "white", colour = NA),
       panel.background = element_rect(fill = "white", colour = NA),
-      panel.border = element_rect(fill = NA, colour = "grey20"),
+      panel.border = element_rect(fill = NA, colour = "grey75"),
       panel.grid = element_line(colour = "grey92"),
       panel.grid.major = element_line(linetype = "dashed", size = 0.7),
       strip.text.x = element_text(size = rel(1.5), hjust = 0,
