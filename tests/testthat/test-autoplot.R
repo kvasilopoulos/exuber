@@ -24,6 +24,7 @@ withr::with_options(
   c(warn = 2),
   test_that("wb", {
     expect_error(autoplot(radf_dta, cv = wb), regexp = NA)
+    # TODO when nonrejected = FALSE this test fails
     expect_error(autoplot(radf_dta_lag1, cv = wb, option = "sadf"), NA)
   })
 )
