@@ -6,14 +6,13 @@
 #'
 #' @inheritParams datestamp.radf_obj
 #'
-#' @param include_negative If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
+#' @param nonrejected If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
 #' @param select_series 	A vector of column names or numbers specifying the series to be used in plotting.
 #' Note that the order of the series does not alter the order used in plotting.
 #' @param shade_opt Shading options, typically set using \code{shade} function.
 #' @param ... Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
-#' @param include Argument name is deprecated and substituted with `include_negative`.
-#' @param select Argument name is deprecated and substituted with `select_series`.
+#' @param include_negative Argument name is deprecated and substituted with `nonrejected`.
 #'
 #' @return A [ggplot2::ggplot()]
 #'
@@ -36,7 +35,11 @@
 #' # Modify the shading options
 #' autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.5))
 #'
-#' # Or remove the shading completely
+#' # Allow for nonrejected series to be plotted
+#' autoplot(rsim_data, nonrejected = TRUE)
+#'
+#' # Or remove the shading completely (2 ways)
+#' autoplot(rsim_data, shade_opt = NULL)
 #' autoplot(rsim_data, shade_opt = shade(opacity = 0))
 #'
 #' # We will need ggplot2 from here on out
@@ -70,13 +73,13 @@ autoplot.radf_obj <- function(object, cv = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0L,
                           select_series = NULL,
-                          include_negative = FALSE,
+                          nonrejected = TRUE,
                           shade_opt = shade(),
                           trunc = TRUE,
-                          include = "DEPRECATED", select = "DEPRECATED", ...) {
+                          include_negative = "DEPRECATED",
+                          ...) {
 
-  deprecate_arg_warn(include, include_negative)
-  deprecate_arg_warn(select, select_series)
+  deprecate_arg_warn(include_negative, nonrejected)
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   snames <- series_names(object)
@@ -93,7 +96,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
     filter_option <- if (option == "gsadf") "bsadf" else "badf"
   }
 
-  pos_series <- if (include_negative) {
+  pos_series <- if (nonrejected) {
     if (is_sb(cv)) "panel" else snames
   } else {
     diagnostics_internal(object, cv)$positive # internal to make the check here
@@ -125,7 +128,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = include_negative)) %>%
+    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = nonrejected)) %>%
       filter(id %in% series)
     gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
@@ -153,7 +156,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
                       option = c("gsadf", "sadf"),
                       min_duration = 0L,
                       select_series = NULL,
-                      include_negative = FALSE,
+                      nonrejected = FALSE,
                       trunc = TRUE,
                       shade_opt = shade(), ...) {
 
@@ -173,7 +176,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
     filter_option <- if (option == "gsadf") "bsadf" else "badf"
   }
 
-  pos_series <- if (include_negative) {
+  pos_series <- if (nonrejected) {
     if (is_sb(cv)) "panel" else snames
   } else {
     diagnostics_internal(object, cv)$positive # internal to make the check here
@@ -204,7 +207,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = include_negative)) %>%
+    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = nonrejected)) %>%
       filter(id %in% series)
     gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
@@ -397,7 +400,7 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75", col_negative =
   idx <- index(object, trunc = trunc)
   scale_custom <- if (lubridate::is.Date(idx)) scale_x_date else scale_x_continuous
 
-  ds_data <- filter(tidy(object)) %>%
+  ds_data <- dplyr::filter(tidy(object)) %>%
     mutate(id = reorder(id, dplyr::desc(id)))
 
   if(is_panel) {
