@@ -15,7 +15,7 @@ test_that("basic", {
   expect_equal(blan$layers %>% length(), 2)
 
   # Dividends
-  div <- radf_dta %>% autoplot(include_negative = TRUE, select_series = "div")
+  div <- radf_dta %>% autoplot(nonrejected = TRUE, select_series = "div")
   expect_equal(div$labels$title, "div")
   expect_equal(div$layers %>% length(), 1) # no geom_rect
 })
