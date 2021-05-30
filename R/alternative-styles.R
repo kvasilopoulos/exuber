@@ -61,6 +61,8 @@
 # TODO https://plotnine.readthedocs.io/en/stable/generated/plotnine.geoms.geom_segment.html
 
 
+# https://www.r-bloggers.com/2018/12/how-to-create-warming-stripes-in-r/
+
 # additional style for autoplot.ds ----------------------------------------
 
 
