@@ -38,9 +38,13 @@
 #' # Allow for nonrejected series to be plotted
 #' autoplot(rsim_data, nonrejected = TRUE)
 #'
-#' # Or remove the shading completely (2 ways)
+#' # Remove the shading completely (2 ways)
 #' autoplot(rsim_data, shade_opt = NULL)
 #' autoplot(rsim_data, shade_opt = shade(opacity = 0))
+#'
+#' # Plot only the series with the shading options
+#' autoplot2(rsim_data)
+#' autoplot2(rsim_data, trunc = FALSE) # keep the minw period
 #'
 #' # We will need ggplot2 from here on out
 #' library(ggplot2)
@@ -73,7 +77,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
                           option = c("gsadf", "sadf"),
                           min_duration = 0L,
                           select_series = NULL,
-                          nonrejected = TRUE,
+                          nonrejected = FALSE,
                           shade_opt = shade(),
                           trunc = TRUE,
                           include_negative = "DEPRECATED",
