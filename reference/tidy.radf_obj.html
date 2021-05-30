@@ -211,34 +211,34 @@
 
 <span class='co'># Get the test statistic</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>rfd</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2 x 4</span>
 #&gt;   id      adf  sadf gsadf
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> psy1  -</span><span style='color: #BB0000;'>2.34</span><span>  2.92  3.04
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> psy2  -</span><span style='color: #BB0000;'>2.22</span><span>  5.15  5.15</div><div class='input'>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> psy1  -<span style='color: #BB0000;'>2.34</span>  2.92  3.04
+#&gt; <span style='color: #BCBCBC;'>2</span> psy2  -<span style='color: #BB0000;'>2.22</span>  5.15  5.15</div><div class='input'>
 <span class='co'># Get the test statisticsequences</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='va'>rfd</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 162 x 6</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 162 x 6</span>
 #&gt;      key index id     data    badf   bsadf
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>    20    20 psy1   80.3 -</span><span style='color: #BB0000;'>1.01</span><span>   -</span><span style='color: #BB0000;'>1.01</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>    20    20 psy2  105.  -</span><span style='color: #BB0000;'>1.54</span><span>   -</span><span style='color: #BB0000;'>1.54</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>    21    21 psy1   84.5 -</span><span style='color: #BB0000;'>1.35</span><span>   -</span><span style='color: #BB0000;'>1.30</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>    21    21 psy2  114.  -</span><span style='color: #BB0000;'>1.01</span><span>   -</span><span style='color: #BB0000;'>0.834</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>    22    22 psy1   92.1 -</span><span style='color: #BB0000;'>1.77</span><span>   -</span><span style='color: #BB0000;'>1.71</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>    22    22 psy2  129.  -</span><span style='color: #BB0000;'>0.055</span><span style='color: #BB0000;text-decoration: underline;'>5</span><span>  0.216 
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>    23    23 psy1   96.9 -</span><span style='color: #BB0000;'>1.90</span><span>   -</span><span style='color: #BB0000;'>1.75</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>    23    23 psy2  128.  -</span><span style='color: #BB0000;'>0.202</span><span>  -</span><span style='color: #BB0000;'>0.034</span><span style='color: #BB0000;text-decoration: underline;'>8</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>    24    24 psy1   94.4 -</span><span style='color: #BB0000;'>1.95</span><span>   -</span><span style='color: #BB0000;'>1.72</span><span>  
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>    24    24 psy2  141.   0.438   0.551 
-#&gt; </span><span style='color: #949494;'># … with 152 more rows</span><span></div><div class='input'>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>    20    20 psy1   80.3 -<span style='color: #BB0000;'>1.01</span>   -<span style='color: #BB0000;'>1.01</span>  
+#&gt; <span style='color: #BCBCBC;'> 2</span>    20    20 psy2  105.  -<span style='color: #BB0000;'>1.54</span>   -<span style='color: #BB0000;'>1.54</span>  
+#&gt; <span style='color: #BCBCBC;'> 3</span>    21    21 psy1   84.5 -<span style='color: #BB0000;'>1.35</span>   -<span style='color: #BB0000;'>1.30</span>  
+#&gt; <span style='color: #BCBCBC;'> 4</span>    21    21 psy2  114.  -<span style='color: #BB0000;'>1.01</span>   -<span style='color: #BB0000;'>0.834</span> 
+#&gt; <span style='color: #BCBCBC;'> 5</span>    22    22 psy1   92.1 -<span style='color: #BB0000;'>1.77</span>   -<span style='color: #BB0000;'>1.71</span>  
+#&gt; <span style='color: #BCBCBC;'> 6</span>    22    22 psy2  129.  -<span style='color: #BB0000;'>0.055</span><span style='color: #BB0000; text-decoration: underline;'>5</span>  0.216 
+#&gt; <span style='color: #BCBCBC;'> 7</span>    23    23 psy1   96.9 -<span style='color: #BB0000;'>1.90</span>   -<span style='color: #BB0000;'>1.75</span>  
+#&gt; <span style='color: #BCBCBC;'> 8</span>    23    23 psy2  128.  -<span style='color: #BB0000;'>0.202</span>  -<span style='color: #BB0000;'>0.034</span><span style='color: #BB0000; text-decoration: underline;'>8</span>
+#&gt; <span style='color: #BCBCBC;'> 9</span>    24    24 psy1   94.4 -<span style='color: #BB0000;'>1.95</span>   -<span style='color: #BB0000;'>1.72</span>  
+#&gt; <span style='color: #BCBCBC;'>10</span>    24    24 psy2  141.   0.438   0.551 
+#&gt; <span style='color: #949494;'># … with 152 more rows</span></div><div class='input'>
 <span class='co'># Get the panel test statistic</span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>rfd</span>, panel <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 1</span>
 #&gt;   gsadf_panel
-#&gt;         </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span>        1.79</div><div class='input'><span class='co'># }</span>
-</div></span></pre>
+#&gt;         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span>        1.79</div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

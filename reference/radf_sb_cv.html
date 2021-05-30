@@ -232,21 +232,21 @@ In search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 <span class='va'>sb</span> <span class='op'>&lt;-</span> <span class='fu'>radf_sb_cv</span><span class='op'>(</span><span class='va'>sim_data</span>, lag <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>sb</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 3</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 3</span>
 #&gt;   id    sig   gsadf_panel
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> panel 90          0.347
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> panel 95          0.432
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> panel 99          0.641</div><div class='input'>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> panel 90          0.347
+#&gt; <span style='color: #BCBCBC;'>2</span> panel 95          0.432
+#&gt; <span style='color: #BCBCBC;'>3</span> panel 99          0.641</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, cv <span class='op'>=</span> <span class='va'>sb</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; ── Summary (minw = 19, lag = 1) ─────────────── Sieve Bootstrap (nboot = 500) ──
 #&gt; 
 #&gt; panel :
-#&gt; </span><span style='color: #949494;'># A tibble: 1 x 5</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 1 x 5</span>
 #&gt;   stat        tstat  `90`  `95`  `99`
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> gsadf_panel  1.89 0.347 0.432 0.641
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> gsadf_panel  1.89 0.347 0.432 0.641
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, cv <span class='op'>=</span> <span class='va'>sb</span><span class='op'>)</span>
 </div><div class='img'><img src='radf_sb_cv-1.png' alt='' width='700' height='433' /></div><div class='input'>
@@ -255,7 +255,7 @@ In search of the smoking gun. The Journal of Real Estate Finance and Economics, 
 
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>sdist</span><span class='op'>)</span>
 </div><div class='img'><img src='radf_sb_cv-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
