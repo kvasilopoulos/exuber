@@ -179,11 +179,10 @@ geom_rect layer that demarcates the exuberance periods.</p>
   option <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span><span class='op'>)</span>,
   min_duration <span class='op'>=</span> <span class='fl'>0L</span>,
   select_series <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include_negative <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  nonrejected <span class='op'>=</span> <span class='cn'>FALSE</span>,
   shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span><span class='op'>)</span>,
   trunc <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  include <span class='op'>=</span> <span class='st'>"DEPRECATED"</span>,
-  select <span class='op'>=</span> <span class='st'>"DEPRECATED"</span>,
+  include_negative <span class='op'>=</span> <span class='st'>"DEPRECATED"</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -194,7 +193,7 @@ geom_rect layer that demarcates the exuberance periods.</p>
   option <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gsadf"</span>, <span class='st'>"sadf"</span><span class='op'>)</span>,
   min_duration <span class='op'>=</span> <span class='fl'>0L</span>,
   select_series <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include_negative <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  nonrejected <span class='op'>=</span> <span class='cn'>FALSE</span>,
   trunc <span class='op'>=</span> <span class='cn'>TRUE</span>,
   shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span><span class='op'>)</span>,
   <span class='va'>...</span>
@@ -234,7 +233,7 @@ reported (default = 0).</p></td>
 Note that the order of the series does not alter the order used in plotting.</p></td>
     </tr>
     <tr>
-      <th>include_negative</th>
+      <th>nonrejected</th>
       <td><p>If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.</p></td>
     </tr>
     <tr>
@@ -246,12 +245,8 @@ Note that the order of the series does not alter the order used in plotting.</p>
       <td><p>Whether to remove the period of the minimum window from the plot (default = TRUE).</p></td>
     </tr>
     <tr>
-      <th>include</th>
-      <td><p>Argument name is deprecated and substituted with <code>include_negative</code>.</p></td>
-    </tr>
-    <tr>
-      <th>select</th>
-      <td><p>Argument name is deprecated and substituted with <code>select_series</code>.</p></td>
+      <th>include_negative</th>
+      <td><p>Argument name is deprecated and substituted with <code>nonrejected</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -292,9 +287,17 @@ the null hypothesis.</p></td>
 <span class='co'># Modify the shading options</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"pink"</span>, opacity <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Or remove the shading completely</span>
-<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span>opacity <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># Allow for nonrejected series to be plotted</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, nonrejected <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Remove the shading completely (2 ways)</span>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, shade_opt <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, shade_opt <span class='op'>=</span> <span class='fu'>shade</span><span class='op'>(</span>opacity <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Plot only the series with the shading options</span>
+<span class='fu'><a href='autoplot2.html'>autoplot2</a></span><span class='op'>(</span><span class='va'>rsim_data</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-7.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='autoplot2.html'>autoplot2</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, trunc <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># keep the minw period</span>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-8.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># We will need ggplot2 from here on out</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
 
@@ -306,25 +309,25 @@ the null hypothesis.</p></td>
 </div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'colour' is already present. Adding another scale for 'colour',</span>
 #&gt; <span class='message'>which will replace the existing scale.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'size' is already present. Adding another scale for 'size', which</span>
 #&gt; <span class='message'>will replace the existing scale.</span></div><div class='output co'>#&gt; <span class='message'>Scale for 'linetype' is already present. Adding another scale for 'linetype',</span>
-#&gt; <span class='message'>which will replace the existing scale.</span></div><div class='img'><img src='autoplot.radf_obj-5.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; <span class='message'>which will replace the existing scale.</span></div><div class='img'><img src='autoplot.radf_obj-9.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change names through labeller (first way)</span>
 <span class='va'>custom_labels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"psy1"</span> <span class='op'>=</span> <span class='st'>"new_name_for_psy1"</span>, <span class='st'>"psy2"</span> <span class='op'>=</span> <span class='st'>"new_name_for_psy2"</span><span class='op'>)</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, labeller <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller</a></span><span class='op'>(</span>.default <span class='op'>=</span> <span class='va'>label_value</span>, id <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/as_labeller.html'>as_labeller</a></span><span class='op'>(</span><span class='va'>custom_labels</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-6.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-10.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change names through labeller (second way)</span>
 <span class='va'>custom_labels2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='series_names.html'>series_names</a></span><span class='op'>(</span><span class='va'>rsim_data</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>custom_labels2</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>custom_labels2</span>
 <span class='va'>custom_labels2</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>5</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Evans"</span>, <span class='st'>"Blanchard"</span><span class='op'>)</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span>, labeller <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labeller.html'>labeller</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='va'>custom_labels2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-7.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-11.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Or change names before plotting</span>
 <span class='fu'><a href='series_names.html'>series_names</a></span><span class='op'>(</span><span class='va'>rsim_data</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-8.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-12.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Change Theme options</span>
 <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/autoplot.html'>autoplot</a></span><span class='op'>(</span><span class='va'>rsim_data</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"right"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-9.png' alt='' width='700' height='433' /></div><div class='input'> <span class='co'># }</span>
+</div><div class='output co'>#&gt; <span class='message'>Using `radf_crit` for `cv`.</span></div><div class='img'><img src='autoplot.radf_obj-13.png' alt='' width='700' height='433' /></div><div class='input'> <span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
