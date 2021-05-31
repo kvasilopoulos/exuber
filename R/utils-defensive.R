@@ -53,8 +53,9 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
 }
 
 assert_between <- function(x, arg1, arg2) {
+  xname <- enexpr(x)
   if (!dplyr::between(x, arg1, arg2)) {
-    stop_glue("Argument '{x}' should be a be between '{arg1}' and '{arg2}'")
+    stop_glue("Argument '{xname}' should be a be between '{arg1}' and '{arg2}'")
   }
 }
 
