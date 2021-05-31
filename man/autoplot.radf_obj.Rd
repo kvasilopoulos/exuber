@@ -12,11 +12,10 @@
   option = c("gsadf", "sadf"),
   min_duration = 0L,
   select_series = NULL,
-  include_negative = FALSE,
+  nonrejected = FALSE,
   shade_opt = shade(),
   trunc = TRUE,
-  include = "DEPRECATED",
-  select = "DEPRECATED",
+  include_negative = "DEPRECATED",
   ...
 )
 
@@ -26,7 +25,7 @@
   option = c("gsadf", "sadf"),
   min_duration = 0L,
   select_series = NULL,
-  include_negative = FALSE,
+  nonrejected = FALSE,
   trunc = TRUE,
   shade_opt = shade(),
   ...
@@ -53,15 +52,13 @@ reported (default = 0).}
 \item{select_series}{A vector of column names or numbers specifying the series to be used in plotting.
 Note that the order of the series does not alter the order used in plotting.}
 
-\item{include_negative}{If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
+\item{nonrejected}{If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
 
 \item{shade_opt}{Shading options, typically set using \code{shade} function.}
 
 \item{trunc}{Whether to remove the period of the minimum window from the plot (default = TRUE).}
 
-\item{include}{Argument name is deprecated and substituted with \code{include_negative}.}
-
-\item{select}{Argument name is deprecated and substituted with \code{select_series}.}
+\item{include_negative}{Argument name is deprecated and substituted with \code{nonrejected}.}
 
 \item{...}{Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
 
@@ -94,8 +91,16 @@ autoplot(rsim_data, scales = "free_y", dir  = "v")
 # Modify the shading options
 autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.5))
 
-# Or remove the shading completely
+# Allow for nonrejected series to be plotted
+autoplot(rsim_data, nonrejected = TRUE)
+
+# Remove the shading completely (2 ways)
+autoplot(rsim_data, shade_opt = NULL)
 autoplot(rsim_data, shade_opt = shade(opacity = 0))
+
+# Plot only the series with the shading options
+autoplot2(rsim_data)
+autoplot2(rsim_data, trunc = FALSE) # keep the minw period
 
 # We will need ggplot2 from here on out
 library(ggplot2)
