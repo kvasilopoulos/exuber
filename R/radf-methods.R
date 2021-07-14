@@ -315,10 +315,12 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
   ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>% pull(ds_lgl) %>% which())
   ds_stamp <- map(ds_basic, ~ stamp(.x) %>% as.matrix())
 
-  if("panel" %ni% pos) {
+  # TODO add peak in panel
+  if(length(pos) != 1 && pos != "panel") {
     tstat <- map2(pos, ds_stamp, ~ filter(ds_tbl, id == .x) %>% pull(tstat))
     mat <- map(pos, ~ mat(object)[,.x])
-    ds_stamp <- purrr::pmap(list(ds_stamp, tstat, mat, get_trunc(object)), add_peak)
+    possibly_add_peak <- possibly(add_peak, otherwise = NULL)
+    ds_stamp <- purrr::pmap(list(ds_stamp, tstat, mat, get_trunc(object)), possibly_add_peak)
   }
 
   idx <- if (is_sb(cv)) index(cv) else index(object)
@@ -376,6 +378,19 @@ stamp <- function(x) {
 
 stamp_to_index <- function(x, idx, cv) {
 
+  if(is.null(x)) {
+    na_df <- data.frame(
+      "Start" = NA,
+      "Peak" = NA,
+      "End" = NA,
+      "Duration" = NA,
+      "Signal" = NA,
+      row.names = NULL
+    )
+    na_df <- na_df[-1,]
+    return(na_df)
+  }
+
   if(is_sb(cv)) {
     data.frame(
       "Start" = idx[x[, "Start"]],
@@ -417,12 +432,15 @@ add_peak <- function(ds, tstat, mat, minw) {
   )
 }
 
-# TODO ongoing canno work in panel
+# TODO ongoing cannot work in panel
 add_ongoing <- function(ds, idx, cv) {
-
   n <- get_n(cv)
   end <- ds[,"End"]
-  ongoing <- ifelse(is.na(end), TRUE, FALSE)
+  if(is_logical(end, 0)) {
+    return(data.frame(ds, Ongoing = character(0)))
+  }else{
+    ongoing <- ifelse(is.na(end), TRUE, FALSE)
+  }
   np <- length(end)
   for(i in 1:np){
     if(ongoing[i]) {
@@ -430,17 +448,6 @@ add_ongoing <- function(ds, idx, cv) {
     }
   }
   ds[,"End"] <- end
-
-  # if(!is_sb(cv)) {
-  #   peak <- ds[,"Peak"]
-  #   for(i in 1:np){
-  #     if(ongoing[i]) {
-  #       peak[i] <- idx[n]
-  #     }
-  #   }
-  #   ds[,"Peak"] <- peak
-  # }
-
   data.frame(ds, Ongoing = ongoing)
 }
 
@@ -448,7 +455,7 @@ add_ongoing <- function(ds, idx, cv) {
 #' @export
 print.ds_radf <- function(x, ...) {
   if (length(x) == 0) {
-    return(invisible())
+    return(invisible(NULL))
   }
   cli::cat_line()
   cli::cat_rule(
