@@ -74,6 +74,7 @@
 #'   theme(legend.position = "right")
 #'  }
 autoplot.radf_obj <- function(object, cv = NULL,
+                              sig_lvl = 95,
                           option = c("gsadf", "sadf"),
                           min_duration = 0L,
                           select_series = NULL,
@@ -121,7 +122,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
 
   dots <- rlang::dots_list(...)
   plot_data <- augment_join(object, cv, trunc = trunc) %>%
-    filter(id %in% series, sig == 95, stat == filter_option) %>%
+    filter(id %in% series, sig == sig_lvl, stat == filter_option) %>%
     pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "tstat_crit")
   gg <-  plot_data %>%
     ggplot(aes(index, value, col = tstat_crit, size = tstat_crit, linetype = tstat_crit)) +
@@ -132,7 +133,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = nonrejected)) %>%
+    ds_data <- tidy(datestamp(object, cv, sig_lvl = sig_lvl, option = option, nonrejected = nonrejected)) %>%
       filter(id %in% series)
     gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
@@ -157,6 +158,7 @@ autoplot.radf_obj <- function(object, cv = NULL,
 #' @rdname autoplot.radf_obj
 #' @export
 autoplot2.radf_obj <- function(object, cv = NULL,
+                               sig_lvl = 95,
                       option = c("gsadf", "sadf"),
                       min_duration = 0L,
                       select_series = NULL,
@@ -201,7 +203,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
 
   dots <- rlang::dots_list(...)
   plot_data <- augment_join(object, cv, trunc = trunc) %>%
-    filter(id %in% series, sig == 95, stat == filter_option)
+    filter(id %in% series, sig == sig_lvl, stat == filter_option)
   gg <-  plot_data %>%
     ggplot(aes(index, data)) +
     geom_line() +
@@ -211,7 +213,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, option = option, nonrejected = nonrejected)) %>%
+    ds_data <- tidy(datestamp(object, cv, sig_lvl = sig_lvl, option = option, nonrejected = nonrejected)) %>%
       filter(id %in% series)
     gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
