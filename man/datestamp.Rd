@@ -11,6 +11,7 @@ datestamp(object, cv = NULL, min_duration = 0L, ...)
   object,
   cv = NULL,
   min_duration = 0L,
+  sig = 95,
   option = c("gsadf", "sadf"),
   nonrejected = FALSE,
   ...

@@ -15,6 +15,7 @@
 #'
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr filter select
+#' @importFrom rlang is_logical
 #' @name summary.radf_obj
 #' @examples
 #' \donttest{
@@ -276,7 +277,7 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #' @inheritParams diagnostics.radf_obj
 #' @importFrom rlang sym !! %||%
 #' @importFrom dplyr filter pull
-#' @importFrom purrr map map_lgl
+#' @importFrom purrr map map_lgl possibly
 #' @export
 #'
 #' @examples
@@ -290,13 +291,14 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #' datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 #'
 #' autoplot(ds_data)
-datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
+datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 95,
                                option = c("gsadf", "sadf"), nonrejected = FALSE, ...) {
 
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   option <- match.arg(option)
+  stopifnot(sig_lvl %in% c(90, 95, 99))
   assert_positive_int(min_duration, strictly = FALSE)
   assert_match(object, cv)
 
@@ -309,7 +311,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L,
 
   filter_option <- if (option == "gsadf") c("bsadf_panel", "bsadf") else c("bsadf_panel", "badf")
   ds_tbl <- augment_join(object, cv) %>%
-    filter(sig == 95, stat %in% filter_option) %>% # either {bsadf, badf} or bsadf_panel
+    filter(sig == sig_lvl, stat %in% filter_option) %>% # either {bsadf, badf} or bsadf_panel
     mutate(ds_lgl = tstat > crit)
 
   ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>% pull(ds_lgl) %>% which())
