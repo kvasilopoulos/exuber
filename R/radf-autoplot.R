@@ -455,7 +455,3 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
     scale_custom(limits = c(idx[1L], idx[length(idx)]))
   )
 }
-
-
-
-

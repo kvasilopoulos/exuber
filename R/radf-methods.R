@@ -244,6 +244,7 @@ print.dg_radf <- function(x, ...) {
 #' reported (default = 0).
 #' @param nonrejected logical. Whether to apply datestamping technique to the series
 #' that were not able to reject the Null hypothesis.
+#' @param sig_lvl logical. Significance level, one of 90, 95 or 99.
 #' @param ... further arguments passed to methods.
 #'
 #' @return Return a table with the following columns:
@@ -317,8 +318,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
   ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>% pull(ds_lgl) %>% which())
   ds_stamp <- map(ds_basic, ~ stamp(.x) %>% as.matrix())
 
-  # TODO add peak in panel
-  if(length(pos) != 1 && pos != "panel") {
+  if(length(pos) != 1 & "panel" %ni% pos) { # TODO check if panel ~ length(pos) != 1 &&
     tstat <- map2(pos, ds_stamp, ~ filter(ds_tbl, id == .x) %>% pull(tstat))
     mat <- map(pos, ~ mat(object)[,.x])
     possibly_add_peak <- possibly(add_peak, otherwise = NULL)
