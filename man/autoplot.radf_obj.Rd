@@ -9,6 +9,7 @@
 \method{autoplot}{radf_obj}(
   object,
   cv = NULL,
+  sig_lvl = 95,
   option = c("gsadf", "sadf"),
   min_duration = 0L,
   select_series = NULL,
@@ -22,6 +23,7 @@
 \method{autoplot2}{radf_obj}(
   object,
   cv = NULL,
+  sig_lvl = 95,
   option = c("gsadf", "sadf"),
   min_duration = 0L,
   select_series = NULL,
