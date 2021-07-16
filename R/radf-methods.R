@@ -54,14 +54,6 @@ summary_radf <- function(cv, ...){
   UseMethod("summary_radf")
 }
 
-summary_radf.sb_cv <- function(cv, object, ...) {
-  ret <- list()
-  ret[["panel"]] <- tidy_join(object, cv, panel = TRUE) %>%
-    pivot_wider(names_from = sig, values_from = crit) %>%
-    select(-id)
-  ret
-}
-
 summary_radf.mc_cv <- summary_radf.wb_cv <- function(cv, object, ...) {
   ret <- list()
   snames <- series_names(object)
@@ -71,6 +63,14 @@ summary_radf.mc_cv <- summary_radf.wb_cv <- function(cv, object, ...) {
     ret[[nms]] <- filter(sm, id == nms) %>%
       select(-id)
   }
+  ret
+}
+
+summary_radf.sb_cv <- function(cv, object, ...) {
+  ret <- list()
+  ret[["panel"]] <- tidy_join(object, cv, panel = TRUE) %>%
+    pivot_wider(names_from = sig, values_from = crit) %>%
+    select(-id)
   ret
 }
 

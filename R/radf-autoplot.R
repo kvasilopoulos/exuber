@@ -399,7 +399,8 @@ autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
     )
 }
 
-geom_ds_segment <- function(object, trunc = TRUE, col = "grey75", col_negative = col,#"yellow2",
+geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
+                            size = 3, col_negative = col,#"yellow2",
                             col_ongoing = NULL) {
 
   is_panel <- get_panel(object)
@@ -425,14 +426,14 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75", col_negative =
   any_pos <- any(ds_data$Signal == "positive")
   x1 <- filter(ds_data,  Signal == "positive") %>%
     geom_segment(
-      data = ., size = 7, color = col,
+      data = ., size = size, color = col,
       aes(x = Start, xend = End, y = id, yend = id)
     )
 
   any_neg <- any(ds_data$Signal == "negative")
   x2 <- filter(ds_data, Signal == "negative") %>%
     geom_segment(
-      data = ., size = 7, color = col_negative,
+      data = ., size = size, color = col_negative,
       aes(x = Start, xend = End, y = id, yend = id)
     )
 
@@ -440,7 +441,7 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75", col_negative =
     any_ongoing <- any(ds_data$Ongoing)
     x3 <- filter(ds_data, Ongoing == TRUE) %>%
       geom_segment(
-        data = ., color = col_ongoing, size = 7,
+        data = ., color = col_ongoing, size = size,
         aes(x = Start, xend = End, y = id, yend = id)
       )
   } else {

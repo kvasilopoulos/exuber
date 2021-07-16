@@ -2,9 +2,8 @@ context("autoplot")
 
 # skip("need new tests here")
 
-p <- autoplot(radf_dta, cv = mc)
-
 test_that("basic", {
+  p <- autoplot(radf_dta, cv = mc)
   expect_error(p, NA)
   expect_s3_class(p, class = c("gg", "ggplot"))
   expect_equal(unique(p$data$index), index(radf_dta, trunc = TRUE))
