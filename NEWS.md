@@ -2,7 +2,7 @@
 
 ### `augment` method for `radf_obj` and `radf_cv`
 * New arg `trunc`
-* Fixed incosistencies among functions.
+* Fixed inconsistencies among functions.
 
 * Now radf stores the data that are later can be accessed with `mat`+
 * Advanced features on datestamping: New columns that indicate:
