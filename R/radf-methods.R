@@ -303,9 +303,11 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
   assert_positive_int(min_duration, strictly = FALSE)
   assert_match(object, cv)
 
+  is_panel <- is_sb(cv)
+
   snames <- series_names(object)
   pos <- if (isTRUE(nonrejected)) {
-    if (is_sb(cv)) "panel" else snames
+    if (is_panel) "panel" else snames
   } else {
     diagnostics_internal(object, cv)$positive # internal to make the check here
   }
@@ -318,15 +320,15 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
   ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>% pull(ds_lgl) %>% which())
   ds_stamp <- map(ds_basic, ~ stamp(.x) %>% as.matrix())
 
-  if(length(pos) != 1 & "panel" %ni% pos) { # TODO check if panel ~ length(pos) != 1 &&
+  if(!is_panel) {
     tstat <- map2(pos, ds_stamp, ~ filter(ds_tbl, id == .x) %>% pull(tstat))
     mat <- map(pos, ~ mat(object)[,.x])
     possibly_add_peak <- possibly(add_peak, otherwise = NULL)
     ds_stamp <- purrr::pmap(list(ds_stamp, tstat, mat, get_trunc(object)), possibly_add_peak)
   }
 
-  idx <- if (is_sb(cv)) index(cv) else index(object)
-  idx_trunc <- if (is_sb(cv)) index(cv, trunc = TRUE) else index(object, trunc = TRUE)
+  idx <- if (is_panel) index(cv) else index(object)
+  idx_trunc <- if (is_panel) index(cv, trunc = TRUE) else index(object, trunc = TRUE)
   ds_stamp_index <- map(ds_stamp, stamp_to_index, idx_trunc, cv)  # index has to from cv to iclude sb_cv(+2)
   ds_full <- purrr::map(ds_stamp_index, add_ongoing, idx, cv)
 
@@ -345,8 +347,8 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
 
   # store to dummy {0, 1}
   idx <- index(object)
-  reps <- if (is_sb(cv)) 1 else match(pos, series_names(object))
-  dms <- list(seq_along(idx), if (is_sb(cv)) "panel" else snames[reps])
+  reps <- if (is_panel) 1 else match(pos, series_names(object))
+  dms <- list(seq_along(idx), if (is_panel) "panel" else snames[reps])
   dummy <- matrix(0, nrow = length(idx), ncol = length(pos), dimnames = dms)
   zadj <- get_minw(object) + get_lag(object)
   for (z in seq_along(pos)) {
@@ -361,7 +363,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     minw = get_minw(object),
     lag = get_lag(object),
     n = get_n(object),
-    panel = is_sb(cv),
+    panel = is_panel,
     min_duration = min_duration,
     option = option,
     method = get_method(cv),
@@ -380,20 +382,19 @@ stamp <- function(x) {
 
 stamp_to_index <- function(x, idx, cv) {
 
-  if(is.null(x)) {
-    na_df <- data.frame(
-      "Start" = NA,
-      "Peak" = NA,
-      "End" = NA,
-      "Duration" = NA,
-      "Signal" = NA,
-      row.names = NULL
-    )
-    na_df <- na_df[-1,]
-    return(na_df)
-  }
-
   if(is_sb(cv)) {
+
+    if(is.null(x)) {
+      na_df <- data.frame(
+        "Start" = NA,
+        "End" = NA,
+        "Duration" = NA,
+        row.names = NULL
+      )
+      na_df <- na_df[-1,]
+      return(na_df)
+    }
+
     data.frame(
       "Start" = idx[x[, "Start"]],
       "End" = idx[x[, "End"]],
@@ -401,6 +402,20 @@ stamp_to_index <- function(x, idx, cv) {
       row.names = NULL
     )
   } else{
+
+    if(is.null(x)) {
+      na_df <- data.frame(
+        "Start" = NA,
+        "Peak" = NA,
+        "End" = NA,
+        "Duration" = NA,
+        "Signal" = NA,
+        row.names = NULL
+      )
+      na_df <- na_df[-1,]
+      return(na_df)
+    }
+
     data.frame(
       "Start" = idx[x[, "Start"]],
       "Peak" = idx[x[, "Peak"]],
