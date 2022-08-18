@@ -6,6 +6,7 @@
 #'
 #' @inheritParams datestamp.radf_obj
 #'
+#' @param sig_lvl Significance level. It could be one of 90, 95 or 99.
 #' @param nonrejected If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
 #' @param select_series 	A vector of column names or numbers specifying the series to be used in plotting.
 #' Note that the order of the series does not alter the order used in plotting.
@@ -75,19 +76,21 @@
 #'  }
 autoplot.radf_obj <- function(object, cv = NULL,
                               sig_lvl = 95,
-                          option = c("gsadf", "sadf"),
-                          min_duration = 0L,
-                          select_series = NULL,
-                          nonrejected = FALSE,
-                          shade_opt = shade(),
-                          trunc = TRUE,
-                          include_negative = "DEPRECATED",
-                          ...) {
+                              option = c("gsadf", "sadf"),
+                              min_duration = 0L,
+                              select_series = NULL,
+                              nonrejected = FALSE,
+                              shade_opt = shade(),
+                              trunc = TRUE,
+                              include_negative = "DEPRECATED",
+                              ...) {
 
   deprecate_arg_warn(include_negative, nonrejected)
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   snames <- series_names(object)
+
+  # sig_lvl <- match.arg(sig_lvl, c(90, 95, 99))
 
   option <- match.arg(option)
   if (is_sb(cv)) {
