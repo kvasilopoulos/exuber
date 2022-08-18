@@ -31,6 +31,7 @@ reference:
       - radf
       - radf_mc_cv
       - radf_wb_cv
+      - radf_wb_cv2
       - radf_sb_cv
       - radf_crit
 
@@ -40,16 +41,26 @@ reference:
       - diagnostics
       - datestamp
 
+  - title: Tidying
+    contents:
+      - tidy.radf_obj
+      - tidy.radf_cv
+      - tidy.radf_distr
+      - tidy.ds_radf
+
+
   - title: Plotting
     contents:
       - autoplot.radf_obj
       - autoplot.radf_distr
       - autoplot.ds_radf
+      - scale_exuber_manual
 
   - title: Simulation
     contents:
       - sim_psy1
       - sim_psy2
+      - sim_ps1
       - sim_blan
       - sim_evans
       - sim_div
@@ -59,10 +70,12 @@ reference:
       - psy_minw
       - index
       - series_names
+      - ps_tb
 
   - title: Extra tidying methods
     contents:
       - tidy_join
+      - tidy_join.radf_obj
 
 
 navbar:

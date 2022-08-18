@@ -19,6 +19,7 @@ ggplot2::autoplot
 #' @param object an object, whose class will determine the behaviour of autoplot
 #' @param ... other arguments passed to specific methods
 #'
+#' @keywords internal
 #' @export
 #' @seealso `autoplot()`
 autoplot2 <- function(object, ...) {

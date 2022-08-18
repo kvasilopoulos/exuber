@@ -12,7 +12,9 @@
 #' @importFrom tidyr nest spread
 #' @importFrom purrr when map2_dbl
 #' @importFrom dplyr group_by
+#' @keywords internal
 #' @examples
+#'
 #'
 #' \dontrun{
 #' radf_psy1 <- radf(sim_psy1(100))

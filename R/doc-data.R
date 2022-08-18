@@ -40,6 +40,7 @@ print.crit <- function(x, ...) {
 #'
 #' @seealso sim_psy1 sim_psy1 sim_evans sim_div sim_blan
 #'
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' # The dataset can be easily replicated with the code below
