@@ -108,7 +108,7 @@ print.sm_radf <- function(x, ...) {
 #'
 #' @export
 diagnostics <- function(object, cv = NULL, ...) {
-  UseMethod("diagnostics")
+  UseMethod("diagnostics", object)
 }
 
 #' @rdname diagnostics

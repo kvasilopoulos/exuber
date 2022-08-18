@@ -19,3 +19,4 @@ other classes and packages can extend.
 \seealso{
 \code{autoplot()}
 }
+\keyword{internal}
