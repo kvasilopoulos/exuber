@@ -34,6 +34,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -65,7 +67,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -85,7 +87,7 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="https://github.com/kvasilopoulos/exuber">
+  <a href="https://github.com/kvasilopoulos/exuber" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -112,7 +114,7 @@
       <h1 data-toc-skip>Simulation</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/master/vignettes/simulation.Rmd"><code>vignettes/simulation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/HEAD/vignettes/simulation.Rmd" class="external-link"><code>vignettes/simulation.Rmd</code></a></small>
       <div class="hidden name"><code>simulation.Rmd</code></div>
 
     </div>
@@ -123,36 +125,36 @@
 <p>To test the GSADF test and its associated date-stamping strategy, the BSADF test, PSY utilize a model of dividends and incorporate an Evans (1991) type bubble. We replicate that here to show 1) the ability of exuber to generate realistic simulated time series which incorporate bubbles and 2) to demonstrate the capabilities of <code><a href="../reference/radf.html">radf()</a></code> to detect them.</p>
 <p>Let’s start be generating a realistic prices series incorporating an Evans (1991) type periodically collapsing bubble with the function <code><a href="../reference/sim_evans.html">sim_evans()</a></code>. We will use the monthly parameterisation detailed in PSY (2015a), which corresponds to the empirical values from the S&amp;P 500. {exuber} contains a function <code><a href="../reference/sim_div.html">sim_div()</a></code> which can be used to generate simulated dividends streams from a random walk with drift model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">125</span><span class="op">)</span>
-<span class="co"># The fundamental value from the Lucas pricing model</span>
-<span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_div.html">sim_div</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span>
-
-<span class="co"># The Evans bubble term</span>
-<span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span>
-
-<span class="co"># the scaling factor for the bubble</span>
-<span class="va">kappa</span> <span class="op">&lt;-</span> <span class="fl">20</span>
-<span class="co"># </span>
-<span class="co"># The simulated price</span>
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="va">pf</span> <span class="op">+</span> <span class="va">kappa</span><span class="op">*</span><span class="va">pb</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">125</span><span class="op">)</span></span>
+<span><span class="co"># The fundamental value from the Lucas pricing model</span></span>
+<span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_div.html">sim_div</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The Evans bubble term</span></span>
+<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># the scaling factor for the bubble</span></span>
+<span><span class="va">kappa</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># The simulated price</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">pf</span> <span class="op">+</span> <span class="va">kappa</span><span class="op">*</span><span class="va">pb</span></span></code></pre></div>
 <p>We can now plot this data to see what it looks like:</p>
 <p><img src="simulation_files/figure-html/plot%20simulation-1.png" width="864"></p>
 <p>Let’s repeat</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
-
-<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
-  sim_psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  sim_psy2 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  sim_evans <span class="op">=</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  sim_blan <span class="op">=</span> <span class="fu"><a href="../reference/sim_blan.html">sim_blan</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-<p>To plot them altogether we can use the<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot()</a></code> method for “sim” objects. However, <code>autoplot.sim()</code> is for individual object thus we need some functional programming to plot them together. We can use the <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function, which iterates through every column of the data.frame and stores them into a list of “ggplot” objects, and then we can arrange with the <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> function into a 2x2 grid.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org" class="external-link">purrr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  sim_psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  sim_psy2 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  sim_evans <span class="op">=</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  sim_blan <span class="op">=</span> <span class="fu"><a href="../reference/sim_blan.html">sim_blan</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>To plot them altogether we can use the<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method for “sim” objects. However, <code>autoplot.sim()</code> is for individual object thus we need some functional programming to plot them together. We can use the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> function, which iterates through every column of the data.frame and stores them into a list of “ggplot” objects, and then we can arrange with the <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> function into a 2x2 grid.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sims</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">autoplot</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">grid.arrange</span>, <span class="va">.</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sims</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">autoplot</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">grid.arrange</span>, <span class="va">.</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulation_files/figure-html/autoplot-sim-1.png" width="864"></p>
   </div>
 
@@ -165,11 +167,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics">Enrique Martínez-García</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://kvasilopoulos.com/" class="external-link">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/" class="external-link">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics" class="external-link">Enrique Martínez-García</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

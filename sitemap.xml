@@ -1,7 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://kvasilopoulos.github.io/exuber/404.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/ISSUE_TEMPLATE.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/SUPPORT.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/articles/exuber.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/articles/plotting.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/articles/simulation.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/authors.html</loc>
+  </url>
+  <url>
     <loc>https://kvasilopoulos.github.io/exuber/index.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/news/index.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.ds_radf.html</loc>
@@ -35,6 +74,9 @@
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber/reference/index-rd.html</loc>
+  </url>
+  <url>
+    <loc>https://kvasilopoulos.github.io/exuber/reference/index.html</loc>
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber/reference/install_exuberdata.html</loc>
@@ -116,14 +158,5 @@
   </url>
   <url>
     <loc>https://kvasilopoulos.github.io/exuber/reference/tidy_join.radf_obj.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/exuber.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/plotting.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/simulation.html</loc>
   </url>
 </urlset>

@@ -34,6 +34,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -65,7 +67,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -85,7 +87,7 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="https://github.com/kvasilopoulos/exuber">
+  <a href="https://github.com/kvasilopoulos/exuber" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -112,127 +114,127 @@
       <h1 data-toc-skip>Intro to exuber</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/master/vignettes/exuber.Rmd"><code>vignettes/exuber.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/HEAD/vignettes/exuber.Rmd" class="external-link"><code>vignettes/exuber.Rmd</code></a></small>
       <div class="hidden name"><code>exuber.Rmd</code></div>
 
     </div>
 
     
     
-<p>For our analysis we are going to use the <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">datasets::EuStockMarkets</a></code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE (see <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html">?EuStockMarkets</a></code>). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
+<p>For our analysis we are going to use the <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html" class="external-link">datasets::EuStockMarkets</a></code> dataset, which contains the daily closing prices of four major European stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE (see <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html" class="external-link">?EuStockMarkets</a></code>). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">EuStockMarkets</span>, nfrequency <span class="op">=</span> <span class="fl">52</span>, <span class="va">mean</span><span class="op">)</span></code></pre></div>
-<div id="estimation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#estimation" class="anchor"></a>Estimation</h2>
+<code class="sourceCode R"><span><span class="va">stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">EuStockMarkets</span>, nfrequency <span class="op">=</span> <span class="fl">52</span>, <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="estimation">Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
+</h2>
 <p>We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">est_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">stocks</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">est_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">stocks</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="analysis" class="section level2">
-<h2 class="hasAnchor">
-<a href="#analysis" class="anchor"></a>Analysis</h2>
+<div class="section level2">
+<h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
+</h2>
 <p>The summary will print the test statistic and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the <code>cv</code> argument in the <code>summary</code> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── Summary (minw = 38, lag = 1) ─────────────────── Monte Carlo (nrep = 2000) ──</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; DAX :</span>
-<span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
-<span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 adf    1.45 -0.437 -0.0900 0.511</span>
-<span class="co">#&gt; 2 sadf   4.95  1.14   1.42   2.04 </span>
-<span class="co">#&gt; 3 gsadf  5.18  1.90   2.14   2.60 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SMI :</span>
-<span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
-<span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 adf    1.77 -0.437 -0.0900 0.511</span>
-<span class="co">#&gt; 2 sadf   4.28  1.14   1.42   2.04 </span>
-<span class="co">#&gt; 3 gsadf  4.49  1.90   2.14   2.60 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; CAC :</span>
-<span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
-<span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 adf   0.987 -0.437 -0.0900 0.511</span>
-<span class="co">#&gt; 2 sadf  2.91   1.14   1.42   2.04 </span>
-<span class="co">#&gt; 3 gsadf 2.97   1.90   2.14   2.60 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; FTSE :</span>
-<span class="co">#&gt; # A tibble: 3 x 5</span>
-<span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span>
-<span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1 adf   0.194 -0.437 -0.0900 0.511</span>
-<span class="co">#&gt; 2 sadf  2.56   1.14   1.42   2.04 </span>
-<span class="co">#&gt; 3 gsadf 2.67   1.90   2.14   2.60</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Summary (minw = 38, lag = 1) ─────────────────── Monte Carlo (nrep = 2000) ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; DAX :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    1.45 -<span style="color: #BB0000;">0.437</span> -<span style="color: #BB0000;">0.090</span><span style="color: #BB0000; text-decoration: underline;">0</span> 0.511</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   4.95  1.14   1.42   2.04 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  5.18  1.90   2.14   2.60 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SMI :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    1.77 -<span style="color: #BB0000;">0.437</span> -<span style="color: #BB0000;">0.090</span><span style="color: #BB0000; text-decoration: underline;">0</span> 0.511</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   4.28  1.14   1.42   2.04 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  4.49  1.90   2.14   2.60 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; CAC :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.987 -<span style="color: #BB0000;">0.437</span> -<span style="color: #BB0000;">0.090</span><span style="color: #BB0000; text-decoration: underline;">0</span> 0.511</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.91   1.14   1.42   2.04 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.97   1.90   2.14   2.60 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; FTSE :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.194 -<span style="color: #BB0000;">0.437</span> -<span style="color: #BB0000;">0.090</span><span style="color: #BB0000; text-decoration: underline;">0</span> 0.511</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.56   1.14   1.42   2.04 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.67   1.90   2.14   2.60</span></span></code></pre></div>
 <p>It seems that all stocks exhibit exuberant behaviour but we can also verify it using <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. This function is particularly useful when we deal a large number of series.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; DAX:      Rejects H0 at the 1% significance level</span>
-<span class="co">#&gt; SMI:      Rejects H0 at the 1% significance level</span>
-<span class="co">#&gt; CAC:      Rejects H0 at the 1% significance level</span>
-<span class="co">#&gt; FTSE:     Rejects H0 at the 1% significance level</span></code></pre></div>
-<p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner with <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. The user still has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; DAX:      Rejects H0 at the <span style="color: #BB0000;">1%</span> significance level</span></span>
+<span><span class="co">#&gt; SMI:      Rejects H0 at the <span style="color: #BB0000;">1%</span> significance level</span></span>
+<span><span class="co">#&gt; CAC:      Rejects H0 at the <span style="color: #BB0000;">1%</span> significance level</span></span>
+<span><span class="co">#&gt; FTSE:     Rejects H0 at the <span style="color: #BB0000;">1%</span> significance level</span></span></code></pre></div>
+<p>If we need to know the exact period of exuberance we can do so with the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in a similar manner with <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. The user still has to specify the critical values, however we can still utilize the package’s critical values by leaving the cv-argument blank.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Minimum duration of an explosive period </span>
-<span class="va">rot</span> <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span> <span class="co"># log(n) ~ rule of thumb</span>
-
-<span class="va">dstamp_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span>, min_duration <span class="op">=</span> <span class="va">rot</span><span class="op">)</span>
-<span class="va">dstamp_stocks</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── Datestamp (min_duration = 6) ───────────────────────────────── Monte Carlo ──</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; DAX :</span>
-<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
-<span class="co">#&gt; 1 1997-02-10 1997-08-05 1997-11-04       38 positive   FALSE</span>
-<span class="co">#&gt; 2 1998-01-27 1998-07-22 1998-08-19       30 positive    TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; SMI :</span>
-<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
-<span class="co">#&gt; 1 1993-12-02 1994-02-03 1994-02-17       11 positive   FALSE</span>
-<span class="co">#&gt; 2 1997-04-14 1997-07-15 1997-09-02       20 positive   FALSE</span>
-<span class="co">#&gt; 3 1997-09-09 1997-10-07 1997-11-04        8 positive   FALSE</span>
-<span class="co">#&gt; 4 1997-11-25 1998-04-07 1998-08-19       39 positive    TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; CAC :</span>
-<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
-<span class="co">#&gt; 1 1997-07-08 1997-08-05 1997-08-19        6 positive   FALSE</span>
-<span class="co">#&gt; 2 1998-03-10 1998-07-15 1998-08-12       22 positive   FALSE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; FTSE :</span>
-<span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span>
-<span class="co">#&gt; 1 1997-07-08 1997-10-07 1997-11-04       17 positive   FALSE</span>
-<span class="co">#&gt; 2 1998-02-10 1998-04-14 1998-06-24       19 positive   FALSE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Minimum duration of an explosive period </span></span>
+<span><span class="va">rot</span> <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span> <span class="co"># log(n) ~ rule of thumb</span></span>
+<span></span>
+<span><span class="va">dstamp_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span>, min_duration <span class="op">=</span> <span class="va">rot</span><span class="op">)</span></span>
+<span><span class="va">dstamp_stocks</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Datestamp (min_duration = 6) ───────────────────────────────── Monte Carlo ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; DAX :</span></span>
+<span><span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1 1997-02-10 1997-08-05 1997-11-04       38 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2 1998-01-27 1998-07-22 1998-08-19       30 positive    TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; SMI :</span></span>
+<span><span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1 1993-12-02 1994-02-03 1994-02-17       11 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2 1997-04-14 1997-07-15 1997-09-02       20 positive   FALSE</span></span>
+<span><span class="co">#&gt; 3 1997-09-09 1997-10-07 1997-11-04        8 positive   FALSE</span></span>
+<span><span class="co">#&gt; 4 1997-11-25 1998-04-07 1998-08-19       39 positive    TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; CAC :</span></span>
+<span><span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1 1997-07-08 1997-08-05 1997-08-19        6 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2 1998-03-10 1998-07-15 1998-08-12       22 positive   FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; FTSE :</span></span>
+<span><span class="co">#&gt;        Start       Peak        End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1 1997-07-08 1997-10-07 1997-11-04       17 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2 1998-02-10 1998-04-14 1998-06-24       19 positive   FALSE</span></span></code></pre></div>
 <p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">dstamp_stocks</span>, <span class="st">"dummy"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="va">dummy</span><span class="op">)</span>
-<span class="co">#&gt;     DAX SMI CAC FTSE</span>
-<span class="co">#&gt; 367   1   1   1    1</span>
-<span class="co">#&gt; 368   1   1   1    1</span>
-<span class="co">#&gt; 369   1   1   1    1</span>
-<span class="co">#&gt; 370   1   1   1    0</span>
-<span class="co">#&gt; 371   1   1   0    0</span>
-<span class="co">#&gt; 372   1   1   0    0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">dstamp_stocks</span>, <span class="st">"dummy"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">dummy</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     DAX SMI CAC FTSE</span></span>
+<span><span class="co">#&gt; 367   1   1   1    1</span></span>
+<span><span class="co">#&gt; 368   1   1   1    1</span></span>
+<span><span class="co">#&gt; 369   1   1   1    1</span></span>
+<span><span class="co">#&gt; 370   1   1   1    0</span></span>
+<span><span class="co">#&gt; 371   1   1   0    0</span></span>
+<span><span class="co">#&gt; 372   1   1   0    0</span></span></code></pre></div>
 </div>
-<div id="plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotting" class="anchor"></a>Plotting</h2>
+<div class="section level2">
+<h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h2>
 <p>The <code>autoplot</code> function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span></span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-radf-1.png" width="864"></p>
 <p>Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-datestaemp-1.png" width="672"></p>
 </div>
   </div>
@@ -248,11 +250,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics">Enrique Martínez-García</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://kvasilopoulos.com/" class="external-link">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/" class="external-link">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics" class="external-link">Enrique Martínez-García</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

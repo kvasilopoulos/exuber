@@ -34,6 +34,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -46,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -65,7 +67,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Vignettes
      
     <span class="caret"></span>
@@ -85,7 +87,7 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="https://github.com/kvasilopoulos/exuber">
+  <a href="https://github.com/kvasilopoulos/exuber" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -112,149 +114,150 @@
       <h1 data-toc-skip>Plotting with exuber</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/master/vignettes/plotting.Rmd"><code>vignettes/plotting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/HEAD/vignettes/plotting.Rmd" class="external-link"><code>vignettes/plotting.Rmd</code></a></small>
       <div class="hidden name"><code>plotting.Rmd</code></div>
 
     </div>
 
     
     
-<div id="the-plotting-api-has-changed-in-exuber-0-4-0" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-plotting-api-has-changed-in-exuber-0-4-0" class="anchor"></a>The plotting API has changed in exuber 0.4.0</h3>
+<div class="section level3">
+<h3 id="the-plotting-api-has-changed-in-exuber-0-4-0">The plotting API has changed in exuber 0.4.0<a class="anchor" aria-label="anchor" href="#the-plotting-api-has-changed-in-exuber-0-4-0"></a>
+</h3>
 <p>The new design offers full flexibility and customization to produce publication-ready plots. <code>exuber</code> used to plot graph individually in a list, and then you could modify each plot and arrange them into a single grob with <code><a href="../reference/exuber-defunct.html">ggarrange()</a></code>(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.</p>
 <p>Let’s start by simulating some data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
-  sim_psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  sim_psy2 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  sim_evans <span class="op">=</span> <span class="fu"><a href="../reference/sim_blan.html">sim_blan</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-  sim_blan <span class="op">=</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,
-<span class="op">)</span> 
-
-<span class="co"># Esimation</span>
-<span class="va">estimation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">sims</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-  
-<span class="co"># Critical Values</span>
-<span class="va">crit_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>  sim_psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  sim_psy2 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  sim_evans <span class="op">=</span> <span class="fu"><a href="../reference/sim_blan.html">sim_blan</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  sim_blan <span class="op">=</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co"># Esimation</span></span>
+<span><span class="va">estimation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">sims</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="co"># Critical Values</span></span>
+<span><span class="va">crit_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sims</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="same-appearance-with-new-features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#same-appearance-with-new-features" class="anchor"></a>Same Appearance with New Features</h2>
+<div class="section level2">
+<h2 id="same-appearance-with-new-features">Same Appearance with New Features<a class="anchor" aria-label="anchor" href="#same-appearance-with-new-features"></a>
+</h2>
 <p>The visual output of autoplot in <code>v0.4.0</code> is exactly the same as before.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-basic-1.png" width="960"> However, almost all aspects of the plot can be easily changed.</p>
-<div id="change-color-and-theme" class="section level3">
-<h3 class="hasAnchor">
-<a href="#change-color-and-theme" class="anchor"></a>Change color and theme</h3>
-<p>The custom color for autoplot are “blue and”red", however the user can easily override this option with <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">ggplot2::scale_color_manual</a></code>.</p>
+<div class="section level3">
+<h3 id="change-color-and-theme">Change color and theme<a class="anchor" aria-label="anchor" href="#change-color-and-theme"></a>
+</h3>
+<p>The custom color for autoplot are “blue and”red", however the user can easily override this option with <code><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">ggplot2::scale_color_manual</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"grey"</span>,<span class="st">"black"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey"</span>,<span class="st">"black"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-color-theme-1.png" width="960"></p>
 </div>
-<div id="changed-the-shaded-region-with-shade_opt" class="section level3">
-<h3 class="hasAnchor">
-<a href="#changed-the-shaded-region-with-shade_opt" class="anchor"></a>Changed the shaded region with shade_opt</h3>
-<p><code>shade_opt</code> allows the user to manipulate the <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_rect()</a></code> layer of the ggplot, using the <code>shade</code> function. Alternatively, it can be omitted if it set to <code>NULL</code>.</p>
+<div class="section level3">
+<h3 id="changed-the-shaded-region-with-shade_opt">Changed the shaded region with shade_opt<a class="anchor" aria-label="anchor" href="#changed-the-shaded-region-with-shade_opt"></a>
+</h3>
+<p><code>shade_opt</code> allows the user to manipulate the <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect()</a></code> layer of the ggplot, using the <code>shade</code> function. Alternatively, it can be omitted if it set to <code>NULL</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span>, shade_opt <span class="op">=</span> <span class="fu"><a href="../reference/autoplot.radf_obj.html">shade</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"pink"</span>, opacity <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span>, shade_opt <span class="op">=</span> <span class="fu"><a href="../reference/autoplot.radf_obj.html">shade</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"pink"</span>, opacity <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-shade-1.png" width="960"></p>
 </div>
 </div>
-<div id="custom-plotting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#custom-plotting" class="anchor"></a>Custom plotting</h2>
+<div class="section level2">
+<h2 id="custom-plotting">Custom plotting<a class="anchor" aria-label="anchor" href="#custom-plotting"></a>
+</h2>
 <p>Custom plotting is also very easy with the <code><a href="../reference/tidy_join.html">augment_join()</a></code>, that merge the output of the estimation and and critical values in a ggplot2-friendly way.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">joined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_join.html">augment_join</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span>
-<span class="va">joined</span>
-<span class="co">#&gt; # A tibble: 1,920 x 8</span>
-<span class="co">#&gt;      key index id        data stat   tstat sig    crit</span>
-<span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt;    &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt;  1    21    21 sim_psy1 119.  badf  -2.08  90    -0.44</span>
-<span class="co">#&gt;  2    22    22 sim_psy1 112.  badf  -2.31  90    -0.44</span>
-<span class="co">#&gt;  3    23    23 sim_psy1 111.  badf  -2.39  90    -0.44</span>
-<span class="co">#&gt;  4    24    24 sim_psy1 104.  badf  -2.26  90    -0.44</span>
-<span class="co">#&gt;  5    25    25 sim_psy1  98.6 badf  -2.08  90    -0.44</span>
-<span class="co">#&gt;  6    26    26 sim_psy1  94.3 badf  -1.79  90    -0.44</span>
-<span class="co">#&gt;  7    27    27 sim_psy1  82.9 badf  -1.00  90    -0.44</span>
-<span class="co">#&gt;  8    28    28 sim_psy1  88.6 badf  -1.34  90    -0.44</span>
-<span class="co">#&gt;  9    29    29 sim_psy1  89.6 badf  -1.28  90    -0.44</span>
-<span class="co">#&gt; 10    30    30 sim_psy1  81.9 badf  -0.800 90    -0.44</span>
-<span class="co">#&gt; # … with 1,910 more rows</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">joined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_join.html">augment_join</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span></span>
+<span><span class="va">joined</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,920 × 8</span></span></span>
+<span><span class="co">#&gt;      key index id        data stat   tstat sig    crit</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>    21    21 sim_psy1 119.  badf  -<span style="color: #BB0000;">2.08</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span>    22    22 sim_psy1 112.  badf  -<span style="color: #BB0000;">2.31</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span>    23    23 sim_psy1 111.  badf  -<span style="color: #BB0000;">2.39</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span>    24    24 sim_psy1 104.  badf  -<span style="color: #BB0000;">2.26</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span>    25    25 sim_psy1  98.6 badf  -<span style="color: #BB0000;">2.08</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span>    26    26 sim_psy1  94.3 badf  -<span style="color: #BB0000;">1.79</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span>    27    27 sim_psy1  82.9 badf  -<span style="color: #BB0000;">1.00</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span>    28    28 sim_psy1  88.6 badf  -<span style="color: #BB0000;">1.34</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span>    29    29 sim_psy1  89.6 badf  -<span style="color: #BB0000;">1.28</span>  90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span>    30    30 sim_psy1  81.9 badf  -<span style="color: #BB0000;">0.800</span> 90    -<span style="color: #BB0000;">0.44</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with 1,910 more rows</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ Use `print(n = ...)` to see more rows</span></span></span></code></pre></div>
 <p>The output of <code>augment_join</code> returns data in tidy format and offers full flexibility to the user. After this point plotting becomes extremely trivial.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">joined</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">index</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">tstat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">crit</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">sig</span> <span class="op">+</span> <span class="va">stat</span> <span class="op">~</span>  <span class="va">id</span>  , scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">joined</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">index</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">tstat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">crit</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">sig</span> <span class="op">+</span> <span class="va">stat</span> <span class="op">~</span>  <span class="va">id</span>  , scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/facet-joined-1.png" width="960"></p>
 <p>We also offer two functions <code>scale_exuber_manual</code> and <code>theme_exuber</code> that offer some extra functionality.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">joined</span> <span class="op">%&gt;%</span>
-  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tstat"</span>, <span class="st">"crit"</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"nms"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">index</span>, y <span class="op">=</span> <span class="va">value</span>, col <span class="op">=</span> <span class="va">nms</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">sig</span> <span class="op">+</span> <span class="va">stat</span> <span class="op">~</span>  <span class="va">id</span>  , scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/scale_exuber_manual.html">scale_exuber_manual</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">joined</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tstat"</span>, <span class="st">"crit"</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"nms"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">index</span>, y <span class="op">=</span> <span class="va">value</span>, col <span class="op">=</span> <span class="va">nms</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">sig</span> <span class="op">+</span> <span class="va">stat</span> <span class="op">~</span>  <span class="va">id</span>  , scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">scale_exuber_manual</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/facet-joined-theme-exuber-1.png" width="960"></p>
 </div>
-<div id="distribution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#distribution" class="anchor"></a>Distribution</h2>
+<div class="section level2">
+<h2 id="distribution">Distribution<a class="anchor" aria-label="anchor" href="#distribution"></a>
+</h2>
 <p>In addition to critical values, we can also calculate the empirical distribution by utilizing the family of *_distr functions. For example if we can simulate the distribution of the supADF tests with Monte Carlo method.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">distr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_distr</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">distr</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">distr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_distr</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">distr</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/distributions-1.png" width="960"></p>
-<div id="empirical-distribution" class="section level3">
-<h3 class="hasAnchor">
-<a href="#empirical-distribution" class="anchor"></a>Empirical distribution</h3>
+<div class="section level3">
+<h3 id="empirical-distribution">Empirical distribution<a class="anchor" aria-label="anchor" href="#empirical-distribution"></a>
+</h3>
 <p>This part is made just for fun.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
-<span class="va">distr</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">rename_all</span><span class="op">(</span><span class="op">~</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html">str_to_upper</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html">gather</a></span><span class="op">(</span><span class="va">Statistic</span>, <span class="va">value</span>, factor_key <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">value</span>, color <span class="op">=</span> <span class="va">Statistic</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html">stat_ecdf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Empirical Cumulative Distribution"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.95</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="va">distr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">rename_all</span><span class="op">(</span><span class="op">~</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/case.html" class="external-link">str_to_upper</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="va">Statistic</span>, <span class="va">value</span>, factor_key <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">value</span>, color <span class="op">=</span> <span class="va">Statistic</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ecdf.html" class="external-link">stat_ecdf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Empirical Cumulative Distribution"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.95</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/ecdf-1.png" width="960"></p>
 </div>
 </div>
-<div id="old-functionality" class="section level2">
-<h2 class="hasAnchor">
-<a href="#old-functionality" class="anchor"></a>Old Functionality</h2>
+<div class="section level2">
+<h2 id="old-functionality">Old Functionality<a class="anchor" aria-label="anchor" href="#old-functionality"></a>
+</h2>
 <p>To return to the old functionality there are several ways.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span>
-
-<span class="co"># To choose only positive series (i.e. statistically significant for 5%)</span>
-<span class="va">positive_series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span><span class="op">$</span><span class="va">positive</span> 
-
-<span class="co"># Through a loop on positive series </span>
-<span class="va">plot_list1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">as</span> <span class="kw">in</span> <span class="va">positive_series</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">plot_list1</span><span class="op">[[</span><span class="va">as</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span>, select_series <span class="op">=</span> <span class="va">as</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># Alternatively  with lapply</span>
-<span class="va">plot_list2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">positive_series</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span>, select_series <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">plot_list2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">positive_series</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="fu">gridExtra</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>, <span class="va">plot_list1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># To choose only positive series (i.e. statistically significant for 5%)</span></span>
+<span><span class="va">positive_series</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span><span class="op">$</span><span class="va">positive</span> </span>
+<span></span>
+<span><span class="co"># Through a loop on positive series </span></span>
+<span><span class="va">plot_list1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">as</span> <span class="kw">in</span> <span class="va">positive_series</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">plot_list1</span><span class="op">[[</span><span class="va">as</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span>, select_series <span class="op">=</span> <span class="va">as</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Alternatively  with lapply</span></span>
+<span><span class="va">plot_list2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">positive_series</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span>, select_series <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">plot_list2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">positive_series</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="fu">gridExtra</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span>, <span class="va">plot_list1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/lapply-arrange-1.png" width="960"></p>
 <p>With the old functionality you had to make changes one at a time</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot_list1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">plot_list1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">plot_list1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">plot_list1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>and then reconstruct the plot with <code>grid.arrange</code> or some other function that arranges all plots into a single grob.</p>
 <p>Enjoy Plotting with <code>exuber</code> !!!</p>
 </div>
@@ -271,11 +274,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://kvasilopoulos.com/">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics">Enrique Martínez-García</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://kvasilopoulos.com/" class="external-link">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/" class="external-link">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics" class="external-link">Enrique Martínez-García</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
