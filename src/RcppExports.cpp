@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // rls_gsadf
 arma::vec rls_gsadf(const arma::mat& yxmat, int min_win, int lag);
 RcppExport SEXP _exuber_rls_gsadf(SEXP yxmatSEXP, SEXP min_winSEXP, SEXP lagSEXP) {

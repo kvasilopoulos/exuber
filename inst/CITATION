@@ -1,26 +1,20 @@
-year <- sub("-.*", "", meta$Date)
-if(!length(year))
-  year <- substr(Sys.Date(),1,4)
-vers <- meta$Version
-if(is.null(vers))
-  vers <- packageVersion("exuber")
-vers <- paste("R package version", vers)
-
-citHeader("To cite package 'exuber' in publications, please use:")
-
-citEntry(entry  = "Manual",
-  title  = "exuber: Testing and Simulating Explosive Periods",
-  author = personList(as.person("Kostas Vasilopoulos"),
-                   as.person("Efthymios Pavlidis"),
-                   as.person("Simon Spavound"),
-                   as.person("Enrique Martínez-García")),
-  year  = year,
-  note  = vers,
-  url   = "https://CRAN.R-project.org/package=exuber",
-
-  textVersion =
-  paste0("Vasilopoulos Kostas, Pavlidis Efthymios,
-        Spavound Simon and Mart\u00EDnez-Garc\u00EDa Enrique", " (", year , ") ",
-        "exuber: Testing and Simulating Explosive Periods. ", vers, ". ",
-        "https://CRAN.R-project.org/package=exuber")
+bibentry(bibtype = "Article",
+  title        = "{exuber}: Recursive Right-Tailed Unit Root Testing with {R}",
+  author       = c(person(given = "Kostas",
+                          family = "Vasilopoulos",
+                          email = "k.vasilopoulos@lancaster.ac.uk"),
+                   person(given = "Efthymios",
+                          family = "Pavlidis",
+                          email = "e.pavlidis@lancaster.ac.uk"),
+                   person(given = "Enrique",
+                          family = "Mart{\\'i}nez-Garc{\\'i}a",
+                          email = "emg.economics@gmail.com")),
+  journal      = "Journal of Statistical Software",
+  year         = "2022",
+  volume       = "103",
+  number       = "10",
+  pages        = "1--26",
+  doi          = "10.18637/jss.v103.i10",
+  header       = "To cite exuber in publications use:"
 )
+

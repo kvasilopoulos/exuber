@@ -2,9 +2,6 @@
 
 #' Calculate p-values
 #'
-#' @description
-#'
-#' `r rlang:::lifecycle("stable")`
 #'
 #' Calculate p-values from `distr` object
 #'

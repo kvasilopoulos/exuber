@@ -27,6 +27,8 @@ reported (default = 0).}
 
 \item{...}{further arguments passed to methods.}
 
+\item{sig_lvl}{logical. Significance level, one of 90, 95 or 99.}
+
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 
 \item{nonrejected}{logical. Whether to apply datestamping technique to the series

@@ -1,4 +1,8 @@
-# exuber (development version)
+# exuber 1.0.0
+
+This first major release accompanies the publication of an article in the Journal of Statistical Software:
+
+
 
 ### `augment` method for `radf_obj` and `radf_cv`
 * New arg `trunc`

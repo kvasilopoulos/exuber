@@ -6,16 +6,9 @@
 \alias{exuber-package}
 \title{exuber: Econometric Analysis of Explosive Time Series}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Testing for and dating periods of explosive
-    dynamics (exuberance) in time series using the univariate and panel
-    recursive unit root tests proposed by Phillips et al. (2015)
-    <doi:10.1111/iere.12132> and Pavlidis et al. (2016)
-    <doi:10.1007/s11146-015-9531-2>.  The recursive least-squares
-    algorithm utilizes the matrix inversion lemma to avoid matrix
-    inversion which results in significant speed improvements. Simulation
-    of a variety of periodically-collapsing bubble processes.
+Testing for and dating periods of explosive dynamics (exuberance) in time series using the univariate and panel recursive unit root tests proposed by Phillips et al. (2015) \doi{10.1111/iere.12132} and Pavlidis et al. (2016) \doi{10.1007/s11146-015-9531-2}.The recursive least-squares algorithm utilizes the matrix inversion lemma to avoid matrix inversion which results in significant speed improvements. Simulation of a variety of periodically-collapsing bubble processes. Details can be found in Vasilopoulos et al. (2022) \doi{10.18637/jss.v103.i10}.
 }
 \section{Package options}{
 

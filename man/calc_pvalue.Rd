@@ -12,8 +12,6 @@ calc_pvalue(x, distr = NULL)
 \item{distr}{A \code{radf_distr} object.}
 }
 \description{
-\ifelse{html}{\out{<a href='https://www.tidyverse.org/lifecycle/#stable'><img src='figures/lifecycle-stable.svg' alt='Stable lifecycle'></a>}}{\strong{Stable}}
-
 Calculate p-values from \code{distr} object
 }
 \examples{

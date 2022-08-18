@@ -46,6 +46,8 @@ shade(
 
 \item{cv}{An object of class \code{cv}.}
 
+\item{sig_lvl}{Significance level. It could be one of 90, 95 or 99.}
+
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 
 \item{min_duration}{The minimum duration of an explosive period for it to be
