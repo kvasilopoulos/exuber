@@ -141,9 +141,9 @@ contains the ADF, SADF and GSADF distributions.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sig      adf  sadf gsadf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.446</span>  1.00  1.65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.102</span>  1.33  1.93</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.639  1.81  2.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.464</span> 0.983  1.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.179</span> 1.31   1.94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.433 1.93   2.62</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Change the minimum window and the number of simulations</span></span></span>
 <span class="r-in"><span><span class="va">mc2</span> <span class="op">&lt;-</span> <span class="fu">radf_mc_cv</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">600</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
@@ -152,9 +152,9 @@ contains the ADF, SADF and GSADF distributions.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sig       adf  sadf gsadf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.385</span>  0.979  1.63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95     0.032<span style="text-decoration: underline;">5</span> 1.23   1.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.727  2.02   2.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.340</span>  0.981  1.64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95     0.011<span style="text-decoration: underline;">7</span> 1.22   1.85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.542  1.66   2.46</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mdist</span> <span class="op">&lt;-</span> <span class="fu">radf_mc_distr</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -171,7 +171,7 @@ contains the ADF, SADF and GSADF distributions.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://kvasilopoulos.com/" class="external-link">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/" class="external-link">Efthymios Pavlidis</a>, Simon Spavound, <a href="https://sites.google.com/view/emgeconomics" class="external-link">Enrique Martínez-García</a>.</p>
+  <p></p><p>Developed by <a href="https://kvasilopoulos.com/" class="external-link">Kostas Vasilopoulos</a>, <a href="https://sites.google.com/site/etpavlidis/" class="external-link">Efthymios Pavlidis</a>, <a href="https://sites.google.com/view/emgeconomics" class="external-link">Enrique Martínez-García</a>, Simon Spavound.</p>
 </div>
 
 <div class="pkgdown">
