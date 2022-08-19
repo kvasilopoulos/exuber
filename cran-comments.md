@@ -14,7 +14,7 @@
 ## R CMD check results 
 
    
-### rhub::check_for_cran() & devtools::check_win_devel()
+### rhub::check_for_cran() & devtools::check_win_devel() & rcmdcheck::rcmdcheck(env = c("_R_CHECK_RD_VALIDATE_RD2HTML_" = "TRUE"))
 
 0 ERRORS √ | 0 WARNINGS √ | 2 NOTEs
 
@@ -30,6 +30,7 @@ Availability using Additional_repositories specification:
 Uses the superseded package: ‘doSNOW (>= 1.0.16)’
 ```
   **(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)**
+  
 ```r
 Found the following (possibly) invalid URLs:
   URL: https://doi.org/10.18637/jss.v103.i10

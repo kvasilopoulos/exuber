@@ -13,7 +13,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R build
 status](https://github.com/kvasilopoulos/exuber/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/exuber/actions)
-[![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg?token=gVPX7STekU)](https://codecov.io/gh/kvasilopoulos/exuber)
+[![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg?token=gVPX7STekU)](https://app.codecov.io/gh/kvasilopoulos/exuber)
 <!-- badges: end -->
 
 Testing for and dating periods of explosive dynamics (exuberance) in
