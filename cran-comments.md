@@ -1,6 +1,4 @@
 
-Maintenance release for compatibility with the upcoming release of dplyr v1.0.0.
-
 ## Test environments
 
 * local OS MS install, R 4.0.3
@@ -33,9 +31,13 @@ Uses the superseded package: ‘doSNOW (>= 1.0.16)’
 ```
   **(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)**
 ```r
-* checking package dependencies ... NOTE
-Package suggested but not available for checking: 'exuberdata'
+Found the following (possibly) invalid URLs:
+  URL: https://doi.org/10.18637/jss.v103.i10
+    From: man/exuber.Rd
+    Status: 404
+    Message: Not Found
 ```
+**The DOI in the CITATION is for a new JSS publication that will be registered after publication on CRAN.**
 
 ## Reverse dependencies
 

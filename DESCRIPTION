@@ -11,14 +11,15 @@ Authors@R:
             family = "Pavlidis", 
              role = "aut", 
              email = "e.pavlidis@lancaster.ac.uk"),
-     person(given = "Simon", 
-            family = "Spavound", 
-            role = "aut", 
-            email = "simon.spavound@googlemail.com"),
      person(given = "Enrique",
             family = "Mart\u00EDnez-Garc\u00EDa",
             role = "aut",
-            email = "emg.economics@gmail.com"))
+            email = "emg.economics@gmail.com"),
+     person(given = "Simon", 
+            family = "Spavound", 
+            role = "aut", 
+            email = "simon.spavound@googlemail.com")
+     )
 Description: Testing for and dating periods of explosive
     dynamics (exuberance) in time series using the univariate and panel
     recursive unit root tests proposed by Phillips et al. (2015)

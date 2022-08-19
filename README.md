@@ -5,16 +5,15 @@
 
 <!-- badges: start -->
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/exuber)](https://cran.r-project.org/package=exuber)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/exuber)](https://cran.r-project.org/package=exuber)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R build
 status](https://github.com/kvasilopoulos/exuber/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/exuber/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg)](https://codecov.io/gh/kvasilopoulos/exuber?branch=master)
+[![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg?token=gVPX7STekU)](https://codecov.io/gh/kvasilopoulos/exuber)
 <!-- badges: end -->
 
 Testing for and dating periods of explosive dynamics (exuberance) in
@@ -98,6 +97,7 @@ If you encounter a clear bug, please file a reproducible example on
 ### Usage
 
 ``` r
+
 library(exuber)
 
 rsim_data <- radf(sim_data)
@@ -105,11 +105,11 @@ rsim_data <- radf(sim_data)
 summary(rsim_data)
 #> Using `radf_crit` for `cv`.
 #> 
-#> -- Summary (minw = 19, lag = 0) --------------------------- Monte Carlo (nrep = 2000) --
+#> -- Summary (minw = 19, lag = 0) ------------------- Monte Carlo (nrep = 2000) --
 #> 
 #> psy1 :
 #> # A tibble: 3 x 5
-#>   name  tstat   `90`    `95`  `99`
+#>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
 #> 1 adf   -2.46 -0.413 -0.0812 0.652
 #> 2 sadf   1.95  0.988  1.29   1.92 
@@ -117,7 +117,7 @@ summary(rsim_data)
 #> 
 #> psy2 :
 #> # A tibble: 3 x 5
-#>   name  tstat   `90`    `95`  `99`
+#>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
 #> 1 adf   -2.86 -0.413 -0.0812 0.652
 #> 2 sadf   7.88  0.988  1.29   1.92 
@@ -125,7 +125,7 @@ summary(rsim_data)
 #> 
 #> evans :
 #> # A tibble: 3 x 5
-#>   name  tstat   `90`    `95`  `99`
+#>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
 #> 1 adf   -5.83 -0.413 -0.0812 0.652
 #> 2 sadf   5.28  0.988  1.29   1.92 
@@ -133,7 +133,7 @@ summary(rsim_data)
 #> 
 #> div :
 #> # A tibble: 3 x 5
-#>   name  tstat   `90`    `95`  `99`
+#>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
 #> 1 adf   -1.95 -0.413 -0.0812 0.652
 #> 2 sadf   1.11  0.988  1.29   1.92 
@@ -141,7 +141,7 @@ summary(rsim_data)
 #> 
 #> blan :
 #> # A tibble: 3 x 5
-#>   name  tstat   `90`    `95`  `99`
+#>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
 #> 1 adf   -5.15 -0.413 -0.0812 0.652
 #> 2 sadf   3.93  0.988  1.29   1.92 
@@ -150,7 +150,7 @@ summary(rsim_data)
 diagnostics(rsim_data)
 #> Using `radf_crit` for `cv`.
 #> 
-#> -- Diagnostics (option = gsadf) ----------------------------------------- Monte Carlo --
+#> -- Diagnostics (option = gsadf) --------------------------------- Monte Carlo --
 #> 
 #> psy1:     Rejects H0 at the 1% significance level
 #> psy2:     Rejects H0 at the 1% significance level
@@ -161,27 +161,27 @@ diagnostics(rsim_data)
 datestamp(rsim_data)
 #> Using `radf_crit` for `cv`.
 #> 
-#> -- Datestamp (min_duration = 0) ----------------------------------------- Monte Carlo --
+#> -- Datestamp (min_duration = 0) --------------------------------- Monte Carlo --
 #> 
 #> psy1 :
-#>   Start End Duration
-#> 1    44  56       12
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    44   48  56       12 positive   FALSE
 #> 
 #> psy2 :
-#>   Start End Duration
-#> 1    22  41       19
-#> 2    62  71        9
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    22   40  41       19 positive   FALSE
+#> 2    62   70  71        9 positive   FALSE
 #> 
 #> evans :
-#>   Start End Duration
-#> 1    20  21        1
-#> 2    44  45        1
-#> 3    66  68        2
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    20   20  21        1 positive   FALSE
+#> 2    44   44  45        1 positive   FALSE
+#> 3    66   67  68        2 positive   FALSE
 #> 
 #> blan :
-#>   Start End Duration
-#> 1    34  37        3
-#> 2    84  87        3
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    34   36  37        3 positive   FALSE
+#> 2    84   86  87        3 positive   FALSE
 
 autoplot(rsim_data)
 #> Using `radf_crit` for `cv`.

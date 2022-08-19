@@ -47,8 +47,8 @@ Useful links:
 Authors:
 \itemize{
   \item Efthymios Pavlidis \email{e.pavlidis@lancaster.ac.uk}
-  \item Simon Spavound \email{simon.spavound@googlemail.com}
   \item Enrique Martínez-García \email{emg.economics@gmail.com}
+  \item Simon Spavound \email{simon.spavound@googlemail.com}
 }
 
 }
