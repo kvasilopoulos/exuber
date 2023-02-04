@@ -148,3 +148,16 @@ is_wb <- function(y) {
 is_sb <- function(y) {
   get_method(y) %||% FALSE == "Sieve Bootstrap"
 }
+
+# TODO: Remove after dplyr 1.1.0 is released and use `multiple = "all"` instead
+suppress_matches_multiple_warning <- function(expr) {
+  handler_matches_multiple <- function(cnd) {
+    if (inherits(cnd, "dplyr_warning_join_matches_multiple")) {
+      restart <- findRestart("muffleWarning")
+      if (!is.null(restart)) {
+        invokeRestart(restart)
+      }
+    }
+  }
+  withCallingHandlers(expr, warning = handler_matches_multiple)
+}
