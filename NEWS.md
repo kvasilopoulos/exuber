@@ -1,7 +1,12 @@
+# exuber 1.0.1
+
+Maintenance release to accomodate breaking changes in dplyr 1.1.0.
+
 # exuber 1.0.0
 
 This first major release accompanies the publication of an article in the Journal of Statistical Software:
 
+Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022). exuber: Recursive Right-Tailed Unit Root Testing with R. Journal of Statistical Software, 103(1), 1–26. https://doi.org/10.18637/jss.v103.i10
 
 
 ### `augment` method for `radf_obj` and `radf_cv`
