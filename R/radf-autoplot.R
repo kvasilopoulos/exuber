@@ -74,16 +74,18 @@
 #' autoplot(rsim_data) +
 #'   theme(legend.position = "right")
 #'  }
-autoplot.radf_obj <- function(object, cv = NULL,
-                              sig_lvl = 95,
-                              option = c("gsadf", "sadf"),
-                              min_duration = 0L,
-                              select_series = NULL,
-                              nonrejected = FALSE,
-                              shade_opt = shade(),
-                              trunc = TRUE,
-                              include_negative = "DEPRECATED",
-                              ...) {
+autoplot.radf_obj <- function(
+    object, cv = NULL,
+    sig_lvl = 95,
+    option = c("gsadf", "sadf"),
+    min_duration = 0L,
+    select_series = NULL,
+    nonrejected = FALSE,
+    shade_opt = shade(),
+    trunc = TRUE,
+    include_negative = "DEPRECATED",
+    ...
+    ) {
 
   deprecate_arg_warn(include_negative, nonrejected)
   cv <- cv %||% retrieve_crit(object)
@@ -266,14 +268,14 @@ shade <- function(fill = "grey55", fill_negative = fill,#"yellow2",
     x1 <-  ds_pos %>%
       geom_rect(
         data = .,  inherit.aes = FALSE, fill = fill, alpha = opacity,
-        aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+        aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf), ...
       )
 
     any_neg <- nrow(ds_neg) > 0
     x2 <-  ds_neg %>%
       geom_rect(
         data = ., inherit.aes = FALSE, fill = fill_negative, alpha = opacity,
-        aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+        aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf), ...
       )
 
     if(!is.null(fill_ongoing)) {
@@ -281,7 +283,7 @@ shade <- function(fill = "grey55", fill_negative = fill,#"yellow2",
       x3 <- filter(ds_data, Ongoing == TRUE) %>%
         geom_rect(
           data = ., inherit.aes = FALSE, fill = fill_ongoing, alpha = opacity,
-          aes_string(xmin = "Start", xmax = "End", ymin = -Inf, ymax = +Inf), ...
+          aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf), ...
         )
     } else {
       any_ongoing <- x3 <- NULL
@@ -346,7 +348,7 @@ theme_exuber <- function(
       panel.background = element_rect(fill = "white", colour = NA),
       panel.border = element_rect(fill = NA, colour = "grey75"),
       panel.grid = element_line(colour = "grey92"),
-      panel.grid.major = element_line(linetype = "dashed", size = 0.7),
+      panel.grid.major = element_line(linetype = "dashed", linewidth = 0.7),
       strip.text.x = element_text(size = rel(1.5), hjust = 0,
           vjust = 1, margin = margin(b = half_line)),
     )
