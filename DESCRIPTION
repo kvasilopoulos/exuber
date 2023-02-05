@@ -75,4 +75,4 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace",
     "collate"))
-RoxygenNote: 7.2.3
+RoxygenNote: 7.2.1
