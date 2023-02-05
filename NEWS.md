@@ -1,6 +1,6 @@
 # exuber 1.0.1
 
-Maintenance release to accomodate breaking changes in dplyr 1.1.0.
+Maintenance release to accommodate breaking changes in dplyr 1.1.0.
 
 # exuber 1.0.0
 
