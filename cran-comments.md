@@ -1,7 +1,9 @@
 
+This is a maintenance submission to deal with warnings from dplyr 1.1.0.
+
 ## Test environments
 
-* local OS MS install, R 4.0.3
+* local OS MS install, R 4.2.2
 * Continuous Integration
   * GitHub actions (ubuntu-20.04): release, devel
   * GitHub actions (windows): release
@@ -31,15 +33,6 @@ Uses the superseded package: ‘doSNOW (>= 1.0.16)’
 ```
   **(Use of the 'doSNOW' package as opposed to the 'doParallel' to support txtProgressBar)**
   
-```r
-Found the following (possibly) invalid URLs:
-  URL: https://doi.org/10.18637/jss.v103.i10
-    From: man/exuber.Rd
-    Status: 404
-    Message: Not Found
-```
-**The DOI in the CITATION is for a new JSS publication that will be registered after publication on CRAN.**
-
 ## Reverse dependencies
 
 There are no reverse dependencies.
