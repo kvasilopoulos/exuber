@@ -139,11 +139,11 @@ contains the ADF, SADF and GSADF distributions.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">mc</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sig      adf  sadf gsadf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.469</span>  1.07  1.68</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.106</span>  1.32  2.03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.675  1.91  2.61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sig       adf  sadf gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.479</span>  0.945  1.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.088</span><span style="color: #BB0000; text-decoration: underline;">0</span> 1.30   2.02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.515  1.90   2.69</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Change the minimum window and the number of simulations</span></span></span>
 <span class="r-in"><span><span class="va">mc2</span> <span class="op">&lt;-</span> <span class="fu">radf_mc_cv</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">600</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
@@ -152,9 +152,9 @@ contains the ADF, SADF and GSADF distributions.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sig      adf  sadf gsadf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.284</span> 0.992  1.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95     0.133 1.39   1.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.768 1.82   2.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.397</span> 0.968  1.61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.144</span> 1.27   2.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.585 2.03   2.61</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mdist</span> <span class="op">&lt;-</span> <span class="fu">radf_mc_distr</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
