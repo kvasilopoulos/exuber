@@ -2,6 +2,7 @@
 
 # DGP_PS ------------------------------------------------------------------
 
+
 #' @importFrom stats coefficients residuals
 adf_res <- function(x, adflag = 0, type = c("fixed", "aic", "bic")) {
   x <- as.matrix(x)
@@ -14,7 +15,7 @@ adf_res <- function(x, adflag = 0, type = c("fixed", "aic", "bic")) {
   list(beta = coefficients(reg), res = residuals(reg))
 }
 
-radf_wb_dgp_ps <- function(y, adflag = 1, type = "fixed", tb = NULL) {
+radf_wb_dgp_ps <- function(y, adflag = 0, type = "fixed", tb = NULL) {
 
   result <- adf_res(y, adflag = adflag, type)
   beta   <- result$beta
@@ -62,14 +63,23 @@ radf_wb_dgp_ps <- function(y, adflag = 1, type = "fixed", tb = NULL) {
 
 lag_select <- function(data, criterion = c("aic", "bic"), max_lag = 8) {
   criterion <- match.arg(criterion)
+  if (max_lag == 0) {
+    message_glue("Please increase `max_lag` to a number higher than 0 when using criterion selection.")
+    return (0)
+  }
+
   tbl <- lag_select_table(data, max_lag)
   criterion_vec <- unname(tbl[, criterion])
+  if (length(criterion_vec) == 1) {
+    return(0)
+  }
   min_idx <- which.min(criterion_vec)
-  as.integer(criterion_vec[min_idx])
+  # as.integer(criterion_vec[min_idx])
+  return(min_idx - 1)
 }
 
 #' @importFrom stats AIC BIC
-lag_select_table <- function(data, max_lag = 8) {
+lag_select_table <- function(data, max_lag) {
   x <- parse_data(data)
   nc <- ncol(x)
   snames <- series_names(x)
