@@ -261,7 +261,7 @@ autoplot.radf_distr <- function(object, ...) {
   autoplot_radf_distr(object, ...)
 }
 
-autoplot_radf_distr <- function(x, ...) {
+autoplot_radf_distr <- function(object, ...) {
   UseMethod("autoplot_radf_distr")
 }
 
