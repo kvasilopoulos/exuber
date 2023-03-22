@@ -24,7 +24,7 @@ root tests. radf_mc_distr computes the distribution."><meta property="og:image" 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">exuber</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
       </span>
     </div>
 
@@ -141,20 +141,20 @@ contains the ADF, SADF and GSADF distributions.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sig       adf  sadf gsadf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.479</span>  0.945  1.75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.088</span><span style="color: #BB0000; text-decoration: underline;">0</span> 1.30   2.02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.515  1.90   2.69</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.451</span>   1.03  1.64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.018</span><span style="color: #BB0000; text-decoration: underline;">9</span>  1.31  1.92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.616   1.81  2.58</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Change the minimum window and the number of simulations</span></span></span>
 <span class="r-in"><span><span class="va">mc2</span> <span class="op">&lt;-</span> <span class="fu">radf_mc_cv</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">600</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">mc2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sig      adf  sadf gsadf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.397</span> 0.968  1.61</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.144</span> 1.27   2.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.585 2.03   2.61</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sig       adf  sadf gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 90    -<span style="color: #BB0000;">0.422</span>  0.938  1.58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 95    -<span style="color: #BB0000;">0.084</span><span style="color: #BB0000; text-decoration: underline;">9</span> 1.28   1.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 99     0.410  1.85   2.46</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">mdist</span> <span class="op">&lt;-</span> <span class="fu">radf_mc_distr</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
