@@ -114,9 +114,11 @@ array_to_list <- function(x, var) {
 add_key <- function(x, attr_from, trunc = FALSE) {
   nkey <- get_trunc(attr_from)
   if(trunc){
-    wkey <- add_column(x , key = (nkey + 1):(nrow(x) + nkey))
+    key_tbl <- tibble(key = (nkey + 1):(nrow(x) + nkey))
+    wkey <- add_column(x , key_tbl)
   }else{
-    wkey <- add_column(x, key = 1:nrow(x))
+    key_tbl <- tibble(key = 1:nrow(x))
+    wkey <- add_column(x, key_tbl)
   }
   wkey
 }
@@ -129,8 +131,9 @@ na_pad_minw <- function(x, attr_from) {
 }
 
 add_index <- function(x, attr_from, trunc = FALSE) {
-  idx <- index(x, trunc = trunc)
-  add_column(x, index = idx)
+  idx <- index(attr_from, trunc = trunc)
+  idx_tbl <- tibble(index = idx)
+  add_column(x, idx_tbl)
 }
 
 
