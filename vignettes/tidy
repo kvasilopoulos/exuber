@@ -23,7 +23,7 @@ library(exuber)
 library(rlang)
 library(purrr)
 library(dplyr)
-tick <- clisymbols::symbol$tick
+tick <- cli::symbol$tick
 method_df <- function(x) {
   methods(x) %>% 
   # grep(x, ., value = TRUE) %>% 

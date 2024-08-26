@@ -53,8 +53,6 @@ Imports:
     progress (>= 1.2.2)
 Suggests:
     magrittr (>= 1.5),
-    clisymbols (>= 1.2.0),
-    covr (>= 3.2.1),
     exuberdata (>= 0.2.0),
     forcats (>= 0.5.0),
     gridExtra (>= 2.3),
