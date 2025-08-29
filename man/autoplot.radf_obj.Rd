@@ -90,7 +90,7 @@ rsim_data <- radf(sim_data_wdate)
 autoplot(rsim_data)
 
 # Modify facet_wrap options through ellipsis
-autoplot(rsim_data, scales = "free_y", dir  = "v")
+autoplot(rsim_data, scales = "free_y", dir = "v")
 
 # Modify the shading options
 autoplot(rsim_data, shade_opt = shade(fill = "pink", opacity = 0.5))
@@ -122,7 +122,7 @@ autoplot(rsim_data, labeller = labeller(.default = label_value, id = as_labeller
 # Change names through labeller (second way)
 custom_labels2 <- series_names(rsim_data)
 names(custom_labels2) <- custom_labels2
-custom_labels2[c(3,5)] <- c("Evans", "Blanchard")
+custom_labels2[c(3, 5)] <- c("Evans", "Blanchard")
 autoplot(rsim_data, labeller = labeller(id = custom_labels2))
 
 # Or change names before plotting
@@ -132,5 +132,5 @@ autoplot(rsim_data)
 # Change Theme options
 autoplot(rsim_data) +
   theme(legend.position = "right")
- }
+}
 }

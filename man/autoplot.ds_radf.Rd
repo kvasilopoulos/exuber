@@ -14,7 +14,7 @@
 \item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
-A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
+\link[ggplot2]{ggplot2}
 }
 \description{
 Takes a \code{ds_radf} object and returns a ggplot2 object, with a

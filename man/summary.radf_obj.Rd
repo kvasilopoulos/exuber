@@ -29,11 +29,10 @@ rsim_data <- radf(sim_data)
 # Summary, diagnostics and datestamp (default)
 summary(rsim_data)
 
-#Summary, diagnostics and datestamp (wild bootstrap critical values)
+# Summary, diagnostics and datestamp (wild bootstrap critical values)
 
 wb <- radf_wb_cv(sim_data)
 
 summary(rsim_data, cv = wb)
-
 }
 }

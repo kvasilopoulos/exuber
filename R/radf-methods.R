@@ -51,6 +51,7 @@ summary_radf <- function(cv, ...) {
   UseMethod("summary_radf")
 }
 
+#' @exportS3method summary_radf mc_cv
 summary_radf.mc_cv <- summary_radf.wb_cv <- function(cv, object, ...) {
   ret <- list()
   snames <- series_names(object)
@@ -63,6 +64,7 @@ summary_radf.mc_cv <- summary_radf.wb_cv <- function(cv, object, ...) {
   ret
 }
 
+#' @exportS3method summary_radf sb_cv
 summary_radf.sb_cv <- function(cv, object, ...) {
   ret <- list()
   ret[["panel"]] <- tidy_join(object, cv, panel = TRUE) %>%

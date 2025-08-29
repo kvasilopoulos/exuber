@@ -2,8 +2,8 @@
 % Please edit documentation in R/exuber-package.r
 \docType{package}
 \name{exuber}
-\alias{exuber}
 \alias{exuber-package}
+\alias{exuber}
 \title{exuber: Econometric Analysis of Explosive Time Series}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
@@ -36,6 +36,7 @@ Testing for and dating periods of explosive dynamics (exuberance) in time series
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://kvasilopoulos.github.io/exuber/}
   \item \url{https://github.com/kvasilopoulos/exuber}
   \item Report bugs at \url{https://github.com/kvasilopoulos/exuber/issues}
 }

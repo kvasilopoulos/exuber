@@ -15,8 +15,6 @@ calc_pvalue(x, distr = NULL)
 Calculate p-values from \code{distr} object
 }
 \examples{
-
-
 \dontrun{
 radf_psy1 <- radf(sim_psy1(100))
 
@@ -30,7 +28,6 @@ calc_pvalue(radf_psy1, wb_psy1)
 sb_psy1 <- radf_sb_distr(sim_data)
 
 calc_pvalue(radf(sim_data), sb_psy1)
-
 }
 }
 \keyword{internal}
