@@ -1,4 +1,3 @@
-
 # summary -----------------------------------------------------------------
 
 #' Summarizing `radf` models
@@ -7,7 +6,7 @@
 #'
 #' @param object An object of class `radf_obj`. The output of \code{\link[=radf]{radf()}}.
 #' @param cv An object of class `radf_cv`. The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},
-#' \code{\link[=radf_wb_cv]{radf_wb_cv()}} or \code{\link[=radf_sb_cv]{radf_sb_cv()}}.
+#'   \code{\link[=radf_wb_cv]{radf_wb_cv()}} or \code{\link[=radf_sb_cv]{radf_sb_cv()}}.
 #' @param ... Further arguments passed to methods. Not used.
 #'
 #' @return Returns a list of summary statistics, which include the estimated ADF,
@@ -25,17 +24,15 @@
 #' # Summary, diagnostics and datestamp (default)
 #' summary(rsim_data)
 #'
-#' #Summary, diagnostics and datestamp (wild bootstrap critical values)
+#' # Summary, diagnostics and datestamp (wild bootstrap critical values)
 #'
 #' wb <- radf_wb_cv(sim_data)
 #'
 #' summary(rsim_data, cv = wb)
-#'
 #' }
 #' @export
 summary.radf_obj <- function(object, cv = NULL, ...) {
-
-  cv <- cv  %||% retrieve_crit(object)
+  cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   assert_match(object, cv)
   ret <- summary_radf(cv, object, ...)
@@ -50,7 +47,7 @@ summary.radf_obj <- function(object, cv = NULL, ...) {
     add_class("sm_radf")
 }
 
-summary_radf <- function(cv, ...){
+summary_radf <- function(cv, ...) {
   UseMethod("summary_radf")
 }
 
@@ -77,7 +74,6 @@ summary_radf.sb_cv <- function(cv, object, ...) {
 #' @importFrom glue glue
 #' @export
 print.sm_radf <- function(x, ...) {
-
   iter_char <- if (is_mc(x)) "nrep" else "nboot"
   cat_line()
   cat_rule(
@@ -123,7 +119,6 @@ diagnostics <- function(object, cv = NULL, ...) {
 #' diagnostics(rsim_data, option = "sadf")
 diagnostics.radf_obj <- function(object, cv = NULL,
                                  option = c("gsadf", "sadf"), ...) {
-
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
@@ -139,7 +134,7 @@ diagnostics.radf_obj <- function(object, cv = NULL,
   }
   out <- tidy_join(object, cv) %>%
     pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv") %>%
-    filter(stat  == option)
+    filter(stat == option)
   # in case of simulation exercises
   dummy <- case_when(
     out$tstat < out$cv95 ~ 0,
@@ -153,7 +148,7 @@ diagnostics.radf_obj <- function(object, cv = NULL,
   )
   dummy_lgl <- as.logical(dummy)
   if (is_sb(cv)) {
-    positive <- ifelse(dummy_lgl , "panel", NA)
+    positive <- ifelse(dummy_lgl, "panel", NA)
     negative <- ifelse(dummy_lgl, NA, "panel")
   } else {
     positive <- snames[as.logical(dummy_lgl)]
@@ -204,7 +199,6 @@ diagnostics_internal <- function(...) {
 #' @importFrom rlang is_bare_character
 #' @export
 print.dg_radf <- function(x, ...) {
-
   cli::cat_line()
   cli::cat_rule(
     left = glue('Diagnostics (option = {attr(x, "option")})'),
@@ -212,19 +206,21 @@ print.dg_radf <- function(x, ...) {
   )
   cli::cat_line()
   if (attr(x, "panel")) {
-    if (x$sig == "Reject")
+    if (x$sig == "Reject") {
       cat(" Cannot reject H0 \n")
-    else
+    } else {
       cat(" Rejects H0 at the", cli::col_red(x$sig), "significance level\n")
+    }
   } else {
     width <- nchar(series_names(x))
     ngaps <- max(8, width) - width
     for (i in seq_along(series_names(x))) {
-      cat(series_names(x)[i], ":" , rep(" ", ngaps[i]), sep = "")
-      if (x$sig[i] == "Reject")
+      cat(series_names(x)[i], ":", rep(" ", ngaps[i]), sep = "")
+      if (x$sig[i] == "Reject") {
         cat(" Cannot reject H0 \n")
-      else
+      } else {
         cat(" Rejects H0 at the", cli::col_red(x$sig[i]), "significance level\n")
+      }
     }
   }
   cli::cat_line()
@@ -249,7 +245,7 @@ print.dg_radf <- function(x, ...) {
 #'
 #' @return Return a table with the following columns:
 #'
-#'\itemize{
+#' \itemize{
 #'  \item Start:
 #'  \item Peak:
 #'  \item End:
@@ -294,7 +290,6 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #' autoplot(ds_data)
 datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 95,
                                option = c("gsadf", "sadf"), nonrejected = FALSE, ...) {
-
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
@@ -317,22 +312,24 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     filter(sig == sig_lvl, stat %in% filter_option) %>% # either {bsadf, badf} or bsadf_panel
     mutate(ds_lgl = tstat > crit)
 
-  ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>% pull(ds_lgl) %>% which())
+  ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>%
+    pull(ds_lgl) %>%
+    which())
   ds_stamp <- map(ds_basic, ~ stamp(.x) %>% as.matrix())
 
-  if(!is_panel) {
+  if (!is_panel) {
     tstat <- map2(pos, ds_stamp, ~ filter(ds_tbl, id == .x) %>% pull(tstat))
-    mat <- map(pos, ~ mat(object)[,.x])
+    mat <- map(pos, ~ mat(object)[, .x])
     possibly_add_peak <- possibly(add_peak, otherwise = NULL)
     ds_stamp <- purrr::pmap(list(ds_stamp, tstat, mat, get_trunc(object)), possibly_add_peak)
   }
 
   idx <- if (is_panel) index(cv) else index(object)
   idx_trunc <- if (is_panel) index(cv, trunc = TRUE) else index(object, trunc = TRUE)
-  ds_stamp_index <- map(ds_stamp, stamp_to_index, idx_trunc, cv)  # index has to from cv to iclude sb_cv(+2)
+  ds_stamp_index <- map(ds_stamp, stamp_to_index, idx_trunc, cv) # index has to from cv to iclude sb_cv(+2)
   ds_full <- purrr::map(ds_stamp_index, add_ongoing, idx, cv)
 
-  if(isTRUE(nonrejected)) {
+  if (isTRUE(nonrejected)) {
     dg <- diagnostics(object, cv)$negative
     ds_full <- map2(ds_full, pos %in% dg, ~ mutate(.x, Nonrejected = .y))
   }
@@ -381,17 +378,15 @@ stamp <- function(x) {
 }
 
 stamp_to_index <- function(x, idx, cv) {
-
-  if(is_sb(cv)) {
-
-    if(is.null(x)) {
+  if (is_sb(cv)) {
+    if (is.null(x)) {
       na_df <- data.frame(
         "Start" = NA,
         "End" = NA,
         "Duration" = NA,
         row.names = NULL
       )
-      na_df <- na_df[-1,]
+      na_df <- na_df[-1, ]
       return(na_df)
     }
 
@@ -401,9 +396,8 @@ stamp_to_index <- function(x, idx, cv) {
       "Duration" = x[, "Duration"],
       row.names = NULL
     )
-  } else{
-
-    if(is.null(x)) {
+  } else {
+    if (is.null(x)) {
       na_df <- data.frame(
         "Start" = NA,
         "Peak" = NA,
@@ -412,7 +406,7 @@ stamp_to_index <- function(x, idx, cv) {
         "Signal" = NA,
         row.names = NULL
       )
-      na_df <- na_df[-1,]
+      na_df <- na_df[-1, ]
       return(na_df)
     }
 
@@ -425,15 +419,14 @@ stamp_to_index <- function(x, idx, cv) {
       row.names = NULL
     )
   }
-
 }
 
 add_peak <- function(ds, tstat, mat, minw) {
-  start <- ds[,"Start"]
-  end <- ds[,"End"]
+  start <- ds[, "Start"]
+  end <- ds[, "End"]
   np <- length(start)
   signal <- peak <- numeric(np)
-  for(i in 1:np) {
+  for (i in 1:np) {
     ival <- start[i]:(end[i] - 1)
     tstat_ival <- tstat[ival]
     peak[i] <- start[i] + which.max(tstat_ival) - 1
@@ -444,7 +437,7 @@ add_peak <- function(ds, tstat, mat, minw) {
     Start = start,
     Peak = peak,
     End = end,
-    Duration = ds[,"Duration"],
+    Duration = ds[, "Duration"],
     Signal = signal
   )
 }
@@ -452,19 +445,19 @@ add_peak <- function(ds, tstat, mat, minw) {
 # TODO ongoing cannot work in panel
 add_ongoing <- function(ds, idx, cv) {
   n <- get_n(cv)
-  end <- ds[,"End"]
-  if(is_logical(end, 0)) {
+  end <- ds[, "End"]
+  if (is_logical(end, 0)) {
     return(data.frame(ds, Ongoing = character(0)))
-  }else{
+  } else {
     ongoing <- ifelse(is.na(end), TRUE, FALSE)
   }
   np <- length(end)
-  for(i in 1:np){
-    if(ongoing[i]) {
+  for (i in 1:np) {
+    if (ongoing[i]) {
       end[i] <- idx[n]
     }
   }
-  ds[,"End"] <- end
+  ds[, "End"] <- end
   data.frame(ds, Ongoing = ongoing)
 }
 
@@ -477,7 +470,8 @@ print.ds_radf <- function(x, ...) {
   cli::cat_line()
   cli::cat_rule(
     left = glue("Datestamp (min_duration = {get_min_dur(x)})"),
-    right = get_method(x))
+    right = get_method(x)
+  )
   cli::cat_line()
   print.listof(x)
 }
@@ -503,6 +497,3 @@ tidy.ds_radf <- function(x, ...) {
     mutate(id = factor(id, levels = fct_lvls))
   ds
 }
-
-
-

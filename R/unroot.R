@@ -1,10 +1,10 @@
 unroot_adf_null <- function(x, lag) {
   dx_embed <- embed(diff(x), lag + 1)
-  dy <- dx_embed[,1]
-  if(lag == 0) {
+  dy <- dx_embed[, 1]
+  if (lag == 0) {
     yxmat <- cbind(dy, ct = 1)
-  }else{
-    dx_lags <- dx_embed[,-1]
+  } else {
+    dx_lags <- dx_embed[, -1]
     yxmat <- cbind(dy, ct = 1, dx_lags)
     colnames(yxmat) <- c("dy", "ct", paste0("dy_lags", 1:lag))
   }
@@ -15,12 +15,12 @@ unroot_adf <- function(x, lag) {
   x_embed <- embed(x, lag + 2) # conform length
   x_lag <- x_embed[, 2]
   dx_embed <- embed(diff(x), lag + 1)
-  dy <- dx_embed[,1]
-  if(lag == 0) {
+  dy <- dx_embed[, 1]
+  if (lag == 0) {
     yxmat <- cbind(dy, 1, x_lag)
     colnames(yxmat) <- c("dy", "ct", "y")
-  }else{
-    dx_lags <- dx_embed[,-1]
+  } else {
+    dx_lags <- dx_embed[, -1]
     yxmat <- cbind(dy, 1, x_lag, dx_lags)
     colnames(yxmat) <- c("dy", "ct", "y", paste0("dy_lags", 1:lag))
   }
