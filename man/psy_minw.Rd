@@ -15,7 +15,8 @@ psy_ds(n, rule = 1, delta = 1)
 \item{rule}{Rule to compute the minimum duration of an episode (default: rule = 1,
 where T denotes the sample size). Rule 1 corresponds to log(T), while rule 2 to log(T)/T.}
 
-\item{delta}{Frequency-dependent parameter (default; delta = 1). See details.}
+\item{delta}{Frequency-dependent parameter (default; delta = 1).
+See details.}
 }
 \description{
 \code{psy_minw} and \code{psy_ds} use the rules-of- thumb proposed by
