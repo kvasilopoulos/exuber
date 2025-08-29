@@ -17,11 +17,11 @@ knitr::opts_chunk$set(
 # exuber <a href='https://kvasilopoulos.github.io/exuber/'><img src='man/figures/logo.png' align="right" height="127.5" /></a>
 
 <!-- badges: start -->
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/exuber)](https://cran.r-project.org/package=exuber)
+[![CRAN status](https://www.r-pkg.org/badges/version/exuber)](https://CRAN.R-project.org/package=exuber)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R build status](https://github.com/kvasilopoulos/exuber/workflows/R-CMD-check/badge.svg)](https://github.com/kvasilopoulos/exuber/actions)
-[![codecov](https://codecov.io/gh/kvasilopoulos/exuber/branch/master/graph/badge.svg?token=gVPX7STekU)](https://app.codecov.io/gh/kvasilopoulos/exuber)
+[![R-CMD-check](https://github.com/kvasilopoulos/exuber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kvasilopoulos/exuber/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/kvasilopoulos/exuber/graph/badge.svg)](https://app.codecov.io/gh/kvasilopoulos/exuber)
 <!-- badges: end -->
 
 
