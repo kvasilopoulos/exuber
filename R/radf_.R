@@ -22,7 +22,7 @@
 #'   \item{bsadf_panel}{Panel Backward Supremum Augmented Dickey-Fuller}
 #'   \item{gsadf_panel}{Panel Generalized Supremum Augmented Dickey-Fuller}
 #'
-#'And attributes:
+#' And attributes:
 #'   \item{mat}{The matrix used in the estimation.}
 #'   \item{index}{The index parsed from the dataset.}
 #'   \item{lag}{The lag used in the estimation.}
@@ -69,9 +69,8 @@
 #'
 #' # For lag = 1 and minimum window = 20
 #' rsim_20 <- radf(sim_data, minw = 20, lag = 1)
-#'}
+#' }
 radf <- function(data, minw = NULL, lag = 0L) {
-
   x <- parse_data(data)
   minw <- minw %||% psy_minw(data)
   nc <- ncol(x)
@@ -89,10 +88,10 @@ radf <- function(data, minw = NULL, lag = 0L) {
     yxmat <- unroot(x[, i], lag = lag)
     results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
 
-    badf[, i]  <- results[1:pointer]
-    adf[i]     <- results[pointer + 1]
-    sadf[i]    <- results[pointer + 2]
-    gsadf[i]   <- results[pointer + 3]
+    badf[, i] <- results[1:pointer]
+    adf[i] <- results[pointer + 1]
+    sadf[i] <- results[pointer + 2]
+    gsadf[i] <- results[pointer + 3]
     bsadf[, i] <- results[-c(1:(pointer + 3))]
   }
 
@@ -106,7 +105,8 @@ radf <- function(data, minw = NULL, lag = 0L) {
     bsadf = bsadf,
     gsadf = gsadf,
     bsadf_panel = bsadf_panel,
-    gsadf_panel = gsadf_panel) %>%
+    gsadf_panel = gsadf_panel
+  ) %>%
     add_attr(
       mat = x,
       index = index(x),
@@ -127,19 +127,20 @@ print.radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
 
   print(format(as.data.frame(tidy(x)),
-               digits = digits), print.gap = 2L, row.names = FALSE)
+    digits = digits
+  ), print.gap = 2L, row.names = FALSE)
   cat_line()
 
   print(format(as.data.frame(tidy(x, panel = TRUE)),
-               digits = digits), print.gap = 2L, row.names = FALSE)
+    digits = digits
+  ), print.gap = 2L, row.names = FALSE)
   cat_line()
 }
 
 #' @export
 print.radf_cv <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
-
   iter_char <- if (is_mc(x)) "nrep" else "nboot"
-  lag_str <- if(is_sb(x)) paste0(", lag = ", get_lag(x)) else ""
+  lag_str <- if (is_sb(x)) paste0(", lag = ", get_lag(x)) else ""
   cat_line()
   cat_rule(
     left = glue("{get_method(x)} (minw = {get_minw(x)}, {iter_char} = {get_iter(x)}{lag_str})")
@@ -147,8 +148,7 @@ print.radf_cv <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
 
   print(format(as.data.frame(tidy(x)),
-               digits = digits), print.gap = 2L, row.names = FALSE)
+    digits = digits
+  ), print.gap = 2L, row.names = FALSE)
   cat_line()
 }
-
-

@@ -1,4 +1,3 @@
-
 #' Retrieve/Replace the index
 #'
 #' @description Retrieve or replace the index of an object.
@@ -19,7 +18,7 @@ index <- function(x, ...) {
 
 #' @rdname index-rd
 #' @export
-`index<-` <- function(x,  value) {
+`index<-` <- function(x, value) {
   UseMethod("index<-")
 }
 
@@ -53,7 +52,7 @@ index.radf_cv <- function(x, trunc = FALSE, ...) {
   if (trunc) {
     if (is_sb(x) && (get_lag(x) != 0)) {
       value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
-    }else{
+    } else {
       value <- value[-c(1:get_minw(x))]
     }
   }
@@ -78,7 +77,7 @@ index_radf_cv.sb_cv <- function(x, trunc, ...) {
   if (trunc) {
     if (get_lag(x) != 0) {
       value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
-    }else{
+    } else {
       value <- value[-c(1:get_minw(x))]
     }
   }
@@ -120,4 +119,3 @@ mat <- function(x, ...) {
 #   attributes(mat) <- NULL
 #   mat
 # }
-

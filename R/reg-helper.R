@@ -13,17 +13,17 @@
 #' psy_minw(100)
 #' psy_ds(100)
 psy_minw <- function(n) {
-
   if (!is_n(n)) {
     n <- NROW(n)
   }
-  floor( (0.01 + 1.8 / sqrt(n)) * n)
+  floor((0.01 + 1.8 / sqrt(n)) * n)
 }
 
 #' @rdname psy_minw
 #' @param rule Rule to compute the minimum duration of an episode (default: rule = 1,
 #' where T denotes the sample size). Rule 1 corresponds to log(T), while rule 2 to log(T)/T.
-#' @param delta Frequency-dependent parameter (default; delta = 1). See details.
+#' @param delta Frequency-dependent parameter (default; delta = 1).
+#'   See details.
 #'
 #' @details For the minimum duration period, \code{psy_ds} allows the user to choose from two rules:
 #'
@@ -37,7 +37,6 @@ psy_minw <- function(n) {
 #'
 #' @export
 psy_ds <- function(n, rule = 1, delta = 1) {
-
   if (!is_n(n)) {
     n <- NROW(n)
   }
@@ -72,8 +71,12 @@ ps_tb <- function(n, freq = c("monthly", "quarterly", "annual", "weekly"), size 
   minw <- psy_minw(n)
   freq <- match.arg(freq)
   assert_positive_int(size)
-  multi <- switch(freq, weekly = 52, monthly = 12, quarterly = 4, annual = 1)
+  multi <- switch(freq,
+    weekly = 52,
+    monthly = 12,
+    quarterly = 4,
+    annual = 1
+  )
   tb <- size * multi
   minw + tb - 1 # is it +1 or minus 1
 }
-
