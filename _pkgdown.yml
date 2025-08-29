@@ -1,13 +1,12 @@
 title: exuber
 url: https://kvasilopoulos.github.io/exuber
 
+
 template:
+  bootstrap: 5
   params:
     ganalytics: UA-129604855-4
     bootswatch: cosmo
-    docsearch:
-      api_key: 3da85b7c10c52498fbaeb87339345e28
-      index_name: exuber
 
 authors:
   Kostas Vasilopoulos:
@@ -77,39 +76,9 @@ reference:
       - tidy_join
       - tidy_join.radf_obj
 
-
-navbar:
-  type: default
-  structure:
-    left:
-    - home
-    - intro
-    - reference
-    - articles
-    - tutorials
-    right:
-    - news
-    - github
-  components:
-    home:
-      icon: fa-home fa-lg
-      href: index.html
-    intro:
-      text: Intro
-      href: articles/exuber.html
-    articles:
-      text: Vignettes
-      menu:
-      - text: Simulation
-        href: articles/simulation.html
-      - text: Plotting
-        href: articles/plotting.html
-    reference:
-      text: Reference
-      href: reference/index.html
-    news:
-      text: News
-      href: news/index.html
-    github:
-      icon: fa-github fa-lg
-      href: https://github.com/kvasilopoulos/exuber
+articles:
+- title: All Articles
+  navbar: ~
+  contents:
+  - simulation
+  - plotting
