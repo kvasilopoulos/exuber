@@ -68,10 +68,9 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Additional_repositories: https://kvasilopoulos.github.io/drat
-Config/Needs/website: exuberdata
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c("rd", "namespace",
     "collate"))
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
