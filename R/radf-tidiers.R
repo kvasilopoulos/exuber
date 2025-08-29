@@ -1,5 +1,3 @@
-
-
 # tidy --------------------------------------------------------------------
 
 #' Tidy a `radf_obj` object
@@ -36,7 +34,6 @@
 #' tidy(rfd, panel = TRUE)
 #' }
 tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
-
   format <- match.arg(format)
 
   if (panel) {
@@ -49,7 +46,7 @@ tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
         mutate(id = factor("panel"), stat = factor(stat)) %>%
         select(id, stat, tstat)
     }
-  }else{
+  } else {
     tbl_radf <- x %>%
       keep(names(.) %in% c("adf", "sadf", "gsadf")) %>%
       map(enframe, name = "stat") %>%
@@ -102,7 +99,6 @@ tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 #'
 #' # Get the critical value sequences
 #' augment(mc)
-#'
 #' }
 tidy.radf_cv <- function(x, format = c("wide", "long"), ...) {
   format <- match.arg(format)
@@ -113,8 +109,8 @@ tidy_radf_cv <- function(x, ...) {
   UseMethod("tidy_radf_cv")
 }
 
+#' @exportS3method tidy_radf_cv mc_cv
 tidy_radf_cv.mc_cv <- function(x, format = c("wide", "long"), ...) {
-
   tbl_cv <- x %>%
     keep(names(.) %in% c("adf_cv", "sadf_cv", "gsadf_cv")) %>%
     map(enframe, name = "stat") %>%
@@ -132,15 +128,15 @@ tidy_radf_cv.mc_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv
 }
 
+#' @exportS3method tidy_radf_cv wb_cv
 tidy_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
-
   tbl_cv <- x %>%
     keep(names(.) %in% c("adf_cv", "sadf_cv", "gsadf_cv")) %>%
     map(~ .x %>%
-          as.data.frame() %>%
-          tibble::rownames_to_column() %>%
-          as_tibble() %>%
-          gather(stat, value, -rowname)) %>%
+      as.data.frame() %>%
+      tibble::rownames_to_column() %>%
+      as_tibble() %>%
+      gather(stat, value, -rowname)) %>%
     reduce(full_join, by = c("rowname", "stat")) %>%
     set_names(c("id", "sig", "adf", "sadf", "gsadf")) %>%
     mutate(sig = gsub("%", "", sig) %>% as.factor()) %>%
@@ -156,8 +152,8 @@ tidy_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv
 }
 
+#' @exportS3method tidy_radf_cv sb_cv
 tidy_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
-
   tbl_cv <- x %>%
     pluck("gsadf_panel_cv") %>%
     enframe(name = "sig", value = "gsadf_panel") %>%
@@ -166,7 +162,6 @@ tidy_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
     select(id, sig, gsadf_panel)
 
   if (format == "long") {
-
     tbl_cv <- tbl_cv %>%
       gather(stat, crit, -id, -sig) %>%
       mutate(stat = factor(stat)) %>%
@@ -218,7 +213,6 @@ tidy_radf_distr.mc_distr <- function(x, ...) {
 #' @importFrom dplyr select bind_cols as_tibble
 #' @importFrom purrr reduce pluck
 tidy_radf_distr.wb_distr <- function(x, ...) {
-
   list(
     x %>%
       pluck("adf_distr") %>%
@@ -239,6 +233,7 @@ tidy_radf_distr.wb_distr <- function(x, ...) {
 }
 
 
+#' @exportS3method tidy_radf_distr sb_distr
 tidy_radf_distr.sb_distr <- function(x, ...) {
   tibble(
     gsadf_panel = x
@@ -268,7 +263,6 @@ autoplot_radf_distr <- function(object, ...) {
 #' @importFrom tidyr gather
 #' @importFrom ggplot2 geom_density aes
 autoplot_radf_distr.mc_distr <- function(object, ...) {
-
   object %>%
     tidy() %>%
     rename(ADF = adf, SADF = sadf, GSADF = gsadf) %>%
@@ -276,14 +270,15 @@ autoplot_radf_distr.mc_distr <- function(object, ...) {
     ggplot(aes(value, fill = Distribution)) +
     geom_density(alpha = 0.2) +
     theme_bw() +
-    labs(x = "", y = "",
-         title = "Distributions of unit root test statistics")
+    labs(
+      x = "", y = "",
+      title = "Distributions of unit root test statistics"
+    )
 }
 
 #' @importFrom tidyr gather
 #' @importFrom ggplot2 facet_wrap
 autoplot_radf_distr.wb_distr <- function(object, ...) {
-
   object %>%
     tidy() %>%
     rename(ADF = adf, SADF = sadf, GSADF = gsadf) %>%
@@ -292,13 +287,12 @@ autoplot_radf_distr.wb_distr <- function(object, ...) {
     geom_density(alpha = 0.2) +
     theme_bw() +
     theme(strip.background = element_blank()) +
-    facet_wrap(~ id, scales = "free", ...) +
+    facet_wrap(~id, scales = "free", ...) +
     labs(x = "", y = "")
 }
 
 #' @export
 autoplot_radf_distr.sb_distr <- function(object, ...) {
-
   object %>%
     tidy() %>%
     ggplot(aes(gsadf_panel, fill = gsadf_panel)) +
@@ -341,7 +335,6 @@ tidy_join <- function(x, y, ...) {
 #' @importFrom dplyr full_join case_when select_at
 #' @export
 tidy_join.radf_obj <- function(x, y = NULL, ...) {
-
   y <- y %||% retrieve_crit(x)
   assert_class(y, "radf_cv")
   assert_match(x, y)
@@ -390,7 +383,8 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
   tbl %>%
     mutate(
       id = factor(id, levels = series_names(x)),
-      stat = factor(stat, levels = c("adf", "sadf", "gsadf"))) %>%
+      stat = factor(stat, levels = c("adf", "sadf", "gsadf"))
+    ) %>%
     arrange(id, stat)
 }
 
@@ -403,8 +397,7 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
 #' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather pivot_longer drop_na
 #' @export
-augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc = TRUE,  ...) {
-
+augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc = TRUE, ...) {
   stopifnot(is.logical(panel))
   stopifnot(is.logical(trunc))
   format <- match.arg(format)
@@ -414,7 +407,7 @@ augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc
       add_index(x) %>%
       select(key, index, bsadf_panel)
 
-    if(format == "long") {
+    if (format == "long") {
       tbl_radf <- tbl_radf %>%
         mutate(id = factor("panel")) %>%
         pivot_longer(
@@ -425,8 +418,7 @@ augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc
         ) %>%
         select(key, index, id, stat, tstat)
     }
-
-  }else{
+  } else {
     tbl_radf <- list(
       extract_obj_mat(x),
       extract_obj_stat(x, "badf"),
@@ -434,7 +426,7 @@ augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc
     ) %>%
       reduce(full_join, by = c("key", "id"))
 
-    if(format == "long") {
+    if (format == "long") {
       tbl_radf <- tbl_radf %>%
         pivot_longer(
           cols = c(badf, bsadf),
@@ -444,9 +436,8 @@ augment.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, trunc
         ) %>%
         mutate(stat = factor(stat, levels = c("badf", "bsadf")))
     }
-
   }
-  if(trunc) {
+  if (trunc) {
     tbl_radf <- filter(tbl_radf, key > get_trunc(x))
   }
   tbl_radf
@@ -468,7 +459,7 @@ extract_obj_stat <- function(x, stat) {
 
 extract_obj_mat <- function(x) {
   mat(x) %>%
-    as_tibble %>%
+    as_tibble() %>%
     add_key(x, F) %>%
     mutate(index = index(x, trunc = FALSE)) %>%
     pivot_longer(
@@ -502,8 +493,8 @@ augment_radf_cv <- function(x, ...) {
   UseMethod("augment_radf_cv")
 }
 
+#' @exportS3method augment_radf_cv mc_cv
 augment_radf_cv.mc_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
-
   stopifnot(is.logical(trunc))
   format <- match.arg(format)
 
@@ -520,7 +511,7 @@ augment_radf_cv.mc_cv <- function(x, format = c("wide", "long"), trunc = TRUE, .
       select(key, stat, sig, crit)
   }
 
-  if(trunc) {
+  if (trunc) {
     tbl_cv <- filter(tbl_cv, key > get_trunc(x))
   }
 
@@ -528,7 +519,7 @@ augment_radf_cv.mc_cv <- function(x, format = c("wide", "long"), trunc = TRUE, .
 }
 
 extract_cv_stat <- function(x, stat = "bsadf_cv") {
-  stat_name <-  gsub("_cv", "", stat)
+  stat_name <- gsub("_cv", "", stat)
   pluck(x, stat) %>%
     as_tibble() %>%
     na_pad_minw(x) %>%
@@ -540,8 +531,8 @@ extract_cv_stat <- function(x, stat = "bsadf_cv") {
 
 
 
+#' @exportS3method augment_radf_cv wb_cv
 augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
-
   tbl_cv <- full_join(
     extract_wb_stat(x, "badf_cv"),
     extract_wb_stat(x, "bsadf_cv"),
@@ -556,15 +547,17 @@ augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, .
       select(key, index, id, stat, sig, crit)
   }
 
-  if(trunc) {
+  if (trunc) {
     tbl_cv <- filter(tbl_cv, key > get_trunc(x))
   }
   tbl_cv
 }
 
 extract_wb_stat <- function(x, stat = "badf_cv") {
-  nms <- pluck(x, stat) %>% dimnames() %>% `[[`(3)
-  stat_name <-  gsub("_cv", "", stat)
+  nms <- pluck(x, stat) %>%
+    dimnames() %>%
+    `[[`(3)
+  stat_name <- gsub("_cv", "", stat)
   array_to_list(x, stat) %>%
     set_names(nms) %>%
     map(as_tibble) %>%
@@ -578,8 +571,8 @@ extract_wb_stat <- function(x, stat = "badf_cv") {
 
 
 
+#' @exportS3method augment_radf_cv sb_cv
 augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
-
   tbl_cv <- extract_sb_stat(x)
 
   if (format == "long") {
@@ -589,14 +582,14 @@ augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, .
       select(key, index, id, stat, sig, crit)
   }
 
-  if(trunc) {
+  if (trunc) {
     tbl_cv <- filter(tbl_cv, key > get_trunc(x))
   }
   tbl_cv
 }
 
 extract_sb_stat <- function(x, stat = "bsadf_panel_cv") {
-  stat_name <-  gsub("_cv", "", stat)
+  stat_name <- gsub("_cv", "", stat)
   pluck(x, stat) %>%
     as_tibble() %>%
     na_pad_minw(x) %>%
@@ -623,7 +616,6 @@ augment_join <- function(x, y, ...) {
 #' @rdname tidy_join.radf_obj
 #' @importFrom dplyr inner_join select case_when all_of
 augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
-
   y <- y %||% retrieve_crit(x)
   assert_class(y, "radf_cv")
   assert_match(x, y)
@@ -632,7 +624,7 @@ augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
   join_by <- if (!is_mc(y)) c("id") else NULL
   is_idx_date <- is.Date(index(x))
   if (!is_idx_date && !is_mc(y)) join_by <- c("index", join_by)
-  idx_if_date <- if (is_idx_date && !is_mc(y)) "index"  else NULL
+  idx_if_date <- if (is_idx_date && !is_mc(y)) "index" else NULL
   # key_if_date <- if (is_idx_date) "key"  else NULL
   id_lvls <- if (is_panel) "panel" else series_names(x)
 
@@ -658,7 +650,7 @@ augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
   tbl %>%
     # drop_na(index) %>%
     mutate(id = factor(id, levels = id_lvls)) %>%
-    arrange(id, stat, sig) #%>%
+    arrange(id, stat, sig) # %>%
   # select_at(vars(-dplyr::all_of(key_if_date)))
 }
 # full_join(
@@ -666,4 +658,3 @@ augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
 #   augment(y, "long", trunc = trunc),
 #   by = c("key", "index", "id", "stat")
 # )
-

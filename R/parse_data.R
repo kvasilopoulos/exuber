@@ -1,4 +1,3 @@
-
 idx_seq <- function(x) {
   seq(1, NROW(x), 1)
 }
@@ -11,14 +10,16 @@ parse_dt <- function(x) {
   UseMethod("parse_dt")
 }
 
+#' @exportS3method parse_dt default
 parse_dt.default <- function(x) {
   stop_glue("unsupported class")
 }
 
+#' @exportS3method parse_dt data.frame
 parse_dt.data.frame <- function(x) {
   date_index <- vapply(x, is.index, logical(1))
   n_index <- sum(date_index, na.rm = TRUE)
-  if(n_index > 1) {
+  if (n_index > 1) {
     stop_glue("The `index` match to multiple variables.")
   }
   if (n_index == 1) {
@@ -32,6 +33,7 @@ parse_dt.data.frame <- function(x) {
   list(data = x, index = index)
 }
 
+#' @exportS3method parse_dt ts
 parse_dt.ts <- function(x) {
   sim_index <- idx_seq(x)
   vec_time <- as.vector(time(x))
@@ -44,7 +46,7 @@ parse_dt.ts <- function(x) {
     if (frequency(x) %in% c(1, 4, 12)) {
       index <- round_date(index, "month")
     } else if (frequency(x) == 52) {
-      #empty no further modification
+      # empty no further modification
     } else {
       index <- round_date(index, "day")
     }
@@ -53,12 +55,13 @@ parse_dt.ts <- function(x) {
   list(data = x, index = index)
 }
 
+#' @exportS3method parse_dt numeric
 parse_dt.numeric <- function(x) {
   list(data = x, index = idx_seq(x))
 }
 
 is_wide <- function(index) {
-  if(is_duplicate(index)) {
+  if (is_duplicate(index)) {
     return(FALSE)
   }
   TRUE
@@ -74,7 +77,7 @@ is_duplicate <- function(x) {
 #' @importFrom stats is.ts
 parse_data <- function(x) {
   lst <- parse_dt(x)
-  if(!is_wide(lst$index)) {
+  if (!is_wide(lst$index)) {
     stop_glue("The data do not have the appropriate format.")
   }
   matx <- as.matrix(lst$data)
