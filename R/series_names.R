@@ -1,5 +1,3 @@
-
-
 #' Retrieve/Replace series names
 #'
 #' Retrieve or replace the series names of an object.
@@ -100,4 +98,3 @@ series_names.default <- function(x, ...) {
   attr(x, "series_names") <- value
   x
 }
-

@@ -3,16 +3,18 @@ deprecate_arg_warn <- function(old, new = NULL) {
   has_new <- is.null(new) || isFALSE(new)
   if (has_old && has_new) {
     warning_glue("`{substitute(old)}` is deprecated. Please use `{substitute(new)}` instead.")
-  }else if(has_old){
+  } else if (has_old) {
     warning_glue("`{substitute(old)}` is deprecated.")
   }
 }
 
 deprecate_arg_stop <- function(old, new = NULL) {
-  if(old == "DEPRECATED" && is.null(new))
+  if (old == "DEPRECATED" && is.null(new)) {
     warning_glue("`{substitute(old)}` is deprecated.")
-  if (!is.null(old) && old != "DEPRECATED")
+  }
+  if (!is.null(old) && old != "DEPRECATED") {
     stop_glue("`{substitute(old)}` is deprecated. Please use `{substitute(new)}` instead.")
+  }
 }
 
 # Deprecated --------------------------------------------------------------
@@ -101,5 +103,3 @@ sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
                      c = 1, alpha = 0.6, sigma = 6.79, seed = NULL) {
   .Defunct(new = "sim_psy2()", package = "exuber")
 }
-
-
