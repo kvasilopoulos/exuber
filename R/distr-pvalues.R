@@ -11,7 +11,7 @@
 #' @export
 #' @importFrom tidyr nest spread
 #' @importFrom purrr when map2_dbl
-#' @importFrom dplyr  mutate select
+#' @importFrom dplyr mutate select group_by
 #' @keywords internal
 #' @examples
 #' \dontrun{
