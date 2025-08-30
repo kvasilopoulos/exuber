@@ -61,6 +61,11 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           extra-packages: exuberdata=?ignore
 
+      # Explicitly install rcmdcheck to ensure it's available
+      - name: Install rcmdcheck
+        run: |
+          R -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck', repos = 'https://cloud.r-project.org')"
+
       - uses: r-hub/actions/run-check@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
@@ -91,7 +96,13 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
           extra-packages: exuberdata=?ignore
-      - uses: r-hub/actions/run-check@v1
+
+      # Explicitly install rcmdcheck to ensure it's available
+      - name: Install rcmdcheck
+        run: |
+          R -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck', repos = 'https://cloud.r-project.org')"
+
+      - uses: r-hub/actions/run-check@v2
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
