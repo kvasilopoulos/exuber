@@ -10,12 +10,12 @@ parse_dt <- function(x) {
   UseMethod("parse_dt")
 }
 
-#' @exportS3method parse_dt default
+#' @export
 parse_dt.default <- function(x) {
   stop_glue("unsupported class")
 }
 
-#' @exportS3method parse_dt data.frame
+#' @export
 parse_dt.data.frame <- function(x) {
   date_index <- vapply(x, is.index, logical(1))
   n_index <- sum(date_index, na.rm = TRUE)
@@ -33,7 +33,7 @@ parse_dt.data.frame <- function(x) {
   list(data = x, index = index)
 }
 
-#' @exportS3method parse_dt ts
+#' @export
 parse_dt.ts <- function(x) {
   sim_index <- idx_seq(x)
   vec_time <- as.vector(time(x))
@@ -55,7 +55,7 @@ parse_dt.ts <- function(x) {
   list(data = x, index = index)
 }
 
-#' @exportS3method parse_dt numeric
+#' @export
 parse_dt.numeric <- function(x) {
   list(data = x, index = idx_seq(x))
 }

@@ -63,18 +63,18 @@ index_radf_cv <- function(x, ...) {
   UseMethod("index_radf_cv")
 }
 
-#' @exportS3method index_radf_cv mc_cv
+#' @export
 index_radf_cv.mc_cv <- function(x, trunc, ...) {
   stop_glue("`index` is not suppoted for class `mc_cv`.")
 }
 
-#' @exportS3method index_radf_cv wb_cv
+#' @export
 index_radf_cv.wb_cv <- function(x, trunc, ...) {
   value <- attr(x, "index")
   value[-c(1:get_minw(x))]
 }
 
-#' @exportS3method index_radf_cv sb_cv
+#' @export
 index_radf_cv.sb_cv <- function(x, trunc, ...) {
   value <- attr(x, "index")
   if (trunc) {

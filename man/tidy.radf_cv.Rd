@@ -40,6 +40,5 @@ tidy(mc)
 
 # Get the critical value sequences
 augment(mc)
-
 }
 }

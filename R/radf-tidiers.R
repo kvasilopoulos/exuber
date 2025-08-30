@@ -13,7 +13,7 @@
 #' @importFrom dplyr full_join arrange
 #' @importFrom rlang set_names
 #' @importFrom tidyr gather
-#' @importFrom tibble enframe
+#' @importFrom tibble enframe tibble
 #'
 #' @return A [tibble::tibble()]
 #'
@@ -109,7 +109,7 @@ tidy_radf_cv <- function(x, ...) {
   UseMethod("tidy_radf_cv")
 }
 
-#' @exportS3method tidy_radf_cv mc_cv
+#' @export
 tidy_radf_cv.mc_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv <- x %>%
     keep(names(.) %in% c("adf_cv", "sadf_cv", "gsadf_cv")) %>%
@@ -128,7 +128,7 @@ tidy_radf_cv.mc_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv
 }
 
-#' @exportS3method tidy_radf_cv wb_cv
+#' @export
 tidy_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv <- x %>%
     keep(names(.) %in% c("adf_cv", "sadf_cv", "gsadf_cv")) %>%
@@ -152,7 +152,7 @@ tidy_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv
 }
 
-#' @exportS3method tidy_radf_cv sb_cv
+#' @export
 tidy_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv <- x %>%
     pluck("gsadf_panel_cv") %>%
@@ -199,7 +199,7 @@ tidy_radf_distr <- function(x, ...) {
   UseMethod("tidy_radf_distr")
 }
 
-#' @importFrom dplyr tibble
+#' @export
 tidy_radf_distr.mc_distr <- function(x, ...) {
   tibble(
     adf = x$adf_distr,
@@ -209,9 +209,7 @@ tidy_radf_distr.mc_distr <- function(x, ...) {
 }
 
 
-#' @importFrom tidyr gather
-#' @importFrom dplyr select bind_cols as_tibble
-#' @importFrom purrr reduce pluck
+#' @export
 tidy_radf_distr.wb_distr <- function(x, ...) {
   list(
     x %>%
@@ -233,7 +231,7 @@ tidy_radf_distr.wb_distr <- function(x, ...) {
 }
 
 
-#' @exportS3method tidy_radf_distr sb_distr
+#' @export
 tidy_radf_distr.sb_distr <- function(x, ...) {
   tibble(
     gsadf_panel = x
@@ -260,8 +258,7 @@ autoplot_radf_distr <- function(object, ...) {
   UseMethod("autoplot_radf_distr")
 }
 
-#' @importFrom tidyr gather
-#' @importFrom ggplot2 geom_density aes
+#' @export
 autoplot_radf_distr.mc_distr <- function(object, ...) {
   object %>%
     tidy() %>%
@@ -276,8 +273,7 @@ autoplot_radf_distr.mc_distr <- function(object, ...) {
     )
 }
 
-#' @importFrom tidyr gather
-#' @importFrom ggplot2 facet_wrap
+#' @export
 autoplot_radf_distr.wb_distr <- function(object, ...) {
   object %>%
     tidy() %>%
@@ -493,7 +489,7 @@ augment_radf_cv <- function(x, ...) {
   UseMethod("augment_radf_cv")
 }
 
-#' @exportS3method augment_radf_cv mc_cv
+#' @export
 augment_radf_cv.mc_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
   stopifnot(is.logical(trunc))
   format <- match.arg(format)
@@ -531,7 +527,7 @@ extract_cv_stat <- function(x, stat = "bsadf_cv") {
 
 
 
-#' @exportS3method augment_radf_cv wb_cv
+#' @export
 augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
   tbl_cv <- full_join(
     extract_wb_stat(x, "badf_cv"),
@@ -571,7 +567,7 @@ extract_wb_stat <- function(x, stat = "badf_cv") {
 
 
 
-#' @exportS3method augment_radf_cv sb_cv
+#' @export
 augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
   tbl_cv <- extract_sb_stat(x)
 
