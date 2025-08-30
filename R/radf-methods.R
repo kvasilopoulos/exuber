@@ -51,7 +51,7 @@ summary_radf <- function(cv, ...) {
   UseMethod("summary_radf")
 }
 
-#' @exportS3method summary_radf mc_cv
+#' @export
 summary_radf.mc_cv <- summary_radf.wb_cv <- function(cv, object, ...) {
   ret <- list()
   snames <- series_names(object)
@@ -64,7 +64,7 @@ summary_radf.mc_cv <- summary_radf.wb_cv <- function(cv, object, ...) {
   ret
 }
 
-#' @exportS3method summary_radf sb_cv
+#' @export
 summary_radf.sb_cv <- function(cv, object, ...) {
   ret <- list()
   ret[["panel"]] <- tidy_join(object, cv, panel = TRUE) %>%
@@ -199,6 +199,7 @@ diagnostics_internal <- function(...) {
 #' @importFrom cli cat_line cat_rule
 #' @importFrom glue glue
 #' @importFrom rlang is_bare_character
+#' @importFrom tibble tibble
 #' @export
 print.dg_radf <- function(x, ...) {
   cli::cat_line()

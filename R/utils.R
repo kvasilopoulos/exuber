@@ -1,15 +1,16 @@
-
 `%NA%` <- function(x, y) {
-  if (is.na(x))
+  if (is.na(x)) {
     y
-  else x
+  } else {
+    x
+  }
 }
 
 
 `%NULL%` <- function(cond, x) {
-  if(isTRUE(cond)) {
+  if (isTRUE(cond)) {
     x
-  } else{
+  } else {
     NULL
   }
 }
@@ -19,23 +20,24 @@
 # For simulation ----------------------------------------------------------
 
 get_rng <- function(seed) {
-  if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
+  if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)) {
     runif(1)
-  if (is.null(seed)) {
-    RNGstate <- get(".Random.seed", envir = .GlobalEnv)
-  }else {
-    R.seed <- get(".Random.seed", envir = .GlobalEnv)
-    RNGstate <- structure(seed, kind = as.list(RNGkind()))
-    on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))
   }
-  RNGstate
+  if (is.null(seed)) {
+    rng_state <- get(".Random.seed", envir = .GlobalEnv)
+  } else {
+    r_seed <- get(".Random.seed", envir = .GlobalEnv)
+    rng_state <- structure(seed, kind = as.list(RNGkind()))
+    on.exit(assign(".Random.seed", r_seed, envir = .GlobalEnv))
+  }
+  rng_state
 }
 
 get_global_rng <- function() {
   option_seed <- getOption("exuber.global_seed")
   if (!is.na(option_seed) && !is.null(option_seed)) {
     option_seed
-  }else{
+  } else {
     NULL
   }
 }
@@ -63,10 +65,17 @@ retrieve_crit <- function(x) {
     message_glue("Using `radf_crit` for `cv`.")
     return(exuber::radf_crit[[nr]])
   } else if (nr > length(exuber::radf_crit) && nr <= 2000) {
-    message_glue("Using `exuberdata::radf_crit2` for `cv`.")
-    need_exuberdata()
-    return(exuberdata::radf_crit2[[nr]])
-  }else {
+    if (requireNamespace("exuberdata", quietly = TRUE)) {
+      message_glue("Using `exuberdata::radf_crit2` for `cv`.")
+      need_exuberdata()
+      return(exuberdata::radf_crit2[[nr]])
+    } else {
+      stop_glue(
+        "`exuberdata` package is not installed. ",
+        "Please install it with `install_exuberdata()`."
+      )
+    }
+  } else {
     stop_glue("Cannot provide critical values see `help(radf_crit)`.")
   }
 }
@@ -82,7 +91,7 @@ show_pb <- function() {
 }
 
 #' @importFrom progress progress_bar
-set_pb <- function(iter,width = getOption("width") - 10L) {
+set_pb <- function(iter, width = getOption("width") - 10L) {
   if (show_pb()) {
     progress_bar$new(format = "[:bar] (:percent)", total = iter, width = width)
   }
@@ -91,7 +100,7 @@ set_pb <- function(iter,width = getOption("width") - 10L) {
 set_pb_opts <- function(pb) {
   if (show_pb()) {
     list(progress = function(n) pb$tick())
-  }else{
+  } else {
     list(progress = NULL)
   }
 }
@@ -100,7 +109,8 @@ set_pb_opts <- function(pb) {
 
 array_to_list <- function(x, var) {
   itnames <- pluck(x, var) %>%
-    dimnames() %>% pluck(3)
+    dimnames() %>%
+    pluck(3)
   iter <- length(itnames)
 
   out <- vector("list", length = iter)
@@ -110,13 +120,13 @@ array_to_list <- function(x, var) {
   out
 }
 
-#' @importFrom tibble add_column
+#' @importFrom tibble add_column tibble
 add_key <- function(x, attr_from, trunc = FALSE) {
   nkey <- get_trunc(attr_from)
-  if(trunc){
+  if (trunc) {
     key_tbl <- tibble(key = (nkey + 1):(nrow(x) + nkey))
-    wkey <- add_column(x , key_tbl)
-  }else{
+    wkey <- add_column(x, key_tbl)
+  } else {
     key_tbl <- tibble(key = 1:nrow(x))
     wkey <- add_column(x, key_tbl)
   }
