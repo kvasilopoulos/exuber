@@ -76,7 +76,7 @@ the null hypothesis.}
 \item{opacity}{The opacity of the shade color aka alpha.}
 }
 \value{
-A \code{\link[ggplot2:ggplot]{ggplot2::ggplot()}}
+A \link[ggplot2]{ggplot}
 }
 \description{
 \code{autoplot.radf_obj} takes \code{radf_obj} and \code{radf_cv} and returns a faceted ggplot object.

@@ -16,7 +16,7 @@ A list with lower level lists that contain
 }
 }
 \source{
-Simulated from exuber package function \code{\link[=radf_mc_cv]{radf_mc_cv()}}.
+Simulated from exuber package function \code{\link{radf_mc_cv}}.
 }
 \usage{
 radf_crit
@@ -25,7 +25,7 @@ radf_crit
 A dataset containing Monte Carlo critical values for up to 600 observations
 generated using the default minimum window. The critical values have been
 simulated and stored as data to save computation time for the user. The stored
-critical values can be obtained with the \code{\link[=radf_mc_cv]{radf_mc_cv()}}
+critical values can be obtained with the \code{\link{radf_mc_cv}}
 function, using nrep = \code{2000} and the \code{seed = 123}.
 }
 \examples{
