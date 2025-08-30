@@ -7,10 +7,10 @@
 \method{summary}{radf_obj}(object, cv = NULL, ...)
 }
 \arguments{
-\item{object}{An object of class \code{radf_obj}. The output of \code{\link[=radf]{radf()}}.}
+\item{object}{An object of class \code{radf_obj}. The output of \code{\link{radf}}.}
 
-\item{cv}{An object of class \code{radf_cv}. The output of \code{\link[=radf_mc_cv]{radf_mc_cv()}},
-\code{\link[=radf_wb_cv]{radf_wb_cv()}} or \code{\link[=radf_sb_cv]{radf_sb_cv()}}.}
+\item{cv}{An object of class \code{radf_cv}. The output of \code{\link{radf_mc_cv}},
+\code{\link{radf_wb_cv}} or \code{\link{radf_sb_cv}}.}
 
 \item{...}{Further arguments passed to methods. Not used.}
 }

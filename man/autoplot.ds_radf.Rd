@@ -7,18 +7,18 @@
 \method{autoplot}{ds_radf}(object, trunc = TRUE, ...)
 }
 \arguments{
-\item{object}{An object of class \code{ds_radf}. The output of \code{\link[=datestamp]{datestamp()}}}
+\item{object}{An object of class \code{ds_radf}. The output of \code{\link{datestamp}}}
 
 \item{trunc}{Whether to remove the period of the minimum window from the plot (default = TRUE).}
 
 \item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
-\link[ggplot2]{ggplot2}
+\link[ggplot2]{ggplot}
 }
 \description{
 Takes a \code{ds_radf} object and returns a ggplot2 object, with a
-\link[=ggplot2]{geom_segment()} layer.
+\link[ggplot2]{geom_segment} layer.
 }
 \examples{
 \donttest{

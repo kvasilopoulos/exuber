@@ -9,18 +9,18 @@
 \alias{augment}
 \title{Objects exported from other packages}
 \seealso{
-\code{\link[=fortify.radf_obj]{fortify.radf_obj()}}
-\code{\link[=fortify.ds_radf]{fortify.ds_radf()}}
+\code{\link{fortify.radf_obj}}
+\code{\link{fortify.ds_radf}}
 
-\code{\link[=autoplot.radf_obj]{autoplot.radf_obj()}}
-\code{\link[=autoplot.ds_radf]{autoplot.ds_radf()}}
+\code{\link{autoplot.radf_obj}}
+\code{\link{autoplot.ds_radf}}
 
-\code{\link[=tidy.radf_obj]{tidy.radf_obj()}}
-\code{\link[=tidy.radf_cv]{tidy.radf_cv()}}
-\code{\link[=tidy.radf_distr]{tidy.radf_distr()}}
+\code{\link{tidy.radf_obj}}
+\code{\link{tidy.radf_cv}}
+\code{\link{tidy.radf_distr}}
 
-\code{\link[=augment.radf_obj]{augment.radf_obj()}}
-\code{\link[=augment.radf_cv]{augment.radf_cv()}}
+\code{\link{augment.radf_obj}}
+\code{\link{augment.radf_cv}}
 }
 \keyword{internal}
 \description{

@@ -15,7 +15,7 @@
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
 #' @param include_negative Argument name is deprecated and substituted with `nonrejected`.
 #'
-#' @return A [ggplot2::ggplot()]
+#' @return A \link[ggplot2]{ggplot}
 #'
 #' @importFrom dplyr filter
 #' @importFrom tidyr pivot_longer
@@ -366,18 +366,18 @@ theme_exuber <- function(
 #' Plotting a `ds_radf` object
 #'
 #' Takes a `ds_radf` object and returns a ggplot2 object, with a
-#' \link[=ggplot2]{geom_segment()} layer.
+#' \link[ggplot2]{geom_segment} layer.
 #'
 #' @name autoplot.ds_radf
 #'
-#' @param object An object of class \code{ds_radf}. The output of \code{\link[=datestamp]{datestamp()}}
+#' @param object An object of class \code{ds_radf}. The output of \code{\link{datestamp}}
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
 #' @param ... Further arguments passed to methods. Not used.
 #' @export
 #'
 #' @importFrom stats reorder
 #'
-#' @return \link[ggplot2]{ggplot2}
+#' @return \link[ggplot2]{ggplot}
 #'
 #' @examples
 #' \donttest{
