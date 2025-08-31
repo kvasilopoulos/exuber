@@ -1,3 +1,8 @@
+# exuber 1.1.0
+
+* Fixed \link{} targets not in the package itself nor in the base packages to
+use package anchors, i.e., use \link[PKG]{FOO}
+
 # exuber 1.0.1
 
 Maintenance release to accommodate breaking changes in dplyr 1.1.0.
