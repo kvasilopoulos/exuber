@@ -10,4 +10,18 @@
 CXX_STD = CXX17
 
 ## PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+## RcppArmadilloForward.h injects extra members into arma::Mat/Col/Row
+## (RcppArmadillo interop methods, R RNG plug-in) before <armadillo> is
+## included. exuber's own sources get this via RcppArmadillo.h; the vendored
+## exubercore source doesn't include that header (it's meant to stay R-free
+## in its own repo) and so builds a differently-shaped arma::Mat -- an ODR
+## violation across translation units in the same DLL that segfaults at
+## call time. Forcing the same header into every TU keeps arma::Mat
+## identical everywhere it's compiled.
+PKG_CPPFLAGS = -Ivendor/exubercore/include -include RcppArmadillo/interface/RcppArmadilloForward.h
 PKG_LIBS =  $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) ## $(SHLIB_OPENMP_CFLAGS)
+
+# rls_gsadf.cpp is a thin Rcpp wrapper around the vendored exubercore
+# numerics (see tools/vendor-exubercore.sh); R's default build only picks
+# up src/*.cpp, so the vendored source needs to be listed explicitly here.
+OBJECTS = RcppExports.o rls_gsadf.o vendor/exubercore/src/radf.o
