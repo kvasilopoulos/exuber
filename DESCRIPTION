@@ -62,11 +62,12 @@ Suggests:
     stringr (>= 1.4.0),
     testthat (>= 2.1.1),
     withr (>= 2.1.2)
-LinkingTo: 
+LinkingTo:
     Rcpp (>= 1.0.1),
     RcppArmadillo (>= 0.9.400.2.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
+Config/exuber/exubercore-version: v0.1.0
 Additional_repositories: https://kvasilopoulos.github.io/drat
 Encoding: UTF-8
 Language: en-US
