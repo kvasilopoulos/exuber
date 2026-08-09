@@ -33,47 +33,37 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 
   nres <- NROW(resmat)
 
-  show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(nboot)
-  pb_opts <- set_pb_opts(pb)
-
   do_par <- getOption("exuber.parallel")
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
   set_rng(seed)
 
-  `%fun%` <- if (do_par) `%dorng%` else `%do%`
-
-  edf_bsadf_panel <- foreach(
-    i = 1:nboot,
-    .export = c("rls_gsadf", "unroot"),
-    .combine = "cbind",
-    .options.snow = pb_opts,
-    .inorder = FALSE
-  ) %fun% {
-    boot_index <- sample(1:nres, replace = TRUE)
-    if (show_pb && !do_par)
-      pb$tick()
-    for (j in 1:nc) {
-      boot_res <- resmat[boot_index, j]
-      dboot_res <- boot_res - mean(boot_res)
-      dy_boot <- c(
-        initmat[j, lag:1],
-        stats::filter(coefmat[j, 1] + dboot_res,
-                      coefmat[j, -1], "rec",
-                      init = initmat[j, ]
+  edf_bsadf_panel <- with_backend({
+    p <- progressor(steps = nboot)
+    foreach(
+      i = 1:nboot,
+      .combine = "cbind",
+      .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot"))),
+      .inorder = FALSE
+    ) %dofuture% {
+      boot_index <- sample(1:nres, replace = TRUE)
+      p()
+      for (j in 1:nc) {
+        boot_res <- resmat[boot_index, j]
+        dboot_res <- boot_res - mean(boot_res)
+        dy_boot <- c(
+          initmat[j, lag:1],
+          stats::filter(coefmat[j, 1] + dboot_res,
+                        coefmat[j, -1], "rec",
+                        init = initmat[j, ]
+          )
         )
-      )
-      y_boot <- cumsum(c(y[1, j], dy_boot))
-      yxmat_boot <- unroot(x = y_boot, lag)
-      aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-      bsadf_boot <- aux_boot[-c(1:(pointer + 3))]
+        y_boot <- cumsum(c(y[1, j], dy_boot))
+        yxmat_boot <- unroot(x = y_boot, lag)
+        aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
+        bsadf_boot <- aux_boot[-c(1:(pointer + 3))]
+      }
+      bsadf_boot / nc
     }
-    bsadf_boot / nc
-  }
+  })
 
   bsadf_crit <- unname(edf_bsadf_panel)
   gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% unname()
@@ -102,8 +92,9 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #' @inheritParams radf
 #' @inheritParams radf_wb_cv
 #'
-#' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar% %do%
+#' @importFrom foreach foreach
+#' @importFrom doFuture `%dofuture%`
+#' @importFrom progressr progressor
 #' @importFrom stats quantile lm
 #' @export
 #'

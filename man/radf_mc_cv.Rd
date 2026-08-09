@@ -5,9 +5,9 @@
 \alias{radf_mc_distr}
 \title{Monte Carlo Critical Values}
 \usage{
-radf_mc_cv(n, minw = NULL, nrep = 1000L, seed = NULL)
+radf_mc_cv(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 
-radf_mc_distr(n, minw = NULL, nrep = 1000L, seed = NULL)
+radf_mc_distr(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 }
 \arguments{
 \item{n}{A positive integer. The sample size.}
@@ -21,8 +21,11 @@ radf_mc_distr(n, minw = NULL, nrep = 1000L, seed = NULL)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are different between
-the parallel and non-parallel option, even if they have the same seed.}
+return .Random.seed as the "seed" attribute. Results are reproducible
+across the parallel and non-parallel option when the same seed is used.}
+
+\item{lag}{A non-negative integer. Number of lags in the auxiliary
+regression, as in \code{\link{radf}}.}
 }
 \value{
 For \code{radf_mc_cv} a list that contains the critical values for ADF,

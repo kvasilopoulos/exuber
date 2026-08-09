@@ -1,8 +1,8 @@
 #
 #' @importFrom rlang is_scalar_atomic
-#' @importFrom doRNG `%dorng%`
-#' @importFrom doSNOW registerDoSNOW
-radf_mc_ <- function(n, minw, nrep, seed = NULL) {
+#' @importFrom doFuture `%dofuture%`
+#' @importFrom progressr progressor
+radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 
   if(!is.null(dim(n))) {
     message_glue("Did you use `data` instead of `n`? Using `NROW(n)` instead.")
@@ -13,36 +13,27 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
   assert_positive_int(nrep)
   minw <- minw %||% psy_minw(n)
   assert_positive_int(minw, greater_than = 2)
-
-  show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(nrep)
-  pb_opts <- set_pb_opts(pb)
+  assert_positive_int(lag, strictly = FALSE)
 
   do_par <- getOption("exuber.parallel")
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-
-  `%fun%` <- if (do_par) `%dorng%` else `%do%`#dorng to seed in parallel
 
   set_rng(seed)
-  results <- foreach(
-    i = 1:nrep,
-    .export = c("rls_gsadf", "unroot"),
-    .combine = "cbind",
-    .options.snow = pb_opts,
-    .inorder = FALSE
-  ) %fun% {
-    if (show_pb && !do_par)
-      pb$tick()
-    y <- cumsum(rnorm(n))
-    yxmat <- unroot(y)
-    rls_gsadf(yxmat, min_win = minw)
-  }
+  results <- with_backend({
+    p <- progressor(steps = nrep)
+    foreach(
+      i = 1:nrep,
+      .combine = "cbind",
+      .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot"))),
+      .inorder = FALSE
+    ) %dofuture% {
+      p()
+      y <- cumsum(rnorm(n))
+      yxmat <- unroot(y, lag = lag)
+      rls_gsadf(yxmat, min_win = minw, lag = lag)
+    }
+  })
 
-  n_minw <- n - minw
+  n_minw <- n - minw - lag
 
   adf_crit   <- results[n_minw + 1, ]
   sadf_crit  <- results[n_minw + 2, ]
@@ -63,6 +54,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
       n = n,
       minw = minw,
       iter = nrep,
+      lag = lag,
       seed = get_rng_state(seed),
       parallel = do_par
     )
@@ -77,12 +69,14 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @inheritParams radf
 #' @param n A positive integer. The sample size.
 #' @param nrep A positive integer. The number of Monte Carlo simulations.
+#' @param lag A non-negative integer. Number of lags in the auxiliary
+#' regression, as in \code{\link{radf}}.
 #' @param seed An object specifying if and how the random number generator (rng)
 #' should be initialized. Either NULL or an integer will be used in a call to
 #' `set.seed` before simulation. If set, the value is saved as "seed" attribute
 #' of the returned value. The default, NULL, will not change rng state, and
-#' return .Random.seed as the "seed" attribute. Results are different between
-#'  the parallel and non-parallel option, even if they have the same seed.
+#' return .Random.seed as the "seed" attribute. Results are reproducible
+#' across the parallel and non-parallel option when the same seed is used.
 #'
 #' @return For \code{radf_mc_cv} a list that contains the critical values for ADF,
 #' BADF, BSADF and GSADF test statistics. For \code{radf_mc_distr} a list that
@@ -91,8 +85,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #' @seealso \code{\link{radf_wb_cv}} for wild bootstrap critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values
 #'
-#' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %do%
+#' @importFrom foreach foreach
 #' @importFrom stats quantile rnorm runif
 #' @importFrom lubridate is.Date
 #' @importFrom purrr detect_index
@@ -114,11 +107,11 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL) {
 #'
 #' autoplot(mdist)
 #' }
-radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
+radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
 
   pcnt <- c(0.9, 0.95, 0.99)
 
-  results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed)
+  results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed, lag = lag)
 
   adf_crit <- quantile(results$adf, probs = pcnt, drop = FALSE)
   sadf_crit <- quantile(results$sadf, probs = pcnt, drop = FALSE)
@@ -151,9 +144,9 @@ radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
 #' @rdname radf_mc_cv
 #' @inheritParams radf_mc_cv
 #' @export
-radf_mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL) {
+radf_mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
 
-  results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed)
+  results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed, lag = lag)
 
   list(
     adf_distr = results$adf,
