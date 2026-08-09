@@ -59,7 +59,6 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
-          extra-packages: exuberdata=?ignore
 
       # Explicitly install rcmdcheck to ensure it's available
       - name: Install rcmdcheck
@@ -95,7 +94,6 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-          extra-packages: exuberdata=?ignore
 
       # Explicitly install rcmdcheck to ensure it's available
       - name: Install rcmdcheck

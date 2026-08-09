@@ -133,40 +133,31 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
   badf_crit <- bsadf_crit <-
     array(NA, dim = c(pointer, nboot, nc), dimnames = list(NULL, NULL, snames))
 
-  show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(nboot*nc)
-  pb_opts <- set_pb_opts(pb)
-
   do_par <- getOption("exuber.parallel")
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-
-  `%fun%` <- if (do_par) `%dorng%` else `%do%`
 
   set_rng(seed)
-  for (j in 1:nc) {
-    results <- foreach(
-      i = 1:nboot,
-      .export = c("rls_gsadf", "unroot", "radf_wb_dgp_ps"),
-      .combine = "cbind",
-      .options.snow = pb_opts,
-      .inorder = FALSE
-    ) %fun% {
-      if (show_pb && !do_par) pb$tick()
-      ystar <- radf_wb_dgp_ps(y[, j, drop = TRUE], adflag, tb = tb, type = type)
-      yxmat <- unroot(ystar)
-      rls_gsadf(yxmat, min_win = minw)
-    }
-    adf_crit[, j] <- results[pointer + 1, ]
-    sadf_crit[, j] <- results[pointer + 2, ]
-    gsadf_crit[, j] <- results[pointer + 3, ]
+  with_backend({
+    p <- progressor(steps = nboot * nc)
+    for (j in 1:nc) {
+      results <- foreach(
+        i = 1:nboot,
+        .combine = "cbind",
+        .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_ps"))),
+        .inorder = FALSE
+      ) %dofuture% {
+        p()
+        ystar <- radf_wb_dgp_ps(y[, j, drop = TRUE], adflag, tb = tb, type = type)
+        yxmat <- unroot(ystar)
+        rls_gsadf(yxmat, min_win = minw)
+      }
+      adf_crit[, j] <- results[pointer + 1, ]
+      sadf_crit[, j] <- results[pointer + 2, ]
+      gsadf_crit[, j] <- results[pointer + 3, ]
 
-    badf_crit[, , j] <- results[1:pointer, ]
-    bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
-  }
+      badf_crit[, , j] <- results[1:pointer, ]
+      bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
+    }
+  })
 
   list(
     adf = adf_crit,
@@ -217,8 +208,9 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
 #'
-#' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar% %do%
+#' @importFrom foreach foreach
+#' @importFrom doFuture `%dofuture%`
+#' @importFrom progressr progressor
 #' @importFrom stats quantile rnorm
 #' @export
 #'
@@ -339,41 +331,32 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
   badf_crit <- bsadf_crit <-
     array(NA, dim = c(pointer, nboot, nc), dimnames = list(NULL, NULL, snames))
 
-  show_pb <- getOption("exuber.show_progress")
-  pb <- set_pb(nboot*nc)
-  pb_opts <- set_pb_opts(pb)
-
   do_par <- getOption("exuber.parallel")
-  if (do_par) {
-    cl <- parallel::makeCluster(getOption("exuber.ncores"), type = "PSOCK")
-    registerDoSNOW(cl)
-    on.exit(parallel::stopCluster(cl))
-  }
-
-  `%fun%` <- if (do_par) `%dorng%` else `%do%`
 
   set_rng(seed)
-  for (j in 1:nc) {
-    results <- foreach(
-      i = 1:nboot,
-      .export = c("rls_gsadf", "unroot", "radf_wb_dgp_hlst"),
-      .combine = "cbind",
-      .options.snow = pb_opts,
-      .inorder = FALSE
-    ) %fun% {
-      if (show_pb && !do_par) pb$tick()
-      ystar <- radf_wb_dgp_hlst(y[, j], dist_rad)
-      yxmat <- unroot(ystar)
-      rls_gsadf(yxmat, min_win = minw)
+  with_backend({
+    p <- progressor(steps = nboot * nc)
+    for (j in 1:nc) {
+      results <- foreach(
+        i = 1:nboot,
+        .combine = "cbind",
+        .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_hlst"))),
+        .inorder = FALSE
+      ) %dofuture% {
+        p()
+        ystar <- radf_wb_dgp_hlst(y[, j], dist_rad)
+        yxmat <- unroot(ystar)
+        rls_gsadf(yxmat, min_win = minw)
+      }
+
+      adf_crit[, j] <- results[pointer + 1, ]
+      sadf_crit[, j] <- results[pointer + 2, ]
+      gsadf_crit[, j] <- results[pointer + 3, ]
+
+      badf_crit[, , j] <- results[1:pointer, ]
+      bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
     }
-
-    adf_crit[, j] <- results[pointer + 1, ]
-    sadf_crit[, j] <- results[pointer + 2, ]
-    gsadf_crit[, j] <- results[pointer + 3, ]
-
-    badf_crit[, , j] <- results[1:pointer, ]
-    bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
-  }
+  })
 
   list(
     adf = adf_crit,
@@ -427,8 +410,9 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
 #'
-#' @importFrom parallel detectCores makeCluster stopCluster
-#' @importFrom foreach foreach %dopar% %do%
+#' @importFrom foreach foreach
+#' @importFrom doFuture `%dofuture%`
+#' @importFrom progressr progressor
 #' @importFrom stats quantile rnorm
 #' @export
 #'

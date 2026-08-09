@@ -46,8 +46,8 @@ selection according to the criterion.}
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
 of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are different between
-the parallel and non-parallel option, even if they have the same seed.}
+return .Random.seed as the "seed" attribute. Results are reproducible
+across the parallel and non-parallel option when the same seed is used.}
 }
 \value{
 For \code{radf_wb_cv2} a list that contains the critical values for the ADF,
