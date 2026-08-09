@@ -33,6 +33,13 @@ reference:
       - radf_sb_cv
       - radf_crit
 
+  - title: Heteroskedasticity-robust (time-transformed)
+    desc: >
+      Bootstrap-free alternative to radf_wb_cv() under time-varying volatility
+    contents:
+      - radf_tt
+      - radf_tt_cv
+
   - title: Analysis
     contents:
       - summary.radf_obj
@@ -81,3 +88,4 @@ articles:
   contents:
   - simulation
   - plotting
+  - radf-tt
