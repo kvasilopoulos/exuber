@@ -21,7 +21,6 @@ reference:
   - title: Package
     contents:
       - exuber
-      - install_exuberdata
 
   - title: Recursive Augmented Dickey Fuller
     desc: >

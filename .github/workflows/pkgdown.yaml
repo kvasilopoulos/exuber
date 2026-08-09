@@ -32,11 +32,6 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install exuberdata
-        if: always()
-        run: |
-          Rscript -e "install.packages('exuberdata', repos = 'https://kvasilopoulos.github.io/drat')"
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.

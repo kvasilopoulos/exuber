@@ -61,23 +61,25 @@ get_rng_state <- function(seed) {
 
 retrieve_crit <- function(x) {
   nr <- NROW(index(x))
-  if (nr > 5 && nr <= length(exuber::radf_crit)) {
+  lag <- get_lag(x) %||% 0
+
+  if (lag == 0 && nr > 5 && nr <= length(exuber::radf_crit)) {
     message_glue("Using `radf_crit` for `cv`.")
     return(exuber::radf_crit[[nr]])
-  } else if (nr > length(exuber::radf_crit) && nr <= 2000) {
-    if (requireNamespace("exuberdata", quietly = TRUE)) {
-      message_glue("Using `exuberdata::radf_crit2` for `cv`.")
-      need_exuberdata()
-      return(exuberdata::radf_crit2[[nr]])
-    } else {
+  }
+  if (nr > 5 && nr <= 5000) {
+    cv <- fetch_crit_bucket(nr, lag = lag)
+    if (is.null(cv)) {
       stop_glue(
-        "`exuberdata` package is not installed. ",
-        "Please install it with `install_exuberdata()`."
+        "Cannot reach the critical-value store for n = {nr}, lag = {lag} ",
+        "(either unreachable, or that combination hasn't been simulated ",
+        "yet). Check your network connection and try again."
       )
     }
-  } else {
-    stop_glue("Cannot provide critical values see `help(radf_crit)`.")
+    message_glue("Using extended critical values for `cv`.")
+    return(cv)
   }
+  stop_glue("Cannot provide critical values see `help(radf_crit)`.")
 }
 
 
@@ -90,19 +92,16 @@ show_pb <- function() {
     !isTRUE(getOption("knitr.in.progress"))
 }
 
-#' @importFrom progress progress_bar
-set_pb <- function(iter, width = getOption("width") - 10L) {
-  if (show_pb()) {
-    progress_bar$new(format = "[:bar] (:percent)", total = iter, width = width)
-  }
-}
-
-set_pb_opts <- function(pb) {
-  if (show_pb()) {
-    list(progress = function(n) pb$tick())
+#' @importFrom progressr with_progress handler_txtprogressbar
+with_backend <- function(expr) {
+  do_par <- getOption("exuber.parallel")
+  oplan <- if (do_par) {
+    future::plan(future::multisession, workers = getOption("exuber.ncores"))
   } else {
-    list(progress = NULL)
+    future::plan(future::sequential)
   }
+  on.exit(future::plan(oplan), add = TRUE)
+  with_progress(expr, enable = show_pb(), handlers = handler_txtprogressbar())
 }
 
 # tidy --------------------------------------------------------------------
