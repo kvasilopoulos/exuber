@@ -62,3 +62,48 @@ test_that("root_ci empirical coverage is in a plausible range at T = 150
   # nominal 95%, since finite-T undercoverage is expected for this estimator
   expect_gt(mean(covered), 0.80)
 })
+
+test_that("root_ci(type = 'cauchy') brackets the point estimate and matches
+  the Phillips-Magdalinos fixed-root formula (eq. 27) exactly, not just
+  approximately", {
+  set.seed(1)
+  rho_true <- 1.05
+  n <- 150
+  y <- numeric(n)
+  e <- rnorm(n)
+  for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
+
+  est <- explosive_root(y, 1, n)
+  ci <- root_ci(est, type = "cauchy")
+
+  expect_true(ci$rho_ci[1] < est$rho && est$rho < ci$rho_ci[2])
+
+  q <- qcauchy(0.975)
+  half_width <- q * (est$rho^2 - 1) / est$rho^est$n
+  expect_equal(ci$rho_ci, est$rho + c(-1, 1) * half_width)
+})
+
+test_that("root_ci_datestamp runs end-to-end on a real datestamp() result
+  and its per-episode rho matches calling explosive_root()/root_ci()
+  directly on the same Start/End positions", {
+  set.seed(2026)
+  burn <- cumsum(rnorm(60))
+  bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+  y <- c(burn, bubble)
+
+  r <- radf(y, minw = 20)
+  mc <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+  ds <- datestamp(r, cv = mc, min_duration = 3)
+
+  skip_if(length(ds) == 0, "no episode detected on this draw")
+
+  out <- root_ci_datestamp(r, ds)
+  expect_type(out, "list")
+  expect_named(out, names(ds))
+
+  ep <- out[["series1"]]
+  first <- ds[["series1"]][1, ]
+  direct <- root_ci(explosive_root(y, first$Start, first$End))
+  expect_equal(ep$rho[1], direct$rho)
+  expect_equal(ep$rho_lower[1], direct$rho_ci[1])
+})

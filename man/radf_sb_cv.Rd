@@ -5,9 +5,25 @@
 \alias{radf_sb_distr}
 \title{Panel Sieve Bootstrap Critical Values}
 \usage{
-radf_sb_cv(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL)
+radf_sb_cv(
+  data,
+  minw = NULL,
+  lag = 0L,
+  nboot = 500L,
+  type = c("fixed", "aic", "bic"),
+  max_lag = 8L,
+  seed = NULL
+)
 
-radf_sb_distr(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL)
+radf_sb_distr(
+  data,
+  minw = NULL,
+  lag = 0L,
+  nboot = 500L,
+  type = c("fixed", "aic", "bic"),
+  max_lag = 8L,
+  seed = NULL
+)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -19,6 +35,17 @@ vector or matrix, or a data.frame. The object should not have any NA values.}
 \item{lag}{A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).}
 
 \item{nboot}{A positive integer. Number of bootstraps (default = 500L).}
+
+\item{type}{Lag-order selection: \code{"fixed"} (default) uses \code{lag}
+as given, matching \code{\link{radf}}'s own single-\code{lag} behaviour.
+\code{"aic"}/\code{"bic"} instead select the lag automatically per series
+via \code{\link{lag_select}} (taking the max across the panel, since the
+rest of this function assumes one common lag order) -- Pedersen &
+Schütte (2020)'s fix for the size distortion a fixed lag causes under
+autocorrelated innovations.}
+
+\item{max_lag}{Maximum lag order to search over when \code{type} is
+\code{"aic"}/\code{"bic"}. Ignored when \code{type = "fixed"}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
@@ -55,12 +82,19 @@ autoplot(rsim_data, cv = sb)
 sdist <- radf_sb_distr(sim_data, lag = 1, nboot = 1000)
 
 autoplot(sdist)
+
+# Automatic BIC lag selection instead of a fixed lag
+sb_bic <- radf_sb_cv(sim_data, type = "bic")
 }
 }
 \references{
 Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 In search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
+
+Pedersen, T. Q., & Schütte, E. C. M. (2020). Testing for
+explosive bubbles in the presence of autocorrelated innovations. Journal
+of Empirical Finance, 58, 207-225.
 }
 \seealso{
 \code{\link{radf_mc_cv}} for Monte Carlo critical values and
