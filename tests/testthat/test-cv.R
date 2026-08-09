@@ -63,6 +63,58 @@ test_that("distribution_rad works", {
   )), regexp = NA)
 })
 
+test_that("dist_skew (Hafner 2020) works and only one of dist_rad/dist_skew may be TRUE", {
+  expect_error(invisible(capture.output(
+    radf_wb_cv(dta, nboot = 10, dist_skew = TRUE)
+  )), regexp = NA)
+  expect_error(
+    radf_wb_cv(dta, nboot = 10, dist_rad = TRUE, dist_skew = TRUE),
+    "Only one of 'dist_rad' and 'dist_skew'"
+  )
+})
+
+test_that("dist_skew's multiplier w = u/sqrt(2) + (v^2-1)/2 has the moments
+  Hafner (2020) claims by construction: E[w]=0, E[w^2]=1, E[w^3]=1", {
+  set.seed(1)
+  n <- 500000
+  u <- rnorm(n); v <- rnorm(n)
+  w <- u / sqrt(2) + (v^2 - 1) / 2
+  expect_equal(mean(w), 0, tolerance = 0.01)
+  expect_equal(mean(w^2), 1, tolerance = 0.01)
+  expect_equal(mean(w^3), 1, tolerance = 0.02)
+})
+
+test_that("dist_skew = FALSE reproduces the original (pre-Hafner) wild bootstrap
+  DGP exactly, for the same seed -- a pure additive option, not a behavior
+  change to the default path", {
+  set.seed(3)
+  y <- cumsum(rnorm(80))
+  set.seed(7)
+  r1 <- exuber:::radf_wb_dgp_hlst(y, dist_rad = FALSE)
+  set.seed(7)
+  r2 <- exuber:::radf_wb_dgp_hlst(y, dist_rad = FALSE, dist_skew = FALSE)
+  expect_identical(r1, r2)
+})
+
+test_that("dist_skew = TRUE bootstrap correctly detects a clear mildly
+  explosive alternative (confirms the skewed multiplier doesn't degrade
+  basic detection power)", {
+  skip_on_cran()
+  run_once <- function(seed) {
+    set.seed(seed)
+    Tn <- 100
+    Te <- 60
+    normal_part <- cumsum(rnorm(Te))
+    expl_part <- normal_part[Te] * 1.06^(1:(Tn - Te)) + cumsum(rnorm(Tn - Te, sd = 0.3))
+    y <- c(normal_part, expl_part)
+    obs <- radf(y, minw = 20)$sadf
+    cv <- radf_wb_cv(y, minw = 20, nboot = 199, dist_skew = TRUE, seed = 1)
+    obs > cv$sadf_cv[1, "95%"]
+  }
+  power <- mean(sapply(1:20, run_once))
+  expect_gt(power, 0.5)
+})
+
 
 # test_that("show_progress", {
 #   options(exuber.show_progress = TRUE)

@@ -5,9 +5,23 @@
 \alias{radf_wb_distr}
 \title{Wild Bootstrap Critical Values}
 \usage{
-radf_wb_cv(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
+radf_wb_cv(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  dist_rad = FALSE,
+  dist_skew = FALSE,
+  seed = NULL
+)
 
-radf_wb_distr(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL)
+radf_wb_distr(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  dist_rad = FALSE,
+  dist_skew = FALSE,
+  seed = NULL
+)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -19,6 +33,13 @@ vector or matrix, or a data.frame. The object should not have any NA values.}
 \item{nboot}{A positive integer. Number of bootstraps (default = 500L).}
 
 \item{dist_rad}{Logical. If TRUE then the Rademacher distribution will be used.}
+
+\item{dist_skew}{Logical. If TRUE, use Hafner (2020)'s fixed right-skewed
+multiplier distribution instead of the (default) standard normal or
+(\code{dist_rad = TRUE}) Rademacher one -- appropriate when the series'
+return distribution is itself notably right-skewed (e.g. cryptocurrency
+returns, the paper's own application). At most one of \code{dist_rad}
+and \code{dist_skew} may be \code{TRUE}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
@@ -69,6 +90,10 @@ non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&P 500. International Economic Review, 56(4), 1043-1078.
+
+Hafner, C. M. (2020). Testing for bubbles in
+cryptocurrencies with time-varying volatility. Journal of Financial
+Econometrics, 18(2), 233-249.
 }
 \seealso{
 \code{\link{radf_mc_cv}} for Monte Carlo critical values and
