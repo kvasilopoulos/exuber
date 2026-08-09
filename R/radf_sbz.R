@@ -153,7 +153,7 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
     boot_df <- boot_bz <- numeric(nboot)
     for (b in 1:nboot) {
       ystar <- radf_wb_dgp_hlst(yj, dist_rad = FALSE)
-      pointer <- length(ystar) - 1L - minw
+      pointer <- length(ystar) - minw
       boot_df[b] <- rls_gsadf(unroot(ystar), min_win = minw)[pointer + 2]
       boot_bz[b] <- wls_dfstat_grid(ystar, vol$sigma2, minw)$sadf
     }
