@@ -114,3 +114,98 @@ test_that("finite-sample accuracy at moderate T is genuinely limited -- not
   expect_true(all(is.finite(errs)))
   expect_true(sd(errs[, "coll_err"]) > 0)
 })
+
+test_that("pdc_find_break()'s weights argument is a no-op regression check:
+  weights = NULL and weights = rep(1, n) give identical results (the
+  weighted search collapses to the original OLS search)", {
+  set.seed(123)
+  y <- cumsum(rnorm(80))
+  res_null <- exuber:::pdc_find_break(y, 0.05)
+  res_ones <- exuber:::pdc_find_break(y, 0.05, weights = rep(1, length(y) - 1))
+  expect_identical(res_null$break_idx, res_ones$break_idx)
+  expect_equal(res_null$rss, res_ones$rss, tolerance = 1e-10)
+})
+
+test_that("pdc_regime_resid() returns one finite residual per (y_t-1, y_t)
+  pair with no gaps or overlaps across regimes", {
+  set.seed(1)
+  y <- cumsum(rnorm(150))
+  breaks <- c(50L, 100L)
+  resid <- exuber:::pdc_regime_resid(y, breaks)
+  expect_length(resid, length(y) - 1L)
+  expect_true(all(is.finite(resid)))
+})
+
+test_that("'type' must be 'ols' or 'wls'", {
+  y <- cumsum(rnorm(80))
+  expect_error(radf_pdc(y, regimes = 3L, type = "gls"))
+})
+
+test_that("type = 'wls' returns the same output structure as 'ols'", {
+  set.seed(1)
+  y <- cumsum(rnorm(80))
+  out_wls <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
+  out_ols <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
+  expect_equal(colnames(out_wls), colnames(out_ols))
+  expect_equal(rownames(out_wls), rownames(out_ols))
+})
+
+test_that("type = 'wls' matches 'ols' closely under homoskedasticity --
+  the volatility correction should cost little to nothing when there is no
+  time-varying volatility to exploit", {
+  set.seed(1)
+  n1_len <- 150; n2_len <- 80; n3_len <- 100
+  regime1 <- cumsum(rnorm(n1_len, sd = 0.5))
+  regime2 <- regime1[n1_len] * 1.07^(1:n2_len) + cumsum(rnorm(n2_len, sd = 0.15))
+  peak <- regime2[n2_len]
+  rho3 <- 0.5
+  regime3 <- numeric(n3_len)
+  regime3[1] <- rho3 * peak + rnorm(1, sd = 0.5)
+  for (t in 2:n3_len) regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
+  y <- c(regime1, regime2, regime3)
+
+  out_ols <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
+  out_wls <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
+  expect_lte(abs(out_wls$origination - out_ols$origination), 5)
+  expect_lte(abs(out_wls$collapse - out_ols$collapse), 5)
+})
+
+test_that("type = 'wls' materially improves origination-date accuracy over
+  'ols' when a volatility burst sits at the start of the sample -- this is
+  the specific scenario Kurozumi & Skrobotov (2023) report the largest
+  gains for, and the mechanism (WLS downweights the noisy region via the
+  estimated spot variance) is directly testable: OLS's unweighted
+  objective lets the high-variance early segment dominate the origination
+  split, while WLS should not", {
+  skip_on_cran()
+  run_once <- function(seed) {
+    set.seed(seed)
+    n1_len <- 150; n2_len <- 80; n3_len <- 100
+    burst_len <- round(0.2 * n1_len)
+    e1 <- c(rnorm(burst_len, sd = 4), rnorm(n1_len - burst_len, sd = 0.3))
+    regime1 <- cumsum(e1)
+    regime2 <- regime1[n1_len] * 1.07^(1:n2_len) + cumsum(rnorm(n2_len, sd = 0.15))
+    peak <- regime2[n2_len]
+    rho3 <- 0.5
+    regime3 <- numeric(n3_len)
+    regime3[1] <- rho3 * peak + rnorm(1, sd = 0.5)
+    for (t in 2:n3_len) regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
+    y <- c(regime1, regime2, regime3)
+    true_origination <- n1_len
+
+    out_ols <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
+    out_wls <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
+    c(
+      ols_err = out_ols$origination - true_origination,
+      wls_err = out_wls$origination - true_origination
+    )
+  }
+
+  errs <- t(sapply(1:40, run_once))
+  mae_ols <- mean(abs(errs[, "ols_err"]))
+  mae_wls <- mean(abs(errs[, "wls_err"]))
+  # Independent validation (40 seeds) found MAE ~13 (ols) vs ~2.3 (wls); a
+  # loose 2x margin here guards against regressions without being brittle
+  # to the exact numbers on CI's RNG/BLAS.
+  expect_lt(mae_wls, mae_ols / 2)
+})

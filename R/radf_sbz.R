@@ -9,17 +9,16 @@
 # (Section 4) -- applied *jointly* to supDF and supBZ so the union procedure
 # is correctly sized (Theorem 3).
 
-# Nonparametric spot-volatility estimator, eq. (6): a Nadaraya-Watson kernel
-# smoother of the squared first differences of the raw (undemeaned) series.
-# `h` in normalized ([0, 1]) time units; default is leave-one-out
-# cross-validation over the paper's own search range [1/(2T), 1/6]
-# (footnote 2), imposing K(0) = 0 in the CV objective as they do.
-kernel_spot_vol <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
+# Nadaraya-Watson kernel smoother of a squared innovation series `e`, with
+# leave-one-out cross-validated bandwidth over search range [1/(2T), 1/6]
+# (footnote 2), imposing K(0) = 0 in the CV objective. Shared core of
+# kernel_spot_vol() below (e = diff(y)) and the WLS bubble-dating
+# volatility correction in radf_pdc.R (e = step-1 fitted regime residuals).
+nw_spot_vol <- function(e, kernel = c("gaussian", "uniform"), h = NULL) {
   kernel <- match.arg(kernel)
-  dy <- diff(y)
-  Tn <- length(dy)
-  s <- (2:Tn) / Tn # i/T for i = 2..T (Delta y_1 doesn't exist)
-  dy2 <- dy[-1]^2 # (Delta y_i)^2 for i = 2..T, aligned with s
+  Tn <- length(e)
+  s <- (2:Tn) / Tn # i/T for i = 2..T (e_1 has no predecessor to pair against)
+  e2 <- e[-1]^2 # e_i^2 for i = 2..T, aligned with s
   t_grid <- (1:Tn) / Tn
 
   kern <- switch(kernel,
@@ -34,8 +33,8 @@ kernel_spot_vol <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
         self <- which(abs(s - t_grid[j]) < .Machine$double.eps^0.5)
         w[self] <- 0
       }
-      if (sum(w) <= 0) return(mean(dy2))
-      sum(w * dy2) / sum(w)
+      if (sum(w) <= 0) return(mean(e2))
+      sum(w * e2) / sum(w)
     }, numeric(1))
   }
 
@@ -45,13 +44,19 @@ kernel_spot_vol <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
     grid <- exp(seq(log(hl), log(hu), length.out = 10))
     cv <- vapply(grid, function(hh) {
       s2_loo <- spot_vol_at(hh, drop0 = TRUE)
-      mean((dy2 - s2_loo[match(s, t_grid)])^2)
+      mean((e2 - s2_loo[match(s, t_grid)])^2)
     }, numeric(1))
     h <- grid[which.min(cv)]
   }
 
   sigma2 <- spot_vol_at(h, drop0 = FALSE)
   list(sigma2 = sigma2, h = h)
+}
+
+# Nonparametric spot-volatility estimator, eq. (6): nw_spot_vol() applied to
+# the squared first differences of the raw (undemeaned) series.
+kernel_spot_vol <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
+  nw_spot_vol(diff(y), kernel = kernel, h = h)
 }
 
 # Feasible BZ statistic family, eq. (6)'s "feasible version" (Section 3):

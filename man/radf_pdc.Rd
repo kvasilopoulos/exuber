@@ -4,7 +4,14 @@
 \alias{radf_pdc}
 \title{Sequential Sample-Splitting Bubble Dating (PDC/KS)}
 \usage{
-radf_pdc(data, regimes = 3L, trim = 0.05)
+radf_pdc(
+  data,
+  regimes = 3L,
+  trim = 0.05,
+  type = c("ols", "wls"),
+  kernel = c("gaussian", "uniform"),
+  h = NULL
+)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -17,6 +24,18 @@ the collapse).}
 \item{trim}{Minimum fraction of the (differenced) sample required on
 either side of each breakpoint search (default 0.05, as in KS's
 empirical application; PDC use 0.05-0.1 in their simulations).}
+
+\item{type}{\code{"ols"} (default) for the plain homoskedastic
+estimator, or \code{"wls"} for Kurozumi & Skrobotov (2023)'s
+volatility-corrected two-step estimator.}
+
+\item{kernel}{Kernel for the spot-volatility estimator when
+\code{type = "wls"}, \code{"gaussian"} (default) or \code{"uniform"}.
+Ignored when \code{type = "ols"}.}
+
+\item{h}{Bandwidth for the spot-volatility estimator when
+\code{type = "wls"}. Default: leave-one-out cross-validation. Ignored
+when \code{type = "ols"}.}
 }
 \value{
 A \code{data.frame} with one row per series and columns
@@ -43,6 +62,17 @@ effect on the residual sum of squares dominates the origination date's
 than jointly (unlike Harvey, Leybourne & Sollis's (2017) BIC-selected,
 jointly-fit alternative, which is not implemented here; see the
 package's enhancement notes for the cost/benefit reasoning).
+
+\code{type = "wls"} adds Kurozumi & Skrobotov (2023)'s time-varying-
+volatility correction: fit the plain (\code{"ols"}) model first, collect
+its fitted piecewise-regime residuals, smooth their square
+nonparametrically (the same Nadaraya-Watson kernel/leave-one-out
+bandwidth estimator exuber already uses for
+\code{\link{radf_sbz_cv}}/\code{\link{radf_kp}}), and re-run the same
+sequential break search with each squared term weighted by the inverse
+of the estimated spot variance. This needs no new critical-value
+theory -- like the OLS version, it is point estimation, not a
+threshold-crossing test.
 }
 \references{
 Pang, T., Du, L., & Chong, T. T. L. (2021). Estimating
@@ -51,6 +81,10 @@ Management Science and Engineering.
 
 Kurozumi, E., & Skrobotov, A. (2023). Bubble dating: a
 sequential testing approach.
+
+Kurozumi, E., & Skrobotov, A. (2023). Improving the accuracy
+of bubble date estimators under time-varying volatility.
+arXiv:2306.02977.
 }
 \seealso{
 \code{\link{datestamp}} for the PSY threshold-crossing
