@@ -298,10 +298,18 @@ radf_wb_distr2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
 
 # DGP_HLST ----------------------------------------------------------------
 
-radf_wb_dgp_hlst <- function(y, dist_rad) {
+radf_wb_dgp_hlst <- function(y, dist_rad, dist_skew = FALSE) {
   dy <- diff(y)
   nr <- length(dy)
-  if (dist_rad) {
+  if (dist_skew) {
+    # Hafner (2020), Step 1: w = u/sqrt(2) + (v^2-1)/2, u,v ~ iid N(0,1)
+    # independent -- E[w]=0, E[w^2]=1, E[w^3]=1, a fixed right-skewed
+    # multiplier for series with right-skewed return distributions (crypto
+    # in the source paper), vs. dist_rad's symmetric two-point multiplier.
+    u <- rnorm(nr, 0, 1)
+    v <- rnorm(nr, 0, 1)
+    w <- u / sqrt(2) + (v^2 - 1) / 2
+  } else if (dist_rad) {
     w <- sample(c(-1, 1), nr, replace = TRUE)
   } else {
     w <- rnorm(nr, 0, 1)
@@ -312,14 +320,17 @@ radf_wb_dgp_hlst <- function(y, dist_rad) {
 }
 
 
-radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
+radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE, seed = NULL) {
 
   y <- parse_data(data)
   assert_na(y)
   minw <- minw %||% psy_minw(data)
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(nboot, greater_than = 2)
-  stopifnot(is.logical(dist_rad))
+  stopifnot(is.logical(dist_rad), is.logical(dist_skew))
+  if (dist_rad && dist_skew) {
+    stop_glue("Only one of 'dist_rad' and 'dist_skew' may be TRUE.")
+  }
 
   nc <- ncol(y)
   nr <- nrow(y)
@@ -344,7 +355,7 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
         .inorder = FALSE
       ) %dofuture% {
         p()
-        ystar <- radf_wb_dgp_hlst(y[, j], dist_rad)
+        ystar <- radf_wb_dgp_hlst(y[, j], dist_rad, dist_skew)
         yxmat <- unroot(ystar)
         rls_gsadf(yxmat, min_win = minw)
       }
@@ -388,6 +399,12 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
 #' @inheritParams radf_mc_cv
 #' @param nboot A positive integer. Number of bootstraps (default = 500L).
 #' @param dist_rad Logical. If TRUE then the Rademacher distribution will be used.
+#' @param dist_skew Logical. If TRUE, use Hafner (2020)'s fixed right-skewed
+#' multiplier distribution instead of the (default) standard normal or
+#' (\code{dist_rad = TRUE}) Rademacher one -- appropriate when the series'
+#' return distribution is itself notably right-skewed (e.g. cryptocurrency
+#' returns, the paper's own application). At most one of \code{dist_rad}
+#' and \code{dist_skew} may be \code{TRUE}.
 #'
 #' @return  For \code{radf_wb_cv} a list that contains the critical values for the ADF,
 #' BADF, BSADF and GSADF tests. For \code{radf_wb_distr} a list that
@@ -406,6 +423,10 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
+#'
+#' @references Hafner, C. M. (2020). Testing for bubbles in
+#' cryptocurrencies with time-varying volatility. Journal of Financial
+#' Econometrics, 18(2), 233-249.
 #'
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
@@ -433,10 +454,11 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, seed = NULL) {
 #'
 #' autoplot(wdist)
 #' }
-radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL) {
+radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
+                        dist_skew = FALSE, seed = NULL) {
 
   results <- radf_wb_hlst(data, minw = minw, nboot = nboot,
-                          dist_rad = dist_rad, seed = seed)
+                          dist_rad = dist_rad, dist_skew = dist_skew, seed = seed)
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -464,10 +486,11 @@ radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed =
 #' @rdname radf_wb_cv
 #' @inheritParams radf_wb_cv
 #' @export
-radf_wb_distr <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE, seed = NULL) {
+radf_wb_distr <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
+                           dist_skew = FALSE, seed = NULL) {
 
   results <- radf_wb_hlst(data, minw = minw, nboot = nboot,
-                          dist_rad = dist_rad, seed = seed)
+                          dist_rad = dist_rad, dist_skew = dist_skew, seed = seed)
 
   list(
     adf_distr = results$adf,
