@@ -4,7 +4,14 @@
 \alias{radf_cusum}
 \title{CUSUM Real-Time Monitoring for Explosive Bubbles}
 \usage{
-radf_cusum(data, r_star = 0.5, b_alpha = 4.6)
+radf_cusum(
+  data,
+  r_star = 0.5,
+  b_alpha = 4.6,
+  type = c("standard", "kernel"),
+  N = 20,
+  kernel = c("gaussian", "uniform")
+)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -19,6 +26,20 @@ HB's own one-sided asymptotic calibration for a 5\\% significance level
 (their Section 3); this is an asymptotic upper bound on the false-
 alarm probability (Chu, Stinchcombe & White 1996), not an exact size,
 so it is typically conservative in finite samples.}
+
+\item{type}{\code{"standard"} (default) for Homm & Breitung (2012)'s
+original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
+Leybourne, Taylor & Zu (2023)'s volatility-robust "CUSUMV" variant.}
+
+\item{N}{Bandwidth/window length for the one-sided kernel spot-variance
+estimator when \code{type = "kernel"}. Default \code{20}, the authors'
+own empirically-recommended value (their Section 3: "setting H = 20
+delivered a procedure with the best trade-off" between false-alarm
+robustness and power). Ignored when \code{type = "standard"}.}
+
+\item{kernel}{Kernel for the spot-variance estimator when
+\code{type = "kernel"}, \code{"gaussian"} (default) or \code{"uniform"}.
+Ignored when \code{type = "standard"}.}
 }
 \value{
 An object of class \code{radf_cusum_obj}: a list with the
@@ -43,6 +64,15 @@ not a recursive regression -- with an asymptotic closed-form boundary
 (Chu, Stinchcombe & White 1996's inequality, HB's eq. 28): no
 bootstrap, no simulation, no dependence on the data beyond the running
 variance estimate itself.
+
+\code{type = "kernel"} instead uses Astill, Harvey, Leybourne, Taylor &
+Zu (2023)'s volatility-robust modification ("CUSUMV"): each first
+difference is standardized by its own one-sided kernel spot-variance
+estimate (their eq. 6-7) instead of a single running variance, before
+cumulating. Their Corollary 1 establishes the \emph{same} boundary
+function delivers a controlled asymptotic false-alarm rate even under
+time-varying volatility, unlike the standard CUSUM statistic, which
+requires homoskedasticity for its own size-control result to hold.
 }
 \references{
 Homm, U., & Breitung, J. (2012). Testing for speculative
@@ -51,6 +81,11 @@ of Financial Econometrics, 10(1), 198-231.
 
 Chu, C. S. J., Stinchcombe, M., & White, H. (1996).
 Monitoring structural change. Econometrica, 64(5), 1045-1065.
+
+Astill, S., Harvey, D. I., Leybourne, S. J., Taylor, A.
+M. R., & Zu, Y. (2023). CUSUM-based monitoring for explosive episodes
+in financial data in the presence of time-varying volatility. Journal
+of Financial Econometrics, 21(1), 187-227.
 }
 \seealso{
 \code{\link{radf_monitor}} for the recursive-ADF (Family A)

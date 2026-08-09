@@ -38,6 +38,55 @@ cusum_stat_path <- function(y, T_star, b_alpha) {
   list(t = t_idx, S = S_t, boundary = boundary_t)
 }
 
+# One-sided (backward-looking) Nadaraya-Watson kernel spot-variance
+# estimator, Astill, Harvey, Leybourne, Taylor & Zu (2023, JFEC 21(1),
+# 187-227; "AHLTZ")'s eq. 6-7: sigma2_j = sum_{s=0}^{N} w_s * dy_{j-s}^2,
+# w_s = K(s/N) / sum_s K(s/N) -- a FIXED weight vector (depends only on
+# s, not j), applied as a one-sided moving weighted average of squared
+# first differences. Deliberately one-sided/causal (only current and past
+# lags), unlike the two-sided smoother already used for SBZ/kernel-purge
+# (radf_sbz.R's nw_spot_vol()): a real-time monitoring statistic at time j
+# can only use data up to j. `stats::filter(..., sides = 1)` computes
+# exactly this weighted sum directly. AHLTZ's own convention (eq. 7's own
+# text) is sigma2_j := 1 for j <= N (monitoring only meaningfully starts
+# once T* > N in practice, so this affects at most the first N
+# observations of a much longer series).
+one_sided_kernel_spot_vol <- function(dy, N = 20, kernel = c("gaussian", "uniform")) {
+  kernel <- match.arg(kernel)
+  kern <- switch(kernel,
+    gaussian = function(u) dnorm(u),
+    uniform = function(u) as.numeric(abs(u) <= 1) / 2
+  )
+  w <- kern((0:N) / N)
+  w <- w / sum(w)
+  sigma2 <- as.numeric(stats::filter(dy^2, filter = w, sides = 1))
+  sigma2[is.na(sigma2)] <- 1
+  sigma2
+}
+
+# AHLTZ's modified (volatility-robust) CUSUM statistic, eq. 6: SV_t :=
+# sum_{j=T*+1}^{t} Delta y_j / sigma_hat_{j,N}, using the one-sided
+# kernel spot-variance estimator above in place of HB's single running
+# variance. Their Corollary 1 establishes the SAME boundary function
+# c_t*sqrt(t) (same b_alpha) delivers a controlled asymptotic FPR for
+# this modified statistic even under time-varying volatility -- so this
+# reuses cusum_stat_path()'s boundary formula unchanged, only the
+# numerator's construction differs.
+cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
+  n <- length(y)
+  dy <- diff(y)
+  sigma2_dy <- one_sided_kernel_spot_vol(dy, N = N, kernel = kernel)
+  weighted <- dy / sqrt(sigma2_dy)
+  cs <- c(0, cumsum(weighted))
+
+  t_idx <- (T_star + 1L):n
+  SV_t <- cs[t_idx] - cs[T_star]
+  c_t <- sqrt(b_alpha + log(t_idx / T_star))
+  boundary_t <- c_t * sqrt(t_idx)
+
+  list(t = t_idx, S = SV_t, boundary = boundary_t)
+}
+
 #' CUSUM Real-Time Monitoring for Explosive Bubbles
 #'
 #' \code{radf_cusum} implements Homm & Breitung (2012)'s CUSUM real-time
@@ -56,12 +105,32 @@ cusum_stat_path <- function(y, T_star, b_alpha) {
 #' bootstrap, no simulation, no dependence on the data beyond the running
 #' variance estimate itself.
 #'
+#' \code{type = "kernel"} instead uses Astill, Harvey, Leybourne, Taylor &
+#' Zu (2023)'s volatility-robust modification ("CUSUMV"): each first
+#' difference is standardized by its own one-sided kernel spot-variance
+#' estimate (their eq. 6-7) instead of a single running variance, before
+#' cumulating. Their Corollary 1 establishes the \emph{same} boundary
+#' function delivers a controlled asymptotic false-alarm rate even under
+#' time-varying volatility, unlike the standard CUSUM statistic, which
+#' requires homoskedasticity for its own size-control result to hold.
+#'
 #' @inheritParams radf_monitor
 #' @param b_alpha The boundary constant (HB's eq. 29). Default \code{4.6},
 #' HB's own one-sided asymptotic calibration for a 5\% significance level
 #' (their Section 3); this is an asymptotic upper bound on the false-
 #' alarm probability (Chu, Stinchcombe & White 1996), not an exact size,
 #' so it is typically conservative in finite samples.
+#' @param type \code{"standard"} (default) for Homm & Breitung (2012)'s
+#' original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
+#' Leybourne, Taylor & Zu (2023)'s volatility-robust "CUSUMV" variant.
+#' @param N Bandwidth/window length for the one-sided kernel spot-variance
+#' estimator when \code{type = "kernel"}. Default \code{20}, the authors'
+#' own empirically-recommended value (their Section 3: "setting H = 20
+#' delivered a procedure with the best trade-off" between false-alarm
+#' robustness and power). Ignored when \code{type = "standard"}.
+#' @param kernel Kernel for the spot-variance estimator when
+#' \code{type = "kernel"}, \code{"gaussian"} (default) or \code{"uniform"}.
+#' Ignored when \code{type = "standard"}.
 #'
 #' @return An object of class \code{radf_cusum_obj}: a list with the
 #' monitoring-region statistic path (\code{S}) and \code{boundary}, the
@@ -75,11 +144,20 @@ cusum_stat_path <- function(y, T_star, b_alpha) {
 #' @references Chu, C. S. J., Stinchcombe, M., & White, H. (1996).
 #' Monitoring structural change. Econometrica, 64(5), 1045-1065.
 #'
+#' @references Astill, S., Harvey, D. I., Leybourne, S. J., Taylor, A.
+#' M. R., & Zu, Y. (2023). CUSUM-based monitoring for explosive episodes
+#' in financial data in the presence of time-varying volatility. Journal
+#' of Financial Econometrics, 21(1), 187-227.
+#'
 #' @seealso \code{\link{radf_monitor}} for the recursive-ADF (Family A)
 #' monitoring alternative.
 #'
 #' @export
-radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6) {
+radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
+                        type = c("standard", "kernel"), N = 20,
+                        kernel = c("gaussian", "uniform")) {
+  type <- match.arg(type)
+  kernel <- match.arg(kernel)
   x <- parse_data(data)
   n <- nrow(x)
 
@@ -99,7 +177,11 @@ radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6) {
   alarm <- setNames(rep(NA_integer_, nc), snames)
 
   for (j in seq_len(nc)) {
-    path <- cusum_stat_path(x[, j], T_star, b_alpha)
+    path <- if (type == "kernel") {
+      cusum_stat_path_kernel(x[, j], T_star, b_alpha, N, kernel)
+    } else {
+      cusum_stat_path(x[, j], T_star, b_alpha)
+    }
     S_path[, j] <- path$S
     boundary_path[, j] <- path$boundary
     breach <- which(path$S > path$boundary)

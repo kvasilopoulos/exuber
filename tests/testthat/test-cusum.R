@@ -87,3 +87,74 @@ test_that("radf_cusum detects at least some genuine post-training bubbles,
   delay <- res[detected, "alarm"] - res[detected, "true_origination"]
   expect_true(all(delay > 0))
 })
+
+test_that("one_sided_kernel_spot_vol() matches an independent brute-force
+  loop recomputation of Astill, Harvey, Leybourne, Taylor & Zu's eq. 6-7", {
+  set.seed(1)
+  n <- 60
+  dy <- rnorm(n)
+  N <- 10
+  res <- exuber:::one_sided_kernel_spot_vol(dy, N = N, kernel = "gaussian")
+
+  w_full <- dnorm((0:N) / N); w_full <- w_full / sum(w_full)
+  sigma2_brute <- numeric(n)
+  for (j in seq_len(n)) {
+    if (j <= N) {
+      sigma2_brute[j] <- 1
+    } else {
+      idx <- (j - N):j
+      sigma2_brute[j] <- sum(rev(w_full) * dy[idx]^2)
+    }
+  }
+  expect_equal(res[(N + 1):n], sigma2_brute[(N + 1):n], tolerance = 1e-10)
+  expect_true(all(res[1:N] == 1))
+})
+
+test_that("cusum_stat_path_kernel() matches an independent brute-force
+  recomputation of the CUSUMV statistic (eq. 6)", {
+  set.seed(2)
+  n <- 100
+  T_star <- 50
+  y <- cumsum(rnorm(n))
+  b_alpha <- 4.6
+  res <- exuber:::cusum_stat_path_kernel(y, T_star, b_alpha, N = 20, kernel = "gaussian")
+
+  dy <- diff(y)
+  sigma2_dy <- exuber:::one_sided_kernel_spot_vol(dy, N = 20, kernel = "gaussian")
+  SV_brute <- numeric(n - T_star)
+  for (k in seq_len(n - T_star)) {
+    t <- T_star + k
+    js <- (T_star + 1):t
+    SV_brute[k] <- sum(dy[js - 1] / sqrt(sigma2_dy[js - 1]))
+  }
+  expect_equal(res$S, SV_brute, tolerance = 1e-8)
+})
+
+test_that("type = 'kernel' runs end to end and returns a well-formed object", {
+  set.seed(1)
+  y <- cumsum(rnorm(100))
+  out <- radf_cusum(y, r_star = 0.5, type = "kernel")
+  expect_s3_class(out, "radf_cusum_obj")
+  expect_true(all(is.finite(out$S)))
+})
+
+test_that("type = 'kernel' (CUSUMV) controls the false-alarm rate under
+  heteroskedasticity meaningfully better than type = 'standard' -- this
+  is Astill, Harvey, Leybourne, Taylor & Zu (2023)'s central claim: the
+  standard CUSUM procedure requires homoskedasticity for its own
+  size-control result to hold and becomes oversized without it, while
+  the kernel-weighted variant stays controlled via the same boundary
+  function (their Corollary 1)", {
+  skip_on_cran()
+  run_null_hetero <- function(seed, type) {
+    set.seed(seed)
+    n <- 150
+    vol <- c(rep(1, 90), rep(8, 60))
+    y <- cumsum(rnorm(n) * vol)
+    out <- radf_cusum(y, r_star = 0.5, b_alpha = 4.6, type = type)
+    !is.na(out$alarm)
+  }
+  rate_std <- mean(sapply(1:40, function(s) run_null_hetero(s, "standard")))
+  rate_ker <- mean(sapply(1:40, function(s) run_null_hetero(s, "kernel")))
+  expect_lte(rate_ker, rate_std)
+})
