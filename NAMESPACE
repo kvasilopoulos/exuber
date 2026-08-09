@@ -83,6 +83,7 @@ export(psy_ds)
 export(psy_minw)
 export(radf)
 export(radf_common)
+export(radf_common_cv)
 export(radf_kp)
 export(radf_mc_cv)
 export(radf_mc_distr)
@@ -97,6 +98,7 @@ export(radf_wb_distr)
 export(radf_wb_distr2)
 export(report)
 export(root_ci)
+export(root_ci_datestamp)
 export(sb_cv)
 export(scale_exuber_manual)
 export(series_names)
@@ -173,6 +175,7 @@ importFrom(purrr,
   map2_dbl,
   map_lgl,
   pluck,
+  pmap,
   possibly,
   reduce,
   when

@@ -1,4 +1,4 @@
-radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
+radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed = NULL) {
 
   y <- parse_data(data)
   assert_na(y)
@@ -10,6 +10,17 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
   nc <- ncol(y)
   nr <- nrow(y)
   snames <- colnames(y)
+
+  # Pedersen & Schütte (2020): a *fixed* lag order causes size distortion
+  # under autocorrelated innovations; automatic AIC/BIC selection fixes it
+  # (their Section 4, e.g. Table 4.8). Selected once per series and the max
+  # taken across the panel, since the rest of this function (pointer,
+  # resmat/initmat dimensions, the bootstrap DGP loop) assumes one common
+  # lag order for the whole panel, matching radf()'s own single-`lag` API.
+  if (type != "fixed") {
+    lag <- max(vapply(1:nc, function(j) as.integer(lag_select(y[, j], criterion = type, max_lag = max_lag)), integer(1)))
+  }
+
   pointer <- nr - minw - lag
 
   initmat <- matrix(0, nc, 1 + lag)
@@ -91,6 +102,15 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #'
 #' @inheritParams radf
 #' @inheritParams radf_wb_cv
+#' @param type Lag-order selection: \code{"fixed"} (default) uses \code{lag}
+#' as given, matching \code{\link{radf}}'s own single-`lag` behaviour.
+#' \code{"aic"}/\code{"bic"} instead select the lag automatically per series
+#' via \code{\link{lag_select}} (taking the max across the panel, since the
+#' rest of this function assumes one common lag order) -- Pedersen &
+#' Schütte (2020)'s fix for the size distortion a fixed lag causes under
+#' autocorrelated innovations.
+#' @param max_lag Maximum lag order to search over when \code{type} is
+#' \code{"aic"}/\code{"bic"}. Ignored when \code{type = "fixed"}.
 #'
 #' @importFrom foreach foreach
 #' @importFrom doFuture `%dofuture%`
@@ -101,6 +121,9 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #' @references Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 #' In search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
+#' @references Pedersen, T. Q., & Schütte, E. C. M. (2020). Testing for
+#' explosive bubbles in the presence of autocorrelated innovations. Journal
+#' of Empirical Finance, 58, 207-225.
 #'
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_wb_cv}} for wild Bootstrap critical values
@@ -127,11 +150,16 @@ radf_sb_ <-  function(data, minw, lag, nboot, seed = NULL) {
 #' sdist <- radf_sb_distr(sim_data, lag = 1, nboot = 1000)
 #'
 #' autoplot(sdist)
+#'
+#' # Automatic BIC lag selection instead of a fixed lag
+#' sb_bic <- radf_sb_cv(sim_data, type = "bic")
 #' }
 radf_sb_cv <- function(data, minw = NULL, lag = 0L,
-                  nboot = 500L, seed = NULL) {
+                  nboot = 500L, type = c("fixed", "aic", "bic"),
+                  max_lag = 8L, seed = NULL) {
 
-  results <- radf_sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
+  type <- match.arg(type)
+  results <- radf_sb_(data, minw, nboot = nboot, lag = lag, type = type, max_lag = max_lag, seed = seed)
 
   pcnt <- c(0.9, 0.95, 0.99)
 
@@ -148,9 +176,11 @@ radf_sb_cv <- function(data, minw = NULL, lag = 0L,
 #' @rdname radf_sb_cv
 #' @inheritParams radf_sb_cv
 #' @export
-radf_sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 500L, seed = NULL) {
+radf_sb_distr <- function(data, minw = NULL, lag = 0L, nboot = 500L,
+                           type = c("fixed", "aic", "bic"), max_lag = 8L, seed = NULL) {
 
-  results <- radf_sb_(data, minw, nboot = nboot, lag = lag, seed = seed)
+  type <- match.arg(type)
+  results <- radf_sb_(data, minw, nboot = nboot, lag = lag, type = type, max_lag = max_lag, seed = seed)
 
   c(results$gsadf_panel) %>%
     inherit_attrs(results) %>%

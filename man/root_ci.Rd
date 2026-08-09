@@ -4,12 +4,16 @@
 \alias{root_ci}
 \title{Confidence Interval and Doubling Time for an Explosive Root}
 \usage{
-root_ci(x, level = 0.95)
+root_ci(x, level = 0.95, type = c("normal", "cauchy"))
 }
 \arguments{
 \item{x}{A list as returned by \code{\link{explosive_root}}.}
 
 \item{level}{Confidence level (default 0.95).}
+
+\item{type}{\code{"normal"} (default) for Guo, Sun & Wang's normal-t
+interval, or \code{"cauchy"} for the Phillips-Magdalinos fixed-root
+Cauchy interval.}
 }
 \value{
 A list with \code{rho}, \code{rho_ci} (length-2 vector), and
@@ -28,6 +32,18 @@ normal-theory interval, the justification is different (Guo, Sun & Wang's
 explosive-root CLT, not the classical stationary one).
 }
 \details{
+\code{type = "cauchy"} instead uses the Phillips & Magdalinos (2007)
+fixed-root result (their eq. 27, restating White 1958): for a genuinely
+explosive, non-drifting root, \eqn{\frac{\rho^n}{\rho^2-1}(\hat\rho-\rho)}
+converges to a standard Cauchy variate. Plugging in \eqn{\hat\rho} for the
+unknown \eqn{\rho} in the normalization (the usual practice for this kind
+of self-normalized pivot) gives \eqn{\hat\rho \pm q_{\alpha/2}\cdot
+(\hat\rho^2-1)/\hat\rho^n}, with \eqn{q_{\alpha/2}} a standard-Cauchy
+quantile. This interval assumes a \emph{fixed} explosive root (no drift,
+no unknown localizing rate); the default \code{"normal"} type is the
+safer choice when that assumption is in doubt, since Guo, Sun & Wang's
+result allows drift and weak dependence.
+
 \code{root_ci} also reports the implied \emph{doubling time}
 \eqn{\log(2)/\log(\hat\rho)}: the number of periods for the bubble to
 double in magnitude at the estimated growth rate, with its own interval
@@ -39,4 +55,8 @@ respectively).
 \references{
 Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate
 explosiveness. The Econometrics Journal, 22(3), 279-303.
+
+Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for
+moderate deviations from a unit root. Journal of Econometrics, 136(1),
+115-130.
 }
