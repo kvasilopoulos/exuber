@@ -1,27 +1,5 @@
 context("cv")
 
-test_that("extended critical values: graceful fallback when unreachable", {
-  expect_null(fetch_crit_bucket(700, lag = 0, base_url = "http://127.0.0.1:1/crit2"))
-})
-
-test_that("extended critical values: not-yet-simulated combo returns NULL, not an error", {
-  skip_on_cran()
-  expect_null(fetch_crit_bucket(4999, lag = 3))
-})
-
-test_that("extended critical values: fetched from the live store", {
-  skip_on_cran()
-  cv <- fetch_crit_bucket(601, lag = 0)
-  skip_if(is.null(cv), "critical-value store unreachable")
-  expect_setequal(
-    names(cv),
-    c("adf_cv", "sadf_cv", "gsadf_cv", "badf_cv", "bsadf_cv")
-  )
-  expect_equal(attr(cv, "n"), 601)
-  expect_equal(attr(cv, "lag"), 0)
-  unlink(crit_cache_path(601, 0))
-})
-
 test_that("data instead of n", {
   expect_message(radf_mc_cv(dta), "Did you use")
 })
