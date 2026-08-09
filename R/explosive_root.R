@@ -64,6 +64,18 @@ explosive_root <- function(data, from, to) {
 #' normal-theory interval, the justification is different (Guo, Sun & Wang's
 #' explosive-root CLT, not the classical stationary one).
 #'
+#' \code{type = "cauchy"} instead uses the Phillips & Magdalinos (2007)
+#' fixed-root result (their eq. 27, restating White 1958): for a genuinely
+#' explosive, non-drifting root, \eqn{\frac{\rho^n}{\rho^2-1}(\hat\rho-\rho)}
+#' converges to a standard Cauchy variate. Plugging in \eqn{\hat\rho} for the
+#' unknown \eqn{\rho} in the normalization (the usual practice for this kind
+#' of self-normalized pivot) gives \eqn{\hat\rho \pm q_{\alpha/2}\cdot
+#' (\hat\rho^2-1)/\hat\rho^n}, with \eqn{q_{\alpha/2}} a standard-Cauchy
+#' quantile. This interval assumes a \emph{fixed} explosive root (no drift,
+#' no unknown localizing rate); the default \code{"normal"} type is the
+#' safer choice when that assumption is in doubt, since Guo, Sun & Wang's
+#' result allows drift and weak dependence.
+#'
 #' \code{root_ci} also reports the implied \emph{doubling time}
 #' \eqn{\log(2)/\log(\hat\rho)}: the number of periods for the bubble to
 #' double in magnitude at the estimated growth rate, with its own interval
@@ -74,17 +86,32 @@ explosive_root <- function(data, from, to) {
 #'
 #' @param x A list as returned by \code{\link{explosive_root}}.
 #' @param level Confidence level (default 0.95).
+#' @param type \code{"normal"} (default) for Guo, Sun & Wang's normal-t
+#' interval, or \code{"cauchy"} for the Phillips-Magdalinos fixed-root
+#' Cauchy interval.
 #'
 #' @return A list with \code{rho}, \code{rho_ci} (length-2 vector), and
 #' \code{doubling_time}, \code{doubling_time_ci}.
 #'
 #' @references Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate
 #' explosiveness. The Econometrics Journal, 22(3), 279-303.
+#' @references Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for
+#' moderate deviations from a unit root. Journal of Econometrics, 136(1),
+#' 115-130.
 #'
 #' @export
-root_ci <- function(x, level = 0.95) {
-  z <- qnorm(1 - (1 - level) / 2)
-  rho_ci <- x$rho + c(-1, 1) * z * x$se
+root_ci <- function(x, level = 0.95, type = c("normal", "cauchy")) {
+  type <- match.arg(type)
+  alpha <- 1 - level
+
+  rho_ci <- if (type == "normal") {
+    z <- qnorm(1 - alpha / 2)
+    x$rho + c(-1, 1) * z * x$se
+  } else {
+    q <- qcauchy(1 - alpha / 2)
+    half_width <- q * (x$rho^2 - 1) / x$rho^x$n
+    x$rho + c(-1, 1) * half_width
+  }
 
   dt <- function(rho) log(2) / log(rho)
 
@@ -94,4 +121,77 @@ root_ci <- function(x, level = 0.95) {
     doubling_time = dt(x$rho),
     doubling_time_ci = c(dt(rho_ci[2]), dt(rho_ci[1]))
   )
+}
+
+#' Root Confidence Intervals for Every Datestamped Episode
+#'
+#' Convenience wrapper that runs \code{\link{explosive_root}}/\code{\link{root_ci}}
+#' on every episode in a \code{\link{datestamp}} result, so root inference
+#' doesn't have to be hand-run per episode.
+#'
+#' \strong{Not} folded into \code{\link{summary.radf_obj}}: that function's
+#' existing S3 dispatch (\code{summary_radf.mc_cv}/\code{.wb_cv}/\code{.sb_cv})
+#' is built entirely around \code{radf_cv} test-statistic critical values --
+#' root CIs are a different kind of output (needing a \code{datestamp()}
+#' result, not a \code{radf_cv}) with no natural fit in that dispatch chain.
+#' A standalone function keeps this addition to the size the enhancement
+#' notes actually scoped ("a small follow-up"), rather than restructuring
+#' \code{summary()}'s shared machinery to accommodate a fundamentally
+#' different kind of result.
+#'
+#' Root inference on a very short episode is statistically meaningless (the
+#' same way it would be calling \code{\link{explosive_root}} directly on 2-3
+#' points) -- this function doesn't filter episodes itself, since
+#' \code{\link{datestamp}} already has a \code{min_duration} argument for
+#' exactly this; set it there before piping into this function, rather than
+#' expecting this function to second-guess what counts as "too short".
+#'
+#' @param object A \code{radf_obj} (or subclass) that \code{ds} was computed
+#' on -- needs the original data, retrieved via its \code{"mat"} attribute.
+#' @param ds A \code{\link{datestamp}} result computed on \code{object}. Set
+#' \code{min_duration} there to exclude episodes too short for reliable root
+#' inference.
+#' @param level Confidence level, passed to \code{\link{root_ci}} (default 0.95).
+#' @param type CI type, passed to \code{\link{root_ci}} (default \code{"normal"}).
+#'
+#' @return A named list (one element per series in \code{ds}; the panel
+#' sieve-bootstrap case, whose \code{ds} entry is named \code{"panel"} and
+#' has no single corresponding series, is dropped with a warning), each a
+#' data frame with one row per datestamped episode: \code{Start}, \code{End},
+#' \code{rho}, \code{rho_lower}, \code{rho_upper}, \code{doubling_time},
+#' \code{doubling_time_lower}, \code{doubling_time_upper}.
+#'
+#' @seealso \code{\link{explosive_root}}, \code{\link{root_ci}}, \code{\link{datestamp}}
+#'
+#' @importFrom purrr imap pmap
+#' @export
+root_ci_datestamp <- function(object, ds, level = 0.95, type = c("normal", "cauchy")) {
+  type <- match.arg(type)
+  x <- mat(object)
+  idx <- index(object)
+
+  if ("panel" %in% names(ds) && !("panel" %in% colnames(x))) {
+    warning_glue("Dropping 'panel' entry of `ds` -- root inference needs a single series, not a sieve-bootstrap panel result.")
+    ds <- ds[names(ds) != "panel"]
+  }
+
+  purrr::imap(ds, function(episodes, snm) {
+    y <- x[, snm]
+    rows <- purrr::pmap(list(episodes$Start, episodes$End), function(s, e) {
+      from <- match(s, idx)
+      to <- match(e, idx)
+      est <- explosive_root(y, from, to)
+      ci <- root_ci(est, level = level, type = type)
+      data.frame(
+        rho = ci$rho, rho_lower = ci$rho_ci[1], rho_upper = ci$rho_ci[2],
+        doubling_time = ci$doubling_time,
+        doubling_time_lower = ci$doubling_time_ci[1],
+        doubling_time_upper = ci$doubling_time_ci[2]
+      )
+    })
+    cbind(
+      data.frame(Start = episodes$Start, End = episodes$End),
+      do.call(rbind, rows)
+    )
+  })
 }
