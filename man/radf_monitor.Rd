@@ -13,7 +13,7 @@ radf_monitor(
   adflag = 0,
   type = c("fixed", "aic", "bic"),
   seed = NULL,
-  boundary = c("bootstrap", "kurozumi")
+  boundary = c("bootstrap", "kurozumi", "fluc")
 )
 }
 \arguments{
@@ -28,28 +28,29 @@ observation count if \code{>= 1}.}
 \eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
 
 \item{nboot}{Number of wild bootstrap replications for the training
-critical value. Ignored when \code{boundary = "kurozumi"}.}
+critical value. Ignored unless \code{boundary = "bootstrap"}.}
 
 \item{level}{Nominal confidence level for the monitoring boundary
-(default \code{0.95}). When \code{boundary = "kurozumi"}, must be one
-of \code{0.90}, \code{0.95}, \code{0.99}.}
+(default \code{0.95}). When \code{boundary} is \code{"kurozumi"} or
+\code{"fluc"}, must be one of \code{0.90}, \code{0.95}, \code{0.99}.}
 
 \item{adflag, type}{Passed to \code{\link{radf_wb_cv2}} (lag length /
-selection for the wild bootstrap DGP). Ignored when
-\code{boundary = "kurozumi"}.}
+selection for the wild bootstrap DGP). Ignored unless
+\code{boundary = "bootstrap"}.}
 
-\item{seed}{Optional seed for the bootstrap draws. Ignored when
-\code{boundary = "kurozumi"}.}
+\item{seed}{Optional seed for the bootstrap draws. Ignored unless
+\code{boundary = "bootstrap"}.}
 
-\item{boundary}{\code{"bootstrap"} (default, Phillips & Shi 2020) or
-\code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary).}
+\item{boundary}{\code{"bootstrap"} (default, Phillips & Shi 2020),
+\code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary), or
+\code{"fluc"} (Homm & Breitung 2012's FLUC boundary).}
 }
 \value{
 An object of class \code{radf_monitor_obj}: a list with the
 full-sample statistic path (\code{stat} -- \code{bsadf} for
-\code{boundary = "bootstrap"}, \code{badf} for
-\code{boundary = "kurozumi"}), the calibrated \code{boundary} (one
-flat value per series), the training window length \code{T_star}, and
+\code{boundary = "bootstrap"}, \code{badf} for \code{"kurozumi"}/
+\code{"fluc"}), the calibrated \code{boundary} (one flat value per
+series), the training window length \code{T_star}, and
 \code{alarm}/\code{alarm_date} (the first monitoring-period
 observation/date at which \code{stat} breaches the boundary,
 \code{NA} if never).
@@ -80,6 +81,12 @@ compared against \code{radf()}'s \code{badf} sequence (his
 his \code{GSADF_{s0}(k)} generalization for \code{s0 > 0} is not
 implemented, see Details). \code{level} must be one of \code{0.90},
 \code{0.95}, or \code{0.99} (the levels his table tabulates).
+
+\code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
+detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
+\code{badf} sequence, compared against a published constant from
+their Table 7 (no detrending case) rather than a simulated one.
+\code{level} must be one of \code{0.90}, \code{0.95}, \code{0.99}.
 }
 \references{
 Phillips, P. C., & Shi, S. (2020). Real time monitoring of
@@ -88,6 +95,10 @@ pp. 61-80). Elsevier.
 
 Kurozumi, E. (2020). Asymptotic properties of bubble
 monitoring tests. Econometric Reviews, 39(5), 510-538.
+
+Homm, U., & Breitung, J. (2012). Testing for speculative
+bubbles in stock markets: A comparison of alternative methods.
+Journal of Financial Econometrics, 10(1), 198-231.
 }
 \seealso{
 \code{\link{radf_wb_cv2}} for the underlying wild bootstrap,

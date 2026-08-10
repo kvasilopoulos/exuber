@@ -69,6 +69,72 @@ kurozumi_sadf_q <- function(level, s_bar) {
   row$q0_df
 }
 
+# Homm & Breitung (2012, J. Financial Econometrics 10(1), 198-231)'s
+# FLUC monitoring detector. Their eq. 27 (confirmed via rendered PDF
+# page): Z_t = (rho_hat_t - 1)/sigma_hat_{rho_t} = DF_{t/n} -- the
+# ordinary recursive/expanding-window OLS ADF t-statistic on the sample
+# {y_0, ..., y_t}, i.e. exactly radf()'s existing `badf` sequence (the
+# same statistic already confirmed, earlier in this file, to equal
+# Kurozumi's SADF(k)). Their eq. 29/31 rejection rule, DF_{t/n} >
+# kappa_t with kappa_t = sqrt(b_{k,alpha} + log(t/n)), has the same
+# functional form as their own CUSUM boundary (this file's `radf_cusum`
+# sibling) but a DIFFERENT calibration constant b_{k,alpha} that (their
+# own text) "we determine... by means of simulation" -- no closed form
+# available. Table 7 (part i, "without detrending", matching radf()'s
+# own no-trend default) publishes exactly this constant, indexed by
+# training length n, significance level alpha, and monitoring-horizon
+# ratio k = N/n (N the total sample including training) -- used
+# directly here, no new simulation needed on exuber's end.
+
+# Homm & Breitung (2012) Table 7(i): FLUC boundary constant b_{k,alpha},
+# without detrending, transcribed from a rendered PDF page (the raw text
+# extraction badly scrambled this table). Tabulated at training length
+# n in {20, 50, 100}, significance level alpha in {0.10, 0.05, 0.01},
+# and horizon ratio k in {2, 3, 4, 5, 6, 8, 10}.
+hb_fluc_table <- local({
+  k_grid <- c(2, 3, 4, 5, 6, 8, 10)
+  n_grid <- c(100, 50, 20)
+  alpha_grid <- c(0.10, 0.05, 0.01)
+  q <- rbind(
+    c(3.05, 3.60, 3.93, 4.15, 4.31, 4.48, 4.57), # n=100, alpha=0.10
+    c(4.50, 5.14, 5.55, 5.69, 5.89, 6.05, 6.26), # n=100, alpha=0.05
+    c(7.76, 8.59, 9.06, 9.48, 9.62, 9.79, 9.99), # n=100, alpha=0.01
+    c(2.80, 3.33, 3.62, 3.80, 3.96, 4.14, 4.27), # n=50,  alpha=0.10
+    c(4.19, 4.80, 5.11, 5.34, 5.50, 5.72, 5.81), # n=50,  alpha=0.05
+    c(7.30, 8.11, 8.43, 8.82, 8.86, 9.25, 9.49), # n=50,  alpha=0.01
+    c(2.49, 3.12, 3.44, 3.65, 3.78, 3.99, 4.12), # n=20,  alpha=0.10
+    c(3.88, 4.56, 4.86, 5.06, 5.19, 5.38, 5.52), # n=20,  alpha=0.05
+    c(7.00, 7.84, 8.26, 8.49, 8.66, 9.12, 9.19)  # n=20,  alpha=0.01
+  )
+  tbl <- data.frame(n = rep(n_grid, each = 3), alpha = rep(alpha_grid, times = 3), q)
+  colnames(tbl) <- c("n", "alpha", paste0("k", k_grid))
+  tbl
+})
+
+# Look up b_{k,alpha} for a given confidence `level`, training length
+# `n_train`, and monitoring-horizon ratio `k`, snapping `n_train` to the
+# nearest of {20, 50, 100} and `k` to the nearest of {2,...,10}. `level`
+# must correspond exactly to one of the table's three significance
+# levels.
+hb_fluc_q <- function(level, n_train, k) {
+  beta <- 1 - level
+  beta_choices <- c(0.10, 0.05, 0.01)
+  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+  if (length(match_idx) == 0L) {
+    stop_glue(
+      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "for boundary = 'fluc' (Homm & Breitung (2012)'s Table 7 only ",
+      "tabulates these significance levels)."
+    )
+  }
+  n_grid <- c(20, 50, 100)
+  k_grid <- c(2, 3, 4, 5, 6, 8, 10)
+  n_snap <- n_grid[which.min(abs(n_train - n_grid))]
+  k_snap <- k_grid[which.min(abs(k - k_grid))]
+  row <- hb_fluc_table[hb_fluc_table$n == n_snap & abs(hb_fluc_table$alpha - beta) < 1e-8, ]
+  row[[paste0("k", k_snap)]]
+}
+
 #' Real-Time Monitoring for Explosive Bubbles
 #'
 #' \code{radf_monitor} implements real-time monitoring: fix a training
@@ -96,28 +162,35 @@ kurozumi_sadf_q <- function(level, s_bar) {
 #' implemented, see Details). \code{level} must be one of \code{0.90},
 #' \code{0.95}, or \code{0.99} (the levels his table tabulates).
 #'
+#' \code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
+#' detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
+#' \code{badf} sequence, compared against a published constant from
+#' their Table 7 (no detrending case) rather than a simulated one.
+#' \code{level} must be one of \code{0.90}, \code{0.95}, \code{0.99}.
+#'
 #' @inheritParams radf
 #' @param r_star The end of the training window: a fraction in
 #' \code{(0, 1)} of the sample (default \code{0.5}), or an integer
 #' observation count if \code{>= 1}.
 #' @param nboot Number of wild bootstrap replications for the training
-#' critical value. Ignored when \code{boundary = "kurozumi"}.
+#' critical value. Ignored unless \code{boundary = "bootstrap"}.
 #' @param level Nominal confidence level for the monitoring boundary
-#' (default \code{0.95}). When \code{boundary = "kurozumi"}, must be one
-#' of \code{0.90}, \code{0.95}, \code{0.99}.
+#' (default \code{0.95}). When \code{boundary} is \code{"kurozumi"} or
+#' \code{"fluc"}, must be one of \code{0.90}, \code{0.95}, \code{0.99}.
 #' @param adflag,type Passed to \code{\link{radf_wb_cv2}} (lag length /
-#' selection for the wild bootstrap DGP). Ignored when
-#' \code{boundary = "kurozumi"}.
-#' @param seed Optional seed for the bootstrap draws. Ignored when
-#' \code{boundary = "kurozumi"}.
-#' @param boundary \code{"bootstrap"} (default, Phillips & Shi 2020) or
-#' \code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary).
+#' selection for the wild bootstrap DGP). Ignored unless
+#' \code{boundary = "bootstrap"}.
+#' @param seed Optional seed for the bootstrap draws. Ignored unless
+#' \code{boundary = "bootstrap"}.
+#' @param boundary \code{"bootstrap"} (default, Phillips & Shi 2020),
+#' \code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary), or
+#' \code{"fluc"} (Homm & Breitung 2012's FLUC boundary).
 #'
 #' @return An object of class \code{radf_monitor_obj}: a list with the
 #' full-sample statistic path (\code{stat} -- \code{bsadf} for
-#' \code{boundary = "bootstrap"}, \code{badf} for
-#' \code{boundary = "kurozumi"}), the calibrated \code{boundary} (one
-#' flat value per series), the training window length \code{T_star}, and
+#' \code{boundary = "bootstrap"}, \code{badf} for \code{"kurozumi"}/
+#' \code{"fluc"}), the calibrated \code{boundary} (one flat value per
+#' series), the training window length \code{T_star}, and
 #' \code{alarm}/\code{alarm_date} (the first monitoring-period
 #' observation/date at which \code{stat} breaches the boundary,
 #' \code{NA} if never).
@@ -129,6 +202,10 @@ kurozumi_sadf_q <- function(level, s_bar) {
 #' @references Kurozumi, E. (2020). Asymptotic properties of bubble
 #' monitoring tests. Econometric Reviews, 39(5), 510-538.
 #'
+#' @references Homm, U., & Breitung, J. (2012). Testing for speculative
+#' bubbles in stock markets: A comparison of alternative methods.
+#' Journal of Financial Econometrics, 10(1), 198-231.
+#'
 #' @seealso \code{\link{radf_wb_cv2}} for the underlying wild bootstrap,
 #' and \code{\link{datestamp}} for the (non-monitoring, full-sample)
 #' origination/collapse dating that already exists.
@@ -137,7 +214,7 @@ kurozumi_sadf_q <- function(level, s_bar) {
 radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
                           level = 0.95, adflag = 0,
                           type = c("fixed", "aic", "bic"), seed = NULL,
-                          boundary = c("bootstrap", "kurozumi")) {
+                          boundary = c("bootstrap", "kurozumi", "fluc")) {
   type <- match.arg(type)
   boundary <- match.arg(boundary)
   x <- parse_data(data)
@@ -164,6 +241,12 @@ radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   if (boundary == "kurozumi") {
     s_bar <- (n - T_star) / T_star
     q <- kurozumi_sadf_q(level, s_bar)
+    stat_path <- full$badf
+    boundary_vec <- setNames(rep(q, nc), snames)
+    iter <- NA_integer_
+  } else if (boundary == "fluc") {
+    k <- n / T_star
+    q <- hb_fluc_q(level, T_star, k)
     stat_path <- full$badf
     boundary_vec <- setNames(rep(q, nc), snames)
     iter <- NA_integer_
