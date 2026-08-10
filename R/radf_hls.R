@@ -54,6 +54,20 @@ hls_segment_ssr <- function(ps, lo, hi, fit) {
   Szz - a * Sz - b * Sxz
 }
 
+# Intercept + slope OLS coefficients of z on x over the segment (lo, hi]
+# (same closed form as hls_segment_ssr(..., fit = TRUE), returning the
+# coefficients themselves rather than the SSR -- used by radf_knp.R).
+hls_segment_coef <- function(ps, lo, hi) {
+  Sx <- ps$cx[hi + 1L] - ps$cx[lo + 1L]
+  Sxx <- ps$cx2[hi + 1L] - ps$cx2[lo + 1L]
+  Sz <- ps$cz[hi + 1L] - ps$cz[lo + 1L]
+  Sxz <- ps$cxz[hi + 1L] - ps$cxz[lo + 1L]
+  n_seg <- hi - lo
+  b <- (n_seg * Sxz - Sx * Sz) / (n_seg * Sxx - Sx^2)
+  a <- (Sz - b * Sx) / n_seg
+  c(intercept = a, slope = b)
+}
+
 hls_model1 <- function(y, ps, trim) {
   n1 <- ps$n1
   k_min <- max(2L, ceiling(trim * n1))
