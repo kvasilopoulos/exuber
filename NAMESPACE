@@ -41,6 +41,7 @@ S3method(print,crit)
 S3method(print,dg_radf)
 S3method(print,ds_radf)
 S3method(print,radf_cobubble)
+S3method(print,radf_contagion_obj)
 S3method(print,radf_cusum_obj)
 S3method(print,radf_cv)
 S3method(print,radf_hls_obj)
@@ -96,6 +97,7 @@ export(radf)
 export(radf_cobubble)
 export(radf_common)
 export(radf_common_cv)
+export(radf_contagion)
 export(radf_cusum)
 export(radf_hls)
 export(radf_hlw)
@@ -233,6 +235,7 @@ importFrom(stats,
   frequency,
   is.ts,
   lm,
+  optimize,
   qnorm,
   quantile,
   rbinom,
