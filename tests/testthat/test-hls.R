@@ -17,7 +17,8 @@ test_that("hls_segment_ssr matches a brute-force lm() SSR for fixed segments", {
   expect_equal(exuber:::hls_segment_ssr(ps, 0, 10, FALSE), sum(z_all[1:10]^2), tolerance = 1e-8)
 })
 
-test_that("hls_model1's grid search matches a brute-force nested lm() search", {
+test_that("hls_model1's grid search matches a brute-force nested lm() search
+  (with HLS's own sign constraint, y_T > y_tau1)", {
   set.seed(2)
   n <- 30
   y <- cumsum(rnorm(n))
@@ -29,6 +30,7 @@ test_that("hls_model1's grid search matches a brute-force nested lm() search", {
   k_min <- max(2L, ceiling(0.1 * n1))
   best <- list(ssr = Inf)
   for (tau1 in k_min:(n1 - k_min)) {
+    if (y[n1 + 1] <= y[tau1 + 1]) next
     idx_right <- (tau1 + 1):n1
     ssr <- sum(z[1:tau1]^2) + sum(resid(lm(z[idx_right] ~ x[idx_right]))^2)
     if (ssr < best$ssr) best <- list(tau1 = tau1, ssr = ssr)
@@ -38,7 +40,8 @@ test_that("hls_model1's grid search matches a brute-force nested lm() search", {
 })
 
 test_that("hls_model4's joint 3-breakpoint grid search matches a brute-force
-  nested lm() search", {
+  nested lm() search (with HLS's own sign constraints: the peak y_tau2
+  must exceed both y_tau1 and y_tau3)", {
   skip_on_cran()
   set.seed(5)
   n <- 24
@@ -54,6 +57,7 @@ test_that("hls_model4's joint 3-breakpoint grid search matches a brute-force
     for (tau2 in (tau1 + k_min):(n1 - 2 * k_min)) {
       if (y[tau2 + 1] <= y[tau1 + 1]) next
       for (tau3 in (tau2 + k_min):(n1 - k_min)) {
+        if (y[tau2 + 1] <= y[tau3 + 1]) next
         ssr <- sum(z[1:tau1]^2) +
           sum(resid(lm(z[(tau1 + 1):tau2] ~ x[(tau1 + 1):tau2]))^2) +
           sum(resid(lm(z[(tau2 + 1):tau3] ~ x[(tau2 + 1):tau3]))^2) +
@@ -66,6 +70,47 @@ test_that("hls_model4's joint 3-breakpoint grid search matches a brute-force
   expect_equal(m4$tau2, best$tau2)
   expect_equal(m4$tau3, best$tau3)
   expect_equal(m4$ssr, best$ssr, tolerance = 1e-6)
+})
+
+test_that("hls_model23's grid search matches a brute-force nested lm()
+  search for both Model 2 (right_fit=FALSE) and Model 3 (right_fit=TRUE,
+  which has the extra sign constraint y_tau2 > y_T)", {
+  set.seed(3)
+  n <- 26
+  y <- cumsum(rnorm(n))
+  ps <- exuber:::hls_prefix_sums(y)
+  n1 <- n - 1L
+  x <- y[1:n1]; z <- y[2:(n1 + 1)] - y[1:n1]
+  k_min <- max(2L, ceiling(0.1 * n1))
+
+  brute <- function(right_fit) {
+    best <- list(ssr = Inf)
+    for (tau1 in k_min:(n1 - 2 * k_min)) {
+      for (tau2 in (tau1 + k_min):(n1 - k_min)) {
+        if (y[tau2 + 1] <= y[tau1 + 1]) next
+        if (right_fit && y[tau2 + 1] <= y[n1 + 1]) next
+        idx_mid <- (tau1 + 1):tau2
+        ssr_mid <- sum(resid(lm(z[idx_mid] ~ x[idx_mid]))^2)
+        ssr_right <- if (right_fit) {
+          idx_right <- (tau2 + 1):n1
+          sum(resid(lm(z[idx_right] ~ x[idx_right]))^2)
+        } else {
+          sum(z[(tau2 + 1):n1]^2)
+        }
+        ssr <- sum(z[1:tau1]^2) + ssr_mid + ssr_right
+        if (ssr < best$ssr) best <- list(tau1 = tau1, tau2 = tau2, ssr = ssr)
+      }
+    }
+    best
+  }
+
+  for (right_fit in c(FALSE, TRUE)) {
+    m <- exuber:::hls_model23(y, ps, trim = 0.1, right_fit = right_fit)
+    b <- brute(right_fit)
+    expect_equal(m$tau1, b$tau1)
+    expect_equal(m$tau2, b$tau2)
+    expect_equal(m$ssr, b$ssr, tolerance = 1e-6)
+  }
 })
 
 test_that("radf_hls runs end to end and returns a well-formed object", {
