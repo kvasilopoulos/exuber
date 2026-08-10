@@ -47,6 +47,7 @@ Imports:
     parallel,
     progressr (>= 0.14.0),
     purrr (>= 0.3.2),
+    quantreg (>= 5.9),
     Rcpp (>= 0.12.17),
     rlang (>= 0.3.4),
     tibble (>= 3.0.2),
