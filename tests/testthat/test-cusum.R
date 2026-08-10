@@ -158,3 +158,67 @@ test_that("type = 'kernel' (CUSUMV) controls the false-alarm rate under
   rate_ker <- mean(sapply(1:40, function(s) run_null_hetero(s, "kernel")))
   expect_lte(rate_ker, rate_std)
 })
+
+test_that("hb_cusum_finite_q looks up Homm & Breitung (2012) Table 8(i)
+  constants exactly", {
+  expect_equal(exuber:::hb_cusum_finite_q(0.95, 100, 2), 1.51)
+  expect_equal(exuber:::hb_cusum_finite_q(0.95, 100, 10), 3.36)
+  expect_equal(exuber:::hb_cusum_finite_q(0.90, 20, 2), 0.81)
+  expect_error(exuber:::hb_cusum_finite_q(0.93, 100, 2))
+})
+
+test_that("radf_cusum runs end to end with boundary = 'finite', using a
+  different (smaller, table-derived) b_alpha than the asymptotic default", {
+  set.seed(1)
+  y <- cumsum(rnorm(150))
+  out <- radf_cusum(y, r_star = 0.5, boundary = "finite", level = 0.95)
+
+  expect_s3_class(out, "radf_cusum_obj")
+  expect_equal(attr(out, "b_alpha"), 1.43) # n=150/T_star=75 snaps to n=50 (tie with 100), k=2
+  expect_true(attr(out, "b_alpha") < 4.6)
+  expect_output(print(out), "radf_cusum")
+})
+
+test_that("boundary = 'finite' rejects levels outside its tabulated set", {
+  y <- cumsum(rnorm(100))
+  expect_error(radf_cusum(y, r_star = 0.5, boundary = "finite", level = 0.93))
+})
+
+test_that("boundary = 'finite' also works with type = 'kernel' (CUSUMV),
+  extending Corollary 1's shared-boundary result to the finite-sample
+  table", {
+  set.seed(1)
+  y <- cumsum(rnorm(150))
+  out <- radf_cusum(y, r_star = 0.5, boundary = "finite", type = "kernel")
+  expect_s3_class(out, "radf_cusum_obj")
+  expect_equal(attr(out, "b_alpha"), 1.43) # n=150/T_star=75 snaps to n=50 (tie with 100), k=2
+})
+
+test_that("boundary = 'finite' gives a false-alarm rate closer to nominal
+  (less conservative) than the asymptotic default under H0, and does not
+  reduce detection power on a genuine post-training bubble", {
+  skip_on_cran()
+  run_null <- function(seed, boundary) {
+    set.seed(seed)
+    y <- cumsum(rnorm(150))
+    out <- radf_cusum(y, r_star = 0.5, boundary = boundary)
+    !is.na(out$alarm)
+  }
+  run_detect <- function(seed, boundary) {
+    set.seed(seed)
+    n1 <- 75; n2 <- 40
+    normal_part <- cumsum(rnorm(n1))
+    expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
+    y <- c(normal_part, expl_part)
+    out <- radf_cusum(y, r_star = n1 / length(y), boundary = boundary)
+    !is.na(out$alarm)
+  }
+  rate_asym <- mean(sapply(1:40, function(s) run_null(s, "asymptotic")))
+  rate_fin <- mean(sapply(1:40, function(s) run_null(s, "finite")))
+  expect_gte(rate_fin, rate_asym)
+  expect_true(rate_fin <= 0.20)
+
+  det_asym <- mean(sapply(1:20, function(s) run_detect(s, "asymptotic")))
+  det_fin <- mean(sapply(1:20, function(s) run_detect(s, "finite")))
+  expect_gte(det_fin, det_asym)
+})

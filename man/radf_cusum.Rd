@@ -8,6 +8,8 @@ radf_cusum(
   data,
   r_star = 0.5,
   b_alpha = 4.6,
+  boundary = c("asymptotic", "finite"),
+  level = 0.95,
   type = c("standard", "kernel"),
   N = 20,
   kernel = c("gaussian", "uniform")
@@ -25,7 +27,17 @@ observation count if \code{>= 1}.}
 HB's own one-sided asymptotic calibration for a 5\\% significance level
 (their Section 3); this is an asymptotic upper bound on the false-
 alarm probability (Chu, Stinchcombe & White 1996), not an exact size,
-so it is typically conservative in finite samples.}
+so it is typically conservative in finite samples. Ignored when
+\code{boundary = "finite"}.}
+
+\item{boundary}{\code{"asymptotic"} (default) uses \code{b_alpha}
+directly. \code{"finite"} instead looks up HB's own finite-sample
+boundary constant (their Table 8) from \code{level} and the realized
+training length/monitoring-horizon ratio -- \code{level} must then be
+one of \code{0.90}, \code{0.95}, \code{0.99}.}
+
+\item{level}{Nominal confidence level when \code{boundary = "finite"}
+(default \code{0.95}); ignored when \code{boundary = "asymptotic"}.}
 
 \item{type}{\code{"standard"} (default) for Homm & Breitung (2012)'s
 original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
