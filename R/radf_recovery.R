@@ -140,6 +140,7 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' sample is exhausted, \code{f_c} is \code{NA} and \code{censored = TRUE}
 #' (the crisis origination predates the observed sample).
 #'
+#' @section Caveats:
 #' \strong{Validation status (2026-08-10), reported honestly rather than
 #' silently}: \code{f_r} (recovery date) validates well against synthetic
 #' collapse-then-recovery data -- bias in the same range the paper's own
@@ -158,6 +159,9 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' out against a subtler implementation issue. Treat \code{f_c} and the
 #' overall detection rate as exploratory pending further validation; see
 #' docs/enhancements/dating-and-root-inference.md for the full numbers.
+#' The same short pointer is emitted as a message when this function is
+#' called (see \code{\link{suppressMessages}} to silence it) and stored as
+#' \code{attr(x, "caveat")} on the returned object.
 #'
 #' @inheritParams radf
 #' @param nrep Number of Monte Carlo replications for
@@ -181,6 +185,9 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' @export
 radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
                            sig_lvl = 95, seed = NULL) {
+  caveat <- "f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section."
+  message_glue(caveat)
+
   stopifnot(sig_lvl %in% c(90, 95, 99))
   x <- parse_data(data)
   n <- nrow(x)
@@ -231,7 +238,7 @@ radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
   ) %>%
     add_attr(
       index = idx, series_names = snames, minw = minw, lag = lag,
-      n = n, sig_lvl = sig_lvl, iter = nrep
+      n = n, sig_lvl = sig_lvl, iter = nrep, caveat = caveat
     ) %>%
     add_class("radf_recovery_obj")
 }
@@ -244,6 +251,7 @@ print.radf_recovery_obj <- function(x, digits = max(3L, getOption("digits") - 3L
     "level = {attr(x, 'sig_lvl')}%)"
   ))
   cat_line()
+  cat_caveat(x)
   print(
     data.frame(
       series = names(x$f_c), f_c = x$f_c_date, f_r = x$f_r_date,

@@ -1,3 +1,69 @@
+# exuber (development version)
+
+New methodologies from the `docs/enhancements/` research programme, each
+independently validated against a published number (formula-exact check,
+table lookup, or a direct Monte Carlo reproduction of the source paper's
+own theorem) — see `docs/enhancements/README.md` for the full record of
+what was checked and how.
+
+### Volatility-robust tests
+
+* `radf_sbz_cv()` — Herwartz & Siedenburg's WLS/kernel-volatility SBZ test.
+* `radf_kp()` — kernel-purge heteroskedasticity test.
+* `radf_wb_cv(..., dist_skew = TRUE)` — Hafner (2020) skewness-corrected
+  wild bootstrap.
+* `radf_sign()`/`radf_sign_cv()` — Harvey, Leybourne & Zu (2020) sign-based
+  sGSADF, invariant to volatility with no bootstrap needed.
+* `radf_ssu()` — Kurozumi & Nishi (2025) stochastic explosive-coefficient
+  test (minimum-viable subset).
+* `radf_svadf()` — Sarkar & Wells (2026) SV-ADF asymmetric-threshold
+  dating. **Caveat:** the source is a non-peer-reviewed preprint, flagged
+  at call time and in `?radf_svadf`.
+
+### Dating and root inference
+
+* `radf_pdc()` — PDC/KS sequential sample-splitting dating, plus
+  `type = "wls"` for Kurozumi & Skrobotov (2023)'s time-varying-volatility
+  correction.
+* `radf_recovery()`/`radf_recovery_cv()` — Phillips & Shi (2014)
+  reverse-regression crisis-origination/recovery dating. **Caveat:** `f_c`
+  and the overall false-detection rate are exploratory pending further
+  validation, flagged at call time and in `?radf_recovery`.
+* `radf_hls()` — Harvey, Leybourne & Sollis (2017) SSR/BIC single-bubble
+  dating.
+* `radf_hlw()` — Harvey, Leybourne & Whitehouse (2020) SSR/BIC
+  multi-bubble two-step wrapper.
+* `radf_knp()` — Kejriwal, Nguyen & Perron (2025) bias-corrected dating.
+
+### Real-time monitoring
+
+* `radf_monitor()` — Phillips & Shi (2020) training/monitoring
+  orchestration (Family A), plus Kurozumi (2020) closed-form `SADF`/
+  `GSADF_s0` boundaries and Homm & Breitung (2012)'s FLUC boundary.
+* `radf_cusum()` — Homm & Breitung (2012) CUSUM monitoring, plus Astill
+  et al. (2023)'s volatility-robust CUSUMV kernel variant and HB's
+  finite-sample boundary.
+* `radf_lbi()`/`radf_lbi_monitor()` — Breitung & Diegel (2025) static LBI
+  test and its sequential mCUSUM/wCUSUM extension.
+
+### Multivariate / panel tests
+
+* `radf_common()`/`radf_common_cv()` — Chen, Phillips & Shi common-bubble
+  detection (PCA + PSY).
+* `radf_cobubble()` — Evripidou, Harvey, Leybourne & Sollis (2022)
+  co-explosive test.
+* `radf_contagion()` — Greenaway-McGrevy & Phillips (2016) bubble
+  contagion regression (minimum-viable subset).
+
+### Alternative paradigms
+
+* `radf_quantile()` — Wu, Shi & Wu (2025) quantile-based global test.
+
+### Other
+
+* `explosive_root()`, `root_ci()`, `root_ci_datestamp()` — root inference
+  and confidence intervals on the explosive coefficient.
+
 # exuber 1.1.0
 
 * Fixed \link{} targets not in the package itself nor in the base packages to

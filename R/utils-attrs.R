@@ -75,5 +75,25 @@ get_panel <- function(y) {
   attr(y, "panel")
 }
 
+get_caveat <- function(x) {
+  attr(x, "caveat")
+}
+
+# Functions whose validation/source status isn't a clean "clean" (a
+# preprint source, a not-fully-resolved validation gap, ...) set a
+# `caveat` attribute (add_attr(..., caveat = ...)) and emit the same text
+# via message_glue() at call time -- one string, not two copies to keep in
+# sync. print.*_obj methods call this to surface it; the roxygen
+# `@section Caveats:` on the function itself remains the long-form doc.
+#' @importFrom cli cat_line col_yellow symbol
+cat_caveat <- function(x) {
+  caveat <- get_caveat(x)
+  if (is.null(caveat)) {
+    return(invisible())
+  }
+  cli::cat_line(cli::col_yellow(cli::symbol$info), " ", caveat)
+  cli::cat_line()
+}
+
 
 
