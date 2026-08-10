@@ -135,6 +135,47 @@ hls_model4 <- function(y, ps, trim) {
 
 hls_bic <- function(ssr, n, df) n * log(ssr / n) + df * log(n)
 
+# Fits the requested subset of HLS's four models to a single series `y`
+# (a plain numeric vector, e.g. a full series or -- for radf_hlw()'s
+# per-window step -- a contiguous sub-window of one) and BIC-selects
+# among them. Breakpoints are returned in `y`'s own i-index space (1-based,
+# same convention as hls_model1()/hls_model23()/hls_model4() and
+# hls_segment_ssr()); callers map them to actual dates/positions.
+hls_fit_series <- function(y, trim, models = 1:4) {
+  n <- length(y)
+  ps <- hls_prefix_sums(y)
+  fits <- list(NULL, NULL, NULL, NULL)
+  dfs <- c(3L, 4L, 6L, 7L)
+  bic <- rep(NA_real_, 4)
+
+  if (1 %in% models) {
+    fits[[1]] <- hls_model1(y, ps, trim)
+    bic[1] <- hls_bic(fits[[1]]$ssr, n, dfs[1])
+  }
+  if (2 %in% models) {
+    fits[[2]] <- hls_model23(y, ps, trim, right_fit = FALSE)
+    bic[2] <- hls_bic(fits[[2]]$ssr, n, dfs[2])
+  }
+  if (3 %in% models) {
+    fits[[3]] <- hls_model23(y, ps, trim, right_fit = TRUE)
+    bic[3] <- hls_bic(fits[[3]]$ssr, n, dfs[3])
+  }
+  if (4 %in% models) {
+    fits[[4]] <- hls_model4(y, ps, trim)
+    bic[4] <- hls_bic(fits[[4]]$ssr, n, dfs[4])
+  }
+
+  jopt <- which.min(bic)
+  fit <- fits[[jopt]]
+  breaks <- switch(jopt,
+    `1` = c(tau1 = fit$tau1),
+    `2` = c(tau1 = fit$tau1, tau2 = fit$tau2),
+    `3` = c(tau1 = fit$tau1, tau2 = fit$tau2),
+    `4` = c(tau1 = fit$tau1, tau2 = fit$tau2, tau3 = fit$tau3)
+  )
+  list(model = jopt, breaks = breaks, bic = bic)
+}
+
 #' SSR/BIC Bubble Dating (Harvey, Leybourne & Sollis 2017)
 #'
 #' \code{radf_hls} dates a single bubble episode by fitting four
@@ -190,28 +231,11 @@ radf_hls <- function(data, trim = 0.05) {
 
   for (j in seq_len(nc)) {
     y <- as.numeric(x[, j])
-    ps <- hls_prefix_sums(y)
+    res <- hls_fit_series(y, trim, models = 1:4)
+    bic_mat[j, ] <- res$bic
+    model[j] <- res$model
 
-    m1 <- hls_model1(y, ps, trim)
-    m2 <- hls_model23(y, ps, trim, right_fit = FALSE)
-    m3 <- hls_model23(y, ps, trim, right_fit = TRUE)
-    m4 <- hls_model4(y, ps, trim)
-
-    bics <- c(
-      hls_bic(m1$ssr, n, 3), hls_bic(m2$ssr, n, 4),
-      hls_bic(m3$ssr, n, 6), hls_bic(m4$ssr, n, 7)
-    )
-    bic_mat[j, ] <- bics
-    jopt <- which.min(bics)
-    model[j] <- jopt
-
-    breaks <- switch(jopt,
-      `1` = c(tau1 = m1$tau1),
-      `2` = c(tau1 = m2$tau1, tau2 = m2$tau2),
-      `3` = c(tau1 = m3$tau1, tau2 = m3$tau2),
-      `4` = c(tau1 = m4$tau1, tau2 = m4$tau2, tau3 = m4$tau3)
-    )
-    dates <- vapply(breaks, function(b) as.character(idx[b + 1L]), character(1))
+    dates <- vapply(res$breaks, function(b) as.character(idx[b + 1L]), character(1))
     origination[j] <- unname(dates["tau1"])
     if ("tau2" %in% names(dates)) collapse[j] <- unname(dates["tau2"])
     if ("tau3" %in% names(dates)) recovery[j] <- unname(dates["tau3"])
