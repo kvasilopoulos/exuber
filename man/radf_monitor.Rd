@@ -13,7 +13,8 @@ radf_monitor(
   adflag = 0,
   type = c("fixed", "aic", "bic"),
   seed = NULL,
-  boundary = c("bootstrap", "kurozumi", "fluc")
+  boundary = c("bootstrap", "kurozumi", "fluc"),
+  s0 = 0
 )
 }
 \arguments{
@@ -42,8 +43,16 @@ selection for the wild bootstrap DGP). Ignored unless
 \code{boundary = "bootstrap"}.}
 
 \item{boundary}{\code{"bootstrap"} (default, Phillips & Shi 2020),
-\code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary), or
+\code{"kurozumi"} (Kurozumi 2020's closed-form SADF/GSADF boundary), or
 \code{"fluc"} (Homm & Breitung 2012's FLUC boundary).}
+
+\item{s0}{Kurozumi (2020)'s window-start range as a fraction of the
+training length, only used when \code{boundary = "kurozumi"}.
+\code{0} (default) is the \code{SADF} case (window start fixed at
+\code{1}); \code{0.4} or \code{0.8} switches to the \code{GSADF_{s0}}
+case (window start ranges over \code{[1, floor(T* * s0)]}), the only
+two values his boundary function's scaling constants are tabulated
+for.}
 }
 \value{
 An object of class \code{radf_monitor_obj}: a list with the
@@ -77,10 +86,14 @@ null calibration.
 \code{boundary = "kurozumi"} implements Kurozumi (2020)'s closed-form
 alternative: no bootstrap at all, just a published constant (his Table 1)
 compared against \code{radf()}'s \code{badf} sequence (his
-\code{SADF(k)} detector -- the \code{s0 = 0}, fixed-start-at-1 case;
-his \code{GSADF_{s0}(k)} generalization for \code{s0 > 0} is not
-implemented, see Details). \code{level} must be one of \code{0.90},
-\code{0.95}, or \code{0.99} (the levels his table tabulates).
+\code{SADF(k)} detector -- the \code{s0 = 0}, fixed-start-at-1 case,
+the default). Setting \code{s0} to \code{0.4} or \code{0.8} instead
+switches to his \code{GSADF_{s0}(k)} generalization: the window start
+is allowed to range over \code{[1, floor(T* * s0)]} rather than being
+fixed at \code{1}, compared against his \code{k}-varying (not
+constant) boundary function and its own published scaling constant.
+\code{level} must be one of \code{0.90}, \code{0.95}, or \code{0.99}
+(the levels his table tabulates).
 
 \code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
 detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
