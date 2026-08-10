@@ -12,7 +12,8 @@ radf_monitor(
   level = 0.95,
   adflag = 0,
   type = c("fixed", "aic", "bic"),
-  seed = NULL
+  seed = NULL,
+  boundary = c("bootstrap", "kurozumi")
 )
 }
 \arguments{
@@ -27,44 +28,66 @@ observation count if \code{>= 1}.}
 \eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
 
 \item{nboot}{Number of wild bootstrap replications for the training
-critical value.}
+critical value. Ignored when \code{boundary = "kurozumi"}.}
 
 \item{level}{Nominal confidence level for the monitoring boundary
-(default \code{0.95}).}
+(default \code{0.95}). When \code{boundary = "kurozumi"}, must be one
+of \code{0.90}, \code{0.95}, \code{0.99}.}
 
 \item{adflag, type}{Passed to \code{\link{radf_wb_cv2}} (lag length /
-selection for the wild bootstrap DGP).}
+selection for the wild bootstrap DGP). Ignored when
+\code{boundary = "kurozumi"}.}
 
-\item{seed}{Optional seed for the bootstrap draws.}
+\item{seed}{Optional seed for the bootstrap draws. Ignored when
+\code{boundary = "kurozumi"}.}
+
+\item{boundary}{\code{"bootstrap"} (default, Phillips & Shi 2020) or
+\code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary).}
 }
 \value{
 An object of class \code{radf_monitor_obj}: a list with the
-full-sample BSADF path (\code{bsadf}), the training-calibrated
-\code{boundary} (one flat value per series), the training window length
-\code{T_star}, and \code{alarm}/\code{alarm_date} (the first monitoring
--period observation/date at which \code{bsadf} breaches the boundary,
+full-sample statistic path (\code{stat} -- \code{bsadf} for
+\code{boundary = "bootstrap"}, \code{badf} for
+\code{boundary = "kurozumi"}), the calibrated \code{boundary} (one
+flat value per series), the training window length \code{T_star}, and
+\code{alarm}/\code{alarm_date} (the first monitoring-period
+observation/date at which \code{stat} breaches the boundary,
 \code{NA} if never).
 }
 \description{
-\code{radf_monitor} implements Phillips & Shi (2020)'s real-time
-monitoring procedure: fix a training window \code{[1, T*]} assumed free
-of exuberance, calibrate a critical value on it via wild bootstrap
-(\code{\link{radf_wb_cv2}}), then compare the running BSADF statistic
-at each subsequent point \code{T*+1, ..., T} against that fixed
-boundary, flagging the first date it is breached.
+\code{radf_monitor} implements real-time monitoring: fix a training
+window \code{[1, T*]} assumed free of exuberance, calibrate a critical
+value on it, then compare the running recursive statistic at each
+subsequent point \code{T*+1, ..., T} against that fixed boundary,
+flagging the first date it is breached.
 }
 \details{
-Deliberately calibrates the critical value on the training window
-\emph{only} (\code{data[1:T*]}), not the full series: \code{\link{radf_wb_cv2}}'s
-underlying null-model fit (\code{adf_res()}) uses whatever data it is
-given in full, with no internal truncation to \code{tb} -- passing
-post-\code{T*} (possibly explosive) data to it directly would leak
-future information into the null calibration.
+\code{boundary = "bootstrap"} (default) implements Phillips & Shi
+(2020): the boundary is a wild-bootstrap quantile of the GSADF-type
+statistic (\code{\link{radf_wb_cv2}}, its \code{tb} parameter),
+compared against \code{radf()}'s \code{bsadf} sequence. Deliberately
+calibrates on the training window \emph{only} (\code{data[1:T*]}), not
+the full series: \code{\link{radf_wb_cv2}}'s underlying null-model fit
+(\code{adf_res()}) uses whatever data it is given in full, with no
+internal truncation to \code{tb} -- passing post-\code{T*} (possibly
+explosive) data to it directly would leak future information into the
+null calibration.
+
+\code{boundary = "kurozumi"} implements Kurozumi (2020)'s closed-form
+alternative: no bootstrap at all, just a published constant (his Table 1)
+compared against \code{radf()}'s \code{badf} sequence (his
+\code{SADF(k)} detector -- the \code{s0 = 0}, fixed-start-at-1 case;
+his \code{GSADF_{s0}(k)} generalization for \code{s0 > 0} is not
+implemented, see Details). \code{level} must be one of \code{0.90},
+\code{0.95}, or \code{0.99} (the levels his table tabulates).
 }
 \references{
 Phillips, P. C., & Shi, S. (2020). Real time monitoring of
 asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42,
 pp. 61-80). Elsevier.
+
+Kurozumi, E. (2020). Asymptotic properties of bubble
+monitoring tests. Econometric Reviews, 39(5), 510-538.
 }
 \seealso{
 \code{\link{radf_wb_cv2}} for the underlying wild bootstrap,
