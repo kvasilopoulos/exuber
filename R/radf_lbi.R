@@ -94,3 +94,185 @@ print.radf_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
   )
   cat_line()
 }
+
+# Breitung & Diegel's own sequential extension (their Section 4.1),
+# resolved by re-reading rendered PDF pages 4-7: the "unknown break date"
+# problem is solved by adopting the classical CUSUM approach directly on
+# the LBI statistic -- a running partial sum of first differences over the
+# monitoring period, normalized by the FIXED monitoring-horizon length
+# T_m (not sqrt(t), unlike radf_cusum()'s Chu-Stinchcombe-White boundary),
+# tested against a CONSTANT boundary. Their eq. 15:
+# LBI_[rT] = (1/(sigma*sqrt(T))) * sum_{t=1}^{[rT]} Delta y_t => W(r), a
+# standard Brownian motion on [0,1] under H0 -- so a constant boundary
+# b_alpha (their Table 1) controls size uniformly over the whole
+# monitoring window, structurally the "mCUSUM" (constant-boundary) variant
+# they show is more powerful than both the classical time-varying-boundary
+# CUSUM (Brown et al. 1975, also tabulated in Table 1 but not implemented
+# here -- superseded by mCUSUM/wCUSUM, the paper's own recommendation) and
+# radf_cusum()'s existing CSW-style growing boundary.
+#
+# Their eq. 12 additionally allows exponentially up-weighting later
+# (more bubble-like) observations via a single parameter c_bar >= 0:
+# w_r^{c_bar} = sqrt(2*c_bar/T_m) / sqrt(exp(2*c_bar)-1) * exp(c_bar*r).
+# c_bar = 0 recovers flat weights (mCUSUM); c_bar > 0 is "wCUSUM". Table 1
+# gives ONE set of critical values covering both, because (their own
+# argument, eq. above Table 1) sup_r{W*(eta(r))} =_d sup_r{W(r)} -- the
+# running max of the time-changed process has the same distribution
+# regardless of c_bar. Table 1's own suggestion is c_bar ~ 2 for a
+# moderate power boost when a bubble partway through the monitoring
+# window is plausible; c_bar = 0 (flat/mCUSUM) is the conservative
+# default matching a bubble equally likely at any point.
+#
+# sigma_tilde^2 is estimated from the TRAINING window only (their Section
+# 4.2's own text: "training set ... is used for estimating nuisance
+# parameters such as sigma^2"), consistently with radf_lbi()'s own
+# training-free full-sample sigma_tilde^2 for the static test.
+
+# Breitung & Diegel (2025) Table 1 (page 7 in the rendered PDF): one-sided
+# asymptotic critical values for sequential bubble detectors, 1,000,000
+# Monte Carlo reps at T=10,000. Only the constant-boundary row (used by
+# both mCUSUM and wCUSUM, per the invariance argument above) is
+# transcribed -- the classical time-varying-boundary CUSUM row is the
+# paper's own point of comparison, not its contribution, and is not
+# implemented.
+bd_cusum_table <- data.frame(
+  level = c(0.90, 0.95, 0.975, 0.99, 0.995),
+  b_alpha = c(1.64, 1.95, 2.24, 2.57, 2.80)
+)
+
+bd_cusum_q <- function(level) {
+  match_idx <- which(abs(level - bd_cusum_table$level) < 1e-8)
+  if (length(match_idx) == 0L) {
+    stop_glue(
+      "'level' must be one of {paste(bd_cusum_table$level, collapse = ', ')} ",
+      "(Breitung & Diegel (2025)'s Table 1 only tabulates these ",
+      "significance levels)."
+    )
+  }
+  bd_cusum_table$b_alpha[match_idx]
+}
+
+# eq. 12's weight function, evaluated at the monitoring period's own
+# discrete relative positions r_j = j / T_m, j = 1, ..., T_m. c_bar = 0
+# (mCUSUM) short-circuits to the flat weight 1/sqrt(T_m) directly (eq.
+# 12's own limit as c_bar -> 0 is 0/0; the flat weight is the paper's own
+# stated closed-form for that case, not a numerical approximation of it).
+bd_cusum_weights <- function(T_m, c_bar) {
+  if (c_bar == 0) {
+    return(rep(1 / sqrt(T_m), T_m))
+  }
+  r <- seq_len(T_m) / T_m
+  sqrt(2 * c_bar / T_m) / sqrt(exp(2 * c_bar) - 1) * exp(c_bar * r)
+}
+
+#' Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung &
+#' Diegel 2025)
+#'
+#' \code{radf_lbi_monitor} implements the sequential (constant-boundary)
+#' extension of \code{\link{radf_lbi}}'s locally best invariant statistic,
+#' for monitoring a series in real time when the bubble's start date is
+#' unknown: after a training window \code{[1, T*]} assumed free of
+#' exuberance, the (optionally exponentially weighted) partial sum of
+#' post-training first differences is compared against a constant
+#' boundary, flagging the first monitoring date it is breached.
+#'
+#' Their eq. 15 shows this partial sum, normalized by the fixed monitoring
+#' horizon length (not \code{sqrt(t)}, unlike \code{\link{radf_cusum}}'s
+#' Chu-Stinchcombe-White-style boundary), converges to a standard Brownian
+#' motion on \code{[0, 1]} under the null -- so a single constant boundary
+#' controls size uniformly across the whole monitoring window. The paper
+#' shows this constant-boundary detector ("mCUSUM" at \code{c_bar = 0},
+#' "wCUSUM" at \code{c_bar > 0}) is more powerful than the classical
+#' time-varying-boundary CUSUM test it is compared against.
+#'
+#' @inheritParams radf_cusum
+#' @param c_bar Exponential up-weighting parameter for later (more
+#' bubble-like) monitoring observations (their eq. 12), \code{>= 0}.
+#' \code{0} (default) is the flat-weight "mCUSUM" variant, appropriate
+#' when a bubble is equally likely to start at any point in the
+#' monitoring window; the paper's own suggested value for a moderate power
+#' boost when a bubble partway through is more plausible is \code{2}.
+#' Critical values (\code{level}) are the same for every \code{c_bar}.
+#' @param level Nominal confidence level, one of \code{0.90}, \code{0.95},
+#' \code{0.975}, \code{0.99}, \code{0.995} (Breitung & Diegel's Table 1
+#' only tabulates these).
+#'
+#' @return An object of class \code{radf_lbi_monitor_obj}: a list with the
+#' monitoring-region statistic path (\code{stat}), the constant
+#' \code{boundary}, the training window length \code{T_star}, and
+#' \code{alarm}/\code{alarm_date} (the first breach, \code{NA} if none).
+#'
+#' @references Breitung, J., & Diegel, M. (2025). A locally best invariant
+#' sequential test for explosive behavior in the presence of nonstationary
+#' volatility. Journal of Time Series Analysis.
+#'
+#' @seealso \code{\link{radf_lbi}} for the static (known, full-sample
+#' bubble window) version. \code{\link{radf_cusum}} and
+#' \code{\link{radf_monitor}} for structurally different monitoring
+#' detectors.
+#'
+#' @export
+radf_lbi_monitor <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
+  stopifnot(c_bar >= 0)
+  b_alpha <- bd_cusum_q(level)
+  x <- parse_data(data)
+  n <- nrow(x)
+
+  T_star <- if (r_star < 1) round(r_star * n) else as.integer(r_star)
+  if (T_star < 3L) {
+    stop_glue("Training window ('r_star') is too short.")
+  }
+  if (T_star >= n) {
+    stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
+  }
+  T_m <- n - T_star
+  w <- bd_cusum_weights(T_m, c_bar)
+
+  snames <- colnames(x)
+  idx <- index(x)
+  nc <- ncol(x)
+
+  stat_path <- matrix(NA_real_, T_m, nc, dimnames = list(NULL, snames))
+  alarm <- setNames(rep(NA_integer_, nc), snames)
+
+  for (j in seq_len(nc)) {
+    y <- as.numeric(x[, j])
+    dy <- diff(y)
+    sigma2_tilde <- mean(dy[seq_len(T_star - 1L)]^2)
+    dy_mon <- dy[T_star:(n - 1L)]
+    phi <- cumsum(w * dy_mon) / sqrt(sigma2_tilde)
+    stat_path[, j] <- phi
+    breach <- which(phi > b_alpha)
+    if (length(breach) > 0L) alarm[j] <- T_star + breach[1L]
+  }
+
+  alarm_date <- vapply(alarm, function(i) {
+    if (is.na(i)) NA_character_ else as.character(idx[i])
+  }, character(1))
+
+  list(
+    stat = stat_path, boundary = b_alpha, T_star = T_star,
+    alarm = alarm, alarm_date = alarm_date
+  ) %>%
+    add_attr(
+      index = idx, series_names = snames, n = n, c_bar = c_bar, level = level
+    ) %>%
+    add_class("radf_lbi_monitor_obj")
+}
+
+#' @export
+print.radf_lbi_monitor_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+  cat_line()
+  cat_rule(left = glue(
+    "radf_lbi_monitor (T* = {x$T_star} / {attr(x, 'n')}, c_bar = {attr(x, 'c_bar')}, b_alpha = {x$boundary})"
+  ))
+  cat_line()
+  print(
+    data.frame(
+      series = names(x$alarm), alarm = x$alarm, alarm_date = x$alarm_date,
+      row.names = NULL
+    ),
+    digits = digits, print.gap = 2L, row.names = FALSE
+  )
+  cat_line()
+}
