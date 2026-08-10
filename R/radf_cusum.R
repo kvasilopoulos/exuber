@@ -9,11 +9,63 @@
 # a boundary formula, exactly matching this project's "why not exubercore"
 # precedent for cheap closed-form statistics (STADF, sign-based).
 #
-# HB propose two monitoring statistics (CUSUM and FLUC); only CUSUM is
-# implemented here. FLUC's boundary constant b_{k,alpha} has no closed
-# form and needs its own Monte Carlo calibration (HB's own text: "we
-# determine the critical value b_{k,alpha} by means of simulation") --
-# structurally closer to Family A's cost profile, not attempted this pass.
+# HB propose two monitoring statistics, CUSUM (here) and FLUC
+# (radf_monitor(..., boundary = "fluc")) -- both now implemented.
+#
+# `boundary = "finite"` adds HB's own finite-sample CUSUM boundary
+# constant (their Table 8, "without drift estimation" -- matching this
+# file's own raw-first-difference construction, no mean removal), used
+# in place of the fixed asymptotic `b_alpha = 4.6`. Same shape and same
+# lookup-and-snap pattern as radf_monitor.R's hb_fluc_q()/hb_fluc_table
+# for FLUC's own Table 7 -- a published constant, no new simulation.
+# Applied to both `type = "standard"` and `type = "kernel"` (CUSUMV):
+# Astill et al.'s own Corollary 1 (already implemented/validated above)
+# establishes the *same* boundary function works unchanged for both
+# statistics, so extending that same finite-sample table to CUSUMV is a
+# direct, not a new, claim.
+
+# Homm & Breitung (2012) Table 8(i): CUSUM boundary constant b_{k,alpha},
+# without drift estimation, transcribed from a rendered PDF page. Same
+# (n, alpha, k) grid as FLUC's Table 7.
+hb_cusum_finite_table <- local({
+  k_grid <- c(2, 3, 4, 5, 6, 8, 10)
+  n_grid <- c(100, 50, 20)
+  alpha_grid <- c(0.10, 0.05, 0.01)
+  q <- rbind(
+    c(0.92, 1.39, 1.62, 1.80, 1.92, 2.08, 2.19), # n=100, alpha=0.10
+    c(1.51, 2.14, 2.47, 2.73, 2.88, 3.20, 3.36), # n=100, alpha=0.05
+    c(2.86, 3.92, 4.57, 4.94, 5.30, 5.72, 6.02), # n=100, alpha=0.01
+    c(0.87, 1.31, 1.55, 1.70, 1.82, 1.97, 2.06), # n=50,  alpha=0.10
+    c(1.43, 2.03, 2.34, 2.62, 2.80, 3.03, 3.12), # n=50,  alpha=0.05
+    c(2.85, 3.87, 4.25, 4.77, 5.03, 5.47, 5.94), # n=50,  alpha=0.01
+    c(0.81, 1.18, 1.43, 1.61, 1.75, 1.91, 2.02), # n=20,  alpha=0.10
+    c(1.27, 1.96, 2.35, 2.53, 2.72, 3.00, 3.13), # n=20,  alpha=0.05
+    c(2.61, 3.91, 4.49, 4.97, 5.16, 5.52, 5.74)  # n=20,  alpha=0.01
+  )
+  tbl <- data.frame(n = rep(n_grid, each = 3), alpha = rep(alpha_grid, times = 3), q)
+  colnames(tbl) <- c("n", "alpha", paste0("k", k_grid))
+  tbl
+})
+
+# Same lookup-and-snap convention as radf_monitor.R's hb_fluc_q().
+hb_cusum_finite_q <- function(level, n_train, k) {
+  beta <- 1 - level
+  beta_choices <- c(0.10, 0.05, 0.01)
+  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+  if (length(match_idx) == 0L) {
+    stop_glue(
+      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "for boundary = 'finite' (Homm & Breitung (2012)'s Table 8 only ",
+      "tabulates these significance levels)."
+    )
+  }
+  n_grid <- c(20, 50, 100)
+  k_grid <- c(2, 3, 4, 5, 6, 8, 10)
+  n_snap <- n_grid[which.min(abs(n_train - n_grid))]
+  k_snap <- k_grid[which.min(abs(k - k_grid))]
+  row <- hb_cusum_finite_table[hb_cusum_finite_table$n == n_snap & abs(hb_cusum_finite_table$alpha - beta) < 1e-8, ]
+  row[[paste0("k", k_snap)]]
+}
 
 # HB's CUSUM statistic (eq. 26) and boundary (eq. 29) evaluated at every
 # monitoring point t = T_star+1, ..., n for a single series y. sigma_hat_t^2
@@ -119,7 +171,15 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' HB's own one-sided asymptotic calibration for a 5\% significance level
 #' (their Section 3); this is an asymptotic upper bound on the false-
 #' alarm probability (Chu, Stinchcombe & White 1996), not an exact size,
-#' so it is typically conservative in finite samples.
+#' so it is typically conservative in finite samples. Ignored when
+#' \code{boundary = "finite"}.
+#' @param boundary \code{"asymptotic"} (default) uses \code{b_alpha}
+#' directly. \code{"finite"} instead looks up HB's own finite-sample
+#' boundary constant (their Table 8) from \code{level} and the realized
+#' training length/monitoring-horizon ratio -- \code{level} must then be
+#' one of \code{0.90}, \code{0.95}, \code{0.99}.
+#' @param level Nominal confidence level when \code{boundary = "finite"}
+#' (default \code{0.95}); ignored when \code{boundary = "asymptotic"}.
 #' @param type \code{"standard"} (default) for Homm & Breitung (2012)'s
 #' original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
 #' Leybourne, Taylor & Zu (2023)'s volatility-robust "CUSUMV" variant.
@@ -154,10 +214,12 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #'
 #' @export
 radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
+                        boundary = c("asymptotic", "finite"), level = 0.95,
                         type = c("standard", "kernel"), N = 20,
                         kernel = c("gaussian", "uniform")) {
   type <- match.arg(type)
   kernel <- match.arg(kernel)
+  boundary <- match.arg(boundary)
   x <- parse_data(data)
   n <- nrow(x)
 
@@ -167,6 +229,9 @@ radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
   }
   if (T_star >= n) {
     stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
+  }
+  if (boundary == "finite") {
+    b_alpha <- hb_cusum_finite_q(level, T_star, n / T_star)
   }
 
   snames <- colnames(x)
