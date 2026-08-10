@@ -45,6 +45,7 @@ S3method(print,radf_cusum_obj)
 S3method(print,radf_cv)
 S3method(print,radf_monitor_obj)
 S3method(print,radf_obj)
+S3method(print,radf_quantile_obj)
 S3method(print,radf_recovery_obj)
 S3method(print,radf_sbz)
 S3method(print,radf_sign_obj)
@@ -96,6 +97,7 @@ export(radf_mc_cv)
 export(radf_mc_distr)
 export(radf_monitor)
 export(radf_pdc)
+export(radf_quantile)
 export(radf_recovery)
 export(radf_recovery_cv)
 export(radf_sb_cv)
@@ -212,7 +214,11 @@ importFrom(rlang,
 importFrom(stats,
   AIC,
   BIC,
+  bw.nrd0,
+  coef,
   coefficients,
+  cor,
+  dnorm,
   embed,
   frequency,
   is.ts,
