@@ -113,6 +113,108 @@ test_that("boundary = 'kurozumi' alarms never fire before T_star", {
   expect_true(all(na.omit(results)))
 })
 
+test_that("kurozumi_gsadf_q looks up Kurozumi (2020) Table 1's GSADF_{s0}
+  columns (q04_df/q08_df) exactly, snapping s0 to the nearest of {0.4, 0.8}", {
+  expect_equal(exuber:::kurozumi_gsadf_q(0.90, 1, 0.4), 1.3969)
+  expect_equal(exuber:::kurozumi_gsadf_q(0.95, 1, 0.4), 1.8081)
+  expect_equal(exuber:::kurozumi_gsadf_q(0.99, 1, 0.4), 2.5927)
+  expect_equal(exuber:::kurozumi_gsadf_q(0.95, 1, 0.8), 2.3330)
+  expect_equal(exuber:::kurozumi_gsadf_q(0.95, 3, 0.4), 2.0737)
+  expect_equal(exuber:::kurozumi_gsadf_q(0.95, 1, 0.6), 1.8081) # tie snaps to first (0.4)
+  expect_error(exuber:::kurozumi_gsadf_q(0.93, 1, 0.4))
+})
+
+test_that("kurozumi_gsadf_stat's closed-form (with-intercept) ADF t-statistic
+  band matches radf()$badf exactly at k1_max = 1 (s0 -> 0 limit)", {
+  set.seed(1)
+  y <- cumsum(rnorm(80))
+  minw <- 20
+  badf <- radf(y, minw = minw, lag = 0)$badf[, 1]
+  # s0 tiny enough that floor(T_star * s0) == 1, T_star = minw so k1_max = 1
+  stat <- exuber:::kurozumi_gsadf_stat(y, T_star = minw, s0 = 1 / minw)
+  expect_equal(unname(stat), badf, tolerance = 1e-8)
+})
+
+test_that("kurozumi_gsadf_stat matches a brute-force lm() search over the
+  restricted window-start band exactly", {
+  set.seed(2)
+  y <- cumsum(rnorm(150))
+  T_star <- 75
+  s0 <- 0.4
+  k1_max <- floor(T_star * s0)
+  stat <- exuber:::kurozumi_gsadf_stat(y, T_star, s0)
+  for (k_check in c(5, 30, 60)) {
+    t_check <- T_star + k_check
+    brute <- sapply(seq_len(k1_max), function(k1) {
+      yy <- y[k1:t_check]
+      fit <- lm(diff(yy) ~ yy[-length(yy)])
+      summary(fit)$coefficients[2, 3]
+    })
+    expect_equal(stat[k_check], max(brute), tolerance = 1e-8, ignore_attr = TRUE)
+  }
+})
+
+test_that("radf_monitor(boundary = 'kurozumi', s0 = 0.4/0.8) runs end to end,
+  matches the published GSADF boundary constant, and alarms never fire
+  before T_star", {
+  set.seed(1)
+  y <- cumsum(rnorm(150))
+  out <- radf_monitor(y, r_star = 0.5, boundary = "kurozumi", s0 = 0.4, level = 0.95)
+
+  expect_s3_class(out, "radf_monitor_obj")
+  expect_true(is.matrix(out$stat))
+  expect_equal(nrow(out$stat), length(out$boundary))
+  expect_equal(attr(out, "q"), 1.8081)
+  expect_equal(attr(out, "s0"), 0.4)
+  expect_output(print(out), "kurozumi")
+  expect_true(is.na(out$alarm) || out$alarm > out$T_star)
+})
+
+test_that("radf_monitor(boundary = 'kurozumi', s0 = 0) is unchanged (s0 = 0
+  is the default and reproduces the original SADF-only behavior)", {
+  set.seed(1)
+  y <- cumsum(rnorm(150))
+  out_default <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
+  out_explicit <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", s0 = 0, level = 0.95)
+  expect_equal(out_default$stat, out_explicit$stat)
+  expect_equal(out_default$boundary, out_explicit$boundary)
+})
+
+test_that("boundary = 'kurozumi', s0 = 0.4 false-alarm rate under H0 is close
+  to nominal, and detection power is comparable to the s0 = 0 (SADF) case", {
+  skip_on_cran()
+  set.seed(10)
+  nrep <- 100
+  n <- 150
+  T_star <- 75
+  fa <- mean(vapply(seq_len(nrep), function(i) {
+    set.seed(1000 + i)
+    y <- cumsum(rnorm(n))
+    !is.na(radf_monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4, level = 0.95)$alarm)
+  }, logical(1)))
+  expect_lt(fa, 0.15)
+
+  make_bubble_series <- function(n, T_star, bstart, rho = 1.03) {
+    y <- numeric(n)
+    y[seq_len(T_star)] <- cumsum(rnorm(T_star))
+    for (t in (T_star + 1):n) {
+      y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
+    }
+    y
+  }
+  run <- function(seed) {
+    set.seed(seed)
+    y <- make_bubble_series(n, T_star, bstart = 130)
+    c(
+      sadf = !is.na(unname(radf_monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0)$alarm)),
+      gsadf = !is.na(unname(radf_monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4)$alarm))
+    )
+  }
+  res <- rowMeans(sapply(1:40, run))
+  expect_gt(res[["gsadf"]], 0.15)
+  expect_lt(abs(res[["gsadf"]] - res[["sadf"]]), 0.35)
+})
+
 test_that("hb_fluc_q looks up Homm & Breitung (2012) Table 7(i) constants exactly", {
   expect_equal(exuber:::hb_fluc_q(0.95, 100, 2), 4.50)
   expect_equal(exuber:::hb_fluc_q(0.95, 100, 10), 6.26)
