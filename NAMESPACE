@@ -51,6 +51,7 @@ S3method(print,radf_lbi_monitor_obj)
 S3method(print,radf_lbi_obj)
 S3method(print,radf_monitor_obj)
 S3method(print,radf_obj)
+S3method(print,radf_qpwy_obj)
 S3method(print,radf_quantile_obj)
 S3method(print,radf_recovery_obj)
 S3method(print,radf_sbz)
@@ -111,6 +112,7 @@ export(radf_mc_cv)
 export(radf_mc_distr)
 export(radf_monitor)
 export(radf_pdc)
+export(radf_qpwy)
 export(radf_quantile)
 export(radf_recovery)
 export(radf_recovery_cv)
@@ -150,7 +152,9 @@ import(ggplot2)
 importFrom(Rcpp,evalCpp)
 importFrom(cli,
   cat_line,
-  cat_rule
+  cat_rule,
+  col_yellow,
+  symbol
 )
 importFrom(doFuture,`%dofuture%`)
 importFrom(dplyr,
