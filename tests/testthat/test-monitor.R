@@ -112,3 +112,57 @@ test_that("boundary = 'kurozumi' alarms never fire before T_star", {
   results <- sapply(1:10, run_once)
   expect_true(all(na.omit(results)))
 })
+
+test_that("hb_fluc_q looks up Homm & Breitung (2012) Table 7(i) constants exactly", {
+  expect_equal(exuber:::hb_fluc_q(0.95, 100, 2), 4.50)
+  expect_equal(exuber:::hb_fluc_q(0.95, 100, 10), 6.26)
+  expect_equal(exuber:::hb_fluc_q(0.95, 50, 4), 5.11)
+  expect_equal(exuber:::hb_fluc_q(0.90, 20, 2), 2.49)
+  expect_equal(exuber:::hb_fluc_q(0.99, 100, 8), 9.79)
+  expect_equal(exuber:::hb_fluc_q(0.95, 73, 7), 5.50) # snaps n->50, k->6
+  expect_error(exuber:::hb_fluc_q(0.93, 100, 2))
+})
+
+test_that("radf_monitor runs end to end with boundary = 'fluc'", {
+  set.seed(1)
+  y <- cumsum(rnorm(150))
+  out <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.95)
+
+  expect_s3_class(out, "radf_monitor_obj")
+  expect_true(is.matrix(out$stat))
+  expect_output(print(out), "fluc")
+})
+
+test_that("boundary = 'fluc' rejects levels outside its tabulated set", {
+  y <- cumsum(rnorm(100))
+  expect_error(radf_monitor(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.93))
+})
+
+test_that("boundary = 'fluc' false-alarm rate under H0 is not wildly
+  inflated (loose Monte Carlo bound; HB's own boundary is conservative)", {
+  skip_on_cran()
+  run_null <- function(seed) {
+    set.seed(seed)
+    y <- cumsum(rnorm(150))
+    out <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.95)
+    !is.na(out$alarm)
+  }
+  rate <- mean(sapply(1:100, run_null))
+  expect_true(rate <= 0.15)
+})
+
+test_that("boundary = 'fluc' alarms never fire before T_star", {
+  skip_on_cran()
+  run_once <- function(seed) {
+    set.seed(seed)
+    n1 <- 75; n2 <- 40
+    normal_part <- cumsum(rnorm(n1))
+    expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
+    y <- c(normal_part, expl_part)
+    out <- radf_monitor(y, r_star = n1 / length(y), minw = 20, boundary = "fluc")
+    alarm <- unname(out$alarm)
+    if (is.na(alarm)) NA else alarm > out$T_star
+  }
+  results <- sapply(1:10, run_once)
+  expect_true(all(na.omit(results)))
+})
