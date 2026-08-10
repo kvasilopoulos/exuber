@@ -66,8 +66,12 @@ svadf_threshold <- function(t, type = c("origination", "collapse")) {
 #' first run of at least \code{min_duration} consecutive points with
 #' \code{badf} below the (lower) collapse threshold.
 #'
-#' NOTE: \code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a
-#' different bar than every other source implemented in this package.
+#' @section Caveats:
+#' \code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a
+#' different bar than every other source implemented in this package. The
+#' same note is emitted as a message when this function is called (see
+#' \code{\link{message}}/\code{\link{suppressMessages}} to silence it) and
+#' stored as \code{attr(x, "caveat")} on the returned object.
 #'
 #' @inheritParams radf
 #' @param min_duration Minimum number of consecutive periods a threshold
@@ -86,6 +90,9 @@ svadf_threshold <- function(t, type = c("origination", "collapse")) {
 #'
 #' @export
 radf_svadf <- function(data, minw = NULL, min_duration = NULL) {
+  caveat <- "Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section."
+  message_glue(caveat)
+
   x <- parse_data(data)
   n <- nrow(x)
   minw <- minw %||% psy_minw(n)
@@ -138,7 +145,7 @@ radf_svadf <- function(data, minw = NULL, min_duration = NULL) {
     origination = origination, collapse = collapse,
     origination_date = origination_date, collapse_date = collapse_date
   ) %>%
-    add_attr(index = idx, series_names = snames, n = n, minw = minw, min_duration = min_duration) %>%
+    add_attr(index = idx, series_names = snames, n = n, minw = minw, min_duration = min_duration, caveat = caveat) %>%
     add_class("radf_svadf_obj")
 }
 
@@ -150,6 +157,7 @@ print.radf_svadf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
     "min_duration = {attr(x, 'min_duration')})"
   ))
   cat_line()
+  cat_caveat(x)
   print(
     data.frame(
       series = names(x$origination),
