@@ -21,12 +21,24 @@
 # is exactly radf()'s `badf` sequence (verified: bit-identical to a
 # from-scratch OLS ADF t-stat with a fixed start at t=1), compared
 # against a closed-form/published constant boundary from his Table 1 --
-# no bootstrap, no simulation. His GSADF_{s0}(k) detector (s0 > 0) is
-# NOT simply radf()'s `bsadf`: its window-start search range is capped at
-# a FIXED fraction of the training length (floor(m*s0)), whereas
-# radf()'s own bsadf search range grows with the current monitoring
-# point -- a genuinely different (and not currently implemented) double
-# recursion. Only the s0 = 0 (SADF) case is implemented here.
+# no bootstrap, no simulation.
+#
+# `s0 > 0` (his GSADF_{s0}(k) detector) -- re-triaged (2026-08-10) after
+# initially being scoped out as needing "new recursion code": his own
+# window-start range, floor(m*s0), is a FIXED cap tied to the training
+# length only, not growing with the current monitoring point the way
+# radf()'s own bsadf search range does -- so it is NOT a reindexing of
+# bsadf, but it also does NOT need a new double-recursive C++ routine.
+# ADF_{k1}^{t} for a fixed (small) band of k1 in [1, floor(m*s0)] and t
+# ranging over the monitoring window is exactly the same closed-form
+# cumulative-sum OLS t-statistic construction already used throughout
+# this project (radf_hls.R's hls_segment_ssr(), radf_tt.R's
+# gls_dfstat_grid()) -- just a WITH-INTERCEPT version (verified against
+# radf()$badf to machine precision at k1_max = 1, and against brute-force
+# lm() fits at k1_max > 1) restricted to a bounded band instead of the
+# full recursive grid. `q_{0.4}^df`/`q_{0.8}^df` and the boundary
+# function's `a/b/c` constants were already transcribed from his Table 1
+# and eq. below it; only the statistic itself was missing.
 
 # Kurozumi (2020) Table 1: SADF/GSADF/CS boundary scaling constants,
 # transcribed from a rendered PDF page (the raw text extraction badly
@@ -67,6 +79,77 @@ kurozumi_sadf_q <- function(level, s_bar) {
     kurozumi_table1$sbar == sbar_snap & abs(kurozumi_table1$beta - beta) < 1e-8,
   ]
   row$q0_df
+}
+
+# Same lookup, for the GSADF_{s0} boundary constant (q04_df/q08_df
+# columns), s0 snapped to the nearest of Kurozumi's two tabulated cases
+# {0.4, 0.8}.
+kurozumi_gsadf_q <- function(level, s_bar, s0) {
+  beta <- 1 - level
+  beta_choices <- c(0.10, 0.05, 0.01)
+  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+  if (length(match_idx) == 0L) {
+    stop_glue(
+      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "for boundary = 'kurozumi' (Kurozumi (2020)'s Table 1 only tabulates ",
+      "these significance levels)."
+    )
+  }
+  sbar_snap <- c(1, 3, 5)[which.min(abs(s_bar - c(1, 3, 5)))]
+  s0_snap <- c(0.4, 0.8)[which.min(abs(s0 - c(0.4, 0.8)))]
+  row <- kurozumi_table1[
+    kurozumi_table1$sbar == sbar_snap & abs(kurozumi_table1$beta - beta) < 1e-8,
+  ]
+  if (s0_snap == 0.4) row$q04_df else row$q08_df
+}
+
+# GSADF_{s0}(k)'s boundary function, g_{s0}^df(k/m) := q_{s0}^df * (a_{s0}
+# + b_{s0} * log(c_{s0} + k/m)) -- confirmed via rendered PDF page.
+kurozumi_gsadf_abc <- data.frame(
+  s0 = c(0.4, 0.8),
+  a  = c(0.76, 0.73),
+  b  = c(0.02, 0.03),
+  c  = c(0.34, 0.90)
+)
+
+# Closed-form GSADF_{s0}(k) statistic path for a single series: max over
+# window starts k1 in [1, floor(T_star*s0)] of the WITH-INTERCEPT ADF
+# t-statistic on window [k1, t], for every monitoring-period t = T_star+1,
+# ..., n. Same cumulative-sum-difference construction as
+# radf_tt.R's gls_dfstat_grid()/radf_hls.R's hls_segment_ssr(), but (a)
+# with an intercept (verified to match radf()$badf exactly at k1_max = 1)
+# and (b) restricted to a bounded k1 band instead of the full grid, since
+# GSADF_{s0}'s own window-start range never grows past floor(T_star*s0).
+kurozumi_gsadf_stat <- function(y, T_star, s0) {
+  n <- length(y)
+  dy <- diff(y)
+  ylag <- y[1:(n - 1L)]
+  cs_x <- c(0, cumsum(ylag))
+  cs_x2 <- c(0, cumsum(ylag^2))
+  cs_y <- c(0, cumsum(dy))
+  cs_y2 <- c(0, cumsum(dy^2))
+  cs_xy <- c(0, cumsum(ylag * dy))
+
+  k1_max <- max(floor(T_star * s0), 1L)
+  a_idx <- seq_len(k1_max)
+  b_idx <- T_star:(n - 1L)
+
+  Sx <- outer(cs_x[b_idx + 1L], cs_x[a_idx], "-")
+  Sx2 <- outer(cs_x2[b_idx + 1L], cs_x2[a_idx], "-")
+  Sy <- outer(cs_y[b_idx + 1L], cs_y[a_idx], "-")
+  Sy2 <- outer(cs_y2[b_idx + 1L], cs_y2[a_idx], "-")
+  Sxy <- outer(cs_xy[b_idx + 1L], cs_xy[a_idx], "-")
+  L <- outer(b_idx, a_idx, "-") + 1L
+
+  Sxx_c <- Sx2 - Sx^2 / L
+  Sxy_c <- Sxy - Sx * Sy / L
+  Syy_c <- Sy2 - Sy^2 / L
+  beta <- Sxy_c / Sxx_c
+  ssr <- Syy_c - beta * Sxy_c
+  sigma2 <- ssr / (L - 2)
+  tstat <- beta / sqrt(sigma2 / Sxx_c)
+
+  apply(tstat, 1, max, na.rm = TRUE)
 }
 
 # Homm & Breitung (2012, J. Financial Econometrics 10(1), 198-231)'s
@@ -157,10 +240,14 @@ hb_fluc_q <- function(level, n_train, k) {
 #' \code{boundary = "kurozumi"} implements Kurozumi (2020)'s closed-form
 #' alternative: no bootstrap at all, just a published constant (his Table 1)
 #' compared against \code{radf()}'s \code{badf} sequence (his
-#' \code{SADF(k)} detector -- the \code{s0 = 0}, fixed-start-at-1 case;
-#' his \code{GSADF_{s0}(k)} generalization for \code{s0 > 0} is not
-#' implemented, see Details). \code{level} must be one of \code{0.90},
-#' \code{0.95}, or \code{0.99} (the levels his table tabulates).
+#' \code{SADF(k)} detector -- the \code{s0 = 0}, fixed-start-at-1 case,
+#' the default). Setting \code{s0} to \code{0.4} or \code{0.8} instead
+#' switches to his \code{GSADF_{s0}(k)} generalization: the window start
+#' is allowed to range over \code{[1, floor(T* * s0)]} rather than being
+#' fixed at \code{1}, compared against his \code{k}-varying (not
+#' constant) boundary function and its own published scaling constant.
+#' \code{level} must be one of \code{0.90}, \code{0.95}, or \code{0.99}
+#' (the levels his table tabulates).
 #'
 #' \code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
 #' detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
@@ -183,8 +270,15 @@ hb_fluc_q <- function(level, n_train, k) {
 #' @param seed Optional seed for the bootstrap draws. Ignored unless
 #' \code{boundary = "bootstrap"}.
 #' @param boundary \code{"bootstrap"} (default, Phillips & Shi 2020),
-#' \code{"kurozumi"} (Kurozumi 2020's closed-form SADF boundary), or
+#' \code{"kurozumi"} (Kurozumi 2020's closed-form SADF/GSADF boundary), or
 #' \code{"fluc"} (Homm & Breitung 2012's FLUC boundary).
+#' @param s0 Kurozumi (2020)'s window-start range as a fraction of the
+#' training length, only used when \code{boundary = "kurozumi"}.
+#' \code{0} (default) is the \code{SADF} case (window start fixed at
+#' \code{1}); \code{0.4} or \code{0.8} switches to the \code{GSADF_{s0}}
+#' case (window start ranges over \code{[1, floor(T* * s0)]}), the only
+#' two values his boundary function's scaling constants are tabulated
+#' for.
 #'
 #' @return An object of class \code{radf_monitor_obj}: a list with the
 #' full-sample statistic path (\code{stat} -- \code{bsadf} for
@@ -214,7 +308,8 @@ hb_fluc_q <- function(level, n_train, k) {
 radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
                           level = 0.95, adflag = 0,
                           type = c("fixed", "aic", "bic"), seed = NULL,
-                          boundary = c("bootstrap", "kurozumi", "fluc")) {
+                          boundary = c("bootstrap", "kurozumi", "fluc"),
+                          s0 = 0) {
   type <- match.arg(type)
   boundary <- match.arg(boundary)
   x <- parse_data(data)
@@ -233,6 +328,41 @@ radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   snames <- colnames(x)
   idx <- index(x)
   nc <- ncol(x)
+
+  if (boundary == "kurozumi" && s0 > 0) {
+    s_bar <- (n - T_star) / T_star
+    q <- kurozumi_gsadf_q(level, s_bar, s0)
+    abc <- kurozumi_gsadf_abc[which.min(abs(kurozumi_gsadf_abc$s0 - s0)), ]
+    k_seq <- seq_len(n - T_star)
+    boundary_path <- q * (abc$a + abc$b * log(abc$c + k_seq / T_star))
+
+    stat_path <- matrix(NA_real_, length(k_seq), nc, dimnames = list(NULL, snames))
+    for (j in seq_len(nc)) {
+      stat_path[, j] <- kurozumi_gsadf_stat(as.numeric(x[, j]), T_star, s0)
+    }
+
+    alarm <- setNames(rep(NA_integer_, nc), snames)
+    for (j in seq_len(nc)) {
+      breach <- which(stat_path[, j] > boundary_path)
+      if (length(breach) > 0L) alarm[j] <- T_star + breach[1L]
+    }
+    alarm_date <- vapply(alarm, function(i) {
+      if (is.na(i)) NA_character_ else as.character(idx[i])
+    }, character(1))
+
+    return(
+      list(
+        stat = stat_path, boundary = boundary_path, T_star = T_star,
+        alarm = alarm, alarm_date = alarm_date
+      ) %>%
+        add_attr(
+          index = idx, series_names = snames, minw = minw, lag = adflag,
+          n = n, level = level, iter = NA_integer_, boundary_type = "kurozumi",
+          s0 = s0, q = q
+        ) %>%
+        add_class("radf_monitor_obj")
+    )
+  }
 
   full <- radf(x, minw = minw, lag = adflag)
   mon_from <- max(T_star - minw - adflag + 1L, 1L)
@@ -276,7 +406,7 @@ radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   ) %>%
     add_attr(
       index = idx, series_names = snames, minw = minw, lag = adflag,
-      n = n, level = level, iter = iter, boundary_type = boundary
+      n = n, level = level, iter = iter, boundary_type = boundary, s0 = 0
     ) %>%
     add_class("radf_monitor_obj")
 }
@@ -284,17 +414,37 @@ radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
 #' @export
 print.radf_monitor_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "radf_monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
-    "level = {attr(x, 'level') * 100}%, boundary = {attr(x, 'boundary_type')})"
-  ))
+  s0 <- attr(x, "s0") %||% 0
+  header <- if (s0 > 0) {
+    glue(
+      "radf_monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
+      "level = {attr(x, 'level') * 100}%, boundary = kurozumi, s0 = {s0}, ",
+      "q = {round(attr(x, 'q'), 4)})"
+    )
+  } else {
+    glue(
+      "radf_monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
+      "level = {attr(x, 'level') * 100}%, boundary = {attr(x, 'boundary_type')})"
+    )
+  }
+  cat_rule(left = header)
   cat_line()
-  print(
-    data.frame(
-      series = names(x$boundary), boundary = x$boundary,
-      alarm = x$alarm, alarm_date = x$alarm_date, row.names = NULL
-    ),
-    digits = digits, print.gap = 2L, row.names = FALSE
-  )
+  if (s0 > 0) {
+    print(
+      data.frame(
+        series = names(x$alarm), alarm = x$alarm, alarm_date = x$alarm_date,
+        row.names = NULL
+      ),
+      digits = digits, print.gap = 2L, row.names = FALSE
+    )
+  } else {
+    print(
+      data.frame(
+        series = names(x$boundary), boundary = x$boundary,
+        alarm = x$alarm, alarm_date = x$alarm_date, row.names = NULL
+      ),
+      digits = digits, print.gap = 2L, row.names = FALSE
+    )
+  }
   cat_line()
 }
