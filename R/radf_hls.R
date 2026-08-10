@@ -58,6 +58,12 @@ hls_model1 <- function(y, ps, trim) {
   n1 <- ps$n1
   k_min <- max(2L, ceiling(trim * n1))
   taus <- k_min:(n1 - k_min)
+  # HLS's sign constraint: the series must end above where the bubble
+  # started (y_T > y_{tau1}) -- an upward-explosive-to-sample-end reading.
+  taus <- taus[y[n1 + 1L] > y[taus + 1L]]
+  if (length(taus) == 0L) {
+    return(list(tau1 = NA_integer_, ssr = Inf))
+  }
   ssr <- hls_segment_ssr(ps, 0L, taus, FALSE) + hls_segment_ssr(ps, taus, n1, TRUE)
   best <- which.min(ssr)
   list(tau1 = taus[best], ssr = ssr[best])
@@ -75,7 +81,15 @@ hls_model23 <- function(y, ps, trim, right_fit) {
   }
   for (tau1 in k_min:tau1_max) {
     tau2 <- (tau1 + k_min):(n1 - k_min)
+    # HLS's own sign constraint (confirmed via HLW's restatement, their
+    # eq. for Model 3): the "peak" y_{tau2} must exceed both the bubble's
+    # own starting level AND wherever the series ends up after the fitted
+    # collapse regime -- Model 2 has no such terminal point to compare
+    # against (its post-tau2 segment is unfitted drift, not a collapse
+    # regime with its own endpoint), so only right_fit=TRUE (Model 3) gets
+    # the second constraint.
     valid <- y[tau2 + 1L] > y[tau1 + 1L]
+    if (right_fit) valid <- valid & (y[tau2 + 1L] > y[n1 + 1L])
     tau2 <- tau2[valid]
     if (length(tau2) == 0L) next
     ssr <- hls_segment_ssr(ps, 0L, tau1, FALSE) +
@@ -101,6 +115,10 @@ hls_model4 <- function(y, ps, trim) {
     for (tau2 in tau2_seq) {
       if (y[tau2 + 1L] <= y[tau1 + 1L]) next
       tau3 <- (tau2 + k_min):(n1 - k_min)
+      # As in Model 3, the "peak" y_{tau2} must also exceed the endpoint
+      # of the fitted collapse regime, y_{tau3} -- otherwise it is not a
+      # genuine peak (see hls_model23()'s comment on the same constraint).
+      tau3 <- tau3[y[tau2 + 1L] > y[tau3 + 1L]]
       if (length(tau3) == 0L) next
       ssr <- hls_segment_ssr(ps, 0L, tau1, FALSE) +
         hls_segment_ssr(ps, tau1, tau2, TRUE) +
