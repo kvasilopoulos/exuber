@@ -56,6 +56,8 @@ identified (\code{NA}, \code{detected = FALSE}). If an up-crossing is
 found but no subsequent down-crossing occurs before the reverse-time
 sample is exhausted, \code{f_c} is \code{NA} and \code{censored = TRUE}
 (the crisis origination predates the observed sample).
+}
+\section{Caveats}{
 
 \strong{Validation status (2026-08-10), reported honestly rather than
 silently}: \code{f_r} (recovery date) validates well against synthetic
@@ -75,7 +77,11 @@ enough to trigger a premature \code{f_c}), but this has not been ruled
 out against a subtler implementation issue. Treat \code{f_c} and the
 overall detection rate as exploratory pending further validation; see
 docs/enhancements/dating-and-root-inference.md for the full numbers.
+The same short pointer is emitted as a message when this function is
+called (see \code{\link{suppressMessages}} to silence it) and stored as
+\code{attr(x, "caveat")} on the returned object.
 }
+
 \references{
 Phillips, P. C. B., & Shi, S. (2014). Financial Bubble
 Implosion and Reverse Regression. Cowles Foundation Discussion Paper

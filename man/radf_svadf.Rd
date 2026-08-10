@@ -41,10 +41,16 @@ consecutive points with \code{badf} above the origination threshold;
 collapse is dated (searching only after the origination date) at the
 first run of at least \code{min_duration} consecutive points with
 \code{badf} below the (lower) collapse threshold.
-
-NOTE: \code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a
-different bar than every other source implemented in this package.
 }
+\section{Caveats}{
+
+\code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a
+different bar than every other source implemented in this package. The
+same note is emitted as a message when this function is called (see
+\code{\link{message}}/\code{\link{suppressMessages}} to silence it) and
+stored as \code{attr(x, "caveat")} on the returned object.
+}
+
 \references{
 Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble?
 Robust date-stamping for periods of exuberance. arXiv:2604.12062.

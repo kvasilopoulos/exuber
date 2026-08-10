@@ -40,6 +40,58 @@ reference:
       - radf_tt
       - radf_tt_cv
 
+  - title: Volatility-robust (other routes)
+    desc: >
+      Further tests robust to time-varying innovation variance; see
+      docs/enhancements/volatility-robustness.md
+    contents:
+      - radf_sbz_cv
+      - radf_kp
+      - radf_sign
+      - radf_sign_cv
+      - radf_ssu
+      - radf_svadf
+
+  - title: Dating and root inference
+    desc: >
+      Start/end/recovery dates and confidence intervals on the explosive
+      root; see docs/enhancements/dating-and-root-inference.md
+    contents:
+      - explosive_root
+      - root_ci
+      - root_ci_datestamp
+      - radf_pdc
+      - radf_recovery
+      - radf_recovery_cv
+      - radf_hls
+      - radf_hlw
+      - radf_knp
+
+  - title: Real-time monitoring
+    desc: >
+      Sequential/real-time bubble detection; see docs/enhancements/monitoring.md
+    contents:
+      - radf_monitor
+      - radf_cusum
+      - radf_lbi
+      - radf_lbi_monitor
+
+  - title: Multivariate / panel bubble tests
+    desc: >
+      Panel and cross-series tests; see docs/enhancements/multivariate.md
+    contents:
+      - radf_common
+      - radf_common_cv
+      - radf_cobubble
+      - radf_contagion
+
+  - title: Alternative paradigms
+    desc: >
+      Non-ADF-family approaches; see docs/enhancements/alternative-paradigms.md
+    contents:
+      - radf_quantile
+      - radf_qpwy
+
   - title: Analysis
     contents:
       - summary.radf_obj
@@ -73,6 +125,7 @@ reference:
   - title: Helpers
     contents:
       - psy_minw
+      - psy_ds
       - index
       - series_names
       - ps_tb
