@@ -46,6 +46,7 @@ S3method(print,radf_cv)
 S3method(print,radf_hls_obj)
 S3method(print,radf_hlw_obj)
 S3method(print,radf_knp_obj)
+S3method(print,radf_lbi_obj)
 S3method(print,radf_monitor_obj)
 S3method(print,radf_obj)
 S3method(print,radf_quantile_obj)
@@ -99,6 +100,7 @@ export(radf_hls)
 export(radf_hlw)
 export(radf_knp)
 export(radf_kp)
+export(radf_lbi)
 export(radf_mc_cv)
 export(radf_mc_distr)
 export(radf_monitor)
@@ -229,6 +231,7 @@ importFrom(stats,
   frequency,
   is.ts,
   lm,
+  qnorm,
   quantile,
   rbinom,
   reorder,
