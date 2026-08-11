@@ -2,9 +2,19 @@
 % Please edit documentation in R/sim.R
 \name{sim_blan}
 \alias{sim_blan}
-\title{Simulation of a Blanchard (1979) bubble process}
+\title{Simulation of a Blanchard (1979) / Rotermann-Wilfling (2018) bubble process}
 \usage{
-sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
+sim_blan(
+  n,
+  pi = 0.7,
+  sigma = 0.03,
+  r = 0.05,
+  b0 = 0.1,
+  type = c("blanchard", "rotermann_wilfling"),
+  delta = 0.984,
+  rw_sigma = 0.05,
+  seed = NULL
+)
 }
 \arguments{
 \item{n}{A positive integer specifying the length of the simulated output series.}
@@ -17,6 +27,15 @@ sim_blan(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1, seed = NULL)
 
 \item{b0}{The initial value of the bubble.}
 
+\item{type}{\code{"blanchard"} (default) or \code{"rotermann_wilfling"}. \code{r} is only used by \code{"blanchard"}; \code{delta}/\code{rw_sigma} only by \code{"rotermann_wilfling"} (see Details).}
+
+\item{delta}{A scalar in (0, 1), the Rotermann-Wilfling deflation
+parameter. Only used for \code{type = "rotermann_wilfling"}.}
+
+\item{rw_sigma}{A positive scalar, the standard deviation (on the log
+scale) of the Rotermann-Wilfling multiplicative lognormal shock. Only
+used for \code{type = "rotermann_wilfling"}.}
+
 \item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to
 \code{set.seed} before simulation. If set, the value is saved as "seed" attribute
@@ -28,10 +47,13 @@ across the parallel and non-parallel option when the same seed is used.}
 A numeric vector of length \code{n}.
 }
 \description{
-Simulation of a Blanchard (1979) rational bubble process.
+Simulation of a Blanchard (1979) rational bubble process, or (with
+\code{type = "rotermann_wilfling"}) Rotermann & Wilfling (2018)'s
+lognormal-mixture extension of it.
 }
 \details{
-Blanchard's bubble process has two regimes, which occur with probability \eqn{\pi} and \eqn{1-\pi}.
+Blanchard's bubble process (\code{type = "blanchard"}) has two regimes,
+which occur with probability \eqn{\pi} and \eqn{1-\pi}.
 In the first regime, the bubble grows exponentially, whereas in the second regime, the bubble
 collapses to a white noise.
 
@@ -41,14 +63,34 @@ With probability \eqn{1 - \pi}:
 \deqn{B_{t+1} = \epsilon_{t+1}}{B[t+1] = \epsilon[t+1],}
 
 where \code{r} is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
+
+Rotermann & Wilfling (2018)'s bubble (\code{type = "rotermann_wilfling"})
+replaces the "collapse to white noise" regime with a \emph{partial,
+stochastically evolving} deflation, giving periodically recurring,
+gradually-deflating trajectories instead of an abrupt one-period collapse:
+\deqn{B_t = \frac{B_{t-1}u_t}{\delta}}{B[t] = B[t-1]*u[t]/delta} with probability \eqn{\pi}, or
+\deqn{B_t = \frac{1-\pi\delta}{1-\pi}B_{t-1}u_t}{B[t] = (1-\pi*\delta)/(1-\pi) * B[t-1] * u[t]}
+with probability \eqn{1-\pi}, where
+\eqn{u_t \sim iid\,LN(-rw\_sigma^2/2,\ rw\_sigma^2)}{u[t] ~ iid LN(-rw_sigma^2/2, rw_sigma^2)}
+(so \eqn{E[u_t] = 1}). \eqn{\delta \in (0, 1)} ensures the bubble never
+collapses to exactly zero and can re-inflate.
 }
 \examples{
 sim_blan(n = 100, seed = 123) \%>\%
+  autoplot()
+
+sim_blan(n = 250, type = "rotermann_wilfling", delta = 0.984, seed = 123) \%>\%
   autoplot()
 }
 \references{
 Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 Economics letters, 3(4), 387-389.
+
+Rotermann, B. & Wilfling, B. (2018). "A new stochastic bubble process:
+Theoretical properties and empirical tests." Applied Economics Letters,
+25(15), 1091-1096. As used for Monte Carlo power analysis in Monschang,
+V. & Wilfling, B. (2021). "Sup-ADF-style bubble-detection methods under
+test." Empirical Economics, 61, 145-172.
 }
 \seealso{
 \code{\link{sim_psy1}}, \code{\link{sim_psy2}}, \code{\link{sim_evans}}
