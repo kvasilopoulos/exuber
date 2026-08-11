@@ -137,6 +137,8 @@ autoplot.radf_obj <- function(
     scale_exuber_manual() +
     theme_exuber()
 
+  gg <- gg + na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
+
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
@@ -218,6 +220,8 @@ autoplot2.radf_obj <- function(object, cv = NULL,
     geom_line() +
     scale_exuber_manual() +
     theme_exuber()
+
+  gg <- gg + na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
 
   all_negative <- all(series %in% diagnostics(object, cv)$negative)
   idx <- index(object)
@@ -302,6 +306,47 @@ shade <- function(fill = "grey55", fill_negative = fill, # "yellow2",
 
 null_color <- function() {
   "#ffffff00"
+}
+
+# Rectangles marking each series' leading/trailing NA-padded region (an
+# uneven panel, see na_edges()) for background shading in autoplot.
+# NULL if there is no padding (the common case) or no valid_range info.
+na_pad_rects <- function(valid_range, idx, snames) {
+  if (is.null(valid_range)) {
+    return(NULL)
+  }
+  snames <- intersect(snames, colnames(valid_range))
+  if (length(snames) == 0) {
+    return(NULL)
+  }
+  n <- length(idx)
+  rows <- lapply(snames, function(nm) {
+    start <- valid_range["start", nm]
+    end <- valid_range["end", nm]
+    out <- list()
+    if (start > 1) {
+      out$lead <- data.frame(id = nm, xmin = idx[1], xmax = idx[start - 1])
+    }
+    if (end < n) {
+      out$trail <- data.frame(id = nm, xmin = idx[end + 1], xmax = idx[n])
+    }
+    out
+  })
+  rects <- do.call(rbind, unlist(rows, recursive = FALSE))
+  if (is.null(rects) || nrow(rects) == 0) {
+    return(NULL)
+  }
+  rects
+}
+
+na_pad_layer <- function(pad_rects) {
+  if (is.null(pad_rects)) {
+    return(NULL)
+  }
+  geom_rect(
+    data = pad_rects, inherit.aes = FALSE, fill = "grey80", alpha = 0.4,
+    aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf)
+  )
 }
 
 #' Exuber scale and theme functions
@@ -397,7 +442,10 @@ theme_exuber <- function(
 autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
   stopifnot(is.logical(trunc))
 
+  pad_rects <- na_pad_rects(get_valid_range(object), index(object, trunc = trunc), names(object))
+
   ggplot() +
+    na_pad_layer(pad_rects) +
     geom_ds_segment(object, trunc = trunc, ...) +
     theme_bw() +
     labs(title = "", x = "", y = "") + # intentionally not in theme (for extra margin)
