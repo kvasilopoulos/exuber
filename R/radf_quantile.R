@@ -102,6 +102,9 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' @seealso \code{\link{radf}} for the mean-regression (ADF/SADF/GSADF)
 #' family this complements.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @importFrom stats coef dnorm lm quantile bw.nrd0 rnorm cor
 #' @export
 radf_quantile <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0.05),

@@ -145,6 +145,9 @@ pdc_regime_resid <- function(y, breaks) {
 #' @seealso \code{\link{datestamp}} for the PSY threshold-crossing
 #' alternative.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_pdc <- function(data, regimes = 3L, trim = 0.05,
                       type = c("ols", "wls"),

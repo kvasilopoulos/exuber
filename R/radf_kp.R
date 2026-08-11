@@ -62,6 +62,9 @@ kernel_purge <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
 #' values, \code{\link{radf_wb_cv}} for a bootstrap-based alternative, and
 #' \code{\link{radf_tt}} for another bootstrap-free alternative.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_kp <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL) {
   kernel <- match.arg(kernel)

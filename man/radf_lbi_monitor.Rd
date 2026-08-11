@@ -52,6 +52,11 @@ shows this constant-boundary detector ("mCUSUM" at \code{c_bar = 0},
 "wCUSUM" at \code{c_bar > 0}) is more powerful than the classical
 time-varying-boundary CUSUM test it is compared against.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Breitung, J., & Diegel, M. (2025). A locally best invariant
 sequential test for explosive behavior in the presence of nonstationary

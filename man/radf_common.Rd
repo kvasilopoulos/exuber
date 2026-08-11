@@ -34,6 +34,11 @@ directly to the result with no modification -- and every downstream
 method (\code{tidy()}, \code{autoplot()}, \code{datestamp()}, ...) works
 on it for free, since the output is an ordinary \code{radf_obj}.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Chen, Y., Phillips, P. C. B., & Shi, S. (2023). Common
 Bubble Detection in Large Dimensional Financial Systems. Journal of

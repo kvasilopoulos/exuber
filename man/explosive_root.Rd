@@ -26,6 +26,11 @@ Phillips & Magdalinos (2007) and Guo, Sun & Wang (2019) for inference on a
 Magdalinos's model (their eq. 58 excludes it "to exclude the presence of
 a deterministically explosive component").
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for
 moderate deviations from a unit root. Journal of Econometrics, 136(1),

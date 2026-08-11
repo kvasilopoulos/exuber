@@ -74,6 +74,11 @@ of the estimated spot variance. This needs no new critical-value
 theory -- like the OLS version, it is point estimation, not a
 threshold-crossing test.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Pang, T., Du, L., & Chong, T. T. L. (2021). Estimating
 multiple breaks in the bubble regime with SSR minimization. Journal of

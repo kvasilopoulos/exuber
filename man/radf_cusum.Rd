@@ -86,6 +86,11 @@ function delivers a controlled asymptotic false-alarm rate even under
 time-varying volatility, unlike the standard CUSUM statistic, which
 requires homoskedasticity for its own size-control result to hold.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Homm, U., & Breitung, J. (2012). Testing for speculative
 bubbles in stock markets: A comparison of alternative methods. Journal

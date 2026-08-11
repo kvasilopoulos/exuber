@@ -43,6 +43,11 @@ shown by independent validation to be badly undersized as a stand-in for
 series -- this null distribution does depend on \code{N}, so \code{N}
 must match the panel \code{\link{radf_common}} was actually run on.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Chen, Y., Phillips, P. C. B., & Shi, S. (2023). Common
 Bubble Detection in Large Dimensional Financial Systems. Journal of
