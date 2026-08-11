@@ -118,7 +118,7 @@ radf_tt_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
     gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE)
   ) %>%
     add_attr(method = "Time-Transformed MC", n = n, minw = minw, iter = nrep) %>%
-    add_class("radf_cv", "tt_cv")
+    add_class("radf_cv", "tt_cv", "mc_cv")
 }
 
 # Variance profile estimation (feasible case, Section 4) --------------------
