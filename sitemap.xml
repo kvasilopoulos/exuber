@@ -1,162 +1,98 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/404.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/ISSUE_TEMPLATE.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/SUPPORT.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/exuber.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/plotting.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/articles/simulation.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.ds_radf.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_obj.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/autoplot2.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/calc_pvalue.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/datestamp.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/diagnostics.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/exuber-defunct.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/exuber.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/index-rd.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/install_exuberdata.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/ps_tb.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/psy_minw.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/radf.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/radf_crit.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv2.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/scale_exuber_manual.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/series_names.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_blan.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_data.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_div.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_evans.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_ps1.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_psy1.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/sim_psy2.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/summary.radf_obj.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/tidy.ds_radf.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/tidy.radf_cv.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/tidy.radf_distr.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/tidy.radf_obj.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/tidy_join.html</loc>
-  </url>
-  <url>
-    <loc>https://kvasilopoulos.github.io/exuber/reference/tidy_join.radf_obj.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://kvasilopoulos.github.io/exuber/404.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/CONTRIBUTING.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/ISSUE_TEMPLATE.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/LICENSE-text.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/LICENSE.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/SUPPORT.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/articles/exuber.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/articles/index.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/articles/plotting.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/articles/radf-tt.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/articles/simulation.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/authors.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/index.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/news/index.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.ds_radf.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_distr.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_obj.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/autoplot2.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/calc_pvalue.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/crit_cache_dir.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/datestamp.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/diagnostics.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/explosive_root.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/exuber-defunct.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/exuber.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/fetch_crit_bucket.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/index-rd.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/parse_crit_bin.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/pipe.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/ps_tb.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/psy_minw.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_cobubble.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_common.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_contagion.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_crit.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_cusum.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_hls.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_hlw.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_knp.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_kp.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_lbi.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_lbi_monitor.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_monitor.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_pdc.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_qpwy.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_quantile.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_recovery.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_ssu.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_svadf.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_tt.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv2.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/reexports.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/root_ci.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/root_ci_datestamp.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/scale_exuber_manual.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/series_names.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_blan.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_common.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_data.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_div.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_evans.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_falsebubble.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_fi.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_innov.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_mar.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_msbubble.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_ps1.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_psy1.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_psy2.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_tree.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/summary.radf_obj.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/tidy.ds_radf.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/tidy.radf_cv.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/tidy.radf_distr.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/tidy.radf_obj.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/tidy_join.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/tidy_join.radf_obj.html</loc></url>
 </urlset>
+
