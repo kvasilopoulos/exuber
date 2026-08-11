@@ -105,7 +105,7 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
 #' @param type Lag-order selection: \code{"fixed"} (default) uses \code{lag}
 #' as given, matching \code{\link{radf}}'s own single-`lag` behaviour.
 #' \code{"aic"}/\code{"bic"} instead select the lag automatically per series
-#' via \code{\link{lag_select}} (taking the max across the panel, since the
+#' via \code{lag_select()} (internal; taking the max across the panel, since the
 #' rest of this function assumes one common lag order) -- Pedersen &
 #' Schütte (2020)'s fix for the size distortion a fixed lag causes under
 #' autocorrelated innovations.

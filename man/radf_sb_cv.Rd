@@ -46,7 +46,7 @@ not supported. When any series is padded this way, the panel statistic
 \item{type}{Lag-order selection: \code{"fixed"} (default) uses \code{lag}
 as given, matching \code{\link{radf}}'s own single-\code{lag} behaviour.
 \code{"aic"}/\code{"bic"} instead select the lag automatically per series
-via \code{\link{lag_select}} (taking the max across the panel, since the
+via \code{lag_select()} (internal; taking the max across the panel, since the
 rest of this function assumes one common lag order) -- Pedersen &
 Schütte (2020)'s fix for the size distortion a fixed lag causes under
 autocorrelated innovations.}
