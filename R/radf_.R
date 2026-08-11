@@ -3,7 +3,14 @@
 #' \code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics.
 #'
 #' @param data A univariate or multivariate numeric time series object, a numeric
-#' vector or matrix, or a data.frame. The object should not have any NA values.
+#' vector or matrix, or a data.frame. A column may have leading and/or trailing
+#' \code{NA} values (an uneven/unbalanced panel where series enter or exit the
+#' sample at different times) -- those periods are filled with \code{NA} in
+#' \code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
+#' \code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
+#' not supported. When any series is padded this way, the panel statistic
+#' (\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
+#' \code{NA}, with a warning.
 #' @param minw A positive integer. The minimum window size (default =
 #' \eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).
 #' @param lag A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).
@@ -74,29 +81,53 @@ radf <- function(data, minw = NULL, lag = 0L) {
   x <- parse_data(data)
   minw <- minw %||% psy_minw(data)
   nc <- ncol(x)
+  n <- nrow(x)
 
-  assert_na(x)
+  ranges <- na_edges(x)
+  uneven <- any(ranges["start", ] != 1L) || any(ranges["end", ] != n)
+  valid_len <- ranges["end", ] - ranges["start", ] + 1L
+
   assert_positive_int(minw, greater_than = 2)
   assert_positive_int(lag, strictly = FALSE)
-
-  pointer <- nrow(x) - minw - lag
-  snames <- colnames(x)
-  adf <- sadf <- gsadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, snames)))
-  badf <- bsadf <- matrix(0, pointer, nc, dimnames = list(NULL, snames))
-
-  for (i in 1:nc) {
-    yxmat <- unroot(x[, i], lag = lag)
-    results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
-
-    badf[, i] <- results[1:pointer]
-    adf[i] <- results[pointer + 1]
-    sadf[i] <- results[pointer + 2]
-    gsadf[i] <- results[pointer + 3]
-    bsadf[, i] <- results[-c(1:(pointer + 3))]
+  if (any(valid_len - lag <= minw)) {
+    stop_glue(
+      "Argument 'minw' should be smaller than the number of non-NA ",
+      "observations minus the lag, for every series."
+    )
   }
 
-  bsadf_panel <- apply(bsadf, 1, mean)
-  gsadf_panel <- max(bsadf_panel)
+  pointer <- n - minw - lag
+  snames <- colnames(x)
+  adf <- sadf <- gsadf <- drop(matrix(0, 1, nc, dimnames = list(NULL, snames)))
+  badf <- bsadf <- matrix(NA_real_, pointer, nc, dimnames = list(NULL, snames))
+
+  for (i in 1:nc) {
+    start <- ranges["start", i]
+    offset <- start - 1L
+    yi <- x[start:ranges["end", i], i]
+    yxmat <- unroot(yi, lag = lag)
+    results <- rls_gsadf(yxmat, min_win = minw, lag = lag)
+
+    pointer_i <- length(yi) - minw - lag
+    badf[offset + seq_len(pointer_i), i] <- results[1:pointer_i]
+    adf[i] <- results[pointer_i + 1]
+    sadf[i] <- results[pointer_i + 2]
+    gsadf[i] <- results[pointer_i + 3]
+    bsadf[offset + seq_len(pointer_i), i] <- results[-c(1:(pointer_i + 3))]
+  }
+
+  if (uneven) {
+    bsadf_panel <- rep(NA_real_, pointer)
+    gsadf_panel <- NA_real_
+    warning_glue(
+      "the panel statistic ('bsadf_panel'/'gsadf_panel') is not available ",
+      "for an uneven panel (leading/trailing NA padding detected); ",
+      "returning NA."
+    )
+  } else {
+    bsadf_panel <- apply(bsadf, 1, mean)
+    gsadf_panel <- max(bsadf_panel)
+  }
 
   list(
     adf = adf,
@@ -113,7 +144,8 @@ radf <- function(data, minw = NULL, lag = 0L) {
       series_names = snames,
       minw = minw,
       lag = lag,
-      n = nrow(x)
+      n = n,
+      valid_range = ranges
     ) %>%
     add_class("radf_obj")
 }

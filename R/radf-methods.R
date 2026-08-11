@@ -355,6 +355,19 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     dummy[ds_basic[[z]] + zadj, z] <- 1
   }
 
+  valid_range <- get_valid_range(object)
+  if (!is_panel && !is.null(valid_range)) {
+    for (z in seq_along(pos)) {
+      nm <- pos[z]
+      if (nm %in% colnames(valid_range)) {
+        start <- valid_range["start", nm]
+        end <- valid_range["end", nm]
+        if (start > 1) dummy[1:(start - 1), z] <- NA_real_
+        if (end < length(idx)) dummy[(end + 1):length(idx), z] <- NA_real_
+      }
+    }
+  }
+
   structure(
     res,
     dummy = dummy,
@@ -367,6 +380,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     min_duration = min_duration,
     option = option,
     method = get_method(cv),
+    valid_range = valid_range,
     class = c("ds_radf", "list")
   )
 }

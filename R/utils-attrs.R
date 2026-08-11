@@ -75,6 +75,10 @@ get_panel <- function(y) {
   attr(y, "panel")
 }
 
+get_valid_range <- function(x) {
+  attr(x, "valid_range")
+}
+
 get_caveat <- function(x) {
   attr(x, "caveat")
 }

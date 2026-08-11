@@ -73,6 +73,32 @@ assert_na <- function(x) {
   }
 }
 
+# Per-column [start, end] row range of non-NA data, allowing NA only as a
+# contiguous run at the beginning and/or end of a column (an uneven/
+# unbalanced panel where series enter/exit the sample at different times).
+# Errors on an interior NA -- a genuine gap this package doesn't interpolate
+# or skip over. Returns a 2 x ncol(x) matrix (rows "start", "end").
+na_edges <- function(x) {
+  out <- vapply(seq_len(ncol(x)), function(i) {
+    col <- x[, i]
+    valid <- which(!is.na(col))
+    if (length(valid) == 0) {
+      stop_glue("series '{colnames(x)[i]}' is entirely NA")
+    }
+    start <- valid[1L]
+    end <- valid[length(valid)]
+    if (anyNA(col[start:end])) {
+      stop_glue(
+        "series '{colnames(x)[i]}' has an interior NA; NA values are only ",
+        "supported as leading/trailing padding (an uneven panel)"
+      )
+    }
+    c(start = start, end = end)
+  }, numeric(2))
+  colnames(out) <- colnames(x)
+  out
+}
+
 # quantile(), but NA/NaN inputs (e.g. a zero-run in the data causing
 # division by zero in the underlying statistic) are dropped instead of
 # propagating to a NA critical value -- with a warning naming how many
