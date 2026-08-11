@@ -90,3 +90,74 @@ test_that("radf_sign correctly detects a clear mildly explosive alternative
   power <- mean(sapply(1:20, run_once))
   expect_gt(power, 0.7)
 })
+
+test_that("sign_demean_transform() matches a brute-force per-i recursive
+  -mean loop (Harvey, Leybourne, Tatlow & Zu (2025)'s Ctilde_t)", {
+  set.seed(7)
+  y <- cumsum(rnorm(40))
+  s <- sign(diff(y))
+  Tn <- length(s)
+  brute <- numeric(Tn)
+  for (t in seq_len(Tn)) {
+    acc <- 0
+    for (i in seq_len(t)) acc <- acc + (s[i] - mean(s[seq_len(i)]))
+    brute[t] <- acc
+  }
+  expect_equal(exuber:::sign_demean_transform(y), c(0, brute), tolerance = 1e-8)
+})
+
+test_that("radf_sign_dm runs on the package's sim_data and returns finite stats", {
+  res <- radf_sign_dm(dta)
+  expect_s3_class(res, "radf_sign_dm_obj")
+  expect_true(all(is.finite(res$adf)))
+  expect_true(all(is.finite(res$sadf)))
+  expect_true(all(is.finite(res$gsadf)))
+  expect_true(all(res$sadf <= res$gsadf + 1e-8))
+})
+
+test_that("radf_sign_dm() is EXACTLY invariant to the pattern of (even wildly
+  time-varying) volatility, same as radf_sign() -- the recursive demeaning
+  operates only on sign(diff(y)), so it inherits the same magnitude
+  -invariance", {
+  set.seed(7)
+  n <- 150
+  raw_dy <- c(rnorm(90), rnorm(1, mean = 3), rnorm(59))
+  y_homo <- cumsum(raw_dy)
+  vol_pattern <- c(rep(0.1, 40), rep(10, 60), rep(1, n - 100))
+  y_hetero <- cumsum(raw_dy * vol_pattern)
+
+  r_homo <- radf_sign_dm(y_homo, minw = 20)
+  r_hetero <- radf_sign_dm(y_hetero, minw = 20)
+
+  expect_identical(r_homo$sadf, r_hetero$sadf)
+  expect_identical(r_homo$gsadf, r_hetero$gsadf)
+})
+
+test_that("radf_sign_dm correctly detects a clear mildly explosive alternative
+  using its own simulated critical value", {
+  skip_on_cran()
+  cv <- radf_sign_dm_cv(150, minw = 20, nrep = 500, seed = 2)
+  run_once <- function(seed) {
+    set.seed(seed)
+    Tn <- 150
+    Te <- 90
+    normal_part <- cumsum(rnorm(Te))
+    expl_part <- normal_part[Te] * 1.05^(1:(Tn - Te)) + cumsum(rnorm(Tn - Te, sd = 0.5))
+    y <- c(normal_part, expl_part)
+    radf_sign_dm(y, minw = 20)$gsadf > cv$gsadf_cv["95%"]
+  }
+  power <- mean(sapply(1:20, run_once))
+  expect_gt(power, 0.7)
+})
+
+test_that("radf_sign_cv, radf_sign_dm_cv and radf_tt_cv objects print without
+  error -- regression test for a class-tag bug where none of these three
+  had a matching tidy_radf_cv method (only mc_cv/wb_cv/sb_cv did), so
+  print() unconditionally errored despite the object itself being fine",  {
+  cv_sign <- radf_sign_cv(60, nrep = 20, seed = 1)
+  cv_sign_dm <- radf_sign_dm_cv(60, nrep = 20, seed = 1)
+  cv_tt <- radf_tt_cv(60, nrep = 20, seed = 1)
+  expect_output(print(cv_sign))
+  expect_output(print(cv_sign_dm))
+  expect_output(print(cv_tt))
+})

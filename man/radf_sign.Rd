@@ -37,13 +37,38 @@ sign-based test only. \code{sadf} is the single-supremum (\code{r1 = 0}
 fixed) sPWY statistic; \code{gsadf} is the double-supremum sPSY
 statistic.
 }
+\section{Level-shift robustness}{
+
+Harvey, Leybourne, Tatlow & Zu (2025) show this test also retains its
+standard (no-level-shift) null distribution in the presence of
+deterministic level shifts, provided the number of shifts grows
+strictly slower than \code{sqrt(T)} -- regardless of how large the
+shifts are. This is a materially weaker requirement than the standard
+PSY test needs for its own size control, which restricts the number
+\strong{and} the magnitude of shifts jointly; in their simulations the
+standard test is never correctly sized once the number of shifts grows
+at rate \code{sqrt(T)}, while this test stays close to nominal size.
+}
+
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2020). Sign-based
 unit root tests for explosive financial bubbles in the presence of
 deterministically time-varying volatility. Econometric Theory, 36(1),
 122-169.
+
+Harvey, D. I., Leybourne, S. J., Tatlow, D., & Zu, Y. (2025).
+Unit root tests for explosive financial bubbles in the presence of
+deterministic level shifts. Oxford Bulletin of Economics and Statistics,
+87(5), 879-901. \doi{10.1111/obes.12668}
 }
 \seealso{
-\code{\link{radf_sign_cv}} for critical values, and
-\code{\link{radf}} for the standard (non-invariant) test.
+\code{\link{radf_sign_cv}} for critical values,
+\code{\link{radf_sign_dm}} for the recursively demeaned sign-based
+analogue (sharing the same level-shift robustness), and \code{\link{radf}}
+for the standard (non-invariant) test.
 }
