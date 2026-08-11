@@ -5,10 +5,10 @@ test_that("Right output", {
   nm <- c("adf", "badf", "sadf", "bsadf", "gsadf", "bsadf_panel", "gsadf_panel")
   expect_output(str(radf_dta), "List of 7")
   expect_equal(names(radf_dta), nm)
-  expect_output(str(attributes(radf_dta)), "List of 8")
+  expect_output(str(attributes(radf_dta)), "List of 9")
   expect_equal(
     names(attributes(radf_dta)),
-    c("names", "mat", "index", "series_names", "minw", "lag", "n","class")
+    c("names", "mat", "index", "series_names", "minw", "lag", "n", "valid_range", "class")
   )
 })
 
@@ -37,5 +37,18 @@ test_that("class check", {
 })
 
 test_that("NA handling", {
-  expect_error(radf(dta_na), "rls estimation cannot handle NA")
+  # dta_na has a single NA at row 1 (leading position) -- an uneven panel,
+  # not an error: radf() drops the panel statistic (with a warning) and
+  # NA-pads the affected series' badf/bsadf, but still computes it.
+  expect_warning(radf_na <- radf(dta_na), "panel statistic")
+  expect_true(all(is.na(radf_na$bsadf_panel)))
+  expect_true(is.na(radf_na$gsadf_panel))
+  padded_col <- colnames(dta_na)[3]
+  expect_true(is.na(radf_na$badf[1, padded_col]))
+  expect_false(anyNA(radf_na$badf[, setdiff(colnames(dta_na), padded_col)]))
+
+  # an interior NA (a gap in the middle of a series) is still rejected
+  dta_na_interior <- dta
+  dta_na_interior[50, 3] <- NA
+  expect_error(radf(dta_na_interior), "interior NA")
 })
