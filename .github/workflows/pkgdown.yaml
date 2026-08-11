@@ -41,6 +41,17 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      - name: Rebuild reference index (pkgdown alias-redirect clobbers it)
+        # exuber exports index()/`index<-`(), so one of that topic's Rd
+        # aliases is literally "index" -- pkgdown's per-alias redirect step
+        # (reference_redirects()) unconditionally overwrites
+        # reference/index.html with a redirect to that topic's own page,
+        # since it has no check against pkgdown's own reserved page names
+        # (r-lib/pkgdown#1110). Re-running just the reference-index build
+        # after the full site build makes it win the file-write race.
+        run: pkgdown::build_reference_index()
+        shell: Rscript {0}
+
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
