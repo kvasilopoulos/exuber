@@ -45,6 +45,11 @@ not \code{GSSU} (the double-recursion generalization), the paper's
 separate CUSUM/CUSUM-SQ statistics, or the union-of-rejections
 procedure combining SSU/GSSU with SADF/GSADF.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Kurozumi, E., & Nishi, M. (2025). Bubble testing with
 stochastically varying explosive coefficient. Journal of Time Series

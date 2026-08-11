@@ -212,6 +212,9 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' @seealso \code{\link{radf_monitor}} for the recursive-ADF (Family A)
 #' monitoring alternative.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
                         boundary = c("asymptotic", "finite"), level = 0.95,

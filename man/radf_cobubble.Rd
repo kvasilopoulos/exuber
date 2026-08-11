@@ -58,6 +58,11 @@ Sollis 2022, Theorem 1), critical values are obtained via a wild
 bootstrap that reproduces that same heteroskedasticity pattern in the
 bootstrap samples (Theorem 2).
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Evripidou, A. C., Harvey, D. I., Leybourne, S. J., & Sollis,
 R. (2022). Testing for co-explosive behaviour in financial time series.

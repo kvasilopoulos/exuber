@@ -51,6 +51,11 @@ many time-varying-volatility patterns, at the cost of lower power under
 others (e.g. upward volatility trends); \code{U} is designed to capture
 whichever of the two is more powerful for a given series.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2019). Testing
 explosive bubbles with time-varying volatility. Econometric Reviews,

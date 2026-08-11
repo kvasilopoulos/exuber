@@ -34,6 +34,11 @@ converges to the true \emph{collapse} date, not the origination date
 single squared residual at the candidate collapse date from the
 objective before minimising.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Kejriwal, M., Nguyen, L., & Perron, P. (2025). An
 improved procedure for retrospectively dating the emergence and

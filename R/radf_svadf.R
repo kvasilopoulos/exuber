@@ -67,6 +67,8 @@ svadf_threshold <- function(t, type = c("origination", "collapse")) {
 #' \code{badf} below the (lower) collapse threshold.
 #'
 #' @section Caveats:
+#' `r lifecycle::badge("experimental")`
+#'
 #' \code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a
 #' different bar than every other source implemented in this package. The
 #' same note is emitted as a message when this function is called (see
@@ -90,7 +92,7 @@ svadf_threshold <- function(t, type = c("origination", "collapse")) {
 #'
 #' @export
 radf_svadf <- function(data, minw = NULL, min_duration = NULL) {
-  caveat <- "Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section."
+  caveat <- "Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section."
   message_glue(caveat)
 
   x <- parse_data(data)

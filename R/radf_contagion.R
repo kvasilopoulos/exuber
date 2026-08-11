@@ -209,6 +209,9 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' @seealso \code{\link{radf_cobubble}} for a different (symmetric,
 #' hypothesis-testing) bivariate bubble relationship.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @importFrom stats dnorm optimize
 #' @export
 radf_contagion <- function(y, core, S = NULL, d = 0L, h = NULL,

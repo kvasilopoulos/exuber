@@ -158,6 +158,9 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' @seealso \code{\link{radf}} for the deterministic-coefficient
 #' recursive ADF-family alternative this complements.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_ssu <- function(data, minw = NULL, level = 0.95) {
   x <- parse_data(data)

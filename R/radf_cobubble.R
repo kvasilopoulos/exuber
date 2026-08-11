@@ -93,6 +93,9 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' R. (2022). Testing for co-explosive behaviour in financial time series.
 #' Oxford Bulletin of Economics and Statistics, 84(3), 624-650.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_cobubble <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
                            level = 0.05, seed = NULL) {

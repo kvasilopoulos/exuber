@@ -231,6 +231,9 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #' alternative this complements, and \code{\link{datestamp}} for PSY's
 #' original threshold-crossing rule.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_hls <- function(data, trim = 0.05) {
   x <- parse_data(data)

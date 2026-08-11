@@ -34,6 +34,9 @@
 #' @references Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate
 #' explosiveness. The Econometrics Journal, 22(3), 279-303.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 explosive_root <- function(data, from, to) {
   y <- as.numeric(data)[from:to]
@@ -99,6 +102,9 @@ explosive_root <- function(data, from, to) {
 #' moderate deviations from a unit root. Journal of Econometrics, 136(1),
 #' 115-130.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 root_ci <- function(x, level = 0.95, type = c("normal", "cauchy")) {
   type <- match.arg(type)
@@ -162,6 +168,9 @@ root_ci <- function(x, level = 0.95, type = c("normal", "cauchy")) {
 #' \code{doubling_time_lower}, \code{doubling_time_upper}.
 #'
 #' @seealso \code{\link{explosive_root}}, \code{\link{root_ci}}, \code{\link{datestamp}}
+#'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
 #'
 #' @importFrom purrr imap pmap
 #' @export

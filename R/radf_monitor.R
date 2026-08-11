@@ -304,6 +304,9 @@ hb_fluc_q <- function(level, n_train, k) {
 #' and \code{\link{datestamp}} for the (non-monitoring, full-sample)
 #' origination/collapse dating that already exists.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
                           level = 0.95, adflag = 0,

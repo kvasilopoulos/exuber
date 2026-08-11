@@ -60,6 +60,11 @@ hypothesis test) on the contagion coefficient itself -- this is a
 point-estimation and visualization tool, not a test, matching what the
 source paper itself does.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Greenaway-McGrevy, R., & Phillips, P. C. B. (2016). Hot
 property in New Zealand: Empirical evidence of housing bubbles in the

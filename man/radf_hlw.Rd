@@ -57,6 +57,11 @@ When exactly one episode is detected, this reduces to
 stated property, since the single window then runs \code{[1, n]} and
 fits all four models.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Harvey, D. I., Leybourne, S. J., & Whitehouse, E. J.
 (2020). Date-stamping multiple bubble regimes. Journal of Empirical

@@ -43,6 +43,11 @@ from "bubble ongoing at the sample end" (Model 1), which
 joint grid search rather than \code{radf_pdc}'s sequential one-break-
 at-a-time scan.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Harvey, D. I., Leybourne, S. J., & Sollis, R. (2017).
 Improving the accuracy of asset price bubble start and end date
