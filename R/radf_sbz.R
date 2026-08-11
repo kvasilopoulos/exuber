@@ -163,8 +163,8 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
       boot_bz[b] <- wls_dfstat_grid(ystar, vol$sigma2, minw)$sadf
     }
 
-    supDF_cv[j, ] <- quantile(boot_df, pcnt)
-    supBZ_cv[j, ] <- quantile(boot_bz, pcnt)
+    supDF_cv[j, ] <- quantile_narm(boot_df, pcnt)
+    supBZ_cv[j, ] <- quantile_narm(boot_bz, pcnt)
     p_supDF[j] <- mean(boot_df > supDF_obs[j])
     p_supBZ[j] <- mean(boot_bz > supBZ_obs[j])
 
@@ -173,7 +173,7 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
     ratio <- supDF_cv[j, "95%"] / supBZ_cv[j, "95%"]
     U_boot <- pmax(boot_df, ratio * boot_bz)
     U_obs[j] <- max(supDF_obs[j], ratio * supBZ_obs[j])
-    U_cv[j, ] <- quantile(U_boot, pcnt)
+    U_cv[j, ] <- quantile_narm(U_boot, pcnt)
     p_U[j] <- mean(U_boot > U_obs[j])
   }
 

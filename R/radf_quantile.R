@@ -37,7 +37,7 @@
 # machinery.
 
 quantile_check_density <- function(u, tau) {
-  b_tau <- stats::quantile(u, probs = tau, names = FALSE)
+  b_tau <- quantile_narm(u, probs = tau, names = FALSE)
   h <- stats::bw.nrd0(u)
   f_hat <- mean(stats::dnorm((b_tau - u) / h)) / h
   list(b_tau = b_tau, f_hat = f_hat)
@@ -137,12 +137,12 @@ radf_quantile <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
     yPzy <- sum((ylag - mean(ylag))^2)
     tstat_j <- (f_hat / sqrt(tau_j * (1 - tau_j))) * sqrt(yPzy) * (alpha_hat - 1)
 
-    psi <- tau_j - as.numeric(dy < stats::quantile(dy, probs = tau_j, names = FALSE))
+    psi <- tau_j - as.numeric(dy < quantile_narm(dy, probs = tau_j, names = FALSE))
     delta_j <- max(min(stats::cor(dy, psi), 1), -1)
 
     z <- stats::rnorm(nrep)
     U <- sqrt(1 - delta_j^2) * z + delta_j * Q
-    crit_j <- unname(stats::quantile(U, probs = level / 100, names = FALSE))
+    crit_j <- unname(quantile_narm(U, probs = level / 100, names = FALSE))
 
     tstat[j] <- tstat_j; crit[j] <- crit_j; delta[j] <- delta_j
     tau_used[j] <- tau_j; detected[j] <- tstat_j > crit_j

@@ -145,9 +145,9 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   gsadf <- vapply(results, `[[`, numeric(1), "gsadf")
 
   list(
-    adf_cv = quantile(adf, probs = pcnt, drop = FALSE),
-    sadf_cv = quantile(sadf, probs = pcnt, drop = FALSE),
-    gsadf_cv = quantile(gsadf, probs = pcnt, drop = FALSE)
+    adf_cv = quantile_narm(adf, probs = pcnt, drop = FALSE),
+    sadf_cv = quantile_narm(sadf, probs = pcnt, drop = FALSE),
+    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE)
   ) %>%
     add_attr(method = "Sign-Based MC", n = n, minw = minw, iter = nrep) %>%
     add_class("radf_cv", "sign_cv")

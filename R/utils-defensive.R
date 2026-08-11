@@ -73,6 +73,23 @@ assert_na <- function(x) {
   }
 }
 
+# quantile(), but NA/NaN inputs (e.g. a zero-run in the data causing
+# division by zero in the underlying statistic) are dropped instead of
+# propagating to a NA critical value -- with a warning naming how many
+# replicates were lost, so a degenerate simulation stays visible instead of
+# silently returning a critical value estimated from a handful of survivors.
+quantile_narm <- function(x, probs, ...) {
+  n_bad <- sum(is.na(x))
+  if (n_bad > 0) {
+    warning_glue(
+      "{n_bad} of {length(x)} replicate(s) produced NA/NaN and were dropped ",
+      "before computing the critical value; treat the result with caution ",
+      "if this is a large share of replicates."
+    )
+  }
+  stats::quantile(x, probs = probs, na.rm = TRUE, ...)
+}
+
 
 # Model matching ----------------------------------------------------------
 

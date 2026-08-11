@@ -113,12 +113,12 @@ radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
 
   results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed, lag = lag)
 
-  adf_crit <- quantile(results$adf, probs = pcnt, drop = FALSE)
-  sadf_crit <- quantile(results$sadf, probs = pcnt, drop = FALSE)
-  gsadf_crit <- quantile(results$gsadf, probs = pcnt, drop = FALSE)
+  adf_crit <- quantile_narm(results$adf, probs = pcnt, drop = FALSE)
+  sadf_crit <- quantile_narm(results$sadf, probs = pcnt, drop = FALSE)
+  gsadf_crit <- quantile_narm(results$gsadf, probs = pcnt, drop = FALSE)
 
   bsadf_crit <- apply(results$badf, 2, cummax) %>%
-    apply(1, quantile, probs = pcnt) %>% t()
+    apply(1, quantile_narm, probs = pcnt) %>% t()
   # values taken from PWY
   asy_adf_crit <- rep(
     c(-0.44, -0.08, 0.6),
