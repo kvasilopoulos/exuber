@@ -36,26 +36,30 @@ est_stocks <- radf(stocks, lag = 1)
 
 ## Analysis
 
-The summary will print the test statistic and the critical values for 10%, 5% and 1% significance level. The package provides simulated critical values for up to 600 observations, so we use them by omitting the `cv` argument in the `summary` function. 
+The summary will print the test statistic and the critical values for 10%, 5% and 1% significance level. For a plain recursive ADF (`lag = 0`) and up to 600 observations, the package ships pre-simulated critical values that `summary()`/`diagnostics()`/`datestamp()`/`autoplot()` use automatically when `cv` is omitted. With `lag = 1` (as estimated above), critical values instead need to be simulated for this specific `(n, lag)` combination -- `radf_mc_cv()` does that locally, and we pass the result via `cv` to every downstream call.
+
+```{r cv}
+cv_stocks <- radf_mc_cv(NROW(stocks), lag = 1)
+```
 
 ```{r summary}
-summary(est_stocks)
+summary(est_stocks, cv = cv_stocks)
 ```
 
 It seems that all stocks exhibit exuberant behaviour but we can also verify it using `diagnostics()`. This function is particularly useful when we deal a large number of series.
 
 ```{r diagnostics}
-diagnostics(est_stocks)
+diagnostics(est_stocks, cv = cv_stocks)
 ```
 
 
-If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner with `summary()` and `diagnostics()`. The user still has to specify the critical values, however we can still utilize the package's critical values by leaving the cv-argument blank.
+If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner with `summary()` and `diagnostics()`.
 
 ```{r datestamp}
-# Minimum duration of an explosive period 
+# Minimum duration of an explosive period
 rot = psy_ds(stocks) # log(n) ~ rule of thumb
 
-dstamp_stocks <- datestamp(est_stocks, min_duration = rot)
+dstamp_stocks <- datestamp(est_stocks, cv = cv_stocks, min_duration = rot)
 dstamp_stocks
 ```
 We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.
@@ -70,12 +74,12 @@ tail(dummy)
 The `autoplot` function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.
 
 ```{r plot-radf, fig.width = 9}
-autoplot(est_stocks)
+autoplot(est_stocks, cv = cv_stocks)
 ```
 
 Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.
 
 ```{r plot-datestaemp, fig.width = 7, fig.height=2}
-datestamp(est_stocks) %>% 
+datestamp(est_stocks, cv = cv_stocks) %>%
   autoplot()
 ```
