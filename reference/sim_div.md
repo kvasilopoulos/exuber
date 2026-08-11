@@ -43,7 +43,7 @@ sim_div(
 - output:
 
   A character string giving the fundamental price("pf") or dividend
-  series("d"). Default is \`pf'.
+  series("d"). Default is `pf`.
 
 - seed:
 
