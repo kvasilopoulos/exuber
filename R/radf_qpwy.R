@@ -153,7 +153,7 @@ radf_qpwy <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 95, see
     stat_path[, j] <- qpwy_stat_path(y, tau, r_idx)
 
     dy_full <- diff(y)
-    psi <- tau - as.numeric(dy_full < stats::quantile(dy_full, probs = tau, names = FALSE))
+    psi <- tau - as.numeric(dy_full < quantile_narm(dy_full, probs = tau, names = FALSE))
     delta_j <- max(min(stats::cor(dy_full, psi), 1), -1)
     delta[j] <- delta_j
 
@@ -168,7 +168,7 @@ radf_qpwy <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 95, see
     # maxima across replicates, giving one flat critical value.
     U <- sqrt(1 - delta_j^2) * z + delta_j * Q
     sup_U <- apply(U, 1, max)
-    boundary[j] <- stats::quantile(sup_U, probs = level / 100, names = FALSE)
+    boundary[j] <- quantile_narm(sup_U, probs = level / 100, names = FALSE)
 
     breach <- which(stat_path[, j] > boundary[j])
     if (length(breach) > 0L) alarm[j] <- r_idx[breach[1L]]

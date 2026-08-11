@@ -123,7 +123,7 @@ radf_cobubble <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
     boot_S[b] <- coexplosive_stat_aligned(ystar, xreg)$S
   }
 
-  cv <- quantile(boot_S, 1 - level, names = FALSE)
+  cv <- quantile_narm(boot_S, 1 - level, names = FALSE)
   p_value <- mean(boot_S > fit$S)
 
   list(

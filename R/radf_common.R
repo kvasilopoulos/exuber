@@ -129,15 +129,15 @@ radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
   })
 
   n_minw <- n - minw
-  adf_crit <- quantile(results[1, ], probs = pcnt, drop = FALSE)
-  sadf_crit <- quantile(results[2, ], probs = pcnt, drop = FALSE)
-  gsadf_crit <- quantile(results[3, ], probs = pcnt, drop = FALSE)
+  adf_crit <- quantile_narm(results[1, ], probs = pcnt, drop = FALSE)
+  sadf_crit <- quantile_narm(results[2, ], probs = pcnt, drop = FALSE)
+  gsadf_crit <- quantile_narm(results[3, ], probs = pcnt, drop = FALSE)
 
   badf_mat <- results[3 + seq_len(n_minw), , drop = FALSE]
   bsadf_mat <- results[3 + n_minw + seq_len(n_minw), , drop = FALSE]
 
   bsadf_crit <- apply(bsadf_mat, 2, cummax) %>%
-    apply(1, quantile, probs = pcnt) %>% t()
+    apply(1, quantile_narm, probs = pcnt) %>% t()
   asy_adf_crit <- rep(c(-0.44, -0.08, 0.6), each = nrow(bsadf_crit))
   badf_crit <- matrix(
     asy_adf_crit, ncol = 3,
