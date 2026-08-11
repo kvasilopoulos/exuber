@@ -74,6 +74,9 @@ hlw_local_to_global <- function(local_tau, s) {
 #' wraps, and \code{\link{datestamp}} for PSY's own multi-bubble
 #' threshold-crossing dating.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
                       min_duration = NULL, nboot = 199L, seed = NULL) {

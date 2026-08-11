@@ -129,6 +129,9 @@ wls_dfstat_grid <- function(y, sigma2, minw) {
 #' bootstrap, and \code{\link{radf_tt}} for a bootstrap-free
 #' heteroskedasticity-robust alternative.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", "uniform"),
                          h = NULL, seed = NULL) {

@@ -52,6 +52,11 @@ obtained by transforming the endpoints of the \eqn{\hat\rho} interval
 upper doubling-time bounds come from the upper and lower \eqn{\rho} bounds,
 respectively).
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate
 explosiveness. The Econometrics Journal, 22(3), 279-303.

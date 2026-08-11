@@ -40,6 +40,11 @@ simulated null path before running the recursive computation, since
 reversal induces an endogeneity with no forward-regression analogue
 (see \code{\link{radf_recovery}}'s Details).
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \seealso{
 \code{\link{radf_recovery}}, \code{\link{radf_mc_cv}}
 }

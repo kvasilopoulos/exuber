@@ -101,6 +101,11 @@ detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
 their Table 7 (no detrending case) rather than a simulated one.
 \code{level} must be one of \code{0.90}, \code{0.95}, \code{0.99}.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Phillips, P. C., & Shi, S. (2020). Real time monitoring of
 asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42,

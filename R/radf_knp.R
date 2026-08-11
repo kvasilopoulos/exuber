@@ -95,6 +95,9 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' @seealso \code{\link{radf_hls}}, \code{\link{radf_pdc}} for related
 #' SSR-based dating approaches.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_knp <- function(data, trim = 0.05, omit = TRUE) {
   x <- parse_data(data)

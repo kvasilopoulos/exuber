@@ -35,6 +35,11 @@ exponentially-weighted extension for monitoring an unknown start
 date, whose exact weighting scheme and boundary constant are not
 pinned down here and are not implemented.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Breitung, J., & Diegel, M. (2025). A locally best
 invariant sequential test for explosive behavior in the presence of

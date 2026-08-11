@@ -59,6 +59,11 @@ standard demeaned Dickey-Fuller t-statistic distribution, simulated by
 the same random-walk-plus-OLS-t-stat construction used elsewhere in
 this package (see \code{\link{radf_mc_cv}}).
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \references{
 Wu, R., Shi, S., & Wu, J. (2025). Quantile analysis for
 financial bubble detection and surveillance. Journal of Time Series

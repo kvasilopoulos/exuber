@@ -15,7 +15,14 @@ radf_recovery(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. The object should not have any NA values.}
+vector or matrix, or a data.frame. A column may have leading and/or trailing
+\code{NA} values (an uneven/unbalanced panel where series enter or exit the
+sample at different times) -- those periods are filled with \code{NA} in
+\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
+\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
+not supported. When any series is padded this way, the panel statistic
+(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
+\code{NA}, with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
@@ -58,6 +65,8 @@ sample is exhausted, \code{f_c} is \code{NA} and \code{censored = TRUE}
 (the crisis origination predates the observed sample).
 }
 \section{Caveats}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 \strong{Validation status (2026-08-10), reported honestly rather than
 silently}: \code{f_r} (recovery date) validates well against synthetic

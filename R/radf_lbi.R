@@ -56,6 +56,9 @@
 #' @seealso \code{\link{radf}} for the recursive ADF-family alternative
 #' this complements.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @importFrom stats qnorm
 #' @export
 radf_lbi <- function(data, level = 0.95) {
@@ -210,6 +213,9 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' bubble window) version. \code{\link{radf_cusum}} and
 #' \code{\link{radf_monitor}} for structurally different monitoring
 #' detectors.
+#'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
 #'
 #' @export
 radf_lbi_monitor <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {

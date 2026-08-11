@@ -98,6 +98,9 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' the same way \code{\link{radf_mc_cv}}'s own \code{bsadf_cv} aligns to
 #' \code{radf()$bsadf}.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @seealso \code{\link{radf_recovery}}, \code{\link{radf_mc_cv}}
 #'
 #' @importFrom stats quantile rnorm
@@ -141,6 +144,8 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' (the crisis origination predates the observed sample).
 #'
 #' @section Caveats:
+#' `r lifecycle::badge("experimental")`
+#'
 #' \strong{Validation status (2026-08-10), reported honestly rather than
 #' silently}: \code{f_r} (recovery date) validates well against synthetic
 #' collapse-then-recovery data -- bias in the same range the paper's own
@@ -185,7 +190,7 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' @export
 radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
                            sig_lvl = 95, seed = NULL) {
-  caveat <- "f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section."
+  caveat <- "Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section."
   message_glue(caveat)
 
   stopifnot(sig_lvl %in% c(90, 95, 99))

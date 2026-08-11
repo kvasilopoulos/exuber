@@ -49,6 +49,11 @@ points) -- this function doesn't filter episodes itself, since
 exactly this; set it there before piping into this function, rather than
 expecting this function to second-guess what counts as "too short".
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \seealso{
 \code{\link{explosive_root}}, \code{\link{root_ci}}, \code{\link{datestamp}}
 }

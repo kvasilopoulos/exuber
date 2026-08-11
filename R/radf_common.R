@@ -41,6 +41,9 @@
 #' @seealso \code{\link{radf}} for the underlying (unmodified) test, and
 #' \code{\link{radf_mc_cv}} for its critical values.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @export
 radf_common <- function(data, minw = NULL, r = 1) {
   x <- parse_data(data)
@@ -96,6 +99,9 @@ radf_common <- function(data, minw = NULL, r = 1) {
 #' Financial Econometrics, 21(4), 989-1063.
 #'
 #' @seealso \code{\link{radf_common}}, \code{\link{radf_mc_cv}}
+#'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
 #'
 #' @importFrom foreach foreach
 #' @importFrom doFuture `%dofuture%`
