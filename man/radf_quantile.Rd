@@ -15,7 +15,14 @@ radf_quantile(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. The object should not have any NA values.}
+vector or matrix, or a data.frame. A column may have leading and/or trailing
+\code{NA} values (an uneven/unbalanced panel where series enter or exit the
+sample at different times) -- those periods are filled with \code{NA} in
+\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
+\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
+not supported. When any series is padded this way, the panel statistic
+(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
+\code{NA}, with a warning.}
 
 \item{tau}{Quantile to test at, in \code{(0, 1)}, or \code{"optimal"}
 (default) to select it via eq. 33's grid search.}
