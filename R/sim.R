@@ -857,7 +857,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
 #' @param r A positive value indicating the discount factor.
 #' @param log Logical. If true dividends follow a lognormal distribution.
 #' @param output A character string giving the fundamental price("pf") or
-#' dividend series("d"). Default is `pf'.
+#' dividend series("d"). Default is `pf`.
 #'
 #' @return A numeric vector of length n.
 #' @export
