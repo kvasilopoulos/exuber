@@ -163,8 +163,8 @@ radf_sb_cv <- function(data, minw = NULL, lag = 0L,
 
   pcnt <- c(0.9, 0.95, 0.99)
 
-  bsadf_crit <- apply(results$bsadf_panel, 1, quantile, probs = pcnt) %>% t()
-  gsadf_crit <- quantile(results$gsadf_panel, probs = pcnt)
+  bsadf_crit <- apply(results$bsadf_panel, 1, quantile_narm, probs = pcnt) %>% t()
+  gsadf_crit <- quantile_narm(results$gsadf_panel, probs = pcnt)
 
     list(gsadf_panel_cv = gsadf_crit,
          bsadf_panel_cv = bsadf_crit) %>%
