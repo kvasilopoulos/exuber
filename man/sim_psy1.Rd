@@ -11,7 +11,11 @@ sim_psy1(
   c = 1,
   alpha = 0.6,
   sigma = 6.79,
-  seed = NULL
+  seed = NULL,
+  e = NULL,
+  shifts = NULL,
+  coef_noise = NULL,
+  coef_a = 1
 )
 }
 \arguments{
@@ -33,6 +37,30 @@ should be initialized. Either NULL or an integer will be used in a call to
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
+
+\item{e}{An optional numeric vector of length \code{n - 1} of innovations
+to use in place of \code{rnorm(n - 1, sd = sigma)}. Lets the plain PSY
+equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
+sequence instead of i.i.d. Gaussian noise -- see \code{\link{sim_innov}}
+(heavy-tailed/skewed), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
+\code{\link{sim_vol_cir}}/\code{\link{sim_vol_sv}} (stochastic volatility)
+and \code{\link{sim_fi}} (long-memory) for ready-made generators. Default
+\code{NULL} reproduces the plain i.i.d. Gaussian DGP exactly.}
+
+\item{shifts}{An optional data frame/list with integer element/column
+\code{date} (in \code{2:n}) and numeric element/column \code{size}, adding
+a one-period deterministic level shift of magnitude \code{size} at each
+\code{date} -- Harvey, Leybourne, Tatlow & Zu (2025)'s level-shift DGP.
+Default \code{NULL} adds no shifts.}
+
+\item{coef_noise}{An optional numeric vector of length \code{n - 1},
+mean-zero/unit-variance, perturbing the explosive-regime coefficient as
+\code{delta + coef_a * coef_noise[t] / sqrt(n)} instead of the fixed
+\code{delta} -- Kurozumi & Nishi (2025)'s stochastically varying explosive
+coefficient. Default \code{NULL} keeps \code{delta} fixed.}
+
+\item{coef_a}{A positive scalar scaling \code{coef_noise}. Ignored if
+\code{coef_noise} is \code{NULL}.}
 }
 \value{
 A numeric vector of length n.
@@ -76,6 +104,14 @@ sim_psy1(n = 200, seed = 123) \%>\%
 
 # 200 periods with bubble origination date 100 and termination date 150
 sim_psy1(n = 200, te = 100, tf = 150, seed = 123) \%>\%
+  autoplot()
+
+# Same DGP, driven by GARCH(1,1) innovations instead of i.i.d. Gaussian
+sim_psy1(n = 200, seed = 123, e = sim_vol_garch(199, seed = 123)) \%>\%
+  autoplot()
+
+# Same DGP, with two deterministic level shifts
+sim_psy1(n = 200, seed = 123, shifts = list(date = c(50, 150), size = c(20, -20))) \%>\%
   autoplot()
 }
 \references{

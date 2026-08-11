@@ -140,13 +140,24 @@ export(scale_exuber_manual)
 export(series_names)
 export(shade)
 export(sim_blan)
+export(sim_coexplosive)
+export(sim_common)
 export(sim_dgp1)
 export(sim_dgp2)
 export(sim_div)
 export(sim_evans)
+export(sim_falsebubble)
+export(sim_fi)
+export(sim_innov)
+export(sim_mar)
+export(sim_msbubble)
 export(sim_ps1)
 export(sim_psy1)
 export(sim_psy2)
+export(sim_tree)
+export(sim_vol_cir)
+export(sim_vol_garch)
+export(sim_vol_sv)
 export(theme_exuber)
 export(tidy)
 export(tidy_join)
@@ -247,12 +258,16 @@ importFrom(stats,
   is.ts,
   lm,
   optimize,
+  pnorm,
   qnorm,
   quantile,
   rbinom,
+  rcauchy,
   reorder,
   residuals,
+  rlnorm,
   rnorm,
+  rt,
   runif,
   time
 )
