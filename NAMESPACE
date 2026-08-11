@@ -204,6 +204,7 @@ importFrom(ggplot2,
   scale_size_manual
 )
 importFrom(glue,glue)
+importFrom(lifecycle,badge)
 importFrom(lubridate,
   date_decimal,
   is.Date,

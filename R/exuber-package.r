@@ -14,6 +14,7 @@
 #' @name exuber
 #' @useDynLib exuber, .registration = TRUE
 #' @importFrom Rcpp evalCpp
+#' @importFrom lifecycle badge
 #' @docType package
 #' @keywords internal
 "_PACKAGE"
