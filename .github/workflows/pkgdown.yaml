@@ -48,8 +48,16 @@ jobs:
         # reference/index.html with a redirect to that topic's own page,
         # since it has no check against pkgdown's own reserved page names
         # (r-lib/pkgdown#1110). Re-running just the reference-index build
-        # after the full site build makes it win the file-write race.
-        run: pkgdown::build_reference_index()
+        # after the full site build would fix this, but write_if_different()
+        # refuses to overwrite an existing file unless made_by_pkgdown()
+        # recognizes its signature comment -- which the redirect template
+        # doesn't have, so it gets silently skipped instead. Deleting the
+        # clobbered file first means made_by_pkgdown() short-circuits to
+        # TRUE (no file = nothing to protect), so the real index can be
+        # written.
+        run: |
+          unlink("docs/reference/index.html")
+          pkgdown::build_reference_index()
         shell: Rscript {0}
 
       - name: Deploy to GitHub pages 🚀
