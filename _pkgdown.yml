@@ -49,6 +49,8 @@ reference:
       - radf_kp
       - radf_sign
       - radf_sign_cv
+      - radf_sign_dm
+      - radf_sign_dm_cv
       - radf_ssu
       - radf_svadf
 
@@ -121,6 +123,25 @@ reference:
       - sim_blan
       - sim_evans
       - sim_div
+
+  - title: Simulation (additional DGPs)
+    desc: >
+      Data-generating processes for axes exuber's original sim_*()
+      functions don't cover -- time-varying volatility, non-Gaussian
+      innovations, long memory, and distinct multi-series/branching
+      mechanisms; see docs/enhancements/simulation-dgps.md
+    contents:
+      - sim_innov
+      - sim_vol_garch
+      - sim_vol_cir
+      - sim_vol_sv
+      - sim_fi
+      - sim_common
+      - sim_coexplosive
+      - sim_tree
+      - sim_mar
+      - sim_msbubble
+      - sim_falsebubble
 
   - title: Helpers
     contents:
