@@ -26,7 +26,7 @@ sim_div(
 \item{log}{Logical. If true dividends follow a lognormal distribution.}
 
 \item{output}{A character string giving the fundamental price("pf") or
-dividend series("d"). Default is `pf'.}
+dividend series("d"). Default is \code{pf}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
 should be initialized. Either NULL or an integer will be used in a call to

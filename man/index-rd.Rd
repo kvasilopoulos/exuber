@@ -15,7 +15,7 @@ index(x) <- value
 
 \item{...}{Further arguments passed to methods.}
 
-\item{value}{An ordered vector of the same length as the `index' attribute of x.}
+\item{value}{An ordered vector of the same length as the \code{index} attribute of x.}
 }
 \description{
 Retrieve or replace the index of an object.
@@ -23,6 +23,6 @@ Retrieve or replace the index of an object.
 \details{
 If the user does not specify an index for the estimation a
 pseudo-index is generated which is a sequential numeric series. After the estimation,
-the user can use \code{index} to retrieve or \code{`index<-`} to replace the index.
+the user can use \code{index()} to retrieve or \verb{index<-()} to replace the index.
 The index can be either numeric or Date.
 }
