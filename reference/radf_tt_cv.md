@@ -1,7 +1,9 @@
 # Monte Carlo critical values for the time-transformed test (STADF/GSTADF)
 
-Simulates the asymptotic null distribution of the GLS-demeaned recursive
-sup-ADF statistic used by
+This is the dedicated critical-value function for
+[`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md).
+It simulates the asymptotic null distribution of the GLS-demeaned
+recursive sup-ADF statistic used by
 [`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md).
 Per Theorem 1 of Kurozumi, Skrobotov & Tsarev, this distribution is free
 of the volatility process (pivotal), so – unlike
@@ -55,3 +57,18 @@ Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed Test
 for Bubbles under Non-stationary Volatility. Journal of Financial
 Econometrics.
 [doi:10.1093/jjfinec/nbae026](https://doi.org/10.1093/jjfinec/nbae026)
+
+## Examples
+
+``` r
+# \donttest{
+cv <- radf_tt_cv(n = 100, minw = 20)
+tidy(cv)
+#> # A tibble: 3 × 4
+#>   sig     adf  sadf gsadf
+#>   <fct> <dbl> <dbl> <dbl>
+#> 1 90    0.889  2.16  2.86
+#> 2 95    1.26   2.58  3.22
+#> 3 99    2.16   3.28  4.01
+# }
+```

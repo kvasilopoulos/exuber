@@ -206,6 +206,40 @@ and <code><a href="datestamp.html">datestamp</a></code> for the (non-monitoring,
 origination/collapse dating that already exists.</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Default: Phillips &amp; Shi (2020) wild bootstrap boundary</span></span></span>
+<span class="r-in"><span><span class="va">mon</span> <span class="op">&lt;-</span> <span class="fu">radf_monitor</span><span class="op">(</span><span class="va">sim_data</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, nboot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mon</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = bootstrap) ──</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series  boundary  alarm  alarm_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1     1.852     51          51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2     1.867     65          65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans     2.565     67          67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div     1.786     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan     2.459     85          85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Kurozumi (2020) closed-form boundary -- no bootstrap needed</span></span></span>
+<span class="r-in"><span><span class="va">mon_kz</span> <span class="op">&lt;-</span> <span class="fu">radf_monitor</span><span class="op">(</span><span class="va">sim_data</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mon_kz</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = kurozumi) ───</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series  boundary  alarm  alarm_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1     1.038     51          51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

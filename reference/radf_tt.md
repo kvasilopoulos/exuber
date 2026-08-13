@@ -43,6 +43,18 @@ radf_tt(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL)
   `T^(-2/5)`, the midpoint (on the log scale) of the paper's
   cross-validation search range \\\[T^{-0.5}, T^{-0.3}\]\\.
 
+## Details
+
+For critical values, use
+[`radf_tt_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+as the primary recommendation: it is pivotal (asymptotically free of the
+volatility process), so it does not need to be recomputed per dataset,
+unlike a bootstrap.
+[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
+(Harvey, Leybourne, Sollis & Taylor's wild bootstrap) is a
+bootstrap-based alternative, worth considering if
+non-pivotality/finite-sample bootstrap robustness is a specific concern.
+
 ## References
 
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed Test
@@ -57,3 +69,27 @@ for the (pivotal, bootstrap-free) asymptotic critical values, and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
 for the bootstrap-based alternative (Harvey, Leybourne, Sollis &
 Taylor).
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_tt(sim_data, minw = 20)
+print(res)
+#> 
+#> ── radf_tt (minw = 20, kernel = uniform) ───────────────────────────────────────
+#> 
+#>   series      adf    sadf  gsadf
+#>     psy1  -1.0366  1.2750  2.204
+#>     psy2  -0.8600  2.5960  3.505
+#>    evans  -1.3349  1.6556  1.883
+#>      div   0.7217  2.3440  2.344
+#>     blan  -1.3363  0.4998  1.541
+#> 
+
+cv <- radf_tt_cv(n = 100, minw = 20)
+summary(res, cv = cv)
+#> Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"): Join columns in `y` must be present in the data.
+#> ✖ Problem with `id`.
+# }
+```

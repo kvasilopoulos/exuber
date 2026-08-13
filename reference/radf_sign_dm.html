@@ -107,6 +107,13 @@ though both are asymptotically level-shift robust under the same
 condition.</p>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>Needs <code><a href="radf_sign_dm_cv.html">radf_sign_dm_cv</a></code> for critical values (not
+<code><a href="radf_sign_cv.html">radf_sign_cv</a></code>, which is calibrated to the non-demeaned
+<code><a href="radf_sign.html">radf_sign</a></code> statistic instead) – pivotal like
+<code>radf_sign</code>, so no per-dataset bootstrap is needed.</p>
+    </div>
+    <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
 
 
@@ -129,6 +136,30 @@ deterministic level shifts. Oxford Bulletin of Economics and Statistics,
 <code><a href="radf_sign.html">radf_sign</a></code> for the non-demeaned sign-based analogue.</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_sign_dm</span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_sign_dm (minw = 20) ────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series       adf     sadf  gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  -0.07152   2.1729  2.976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2   1.47812   3.0005  3.433</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  -2.14492  -0.9121  1.149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div  -1.05486   2.3305  2.369</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  -0.17252   1.3508  1.489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf_sign_dm_cv.html">radf_sign_dm_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"):</span> Join columns in `y` must be present in the data.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Problem with `id`.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

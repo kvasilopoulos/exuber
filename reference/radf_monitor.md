@@ -152,3 +152,37 @@ for the underlying wild bootstrap, and
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for the (non-monitoring, full-sample) origination/collapse dating that
 already exists.
+
+## Examples
+
+``` r
+# \donttest{
+# Default: Phillips & Shi (2020) wild bootstrap boundary
+mon <- radf_monitor(sim_data, r_star = 0.5, nboot = 200)
+print(mon)
+#> 
+#> ── radf_monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = bootstrap) ──
+#> 
+#>   series  boundary  alarm  alarm_date
+#>     psy1     1.852     51          51
+#>     psy2     1.867     65          65
+#>    evans     2.565     67          67
+#>      div     1.786     NA        <NA>
+#>     blan     2.459     85          85
+#> 
+
+# Kurozumi (2020) closed-form boundary -- no bootstrap needed
+mon_kz <- radf_monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+print(mon_kz)
+#> 
+#> ── radf_monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = kurozumi) ───
+#> 
+#>   series  boundary  alarm  alarm_date
+#>     psy1     1.038     51          51
+#>     psy2     1.038     NA        <NA>
+#>    evans     1.038     NA        <NA>
+#>      div     1.038     NA        <NA>
+#>     blan     1.038     NA        <NA>
+#> 
+# }
+```

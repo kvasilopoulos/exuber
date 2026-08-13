@@ -116,6 +116,13 @@ fixed) sPWY statistic; <code>gsadf</code> is the double-supremum sPSY
 statistic.</p>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>Needs <code><a href="radf_sign_cv.html">radf_sign_cv</a></code> for critical values, not
+<code><a href="radf_wb_cv.html">radf_wb_cv</a></code> or any other bootstrap – the statistic is
+pivotal (exactly invariant to heteroskedasticity), so its critical
+values are simulated once, not per dataset.</p>
+    </div>
+    <div class="section level2">
     <h2 id="level-shift-robustness">Level-shift robustness<a class="anchor" aria-label="anchor" href="#level-shift-robustness"></a></h2>
 
 
@@ -154,6 +161,30 @@ analogue (sharing the same level-shift robustness), and <code><a href="radf.html
 for the standard (non-invariant) test.</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_sign</span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_sign (minw = 20) ───────────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series      adf    sadf   gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  -0.1516  0.9367   2.021</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2   2.5578  6.4212  13.985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans   4.8486  5.7582   6.852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div   1.1346  2.7920   2.950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan   3.3805  3.3805   3.684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf_sign_cv.html">radf_sign_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"):</span> Join columns in `y` must be present in the data.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Problem with `id`.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

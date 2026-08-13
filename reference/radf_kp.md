@@ -89,3 +89,72 @@ for this test's (unmodified) critical values,
 for a bootstrap-based alternative, and
 [`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
 for another bootstrap-free alternative.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_kp(sim_data, minw = 20)
+print(res)
+#> 
+#> ── radf (minw = 20, lag = 0) ───────────────────────────────────────────────────
+#> 
+#>      id      adf     sadf   gsadf
+#>    psy1  -0.4387   0.1754  1.6743
+#>    psy2  -2.4026   0.9183  2.0255
+#>   evans  -1.9339  -0.7140  0.4889
+#>     div  -2.3185   0.5835  0.8997
+#>    blan  -2.4701  -1.4602  0.4523
+#> 
+#>   gsadf_panel
+#>     -0.002803
+#> 
+
+# radf_mc_cv() applies unmodified -- see Details
+cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
+summary(res, cv = cv)
+#> 
+#> ── Summary (minw = 20, lag = 0) ─────────────────── Monte Carlo (nrep = 1000) ──
+#> 
+#> psy1 :
+#> # A tibble: 3 × 5
+#>   stat   tstat   `90`    `95`  `99`
+#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -0.439 -0.512 -0.0484 0.534
+#> 2 sadf   0.175  1.01   1.38   2.03 
+#> 3 gsadf  1.67   1.66   1.95   2.61 
+#> 
+#> psy2 :
+#> # A tibble: 3 × 5
+#>   stat   tstat   `90`    `95`  `99`
+#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -2.40  -0.512 -0.0484 0.534
+#> 2 sadf   0.918  1.01   1.38   2.03 
+#> 3 gsadf  2.03   1.66   1.95   2.61 
+#> 
+#> evans :
+#> # A tibble: 3 × 5
+#>   stat   tstat   `90`    `95`  `99`
+#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -1.93  -0.512 -0.0484 0.534
+#> 2 sadf  -0.714  1.01   1.38   2.03 
+#> 3 gsadf  0.489  1.66   1.95   2.61 
+#> 
+#> div :
+#> # A tibble: 3 × 5
+#>   stat   tstat   `90`    `95`  `99`
+#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -2.32  -0.512 -0.0484 0.534
+#> 2 sadf   0.584  1.01   1.38   2.03 
+#> 3 gsadf  0.900  1.66   1.95   2.61 
+#> 
+#> blan :
+#> # A tibble: 3 × 5
+#>   stat   tstat   `90`    `95`  `99`
+#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -2.47  -0.512 -0.0484 0.534
+#> 2 sadf  -1.46   1.01   1.38   2.03 
+#> 3 gsadf  0.452  1.66   1.95   2.61 
+#> 
+# }
+```

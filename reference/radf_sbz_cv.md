@@ -74,6 +74,14 @@ radf_sbz_cv(
 A list with bootstrap p-values (`p_supDF`, `p_supBZ`, `p_U`) and
 critical values (`supDF_cv`, `supBZ_cv`, `U_cv`) for each series.
 
+## Note
+
+This function bundles the statistic and its critical values in a single
+call – there is no separate un-cv'd statistic function and no other
+critical-value function to pair it with, unlike
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/
+[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md).
+
 ## Status
 
 **\[experimental\]**
@@ -90,3 +98,22 @@ bubbles with time-varying volatility. Econometric Reviews, 38(10),
 for the underlying (supDF-only) wild bootstrap, and
 [`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
 for a bootstrap-free heteroskedasticity-robust alternative.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_sbz_cv(sim_data, nboot = 200)
+print(res)
+#> 
+#> ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────
+#> 
+#>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U
+#>     psy1  1.946  0.2802  1.946    0.045    0.580  0.070
+#>     psy2  7.880  1.5349  7.880    0.000    0.175  0.000
+#>    evans  5.283  1.9138  5.283    0.085    0.285  0.120
+#>      div  1.113  2.2607  1.336    0.100    0.080  0.110
+#>     blan  3.930  1.4008  3.930    0.060    0.235  0.085
+#> 
+# }
+```

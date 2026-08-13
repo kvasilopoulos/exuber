@@ -79,3 +79,18 @@ Econometrics, 21(4), 989-1063.
 
 [`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md),
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+
+## Examples
+
+``` r
+# \donttest{
+cv <- radf_common_cv(n = 100, N = 5, minw = 20, nrep = 200)
+tidy(cv)
+#> # A tibble: 3 × 4
+#>   sig     adf  sadf gsadf
+#>   <fct> <dbl> <dbl> <dbl>
+#> 1 90    0.529  1.87  2.37
+#> 2 95    0.834  2.10  2.79
+#> 3 99    1.21   2.90  3.07
+# }
+```

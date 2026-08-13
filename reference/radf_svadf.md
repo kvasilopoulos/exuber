@@ -58,6 +58,16 @@ is dated (searching only after the origination date) at the first run of
 at least `min_duration` consecutive points with `badf` below the (lower)
 collapse threshold.
 
+## Note
+
+Reuses
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s own
+`badf` sequence directly, compared against the two closed-form
+thresholds above – no simulation and no separate critical-value
+function, unlike
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)/
+[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md).
+
 ## Caveats
 
 **\[experimental\]**
@@ -77,3 +87,25 @@ date-stamping for periods of exuberance. arXiv:2604.12062.
 
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for the symmetric-threshold PWY/PSY dating this complements.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_svadf(sim_data)
+#> Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section.
+print(res)
+#> 
+#> ── radf_svadf (n = 100, minw = 19, min_duration = 5) ───────────────────────────
+#> 
+#> ℹ Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section.
+#> 
+#>   series  origination  origination_date  collapse  collapse_date
+#>     psy1           48                48        49             49
+#>     psy2           23                23        24             24
+#>    evans           NA              <NA>        NA           <NA>
+#>      div           NA              <NA>        NA           <NA>
+#>     blan           NA              <NA>        NA           <NA>
+#> 
+# }
+```

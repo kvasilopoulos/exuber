@@ -136,6 +136,13 @@ across the parallel and non-parallel option when the same seed is used.</p></dd>
 <code>U_cv</code>) for each series.</p>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>This function bundles the statistic and its critical values in a
+single call – there is no separate un-cv'd statistic function and no
+other critical-value function to pair it with, unlike <code><a href="radf.html">radf()</a></code>/
+<code><a href="radf_wb_cv.html">radf_wb_cv()</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
 
 
@@ -154,6 +161,25 @@ bootstrap, and <code><a href="radf_tt.html">radf_tt</a></code> for a bootstrap-f
 heteroskedasticity-robust alternative.</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_sbz_cv</span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  1.946  0.2802  1.946    0.045    0.580  0.070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2  7.880  1.5349  7.880    0.000    0.175  0.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  5.283  1.9138  5.283    0.085    0.285  0.120</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div  1.113  2.2607  1.336    0.100    0.080  0.110</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  3.930  1.4008  3.930    0.060    0.235  0.085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

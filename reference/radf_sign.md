@@ -50,6 +50,16 @@ cost/benefit reasoning); this function provides the standalone
 sign-based test only. `sadf` is the single-supremum (`r1 = 0` fixed)
 sPWY statistic; `gsadf` is the double-supremum sPSY statistic.
 
+## Note
+
+Needs
+[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+for critical values, not
+[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
+or any other bootstrap – the statistic is pivotal (exactly invariant to
+heteroskedasticity), so its critical values are simulated once, not per
+dataset.
+
 ## Level-shift robustness
 
 Harvey, Leybourne, Tatlow & Zu (2025) show this test also retains its
@@ -87,3 +97,27 @@ for the recursively demeaned sign-based analogue (sharing the same
 level-shift robustness), and
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) for
 the standard (non-invariant) test.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_sign(sim_data, minw = 20)
+print(res)
+#> 
+#> ── radf_sign (minw = 20) ───────────────────────────────────────────────────────
+#> 
+#>   series      adf    sadf   gsadf
+#>     psy1  -0.1516  0.9367   2.021
+#>     psy2   2.5578  6.4212  13.985
+#>    evans   4.8486  5.7582   6.852
+#>      div   1.1346  2.7920   2.950
+#>     blan   3.3805  3.3805   3.684
+#> 
+
+cv <- radf_sign_cv(n = 100, minw = 20)
+summary(res, cv = cv)
+#> Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"): Join columns in `y` must be present in the data.
+#> ✖ Problem with `id`.
+# }
+```

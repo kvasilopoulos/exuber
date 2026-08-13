@@ -64,3 +64,16 @@ own `bsadf_cv` aligns to `radf()$bsadf`.
 
 [`radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+
+## Examples
+
+``` r
+# \donttest{
+cv <- radf_recovery_cv(n = 100, minw = 20, nrep = 200)
+print(cv)
+#> 
+#> ── Monte Carlo (reverse) (minw = 20, nboot = 200) ──────────────────────────────
+#> 
+#> Error in UseMethod("tidy_radf_cv"): no applicable method for 'tidy_radf_cv' applied to an object of class "c('radf_cv', 'recovery_cv', 'list')"
+# }
+```

@@ -177,6 +177,28 @@ No. 1967, Yale University. Published in Econometric Theory.</p>
 origination/collapse dating this complements.</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_recovery</span><span class="op">(</span><span class="va">sim_data</span>, nrep <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_recovery (n = 100, minw = 19, level = 95%) ─────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">ℹ</span> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series   f_c   f_r  detected  censored</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  &lt;NA&gt;  &lt;NA&gt;     FALSE     FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2  &lt;NA&gt;  &lt;NA&gt;     FALSE     FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  &lt;NA&gt;  &lt;NA&gt;     FALSE     FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div  &lt;NA&gt;  &lt;NA&gt;     FALSE     FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  &lt;NA&gt;  &lt;NA&gt;     FALSE     FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

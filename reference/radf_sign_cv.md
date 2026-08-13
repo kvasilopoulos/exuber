@@ -59,3 +59,18 @@ Harvey, D. I., Leybourne, S. J., & Zu, Y. (2020). Sign-based unit root
 tests for explosive financial bubbles in the presence of
 deterministically time-varying volatility. Econometric Theory, 36(1),
 122-169.
+
+## Examples
+
+``` r
+# \donttest{
+cv <- radf_sign_cv(n = 100, minw = 20)
+tidy(cv)
+#> # A tibble: 3 × 4
+#>   sig     adf  sadf gsadf
+#>   <fct> <dbl> <dbl> <dbl>
+#> 1 90    0.885  2.27  2.93
+#> 2 95    1.34   2.61  3.38
+#> 3 99    1.96   3.25  4.38
+# }
+```

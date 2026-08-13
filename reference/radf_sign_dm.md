@@ -49,6 +49,17 @@ also find the recursive demeaning tends to further reduce size
 distortion under level shifts relative to `radf_sign`, though both are
 asymptotically level-shift robust under the same condition.
 
+## Note
+
+Needs
+[`radf_sign_dm_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)
+for critical values (not
+[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+which is calibrated to the non-demeaned
+[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
+statistic instead) – pivotal like `radf_sign`, so no per-dataset
+bootstrap is needed.
+
 ## Status
 
 **\[experimental\]**
@@ -71,3 +82,27 @@ level shifts. Oxford Bulletin of Economics and Statistics, 87(5),
 for critical values, and
 [`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
 for the non-demeaned sign-based analogue.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_sign_dm(sim_data, minw = 20)
+print(res)
+#> 
+#> ── radf_sign_dm (minw = 20) ────────────────────────────────────────────────────
+#> 
+#>   series       adf     sadf  gsadf
+#>     psy1  -0.07152   2.1729  2.976
+#>     psy2   1.47812   3.0005  3.433
+#>    evans  -2.14492  -0.9121  1.149
+#>      div  -1.05486   2.3305  2.369
+#>     blan  -0.17252   1.3508  1.489
+#> 
+
+cv <- radf_sign_dm_cv(n = 100, minw = 20)
+summary(res, cv = cv)
+#> Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"): Join columns in `y` must be present in the data.
+#> ✖ Problem with `id`.
+# }
+```

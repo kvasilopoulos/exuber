@@ -99,6 +99,15 @@ cross-validation search range \([T^{-0.5}, T^{-0.3}]\).</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>For critical values, use <code><a href="radf_tt_cv.html">radf_tt_cv</a></code> as the primary
+recommendation: it is pivotal (asymptotically free of the volatility
+process), so it does not need to be recomputed per dataset, unlike a
+bootstrap. <code><a href="radf_wb_cv.html">radf_wb_cv</a></code> (Harvey, Leybourne, Sollis &amp; Taylor's
+wild bootstrap) is a bootstrap-based alternative, worth considering if
+non-pivotality/finite-sample bootstrap robustness is a specific concern.</p>
+    </div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Kurozumi, E., Skrobotov, A., &amp; Tsarev, A. (2024). Time-Transformed
 Test for Bubbles under Non-stationary Volatility. Journal of Financial
@@ -111,6 +120,30 @@ asymptotic critical values, and <code><a href="radf_wb_cv.html">radf_wb_cv</a></
 bootstrap-based alternative (Harvey, Leybourne, Sollis &amp; Taylor).</p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_tt</span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_tt (minw = 20, kernel = uniform) ───────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series      adf    sadf  gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  -1.0366  1.2750  2.204</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2  -0.8600  2.5960  3.505</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  -1.3349  1.6556  1.883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div   0.7217  2.3440  2.344</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  -1.3363  0.4998  1.541</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"):</span> Join columns in `y` must be present in the data.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Problem with `id`.</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

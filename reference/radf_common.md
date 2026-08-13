@@ -4,13 +4,7 @@
 Phillips & Shi, 2023): it extracts the panel's first principal component
 and runs the ordinary
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) test
-on it. Per the paper's Theorem 4.3, the resulting statistic's null
-limiting distribution is identical to the standard PSY/GSADF one, so
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-(or
-[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
-for heteroskedasticity robustness) applies directly to the result with
-no modification – and every downstream method
+on it – and every downstream method
 ([`tidy()`](https://generics.r-lib.org/reference/tidy.html),
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html),
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
@@ -55,6 +49,26 @@ A `radf_obj` (see
 computed on the panel's first principal component, with the fitted
 `prcomp` object attached as an attribute (`attr(x, "prcomp")`).
 
+## Details
+
+The paper's own Theorem 4.3 claims the resulting statistic's null
+limiting distribution is asymptotically identical to the standard
+PSY/GSADF one, which would let
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+apply directly. An independent validation found this identity does
+**not** hold at practical panel widths `N`: the true critical value is
+more than double
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)'s
+at `N = 100`, and the gap grows as `N` increases – PCA on a panel of
+merely independent (non-cointegrated) I(1) series does not behave like a
+single random walk once there are more series to draw transient
+co-movement from. Use
+[`radf_common_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md)
+for critical values, **not**
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+which has no dependence on panel width and is badly undersized here once
+`N` grows past a handful of series.
+
 ## Status
 
 **\[experimental\]**
@@ -69,5 +83,38 @@ Econometrics, 21(4), 989-1063.
 
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) for
 the underlying (unmodified) test, and
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-for its critical values.
+[`radf_common_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md)
+for its (panel-width-specific) critical values.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_common(sim_data, minw = 20)
+print(res)
+#> 
+#> ── radf (minw = 20, lag = 0) ───────────────────────────────────────────────────
+#> 
+#>        id     adf   sadf  gsadf
+#>   series1  -2.734  7.145  7.145
+#> 
+#>   gsadf_panel
+#>         7.145
+#> 
+
+# radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
+cv <- radf_common_cv(n = 100, N = ncol(sim_data), minw = 20)
+summary(res, cv = cv)
+#> 
+#> ── Summary (minw = 20, lag = 0) ─────────────────── Monte Carlo (nrep = 1000) ──
+#> 
+#> series1 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -2.73 0.300 0.620  1.40
+#> 2 sadf   7.15 1.81  2.13   2.68
+#> 3 gsadf  7.15 2.32  2.63   3.25
+#> 
+# }
+```

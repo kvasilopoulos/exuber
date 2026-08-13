@@ -58,45 +58,51 @@
 <li>
 <code><a href="../reference/radf_sign.html">radf_sign()</a></code>/<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> — Harvey, Leybourne &amp; Zu (2020) sign-based sGSADF, invariant to volatility with no bootstrap needed.</li>
 <li>
-<code><a href="../reference/radf_ssu.html">radf_ssu()</a></code> — Kurozumi &amp; Nishi (2025) stochastic explosive-coefficient test (minimum-viable subset).</li>
+<code><a href="../reference/ssu_test.html">ssu_test()</a></code> — Kurozumi &amp; Nishi (2025) stochastic explosive-coefficient test (minimum-viable subset).</li>
 <li>
 <code><a href="../reference/radf_svadf.html">radf_svadf()</a></code> — Sarkar &amp; Wells (2026) SV-ADF asymmetric-threshold dating. <strong>Caveat:</strong> the source is a non-peer-reviewed preprint, flagged at call time and in <code><a href="../reference/radf_svadf.html">?radf_svadf</a></code>.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="dating-and-root-inference-development-version">Dating and root inference<a class="anchor" aria-label="anchor" href="#dating-and-root-inference-development-version"></a></h4>
 <ul><li>
-<code><a href="../reference/radf_pdc.html">radf_pdc()</a></code> — PDC/KS sequential sample-splitting dating, plus <code>type = "wls"</code> for Kurozumi &amp; Skrobotov (2023)’s time-varying-volatility correction.</li>
+<code><a href="../reference/dating_pdc.html">dating_pdc()</a></code> — PDC/KS sequential sample-splitting dating, plus <code>type = "wls"</code> for Kurozumi &amp; Skrobotov (2023)’s time-varying-volatility correction.</li>
 <li>
 <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>/<code><a href="../reference/radf_recovery_cv.html">radf_recovery_cv()</a></code> — Phillips &amp; Shi (2014) reverse-regression crisis-origination/recovery dating. <strong>Caveat:</strong> <code>f_c</code> and the overall false-detection rate are exploratory pending further validation, flagged at call time and in <code><a href="../reference/radf_recovery.html">?radf_recovery</a></code>.</li>
 <li>
-<code><a href="../reference/radf_hls.html">radf_hls()</a></code> — Harvey, Leybourne &amp; Sollis (2017) SSR/BIC single-bubble dating.</li>
+<code><a href="../reference/dating_hls.html">dating_hls()</a></code> — Harvey, Leybourne &amp; Sollis (2017) SSR/BIC single-bubble dating.</li>
 <li>
-<code><a href="../reference/radf_hlw.html">radf_hlw()</a></code> — Harvey, Leybourne &amp; Whitehouse (2020) SSR/BIC multi-bubble two-step wrapper.</li>
+<code><a href="../reference/dating_hlw.html">dating_hlw()</a></code> — Harvey, Leybourne &amp; Whitehouse (2020) SSR/BIC multi-bubble two-step wrapper.</li>
 <li>
-<code><a href="../reference/radf_knp.html">radf_knp()</a></code> — Kejriwal, Nguyen &amp; Perron (2025) bias-corrected dating.</li>
+<code><a href="../reference/dating_knp.html">dating_knp()</a></code> — Kejriwal, Nguyen &amp; Perron (2025) bias-corrected dating.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="real-time-monitoring-development-version">Real-time monitoring<a class="anchor" aria-label="anchor" href="#real-time-monitoring-development-version"></a></h4>
 <ul><li>
 <code><a href="../reference/radf_monitor.html">radf_monitor()</a></code> — Phillips &amp; Shi (2020) training/monitoring orchestration (Family A), plus Kurozumi (2020) closed-form <code>SADF</code>/ <code>GSADF_s0</code> boundaries and Homm &amp; Breitung (2012)’s FLUC boundary.</li>
 <li>
-<code><a href="../reference/radf_cusum.html">radf_cusum()</a></code> — Homm &amp; Breitung (2012) CUSUM monitoring, plus Astill et al. (2023)’s volatility-robust CUSUMV kernel variant and HB’s finite-sample boundary.</li>
+<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> — Homm &amp; Breitung (2012) CUSUM monitoring, plus Astill et al. (2023)’s volatility-robust CUSUMV kernel variant and HB’s finite-sample boundary.</li>
 <li>
-<code><a href="../reference/radf_lbi.html">radf_lbi()</a></code>/<code><a href="../reference/radf_lbi_monitor.html">radf_lbi_monitor()</a></code> — Breitung &amp; Diegel (2025) static LBI test and its sequential mCUSUM/wCUSUM extension.</li>
+<code><a href="../reference/lbi_test.html">lbi_test()</a></code>/<code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> — Breitung &amp; Diegel (2025) static LBI test and its sequential mCUSUM/wCUSUM extension.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="multivariate--panel-tests-development-version">Multivariate / panel tests<a class="anchor" aria-label="anchor" href="#multivariate--panel-tests-development-version"></a></h4>
 <ul><li>
 <code><a href="../reference/radf_common.html">radf_common()</a></code>/<code><a href="../reference/radf_common_cv.html">radf_common_cv()</a></code> — Chen, Phillips &amp; Shi common-bubble detection (PCA + PSY).</li>
 <li>
-<code><a href="../reference/radf_cobubble.html">radf_cobubble()</a></code> — Evripidou, Harvey, Leybourne &amp; Sollis (2022) co-explosive test.</li>
+<code><a href="../reference/cobubble_test.html">cobubble_test()</a></code> — Evripidou, Harvey, Leybourne &amp; Sollis (2022) co-explosive test.</li>
 <li>
-<code><a href="../reference/radf_contagion.html">radf_contagion()</a></code> — Greenaway-McGrevy &amp; Phillips (2016) bubble contagion regression (minimum-viable subset).</li>
+<code><a href="../reference/contagion_reg.html">contagion_reg()</a></code> — Greenaway-McGrevy &amp; Phillips (2016) bubble contagion regression (minimum-viable subset).</li>
 </ul></div>
 <div class="section level4">
 <h4 id="alternative-paradigms-development-version">Alternative paradigms<a class="anchor" aria-label="anchor" href="#alternative-paradigms-development-version"></a></h4>
 <ul><li>
-<code><a href="../reference/radf_quantile.html">radf_quantile()</a></code> — Wu, Shi &amp; Wu (2025) quantile-based global test.</li>
+<code><a href="../reference/quantile_test.html">quantile_test()</a></code> — Wu, Shi &amp; Wu (2025) quantile-based global test.</li>
+<li>
+<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> — Wu, Shi &amp; Wu (2025) QPWY recursive quantile monitoring.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="naming-development-version">Naming<a class="anchor" aria-label="anchor" href="#naming-development-version"></a></h4>
+<ul><li>12 of the functions above (<code>cobubble_test</code>, <code>contagion_reg</code>, <code>monitor_cusum</code>, <code>dating_hls</code>, <code>dating_hlw</code>, <code>dating_knp</code>, <code>lbi_test</code>, <code>monitor_lbi</code>, <code>dating_pdc</code>, <code>monitor_quantile</code>, <code>quantile_test</code>, <code>ssu_test</code>) were named <code>radf_*</code> in earlier development snapshots of this unreleased version; renamed before release since none of them are actually recursive-ADF-based tests. No deprecated aliases were kept, as the old names never shipped in a CRAN release.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="other-development-version">Other<a class="anchor" aria-label="anchor" href="#other-development-version"></a></h4>

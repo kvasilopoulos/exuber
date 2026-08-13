@@ -19,7 +19,7 @@ what was checked and how.
 - [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)/[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
   — Harvey, Leybourne & Zu (2020) sign-based sGSADF, invariant to
   volatility with no bootstrap needed.
-- [`radf_ssu()`](https://kvasilopoulos.github.io/exuber/reference/radf_ssu.md)
+- [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
   — Kurozumi & Nishi (2025) stochastic explosive-coefficient test
   (minimum-viable subset).
 - [`radf_svadf()`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md)
@@ -30,7 +30,7 @@ what was checked and how.
 
 #### Dating and root inference
 
-- [`radf_pdc()`](https://kvasilopoulos.github.io/exuber/reference/radf_pdc.md)
+- [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md)
   — PDC/KS sequential sample-splitting dating, plus `type = "wls"` for
   Kurozumi & Skrobotov (2023)’s time-varying-volatility correction.
 - [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)/[`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md)
@@ -38,12 +38,12 @@ what was checked and how.
   dating. **Caveat:** `f_c` and the overall false-detection rate are
   exploratory pending further validation, flagged at call time and in
   [`?radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md).
-- [`radf_hls()`](https://kvasilopoulos.github.io/exuber/reference/radf_hls.md)
+- [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md)
   — Harvey, Leybourne & Sollis (2017) SSR/BIC single-bubble dating.
-- [`radf_hlw()`](https://kvasilopoulos.github.io/exuber/reference/radf_hlw.md)
+- [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md)
   — Harvey, Leybourne & Whitehouse (2020) SSR/BIC multi-bubble two-step
   wrapper.
-- [`radf_knp()`](https://kvasilopoulos.github.io/exuber/reference/radf_knp.md)
+- [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md)
   — Kejriwal, Nguyen & Perron (2025) bias-corrected dating.
 
 #### Real-time monitoring
@@ -52,11 +52,11 @@ what was checked and how.
   — Phillips & Shi (2020) training/monitoring orchestration (Family A),
   plus Kurozumi (2020) closed-form `SADF`/ `GSADF_s0` boundaries and
   Homm & Breitung (2012)’s FLUC boundary.
-- [`radf_cusum()`](https://kvasilopoulos.github.io/exuber/reference/radf_cusum.md)
+- [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
   — Homm & Breitung (2012) CUSUM monitoring, plus Astill et al. (2023)’s
   volatility-robust CUSUMV kernel variant and HB’s finite-sample
   boundary.
-- [`radf_lbi()`](https://kvasilopoulos.github.io/exuber/reference/radf_lbi.md)/[`radf_lbi_monitor()`](https://kvasilopoulos.github.io/exuber/reference/radf_lbi_monitor.md)
+- [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md)/[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
   — Breitung & Diegel (2025) static LBI test and its sequential
   mCUSUM/wCUSUM extension.
 
@@ -64,16 +64,28 @@ what was checked and how.
 
 - [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)/[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md)
   — Chen, Phillips & Shi common-bubble detection (PCA + PSY).
-- [`radf_cobubble()`](https://kvasilopoulos.github.io/exuber/reference/radf_cobubble.md)
+- [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)
   — Evripidou, Harvey, Leybourne & Sollis (2022) co-explosive test.
-- [`radf_contagion()`](https://kvasilopoulos.github.io/exuber/reference/radf_contagion.md)
+- [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
   — Greenaway-McGrevy & Phillips (2016) bubble contagion regression
   (minimum-viable subset).
 
 #### Alternative paradigms
 
-- [`radf_quantile()`](https://kvasilopoulos.github.io/exuber/reference/radf_quantile.md)
+- [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
   — Wu, Shi & Wu (2025) quantile-based global test.
+- [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  — Wu, Shi & Wu (2025) QPWY recursive quantile monitoring.
+
+#### Naming
+
+- 12 of the functions above (`cobubble_test`, `contagion_reg`,
+  `monitor_cusum`, `dating_hls`, `dating_hlw`, `dating_knp`, `lbi_test`,
+  `monitor_lbi`, `dating_pdc`, `monitor_quantile`, `quantile_test`,
+  `ssu_test`) were named `radf_*` in earlier development snapshots of
+  this unreleased version; renamed before release since none of them are
+  actually recursive-ADF-based tests. No deprecated aliases were kept,
+  as the old names never shipped in a CRAN release.
 
 #### Other
 

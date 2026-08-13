@@ -116,3 +116,25 @@ University. Published in Econometric Theory.
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for the (forward, non-reversed) origination/collapse dating this
 complements.
+
+## Examples
+
+``` r
+# \donttest{
+res <- radf_recovery(sim_data, nrep = 200)
+#> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
+print(res)
+#> 
+#> ── radf_recovery (n = 100, minw = 19, level = 95%) ─────────────────────────────
+#> 
+#> ℹ Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
+#> 
+#>   series   f_c   f_r  detected  censored
+#>     psy1  <NA>  <NA>     FALSE     FALSE
+#>     psy2  <NA>  <NA>     FALSE     FALSE
+#>    evans  <NA>  <NA>     FALSE     FALSE
+#>      div  <NA>  <NA>     FALSE     FALSE
+#>     blan  <NA>  <NA>     FALSE     FALSE
+#> 
+# }
+```
