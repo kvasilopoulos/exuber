@@ -16,12 +16,12 @@ test_that("Breitung & Diegel's eq. 4 telescoping identity holds exactly
 test_that("radf_lbi runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_lbi(y)
+  out <- lbi_test(y)
 
-  expect_s3_class(out, "radf_lbi_obj")
+  expect_s3_class(out, "lbi_test_obj")
   expect_true(is.numeric(out$stat[["series1"]]))
   expect_equal(out$crit, qnorm(0.95))
-  expect_output(print(out), "radf_lbi")
+  expect_output(print(out), "lbi_test")
 })
 
 test_that("radf_lbi's statistic follows a standard normal distribution
@@ -31,7 +31,7 @@ test_that("radf_lbi's statistic follows a standard normal distribution
   run_stat <- function(seed) {
     set.seed(seed)
     y <- cumsum(rnorm(100))
-    radf_lbi(y)$stat[["series1"]]
+    lbi_test(y)$stat[["series1"]]
   }
   stats <- sapply(1:300, run_stat)
   expect_true(abs(mean(stats)) < 0.15)
@@ -46,7 +46,7 @@ test_that("radf_lbi detects a genuine explosive series with power
     set.seed(seed)
     n1 <- 60
     y <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
-    radf_lbi(y)$detected[["series1"]]
+    lbi_test(y)$detected[["series1"]]
   }
   rate <- mean(sapply(1:30, run_lbi))
   expect_gt(rate, 0.8)
@@ -78,7 +78,7 @@ test_that("radf_lbi_monitor's mCUSUM (c_bar = 0) final-point statistic is
   n <- 300
   T_star <- 150
   y <- cumsum(rnorm(n))
-  out <- radf_lbi_monitor(y, r_star = T_star, c_bar = 0, level = 0.95)
+  out <- monitor_lbi(y, r_star = T_star, c_bar = 0, level = 0.95)
   dy <- diff(y)
   sigma2_tilde <- mean(dy[seq_len(T_star - 1L)]^2)
   manual <- (y[n] - y[T_star]) / sqrt(sigma2_tilde * (n - T_star))
@@ -89,21 +89,21 @@ test_that("radf_lbi_monitor runs end to end and returns a well-formed
   object; alarms never fire before T_star + 1", {
   set.seed(1)
   y <- cumsum(rnorm(200))
-  out <- radf_lbi_monitor(y, r_star = 100, c_bar = 0, level = 0.95)
+  out <- monitor_lbi(y, r_star = 100, c_bar = 0, level = 0.95)
 
-  expect_s3_class(out, "radf_lbi_monitor_obj")
+  expect_s3_class(out, "monitor_lbi_obj")
   expect_equal(out$boundary, 1.95)
   expect_equal(out$T_star, 100)
   expect_true(is.na(out$alarm[["series1"]]) || out$alarm[["series1"]] > 100)
-  expect_output(print(out), "radf_lbi_monitor")
+  expect_output(print(out), "monitor_lbi")
 })
 
 test_that("radf_lbi_monitor errors on an untabulated level and on too-short
   training/monitoring windows", {
   y <- cumsum(rnorm(200))
-  expect_error(radf_lbi_monitor(y, level = 0.80), "must be one of")
-  expect_error(radf_lbi_monitor(y, r_star = 2), "too short")
-  expect_error(radf_lbi_monitor(y, r_star = 200), "leave at least one")
+  expect_error(monitor_lbi(y, level = 0.80), "must be one of")
+  expect_error(monitor_lbi(y, r_star = 2), "too short")
+  expect_error(monitor_lbi(y, r_star = 200), "leave at least one")
 })
 
 test_that("radf_lbi_monitor's mCUSUM/wCUSUM false-alarm rate under H0 is
@@ -118,7 +118,7 @@ test_that("radf_lbi_monitor's mCUSUM/wCUSUM false-alarm rate under H0 is
     mean(vapply(seq_len(nrep), function(i) {
       set.seed(1000 + i)
       y <- cumsum(rnorm(n))
-      !is.na(radf_lbi_monitor(y, r_star = T_star, c_bar = c_bar, level = 0.95)$alarm[["series1"]])
+      !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, level = 0.95)$alarm[["series1"]])
     }, logical(1)))
   }
   expect_lt(fires(0), 0.10)
@@ -126,7 +126,7 @@ test_that("radf_lbi_monitor's mCUSUM/wCUSUM false-alarm rate under H0 is
 })
 
 test_that("radf_lbi_monitor detects a genuine post-training bubble with
-  power exceeding radf_cusum(type = 'standard') on the same DGP, and
+  power exceeding monitor_cusum(type = 'standard') on the same DGP, and
   wCUSUM (c_bar = 2) is at least as powerful as mCUSUM (c_bar = 0)", {
   skip_on_cran()
   make_bubble_series <- function(n, T_star, bstart, rho = 1.03) {
@@ -144,9 +144,9 @@ test_that("radf_lbi_monitor detects a genuine post-training bubble with
     set.seed(seed)
     y <- make_bubble_series(n, T_star, bstart = 165)
     c(
-      mcusum = !is.na(radf_lbi_monitor(y, r_star = T_star, c_bar = 0)$alarm[["series1"]]),
-      wcusum = !is.na(radf_lbi_monitor(y, r_star = T_star, c_bar = 2)$alarm[["series1"]]),
-      cusum_std = !is.na(radf_cusum(y, r_star = T_star / n, b_alpha = 4.6)$alarm[["series1"]])
+      mcusum = !is.na(monitor_lbi(y, r_star = T_star, c_bar = 0)$alarm[["series1"]]),
+      wcusum = !is.na(monitor_lbi(y, r_star = T_star, c_bar = 2)$alarm[["series1"]]),
+      cusum_std = !is.na(monitor_cusum(y, r_star = T_star / n, b_alpha = 4.6)$alarm[["series1"]])
     )
   }
   res <- rowMeans(sapply(1:nrep, run))

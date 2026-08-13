@@ -113,6 +113,18 @@ their Table 7 (no detrending case) rather than a simulated one.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+# Default: Phillips & Shi (2020) wild bootstrap boundary
+mon <- radf_monitor(sim_data, r_star = 0.5, nboot = 200)
+print(mon)
+
+# Kurozumi (2020) closed-form boundary -- no bootstrap needed
+mon_kz <- radf_monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+print(mon_kz)
+}
+
+}
 \references{
 Phillips, P. C., & Shi, S. (2020). Real time monitoring of
 asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42,

@@ -26,7 +26,7 @@
 
 #' Locally Best Invariant Test for a Bubble (Breitung & Diegel 2025)
 #'
-#' \code{radf_lbi} implements the static locally best invariant (LBI)
+#' \code{lbi_test} implements the static locally best invariant (LBI)
 #' test of Breitung & Diegel (2025) for a bubble known (or assumed) to
 #' span the entire sample: \code{LBI = (y_T - y_1) / (sigma_tilde *
 #' sqrt(T - 1))}, with \code{sigma_tilde^2} the sample variance of first
@@ -41,11 +41,15 @@
 #' date, whose exact weighting scheme and boundary constant are not
 #' pinned down here and are not implemented.
 #'
+#' @note The critical value is closed-form: the standard normal
+#' (\code{qnorm}) quantile at \code{level} -- no bootstrap, no
+#' simulation, no table needed.
+#'
 #' @inheritParams radf
 #' @param level Nominal confidence level for the (one-sided, right-tailed
 #' -- positive bubbles only) test (default \code{0.95}).
 #'
-#' @return An object of class \code{radf_lbi_obj}: a list with the test
+#' @return An object of class \code{lbi_test_obj}: a list with the test
 #' statistic \code{stat}, the standard-normal critical value \code{crit},
 #' and \code{detected} (logical, \code{stat > crit}).
 #'
@@ -59,9 +63,15 @@
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- lbi_test(sim_data$sim_psy1)
+#' print(res)
+#' }
+#'
 #' @importFrom stats qnorm
 #' @export
-radf_lbi <- function(data, level = 0.95) {
+lbi_test <- function(data, level = 0.95) {
   stopifnot(level > 0 && level < 1)
   x <- parse_data(data)
   n <- nrow(x)
@@ -80,13 +90,13 @@ radf_lbi <- function(data, level = 0.95) {
 
   list(stat = stat, crit = crit, detected = detected) %>%
     add_attr(series_names = snames, n = n, level = level) %>%
-    add_class("radf_lbi_obj")
+    add_class("lbi_test_obj")
 }
 
 #' @export
-print.radf_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.lbi_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("radf_lbi (n = {attr(x, 'n')}, level = {attr(x, 'level') * 100}%)"))
+  cat_rule(left = glue("lbi_test (n = {attr(x, 'n')}, level = {attr(x, 'level') * 100}%)"))
   cat_line()
   print(
     data.frame(
@@ -103,7 +113,7 @@ print.radf_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
 # problem is solved by adopting the classical CUSUM approach directly on
 # the LBI statistic -- a running partial sum of first differences over the
 # monitoring period, normalized by the FIXED monitoring-horizon length
-# T_m (not sqrt(t), unlike radf_cusum()'s Chu-Stinchcombe-White boundary),
+# T_m (not sqrt(t), unlike monitor_cusum()'s Chu-Stinchcombe-White boundary),
 # tested against a CONSTANT boundary. Their eq. 15:
 # LBI_[rT] = (1/(sigma*sqrt(T))) * sum_{t=1}^{[rT]} Delta y_t => W(r), a
 # standard Brownian motion on [0,1] under H0 -- so a constant boundary
@@ -112,7 +122,7 @@ print.radf_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
 # they show is more powerful than both the classical time-varying-boundary
 # CUSUM (Brown et al. 1975, also tabulated in Table 1 but not implemented
 # here -- superseded by mCUSUM/wCUSUM, the paper's own recommendation) and
-# radf_cusum()'s existing CSW-style growing boundary.
+# monitor_cusum()'s existing CSW-style growing boundary.
 #
 # Their eq. 12 additionally allows exponentially up-weighting later
 # (more bubble-like) observations via a single parameter c_bar >= 0:
@@ -128,7 +138,7 @@ print.radf_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
 #
 # sigma_tilde^2 is estimated from the TRAINING window only (their Section
 # 4.2's own text: "training set ... is used for estimating nuisance
-# parameters such as sigma^2"), consistently with radf_lbi()'s own
+# parameters such as sigma^2"), consistently with lbi_test()'s own
 # training-free full-sample sigma_tilde^2 for the static test.
 
 # Breitung & Diegel (2025) Table 1 (page 7 in the rendered PDF): one-sided
@@ -171,8 +181,8 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung &
 #' Diegel 2025)
 #'
-#' \code{radf_lbi_monitor} implements the sequential (constant-boundary)
-#' extension of \code{\link{radf_lbi}}'s locally best invariant statistic,
+#' \code{monitor_lbi} implements the sequential (constant-boundary)
+#' extension of \code{\link{lbi_test}}'s locally best invariant statistic,
 #' for monitoring a series in real time when the bubble's start date is
 #' unknown: after a training window \code{[1, T*]} assumed free of
 #' exuberance, the (optionally exponentially weighted) partial sum of
@@ -180,7 +190,7 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' boundary, flagging the first monitoring date it is breached.
 #'
 #' Their eq. 15 shows this partial sum, normalized by the fixed monitoring
-#' horizon length (not \code{sqrt(t)}, unlike \code{\link{radf_cusum}}'s
+#' horizon length (not \code{sqrt(t)}, unlike \code{\link{monitor_cusum}}'s
 #' Chu-Stinchcombe-White-style boundary), converges to a standard Brownian
 #' motion on \code{[0, 1]} under the null -- so a single constant boundary
 #' controls size uniformly across the whole monitoring window. The paper
@@ -188,7 +198,10 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' "wCUSUM" at \code{c_bar > 0}) is more powerful than the classical
 #' time-varying-boundary CUSUM test it is compared against.
 #'
-#' @inheritParams radf_cusum
+#' @note The critical value is a published constant boundary (Breitung &
+#' Diegel (2025)'s Table 1) -- a table lookup, no simulation.
+#'
+#' @inheritParams monitor_cusum
 #' @param c_bar Exponential up-weighting parameter for later (more
 #' bubble-like) monitoring observations (their eq. 12), \code{>= 0}.
 #' \code{0} (default) is the flat-weight "mCUSUM" variant, appropriate
@@ -200,7 +213,7 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' \code{0.975}, \code{0.99}, \code{0.995} (Breitung & Diegel's Table 1
 #' only tabulates these).
 #'
-#' @return An object of class \code{radf_lbi_monitor_obj}: a list with the
+#' @return An object of class \code{monitor_lbi_obj}: a list with the
 #' monitoring-region statistic path (\code{stat}), the constant
 #' \code{boundary}, the training window length \code{T_star}, and
 #' \code{alarm}/\code{alarm_date} (the first breach, \code{NA} if none).
@@ -209,16 +222,22 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' sequential test for explosive behavior in the presence of nonstationary
 #' volatility. Journal of Time Series Analysis.
 #'
-#' @seealso \code{\link{radf_lbi}} for the static (known, full-sample
-#' bubble window) version. \code{\link{radf_cusum}} and
+#' @seealso \code{\link{lbi_test}} for the static (known, full-sample
+#' bubble window) version. \code{\link{monitor_cusum}} and
 #' \code{\link{radf_monitor}} for structurally different monitoring
 #' detectors.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- monitor_lbi(sim_data$sim_psy1, r_star = 0.5)
+#' print(res)
+#' }
+#'
 #' @export
-radf_lbi_monitor <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
+monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
   stopifnot(c_bar >= 0)
   b_alpha <- bd_cusum_q(level)
   x <- parse_data(data)
@@ -263,14 +282,14 @@ radf_lbi_monitor <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
     add_attr(
       index = idx, series_names = snames, n = n, c_bar = c_bar, level = level
     ) %>%
-    add_class("radf_lbi_monitor_obj")
+    add_class("monitor_lbi_obj")
 }
 
 #' @export
-print.radf_lbi_monitor_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.monitor_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "radf_lbi_monitor (T* = {x$T_star} / {attr(x, 'n')}, c_bar = {attr(x, 'c_bar')}, b_alpha = {x$boundary})"
+    "monitor_lbi (T* = {x$T_star} / {attr(x, 'n')}, c_bar = {attr(x, 'c_bar')}, b_alpha = {x$boundary})"
   ))
   cat_line()
   print(

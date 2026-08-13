@@ -121,7 +121,7 @@ ssu_stat_path <- function(ps, hi_idx) {
 
 #' Stochastic Unit Root Bubble Test (Kurozumi & Nishi 2025)
 #'
-#' \code{radf_ssu} implements the SSU statistic of Kurozumi & Nishi
+#' \code{ssu_test} implements the SSU statistic of Kurozumi & Nishi
 #' (2025): a sup-type test for a bubble based on testing for a
 #' stochastic (rather than deterministic) unit root in the *squared*
 #' first differences, \code{(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 +
@@ -141,11 +141,15 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' separate CUSUM/CUSUM-SQ statistics, or the union-of-rejections
 #' procedure combining SSU/GSSU with SADF/GSADF.
 #'
+#' @note The critical value is a published closed-table constant
+#' (Kurozumi & Nishi (2025)'s Table I, via the internal \code{ssu_q()}
+#' helper) -- no simulation needed.
+#'
 #' @inheritParams radf
 #' @param level Nominal confidence level, one of \code{0.90}, \code{0.95},
 #' \code{0.99} (the levels Kurozumi & Nishi's Table I tabulates).
 #'
-#' @return An object of class \code{radf_ssu_obj}: a list with the
+#' @return An object of class \code{ssu_test_obj}: a list with the
 #' statistic path (\code{stat}, one value per candidate end point from
 #' \code{minw} to \code{n}), the constant \code{crit} from Table I, and
 #' \code{sadf} (the maximum, compared against \code{crit}) and
@@ -161,8 +165,14 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- ssu_test(sim_data$sim_psy1, level = 0.95)
+#' print(res)
+#' }
+#'
 #' @export
-radf_ssu <- function(data, minw = NULL, level = 0.95) {
+ssu_test <- function(data, minw = NULL, level = 0.95) {
   x <- parse_data(data)
   n <- nrow(x)
   minw <- minw %||% psy_minw(n)
@@ -185,7 +195,7 @@ radf_ssu <- function(data, minw = NULL, level = 0.95) {
 
   list(stat = stat_path, sadf = sadf, crit = crit, detected = detected) %>%
     add_attr(index = idx, series_names = snames, n = n, minw = minw, level = level) %>%
-    add_class("radf_ssu_obj")
+    add_class("ssu_test_obj")
 }
 
 # Kurozumi & Nishi (2025) Table I: SSU's own published asymptotic
@@ -207,10 +217,10 @@ ssu_q <- function(level) {
 }
 
 #' @export
-print.radf_ssu_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.ssu_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "radf_ssu (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
+    "ssu_test (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
     "level = {attr(x, 'level') * 100}%, crit = {x$crit})"
   ))
   cat_line()

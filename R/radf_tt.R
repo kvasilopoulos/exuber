@@ -73,12 +73,14 @@ gls_dfstat_grid <- function(y, minw) {
 
 #' Monte Carlo critical values for the time-transformed test (STADF/GSTADF)
 #'
-#' Simulates the asymptotic null distribution of the GLS-demeaned recursive
-#' sup-ADF statistic used by \code{\link{radf_tt}}. Per Theorem 1 of Kurozumi,
-#' Skrobotov & Tsarev, this distribution is free of the volatility process
-#' (pivotal), so -- unlike \code{\link{radf_wb_cv}} -- it does not need to be
-#' recomputed per dataset: a large \code{n} with default \code{nrep} well
-#' approximates the T -> Inf limit used in the paper.
+#' This is the dedicated critical-value function for \code{\link{radf_tt}}.
+#' It simulates the asymptotic null distribution of the GLS-demeaned
+#' recursive sup-ADF statistic used by \code{\link{radf_tt}}. Per Theorem 1
+#' of Kurozumi, Skrobotov & Tsarev, this distribution is free of the
+#' volatility process (pivotal), so -- unlike \code{\link{radf_wb_cv}} --
+#' it does not need to be recomputed per dataset: a large \code{n} with
+#' default \code{nrep} well approximates the T -> Inf limit used in the
+#' paper.
 #'
 #' The \code{sadf_cv} column (STADF, i.e. \code{r1 = 0} fixed) can be checked
 #' against Whitehouse (2019)'s published asymptotic values, quoted in
@@ -92,6 +94,13 @@ gls_dfstat_grid <- function(y, minw) {
 #' @references Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed
 #' Test for Bubbles under Non-stationary Volatility. Journal of Financial
 #' Econometrics. \doi{10.1093/jjfinec/nbae026}
+#'
+#' @examples
+#' \donttest{
+#' cv <- radf_tt_cv(n = 100, minw = 20)
+#' tidy(cv)
+#' }
+#'
 #' @export
 radf_tt_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   assert_n(n)
@@ -184,6 +193,14 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' using a nonparametric estimate of its variance profile, after which the
 #' usual (asymptotic, homoskedastic) recursive sup-ADF critical values apply.
 #'
+#' @details
+#' For critical values, use \code{\link{radf_tt_cv}} as the primary
+#' recommendation: it is pivotal (asymptotically free of the volatility
+#' process), so it does not need to be recomputed per dataset, unlike a
+#' bootstrap. \code{\link{radf_wb_cv}} (Harvey, Leybourne, Sollis & Taylor's
+#' wild bootstrap) is a bootstrap-based alternative, worth considering if
+#' non-pivotality/finite-sample bootstrap robustness is a specific concern.
+#'
 #' @inheritParams radf
 #' @param kernel Kernel used in the local variance-profile regression,
 #' \code{"uniform"} (default, as in the paper's simulations) or \code{"gaussian"}.
@@ -198,6 +215,15 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' @seealso \code{\link{radf_tt_cv}} for the (pivotal, bootstrap-free)
 #' asymptotic critical values, and \code{\link{radf_wb_cv}} for the
 #' bootstrap-based alternative (Harvey, Leybourne, Sollis & Taylor).
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_tt(sim_data, minw = 20)
+#' print(res)
+#'
+#' cv <- radf_tt_cv(n = 100, minw = 20)
+#' summary(res, cv = cv)
+#' }
 #'
 #' @export
 radf_tt <- function(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL) {

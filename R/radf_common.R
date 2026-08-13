@@ -16,13 +16,24 @@
 #'
 #' \code{radf_common} tests for a bubble common to a panel of series
 #' (Chen, Phillips & Shi, 2023): it extracts the panel's first principal
-#' component and runs the ordinary \code{\link{radf}} test on it. Per the
-#' paper's Theorem 4.3, the resulting statistic's null limiting distribution
-#' is identical to the standard PSY/GSADF one, so \code{\link{radf_mc_cv}}
-#' (or \code{\link{radf_wb_cv}}, for heteroskedasticity robustness) applies
-#' directly to the result with no modification -- and every downstream
-#' method (\code{tidy()}, \code{autoplot()}, \code{datestamp()}, ...) works
-#' on it for free, since the output is an ordinary \code{radf_obj}.
+#' component and runs the ordinary \code{\link{radf}} test on it -- and
+#' every downstream method (\code{tidy()}, \code{autoplot()},
+#' \code{datestamp()}, ...) works on it for free, since the output is an
+#' ordinary \code{radf_obj}.
+#'
+#' @details
+#' The paper's own Theorem 4.3 claims the resulting statistic's null
+#' limiting distribution is asymptotically identical to the standard
+#' PSY/GSADF one, which would let \code{\link{radf_mc_cv}} apply directly.
+#' An independent validation found this identity does \strong{not} hold at
+#' practical panel widths \code{N}: the true critical value is more than
+#' double \code{\link{radf_mc_cv}}'s at \code{N = 100}, and the gap grows
+#' as \code{N} increases -- PCA on a panel of merely independent
+#' (non-cointegrated) I(1) series does not behave like a single random walk
+#' once there are more series to draw transient co-movement from. Use
+#' \code{\link{radf_common_cv}} for critical values, \strong{not}
+#' \code{\link{radf_mc_cv}}, which has no dependence on panel width and is
+#' badly undersized here once \code{N} grows past a handful of series.
 #'
 #' @inheritParams radf
 #' @param r Number of principal components to extract (default 1, the
@@ -39,10 +50,21 @@
 #' Financial Econometrics, 21(4), 989-1063.
 #'
 #' @seealso \code{\link{radf}} for the underlying (unmodified) test, and
-#' \code{\link{radf_mc_cv}} for its critical values.
+#' \code{\link{radf_common_cv}} for its (panel-width-specific) critical
+#' values.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_common(sim_data, minw = 20)
+#' print(res)
+#'
+#' # radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
+#' cv <- radf_common_cv(n = 100, N = ncol(sim_data), minw = 20)
+#' summary(res, cv = cv)
+#' }
 #'
 #' @export
 radf_common <- function(data, minw = NULL, r = 1) {
@@ -106,6 +128,13 @@ radf_common <- function(data, minw = NULL, r = 1) {
 #' @importFrom foreach foreach
 #' @importFrom doFuture `%dofuture%`
 #' @importFrom progressr progressor
+#'
+#' @examples
+#' \donttest{
+#' cv <- radf_common_cv(n = 100, N = 5, minw = 20, nrep = 200)
+#' tidy(cv)
+#' }
+#'
 #' @export
 radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
   assert_n(n)

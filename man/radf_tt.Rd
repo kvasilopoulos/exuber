@@ -34,6 +34,24 @@ Skrobotov & Tsarev, a heteroskedasticity-robust alternative to
 using a nonparametric estimate of its variance profile, after which the
 usual (asymptotic, homoskedastic) recursive sup-ADF critical values apply.
 }
+\details{
+For critical values, use \code{\link{radf_tt_cv}} as the primary
+recommendation: it is pivotal (asymptotically free of the volatility
+process), so it does not need to be recomputed per dataset, unlike a
+bootstrap. \code{\link{radf_wb_cv}} (Harvey, Leybourne, Sollis & Taylor's
+wild bootstrap) is a bootstrap-based alternative, worth considering if
+non-pivotality/finite-sample bootstrap robustness is a specific concern.
+}
+\examples{
+\donttest{
+res <- radf_tt(sim_data, minw = 20)
+print(res)
+
+cv <- radf_tt_cv(n = 100, minw = 20)
+summary(res, cv = cv)
+}
+
+}
 \references{
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed
 Test for Bubbles under Non-stationary Volatility. Journal of Financial

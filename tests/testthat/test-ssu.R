@@ -55,26 +55,26 @@ test_that("ssu_q looks up Kurozumi & Nishi (2025) Table I exactly and
 test_that("radf_ssu runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_ssu(y, level = 0.95)
+  out <- ssu_test(y, level = 0.95)
 
-  expect_s3_class(out, "radf_ssu_obj")
+  expect_s3_class(out, "ssu_test_obj")
   expect_true(is.matrix(out$stat))
   expect_equal(unname(out$crit), 3.30)
   expect_equal(unname(out$sadf), max(out$stat[, 1]))
-  expect_output(print(out), "radf_ssu")
+  expect_output(print(out), "ssu_test")
 })
 
 test_that("radf_ssu's minw matches psy_minw() by default (SSU's own
   r0 = 0.01 + 1.8/sqrt(T) is exactly exuber's existing convention)", {
   set.seed(1)
   y <- cumsum(rnorm(120))
-  out <- radf_ssu(y)
+  out <- ssu_test(y)
   expect_equal(attr(out, "minw"), psy_minw(120))
 })
 
 test_that("radf_ssu rejects an untabulated level", {
   y <- cumsum(rnorm(60))
-  expect_error(radf_ssu(y, level = 0.80))
+  expect_error(ssu_test(y, level = 0.80))
 })
 
 test_that("radf_ssu's empirical false-alarm rate under H0 is close to
@@ -87,7 +87,7 @@ test_that("radf_ssu's empirical false-alarm rate under H0 is close to
     mean(vapply(seq_len(nrep), function(i) {
       set.seed(1000 + i)
       y <- cumsum(rnorm(n))
-      unname(radf_ssu(y, level = level)$detected)
+      unname(ssu_test(y, level = level)$detected)
     }, logical(1)))
   }
   expect_lt(run(0.90), 0.25)
@@ -118,7 +118,7 @@ test_that("radf_ssu has non-trivial detection power on a stochastic
   rate <- mean(vapply(seq_len(nrep), function(i) {
     set.seed(2000 + i)
     y <- make_stochastic_bubble(n)
-    unname(radf_ssu(y, level = 0.95)$detected)
+    unname(ssu_test(y, level = 0.95)$detected)
   }, logical(1)))
   expect_gt(rate, 0.3)
 })

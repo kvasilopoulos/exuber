@@ -35,13 +35,13 @@ test_that("qpwy_boundary_sim's simulated Q paths have the same length as
 test_that("radf_qpwy runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(80))
-  out <- radf_qpwy(y, tau = 0.5, nrep = 50, seed = 1)
+  out <- monitor_quantile(y, tau = 0.5, nrep = 50, seed = 1)
 
-  expect_s3_class(out, "radf_qpwy_obj")
+  expect_s3_class(out, "monitor_quantile_obj")
   expect_true(is.matrix(out$stat))
   expect_true(is.numeric(out$boundary) && length(out$boundary) == 1)
   expect_true(out$delta >= -1 && out$delta <= 1)
-  expect_output(print(out), "radf_qpwy")
+  expect_output(print(out), "monitor_quantile")
 })
 
 test_that("radf_qpwy's boundary is the quantile of simulated PATH
@@ -66,8 +66,8 @@ test_that("radf_qpwy's boundary is the quantile of simulated PATH
 
 test_that("radf_qpwy rejects an out-of-range tau or level", {
   y <- cumsum(rnorm(60))
-  expect_error(radf_qpwy(y, tau = 1.5))
-  expect_error(radf_qpwy(y, level = 80))
+  expect_error(monitor_quantile(y, tau = 1.5))
+  expect_error(monitor_quantile(y, level = 80))
 })
 
 test_that("radf_qpwy's false-alarm rate under H0 is not wildly inflated", {
@@ -78,7 +78,7 @@ test_that("radf_qpwy's false-alarm rate under H0 is not wildly inflated", {
   fa <- mean(vapply(seq_len(nrep_mc), function(i) {
     set.seed(2000 + i)
     yy <- cumsum(rnorm(n))
-    !is.na(radf_qpwy(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
+    !is.na(monitor_quantile(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
   }, logical(1)))
   expect_lt(fa, 0.30)
 })
@@ -94,7 +94,7 @@ test_that("radf_qpwy has non-trivial detection power on a genuine
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.03^(1:40) + cumsum(rnorm(40, sd = 1))
     yy <- c(normal_part, expl_part)
-    !is.na(radf_qpwy(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
+    !is.na(monitor_quantile(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
   }, logical(1)))
   expect_gt(det, 0.3)
 })

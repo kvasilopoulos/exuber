@@ -19,7 +19,7 @@
 # active dummy is a plain intercept+slope OLS fit of Delta y_t on
 # y_{t-1}). Every segment's SSR is then a closed-form ratio of
 # cumulative sums (Sx, Sxx, Sz, Szz, Sxz), the same style of O(1)-per-
-# candidate lookup radf_pdc.R's pdc_find_break() already uses for its
+# candidate lookup dating_pdc.R's pdc_find_break() already uses for its
 # own (differently-specified, no-intercept) breakpoint search -- so the
 # joint grid search over 1-3 breakpoints needs no new-per-candidate
 # regression fit at all, only prefix-sum differences.
@@ -56,7 +56,7 @@ hls_segment_ssr <- function(ps, lo, hi, fit) {
 
 # Intercept + slope OLS coefficients of z on x over the segment (lo, hi]
 # (same closed form as hls_segment_ssr(..., fit = TRUE), returning the
-# coefficients themselves rather than the SSR -- used by radf_knp.R).
+# coefficients themselves rather than the SSR -- used by dating_knp.R).
 hls_segment_coef <- function(ps, lo, hi) {
   Sx <- ps$cx[hi + 1L] - ps$cx[lo + 1L]
   Sxx <- ps$cx2[hi + 1L] - ps$cx2[lo + 1L]
@@ -150,7 +150,7 @@ hls_model4 <- function(y, ps, trim) {
 hls_bic <- function(ssr, n, df) n * log(ssr / n) + df * log(n)
 
 # Fits the requested subset of HLS's four models to a single series `y`
-# (a plain numeric vector, e.g. a full series or -- for radf_hlw()'s
+# (a plain numeric vector, e.g. a full series or -- for dating_hlw()'s
 # per-window step -- a contiguous sub-window of one) and BIC-selects
 # among them. Breakpoints are returned in `y`'s own i-index space (1-based,
 # same convention as hls_model1()/hls_model23()/hls_model4() and
@@ -192,7 +192,7 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 
 #' SSR/BIC Bubble Dating (Harvey, Leybourne & Sollis 2017)
 #'
-#' \code{radf_hls} dates a single bubble episode by fitting four
+#' \code{dating_hls} dates a single bubble episode by fitting four
 #' candidate regime-dummy regressions of \code{Delta y_t} on
 #' \code{y_{t-1}} (unit-root-to-end, unit-root-bubble-unit-root,
 #' unit-root-bubble-collapse, and unit-root-bubble-collapse-unit-root),
@@ -200,23 +200,26 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #' fractions, and selects among them by BIC.
 #'
 #' Unlike \code{\link{datestamp}} (threshold-crossing on the recursive
-#' BSADF statistic) or \code{\link{radf_pdc}} (a fixed 3/4-regime
+#' BSADF statistic) or \code{\link{dating_pdc}} (a fixed 3/4-regime
 #' structure with sequentially, not jointly, estimated breaks), this
 #' jointly searches breakpoints within each of four candidate regime
 #' structures and lets BIC pick the structure itself -- so it can
 #' distinguish "bubble that collapses to a new stationary regime"
 #' (Model 3) from "bubble that fully reverts to a unit root" (Model 4)
 #' from "bubble ongoing at the sample end" (Model 1), which
-#' \code{radf_pdc}'s fixed regime count cannot. The cost is a genuine
-#' joint grid search rather than \code{radf_pdc}'s sequential one-break-
+#' \code{dating_pdc}'s fixed regime count cannot. The cost is a genuine
+#' joint grid search rather than \code{dating_pdc}'s sequential one-break-
 #' at-a-time scan.
+#'
+#' @note This is an SSR/BIC model-selection dating procedure, not a
+#' hypothesis test -- it needs no critical values at all.
 #'
 #' @inheritParams radf
 #' @param trim Minimum fraction of the (differenced) sample required in
 #' every regime (default 0.05, following Harvey, Leybourne & Sollis's own
 #' empirical-application choice; their simulations use 0.1).
 #'
-#' @return An object of class \code{radf_hls_obj}: a list with the
+#' @return An object of class \code{dating_hls_obj}: a list with the
 #' selected model (\code{model}, one of \code{1:4}), its breakpoint date(s)
 #' (\code{origination}, \code{collapse}, \code{recovery} -- \code{NA} for
 #' breakpoints the selected model doesn't have), and the BIC value of
@@ -227,15 +230,21 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #' Improving the accuracy of asset price bubble start and end date
 #' estimators. Journal of Empirical Finance, 40, 121-138.
 #'
-#' @seealso \code{\link{radf_pdc}} for the cheaper sequential-splitting
+#' @seealso \code{\link{dating_pdc}} for the cheaper sequential-splitting
 #' alternative this complements, and \code{\link{datestamp}} for PSY's
 #' original threshold-crossing rule.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- dating_hls(sim_data$sim_psy1, trim = 0.05)
+#' print(res)
+#' }
+#'
 #' @export
-radf_hls <- function(data, trim = 0.05) {
+dating_hls <- function(data, trim = 0.05) {
   x <- parse_data(data)
   n <- nrow(x)
   snames <- colnames(x)
@@ -263,13 +272,13 @@ radf_hls <- function(data, trim = 0.05) {
     recovery = recovery, bic = bic_mat
   ) %>%
     add_attr(index = idx, series_names = snames, n = n, trim = trim) %>%
-    add_class("radf_hls_obj")
+    add_class("dating_hls_obj")
 }
 
 #' @export
-print.radf_hls_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.dating_hls_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("radf_hls (n = {attr(x, 'n')}, trim = {attr(x, 'trim')})"))
+  cat_rule(left = glue("dating_hls (n = {attr(x, 'n')}, trim = {attr(x, 'trim')})"))
   cat_line()
   print(
     data.frame(

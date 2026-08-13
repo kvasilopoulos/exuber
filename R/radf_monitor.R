@@ -32,7 +32,7 @@
 # ADF_{k1}^{t} for a fixed (small) band of k1 in [1, floor(m*s0)] and t
 # ranging over the monitoring window is exactly the same closed-form
 # cumulative-sum OLS t-statistic construction already used throughout
-# this project (radf_hls.R's hls_segment_ssr(), radf_tt.R's
+# this project (dating_hls.R's hls_segment_ssr(), radf_tt.R's
 # gls_dfstat_grid()) -- just a WITH-INTERCEPT version (verified against
 # radf()$badf to machine precision at k1_max = 1, and against brute-force
 # lm() fits at k1_max > 1) restricted to a bounded band instead of the
@@ -116,7 +116,7 @@ kurozumi_gsadf_abc <- data.frame(
 # window starts k1 in [1, floor(T_star*s0)] of the WITH-INTERCEPT ADF
 # t-statistic on window [k1, t], for every monitoring-period t = T_star+1,
 # ..., n. Same cumulative-sum-difference construction as
-# radf_tt.R's gls_dfstat_grid()/radf_hls.R's hls_segment_ssr(), but (a)
+# radf_tt.R's gls_dfstat_grid()/dating_hls.R's hls_segment_ssr(), but (a)
 # with an intercept (verified to match radf()$badf exactly at k1_max = 1)
 # and (b) restricted to a bounded k1 band instead of the full grid, since
 # GSADF_{s0}'s own window-start range never grows past floor(T_star*s0).
@@ -160,7 +160,7 @@ kurozumi_gsadf_stat <- function(y, T_star, s0) {
 # same statistic already confirmed, earlier in this file, to equal
 # Kurozumi's SADF(k)). Their eq. 29/31 rejection rule, DF_{t/n} >
 # kappa_t with kappa_t = sqrt(b_{k,alpha} + log(t/n)), has the same
-# functional form as their own CUSUM boundary (this file's `radf_cusum`
+# functional form as their own CUSUM boundary (this file's `monitor_cusum`
 # sibling) but a DIFFERENT calibration constant b_{k,alpha} that (their
 # own text) "we determine... by means of simulation" -- no closed form
 # available. Table 7 (part i, "without detrending", matching radf()'s
@@ -306,6 +306,17 @@ hb_fluc_q <- function(level, n_train, k) {
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' \donttest{
+#' # Default: Phillips & Shi (2020) wild bootstrap boundary
+#' mon <- radf_monitor(sim_data, r_star = 0.5, nboot = 200)
+#' print(mon)
+#'
+#' # Kurozumi (2020) closed-form boundary -- no bootstrap needed
+#' mon_kz <- radf_monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+#' print(mon_kz)
+#' }
 #'
 #' @export
 radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,

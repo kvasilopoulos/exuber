@@ -29,7 +29,7 @@ test_that("coexplosive_stat() matches an independent brute-force computation
 })
 
 test_that("'y' and 'x' must be the same length", {
-  expect_error(radf_cobubble(rnorm(50), rnorm(51)))
+  expect_error(cobubble_test(rnorm(50), rnorm(51)))
 })
 
 test_that("wild bootstrap controls empirical size near the nominal level
@@ -43,7 +43,7 @@ test_that("wild bootstrap controls empirical size near the nominal level
     expl <- ex[Te] * 1.05^(1:(Tn - Te)) + cumsum(rnorm(Tn - Te, sd = 0.3))
     x <- c(ex, expl)
     y <- 1 + 0.8 * x + rnorm(Tn, sd = 1)
-    radf_cobubble(y, x, lag = 0L, nboot = 199L, seed = 1)$reject
+    cobubble_test(y, x, lag = 0L, nboot = 199L, seed = 1)$reject
   }
   size <- mean(sapply(1:100, run_once))
   # loose band around the nominal 5% -- 100 MC reps has real sampling noise
@@ -64,7 +64,7 @@ test_that("wild bootstrap controls empirical size near the nominal level
     x <- c(ex, expl)
     sd_pattern <- c(rep(1, Tn %/% 2), rep(4, Tn - Tn %/% 2))
     y <- 1 + 0.8 * x + rnorm(Tn, sd = sd_pattern)
-    radf_cobubble(y, x, lag = 0L, nboot = 199L, seed = 1)$reject
+    cobubble_test(y, x, lag = 0L, nboot = 199L, seed = 1)$reject
   }
   size <- mean(sapply(1:100, run_once))
   expect_lt(size, 0.15)
@@ -83,7 +83,7 @@ test_that("test has high power under H1: y and x contain independent
     ey <- cumsum(rnorm(Te))
     expl_y <- ey[Te] * 1.05^(1:(Tn - Te)) + cumsum(rnorm(Tn - Te, sd = 0.3))
     y <- c(ey, expl_y)
-    radf_cobubble(y, x, lag = 0L, nboot = 199L, seed = 1)$reject
+    cobubble_test(y, x, lag = 0L, nboot = 199L, seed = 1)$reject
   }
   power <- mean(sapply(1:40, run_once))
   expect_gt(power, 0.8)
@@ -114,11 +114,11 @@ test_that("radf_cobubble() runs end to end and returns a well-formed object", {
   x <- c(ex, expl)
   y <- 1 + 0.8 * x + rnorm(Tn)
 
-  out <- radf_cobubble(y, x, nboot = 99L, seed = 1)
-  expect_s3_class(out, "radf_cobubble")
+  out <- cobubble_test(y, x, nboot = 99L, seed = 1)
+  expect_s3_class(out, "cobubble_test")
   expect_true(is.numeric(out$S))
   expect_true(is.numeric(out$cv))
   expect_true(out$lag %in% (-6:6))
   expect_true(is.logical(out$reject))
-  expect_output(print(out), "radf_cobubble")
+  expect_output(print(out), "cobubble_test")
 })

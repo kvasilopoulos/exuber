@@ -91,6 +91,13 @@ called (see \code{\link{suppressMessages}} to silence it) and stored as
 \code{attr(x, "caveat")} on the returned object.
 }
 
+\examples{
+\donttest{
+res <- radf_recovery(sim_data, nrep = 200)
+print(res)
+}
+
+}
 \references{
 Phillips, P. C. B., & Shi, S. (2014). Financial Bubble
 Implosion and Reverse Regression. Cowles Foundation Discussion Paper

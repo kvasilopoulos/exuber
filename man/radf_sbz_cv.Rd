@@ -58,11 +58,24 @@ many time-varying-volatility patterns, at the cost of lower power under
 others (e.g. upward volatility trends); \code{U} is designed to capture
 whichever of the two is more powerful for a given series.
 }
+\note{
+This function bundles the statistic and its critical values in a
+single call -- there is no separate un-cv'd statistic function and no
+other critical-value function to pair it with, unlike \code{radf()}/
+\code{radf_wb_cv()}.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+res <- radf_sbz_cv(sim_data, nboot = 200)
+print(res)
+}
+
+}
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2019). Testing
 explosive bubbles with time-varying volatility. Econometric Reviews,

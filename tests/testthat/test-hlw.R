@@ -20,16 +20,16 @@ test_that("radf_hlw runs end to end and returns a well-formed object", {
   recovery <- collapse[n3] + cumsum(rnorm(n4))
   y <- c(unit1, bubble, collapse, recovery)
 
-  out <- radf_hlw(y, trim = 0.1, min_duration = psy_ds(length(y)), nboot = 199, seed = 1)
+  out <- dating_hlw(y, trim = 0.1, min_duration = psy_ds(length(y)), nboot = 199, seed = 1)
 
-  expect_s3_class(out, "radf_hlw_obj")
+  expect_s3_class(out, "dating_hlw_obj")
   expect_true("series1" %in% names(out))
   expect_true(is.data.frame(out[["series1"]]))
-  expect_output(print(out), "radf_hlw")
+  expect_output(print(out), "dating_hlw")
 })
 
 test_that("radf_hlw's final window, on a single clean bubble episode,
-  matches standalone radf_hls() applied to the whole series", {
+  matches standalone dating_hls() applied to the whole series", {
   skip_on_cran()
   set.seed(11)
   n1 <- 60; n2 <- 25; n3 <- 25; n4 <- 40
@@ -42,8 +42,8 @@ test_that("radf_hlw's final window, on a single clean bubble episode,
   recovery <- collapse[n3] + cumsum(rnorm(n4))
   y <- c(unit1, bubble, collapse, recovery)
 
-  hls_out <- radf_hls(y, trim = 0.1)
-  hlw_out <- radf_hlw(y, trim = 0.1, min_duration = psy_ds(length(y)), nboot = 199, seed = 1)
+  hls_out <- dating_hls(y, trim = 0.1)
+  hlw_out <- dating_hlw(y, trim = 0.1, min_duration = psy_ds(length(y)), nboot = 199, seed = 1)
   df <- hlw_out[["series1"]]
   last <- df[nrow(df), ]
 
@@ -57,7 +57,7 @@ test_that("radf_hlw does not error and returns a zero-row result under a
   skip_on_cran()
   set.seed(2)
   y <- 100 + cumsum(rnorm(150))
-  out <- radf_hlw(y, trim = 0.1, nboot = 199, seed = 1)
+  out <- dating_hlw(y, trim = 0.1, nboot = 199, seed = 1)
   expect_equal(nrow(out[["series1"]]), 0L)
 })
 
@@ -77,7 +77,7 @@ test_that("radf_hlw recovers two genuine, well-separated bubble episodes
   }
   run_once <- function(seed) {
     sim <- sim_two_bubbles(seed)
-    out <- radf_hlw(sim$y, trim = 0.1, min_duration = psy_ds(length(sim$y)), nboot = 199, seed = 1)
+    out <- dating_hlw(sim$y, trim = 0.1, min_duration = psy_ds(length(sim$y)), nboot = 199, seed = 1)
     df <- out[["series1"]]
     list(df = df, true1 = sim$true1, true2 = sim$true2)
   }

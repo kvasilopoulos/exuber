@@ -20,7 +20,7 @@
 # equivalent to a one-time-dummy modification of HLS's own Model 4
 # regression, but the omission formulation is the cheap one to compute:
 # it needs no new regression at all, only subtracting a single already-
-# available squared term from radf_hls.R's existing Model-2-style
+# available squared term from dating_hls.R's existing Model-2-style
 # closed-form SSR (hls_segment_ssr()), reused directly here.
 #
 # KNP's Section 3 also develops a Bai-Perron/Perron-Qu-style dynamic
@@ -35,7 +35,7 @@
 
 # Jointly searches (tau1, tau2) minimising KNP's SSR (eq. 3, `omit =
 # FALSE`) or their omission-corrected SSR (eq. 4, `omit = TRUE`,
-# default) -- both reuse radf_hls.R's hls_prefix_sums()/hls_segment_ssr()
+# default) -- both reuse dating_hls.R's hls_prefix_sums()/hls_segment_ssr()
 # directly, since KNP's model has the same three-segment (unfitted,
 # intercept+slope, unfitted) shape as HLS's Model 2. Unlike
 # hls_model23(), KNP's own candidate set T_epsilon(2) imposes no
@@ -66,7 +66,7 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 
 #' Bias-Corrected Single-Bubble Dating (Kejriwal, Nguyen & Perron 2025)
 #'
-#' \code{radf_knp} dates a single bubble episode (origination, collapse)
+#' \code{dating_knp} dates a single bubble episode (origination, collapse)
 #' by minimising a residual-omission-corrected sum of squared residuals
 #' over a three-regime model (unit root, explosive, unit root resuming
 #' from a shifted level after an instantaneous collapse). Plain OLS over
@@ -76,6 +76,9 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' single squared residual at the candidate collapse date from the
 #' objective before minimising.
 #'
+#' @note This is a residual-sum-of-squares model-selection dating
+#' procedure, not a hypothesis test -- it needs no critical values at all.
+#'
 #' @inheritParams radf
 #' @param trim Minimum fraction of the (differenced) sample required in
 #' each regime (default 0.05).
@@ -84,7 +87,7 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' provably inconsistent OLS estimator (their Theorem 1) -- kept mainly
 #' to demonstrate the correction's effect, not for practical dating.
 #'
-#' @return An object of class \code{radf_knp_obj}: a list with
+#' @return An object of class \code{dating_knp_obj}: a list with
 #' \code{origination}, \code{collapse} (dates) and \code{delta} (the
 #' fitted explosive AR coefficient).
 #'
@@ -92,14 +95,20 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' improved procedure for retrospectively dating the emergence and
 #' collapse of bubbles. Journal of Time Series Analysis, 46(5), 867-883.
 #'
-#' @seealso \code{\link{radf_hls}}, \code{\link{radf_pdc}} for related
+#' @seealso \code{\link{dating_hls}}, \code{\link{dating_pdc}} for related
 #' SSR-based dating approaches.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- dating_knp(sim_data$sim_psy1, trim = 0.05)
+#' print(res)
+#' }
+#'
 #' @export
-radf_knp <- function(data, trim = 0.05, omit = TRUE) {
+dating_knp <- function(data, trim = 0.05, omit = TRUE) {
   x <- parse_data(data)
   n <- nrow(x)
   snames <- colnames(x)
@@ -122,13 +131,13 @@ radf_knp <- function(data, trim = 0.05, omit = TRUE) {
 
   list(origination = origination, collapse = collapse, delta = delta) %>%
     add_attr(index = idx, series_names = snames, n = n, trim = trim, omit = omit) %>%
-    add_class("radf_knp_obj")
+    add_class("dating_knp_obj")
 }
 
 #' @export
-print.radf_knp_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.dating_knp_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("radf_knp (n = {attr(x, 'n')}, trim = {attr(x, 'trim')}, omit = {attr(x, 'omit')})"))
+  cat_rule(left = glue("dating_knp (n = {attr(x, 'n')}, trim = {attr(x, 'trim')}, omit = {attr(x, 'omit')})"))
   cat_line()
   print(
     data.frame(
