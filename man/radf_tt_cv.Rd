@@ -22,12 +22,14 @@ return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
 }
 \description{
-Simulates the asymptotic null distribution of the GLS-demeaned recursive
-sup-ADF statistic used by \code{\link{radf_tt}}. Per Theorem 1 of Kurozumi,
-Skrobotov & Tsarev, this distribution is free of the volatility process
-(pivotal), so -- unlike \code{\link{radf_wb_cv}} -- it does not need to be
-recomputed per dataset: a large \code{n} with default \code{nrep} well
-approximates the T -> Inf limit used in the paper.
+This is the dedicated critical-value function for \code{\link{radf_tt}}.
+It simulates the asymptotic null distribution of the GLS-demeaned
+recursive sup-ADF statistic used by \code{\link{radf_tt}}. Per Theorem 1
+of Kurozumi, Skrobotov & Tsarev, this distribution is free of the
+volatility process (pivotal), so -- unlike \code{\link{radf_wb_cv}} --
+it does not need to be recomputed per dataset: a large \code{n} with
+default \code{nrep} well approximates the T -> Inf limit used in the
+paper.
 }
 \details{
 The \code{sadf_cv} column (STADF, i.e. \code{r1 = 0} fixed) can be checked
@@ -37,6 +39,13 @@ Kurozumi, Skrobotov & Tsarev's footnote 4: for \code{minw/n = 0.1}, (10\\%,
 STADF, not GSTADF (\code{gsadf_cv}) -- the paper's own GSTADF critical
 values are not given as literal numbers in the text, only as "easily
 computed from" the authors' R code.
+}
+\examples{
+\donttest{
+cv <- radf_tt_cv(n = 100, minw = 20)
+tidy(cv)
+}
+
 }
 \references{
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed

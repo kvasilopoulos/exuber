@@ -14,7 +14,7 @@ what was checked and how.
   wild bootstrap.
 * `radf_sign()`/`radf_sign_cv()` — Harvey, Leybourne & Zu (2020) sign-based
   sGSADF, invariant to volatility with no bootstrap needed.
-* `radf_ssu()` — Kurozumi & Nishi (2025) stochastic explosive-coefficient
+* `ssu_test()` — Kurozumi & Nishi (2025) stochastic explosive-coefficient
   test (minimum-viable subset).
 * `radf_svadf()` — Sarkar & Wells (2026) SV-ADF asymmetric-threshold
   dating. **Caveat:** the source is a non-peer-reviewed preprint, flagged
@@ -22,42 +22,54 @@ what was checked and how.
 
 ### Dating and root inference
 
-* `radf_pdc()` — PDC/KS sequential sample-splitting dating, plus
+* `dating_pdc()` — PDC/KS sequential sample-splitting dating, plus
   `type = "wls"` for Kurozumi & Skrobotov (2023)'s time-varying-volatility
   correction.
 * `radf_recovery()`/`radf_recovery_cv()` — Phillips & Shi (2014)
   reverse-regression crisis-origination/recovery dating. **Caveat:** `f_c`
   and the overall false-detection rate are exploratory pending further
   validation, flagged at call time and in `?radf_recovery`.
-* `radf_hls()` — Harvey, Leybourne & Sollis (2017) SSR/BIC single-bubble
+* `dating_hls()` — Harvey, Leybourne & Sollis (2017) SSR/BIC single-bubble
   dating.
-* `radf_hlw()` — Harvey, Leybourne & Whitehouse (2020) SSR/BIC
+* `dating_hlw()` — Harvey, Leybourne & Whitehouse (2020) SSR/BIC
   multi-bubble two-step wrapper.
-* `radf_knp()` — Kejriwal, Nguyen & Perron (2025) bias-corrected dating.
+* `dating_knp()` — Kejriwal, Nguyen & Perron (2025) bias-corrected dating.
 
 ### Real-time monitoring
 
 * `radf_monitor()` — Phillips & Shi (2020) training/monitoring
   orchestration (Family A), plus Kurozumi (2020) closed-form `SADF`/
   `GSADF_s0` boundaries and Homm & Breitung (2012)'s FLUC boundary.
-* `radf_cusum()` — Homm & Breitung (2012) CUSUM monitoring, plus Astill
+* `monitor_cusum()` — Homm & Breitung (2012) CUSUM monitoring, plus Astill
   et al. (2023)'s volatility-robust CUSUMV kernel variant and HB's
   finite-sample boundary.
-* `radf_lbi()`/`radf_lbi_monitor()` — Breitung & Diegel (2025) static LBI
+* `lbi_test()`/`monitor_lbi()` — Breitung & Diegel (2025) static LBI
   test and its sequential mCUSUM/wCUSUM extension.
 
 ### Multivariate / panel tests
 
 * `radf_common()`/`radf_common_cv()` — Chen, Phillips & Shi common-bubble
   detection (PCA + PSY).
-* `radf_cobubble()` — Evripidou, Harvey, Leybourne & Sollis (2022)
+* `cobubble_test()` — Evripidou, Harvey, Leybourne & Sollis (2022)
   co-explosive test.
-* `radf_contagion()` — Greenaway-McGrevy & Phillips (2016) bubble
+* `contagion_reg()` — Greenaway-McGrevy & Phillips (2016) bubble
   contagion regression (minimum-viable subset).
 
 ### Alternative paradigms
 
-* `radf_quantile()` — Wu, Shi & Wu (2025) quantile-based global test.
+* `quantile_test()` — Wu, Shi & Wu (2025) quantile-based global test.
+* `monitor_quantile()` — Wu, Shi & Wu (2025) QPWY recursive quantile
+  monitoring.
+
+### Naming
+
+* 12 of the functions above (`cobubble_test`, `contagion_reg`,
+  `monitor_cusum`, `dating_hls`, `dating_hlw`, `dating_knp`, `lbi_test`,
+  `monitor_lbi`, `dating_pdc`, `monitor_quantile`, `quantile_test`,
+  `ssu_test`) were named `radf_*` in earlier development snapshots of
+  this unreleased version; renamed before release since none of them are
+  actually recursive-ADF-based tests. No deprecated aliases were kept, as
+  the old names never shipped in a CRAN release.
 
 ### Other
 

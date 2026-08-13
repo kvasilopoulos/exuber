@@ -33,6 +33,13 @@ dataset.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+cv <- radf_sign_dm_cv(n = 100, minw = 20)
+tidy(cv)
+}
+
+}
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2020). Sign-based
 unit root tests for explosive financial bubbles in the presence of

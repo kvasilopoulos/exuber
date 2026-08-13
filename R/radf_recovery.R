@@ -104,6 +104,13 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' @seealso \code{\link{radf_recovery}}, \code{\link{radf_mc_cv}}
 #'
 #' @importFrom stats quantile rnorm
+#'
+#' @examples
+#' \donttest{
+#' cv <- radf_recovery_cv(n = 100, minw = 20, nrep = 200)
+#' print(cv)
+#' }
+#'
 #' @export
 radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
 
@@ -186,6 +193,12 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #'
 #' @seealso \code{\link{datestamp}} for the (forward, non-reversed)
 #' origination/collapse dating this complements.
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_recovery(sim_data, nrep = 200)
+#' print(res)
+#' }
 #'
 #' @export
 radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,

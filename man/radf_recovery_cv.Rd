@@ -45,6 +45,13 @@ reversal induces an endogeneity with no forward-regression analogue
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+cv <- radf_recovery_cv(n = 100, minw = 20, nrep = 200)
+print(cv)
+}
+
+}
 \seealso{
 \code{\link{radf_recovery}}, \code{\link{radf_mc_cv}}
 }

@@ -13,7 +13,7 @@
 # 1. The fixed-window AR(1) coefficient sequence (eq. 1, GMP's own
 #    "fixed window width subsample" scheme) is the SAME closed-form
 #    cumulative-sum-difference OLS-window construction already used for
-#    radf_hls.R's hls_segment_ssr()/hls_prefix_sums() -- just levels-on-
+#    dating_hls.R's hls_segment_ssr()/hls_prefix_sums() -- just levels-on-
 #    lagged-levels (eq. 1: y_t = delta + beta*y_{t-1} + e_t) instead of
 #    differences-on-lagged-levels, and a MOVING rather than expanding
 #    window. hls_segment_coef()'s own closed form is generic (any x, z
@@ -51,7 +51,7 @@
 # series," not literally months.
 
 # Prefix sums for the fixed-window AR(1) coefficient sequence (eq. 1):
-# same structure as radf_hls.R's hls_prefix_sums(), but z = y_t (levels)
+# same structure as dating_hls.R's hls_prefix_sums(), but z = y_t (levels)
 # rather than hls_prefix_sums()'s own hard-coded z = Delta y_t.
 contagion_ar1_prefix_sums <- function(y) {
   n1 <- length(y) - 1L
@@ -164,7 +164,7 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 
 #' Bubble Contagion Regression (Greenaway-McGrevy & Phillips 2016)
 #'
-#' \code{radf_contagion} estimates the time-varying contagion coefficient
+#' \code{contagion_reg} estimates the time-varying contagion coefficient
 #' of Greenaway-McGrevy & Phillips (2016): a fixed-window rolling AR(1)
 #' coefficient sequence for a "core" series and a "satellite" series
 #' \code{y}, related by a functional (Nadaraya-Watson kernel) regression
@@ -177,13 +177,18 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' Nadaraya-Watson regression at a single supplied \code{d} (eq. 6), and
 #' leave-one-out cross-validated bandwidth selection (eq. 7). Their eq. 8
 #' (searching over \code{d} automatically) is not implemented -- call
-#' \code{radf_contagion} once per candidate \code{d} and compare fit if
+#' \code{contagion_reg} once per candidate \code{d} and compare fit if
 #' an automatic search is needed.
 #'
 #' The paper performs no formal inference (no confidence bands, no
 #' hypothesis test) on the contagion coefficient itself -- this is a
 #' point-estimation and visualization tool, not a test, matching what the
 #' source paper itself does.
+#'
+#' @note Not a hypothesis test: \code{contagion_reg} performs no formal
+#' inference (no confidence bands, no significance test) on the contagion
+#' coefficient, so there is no critical value at all for this function --
+#' don't look for one.
 #'
 #' @param y Satellite (dependent) series, numeric vector.
 #' @param core Core (reference) series, numeric vector, same length as
@@ -196,7 +201,7 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' @param r_grid Evaluation points for the time-varying coefficient,
 #' as fractions of the sample (default \code{seq(0, 1, length.out = 100)}).
 #'
-#' @return An object of class \code{radf_contagion_obj}: a list with the
+#' @return An object of class \code{contagion_reg_obj}: a list with the
 #' fixed-window AR(1) coefficient sequences (\code{beta_core},
 #' \code{beta_j}), the selected/supplied bandwidth (\code{h}), and the
 #' estimated time-varying contagion coefficient (\code{delta2}, aligned
@@ -206,15 +211,21 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' property in New Zealand: Empirical evidence of housing bubbles in the
 #' metropolitan centres. New Zealand Economic Papers, 50(1), 88-113.
 #'
-#' @seealso \code{\link{radf_cobubble}} for a different (symmetric,
+#' @seealso \code{\link{cobubble_test}} for a different (symmetric,
 #' hypothesis-testing) bivariate bubble relationship.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- contagion_reg(sim_data$sim_psy1, sim_data$sim_psy2, d = 0L)
+#' print(res)
+#' }
+#'
 #' @importFrom stats dnorm optimize
 #' @export
-radf_contagion <- function(y, core, S = NULL, d = 0L, h = NULL,
+contagion_reg <- function(y, core, S = NULL, d = 0L, h = NULL,
                             r_grid = seq(0, 1, length.out = 100)) {
   y <- as.numeric(y)
   core <- as.numeric(core)
@@ -239,14 +250,14 @@ radf_contagion <- function(y, core, S = NULL, d = 0L, h = NULL,
     r_grid = r_grid, delta2 = delta2
   ) %>%
     add_attr(n = T_len, S = S) %>%
-    add_class("radf_contagion_obj")
+    add_class("contagion_reg_obj")
 }
 
 #' @export
-print.radf_contagion_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.contagion_reg_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "radf_contagion (n = {attr(x, 'n')}, S = {attr(x, 'S')}, d = {x$d}, ",
+    "contagion_reg (n = {attr(x, 'n')}, S = {attr(x, 'S')}, d = {x$d}, ",
     "h = {round(x$h, 4)})"
   ))
   cat_line()

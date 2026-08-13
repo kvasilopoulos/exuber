@@ -49,6 +49,12 @@ collapse is dated (searching only after the origination date) at the
 first run of at least \code{min_duration} consecutive points with
 \code{badf} below the (lower) collapse threshold.
 }
+\note{
+Reuses \code{\link{radf}}'s own \code{badf} sequence directly,
+compared against the two closed-form thresholds above -- no simulation
+and no separate critical-value function, unlike \code{\link{radf_mc_cv}}/
+\code{\link{radf_wb_cv}}.
+}
 \section{Caveats}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -60,6 +66,13 @@ same note is emitted as a message when this function is called (see
 stored as \code{attr(x, "caveat")} on the returned object.
 }
 
+\examples{
+\donttest{
+res <- radf_svadf(sim_data)
+print(res)
+}
+
+}
 \references{
 Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble?
 Robust date-stamping for periods of exuberance. arXiv:2604.12062.

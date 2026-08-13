@@ -48,6 +48,13 @@ must match the panel \code{\link{radf_common}} was actually run on.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+cv <- radf_common_cv(n = 100, N = 5, minw = 20, nrep = 200)
+tidy(cv)
+}
+
+}
 \references{
 Chen, Y., Phillips, P. C. B., & Shi, S. (2023). Common
 Bubble Detection in Large Dimensional Financial Systems. Journal of

@@ -141,13 +141,18 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 
 #' CUSUM Real-Time Monitoring for Explosive Bubbles
 #'
-#' \code{radf_cusum} implements Homm & Breitung (2012)'s CUSUM real-time
+#' \code{monitor_cusum} implements Homm & Breitung (2012)'s CUSUM real-time
 #' monitoring procedure: fix a training window \code{[1, T*]} assumed free
 #' of exuberance, then compare the standardized cumulative sum of
 #' post-training first differences, \code{S_t = (y_t - y_{T*}) /
 #' sigma_hat_t}, against a closed-form boundary
 #' \code{c_t * sqrt(t)}, \code{c_t = sqrt(b_alpha + log(t / T*))}, flagging
 #' the first date it is breached.
+#'
+#' @note The boundary is closed-form throughout: a fixed asymptotic
+#' constant (\code{boundary = "asymptotic"}, \code{b_alpha = 4.6}) or a
+#' published finite-sample table lookup (\code{boundary = "finite"}, Homm
+#' & Breitung (2012)'s Table 8) -- no simulation, no separate cv function.
 #'
 #' Unlike \code{\link{radf_monitor}} (Family A, a recursive ADF-family
 #' statistic requiring a wild bootstrap to calibrate its boundary), this
@@ -192,7 +197,7 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' \code{type = "kernel"}, \code{"gaussian"} (default) or \code{"uniform"}.
 #' Ignored when \code{type = "standard"}.
 #'
-#' @return An object of class \code{radf_cusum_obj}: a list with the
+#' @return An object of class \code{monitor_cusum_obj}: a list with the
 #' monitoring-region statistic path (\code{S}) and \code{boundary}, the
 #' training window length \code{T_star}, and \code{alarm}/\code{alarm_date}
 #' (the first breach, \code{NA} if none).
@@ -215,8 +220,14 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- monitor_cusum(sim_data$sim_psy1, r_star = 0.5)
+#' print(res)
+#' }
+#'
 #' @export
-radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
+monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
                         boundary = c("asymptotic", "finite"), level = 0.95,
                         type = c("standard", "kernel"), N = 20,
                         kernel = c("gaussian", "uniform")) {
@@ -267,14 +278,14 @@ radf_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
     add_attr(
       index = idx, series_names = snames, n = n, b_alpha = b_alpha
     ) %>%
-    add_class("radf_cusum_obj")
+    add_class("monitor_cusum_obj")
 }
 
 #' @export
-print.radf_cusum_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.monitor_cusum_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "radf_cusum (T* = {x$T_star} / {attr(x, 'n')}, b_alpha = {attr(x, 'b_alpha')})"
+    "monitor_cusum (T* = {x$T_star} / {attr(x, 'n')}, b_alpha = {attr(x, 'b_alpha')})"
   ))
   cat_line()
   print(

@@ -106,8 +106,22 @@ sign_demean_transform <- function(y) {
 #' analogue (sharing the same level-shift robustness), and \code{\link{radf}}
 #' for the standard (non-invariant) test.
 #'
+#' @note Needs \code{\link{radf_sign_cv}} for critical values, not
+#' \code{\link{radf_wb_cv}} or any other bootstrap -- the statistic is
+#' pivotal (exactly invariant to heteroskedasticity), so its critical
+#' values are simulated once, not per dataset.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_sign(sim_data, minw = 20)
+#' print(res)
+#'
+#' cv <- radf_sign_cv(n = 100, minw = 20)
+#' summary(res, cv = cv)
+#' }
 #'
 #' @export
 radf_sign <- function(data, minw = NULL) {
@@ -185,6 +199,12 @@ print.radf_sign_obj <- function(x, digits = max(3L, getOption("digits") - 3L), .
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' cv <- radf_sign_cv(n = 100, minw = 20)
+#' tidy(cv)
+#' }
+#'
 #' @export
 radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   assert_n(n)
@@ -249,8 +269,22 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #' @seealso \code{\link{radf_sign_dm_cv}} for critical values, and
 #' \code{\link{radf_sign}} for the non-demeaned sign-based analogue.
 #'
+#' @note Needs \code{\link{radf_sign_dm_cv}} for critical values (not
+#' \code{\link{radf_sign_cv}}, which is calibrated to the non-demeaned
+#' \code{\link{radf_sign}} statistic instead) -- pivotal like
+#' \code{radf_sign}, so no per-dataset bootstrap is needed.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_sign_dm(sim_data, minw = 20)
+#' print(res)
+#'
+#' cv <- radf_sign_dm_cv(n = 100, minw = 20)
+#' summary(res, cv = cv)
+#' }
 #'
 #' @export
 radf_sign_dm <- function(data, minw = NULL) {
@@ -319,6 +353,12 @@ print.radf_sign_dm_obj <- function(x, digits = max(3L, getOption("digits") - 3L)
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' \donttest{
+#' cv <- radf_sign_dm_cv(n = 100, minw = 20)
+#' tidy(cv)
+#' }
 #'
 #' @export
 radf_sign_dm_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {

@@ -54,7 +54,7 @@ coexplosive_select_lag <- function(y, x, lags) {
 
 #' Test for Co-explosive Behaviour Between Two Series
 #'
-#' \code{radf_cobubble} tests whether two series that each contain an
+#' \code{cobubble_test} tests whether two series that each contain an
 #' explosive episode are \emph{co-explosive}: whether a linear combination
 #' \code{y_t - alpha - beta * x_{t-lag}} is stationary, i.e. whether the
 #' explosive dynamics in \code{y} and \code{x} are the same underlying
@@ -71,6 +71,10 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' bootstrap that reproduces that same heteroskedasticity pattern in the
 #' bootstrap samples (Theorem 2).
 #'
+#' @note The critical value is a wild bootstrap of the residuals, computed
+#' internally on every call (Theorem 2) -- there is no separate/reusable
+#' cv function for this test.
+#'
 #' @param y,x Numeric vectors of equal length, or objects coercible to one
 #' via \code{as.numeric()}. \code{x} is the (candidate) explosive-episode
 #' regressor; \code{y} is tested for co-explosivity with \code{x_{t-lag}}.
@@ -83,7 +87,7 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' @param level Nominal test size (upper-tail rejection region).
 #' @param seed Optional seed for the bootstrap draws.
 #'
-#' @return An object of class \code{radf_cobubble}: a list with the
+#' @return An object of class \code{cobubble_test}: a list with the
 #' observed statistic \code{S}, the (given or estimated) \code{lag}, the
 #' bootstrap critical value \code{cv} at \code{level}, the bootstrap
 #' p-value \code{p_value}, and \code{reject} (\code{TRUE} if \code{S}
@@ -96,8 +100,14 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- cobubble_test(sim_data$sim_psy1, sim_data$sim_psy2, nboot = 199L, seed = 1)
+#' print(res)
+#' }
+#'
 #' @export
-radf_cobubble <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
+cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
                            level = 0.05, seed = NULL) {
   y <- as.numeric(y)
   x <- as.numeric(x)
@@ -133,13 +143,13 @@ radf_cobubble <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
     S = fit$S, lag = lag, cv = cv, p_value = p_value, reject = fit$S > cv
   ) %>%
     add_attr(level = level, iter = nboot, lags = lags) %>%
-    add_class("radf_cobubble")
+    add_class("cobubble_test")
 }
 
 #' @export
-print.radf_cobubble <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.cobubble_test <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("radf_cobubble (lag = {x$lag}, nboot = {attr(x, 'iter')})"))
+  cat_rule(left = glue("cobubble_test (lag = {x$lag}, nboot = {attr(x, 'iter')})"))
   cat_line()
   cat_line(glue(
     "S = {format(x$S, digits = digits)}, ",

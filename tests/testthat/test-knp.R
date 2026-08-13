@@ -52,13 +52,13 @@ test_that("knp_find_break(omit = TRUE) matches a brute-force search with
 test_that("radf_knp runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_knp(y, trim = 0.05)
+  out <- dating_knp(y, trim = 0.05)
 
-  expect_s3_class(out, "radf_knp_obj")
+  expect_s3_class(out, "dating_knp_obj")
   expect_true(is.character(out$origination[["series1"]]))
   expect_true(is.character(out$collapse[["series1"]]))
   expect_true(is.numeric(out$delta[["series1"]]))
-  expect_output(print(out), "radf_knp")
+  expect_output(print(out), "dating_knp")
 })
 
 test_that("radf_knp's omission correction reproduces Kejriwal, Nguyen &

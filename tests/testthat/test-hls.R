@@ -116,13 +116,13 @@ test_that("hls_model23's grid search matches a brute-force nested lm()
 test_that("radf_hls runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_hls(y, trim = 0.05)
+  out <- dating_hls(y, trim = 0.05)
 
-  expect_s3_class(out, "radf_hls_obj")
+  expect_s3_class(out, "dating_hls_obj")
   expect_true(out$model[["series1"]] %in% 1:4)
   expect_true(is.matrix(out$bic))
   expect_equal(ncol(out$bic), 4)
-  expect_output(print(out), "radf_hls")
+  expect_output(print(out), "dating_hls")
 })
 
 test_that("radf_hls's selected model always has NA for the breakpoints it
@@ -130,7 +130,7 @@ test_that("radf_hls's selected model always has NA for the breakpoints it
   recovery)", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_hls(y, trim = 0.05)
+  out <- dating_hls(y, trim = 0.05)
   m <- out$model[["series1"]]
   if (m == 1) {
     expect_true(is.na(out$collapse[["series1"]]))
@@ -160,7 +160,7 @@ test_that("radf_hls recovers a genuine 4-regime bubble episode with
   }
   run_once <- function(seed) {
     sim <- sim_model4(seed)
-    out <- radf_hls(sim$y, trim = 0.05)
+    out <- dating_hls(sim$y, trim = 0.05)
     list(
       model = out$model[["series1"]],
       orig_bias = as.numeric(out$origination[["series1"]]) - sim$true_tau1
@@ -179,7 +179,7 @@ test_that("radf_hls does not spuriously prefer complex models on a
   run_h0 <- function(seed) {
     set.seed(seed)
     y <- 100 + cumsum(rnorm(150))
-    radf_hls(y, trim = 0.05)$model[["series1"]]
+    dating_hls(y, trim = 0.05)$model[["series1"]]
   }
   models <- sapply(1:20, run_h0)
   expect_true(mean(models == 4) < 0.3)

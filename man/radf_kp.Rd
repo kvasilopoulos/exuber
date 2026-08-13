@@ -56,6 +56,17 @@ union-of-rejections test combining both; these are not implemented here
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+res <- radf_kp(sim_data, minw = 20)
+print(res)
+
+# radf_mc_cv() applies unmodified -- see Details
+cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
+summary(res, cv = cv)
+}
+
+}
 \references{
 Harvey, D. I., Leybourne, S. J., Taylor, A. M. R., & Zu, Y.
 (2024). A new heteroskedasticity-robust test for explosive bubbles.
