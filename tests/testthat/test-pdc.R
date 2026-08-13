@@ -24,18 +24,18 @@ test_that("pdc_find_break() matches a brute-force lm()-based RSS scan exactly", 
 
 test_that("regimes must be 3 or 4", {
   y <- cumsum(rnorm(80))
-  expect_error(radf_pdc(y, regimes = 5L), "should be 3 or 4")
+  expect_error(dating_pdc(y, regimes = 5L), "should be 3 or 4")
 })
 
 test_that("errors on a series too short for the requested trim", {
-  expect_error(radf_pdc(rnorm(10), regimes = 4L), "too short")
+  expect_error(dating_pdc(rnorm(10), regimes = 4L), "too short")
 })
 
 test_that("works on a multivariate panel, one row per series", {
   set.seed(1)
   y <- cumsum(rnorm(80))
   panel <- cbind(s1 = y, s2 = y + rnorm(length(y), sd = 0.1))
-  out <- radf_pdc(panel, regimes = 3L)
+  out <- dating_pdc(panel, regimes = 3L)
   expect_equal(rownames(out), c("s1", "s2"))
   expect_true(all(c("origination", "collapse") %in% colnames(out)))
 })
@@ -52,7 +52,7 @@ test_that("3-regime dating is essentially exact in the low-noise/long-series/
   regime3 <- target + (peak - target) * exp(-0.2 * (1:n3_len)) + rnorm(n3_len, sd = 0.3)
   y <- c(regime1, regime2, regime3)
 
-  out <- radf_pdc(y, regimes = 3L, trim = 0.05)
+  out <- dating_pdc(y, regimes = 3L, trim = 0.05)
   expect_lte(abs(out$origination - n1_len), 2)
   expect_lte(abs(out$collapse - (n1_len + n2_len)), 2)
 })
@@ -79,7 +79,7 @@ test_that("4-regime dating (KS extension, recovery = split of the
   regime4 <- regime3[n3_len] + cumsum(rnorm(n4_len, sd = 0.5))
   y <- c(regime1, regime2, regime3, regime4)
 
-  out <- radf_pdc(y, regimes = 4L, trim = 0.05)
+  out <- dating_pdc(y, regimes = 4L, trim = 0.05)
   true_origination <- n1_len
   true_collapse <- n1_len + n2_len
   true_recovery <- n1_len + n2_len + n3_len
@@ -104,7 +104,7 @@ test_that("finite-sample accuracy at moderate T is genuinely limited -- not
     peak <- regime2[n2_len]; target <- regime1[n1_len]
     regime3 <- target + (peak - target) * exp(-0.15 * (1:n3_len)) + rnorm(n3_len, sd = 0.5)
     y <- c(regime1, regime2, regime3)
-    out <- radf_pdc(y, regimes = 3L, trim = 0.05)
+    out <- dating_pdc(y, regimes = 3L, trim = 0.05)
     c(orig_err = out$origination - n1_len, coll_err = out$collapse - (n1_len + n2_len))
   }))
   # sanity bound only: estimates should stay within the sample, not that
@@ -138,14 +138,14 @@ test_that("pdc_regime_resid() returns one finite residual per (y_t-1, y_t)
 
 test_that("'type' must be 'ols' or 'wls'", {
   y <- cumsum(rnorm(80))
-  expect_error(radf_pdc(y, regimes = 3L, type = "gls"))
+  expect_error(dating_pdc(y, regimes = 3L, type = "gls"))
 })
 
 test_that("type = 'wls' returns the same output structure as 'ols'", {
   set.seed(1)
   y <- cumsum(rnorm(80))
-  out_wls <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
-  out_ols <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
+  out_wls <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
+  out_ols <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
   expect_equal(colnames(out_wls), colnames(out_ols))
   expect_equal(rownames(out_wls), rownames(out_ols))
 })
@@ -164,8 +164,8 @@ test_that("type = 'wls' matches 'ols' closely under homoskedasticity --
   for (t in 2:n3_len) regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
   y <- c(regime1, regime2, regime3)
 
-  out_ols <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
-  out_wls <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
+  out_ols <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
+  out_wls <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
   expect_lte(abs(out_wls$origination - out_ols$origination), 5)
   expect_lte(abs(out_wls$collapse - out_ols$collapse), 5)
 })
@@ -193,8 +193,8 @@ test_that("type = 'wls' materially improves origination-date accuracy over
     y <- c(regime1, regime2, regime3)
     true_origination <- n1_len
 
-    out_ols <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
-    out_wls <- radf_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
+    out_ols <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
+    out_wls <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "wls")
     c(
       ols_err = out_ols$origination - true_origination,
       wls_err = out_wls$origination - true_origination

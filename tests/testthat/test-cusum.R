@@ -26,10 +26,10 @@ test_that("cusum_stat_path() matches an independent brute-force loop
 test_that("radf_cusum runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_cusum(y, r_star = 0.5)
-  expect_s3_class(out, "radf_cusum_obj")
+  out <- monitor_cusum(y, r_star = 0.5)
+  expect_s3_class(out, "monitor_cusum_obj")
   expect_equal(out$T_star, 50)
-  expect_output(print(out), "radf_cusum")
+  expect_output(print(out), "monitor_cusum")
 })
 
 test_that("an alarm, when raised, always falls strictly after T_star", {
@@ -40,7 +40,7 @@ test_that("an alarm, when raised, always falls strictly after T_star", {
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_cusum(y, r_star = n1 / length(y))
+    out <- monitor_cusum(y, r_star = n1 / length(y))
     alarm <- unname(out$alarm)
     if (is.na(alarm)) NA else alarm > out$T_star
   }
@@ -57,7 +57,7 @@ test_that("empirical cumulative false-alarm rate under H0 stays well within
   run_null <- function(seed) {
     set.seed(seed)
     y <- cumsum(rnorm(150))
-    out <- radf_cusum(y, r_star = 0.5, b_alpha = 4.6)
+    out <- monitor_cusum(y, r_star = 0.5, b_alpha = 4.6)
     !is.na(out$alarm)
   }
   rate <- mean(sapply(1:60, run_null))
@@ -78,7 +78,7 @@ test_that("radf_cusum detects at least some genuine post-training bubbles,
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_cusum(y, r_star = n1 / length(y))
+    out <- monitor_cusum(y, r_star = n1 / length(y))
     c(alarm = unname(out$alarm), true_origination = n1)
   }
   res <- t(sapply(1:30, run_once))
@@ -133,8 +133,8 @@ test_that("cusum_stat_path_kernel() matches an independent brute-force
 test_that("type = 'kernel' runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_cusum(y, r_star = 0.5, type = "kernel")
-  expect_s3_class(out, "radf_cusum_obj")
+  out <- monitor_cusum(y, r_star = 0.5, type = "kernel")
+  expect_s3_class(out, "monitor_cusum_obj")
   expect_true(all(is.finite(out$S)))
 })
 
@@ -151,7 +151,7 @@ test_that("type = 'kernel' (CUSUMV) controls the false-alarm rate under
     n <- 150
     vol <- c(rep(1, 90), rep(8, 60))
     y <- cumsum(rnorm(n) * vol)
-    out <- radf_cusum(y, r_star = 0.5, b_alpha = 4.6, type = type)
+    out <- monitor_cusum(y, r_star = 0.5, b_alpha = 4.6, type = type)
     !is.na(out$alarm)
   }
   rate_std <- mean(sapply(1:40, function(s) run_null_hetero(s, "standard")))
@@ -171,17 +171,17 @@ test_that("radf_cusum runs end to end with boundary = 'finite', using a
   different (smaller, table-derived) b_alpha than the asymptotic default", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_cusum(y, r_star = 0.5, boundary = "finite", level = 0.95)
+  out <- monitor_cusum(y, r_star = 0.5, boundary = "finite", level = 0.95)
 
-  expect_s3_class(out, "radf_cusum_obj")
+  expect_s3_class(out, "monitor_cusum_obj")
   expect_equal(attr(out, "b_alpha"), 1.43) # n=150/T_star=75 snaps to n=50 (tie with 100), k=2
   expect_true(attr(out, "b_alpha") < 4.6)
-  expect_output(print(out), "radf_cusum")
+  expect_output(print(out), "monitor_cusum")
 })
 
 test_that("boundary = 'finite' rejects levels outside its tabulated set", {
   y <- cumsum(rnorm(100))
-  expect_error(radf_cusum(y, r_star = 0.5, boundary = "finite", level = 0.93))
+  expect_error(monitor_cusum(y, r_star = 0.5, boundary = "finite", level = 0.93))
 })
 
 test_that("boundary = 'finite' also works with type = 'kernel' (CUSUMV),
@@ -189,8 +189,8 @@ test_that("boundary = 'finite' also works with type = 'kernel' (CUSUMV),
   table", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_cusum(y, r_star = 0.5, boundary = "finite", type = "kernel")
-  expect_s3_class(out, "radf_cusum_obj")
+  out <- monitor_cusum(y, r_star = 0.5, boundary = "finite", type = "kernel")
+  expect_s3_class(out, "monitor_cusum_obj")
   expect_equal(attr(out, "b_alpha"), 1.43) # n=150/T_star=75 snaps to n=50 (tie with 100), k=2
 })
 
@@ -201,7 +201,7 @@ test_that("boundary = 'finite' gives a false-alarm rate closer to nominal
   run_null <- function(seed, boundary) {
     set.seed(seed)
     y <- cumsum(rnorm(150))
-    out <- radf_cusum(y, r_star = 0.5, boundary = boundary)
+    out <- monitor_cusum(y, r_star = 0.5, boundary = boundary)
     !is.na(out$alarm)
   }
   run_detect <- function(seed, boundary) {
@@ -210,7 +210,7 @@ test_that("boundary = 'finite' gives a false-alarm rate closer to nominal
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_cusum(y, r_star = n1 / length(y), boundary = boundary)
+    out <- monitor_cusum(y, r_star = n1 / length(y), boundary = boundary)
     !is.na(out$alarm)
   }
   rate_asym <- mean(sapply(1:40, function(s) run_null(s, "asymptotic")))

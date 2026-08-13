@@ -20,23 +20,23 @@
 # fits (quantreg::rq() has no closed-form recursive update the way OLS
 # does -- this part of the original "no closed form" assessment holds),
 # but the CRITICAL VALUE machinery turns out to reuse what
-# radf_quantile.R already validated, not new simulation theory: their
+# quantile_test.R already validated, not new simulation theory: their
 # Corollary 1 decomposes the limiting distribution of t_T^{r1,r2}(tau)
 # as U'^{r1,r2}(tau) = sqrt(1-delta(tau)^2)*z + delta(tau)*Q_{r1,r2},
-# EXACTLY radf_quantile()'s own global-test decomposition, and their
+# EXACTLY quantile_test()'s own global-test decomposition, and their
 # Corollary 2 confirms QPWY_r(tau) => U'^{0,r}(tau) -- i.e. Q_{0,r} is
 # precisely radf()'s own badf[r] under a simulated null path (an
 # expanding-window ADF t-statistic distribution), not a new functional.
 # One radf() call per simulated null replicate therefore gives the WHOLE
 # Q_{0,r} boundary path at once (qpwy_boundary_sim() below), reusing
-# radf_quantile.R's own quantile_check_density() for delta(tau) and the
+# quantile_test.R's own quantile_check_density() for delta(tau) and the
 # same "z ~ N(0,1) combined with Q" construction -- only the point
 # statistic (qpwy_stat_path()) is genuinely new code, an O(T) loop
-# mirroring radf_quantile()'s own per-window t-ratio construction.
+# mirroring quantile_test()'s own per-window t-ratio construction.
 
 # QPWY_r(tau) for every window-end r in `r_idx` -- window fixed at [1, r]
 # (start = 1, matching radf()'s own badf convention), mirroring
-# radf_quantile()'s own per-window QR t-ratio construction (eq. 18)
+# quantile_test()'s own per-window QR t-ratio construction (eq. 18)
 # exactly, just repeated over a growing window instead of the full
 # sample.
 qpwy_stat_path <- function(y, tau, r_idx) {
@@ -75,12 +75,12 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 
 #' QPWY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
 #'
-#' \code{radf_qpwy} implements the QPWY real-time monitoring strategy of
+#' \code{monitor_quantile} implements the QPWY real-time monitoring strategy of
 #' Wu, Shi & Wu (2025): a quantile-regression (QR) analogue of PWY's own
 #' recursive ADF t-statistic, testing at a chosen conditional quantile
 #' \code{tau} over an expanding window \code{[1, r]} (start fixed at the
 #' beginning of the sample, exactly \code{\link{radf}}'s own \code{badf}
-#' convention) rather than \code{\link{radf_quantile}}'s single
+#' convention) rather than \code{\link{quantile_test}}'s single
 #' full-sample test.
 #'
 #' Only \code{QPWY} (single recursion) is implemented, not the paper's
@@ -95,7 +95,7 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' limiting null distribution at each \code{r} is \code{sqrt(1 - delta^2)
 #' * z + delta * Q_{0,r}}, with \code{z ~ N(0, 1)}, \code{delta} a
 #' data-estimated correlation coefficient (as in
-#' \code{\link{radf_quantile}}), and \code{Q_{0,r}} exactly \code{radf()}'s
+#' \code{\link{quantile_test}}), and \code{Q_{0,r}} exactly \code{radf()}'s
 #' own \code{badf} sequence under a simulated null path -- reusing
 #' \code{radf()} directly for the simulation rather than new theory. A
 #' single \strong{flat} boundary is used (not one value per \code{r}):
@@ -105,16 +105,21 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' per-\code{r} marginal quantile (which would badly inflate the
 #' false-alarm rate).
 #'
+#' @note The critical value (boundary) is simulated internally on every
+#' call (via an unexported helper, \code{qpwy_boundary_sim}) -- there is
+#' currently no reusable/exported cv counterpart for this function (a
+#' known, separately-tracked gap, not addressed here).
+#'
 #' @inheritParams radf
 #' @param tau Quantile to test at, in \code{(0, 1)} (fixed, unlike
-#' \code{\link{radf_quantile}}'s \code{"optimal"} grid search -- WSW's own
+#' \code{\link{quantile_test}}'s \code{"optimal"} grid search -- WSW's own
 #' eq. 25 takes \code{tau} as a given parameter for the monitoring
 #' statistic, not re-selected at each recursion point).
 #' @param nrep Number of Monte Carlo replications for the boundary.
 #' @param level Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
-#' @return An object of class \code{radf_qpwy_obj}: a list with the
+#' @return An object of class \code{monitor_quantile_obj}: a list with the
 #' statistic path \code{stat}, the (flat) \code{boundary}, the estimated
 #' \code{delta}, and \code{alarm}/\code{alarm_date} (the first breach,
 #' \code{NA} if none).
@@ -123,12 +128,18 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' financial bubble detection and surveillance. Journal of Time Series
 #' Analysis, 46(5), 908-931.
 #'
-#' @seealso \code{\link{radf_quantile}} for the static, full-sample
+#' @seealso \code{\link{quantile_test}} for the static, full-sample
 #' version of this test. \code{\link{radf_monitor}} for the OLS-based
 #' monitoring alternative.
 #'
+#' @examples
+#' \donttest{
+#' res <- monitor_quantile(sim_data$sim_psy1, tau = 0.5, nrep = 100, seed = 1)
+#' print(res)
+#' }
+#'
 #' @export
-radf_qpwy <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 95, seed = NULL) {
+monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 95, seed = NULL) {
   stopifnot(tau > 0 && tau < 1)
   stopifnot(level %in% c(90, 95, 99))
   x <- parse_data(data)
@@ -186,14 +197,14 @@ radf_qpwy <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 95, see
       index = idx, series_names = snames, n = n, minw = minw,
       tau = tau, level = level, iter = nrep
     ) %>%
-    add_class("radf_qpwy_obj")
+    add_class("monitor_quantile_obj")
 }
 
 #' @export
-print.radf_qpwy_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.monitor_quantile_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "radf_qpwy (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
+    "monitor_quantile (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
     "tau = {attr(x, 'tau')}, level = {attr(x, 'level')}%)"
   ))
   cat_line()

@@ -13,30 +13,30 @@ test_that("quantile_adf_tstat matches radf()'s own single-shot adf t-stat
 test_that("radf_quantile runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_quantile(y, nrep = 100, seed = 1)
+  out <- quantile_test(y, nrep = 100, seed = 1)
 
-  expect_s3_class(out, "radf_quantile_obj")
+  expect_s3_class(out, "quantile_test_obj")
   expect_true(is.numeric(out$tstat))
   expect_true(out$tau[["series1"]] >= 0.2 && out$tau[["series1"]] <= 0.8)
   expect_true(out$delta[["series1"]] >= -1 && out$delta[["series1"]] <= 1)
-  expect_output(print(out), "radf_quantile")
+  expect_output(print(out), "quantile_test")
 })
 
 test_that("radf_quantile runs with a fixed tau", {
   set.seed(1)
   y <- cumsum(rnorm(100))
-  out <- radf_quantile(y, tau = 0.5, nrep = 100, seed = 1)
+  out <- quantile_test(y, tau = 0.5, nrep = 100, seed = 1)
   expect_equal(unname(out$tau[["series1"]]), 0.5)
 })
 
 test_that("radf_quantile rejects a tau outside (0, 1)", {
   y <- cumsum(rnorm(100))
-  expect_error(radf_quantile(y, tau = 1.5, nrep = 100))
+  expect_error(quantile_test(y, tau = 1.5, nrep = 100))
 })
 
 test_that("radf_quantile rejects a non-tabulated significance level", {
   y <- cumsum(rnorm(100))
-  expect_error(radf_quantile(y, level = 93, nrep = 100))
+  expect_error(quantile_test(y, level = 93, nrep = 100))
 })
 
 test_that("radf_quantile detects a genuine explosive series far more
@@ -46,12 +46,12 @@ test_that("radf_quantile detects a genuine explosive series far more
     set.seed(seed)
     n1 <- 60
     y <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
-    radf_quantile(y, nrep = 100, seed = 1)$detected[["series1"]]
+    quantile_test(y, nrep = 100, seed = 1)$detected[["series1"]]
   }
   run_null <- function(seed) {
     set.seed(seed)
     y <- cumsum(rnorm(100))
-    radf_quantile(y, nrep = 100, seed = 1)$detected[["series1"]]
+    quantile_test(y, nrep = 100, seed = 1)$detected[["series1"]]
   }
   rate_explosive <- mean(sapply(1:25, run_explosive))
   rate_null <- mean(sapply(1:25, run_null))
@@ -65,7 +65,7 @@ test_that("radf_quantile false-detection rate under pure H0 is in a
   run_null <- function(seed) {
     set.seed(seed)
     y <- cumsum(rnorm(100))
-    radf_quantile(y, nrep = 100, seed = 1)$detected[["series1"]]
+    quantile_test(y, nrep = 100, seed = 1)$detected[["series1"]]
   }
   rate <- mean(sapply(1:40, run_null))
   expect_true(rate <= 0.25)

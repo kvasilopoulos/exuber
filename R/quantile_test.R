@@ -58,7 +58,7 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 
 #' Quantile Unit Root Test for Bubble Detection (Global Test)
 #'
-#' \code{radf_quantile} implements the "global test" of Wu, Shi & Wu
+#' \code{quantile_test} implements the "global test" of Wu, Shi & Wu
 #' (2025): a quantile-regression (QR) analogue of the Dickey-Fuller
 #' t-ratio, testing for explosive behavior at a chosen conditional
 #' quantile \code{tau} of \code{y_t} on \code{y_{t-1}} rather than at the
@@ -72,8 +72,10 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' search over \code{tau_grid}, excluding the extreme quantiles the paper
 #' itself recommends avoiding at practical sample sizes.
 #'
-#' The critical value is simulated per call (not a fixed table): the
-#' statistic's limiting null distribution is
+#' The critical value is simulated per call (not a fixed table), and there
+#' is currently no reusable/exported cv counterpart for this function (a
+#' known, separately-tracked gap, not addressed here): the statistic's
+#' limiting null distribution is
 #' \code{sqrt(1 - delta^2) * z + delta * Q}, with \code{z ~ N(0, 1)} and
 #' \code{delta} a data-estimated correlation coefficient; \code{Q} is the
 #' standard demeaned Dickey-Fuller t-statistic distribution, simulated by
@@ -90,7 +92,7 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' @param level Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
-#' @return An object of class \code{radf_quantile_obj}: a list with the
+#' @return An object of class \code{quantile_test_obj}: a list with the
 #' test statistic \code{tstat}, the selected \code{tau}, the estimated
 #' correlation \code{delta}, the simulated \code{crit} value, and
 #' \code{detected} (logical, \code{tstat > crit}).
@@ -105,9 +107,15 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- quantile_test(sim_data$sim_psy1, nrep = 100, seed = 1)
+#' print(res)
+#' }
+#'
 #' @importFrom stats coef dnorm lm quantile bw.nrd0 rnorm cor
 #' @export
-radf_quantile <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0.05),
+quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0.05),
                            nrep = 1000L, level = 95, seed = NULL) {
   stopifnot(level %in% c(90, 95, 99))
   x <- parse_data(data)
@@ -158,13 +166,13 @@ radf_quantile <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
       index = attr(x, "index"), series_names = snames, n = n,
       level = level, iter = nrep, seed = get_rng_state(seed)
     ) %>%
-    add_class("radf_quantile_obj")
+    add_class("quantile_test_obj")
 }
 
 #' @export
-print.radf_quantile_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.quantile_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("radf_quantile (n = {attr(x, 'n')}, level = {attr(x, 'level')}%)"))
+  cat_rule(left = glue("quantile_test (n = {attr(x, 'n')}, level = {attr(x, 'level')}%)"))
   cat_line()
   print(
     data.frame(

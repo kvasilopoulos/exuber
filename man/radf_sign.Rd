@@ -44,6 +44,12 @@ sign-based test only. \code{sadf} is the single-supremum (\code{r1 = 0}
 fixed) sPWY statistic; \code{gsadf} is the double-supremum sPSY
 statistic.
 }
+\note{
+Needs \code{\link{radf_sign_cv}} for critical values, not
+\code{\link{radf_wb_cv}} or any other bootstrap -- the statistic is
+pivotal (exactly invariant to heteroskedasticity), so its critical
+values are simulated once, not per dataset.
+}
 \section{Level-shift robustness}{
 
 Harvey, Leybourne, Tatlow & Zu (2025) show this test also retains its
@@ -62,6 +68,16 @@ at rate \code{sqrt(T)}, while this test stays close to nominal size.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+res <- radf_sign(sim_data, minw = 20)
+print(res)
+
+cv <- radf_sign_cv(n = 100, minw = 20)
+summary(res, cv = cv)
+}
+
+}
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2020). Sign-based
 unit root tests for explosive financial bubbles in the presence of

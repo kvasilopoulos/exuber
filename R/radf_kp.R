@@ -65,6 +65,16 @@ kernel_purge <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- radf_kp(sim_data, minw = 20)
+#' print(res)
+#'
+#' # radf_mc_cv() applies unmodified -- see Details
+#' cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
+#' summary(res, cv = cv)
+#' }
+#'
 #' @export
 radf_kp <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL) {
   kernel <- match.arg(kernel)

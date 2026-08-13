@@ -117,13 +117,13 @@ test_that("radf_contagion runs end to end and returns a well-formed
   n <- 150
   core <- cumsum(rnorm(n))
   y <- 0.5 * core + cumsum(rnorm(n, sd = 0.5))
-  out <- radf_contagion(y, core, S = 50, d = 2)
+  out <- contagion_reg(y, core, S = 50, d = 2)
 
-  expect_s3_class(out, "radf_contagion_obj")
+  expect_s3_class(out, "contagion_reg_obj")
   expect_length(out$beta_core, length(out$beta_j))
   expect_length(out$delta2, length(out$r_grid))
   expect_true(is.numeric(out$h) && out$h > 0)
-  expect_output(print(out), "radf_contagion")
+  expect_output(print(out), "contagion_reg")
 })
 
 test_that("radf_contagion accepts a user-supplied bandwidth, skipping CV", {
@@ -131,12 +131,12 @@ test_that("radf_contagion accepts a user-supplied bandwidth, skipping CV", {
   n <- 150
   core <- cumsum(rnorm(n))
   y <- 0.5 * core + cumsum(rnorm(n, sd = 0.5))
-  out <- radf_contagion(y, core, S = 50, d = 1, h = 0.3)
+  out <- contagion_reg(y, core, S = 50, d = 1, h = 0.3)
   expect_equal(out$h, 0.3)
 })
 
 test_that("radf_contagion rejects mismatched series lengths", {
-  expect_error(radf_contagion(rnorm(10), rnorm(11)))
+  expect_error(contagion_reg(rnorm(10), rnorm(11)))
 })
 
 test_that("radf_contagion's estimated delta2(r) varies more over r for a
@@ -158,8 +158,8 @@ test_that("radf_contagion's estimated delta2(r) varies more over r for a
     }
     y_indep <- cumsum(rnorm(n))
 
-    out_planted <- radf_contagion(y_planted, core_i, S = S, d = 3, h = 0.3)
-    out_indep <- radf_contagion(y_indep, core_i, S = S, d = 3, h = 0.3)
+    out_planted <- contagion_reg(y_planted, core_i, S = S, d = 3, h = 0.3)
+    out_indep <- contagion_reg(y_indep, core_i, S = S, d = 3, h = 0.3)
     planted_range[i] <- diff(range(out_planted$delta2))
     indep_range[i] <- diff(range(out_indep$delta2))
   }

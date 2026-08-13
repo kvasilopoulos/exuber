@@ -90,6 +90,17 @@ svadf_threshold <- function(t, type = c("origination", "collapse")) {
 #' @seealso \code{\link{datestamp}} for the symmetric-threshold PWY/PSY
 #' dating this complements.
 #'
+#' @note Reuses \code{\link{radf}}'s own \code{badf} sequence directly,
+#' compared against the two closed-form thresholds above -- no simulation
+#' and no separate critical-value function, unlike \code{\link{radf_mc_cv}}/
+#' \code{\link{radf_wb_cv}}.
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_svadf(sim_data)
+#' print(res)
+#' }
+#'
 #' @export
 radf_svadf <- function(data, minw = NULL, min_duration = NULL) {
   caveat <- "Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section."

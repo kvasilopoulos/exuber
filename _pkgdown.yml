@@ -51,7 +51,7 @@ reference:
       - radf_sign_cv
       - radf_sign_dm
       - radf_sign_dm_cv
-      - radf_ssu
+      - ssu_test
       - radf_svadf
 
   - title: Dating and root inference
@@ -62,21 +62,21 @@ reference:
       - explosive_root
       - root_ci
       - root_ci_datestamp
-      - radf_pdc
+      - dating_pdc
       - radf_recovery
       - radf_recovery_cv
-      - radf_hls
-      - radf_hlw
-      - radf_knp
+      - dating_hls
+      - dating_hlw
+      - dating_knp
 
   - title: Real-time monitoring
     desc: >
       Sequential/real-time bubble detection; see docs/enhancements/monitoring.md
     contents:
       - radf_monitor
-      - radf_cusum
-      - radf_lbi
-      - radf_lbi_monitor
+      - monitor_cusum
+      - lbi_test
+      - monitor_lbi
 
   - title: Multivariate / panel bubble tests
     desc: >
@@ -84,15 +84,15 @@ reference:
     contents:
       - radf_common
       - radf_common_cv
-      - radf_cobubble
-      - radf_contagion
+      - cobubble_test
+      - contagion_reg
 
   - title: Alternative paradigms
     desc: >
       Non-ADF-family approaches; see docs/enhancements/alternative-paradigms.md
     contents:
-      - radf_quantile
-      - radf_qpwy
+      - quantile_test
+      - monitor_quantile
 
   - title: Analysis
     contents:

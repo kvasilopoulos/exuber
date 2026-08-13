@@ -80,7 +80,7 @@ pdc_regime_resid <- function(y, breaks) {
 
 #' Sequential Sample-Splitting Bubble Dating (PDC/KS)
 #'
-#' \code{radf_pdc} dates a single bubble episode using the sequential
+#' \code{dating_pdc} dates a single bubble episode using the sequential
 #' sample-splitting method of Pang, Du & Chong (2021) and its 4-regime
 #' extension by Kurozumi & Skrobotov (2023): a fixed regime structure
 #' (unit-root, explosive, stationary-collapse, and optionally a final
@@ -148,8 +148,14 @@ pdc_regime_resid <- function(y, breaks) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' res <- dating_pdc(sim_data$sim_psy1, regimes = 3L, trim = 0.05)
+#' print(res)
+#' }
+#'
 #' @export
-radf_pdc <- function(data, regimes = 3L, trim = 0.05,
+dating_pdc <- function(data, regimes = 3L, trim = 0.05,
                       type = c("ols", "wls"),
                       kernel = c("gaussian", "uniform"), h = NULL) {
   regimes <- as.integer(regimes)

@@ -13,7 +13,7 @@
 # leave-one-out cross-validated bandwidth over search range [1/(2T), 1/6]
 # (footnote 2), imposing K(0) = 0 in the CV objective. Shared core of
 # kernel_spot_vol() below (e = diff(y)) and the WLS bubble-dating
-# volatility correction in radf_pdc.R (e = step-1 fitted regime residuals).
+# volatility correction in dating_pdc.R (e = step-1 fitted regime residuals).
 nw_spot_vol <- function(e, kernel = c("gaussian", "uniform"), h = NULL) {
   kernel <- match.arg(kernel)
   Tn <- length(e)
@@ -129,8 +129,19 @@ wls_dfstat_grid <- function(y, sigma2, minw) {
 #' bootstrap, and \code{\link{radf_tt}} for a bootstrap-free
 #' heteroskedasticity-robust alternative.
 #'
+#' @note This function bundles the statistic and its critical values in a
+#' single call -- there is no separate un-cv'd statistic function and no
+#' other critical-value function to pair it with, unlike \code{radf()}/
+#' \code{radf_wb_cv()}.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' \donttest{
+#' res <- radf_sbz_cv(sim_data, nboot = 200)
+#' print(res)
+#' }
 #'
 #' @export
 radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", "uniform"),
