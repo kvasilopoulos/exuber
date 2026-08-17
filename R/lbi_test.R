@@ -65,7 +65,7 @@
 #'
 #' @examples
 #' \donttest{
-#' res <- lbi_test(sim_data$sim_psy1)
+#' res <- lbi_test(sim_data$psy1)
 #' print(res)
 #' }
 #'
@@ -232,7 +232,7 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #'
 #' @examples
 #' \donttest{
-#' res <- monitor_lbi(sim_data$sim_psy1, r_star = 0.5)
+#' res <- monitor_lbi(sim_data$psy1, r_star = 0.5)
 #' print(res)
 #' }
 #'

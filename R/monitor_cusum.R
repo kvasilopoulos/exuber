@@ -222,7 +222,7 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #'
 #' @examples
 #' \donttest{
-#' res <- monitor_cusum(sim_data$sim_psy1, r_star = 0.5)
+#' res <- monitor_cusum(sim_data$psy1, r_star = 0.5)
 #' print(res)
 #' }
 #'

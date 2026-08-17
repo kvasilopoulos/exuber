@@ -64,7 +64,7 @@ helper) -- no simulation needed.
 
 \examples{
 \donttest{
-res <- ssu_test(sim_data$sim_psy1, level = 0.95)
+res <- ssu_test(sim_data$psy1, level = 0.95)
 print(res)
 }
 
