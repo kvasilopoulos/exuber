@@ -150,7 +150,7 @@ add_index <- function(x, attr_from, trunc = FALSE) {
 
 #' @importFrom rlang %||%
 is_mc <- function(y) {
-  get_method(y) %||% FALSE == "Monte Carlo"
+  inherits(y, "mc_cv")
 }
 
 is_wb <- function(y) {

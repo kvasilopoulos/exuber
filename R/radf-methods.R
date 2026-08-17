@@ -79,7 +79,7 @@ print.sm_radf <- function(x, ...) {
   iter_char <- if (is_mc(x)) "nrep" else "nboot"
   cat_line()
   cat_rule(
-    left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x)})"),
+    left = glue("Summary (minw = {get_minw(x)}, lag = {get_lag(x) %||% 0L})"),
     right = glue("{get_method(x)} ({iter_char} = {get_iter(x)})")
   )
   cat_line()
