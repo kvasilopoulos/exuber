@@ -162,6 +162,12 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' @seealso \code{\link{radf}} for the deterministic-coefficient
 #' recursive ADF-family alternative this complements.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' statistic/critical-value summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

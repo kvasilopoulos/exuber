@@ -134,6 +134,13 @@ wls_dfstat_grid <- function(y, sigma2, minw) {
 #' other critical-value function to pair it with, unlike \code{radf()}/
 #' \code{radf_wb_cv()}.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' statistic/critical-value summary (bundles the test statistic and its
+#' critical value in one object) -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

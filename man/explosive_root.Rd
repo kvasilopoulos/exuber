@@ -26,6 +26,14 @@ Phillips & Magdalinos (2007) and Guo, Sun & Wang (2019) for inference on a
 Magdalinos's model (their eq. 58 excludes it "to exclude the presence of
 a deterministically explosive component").
 }
+\note{
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+confidence-interval summary (this is inference on the root's
+magnitude, not a \code{radf_obj}-shaped test result) -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

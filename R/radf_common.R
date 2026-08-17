@@ -53,6 +53,13 @@
 #' \code{\link{radf_common_cv}} for its (panel-width-specific) critical
 #' values.
 #'
+#' @note Returns \code{radf()}'s own output (computed on the extracted
+#' factor), and \code{radf_common_cv()} computes the full time-varying
+#' boundary alongside the scalar critical values, so the full
+#' \code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+#' pipeline works -- see \code{vignette("naming-and-analysis", package =
+#' "exuber")}.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

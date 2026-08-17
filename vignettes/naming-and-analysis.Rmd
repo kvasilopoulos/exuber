@@ -1,0 +1,127 @@
+---
+title: "Naming Conventions and the Analysis/Tidying/Plotting Pipeline"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Naming Conventions and the Analysis/Tidying/Plotting Pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, warning = FALSE, message = FALSE,
+  comment = "#>"
+)
+```
+
+```{r load}
+library(exuber)
+```
+
+## Why this exists
+
+`exuber` started as one test (`radf()`, the recursive ADF/SADF/GSADF/BSADF
+statistic of Phillips, Shi & Yu 2015) and grew, through a long research
+programme, into roughly 25 functions covering a dozen papers' worth of
+related-but-distinct methodology: alternative tests, dating procedures,
+monitoring schemes, root inference. Every one of them used to be named
+`radf_<something>()`, which was accurate for some and misleading for others --
+a `radf_` prefix reads as "this is a recursive-ADF statistic," but several of
+these functions are not that at all. This vignette documents the naming
+scheme that replaced it, and -- more usefully -- which functions can actually
+be plugged into the shared `summary()`/`datestamp()`/`tidy()`/`autoplot()`
+pipeline built for `radf()`, and which have their own, differently-shaped
+output instead.
+
+## The naming scheme
+
+| Pattern | Means | Examples |
+|---|---|---|
+| `radf_` prefix | Genuinely built on the recursive-ADF core: calls `radf()` directly, or reuses its `badf`/`bsadf` recursion | `radf()`, `radf_tt()`, `radf_sign()`, `radf_common()`, `radf_kp()`, `radf_monitor()`, `radf_recovery()`, `radf_svadf()`, and the `_cv`/`_mc`/`_sb`/`_wb` critical-value engines |
+| `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive-ADF core | `lbi_test()`, `ssu_test()`, `quantile_test()`, `cobubble_test()` |
+| `dating_` prefix | Point-estimation / model-selection dating, no formal hypothesis test at all | `dating_hls()`, `dating_hlw()`, `dating_knp()`, `dating_pdc()` |
+| `monitor_` prefix | Real-time/sequential detection | `monitor_cusum()`, `monitor_lbi()`, `monitor_quantile()` (plus ADF-family `radf_monitor()`, which keeps the `radf_` prefix since it reuses `badf`/`bsadf` directly) |
+| `root_` prefix | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence | `explosive_root()`, `root_ci()`, `root_ci_datestamp()` |
+| stands alone | A point-estimation tool, not a test | `contagion_reg()` |
+
+Two names that look related but aren't: the `dating_*()` family above are
+standalone SSR/BIC procedures called directly on raw data -- they take no
+critical value at all. `datestamp()` (see below) is a different thing
+entirely: the generic that applies PSY's own threshold-crossing rule to any
+`radf_obj` + `radf_cv` pair.
+
+## What actually plugs into `summary()`/`datestamp()`/`tidy()`/`autoplot()`
+
+These four generics are built around one shape: a `radf_obj` (from `radf()`)
+paired with a `radf_cv` that carries a **time-varying** boundary
+(`badf_cv`/`bsadf_cv`, one critical value per recursion point) as well as the
+three scalar sup-statistic critical values (`adf_cv`/`sadf_cv`/`gsadf_cv`).
+Only functions whose result actually carries the `radf_obj` class -- and
+whose paired `_cv()` actually computes that time-varying boundary -- get the
+full pipeline. Three tiers, in practice:
+
+### Full support: `radf_common()`, `radf_kp()`
+
+Both literally return `radf()`'s own output (`radf_kp()` purges volatility
+first, `radf_common()` extracts a PCA factor first, then calls `radf()`
+unmodified), so every generic works exactly as it does for plain `radf()`:
+
+```{r kp-full}
+res <- radf_kp(sim_data, minw = 20)
+cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
+
+summary(res, cv = cv)
+datestamp(res, cv = cv)
+tidy(res, cv = cv)
+autoplot(res, cv = cv)
+```
+
+### Partial support: `radf_sign()`, `radf_sign_dm()`, `radf_tt()`
+
+These carry the `radf_obj` class too (so `summary()` and `tidy()` work), but
+their own critical-value functions -- `radf_sign_cv()`, `radf_sign_dm_cv()`,
+`radf_tt_cv()` -- only ever computed the three scalar critical values
+`summary()` needs, never the `badf_cv`/`bsadf_cv` time-varying boundary
+`datestamp()`/`autoplot()` require. This is a real, currently unfixed gap,
+not a design choice -- adding it means simulating and calibrating a full
+recursive boundary the way `radf_mc_cv()`/`radf_common_cv()` do, which needs
+this package's usual validation pass (formula-exact check, Monte Carlo size,
+a replication script) before it ships, not a quick patch.
+
+```{r sign-partial}
+res <- radf_sign(sim_data, minw = 20)
+cv <- radf_sign_cv(n = 100, minw = 20)
+
+summary(res, cv = cv) # works
+tidy(res, cv = cv) # works
+```
+```r
+datestamp(res, cv = cv) # errors: cv has no bsadf_cv
+autoplot(res, cv = cv) # errors: cv has no bsadf_cv
+```
+
+### No support: everything else
+
+The remaining ~15 functions (`lbi_test()`, `ssu_test()`, `quantile_test()`,
+`cobubble_test()`, the `dating_*()` family, the `monitor_*()` family,
+`contagion_reg()`, `radf_monitor()`, `radf_recovery()`, `radf_svadf()`,
+`radf_sbz_cv()`) each return their own class with their own `print()` method,
+because their output genuinely doesn't fit the `radf_obj` shape -- a dating
+table isn't a per-series sup-statistic, a monitoring alarm isn't a critical
+value grid. Trying to force them through `summary()`/`datestamp()`/`tidy()`/
+`autoplot()` isn't a documentation gap to close; the right call is their own
+presentation, shown directly:
+
+```{r standalone}
+dating_hls(sim_data$psy1, trim = 0.05)
+
+ssu_test(sim_data$psy1, level = 0.95)
+```
+
+## Summary
+
+| Tier | Functions | `summary()` | `datestamp()` | `tidy()` | `autoplot()` |
+|---|---|---|---|---|---|
+| Full | `radf()`, `radf_common()`, `radf_kp()` | yes | yes | yes | yes |
+| Partial | `radf_sign()`, `radf_sign_dm()`, `radf_tt()` | yes | no (gap) | yes | no (gap) |
+| Standalone | everything else | own `print()` | -- | -- | -- |

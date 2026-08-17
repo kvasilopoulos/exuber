@@ -34,6 +34,13 @@
 #' @references Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate
 #' explosiveness. The Econometrics Journal, 22(3), 279-303.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' confidence-interval summary (this is inference on the root's
+#' magnitude, not a `radf_obj`-shaped test result) -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
@@ -102,6 +109,13 @@ explosive_root <- function(data, from, to) {
 #' moderate deviations from a unit root. Journal of Econometrics, 136(1),
 #' 115-130.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' confidence-interval summary (this is inference on the root's
+#' magnitude, not a `radf_obj`-shaped test result) -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
@@ -168,6 +182,12 @@ root_ci <- function(x, level = 0.95, type = c("normal", "cauchy")) {
 #' \code{doubling_time_lower}, \code{doubling_time_upper}.
 #'
 #' @seealso \code{\link{explosive_root}}, \code{\link{root_ci}}, \code{\link{datestamp}}
+#'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' per-episode confidence-interval table -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`

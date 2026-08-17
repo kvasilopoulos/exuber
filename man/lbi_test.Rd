@@ -46,6 +46,12 @@ pinned down here and are not implemented.
 The critical value is closed-form: the standard normal
 (\code{qnorm}) quantile at \code{level} -- no bootstrap, no
 simulation, no table needed.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+statistic/critical-value/detected summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

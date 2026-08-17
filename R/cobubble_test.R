@@ -97,6 +97,12 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' R. (2022). Testing for co-explosive behaviour in financial time series.
 #' Oxford Bulletin of Economics and Statistics, 84(3), 624-650.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' statistic/critical-value/p-value summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

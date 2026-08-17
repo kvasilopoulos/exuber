@@ -95,6 +95,12 @@ svadf_threshold <- function(t, type = c("origination", "collapse")) {
 #' and no separate critical-value function, unlike \code{\link{radf_mc_cv}}/
 #' \code{\link{radf_wb_cv}}.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' origination/collapse date summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @examples
 #' \donttest{
 #' res <- radf_svadf(sim_data)

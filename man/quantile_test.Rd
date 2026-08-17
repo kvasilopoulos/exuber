@@ -68,6 +68,13 @@ standard demeaned Dickey-Fuller t-statistic distribution, simulated by
 the same random-walk-plus-OLS-t-stat construction used elsewhere in
 this package (see \code{\link{radf_mc_cv}}).
 }
+\note{
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+statistic/boundary/delta summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

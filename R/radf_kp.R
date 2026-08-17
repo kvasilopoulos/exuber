@@ -62,6 +62,11 @@ kernel_purge <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
 #' values, \code{\link{radf_wb_cv}} for a bootstrap-based alternative, and
 #' \code{\link{radf_tt}} for another bootstrap-free alternative.
 #'
+#' @note Returns \code{\link{radf}}'s own output unmodified, so the full
+#' \code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+#' pipeline works exactly as it does for plain \code{radf()} -- see
+#' \code{vignette("naming-and-analysis", package = "exuber")}.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

@@ -65,6 +65,12 @@ Not a hypothesis test: \code{contagion_reg} performs no formal
 inference (no confidence bands, no significance test) on the contagion
 coefficient, so there is no critical value at all for this function --
 don't look for one.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+coefficient-path summary (it performs no formal inference at all) --
+see \code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

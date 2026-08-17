@@ -104,6 +104,12 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' @seealso \code{\link{radf}} for the mean-regression (ADF/SADF/GSADF)
 #' family this complements.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' statistic/boundary/delta summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

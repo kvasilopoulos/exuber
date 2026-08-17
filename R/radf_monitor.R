@@ -304,6 +304,13 @@ hb_fluc_q <- function(level, n_train, k) {
 #' and \code{\link{datestamp}} for the (non-monitoring, full-sample)
 #' origination/collapse dating that already exists.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' boundary/alarm summary (real-time monitoring output, not a
+#' per-series sup-statistic table) -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

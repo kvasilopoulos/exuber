@@ -56,6 +56,12 @@ procedure combining SSU/GSSU with SADF/GSADF.
 The critical value is a published closed-table constant
 (Kurozumi & Nishi (2025)'s Table I, via the internal \code{ssu_q()}
 helper) -- no simulation needed.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+statistic/critical-value summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

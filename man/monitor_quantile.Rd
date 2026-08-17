@@ -81,6 +81,12 @@ The critical value (boundary) is simulated internally on every
 call (via an unexported helper, \code{qpwy_boundary_sim}) -- there is
 currently no reusable/exported cv counterpart for this function (a
 known, separately-tracked gap, not addressed here).
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+statistic/boundary/delta summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \examples{
 \donttest{

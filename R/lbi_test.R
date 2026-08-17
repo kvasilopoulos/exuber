@@ -60,6 +60,12 @@
 #' @seealso \code{\link{radf}} for the recursive ADF-family alternative
 #' this complements.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' statistic/critical-value/detected summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
@@ -226,6 +232,12 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' bubble window) version. \code{\link{monitor_cusum}} and
 #' \code{\link{radf_monitor}} for structurally different monitoring
 #' detectors.
+#'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' boundary/alarm summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`

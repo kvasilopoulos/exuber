@@ -132,6 +132,12 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' version of this test. \code{\link{radf_monitor}} for the OLS-based
 #' monitoring alternative.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' statistic/boundary/delta summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @examples
 #' \donttest{
 #' res <- monitor_quantile(sim_data$psy1, tau = 0.5, nrep = 100, seed = 1)

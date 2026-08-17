@@ -54,6 +54,12 @@ Reuses \code{\link{radf}}'s own \code{badf} sequence directly,
 compared against the two closed-form thresholds above -- no simulation
 and no separate critical-value function, unlike \code{\link{radf_mc_cv}}/
 \code{\link{radf_wb_cv}}.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+origination/collapse date summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Caveats}{
 

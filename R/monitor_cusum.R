@@ -217,6 +217,12 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' @seealso \code{\link{radf_monitor}} for the recursive-ADF (Family A)
 #' monitoring alternative.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' boundary/alarm summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

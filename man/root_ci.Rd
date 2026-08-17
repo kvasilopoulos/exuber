@@ -52,6 +52,14 @@ obtained by transforming the endpoints of the \eqn{\hat\rho} interval
 upper doubling-time bounds come from the upper and lower \eqn{\rho} bounds,
 respectively).
 }
+\note{
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+confidence-interval summary (this is inference on the root's
+magnitude, not a \code{radf_obj}-shaped test result) -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

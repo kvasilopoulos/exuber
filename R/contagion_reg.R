@@ -214,6 +214,12 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' @seealso \code{\link{cobubble_test}} for a different (symmetric,
 #' hypothesis-testing) bivariate bubble relationship.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' coefficient-path summary (it performs no formal inference at all) --
+#' see `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

@@ -64,6 +64,13 @@ found but no subsequent down-crossing occurs before the reverse-time
 sample is exhausted, \code{f_c} is \code{NA} and \code{censored = TRUE}
 (the crisis origination predates the observed sample).
 }
+\note{
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+origination/recovery date summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
+}
 \section{Caveats}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

@@ -80,6 +80,12 @@ hlw_local_to_global <- function(local_tau, s) {
 #' wraps, and \code{\link{datestamp}} for PSY's own multi-bubble
 #' threshold-crossing dating.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' dating table (model, origination, collapse, recovery) -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
