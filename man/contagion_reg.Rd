@@ -73,7 +73,7 @@ don't look for one.
 
 \examples{
 \donttest{
-res <- contagion_reg(sim_data$sim_psy1, sim_data$sim_psy2, d = 0L)
+res <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0L)
 print(res)
 }
 

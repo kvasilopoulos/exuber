@@ -239,7 +239,7 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #'
 #' @examples
 #' \donttest{
-#' res <- dating_hls(sim_data$sim_psy1, trim = 0.05)
+#' res <- dating_hls(sim_data$psy1, trim = 0.05)
 #' print(res)
 #' }
 #'

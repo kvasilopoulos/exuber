@@ -54,7 +54,7 @@ simulation, no table needed.
 
 \examples{
 \donttest{
-res <- lbi_test(sim_data$sim_psy1)
+res <- lbi_test(sim_data$psy1)
 print(res)
 }
 

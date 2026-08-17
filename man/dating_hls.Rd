@@ -61,7 +61,7 @@ hypothesis test -- it needs no critical values at all.
 
 \examples{
 \donttest{
-res <- dating_hls(sim_data$sim_psy1, trim = 0.05)
+res <- dating_hls(sim_data$psy1, trim = 0.05)
 print(res)
 }
 

@@ -70,7 +70,7 @@ Diegel (2025)'s Table 1) -- a table lookup, no simulation.
 
 \examples{
 \donttest{
-res <- monitor_lbi(sim_data$sim_psy1, r_star = 0.5)
+res <- monitor_lbi(sim_data$psy1, r_star = 0.5)
 print(res)
 }
 
