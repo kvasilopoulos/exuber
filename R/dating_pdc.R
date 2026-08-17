@@ -145,6 +145,12 @@ pdc_regime_resid <- function(y, breaks) {
 #' @seealso \code{\link{datestamp}} for the PSY threshold-crossing
 #' alternative.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' dating table (model, origination, collapse, recovery) -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'

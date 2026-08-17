@@ -63,6 +63,13 @@ This function bundles the statistic and its critical values in a
 single call -- there is no separate un-cv'd statistic function and no
 other critical-value function to pair it with, unlike \code{radf()}/
 \code{radf_wb_cv()}.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+statistic/critical-value summary (bundles the test statistic and its
+critical value in one object) -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

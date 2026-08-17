@@ -216,6 +216,12 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' asymptotic critical values, and \code{\link{radf_wb_cv}} for the
 #' bootstrap-based alternative (Harvey, Leybourne, Sollis & Taylor).
 #'
+#' @note Carries the \code{radf_obj} class, so \code{summary()} and
+#' \code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not:
+#' \code{radf_tt_cv()} only computes the three scalar critical values, not
+#' the time-varying boundary those two need -- see
+#' \code{vignette("naming-and-analysis", package = "exuber")}.
+#'
 #' @examples
 #' \donttest{
 #' res <- radf_tt(sim_data, minw = 20)
@@ -223,6 +229,7 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #'
 #' cv <- radf_tt_cv(n = 100, minw = 20)
 #' summary(res, cv = cv)
+#' tidy(res, cv = cv)
 #' }
 #'
 #' @export
@@ -268,7 +275,7 @@ radf_tt <- function(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NU
     adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, minw = minw, n = nrow(x), kernel = kernel, lag = 0L
+      mat = x, index = index(x), series_names = snames, minw = minw, n = nrow(x), kernel = kernel, lag = 0L
     ) %>%
     add_class("radf_tt_obj", "radf_obj")
 }

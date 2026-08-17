@@ -49,6 +49,13 @@ Needs \code{\link{radf_sign_cv}} for critical values, not
 \code{\link{radf_wb_cv}} or any other bootstrap -- the statistic is
 pivotal (exactly invariant to heteroskedasticity), so its critical
 values are simulated once, not per dataset.
+
+Carries the \code{radf_obj} class, so \code{summary()} and
+\code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not:
+\code{radf_sign_cv()} only computes the three scalar critical values
+\code{summary()} needs, not the time-varying boundary those two require.
+A known gap, not a design choice -- see \code{vignette("naming-and-
+analysis", package = "exuber")}.
 }
 \section{Level-shift robustness}{
 
@@ -75,6 +82,7 @@ print(res)
 
 cv <- radf_sign_cv(n = 100, minw = 20)
 summary(res, cv = cv)
+tidy(res, cv = cv)
 }
 
 }

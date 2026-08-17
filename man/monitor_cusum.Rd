@@ -97,6 +97,12 @@ cumulating. Their Corollary 1 establishes the \emph{same} boundary
 function delivers a controlled asymptotic false-alarm rate even under
 time-varying volatility, unlike the standard CUSUM statistic, which
 requires homoskedasticity for its own size-control result to hold.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+boundary/alarm summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

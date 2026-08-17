@@ -62,6 +62,12 @@ time-varying-boundary CUSUM test it is compared against.
 \note{
 The critical value is a published constant boundary (Breitung &
 Diegel (2025)'s Table 1) -- a table lookup, no simulation.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+boundary/alarm summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

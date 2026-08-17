@@ -62,6 +62,12 @@ bootstrap samples (Theorem 2).
 The critical value is a wild bootstrap of the residuals, computed
 internally on every call (Theorem 2) -- there is no separate/reusable
 cv function for this test.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+statistic/critical-value/p-value summary -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

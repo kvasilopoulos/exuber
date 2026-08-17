@@ -111,6 +111,13 @@ sign_demean_transform <- function(y) {
 #' pivotal (exactly invariant to heteroskedasticity), so its critical
 #' values are simulated once, not per dataset.
 #'
+#' @note Carries the \code{radf_obj} class, so \code{summary()} and
+#' \code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not:
+#' \code{radf_sign_cv()} only computes the three scalar critical values
+#' \code{summary()} needs, not the time-varying boundary those two require.
+#' A known gap, not a design choice -- see \code{vignette("naming-and-
+#' analysis", package = "exuber")}.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
@@ -121,6 +128,7 @@ sign_demean_transform <- function(y) {
 #'
 #' cv <- radf_sign_cv(n = 100, minw = 20)
 #' summary(res, cv = cv)
+#' tidy(res, cv = cv)
 #' }
 #'
 #' @export
@@ -154,7 +162,7 @@ radf_sign <- function(data, minw = NULL) {
     adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
+      mat = x, index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
     ) %>%
     add_class("radf_sign_obj", "radf_obj")
 }
@@ -274,6 +282,12 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #' \code{\link{radf_sign}} statistic instead) -- pivotal like
 #' \code{radf_sign}, so no per-dataset bootstrap is needed.
 #'
+#' @note Carries the \code{radf_obj} class, so \code{summary()} and
+#' \code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not
+#' -- same gap as \code{\link{radf_sign}}: \code{radf_sign_dm_cv()} only
+#' computes the three scalar critical values, not a time-varying boundary.
+#' See \code{vignette("naming-and-analysis", package = "exuber")}.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
@@ -284,6 +298,7 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #'
 #' cv <- radf_sign_dm_cv(n = 100, minw = 20)
 #' summary(res, cv = cv)
+#' tidy(res, cv = cv)
 #' }
 #'
 #' @export
@@ -317,7 +332,7 @@ radf_sign_dm <- function(data, minw = NULL) {
     adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
+      mat = x, index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
     ) %>%
     add_class("radf_sign_dm_obj", "radf_obj")
 }
