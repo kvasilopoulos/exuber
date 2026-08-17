@@ -103,7 +103,7 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #'
 #' @examples
 #' \donttest{
-#' res <- dating_knp(sim_data$sim_psy1, trim = 0.05)
+#' res <- dating_knp(sim_data$psy1, trim = 0.05)
 #' print(res)
 #' }
 #'

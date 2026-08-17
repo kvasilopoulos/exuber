@@ -85,7 +85,7 @@ hlw_local_to_global <- function(local_tau, s) {
 #'
 #' @examples
 #' \donttest{
-#' res <- dating_hlw(sim_data$sim_psy1, trim = 0.1, nboot = 199L, seed = 1)
+#' res <- dating_hlw(sim_data$psy1, trim = 0.1, nboot = 199L, seed = 1)
 #' print(res)
 #' }
 #'

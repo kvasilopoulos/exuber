@@ -134,7 +134,7 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' res <- monitor_quantile(sim_data$sim_psy1, tau = 0.5, nrep = 100, seed = 1)
+#' res <- monitor_quantile(sim_data$psy1, tau = 0.5, nrep = 100, seed = 1)
 #' print(res)
 #' }
 #'

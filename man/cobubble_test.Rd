@@ -70,7 +70,7 @@ cv function for this test.
 
 \examples{
 \donttest{
-res <- cobubble_test(sim_data$sim_psy1, sim_data$sim_psy2, nboot = 199L, seed = 1)
+res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
 print(res)
 }
 

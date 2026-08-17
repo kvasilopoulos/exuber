@@ -150,7 +150,7 @@ pdc_regime_resid <- function(y, breaks) {
 #'
 #' @examples
 #' \donttest{
-#' res <- dating_pdc(sim_data$sim_psy1, regimes = 3L, trim = 0.05)
+#' res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
 #' print(res)
 #' }
 #'

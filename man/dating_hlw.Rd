@@ -78,7 +78,7 @@ preliminary episode windows, not for the dating step itself.
 
 \examples{
 \donttest{
-res <- dating_hlw(sim_data$sim_psy1, trim = 0.1, nboot = 199L, seed = 1)
+res <- dating_hlw(sim_data$psy1, trim = 0.1, nboot = 199L, seed = 1)
 print(res)
 }
 
