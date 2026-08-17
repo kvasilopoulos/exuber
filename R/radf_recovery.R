@@ -98,6 +98,15 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' the same way \code{\link{radf_mc_cv}}'s own \code{bsadf_cv} aligns to
 #' \code{radf()$bsadf}.
 #'
+#' @note \code{print()}/\code{tidy()} are not yet implemented for this
+#' object's own class (\code{recovery_cv} has no \code{tidy_radf_cv}
+#' method, unlike \code{radf_sign_cv()}/\code{radf_tt_cv()} which fall
+#' back to \code{mc_cv}'s -- that fallback does not apply here since this
+#' object only carries \code{bsadf_cv}, not the \code{adf_cv}/
+#' \code{sadf_cv}/\code{gsadf_cv} fields that method expects). Inspect
+#' \code{cv$bsadf_cv} directly instead of calling \code{print(cv)}/
+#' \code{tidy(cv)}, which currently error.
+#'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
@@ -108,7 +117,7 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' @examples
 #' \donttest{
 #' cv <- radf_recovery_cv(n = 100, minw = 20, nrep = 200)
-#' print(cv)
+#' range(cv$bsadf_cv)
 #' }
 #'
 #' @export

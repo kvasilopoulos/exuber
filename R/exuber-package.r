@@ -15,6 +15,7 @@
 #' @useDynLib exuber, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 #' @importFrom lifecycle badge
+#' @importFrom stats setNames approx qcauchy lm.fit
 #' @docType package
 #' @keywords internal
 "_PACKAGE"

@@ -40,6 +40,16 @@ simulated null path before running the recursive computation, since
 reversal induces an endogeneity with no forward-regression analogue
 (see \code{\link{radf_recovery}}'s Details).
 }
+\note{
+\code{print()}/\code{tidy()} are not yet implemented for this
+object's own class (\code{recovery_cv} has no \code{tidy_radf_cv}
+method, unlike \code{radf_sign_cv()}/\code{radf_tt_cv()} which fall
+back to \code{mc_cv}'s -- that fallback does not apply here since this
+object only carries \code{bsadf_cv}, not the \code{adf_cv}/
+\code{sadf_cv}/\code{gsadf_cv} fields that method expects). Inspect
+\code{cv$bsadf_cv} directly instead of calling \code{print(cv)}/
+\code{tidy(cv)}, which currently error.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -48,7 +58,7 @@ reversal induces an endogeneity with no forward-regression analogue
 \examples{
 \donttest{
 cv <- radf_recovery_cv(n = 100, minw = 20, nrep = 200)
-print(cv)
+range(cv$bsadf_cv)
 }
 
 }

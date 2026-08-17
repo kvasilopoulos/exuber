@@ -268,7 +268,7 @@ radf_tt <- function(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NU
     adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, minw = minw, n = nrow(x), kernel = kernel
+      index = index(x), series_names = snames, minw = minw, n = nrow(x), kernel = kernel, lag = 0L
     ) %>%
     add_class("radf_tt_obj", "radf_obj")
 }
