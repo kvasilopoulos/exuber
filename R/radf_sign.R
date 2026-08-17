@@ -154,7 +154,7 @@ radf_sign <- function(data, minw = NULL) {
     adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, minw = minw, n = nrow(x)
+      index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
     ) %>%
     add_class("radf_sign_obj", "radf_obj")
 }
@@ -317,7 +317,7 @@ radf_sign_dm <- function(data, minw = NULL) {
     adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, minw = minw, n = nrow(x)
+      index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
     ) %>%
     add_class("radf_sign_dm_obj", "radf_obj")
 }
