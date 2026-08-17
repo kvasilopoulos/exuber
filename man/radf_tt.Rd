@@ -42,6 +42,13 @@ bootstrap. \code{\link{radf_wb_cv}} (Harvey, Leybourne, Sollis & Taylor's
 wild bootstrap) is a bootstrap-based alternative, worth considering if
 non-pivotality/finite-sample bootstrap robustness is a specific concern.
 }
+\note{
+Carries the \code{radf_obj} class, so \code{summary()} and
+\code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not:
+\code{radf_tt_cv()} only computes the three scalar critical values, not
+the time-varying boundary those two need -- see
+\code{vignette("naming-and-analysis", package = "exuber")}.
+}
 \examples{
 \donttest{
 res <- radf_tt(sim_data, minw = 20)
@@ -49,6 +56,7 @@ print(res)
 
 cv <- radf_tt_cv(n = 100, minw = 20)
 summary(res, cv = cv)
+tidy(res, cv = cv)
 }
 
 }

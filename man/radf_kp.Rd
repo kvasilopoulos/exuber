@@ -51,6 +51,12 @@ implemented. The paper also proposes a without-intercept variant and a
 union-of-rejections test combining both; these are not implemented here
 (see the package's enhancement notes for the cost/benefit reasoning).
 }
+\note{
+Returns \code{\link{radf}}'s own output unmodified, so the full
+\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+pipeline works exactly as it does for plain \code{radf()} -- see
+\code{vignette("naming-and-analysis", package = "exuber")}.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

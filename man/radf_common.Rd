@@ -52,6 +52,14 @@ once there are more series to draw transient co-movement from. Use
 \code{\link{radf_mc_cv}}, which has no dependence on panel width and is
 badly undersized here once \code{N} grows past a handful of series.
 }
+\note{
+Returns \code{radf()}'s own output (computed on the extracted
+factor), and \code{radf_common_cv()} computes the full time-varying
+boundary alongside the scalar critical values, so the full
+\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+pipeline works -- see \code{vignette("naming-and-analysis", package =
+"exuber")}.
+}
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

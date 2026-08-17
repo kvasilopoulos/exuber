@@ -70,6 +70,12 @@ values at all, same as \code{\link{dating_hls}}. The step-1 PSY
 detection/dating pass does use a wild bootstrap critical value
 (\code{cv}/\code{nboot}/\code{seed} below), but only to locate the
 preliminary episode windows, not for the dating step itself.
+
+Returns its own class (not \code{radf_obj}), so it does not plug into
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+dating table (model, origination, collapse, recovery) -- see
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+picture of which functions do and don't fit that pipeline.
 }
 \section{Status}{
 

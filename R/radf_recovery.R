@@ -203,6 +203,12 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' @seealso \code{\link{datestamp}} for the (forward, non-reversed)
 #' origination/collapse dating this complements.
 #'
+#' @note Returns its own class (not `radf_obj`), so it does not plug into
+#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' origination/recovery date summary -- see
+#' `vignette("naming-and-analysis", package = "exuber")` for the full
+#' picture of which functions do and don't fit that pipeline.
+#'
 #' @examples
 #' \donttest{
 #' res <- radf_recovery(sim_data, nrep = 200)
