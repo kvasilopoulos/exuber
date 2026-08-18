@@ -45,7 +45,7 @@
 # scrambled this table's sub/superscripts and numeric alignment), for
 # significance level beta and monitoring-horizon ratio s_bar = k_bar/m,
 # tabulated only at s_bar in {1, 3, 5}. Only q0_df (the SADF boundary
-# constant, s0 = 0) is used by radf_monitor(); the other columns are kept
+# constant, s0 = 0) is used by monitor_radf(); the other columns are kept
 # for completeness/future use (q04_df, q08_df for GSADF_{s0}, q025_cs/
 # q045_cs for HB's CS/CUSUM detector at gamma = 0.25/0.45).
 kurozumi_table1 <- data.frame(
@@ -220,7 +220,7 @@ hb_fluc_q <- function(level, n_train, k) {
 
 #' Real-Time Monitoring for Explosive Bubbles
 #'
-#' \code{radf_monitor} implements real-time monitoring: fix a training
+#' \code{monitor_radf} implements real-time monitoring: fix a training
 #' window \code{[1, T*]} assumed free of exuberance, calibrate a critical
 #' value on it, then compare the running recursive statistic at each
 #' subsequent point \code{T*+1, ..., T} against that fixed boundary,
@@ -280,7 +280,7 @@ hb_fluc_q <- function(level, n_train, k) {
 #' two values his boundary function's scaling constants are tabulated
 #' for.
 #'
-#' @return An object of class \code{radf_monitor_obj}: a list with the
+#' @return An object of class \code{monitor_radf_obj}: a list with the
 #' full-sample statistic path (\code{stat} -- \code{bsadf} for
 #' \code{boundary = "bootstrap"}, \code{badf} for \code{"kurozumi"}/
 #' \code{"fluc"}), the calibrated \code{boundary} (one flat value per
@@ -317,16 +317,16 @@ hb_fluc_q <- function(level, n_train, k) {
 #' @examples
 #' \donttest{
 #' # Default: Phillips & Shi (2020) wild bootstrap boundary
-#' mon <- radf_monitor(sim_data, r_star = 0.5, nboot = 200)
+#' mon <- monitor_radf(sim_data, r_star = 0.5, nboot = 200)
 #' print(mon)
 #'
 #' # Kurozumi (2020) closed-form boundary -- no bootstrap needed
-#' mon_kz <- radf_monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+#' mon_kz <- monitor_radf(sim_data, r_star = 0.5, boundary = "kurozumi")
 #' print(mon_kz)
 #' }
 #'
 #' @export
-radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
+monitor_radf <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
                           level = 0.95, adflag = 0,
                           type = c("fixed", "aic", "bic"), seed = NULL,
                           boundary = c("bootstrap", "kurozumi", "fluc"),
@@ -381,7 +381,7 @@ radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
           n = n, level = level, iter = NA_integer_, boundary_type = "kurozumi",
           s0 = s0, q = q
         ) %>%
-        add_class("radf_monitor_obj")
+        add_class("monitor_radf_obj")
     )
   }
 
@@ -429,22 +429,22 @@ radf_monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
       index = idx, series_names = snames, minw = minw, lag = adflag,
       n = n, level = level, iter = iter, boundary_type = boundary, s0 = 0
     ) %>%
-    add_class("radf_monitor_obj")
+    add_class("monitor_radf_obj")
 }
 
 #' @export
-print.radf_monitor_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.monitor_radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   s0 <- attr(x, "s0") %||% 0
   header <- if (s0 > 0) {
     glue(
-      "radf_monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
+      "monitor_radf (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
       "level = {attr(x, 'level') * 100}%, boundary = kurozumi, s0 = {s0}, ",
       "q = {round(attr(x, 'q'), 4)})"
     )
   } else {
     glue(
-      "radf_monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
+      "monitor_radf (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
       "level = {attr(x, 'level') * 100}%, boundary = {attr(x, 'boundary_type')})"
     )
   }

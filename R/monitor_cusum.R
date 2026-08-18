@@ -3,20 +3,20 @@
 # docs/enhancements/monitoring.md, "CUSUM/Page-CUSUM detector family", for
 # the full evaluation this implements -- Family B: a structurally
 # different statistic from Family A's recursive-ADF training-max
-# (radf_monitor()), a standardized running sum of first differences
+# (monitor_radf()), a standardized running sum of first differences
 # compared against a closed-form asymptotic boundary. No wild bootstrap,
 # no simulation, no new dependency -- the whole detector is a cumsum() and
 # a boundary formula, exactly matching this project's "why not exubercore"
 # precedent for cheap closed-form statistics (STADF, sign-based).
 #
 # HB propose two monitoring statistics, CUSUM (here) and FLUC
-# (radf_monitor(..., boundary = "fluc")) -- both now implemented.
+# (monitor_radf(..., boundary = "fluc")) -- both now implemented.
 #
 # `boundary = "finite"` adds HB's own finite-sample CUSUM boundary
 # constant (their Table 8, "without drift estimation" -- matching this
 # file's own raw-first-difference construction, no mean removal), used
 # in place of the fixed asymptotic `b_alpha = 4.6`. Same shape and same
-# lookup-and-snap pattern as radf_monitor.R's hb_fluc_q()/hb_fluc_table
+# lookup-and-snap pattern as monitor_radf.R's hb_fluc_q()/hb_fluc_table
 # for FLUC's own Table 7 -- a published constant, no new simulation.
 # Applied to both `type = "standard"` and `type = "kernel"` (CUSUMV):
 # Astill et al.'s own Corollary 1 (already implemented/validated above)
@@ -47,7 +47,7 @@ hb_cusum_finite_table <- local({
   tbl
 })
 
-# Same lookup-and-snap convention as radf_monitor.R's hb_fluc_q().
+# Same lookup-and-snap convention as monitor_radf.R's hb_fluc_q().
 hb_cusum_finite_q <- function(level, n_train, k) {
   beta <- 1 - level
   beta_choices <- c(0.10, 0.05, 0.01)
@@ -73,7 +73,7 @@ hb_cusum_finite_q <- function(level, n_train, k) {
 # sample {y_0, ..., y_t}" (eq. 26's own text): the recursive (growing)
 # sample variance of first differences up to t, re-estimated as new data
 # arrives -- legitimate in real-time monitoring since only past/current
-# data is used at each t, unlike radf_monitor()'s training-only wild
+# data is used at each t, unlike monitor_radf()'s training-only wild
 # bootstrap which has to guard against a fixed critical value leaking
 # future information.
 cusum_stat_path <- function(y, T_star, b_alpha) {
@@ -154,7 +154,7 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' published finite-sample table lookup (\code{boundary = "finite"}, Homm
 #' & Breitung (2012)'s Table 8) -- no simulation, no separate cv function.
 #'
-#' Unlike \code{\link{radf_monitor}} (Family A, a recursive ADF-family
+#' Unlike \code{\link{monitor_radf}} (Family A, a recursive ADF-family
 #' statistic requiring a wild bootstrap to calibrate its boundary), this
 #' is a structurally different statistic -- a standardized running sum,
 #' not a recursive regression -- with an asymptotic closed-form boundary
@@ -171,7 +171,7 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' time-varying volatility, unlike the standard CUSUM statistic, which
 #' requires homoskedasticity for its own size-control result to hold.
 #'
-#' @inheritParams radf_monitor
+#' @inheritParams monitor_radf
 #' @param b_alpha The boundary constant (HB's eq. 29). Default \code{4.6},
 #' HB's own one-sided asymptotic calibration for a 5\% significance level
 #' (their Section 3); this is an asymptotic upper bound on the false-
@@ -214,7 +214,7 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' in financial data in the presence of time-varying volatility. Journal
 #' of Financial Econometrics, 21(1), 187-227.
 #'
-#' @seealso \code{\link{radf_monitor}} for the recursive-ADF (Family A)
+#' @seealso \code{\link{monitor_radf}} for the recursive-ADF (Family A)
 #' monitoring alternative.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
@@ -228,8 +228,18 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #'
 #' @examples
 #' \donttest{
-#' res <- monitor_cusum(sim_data$psy1, r_star = 0.5)
-#' print(res)
+#' make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
+#'   y <- numeric(n)
+#'   y[seq_len(T_star)] <- cumsum(rnorm(T_star))
+#'   for (t in (T_star + 1):n) {
+#'     y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
+#'   }
+#'   y
+#' }
+#' set.seed(7)
+#' y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+#' res <- monitor_cusum(y, r_star = 0.5)
+#' print(res) # alarm should fire soon after t = 150
 #' }
 #'
 #' @export

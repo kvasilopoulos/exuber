@@ -60,7 +60,10 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-res <- lbi_test(sim_data$psy1)
+set.seed(1)
+n <- 60
+y <- 100 * 1.03^(1:n) + cumsum(rnorm(n, sd = 1)) # genuine explosive AR
+res <- lbi_test(y)
 print(res)
 }
 

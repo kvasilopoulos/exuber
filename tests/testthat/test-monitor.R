@@ -1,23 +1,23 @@
-context("radf_monitor")
+context("monitor_radf")
 
-test_that("radf_monitor runs end to end and returns a well-formed object", {
+test_that("monitor_radf runs end to end and returns a well-formed object", {
   set.seed(1)
   n <- 100
   y <- cumsum(rnorm(n))
-  out <- radf_monitor(y, r_star = 0.5, minw = 20, nboot = 99, seed = 1)
+  out <- monitor_radf(y, r_star = 0.5, minw = 20, nboot = 99, seed = 1)
 
-  expect_s3_class(out, "radf_monitor_obj")
+  expect_s3_class(out, "monitor_radf_obj")
   expect_true(is.matrix(out$stat))
   expect_true(is.numeric(out$boundary))
   expect_equal(out$T_star, 50)
-  expect_output(print(out), "radf_monitor")
+  expect_output(print(out), "monitor_radf")
 })
 
 test_that("'r_star' must leave room for both a training window and at
   least one monitoring observation", {
   y <- cumsum(rnorm(60))
-  expect_error(radf_monitor(y, r_star = 5, minw = 20, nboot = 20))
-  expect_error(radf_monitor(y, r_star = 60, minw = 20, nboot = 20))
+  expect_error(monitor_radf(y, r_star = 5, minw = 20, nboot = 20))
+  expect_error(monitor_radf(y, r_star = 60, minw = 20, nboot = 20))
 })
 
 test_that("an alarm, when raised, always falls strictly after the
@@ -29,7 +29,7 @@ test_that("an alarm, when raised, always falls strictly after the
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_monitor(y, r_star = n1 / length(y), minw = 20, nboot = 99, seed = 1)
+    out <- monitor_radf(y, r_star = n1 / length(y), minw = 20, nboot = 99, seed = 1)
     alarm <- unname(out$alarm)
     if (is.na(alarm)) NA else alarm > out$T_star
   }
@@ -37,7 +37,7 @@ test_that("an alarm, when raised, always falls strictly after the
   expect_true(all(na.omit(results)))
 })
 
-test_that("radf_monitor detects a clear bubble starting strictly after the
+test_that("monitor_radf detects a clear bubble starting strictly after the
   training window, with a positive (not negative or absurdly large) alarm
   delay relative to the true origination date", {
   skip_on_cran()
@@ -47,7 +47,7 @@ test_that("radf_monitor detects a clear bubble starting strictly after the
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_monitor(y, r_star = n1 / length(y), minw = 20, nboot = 99, seed = 1)
+    out <- monitor_radf(y, r_star = n1 / length(y), minw = 20, nboot = 99, seed = 1)
     c(alarm = unname(out$alarm), true_origination = n1)
   }
   res <- t(sapply(1:15, run_once))
@@ -68,12 +68,12 @@ test_that("kurozumi_sadf_q looks up Kurozumi (2020) Table 1 constants exactly", 
   expect_error(exuber:::kurozumi_sadf_q(0.93, 1))
 })
 
-test_that("radf_monitor runs end to end with boundary = 'kurozumi'", {
+test_that("monitor_radf runs end to end with boundary = 'kurozumi'", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
+  out <- monitor_radf(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
 
-  expect_s3_class(out, "radf_monitor_obj")
+  expect_s3_class(out, "monitor_radf_obj")
   expect_true(is.matrix(out$stat))
   expect_equal(unname(out$boundary), 1.0381)
   expect_output(print(out), "kurozumi")
@@ -81,7 +81,7 @@ test_that("radf_monitor runs end to end with boundary = 'kurozumi'", {
 
 test_that("boundary = 'kurozumi' rejects levels outside its tabulated set", {
   y <- cumsum(rnorm(100))
-  expect_error(radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.93))
+  expect_error(monitor_radf(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.93))
 })
 
 test_that("boundary = 'kurozumi' false-alarm rate under H0 is in a plausible
@@ -90,7 +90,7 @@ test_that("boundary = 'kurozumi' false-alarm rate under H0 is in a plausible
   run_null <- function(seed) {
     set.seed(seed)
     y <- cumsum(rnorm(150))
-    out <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
+    out <- monitor_radf(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
     !is.na(out$alarm)
   }
   rate <- mean(sapply(1:100, run_null))
@@ -105,7 +105,7 @@ test_that("boundary = 'kurozumi' alarms never fire before T_star", {
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_monitor(y, r_star = n1 / length(y), minw = 20, boundary = "kurozumi")
+    out <- monitor_radf(y, r_star = n1 / length(y), minw = 20, boundary = "kurozumi")
     alarm <- unname(out$alarm)
     if (is.na(alarm)) NA else alarm > out$T_star
   }
@@ -154,14 +154,14 @@ test_that("kurozumi_gsadf_stat matches a brute-force lm() search over the
   }
 })
 
-test_that("radf_monitor(boundary = 'kurozumi', s0 = 0.4/0.8) runs end to end,
+test_that("monitor_radf(boundary = 'kurozumi', s0 = 0.4/0.8) runs end to end,
   matches the published GSADF boundary constant, and alarms never fire
   before T_star", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_monitor(y, r_star = 0.5, boundary = "kurozumi", s0 = 0.4, level = 0.95)
+  out <- monitor_radf(y, r_star = 0.5, boundary = "kurozumi", s0 = 0.4, level = 0.95)
 
-  expect_s3_class(out, "radf_monitor_obj")
+  expect_s3_class(out, "monitor_radf_obj")
   expect_true(is.matrix(out$stat))
   expect_equal(nrow(out$stat), length(out$boundary))
   expect_equal(attr(out, "q"), 1.8081)
@@ -170,12 +170,12 @@ test_that("radf_monitor(boundary = 'kurozumi', s0 = 0.4/0.8) runs end to end,
   expect_true(is.na(out$alarm) || out$alarm > out$T_star)
 })
 
-test_that("radf_monitor(boundary = 'kurozumi', s0 = 0) is unchanged (s0 = 0
+test_that("monitor_radf(boundary = 'kurozumi', s0 = 0) is unchanged (s0 = 0
   is the default and reproduces the original SADF-only behavior)", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out_default <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
-  out_explicit <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "kurozumi", s0 = 0, level = 0.95)
+  out_default <- monitor_radf(y, r_star = 0.5, minw = 20, boundary = "kurozumi", level = 0.95)
+  out_explicit <- monitor_radf(y, r_star = 0.5, minw = 20, boundary = "kurozumi", s0 = 0, level = 0.95)
   expect_equal(out_default$stat, out_explicit$stat)
   expect_equal(out_default$boundary, out_explicit$boundary)
 })
@@ -190,7 +190,7 @@ test_that("boundary = 'kurozumi', s0 = 0.4 false-alarm rate under H0 is close
   fa <- mean(vapply(seq_len(nrep), function(i) {
     set.seed(1000 + i)
     y <- cumsum(rnorm(n))
-    !is.na(radf_monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4, level = 0.95)$alarm)
+    !is.na(monitor_radf(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4, level = 0.95)$alarm)
   }, logical(1)))
   expect_lt(fa, 0.15)
 
@@ -206,8 +206,8 @@ test_that("boundary = 'kurozumi', s0 = 0.4 false-alarm rate under H0 is close
     set.seed(seed)
     y <- make_bubble_series(n, T_star, bstart = 130)
     c(
-      sadf = !is.na(unname(radf_monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0)$alarm)),
-      gsadf = !is.na(unname(radf_monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4)$alarm))
+      sadf = !is.na(unname(monitor_radf(y, r_star = T_star, boundary = "kurozumi", s0 = 0)$alarm)),
+      gsadf = !is.na(unname(monitor_radf(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4)$alarm))
     )
   }
   res <- rowMeans(sapply(1:40, run))
@@ -225,19 +225,19 @@ test_that("hb_fluc_q looks up Homm & Breitung (2012) Table 7(i) constants exactl
   expect_error(exuber:::hb_fluc_q(0.93, 100, 2))
 })
 
-test_that("radf_monitor runs end to end with boundary = 'fluc'", {
+test_that("monitor_radf runs end to end with boundary = 'fluc'", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.95)
+  out <- monitor_radf(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.95)
 
-  expect_s3_class(out, "radf_monitor_obj")
+  expect_s3_class(out, "monitor_radf_obj")
   expect_true(is.matrix(out$stat))
   expect_output(print(out), "fluc")
 })
 
 test_that("boundary = 'fluc' rejects levels outside its tabulated set", {
   y <- cumsum(rnorm(100))
-  expect_error(radf_monitor(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.93))
+  expect_error(monitor_radf(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.93))
 })
 
 test_that("boundary = 'fluc' false-alarm rate under H0 is not wildly
@@ -246,7 +246,7 @@ test_that("boundary = 'fluc' false-alarm rate under H0 is not wildly
   run_null <- function(seed) {
     set.seed(seed)
     y <- cumsum(rnorm(150))
-    out <- radf_monitor(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.95)
+    out <- monitor_radf(y, r_star = 0.5, minw = 20, boundary = "fluc", level = 0.95)
     !is.na(out$alarm)
   }
   rate <- mean(sapply(1:100, run_null))
@@ -261,7 +261,7 @@ test_that("boundary = 'fluc' alarms never fire before T_star", {
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
-    out <- radf_monitor(y, r_star = n1 / length(y), minw = 20, boundary = "fluc")
+    out <- monitor_radf(y, r_star = n1 / length(y), minw = 20, boundary = "fluc")
     alarm <- unname(out$alarm)
     if (is.na(alarm)) NA else alarm > out$T_star
   }

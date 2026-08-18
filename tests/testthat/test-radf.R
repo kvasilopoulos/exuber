@@ -33,7 +33,8 @@ test_that("minw check radf", {
 })
 
 test_that("class check", {
-  expect_error(radf(as.list(dta)), "unsupported class")
+  expect_error(radf(as.list(dta)), "Unsupported input class")
+  expect_error(radf(NULL), "`data` is NULL")
 })
 
 test_that("NA handling", {

@@ -44,6 +44,19 @@
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' set.seed(2026)
+#' burn <- cumsum(rnorm(60))
+#' bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+#' y <- c(burn, bubble)
+#'
+#' r <- radf(y, minw = 20)
+#' cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+#' ds <- datestamp(r, cv = cv, min_duration = 3)
+#'
+#' est <- explosive_root(y, ds[["series1"]]$Start[1], ds[["series1"]]$End[1])
+#' est
+#'
 #' @export
 explosive_root <- function(data, from, to) {
   y <- as.numeric(data)[from:to]
@@ -119,6 +132,20 @@ explosive_root <- function(data, from, to) {
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' set.seed(2026)
+#' burn <- cumsum(rnorm(60))
+#' bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+#' y <- c(burn, bubble)
+#'
+#' r <- radf(y, minw = 20)
+#' cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+#' ds <- datestamp(r, cv = cv, min_duration = 3)
+#'
+#' est <- explosive_root(y, ds[["series1"]]$Start[1], ds[["series1"]]$End[1])
+#' root_ci(est) # true rho = 1.04 -- CI should bracket it
+#' root_ci(est, type = "cauchy")
+#'
 #' @export
 root_ci <- function(x, level = 0.95, type = c("normal", "cauchy")) {
   type <- match.arg(type)
@@ -191,6 +218,18 @@ root_ci <- function(x, level = 0.95, type = c("normal", "cauchy")) {
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
+#'
+#' @examples
+#' set.seed(2026)
+#' burn <- cumsum(rnorm(60))
+#' bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+#' y <- c(burn, bubble)
+#'
+#' r <- radf(y, minw = 20)
+#' cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+#' ds <- datestamp(r, cv = cv, min_duration = 3)
+#'
+#' root_ci_datestamp(r, ds) # one row per datestamped episode
 #'
 #' @importFrom purrr imap pmap
 #' @export
