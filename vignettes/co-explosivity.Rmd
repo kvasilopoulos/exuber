@@ -1,0 +1,90 @@
+---
+title: "Bivariate Bubble Relationships: cobubble_test() and contagion_reg()"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bivariate Bubble Relationships: cobubble_test() and contagion_reg()}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, warning = FALSE, message = FALSE,
+  comment = "#>"
+)
+```
+
+```{r load}
+library(exuber)
+```
+
+## Two different questions about two series
+
+Both functions here look at a *pair* of series that each contain (or might
+contain) an explosive episode, but they ask different questions and answer
+them differently:
+
+- `cobubble_test()` (Evripidou, Harvey, Leybourne & Sollis 2022) is a formal
+  **hypothesis test**: are `y` and `x`'s explosive episodes the *same*
+  episode, i.e. is `y_t - alpha - beta * x_{t-i}` stationary for some
+  lag/lead `i`? This is a KPSS-type test -- the null hypothesis is
+  co-explosivity (stationary residual), so *rejecting* means the two series'
+  bubbles are not the same underlying process.
+- `contagion_reg()` (Greenaway-McGrevy & Phillips 2016) performs no formal
+  inference at all. It estimates a **time-varying** contagion coefficient
+  `delta_2(r)`: at each point `r` in the sample, how strongly a "peripheral"
+  series `y`'s (fixed-window) AR(1) coefficient co-moves with a "core"
+  series' own coefficient, via a Nadaraya-Watson kernel regression.
+
+Neither carries the `radf_obj` class -- see `vignette("naming-and-analysis")`.
+
+## `cobubble_test()`: are these the same bubble?
+
+`sim_data$psy1` and `sim_data$psy2` are independently simulated explosive
+episodes, so a correct test should reject co-explosivity between them:
+
+```{r cobubble}
+res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199, seed = 1)
+res
+```
+
+It does: `S` comfortably exceeds its (wild-bootstrap, heteroskedasticity-robust)
+critical value, and co-explosivity is rejected -- correctly, since these two
+series share no common bubble process by construction.
+
+## `contagion_reg()`: how strongly do they co-move, and when?
+
+```{r contagion}
+cr <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0)
+cr
+```
+
+`cr$delta2` is the full estimated path over `cr$r_grid`, not just the range
+`print()` shows:
+
+```{r contagion-plot, fig.width = 6, fig.height = 4}
+plot(cr$r_grid, cr$delta2, type = "l",
+     xlab = "r (fraction of sample)", ylab = expression(delta[2](r)),
+     main = "Estimated time-varying contagion coefficient")
+```
+
+For contrast, a series with no relationship to `psy2` at all -- a plain
+random walk -- gives a visibly different, wider-ranging path that also
+crosses zero:
+
+```{r contagion-null}
+set.seed(5)
+indep <- cumsum(rnorm(100))
+cr_null <- contagion_reg(indep, sim_data$psy2, d = 0)
+range(cr_null$delta2)
+range(cr$delta2)
+```
+
+## Which to reach for
+
+- Want a yes/no answer, with a critical value, to "do these two series share
+  the same explosive episode": `cobubble_test()`.
+- Want to see *how* the strength of comovement between two series' AR
+  coefficients evolves over the sample (e.g. to visualize contagion
+  building up before a joint collapse), with no formal test attached:
+  `contagion_reg()`.
