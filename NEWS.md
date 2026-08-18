@@ -16,9 +16,11 @@ what was checked and how.
   sGSADF, invariant to volatility with no bootstrap needed.
 * `ssu_test()` — Kurozumi & Nishi (2025) stochastic explosive-coefficient
   test (minimum-viable subset).
-* `radf_svadf()` — Sarkar & Wells (2026) SV-ADF asymmetric-threshold
-  dating. **Caveat:** the source is a non-peer-reviewed preprint, flagged
-  at call time and in `?radf_svadf`.
+* `datestamp(..., option = "svadf")` — Sarkar & Wells (2026) SV-ADF
+  asymmetric-threshold dating, folded into `datestamp()` rather than
+  shipped as a separate `radf_svadf()` entry point. **Caveat:** the
+  source is a non-peer-reviewed preprint, flagged at call time and in
+  `?datestamp`, Caveats section.
 
 ### Dating and root inference
 

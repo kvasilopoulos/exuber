@@ -29,7 +29,6 @@ exuber_registry <- function() {
     "radf_kp", "adf", "Kernel-purge heteroskedasticity-robust test; purges volatility, then plain radf().",
     "radf_recovery", "adf", "Reverse-regression crisis-origination/recovery dating.",
     "radf_recovery_cv", "adf", "Critical values for radf_recovery() (its own null, not radf_mc_cv()'s).",
-    "radf_svadf", "adf", "SV-ADF asymmetric-threshold dating; reuses radf()'s own badf sequence.",
     "monitor_radf", "adf,monitor", "Real-time monitoring (Family A); reuses radf()'s badf/bsadf directly.",
     "lbi_test", "test", "Locally best invariant test for a bubble spanning the whole sample (Breitung & Diegel 2025).",
     "ssu_test", "test", "Stochastic explosive-coefficient test on squared first differences (Kurozumi & Nishi 2025).",

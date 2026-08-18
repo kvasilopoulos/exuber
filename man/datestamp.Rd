@@ -12,7 +12,7 @@ datestamp(object, cv = NULL, min_duration = 0L, ...)
   cv = NULL,
   min_duration = 0L,
   sig_lvl = 95,
-  option = c("gsadf", "sadf"),
+  option = c("gsadf", "sadf", "svadf"),
   nonrejected = FALSE,
   ...
 )
@@ -27,12 +27,19 @@ reported (default = 0).}
 
 \item{...}{further arguments passed to methods.}
 
-\item{sig_lvl}{logical. Significance level, one of 90, 95 or 99.}
+\item{sig_lvl}{logical. Significance level, one of 90, 95 or 99. Ignored
+when \code{option = "svadf"}.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
+\item{option}{one of \code{"gsadf"}/\code{"sadf"} (PWY/PSY dating against
+\code{cv}'s critical values) or \code{"svadf"} (Sarkar & Wells 2026's
+SV-ADF asymmetric-threshold dating -- \code{radf()}'s own \code{badf}
+compared against two closed-form, sample-size-only thresholds,
+\code{log(t)/10} for origination and \code{log(t)/2} for collapse; no
+\code{cv} needed). See Caveats.}
 
 \item{nonrejected}{logical. Whether to apply datestamping technique to the series
-that were not able to reject the Null hypothesis.}
+that were not able to reject the Null hypothesis. Ignored when
+\code{option = "svadf"}.}
 }
 \value{
 Return a table with the following columns:
@@ -58,6 +65,16 @@ Datestamp also stores a vector whose elements take the value of 1 when there is
 a period of explosive behaviour and 0 otherwise. This output can serve as a
 dummy variable for the occurrence of exuberance.
 }
+\section{Caveats}{
+
+\code{option = "svadf"}: \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+\code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a different
+bar than every other source this package implements. The same note is
+emitted as a message when called with this option. Detects at most one
+origination/collapse pair per series (the paper's own procedure), not
+every recurring episode the way \code{"gsadf"}/\code{"sadf"} do.
+}
+
 \examples{
 
 rsim_data <- radf(sim_data)
@@ -69,9 +86,15 @@ ds_data
 datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 
 autoplot(ds_data)
+
+# SV-ADF asymmetric-threshold dating (no critical values needed)
+datestamp(rsim_data, option = "svadf")
 }
 \references{
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&P 500. International Economic Review, 56(4), 1043-1078.
+
+Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble?
+Robust date-stamping for periods of exuberance. arXiv:2604.12062.
 }
