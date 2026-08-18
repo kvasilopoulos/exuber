@@ -40,10 +40,34 @@ STADF, not GSTADF (\code{gsadf_cv}) -- the paper's own GSTADF critical
 values are not given as literal numbers in the text, only as "easily
 computed from" the authors' R code.
 }
+\note{
+As of 2026-08-18, also computes \code{badf_cv}/\code{bsadf_cv} (a
+time-varying boundary, one row per recursion point), so
+\code{\link{datestamp}}/\code{autoplot} now work on \code{\link{radf_tt}}
+results, not just \code{summary()}/\code{tidy}. Unlike
+\code{\link{radf_mc_cv}}'s own \code{bsadf_cv} (a \code{cummax()}-across-
+replicates shortcut around the base C++ engine's output shape),
+\code{gls_dfstat_grid()}'s (internal) \code{bsadf} is already the genuine
+sup-over-all-window-starts statistic at each point, so no such shortcut
+is needed here -- just the per-time-point quantile across replicates.
+Validated: \code{badf_cv}'s last row is bit-identical to \code{adf_cv}
+(a hard identity, since \code{adf} is literally \code{badf}'s last
+point, per replicate); empirical false-alarm rate under \code{H0} is
+conservative relative to nominal (3.3\\% at 5\\%, n=100, minw=20,
+nrep=2000); and detection power on a synthetic bubble matches the
+established \code{radf()}/\code{radf_mc_cv()} pipeline almost exactly
+(18\\% vs. 16\\%) on the identical series. \code{radf_sign_cv()}/
+\code{radf_sign_dm_cv()} have the same gap, not yet addressed the same
+way -- see \code{vignette("naming-and-analysis")}.
+}
 \examples{
 \donttest{
 cv <- radf_tt_cv(n = 100, minw = 20)
 tidy(cv)
+
+res <- radf_tt(sim_data, minw = 20)
+datestamp(res, cv = cv)
+autoplot(res, cv = cv)
 }
 
 }

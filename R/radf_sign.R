@@ -111,12 +111,12 @@ sign_demean_transform <- function(y) {
 #' pivotal (exactly invariant to heteroskedasticity), so its critical
 #' values are simulated once, not per dataset.
 #'
-#' @note Carries the \code{radf_obj} class, so \code{summary()} and
-#' \code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not:
-#' \code{radf_sign_cv()} only computes the three scalar critical values
-#' \code{summary()} needs, not the time-varying boundary those two require.
-#' A known gap, not a design choice -- see \code{vignette("naming-and-
-#' analysis", package = "exuber")}.
+#' @note Carries the \code{radf_obj} class and, as of 2026-08-18, its full
+#' \code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+#' pipeline works -- \code{radf_sign_cv()} now computes the time-varying
+#' \code{badf_cv}/\code{bsadf_cv} boundary those last two need, not just
+#' the three scalar critical values \code{summary()} uses. See
+#' \code{vignette("naming-and-analysis", package = "exuber")}.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -129,6 +129,8 @@ sign_demean_transform <- function(y) {
 #' cv <- radf_sign_cv(n = 100, minw = 20)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
+#' datestamp(res, cv = cv)
+#' autoplot(res, cv = cv)
 #' }
 #'
 #' @export
@@ -233,10 +235,23 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   sadf <- vapply(results, `[[`, numeric(1), "sadf")
   gsadf <- vapply(results, `[[`, numeric(1), "gsadf")
 
+  # badf/bsadf critical values, same construction as radf_tt_cv(): each
+  # replicate's gls_dfstat_grid() already returns the genuine sup-over-all-
+  # window-starts bsadf at each point (no cummax shortcut needed, unlike
+  # radf_mc_cv()'s own bsadf_cv), so just the per-time-point quantile
+  # across replicates.
+  n_minw <- length(results[[1]]$badf)
+  badf_mat <- vapply(results, `[[`, numeric(n_minw), "badf")
+  bsadf_mat <- vapply(results, `[[`, numeric(n_minw), "bsadf")
+  badf_cv <- t(apply(badf_mat, 1, quantile_narm, probs = pcnt))
+  bsadf_cv <- t(apply(bsadf_mat, 1, quantile_narm, probs = pcnt))
+
   list(
     adf_cv = quantile_narm(adf, probs = pcnt, drop = FALSE),
     sadf_cv = quantile_narm(sadf, probs = pcnt, drop = FALSE),
-    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE)
+    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE),
+    badf_cv = badf_cv,
+    bsadf_cv = bsadf_cv
   ) %>%
     add_attr(method = "Sign-Based MC", n = n, minw = minw, iter = nrep) %>%
     add_class("radf_cv", "sign_cv", "mc_cv")
@@ -282,11 +297,12 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #' \code{\link{radf_sign}} statistic instead) -- pivotal like
 #' \code{radf_sign}, so no per-dataset bootstrap is needed.
 #'
-#' @note Carries the \code{radf_obj} class, so \code{summary()} and
-#' \code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not
-#' -- same gap as \code{\link{radf_sign}}: \code{radf_sign_dm_cv()} only
-#' computes the three scalar critical values, not a time-varying boundary.
-#' See \code{vignette("naming-and-analysis", package = "exuber")}.
+#' @note Carries the \code{radf_obj} class and, as of 2026-08-18, its full
+#' \code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+#' pipeline works, the same fix as \code{\link{radf_sign}} --
+#' \code{radf_sign_dm_cv()} now computes \code{badf_cv}/\code{bsadf_cv}
+#' too, not just the three scalar critical values. See
+#' \code{vignette("naming-and-analysis", package = "exuber")}.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -299,6 +315,8 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #' cv <- radf_sign_dm_cv(n = 100, minw = 20)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
+#' datestamp(res, cv = cv)
+#' autoplot(res, cv = cv)
 #' }
 #'
 #' @export
@@ -395,10 +413,19 @@ radf_sign_dm_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   sadf <- vapply(results, `[[`, numeric(1), "sadf")
   gsadf <- vapply(results, `[[`, numeric(1), "gsadf")
 
+  # badf/bsadf critical values -- see radf_sign_cv()'s identical comment.
+  n_minw <- length(results[[1]]$badf)
+  badf_mat <- vapply(results, `[[`, numeric(n_minw), "badf")
+  bsadf_mat <- vapply(results, `[[`, numeric(n_minw), "bsadf")
+  badf_cv <- t(apply(badf_mat, 1, quantile_narm, probs = pcnt))
+  bsadf_cv <- t(apply(bsadf_mat, 1, quantile_narm, probs = pcnt))
+
   list(
     adf_cv = quantile_narm(adf, probs = pcnt, drop = FALSE),
     sadf_cv = quantile_narm(sadf, probs = pcnt, drop = FALSE),
-    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE)
+    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE),
+    badf_cv = badf_cv,
+    bsadf_cv = bsadf_cv
   ) %>%
     add_attr(method = "Sign-Based MC (demeaned)", n = n, minw = minw, iter = nrep) %>%
     add_class("radf_cv", "sign_dm_cv", "mc_cv")

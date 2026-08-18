@@ -90,6 +90,25 @@ gls_dfstat_grid <- function(y, minw) {
 #' values are not given as literal numbers in the text, only as "easily
 #' computed from" the authors' R code.
 #'
+#' @note As of 2026-08-18, also computes \code{badf_cv}/\code{bsadf_cv} (a
+#' time-varying boundary, one row per recursion point), so
+#' \code{\link{datestamp}}/\code{autoplot} now work on \code{\link{radf_tt}}
+#' results, not just \code{summary()}/\code{tidy}. Unlike
+#' \code{\link{radf_mc_cv}}'s own \code{bsadf_cv} (a \code{cummax()}-across-
+#' replicates shortcut around the base C++ engine's output shape),
+#' \code{gls_dfstat_grid()}'s (internal) \code{bsadf} is already the genuine
+#' sup-over-all-window-starts statistic at each point, so no such shortcut
+#' is needed here -- just the per-time-point quantile across replicates.
+#' Validated: \code{badf_cv}'s last row is bit-identical to \code{adf_cv}
+#' (a hard identity, since \code{adf} is literally \code{badf}'s last
+#' point, per replicate); empirical false-alarm rate under \code{H0} is
+#' conservative relative to nominal (3.3\% at 5\%, n=100, minw=20,
+#' nrep=2000); and detection power on a synthetic bubble matches the
+#' established \code{radf()}/\code{radf_mc_cv()} pipeline almost exactly
+#' (18\% vs. 16\%) on the identical series. \code{radf_sign_cv()}/
+#' \code{radf_sign_dm_cv()} have the same gap, not yet addressed the same
+#' way -- see \code{vignette("naming-and-analysis")}.
+#'
 #' @inheritParams radf_mc_cv
 #' @references Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed
 #' Test for Bubbles under Non-stationary Volatility. Journal of Financial
@@ -99,6 +118,10 @@ gls_dfstat_grid <- function(y, minw) {
 #' \donttest{
 #' cv <- radf_tt_cv(n = 100, minw = 20)
 #' tidy(cv)
+#'
+#' res <- radf_tt(sim_data, minw = 20)
+#' datestamp(res, cv = cv)
+#' autoplot(res, cv = cv)
 #' }
 #'
 #' @export
@@ -121,10 +144,24 @@ radf_tt_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   sadf <- vapply(results, `[[`, numeric(1), "sadf")
   gsadf <- vapply(results, `[[`, numeric(1), "gsadf")
 
+  # badf/bsadf paths, one column per replicate -- unlike radf_mc_cv()'s own
+  # bsadf_cv (a cummax(badf)-across-replicates shortcut around the base C++
+  # engine's output shape), gls_dfstat_grid() already returns the genuine
+  # sup-over-all-window-starts bsadf at each point directly, so no cummax
+  # step is needed here: just the quantile of each row (time point) across
+  # replicates, same construction radf_mc_cv() uses for bsadf_cv itself.
+  n_minw <- length(results[[1]]$badf)
+  badf_mat <- vapply(results, `[[`, numeric(n_minw), "badf")
+  bsadf_mat <- vapply(results, `[[`, numeric(n_minw), "bsadf")
+  badf_cv <- t(apply(badf_mat, 1, quantile_narm, probs = pcnt))
+  bsadf_cv <- t(apply(bsadf_mat, 1, quantile_narm, probs = pcnt))
+
   list(
     adf_cv = quantile_narm(adf, probs = pcnt, drop = FALSE),
     sadf_cv = quantile_narm(sadf, probs = pcnt, drop = FALSE),
-    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE)
+    gsadf_cv = quantile_narm(gsadf, probs = pcnt, drop = FALSE),
+    badf_cv = badf_cv,
+    bsadf_cv = bsadf_cv
   ) %>%
     add_attr(method = "Time-Transformed MC", n = n, minw = minw, iter = nrep) %>%
     add_class("radf_cv", "tt_cv", "mc_cv")
@@ -216,10 +253,11 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' asymptotic critical values, and \code{\link{radf_wb_cv}} for the
 #' bootstrap-based alternative (Harvey, Leybourne, Sollis & Taylor).
 #'
-#' @note Carries the \code{radf_obj} class, so \code{summary()} and
-#' \code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not:
-#' \code{radf_tt_cv()} only computes the three scalar critical values, not
-#' the time-varying boundary those two need -- see
+#' @note Carries the \code{radf_obj} class and, as of 2026-08-18, its full
+#' \code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+#' pipeline works -- \code{radf_tt_cv()} now computes the time-varying
+#' \code{badf_cv}/\code{bsadf_cv} boundary those last two need, not just
+#' the three scalar critical values \code{summary()} uses. See
 #' \code{vignette("naming-and-analysis", package = "exuber")}.
 #'
 #' @examples
@@ -230,6 +268,8 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' cv <- radf_tt_cv(n = 100, minw = 20)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
+#' datestamp(res, cv = cv)
+#' autoplot(res, cv = cv)
 #' }
 #'
 #' @export
