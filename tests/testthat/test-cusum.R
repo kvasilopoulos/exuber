@@ -66,7 +66,7 @@ test_that("empirical cumulative false-alarm rate under H0 stays well within
 
 test_that("radf_cusum detects at least some genuine post-training bubbles,
   with a positive alarm delay -- power is expected to be genuinely lower
-  than the ADF-family monitor_radf() for this kind of (mid-sample)
+  than the ADF-family monitor() for this kind of (mid-sample)
   bubble, consistent with the literature's own finding (Kurozumi 2020/
   2021, cited in monitoring.md) that CUSUM-type detectors underperform
   ADF-type ones for middle-to-late bubbles; this is not asserted as high

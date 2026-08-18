@@ -129,7 +129,7 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' Analysis, 46(5), 908-931.
 #'
 #' @seealso \code{\link{quantile_test}} for the static, full-sample
-#' version of this test. \code{\link{monitor_radf}} for the OLS-based
+#' version of this test. \code{\link{monitor}} for the OLS-based
 #' monitoring alternative.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into

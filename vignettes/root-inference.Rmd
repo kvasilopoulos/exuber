@@ -20,7 +20,7 @@ library(exuber)
 
 ## A different question from "is there a bubble"
 
-`radf()`/`datestamp()` (and the `dating_*()`/`_test()`/`monitor_*()`
+`radf()`/`datestamp()` (and the `dating_*()`/`_test()`/`monitor()`/`monitor_*()`
 families) all answer some version of "is there a bubble, and when did it
 happen." None of them
 say anything about its *magnitude*: once an explosive episode is dated, how

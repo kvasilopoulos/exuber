@@ -102,6 +102,6 @@ Analysis, 46(5), 908-931.
 }
 \seealso{
 \code{\link{quantile_test}} for the static, full-sample
-version of this test. \code{\link{monitor_radf}} for the OLS-based
+version of this test. \code{\link{monitor}} for the OLS-based
 monitoring alternative.
 }
