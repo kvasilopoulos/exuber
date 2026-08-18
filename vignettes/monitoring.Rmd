@@ -30,17 +30,21 @@ the first time the boundary is breached. All four functions share this
 `r_star`/alarm/`alarm_date` shape; they differ in what statistic they
 monitor and how the boundary is calibrated.
 
-| Function | Statistic monitored | Boundary |
-|---|---|---|
-| `monitor_radf()` | `radf()`'s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) |
-| `monitor_cusum()` | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)'s asymptotic (or finite-sample) constant |
-| `monitor_lbi()` | Breitung & Diegel (2025)'s locally-best-invariant CUSUM (`mCUSUM`/`wCUSUM`, via `c_bar`) | Their Table 1 constant |
-| `monitor_quantile()` | A recursive quantile regression at `tau` | A simulated first-crossing boundary (Wu, Shi & Wu 2025) |
+| Function | Statistic monitored | Boundary | Static, full-sample counterpart |
+|---|---|---|---|
+| `monitor()` | `radf()`'s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) | `radf()`/`datestamp()` -- not a `_test()`, but the same recursive-ADF core |
+| `monitor_cusum()` | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)'s asymptotic (or finite-sample) constant | none -- Homm & Breitung's CUSUM boundary is inherently a training/monitoring construction, with no full-sample form |
+| `monitor_lbi()` | Breitung & Diegel (2025)'s locally-best-invariant CUSUM (`mCUSUM`/`wCUSUM`, via `c_bar`) | Their Table 1 constant | `lbi_test()`, the static version of the same statistic |
+| `monitor_quantile()` | A recursive quantile regression at `tau` | A simulated first-crossing boundary (Wu, Shi & Wu 2025) | `quantile_test()`, the static version of the same statistic |
 
-`monitor_radf()` keeps the `radf_` internals (it reuses `badf`/`bsadf`
-directly) but is named for what it *does* -- see
-`vignette("naming-and-analysis")` for why the naming convention crosses that
-line deliberately.
+`monitor()` reuses `badf`/`bsadf` directly (the same recursive-ADF core as
+the `radf_*()` family) but is named for what it *does*, not that internal
+detail -- see `vignette("naming-and-analysis")` for why. Two of its three
+siblings (`monitor_lbi()`, `monitor_quantile()`) are the sequential
+extension of an existing static test of the same name minus the
+`monitor_` prefix; `monitor_cusum()` has no such counterpart, since its
+source paper (Homm & Breitung 2012) proposed CUSUM as a monitoring
+detector only.
 
 ## The same bubble, five monitors
 
@@ -64,14 +68,23 @@ y <- make_bubble_series(200, T_star = 100, bstart = 150)
 monitor_lbi(y, r_star = 100)
 monitor_cusum(y, r_star = 0.5)
 monitor_quantile(y, tau = 0.5, nrep = 200, seed = 1)
-monitor_radf(y, r_star = 0.5, nboot = 200, seed = 1)
-monitor_radf(y, r_star = 0.5, boundary = "kurozumi")
+monitor(y, r_star = 0.5, nboot = 200, seed = 1)
+monitor(y, r_star = 0.5, boundary = "kurozumi")
+```
+
+`monitor_lbi()` and `monitor_quantile()` each have a static, full-sample
+sibling that asks the retrospective version of the same question -- run on
+the whole series rather than watching for a first crossing:
+
+```{r static-siblings}
+lbi_test(y)
+quantile_test(y, tau = 0.5)
 ```
 
 Every monitor here alarms within about 15 points of the true bubble start
 (150), none before it -- that "never before `T*` (or the true start)" property
 is exactly what each function's own test suite checks under the null. Alarm
-*timing* differs by design: `monitor_radf()`'s ADF-family statistics tend to
+*timing* differs by design: `monitor()`'s ADF-family statistics tend to
 detect mid-sample bubbles fastest (the literature's own finding, e.g.
 Kurozumi 2020/2021), while CUSUM-type detectors (`monitor_cusum()`,
 `monitor_lbi()`) are typically slower but computationally simpler and don't
@@ -80,9 +93,9 @@ need a bootstrap.
 ## Which to reach for
 
 - Fastest detection, willing to pay for a wild bootstrap per call:
-  `monitor_radf(boundary = "bootstrap")` (the default).
+  `monitor(boundary = "bootstrap")` (the default).
 - Same statistic, no bootstrap, an off-the-shelf published constant instead:
-  `monitor_radf(boundary = "kurozumi")` or `boundary = "fluc"`.
+  `monitor(boundary = "kurozumi")` or `boundary = "fluc"`.
 - A simpler CUSUM-based alternative with its own closed-form boundary:
   `monitor_cusum()`, or `monitor_lbi()` for Breitung & Diegel's
   locally-best-invariant version (`c_bar > 0` trades a little size for

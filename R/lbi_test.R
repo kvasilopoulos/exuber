@@ -233,7 +233,7 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #'
 #' @seealso \code{\link{lbi_test}} for the static (known, full-sample
 #' bubble window) version. \code{\link{monitor_cusum}} and
-#' \code{\link{monitor_radf}} for structurally different monitoring
+#' \code{\link{monitor}} for structurally different monitoring
 #' detectors.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into

@@ -67,12 +67,16 @@ reference:
 
   - title: Real-time monitoring
     desc: >
-      Sequential/real-time bubble detection; see docs/enhancements/monitoring.md
+      Sequential/real-time bubble detection; see docs/enhancements/monitoring.md.
+      Each monitor is listed with its static, full-sample counterpart where one
+      exists.
     contents:
-      - monitor_radf
+      - monitor
       - monitor_cusum
       - monitor_lbi
       - lbi_test
+      - monitor_quantile
+      - quantile_test
 
   - title: Multivariate / panel bubble tests
     desc: >
@@ -83,12 +87,6 @@ reference:
       - cobubble_test
       - contagion_reg
 
-  - title: Alternative paradigms
-    desc: >
-      Non-ADF-family approaches; see docs/enhancements/alternative-paradigms.md
-    contents:
-      - quantile_test
-      - monitor_quantile
 
   - title: Analysis
     contents:
