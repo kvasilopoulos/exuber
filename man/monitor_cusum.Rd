@@ -81,7 +81,7 @@ constant (\code{boundary = "asymptotic"}, \code{b_alpha = 4.6}) or a
 published finite-sample table lookup (\code{boundary = "finite"}, Homm
 & Breitung (2012)'s Table 8) -- no simulation, no separate cv function.
 
-Unlike \code{\link{radf_monitor}} (Family A, a recursive ADF-family
+Unlike \code{\link{monitor_radf}} (Family A, a recursive ADF-family
 statistic requiring a wild bootstrap to calibrate its boundary), this
 is a structurally different statistic -- a standardized running sum,
 not a recursive regression -- with an asymptotic closed-form boundary
@@ -111,8 +111,18 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-res <- monitor_cusum(sim_data$psy1, r_star = 0.5)
-print(res)
+make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
+  y <- numeric(n)
+  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
+  for (t in (T_star + 1):n) {
+    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
+  }
+  y
+}
+set.seed(7)
+y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+res <- monitor_cusum(y, r_star = 0.5)
+print(res) # alarm should fire soon after t = 150
 }
 
 }
@@ -130,6 +140,6 @@ in financial data in the presence of time-varying volatility. Journal
 of Financial Econometrics, 21(1), 187-227.
 }
 \seealso{
-\code{\link{radf_monitor}} for the recursive-ADF (Family A)
+\code{\link{monitor_radf}} for the recursive-ADF (Family A)
 monitoring alternative.
 }

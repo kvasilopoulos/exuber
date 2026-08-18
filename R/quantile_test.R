@@ -115,7 +115,7 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' res <- quantile_test(sim_data$psy1, nrep = 100, seed = 1)
+#' res <- quantile_test(sim_data$psy2, nrep = 100, seed = 1)
 #' print(res)
 #' }
 #'

@@ -12,7 +12,17 @@ parse_dt <- function(x) {
 
 #' @export
 parse_dt.default <- function(x) {
-  stop_glue("unsupported class")
+  if (is.null(x)) {
+    stop_glue(
+      "`data` is NULL. If you selected a column by name (e.g. `data$col`), ",
+      "check `colnames(data)` -- selecting a column that doesn't exist ",
+      "returns NULL silently rather than erroring."
+    )
+  }
+  stop_glue(
+    "Unsupported input class '{paste(class(x), collapse = '/')}' for `data`. ",
+    "Expected a numeric vector, matrix, data.frame/tibble, or ts object."
+  )
 }
 
 #' @export
