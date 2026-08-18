@@ -80,3 +80,21 @@ single-sup, `r1 = 0` case). exuber's test suite
 (`tests/testthat/test-tt.R`) reproduces this via `radf_tt_cv()`'s own
 Monte Carlo and checks it lands within Monte Carlo/finite-sample tolerance
 of the published numbers.
+
+## Dating and plotting a detected bubble
+
+`radf_tt()` keeps the same `radf_obj` class `radf()` itself uses, and (as
+of 2026-08-18) `radf_tt_cv()` computes the full time-varying boundary
+needed to date and plot episodes, not just the summary-level critical
+values -- so the usual pipeline works unchanged:
+
+```{r radf-tt-datestamp}
+res <- radf_tt(sim_data, minw = 20)
+cv <- radf_tt_cv(n = 100, minw = 20)
+
+datestamp(res, cv = cv)
+autoplot(res, cv = cv)
+```
+
+See `vignette("naming-and-analysis")` for which other exuber functions do
+and don't plug into this pipeline, and why.

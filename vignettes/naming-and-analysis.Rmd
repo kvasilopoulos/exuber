@@ -71,10 +71,10 @@ Only functions whose result actually carries the `radf_obj` class -- and
 whose paired `_cv()` actually computes that time-varying boundary -- get the
 full pipeline. Three tiers, in practice:
 
-### Full support: `radf_common()`, `radf_kp()`
+### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`
 
-Both literally return `radf()`'s own output (`radf_kp()` purges volatility
-first, `radf_common()` extracts a PCA factor first, then calls `radf()`
+`radf_kp()`/`radf_common()` literally return `radf()`'s own output (purged
+of volatility, or computed on a PCA factor, respectively, then `radf()`
 unmodified), so every generic works exactly as it does for plain `radf()`:
 
 ```{r kp-full}
@@ -87,28 +87,53 @@ tidy(res, cv = cv)
 autoplot(res, cv = cv)
 ```
 
-### Partial support: `radf_sign()`, `radf_sign_dm()`, `radf_tt()`
+The other three are different: they carry the `radf_obj` class but build
+their statistic on `gls_dfstat_grid()` (a no-intercept, GLS-demeaned
+recursive-DF grid, fed the raw series for `radf_tt()`, its cumulated sign
+for `radf_sign()`, a recursively demeaned cumulated sign for
+`radf_sign_dm()`) rather than calling `radf()` directly. Until 2026-08-18
+all three had a real gap: their `_cv()` functions only ever computed the
+three scalar critical values `summary()`/`tidy()` need, discarding the
+`badf`/`bsadf` path `gls_dfstat_grid()` already computes per replicate,
+so `datestamp()`/`autoplot()` (which need a *time-varying* boundary) always
+errored. Fixed for all three the same way, once the pattern was confirmed
+in `radf_tt_cv()` first and then checked to hold for the other two as
+well: unlike `radf_mc_cv()`'s own `bsadf_cv` (a `cummax()`-across-replicates
+shortcut around the base C++ engine's output shape), `gls_dfstat_grid()`'s
+`bsadf` is already the genuine sup-over-all-window-starts statistic at
+each point, so no shortcut derivation was needed -- just the per-time-point
+quantile across replicates, the construction `radf_mc_cv()` uses for its
+own `bsadf_cv`. Validated per function: `badf_cv`'s last row is
+bit-identical to `adf_cv` (`adf` is literally `badf`'s last point, per
+replicate -- a hard identity, not an approximate check, and true regardless
+of which series feeds `gls_dfstat_grid()`); empirical false-alarm rate
+under `H0` is at or below nominal (`radf_tt` 3.3%, `radf_sign` 5.5%,
+`radf_sign_dm` 3.5%, all at nominal 5%, n=100, minw=20); and detection
+power on an identical synthetic bubble is in the same range as the
+established `radf()`/`radf_mc_cv()` baseline (16%) rather than
+suspiciously higher or lower (`radf_tt` 18%, `radf_sign` 20%,
+`radf_sign_dm` 8% -- the sign-based tests trading power for their
+heteroskedasticity invariance is itself the paper's own documented
+finding, not a validation red flag).
 
-These carry the `radf_obj` class too (so `summary()` and `tidy()` work), but
-their own critical-value functions -- `radf_sign_cv()`, `radf_sign_dm_cv()`,
-`radf_tt_cv()` -- only ever computed the three scalar critical values
-`summary()` needs, never the `badf_cv`/`bsadf_cv` time-varying boundary
-`datestamp()`/`autoplot()` require. This is a real, currently unfixed gap,
-not a design choice -- adding it means simulating and calibrating a full
-recursive boundary the way `radf_mc_cv()`/`radf_common_cv()` do, which needs
-this package's usual validation pass (formula-exact check, Monte Carlo size,
-a replication script) before it ships, not a quick patch.
+```{r tt-full}
+res <- radf_tt(sim_data, minw = 20)
+cv <- radf_tt_cv(n = 100, minw = 20)
 
-```{r sign-partial}
+summary(res, cv = cv)
+datestamp(res, cv = cv)
+tidy(res, cv = cv)
+autoplot(res, cv = cv)
+```
+
+```{r sign-full}
 res <- radf_sign(sim_data, minw = 20)
 cv <- radf_sign_cv(n = 100, minw = 20)
 
-summary(res, cv = cv) # works
-tidy(res, cv = cv) # works
-```
-```r
-datestamp(res, cv = cv) # errors: cv has no bsadf_cv
-autoplot(res, cv = cv) # errors: cv has no bsadf_cv
+summary(res, cv = cv)
+datestamp(res, cv = cv)
+tidy(res, cv = cv)
+autoplot(res, cv = cv)
 ```
 
 ### No support: everything else
@@ -134,6 +159,5 @@ ssu_test(sim_data$psy1, level = 0.95)
 
 | Tier | Functions | `summary()` | `datestamp()` | `tidy()` | `autoplot()` |
 |---|---|---|---|---|---|
-| Full | `radf()`, `radf_common()`, `radf_kp()` | yes | yes | yes | yes |
-| Partial | `radf_sign()`, `radf_sign_dm()`, `radf_tt()` | yes | no (gap) | yes | no (gap) |
+| Full | `radf()`, `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()` | yes | yes | yes | yes |
 | Standalone | everything else | own `print()` | -- | -- | -- |

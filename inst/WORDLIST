@@ -8,7 +8,6 @@ Blasques
 Bollerslev
 Breitung
 CAC
-CI's
 CLT
 CMD
 CUSUM
@@ -22,7 +21,6 @@ DF
 DGP
 DOLS
 Datestamp
-Datestamped
 Diegel
 Diegel's
 Econometrica
@@ -41,6 +39,8 @@ Grossman
 Guo
 HAC
 HB's
+HLS
+HLS's
 HLST
 HLW's
 HLZ
@@ -52,6 +52,7 @@ Hurn
 Ingersoll
 JTSA
 Jasiak
+KNP's
 KPSS
 KS's
 Kejriwal
@@ -63,7 +64,6 @@ Leybourne
 Lifecycle
 Lui
 Magdalinos
-Magdalinos's
 Martínez
 Maruyama
 McGrevy
@@ -135,10 +135,13 @@ bic
 blan
 bsadf
 centres
+cobubble
 cointegrated
+comovement
 crit
 cryptocurrencies
 cryptocurrency
+cumulate
 cumulating
 cv
 cv'd
@@ -154,9 +157,11 @@ doi
 dplyr
 endogeneity
 eq
+errored
 erroring
 et
 evans
+evidentiary
 explosivity
 exuber's
 exuberdata
@@ -169,11 +174,13 @@ homoskedastic
 homoskedasticity
 iere
 jss
+lbi
 linetype
 mCUSUM
 md
 minimisation
 minimising
+minimizer
 minw
 misremember
 ncores
@@ -192,6 +199,7 @@ pts
 queryable
 radf
 rect
+reimplementation
 resimulation
 rng
 sGSADF
@@ -200,12 +208,16 @@ sPWY
 sadf
 scalability
 sig
+ssu
 submartingale
 supADF
 supBZ
 supDF
+svadf
 te
 tf
+th
 tibble
 un
+unioned
 wCUSUM

@@ -47,11 +47,12 @@ Needs \code{\link{radf_sign_dm_cv}} for critical values (not
 \code{\link{radf_sign}} statistic instead) -- pivotal like
 \code{radf_sign}, so no per-dataset bootstrap is needed.
 
-Carries the \code{radf_obj} class, so \code{summary()} and
-\code{tidy()} work, but \code{\link{datestamp}}/\code{autoplot} do not
--- same gap as \code{\link{radf_sign}}: \code{radf_sign_dm_cv()} only
-computes the three scalar critical values, not a time-varying boundary.
-See \code{vignette("naming-and-analysis", package = "exuber")}.
+Carries the \code{radf_obj} class and, as of 2026-08-18, its full
+\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
+pipeline works, the same fix as \code{\link{radf_sign}} --
+\code{radf_sign_dm_cv()} now computes \code{badf_cv}/\code{bsadf_cv}
+too, not just the three scalar critical values. See
+\code{vignette("naming-and-analysis", package = "exuber")}.
 }
 \section{Status}{
 
@@ -66,6 +67,8 @@ print(res)
 cv <- radf_sign_dm_cv(n = 100, minw = 20)
 summary(res, cv = cv)
 tidy(res, cv = cv)
+datestamp(res, cv = cv)
+autoplot(res, cv = cv)
 }
 
 }
