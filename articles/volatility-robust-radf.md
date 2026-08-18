@@ -152,22 +152,24 @@ summary(res_kp, cv = cv_kp)
 
 ``` r
 
-radf_sbz_cv(sim_data, nboot = 200)
+radf_sbz_cv(sim_data, nboot = 200, seed = 1)
 #> 
 #> ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────
 #> 
 #>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U
-#>     psy1  1.946  0.2802  1.946    0.065    0.665  0.115
-#>     psy2  7.880  1.5349  7.880    0.000    0.160  0.000
-#>    evans  5.283  1.9138  5.283    0.105    0.270  0.130
-#>      div  1.113  2.2607  1.113    0.030    0.045  0.050
-#>     blan  3.930  1.4008  3.930    0.080    0.250  0.130
+#>     psy1  1.946  0.2802  1.946    0.055     0.64  0.100
+#>     psy2  7.880  1.5349  7.880    0.000     0.14  0.000
+#>    evans  5.283  1.9138  5.283    0.130     0.30  0.165
+#>      div  1.113  2.2607  1.113    0.065     0.10  0.130
+#>     blan  3.930  1.4008  3.930    0.050     0.25  0.075
 ```
 
 `supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version,
 and `U` their union – each with its own bootstrap p-value, so a series
-can be flagged by one without the other (`div` here is significant on
-`supDF` and the union but not on `supBZ`).
+can be flagged by one without the other: `psy2` is clearly significant
+across all three here, while the rest of this panel sit closer to the
+boundary, with `supBZ`’s p-values consistently the least significant of
+the three on this draw.
 
 ## Which to reach for
 

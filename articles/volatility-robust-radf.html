@@ -252,21 +252,23 @@ sign-based and SBZ variants):</p>
 <code>radf_sbz_cv()</code><a class="anchor" aria-label="anchor" href="#wls-kernel-volatility-with-union-of-rejections-radf_sbz_cv"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U</span></span>
-<span><span class="co">#&gt;     psy1  1.946  0.2802  1.946    0.065    0.665  0.115</span></span>
-<span><span class="co">#&gt;     psy2  7.880  1.5349  7.880    0.000    0.160  0.000</span></span>
-<span><span class="co">#&gt;    evans  5.283  1.9138  5.283    0.105    0.270  0.130</span></span>
-<span><span class="co">#&gt;      div  1.113  2.2607  1.113    0.030    0.045  0.050</span></span>
-<span><span class="co">#&gt;     blan  3.930  1.4008  3.930    0.080    0.250  0.130</span></span></code></pre></div>
+<span><span class="co">#&gt;     psy1  1.946  0.2802  1.946    0.055     0.64  0.100</span></span>
+<span><span class="co">#&gt;     psy2  7.880  1.5349  7.880    0.000     0.14  0.000</span></span>
+<span><span class="co">#&gt;    evans  5.283  1.9138  5.283    0.130     0.30  0.165</span></span>
+<span><span class="co">#&gt;      div  1.113  2.2607  1.113    0.065     0.10  0.130</span></span>
+<span><span class="co">#&gt;     blan  3.930  1.4008  3.930    0.050     0.25  0.075</span></span></code></pre></div>
 <p><code>supDF</code> is the classic PWY statistic, <code>supBZ</code>
 the WLS-weighted version, and <code>U</code> their union – each with its
 own bootstrap p-value, so a series can be flagged by one without the
-other (<code>div</code> here is significant on <code>supDF</code> and
-the union but not on <code>supBZ</code>).</p>
+other: <code>psy2</code> is clearly significant across all three here,
+while the rest of this panel sit closer to the boundary, with
+<code>supBZ</code>’s p-values consistently the least significant of the
+three on this draw.</p>
 </div>
 <div class="section level2">
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
