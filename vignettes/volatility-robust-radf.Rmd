@@ -23,12 +23,16 @@ library(exuber)
 Plain `radf()` assumes constant innovation variance. Real series rarely
 have that, and under time-varying volatility its standard critical values
 no longer control size. exuber has several fixes for this, each taking a
-structurally different approach, and -- unlike most of the other new
-functions -- all four here keep the `radf_obj` class, so `summary()`/`tidy()`
-still work the same way they do for plain `radf()` (see
-`vignette("naming-and-analysis")` for exactly how far each one plugs into
-the pipeline). `radf_tt()`'s time-deformation approach has its own
-dedicated vignette, `vignette("radf-tt")`; this one covers the rest.
+structurally different approach. Three of the four below (`radf_sign()`,
+`radf_sign_dm()`, `radf_kp()`) keep the `radf_obj` class and now have full
+`summary()`/`datestamp()`/`tidy()`/`autoplot()` support, the same as plain
+`radf()` (see `vignette("naming-and-analysis")` for exactly how each one
+plugs into the pipeline and how that was validated); `radf_sbz_cv()`
+doesn't -- it bundles the statistic and its own critical value into one
+call with its own class, not a `radf_obj`, so none of those four generics
+apply to it, only its own `print()`. `radf_tt()`'s time-deformation
+approach has its own dedicated vignette, `vignette("radf-tt")`; this one
+covers the rest.
 
 | Function | Paper | Approach |
 |---|---|---|
@@ -38,10 +42,16 @@ dedicated vignette, `vignette("radf-tt")`; this one covers the rest.
 
 ## Sign-based: `radf_sign()`
 
+As of 2026-08-18, this also gets full pipeline support -- `radf_sign_cv()`
+computes the time-varying `badf_cv`/`bsadf_cv` boundary now, not just the
+scalar critical values `summary()` needs (see
+`vignette("naming-and-analysis")` for the validation):
+
 ```{r sign}
 res <- radf_sign(sim_data, minw = 20)
 cv <- radf_sign_cv(n = 100, minw = 20)
 summary(res, cv = cv)
+datestamp(res, cv = cv)
 ```
 
 `psy2` and `evans` clear their 99% critical values comfortably; the others
@@ -51,8 +61,8 @@ demo panel is meant to look explosive.
 ## Kernel-purged: `radf_kp()`
 
 Because `radf_kp()` purges volatility and then calls `radf()` unmodified,
-it gets **full** pipeline support (`summary()`, `datestamp()`, `tidy()`,
-`autoplot()` all work, unlike the sign-based and SBZ variants):
+it gets full pipeline support too, the simplest way of all (no new
+critical-value machinery at all -- `radf_mc_cv()` applies unmodified):
 
 ```{r kp}
 res_kp <- radf_kp(sim_data, minw = 20)
@@ -77,12 +87,14 @@ draw.
 
 - Want exact invariance to *any* heteroskedasticity pattern with no
   bootstrap at all: `radf_sign()` (or `radf_sign_dm()` if a level shift,
-  not just volatility, is a concern).
-- Want to stay inside the full `summary()`/`datestamp()`/`tidy()`/
-  `autoplot()` pipeline: `radf_kp()` -- the only one of this group with no
-  gaps there.
+  not just volatility, is a concern). Also full pipeline support.
+- Want to stay closest to plain `radf()`, no new critical-value machinery
+  at all: `radf_kp()`.
 - Want the WLS efficiency gain and a union test against the classic
-  statistic: `radf_sbz_cv()`.
+  statistic: `radf_sbz_cv()` -- the one function in this group with no
+  `datestamp()`/`autoplot()` support, since it bundles the statistic and
+  its (scalar-only) critical value in one call rather than returning a
+  `radf_obj`.
 - Volatility is the whole story and a bootstrap-free, time-deformation
   approach is preferred: `radf_tt()`, see `vignette("radf-tt")`.
 - Volatility is genuinely unknown/complex and a bootstrap is acceptable:

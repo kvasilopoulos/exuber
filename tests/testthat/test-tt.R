@@ -31,6 +31,39 @@ test_that("radf_tt runs on the package's sim_data and returns finite stats", {
   expect_true(all(res$sadf <= res$gsadf + 1e-8))
 })
 
+test_that("radf_tt_cv computes badf_cv/bsadf_cv with the right shape and a hard identity", {
+  set.seed(1)
+  n <- 100
+  minw <- 20
+  cv <- radf_tt_cv(n = n, minw = minw, nrep = 300, seed = 1)
+
+  n_minw <- n - minw
+  expect_equal(dim(cv$badf_cv), c(n_minw, 3L))
+  expect_equal(dim(cv$bsadf_cv), c(n_minw, 3L))
+  expect_equal(colnames(cv$badf_cv), c("90%", "95%", "99%"))
+  expect_equal(colnames(cv$bsadf_cv), c("90%", "95%", "99%"))
+
+  # badf's last point IS adf by construction (gls_dfstat_grid(): adf <-
+  # badf[length(badf)]), per replicate -- so their quantiles across
+  # replicates must match exactly, not just approximately.
+  expect_equal(
+    unname(cv$badf_cv[n_minw, ]),
+    as.vector(cv$adf_cv)
+  )
+})
+
+test_that("radf_tt's full Analysis/Tidying/Plotting pipeline works, not just summary()/tidy()", {
+  skip_on_cran()
+  res <- radf_tt(sim_data, minw = 20)
+  cv <- radf_tt_cv(n = 100, minw = 20, nrep = 300, seed = 1)
+
+  expect_no_error(summary(res, cv = cv))
+  expect_no_error(tidy(res, cv = cv))
+  expect_no_error(datestamp(res, cv = cv))
+  expect_no_error(datestamp(res, cv = cv, option = "sadf")) # exercises badf_cv specifically
+  expect_no_error(autoplot(res, cv = cv))
+})
+
 test_that("radf_tt_cv's asymptotic STADF critical values match Whitehouse (2019)
   as reported in Kurozumi, Skrobotov & Tsarev (2024), footnote 4: for r0 = 0.1,
   (10%, 5%, 1%) = (2.319, 2.626, 3.223). This is a Monte Carlo approximation to

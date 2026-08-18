@@ -78,6 +78,23 @@ what was checked and how.
   function's family (`adf`, `test`, `dating`, `monitor`, `root`,
   `regression`), so "what monitoring functions exist" is an actual
   function call, not a naming convention to memorize.
+* `radf_tt_cv()`, `radf_sign_cv()`, and `radf_sign_dm_cv()` now all
+  compute `badf_cv`/`bsadf_cv` (a time-varying boundary), not just the
+  three scalar critical values — `radf_tt()`/`radf_sign()`/
+  `radf_sign_dm()` results now work with the full `summary()`/
+  `datestamp()`/`tidy()`/`autoplot()` pipeline, not just `summary()`/
+  `tidy()`. Found first in `radf_tt_cv()` (a user-reported `datestamp()`
+  crash on `radf_sign()` prompted checking all three GLS-demeaned-family
+  functions), then confirmed the identical fix applies to the other two.
+  Validated per function: `badf_cv`'s last row is bit-identical to
+  `adf_cv` (a hard identity), empirical false-alarm rate at or below
+  nominal (`radf_tt` 3.3%, `radf_sign` 5.5%, `radf_sign_dm` 3.5%, vs. 5%
+  nominal), and detection power on an identical synthetic bubble in the
+  same range as the established `radf()`/`radf_mc_cv()` baseline (16%):
+  `radf_tt` 18%, `radf_sign` 20%, `radf_sign_dm` 8% (lower power a known,
+  expected property of the sign-based tests' heteroskedasticity
+  invariance, not a validation concern) — see
+  `vignette("naming-and-analysis")`.
 
 ### Other
 

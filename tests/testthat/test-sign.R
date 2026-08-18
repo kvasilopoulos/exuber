@@ -161,3 +161,33 @@ test_that("radf_sign_cv, radf_sign_dm_cv and radf_tt_cv objects print without
   expect_output(print(cv_sign_dm))
   expect_output(print(cv_tt))
 })
+
+test_that("radf_sign_cv/radf_sign_dm_cv compute badf_cv/bsadf_cv with the right shape and a hard identity", {
+  n <- 100
+  minw <- 20
+  n_minw <- n - minw
+  for (cv_fn in list(radf_sign_cv, radf_sign_dm_cv)) {
+    cv <- cv_fn(n = n, minw = minw, nrep = 300, seed = 1)
+    expect_equal(dim(cv$badf_cv), c(n_minw, 3L))
+    expect_equal(dim(cv$bsadf_cv), c(n_minw, 3L))
+    expect_equal(colnames(cv$badf_cv), c("90%", "95%", "99%"))
+    # badf's last point IS adf by construction, per replicate -- their
+    # quantiles across replicates must match exactly.
+    expect_equal(unname(cv$badf_cv[n_minw, ]), as.vector(cv$adf_cv))
+  }
+})
+
+test_that("radf_sign/radf_sign_dm's full Analysis/Tidying/Plotting pipeline works, not just summary()/tidy()", {
+  skip_on_cran()
+  cv_sign <- radf_sign_cv(n = 100, minw = 20, nrep = 300, seed = 1)
+  res_sign <- radf_sign(sim_data, minw = 20)
+  expect_no_error(datestamp(res_sign, cv = cv_sign))
+  expect_no_error(datestamp(res_sign, cv = cv_sign, option = "sadf"))
+  expect_no_error(autoplot(res_sign, cv = cv_sign))
+
+  cv_sign_dm <- radf_sign_dm_cv(n = 100, minw = 20, nrep = 300, seed = 1)
+  res_sign_dm <- radf_sign_dm(sim_data, minw = 20)
+  expect_no_error(datestamp(res_sign_dm, cv = cv_sign_dm))
+  expect_no_error(datestamp(res_sign_dm, cv = cv_sign_dm, option = "sadf"))
+  expect_no_error(autoplot(res_sign_dm, cv = cv_sign_dm))
+})

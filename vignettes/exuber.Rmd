@@ -69,6 +69,16 @@ dummy <- attr(dstamp_stocks, "dummy")
 tail(dummy)
 ```
 
+`datestamp()` is not the only way to get dates out of the package, and the
+other two answer different questions rather than being alternate ways to get
+the same answer: the `dating_*()` family (`vignette("dating-methods")`) fits
+an explicit regime model to date a bubble you already believe is there,
+instead of testing whether one exists; the `monitor_*()` family
+(`vignette("monitoring")`) does real-time detection, watching new
+observations one at a time rather than dating a finished sample. See
+`vignette("naming-and-analysis")` for how every function in the package
+relates to this one.
+
 ## Plotting
 
 The `autoplot` function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.
