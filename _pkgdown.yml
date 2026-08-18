@@ -58,9 +58,7 @@ reference:
       Start/end/recovery dates and confidence intervals on the explosive
       root; see docs/enhancements/dating-and-root-inference.md
     contents:
-      - explosive_root
-      - root_ci
-      - root_ci_datestamp
+      - rootstamp
       - dating_pdc
       - radf_recovery
       - radf_recovery_cv

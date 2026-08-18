@@ -81,8 +81,11 @@ what was checked and how.
 
 ### Other
 
-* `explosive_root()`, `root_ci()`, `root_ci_datestamp()` — root inference
-  and confidence intervals on the explosive coefficient.
+* `rootstamp()` — confidence interval and doubling time on the explosive
+  root, via S3 dispatch: the default method fits a single sub-sample, the
+  `radf_obj` method runs every `datestamp()` episode at once (previously
+  three separate functions -- `explosive_root()`, `root_ci()`,
+  `root_ci_datestamp()` -- consolidated before release).
 
 # exuber 1.1.0
 

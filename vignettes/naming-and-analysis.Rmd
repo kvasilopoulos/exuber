@@ -41,7 +41,7 @@ output instead.
 | `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive-ADF core | `lbi_test()`, `ssu_test()`, `quantile_test()`, `cobubble_test()` |
 | `dating_` prefix | Point-estimation / model-selection dating, no formal hypothesis test at all | `dating_hls()`, `dating_hlw()`, `dating_knp()`, `dating_pdc()` |
 | `monitor_` prefix | Real-time/sequential detection -- grouped by *what it does*, not by internal mechanism, so this one deliberately crosses the ADF-family line: `monitor_radf()` reuses `badf`/`bsadf` directly (same as the `radf_` family above) but is named for its monitoring behavior, not that internal detail, since that's what a user searching for "what can monitor a series in real time" actually wants to find | `monitor_cusum()`, `monitor_lbi()`, `monitor_quantile()`, `monitor_radf()` |
-| `root_` prefix | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence | `explosive_root()`, `root_ci()`, `root_ci_datestamp()` |
+| `root_` prefix | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence | `rootstamp()` (two S3 methods: default for a single sub-sample, `radf_obj` to run every `datestamp()` episode at once) |
 | stands alone | A point-estimation tool, not a test | `contagion_reg()` |
 
 Naming prefixes are a convention, not a contract -- they're easy to

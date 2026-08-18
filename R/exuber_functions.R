@@ -43,9 +43,7 @@ exuber_registry <- function() {
     "monitor_cusum", "monitor", "CUSUM/CUSUMV real-time monitoring, closed-form boundary, no bootstrap.",
     "monitor_lbi", "monitor", "Sequential extension of lbi_test(), constant-boundary mCUSUM/wCUSUM.",
     "monitor_quantile", "monitor", "QPWY recursive quantile-regression monitoring, expanding window.",
-    "explosive_root", "root", "Confidence interval on the magnitude of the explosive autoregressive root.",
-    "root_ci", "root", "Standalone confidence interval on an explosive root estimate.",
-    "root_ci_datestamp", "root", "root_ci() applied per-episode over a whole datestamp() result.",
+    "rootstamp", "root", "Confidence interval + doubling time on the magnitude of the explosive root; default method fits a single sub-sample, radf_obj method runs every datestamp() episode.",
     "contagion_reg", "regression", "Bubble contagion regression (Greenaway-McGrevy & Phillips 2016); point estimation, no test."
   )
 }
