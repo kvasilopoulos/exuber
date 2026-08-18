@@ -113,6 +113,23 @@ is the actual queryable registry (`adf`/`test`/`dating`/`monitor`/`root`/
 the same way `_pkgdown.yml`/`NEWS.md`/this file/the `naming-and-analysis`
 vignette need updating.
 
+**2026-08-18**: `radf_svadf()` removed, not renamed — folded into
+`datestamp()` as `option = "svadf"` instead. It was already dating, not a
+test (`log(t)/10`/`log(t)/2` threshold comparison, no critical value), so
+a `dating_` name would have fit the convention above — but its whole
+reason for being its own function was a rejected extension of
+`datestamp()` (see `R/svadf.R`'s header comment, previously: "datestamp()'s
+own S3 dispatch assumes one shared critical value throughout"). Revisited
+and done anyway: `datestamp.radf_obj()`'s `option` argument now dispatches
+to a `datestamp_svadf()` helper that bypasses the `cv`/`sig_lvl` path
+entirely and reuses the same `stamp()`/`add_peak()`/`stamp_to_index()`/
+`add_ongoing()` machinery the `"gsadf"`/`"sadf"` options use, so the
+return shape (a `ds_radf` list, `Start`/`Peak`/`End`/`Duration`/`Signal`/
+`Ongoing` per series) is identical across all three options. Not a
+`radf_` / `_test` / `dating_` naming call at all in the end — one option
+value on an existing generic, no new exported name to place in the table
+above.
+
 ## Implementing items from docs/enhancements/
 
 `../docs/enhancements/` is a research backlog: papers evaluated for
@@ -334,5 +351,8 @@ helper instead of the intended exported function.
   `add_attr(..., caveat = <string>)`, emit the same string via
   `message_glue(caveat)` at call time, and call `cat_caveat(x)` in the
   `print.*_obj` method — one string kept in sync in three places rather
-  than three independent copies. See `radf_svadf()`/`radf_recovery()`
-  for the established pattern.
+  than three independent copies. See `datestamp_svadf()` in
+  `R/radf-methods.R` (a caveat on one `option` of a shared generic, not
+  its own class — the `caveat` attr is simply absent for the other
+  options, and `cat_caveat()`/`print.ds_radf()` no-op on that) /
+  `radf_recovery()` (its own class) for the established pattern.
