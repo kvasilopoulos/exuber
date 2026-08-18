@@ -44,7 +44,7 @@ for the full naming scheme and which functions plug into
 
 ``` r
 exuber_functions()
-#> # A tibble: 34 × 3
+#> # A tibble: 32 × 3
 #>    name         family description                                              
 #>    <chr>        <chr>  <chr>                                                    
 #>  1 radf         adf    The recursive ADF/SADF/GSADF/BSADF statistic (Phillips, …
@@ -57,7 +57,7 @@ exuber_functions()
 #>  8 radf_sign    adf    Sign-based sPWY/sPSY test, exactly invariant to heterosk…
 #>  9 radf_sign_cv adf    Critical values for radf_sign().                         
 #> 10 radf_sign_dm adf    Recursively demeaned sign-based test, robust to determin…
-#> # ℹ 24 more rows
+#> # ℹ 22 more rows
 exuber_functions(family = "monitor")
 #> # A tibble: 4 × 3
 #>   name             family      description                                      

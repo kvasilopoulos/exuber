@@ -102,11 +102,14 @@ what was checked and how.
 
 #### Other
 
-- [`explosive_root()`](https://kvasilopoulos.github.io/exuber/reference/explosive_root.md),
-  [`root_ci()`](https://kvasilopoulos.github.io/exuber/reference/root_ci.md),
-  [`root_ci_datestamp()`](https://kvasilopoulos.github.io/exuber/reference/root_ci_datestamp.md)
-  — root inference and confidence intervals on the explosive
-  coefficient.
+- [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+  — confidence interval and doubling time on the explosive root, via S3
+  dispatch: the default method fits a single sub-sample, the `radf_obj`
+  method runs every
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+  episode at once (previously three separate functions –
+  `explosive_root()`, `root_ci()`, `root_ci_datestamp()` – consolidated
+  before release).
 
 ## exuber 1.1.0
 
