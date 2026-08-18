@@ -242,8 +242,16 @@ print.dg_radf <- function(x, ...) {
 #' @param min_duration The minimum duration of an explosive period for it to be
 #' reported (default = 0).
 #' @param nonrejected logical. Whether to apply datestamping technique to the series
-#' that were not able to reject the Null hypothesis.
-#' @param sig_lvl logical. Significance level, one of 90, 95 or 99.
+#' that were not able to reject the Null hypothesis. Ignored when
+#' \code{option = "svadf"}.
+#' @param sig_lvl logical. Significance level, one of 90, 95 or 99. Ignored
+#' when \code{option = "svadf"}.
+#' @param option one of \code{"gsadf"}/\code{"sadf"} (PWY/PSY dating against
+#' \code{cv}'s critical values) or \code{"svadf"} (Sarkar & Wells 2026's
+#' SV-ADF asymmetric-threshold dating -- \code{radf()}'s own \code{badf}
+#' compared against two closed-form, sample-size-only thresholds,
+#' \code{log(t)/10} for origination and \code{log(t)/2} for collapse; no
+#' \code{cv} needed). See Caveats.
 #' @param ... further arguments passed to methods.
 #'
 #' @return Return a table with the following columns:
@@ -264,9 +272,19 @@ print.dg_radf <- function(x, ...) {
 #' a period of explosive behaviour and 0 otherwise. This output can serve as a
 #' dummy variable for the occurrence of exuberance.
 #'
+#' @section Caveats:
+#' \code{option = "svadf"}: `r lifecycle::badge("experimental")`
+#' \code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a different
+#' bar than every other source this package implements. The same note is
+#' emitted as a message when called with this option. Detects at most one
+#' origination/collapse pair per series (the paper's own procedure), not
+#' every recurring episode the way \code{"gsadf"}/\code{"sadf"} do.
+#'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
+#' @references Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble?
+#' Robust date-stamping for periods of exuberance. arXiv:2604.12062.
 #'
 #' @export
 datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
@@ -291,14 +309,22 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #' datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 #'
 #' autoplot(ds_data)
+#'
+#' # SV-ADF asymmetric-threshold dating (no critical values needed)
+#' datestamp(rsim_data, option = "svadf")
 datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 95,
-                               option = c("gsadf", "sadf"), nonrejected = FALSE, ...) {
+                               option = c("gsadf", "sadf", "svadf"), nonrejected = FALSE, ...) {
+  option <- match.arg(option)
+  assert_positive_int(min_duration, strictly = FALSE)
+
+  if (option == "svadf") {
+    return(datestamp_svadf(object, min_duration))
+  }
+
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
-  option <- match.arg(option)
   stopifnot(sig_lvl %in% c(90, 95, 99))
-  assert_positive_int(min_duration, strictly = FALSE)
   assert_match(object, cv)
 
   is_panel <- is_sb(cv)
@@ -381,6 +407,120 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     option = option,
     method = get_method(cv),
     valid_range = valid_range,
+    class = c("ds_radf", "list")
+  )
+}
+
+# option = "svadf" ----------------------------------------------------------
+#
+# Sarkar & Wells (2026)'s asymmetric-threshold dating: unlike gsadf/sadf,
+# origination and collapse compare `badf` against two DIFFERENT closed-form
+# thresholds (their Remark 1), so it doesn't reduce to the shared
+# `tstat > crit` boolean this function's cv-based branch is built around.
+# Detects at most one origination/collapse pair per series, reusing
+# stamp()/add_peak()/stamp_to_index()/add_ongoing() the same way the
+# cv-based branch does so the two options return the same `ds_radf` shape.
+datestamp_svadf <- function(object, min_duration) {
+  message_glue(svadf_caveat)
+
+  snames <- series_names(object)
+  pos <- snames
+  badf <- object$badf
+  pointer <- nrow(badf)
+  trunc_n <- get_trunc(object)
+  t_idx <- trunc_n + seq_len(pointer)
+  orig_thresh <- svadf_threshold(t_idx, "origination")
+  coll_thresh <- svadf_threshold(t_idx, "collapse")
+
+  no_episode <- matrix(numeric(0), nrow = 0, ncol = 3, dimnames = list(NULL, c("Start", "End", "Duration")))
+  ds_basic <- ds_stamp <- vector("list", length(pos))
+  for (j in seq_along(pos)) {
+    above_idx <- which(badf[, j] > orig_thresh)
+    # stamp(integer(0)) returns one NA-filled row, not zero rows -- guard
+    # explicitly rather than filtering its output by Duration.
+    if (length(above_idx) == 0L) {
+      ds_basic[[j]] <- integer(0)
+      ds_stamp[[j]] <- no_episode
+      next
+    }
+    runs <- stamp(above_idx)
+    runs <- runs[runs$Duration >= min_duration, ]
+    if (nrow(runs) == 0L) {
+      ds_basic[[j]] <- integer(0)
+      ds_stamp[[j]] <- no_episode
+      next
+    }
+    start_row <- runs$Start[1]
+
+    below_idx <- which(badf[, j] < coll_thresh)
+    below_idx <- below_idx[below_idx > start_row]
+    # one past pointer when no collapse is found -- stamp_to_index() then
+    # indexes out of bounds (NA), and add_ongoing() picks that up, exactly
+    # how the gsadf/sadf branch marks an episode still running at n.
+    end_row <- pointer + 1L
+    if (length(below_idx) > 0L) {
+      runs2 <- stamp(below_idx)
+      runs2 <- runs2[runs2$Duration >= min_duration, ]
+      if (nrow(runs2) > 0L) end_row <- runs2$Start[1]
+    }
+
+    ds_basic[[j]] <- start_row:(end_row - 1L)
+    ds_stamp[[j]] <- matrix(c(start_row, end_row, end_row - start_row),
+      nrow = 1, dimnames = list(NULL, c("Start", "End", "Duration"))
+    )
+  }
+
+  tstat <- map(pos, ~ badf[, .x])
+  mat_l <- map(pos, ~ mat(object)[, .x])
+  possibly_add_peak <- possibly(add_peak, otherwise = NULL)
+  ds_stamp <- purrr::pmap(list(ds_stamp, tstat, mat_l, trunc_n), possibly_add_peak)
+
+  idx <- index(object)
+  idx_trunc <- index(object, trunc = TRUE)
+  ds_stamp_index <- map(ds_stamp, stamp_to_index, idx_trunc, object) # is_sb(object) is always FALSE
+  ds_full <- purrr::map(ds_stamp_index, add_ongoing, idx, object) # get_n(object) works the same as get_n(cv)
+
+  # min_duration is already enforced on both the origination and collapse
+  # detection runs above; unlike gsadf/sadf, `Duration` here is the
+  # origination-to-collapse span, a different quantity, so it is not
+  # re-filtered by min_duration again.
+  no_episode_idx <- map_lgl(ds_full, ~ nrow(.x) == 0)
+  res <- ds_full[!no_episode_idx]
+  names(res) <- pos[!no_episode_idx]
+
+  dms <- list(seq_along(idx), snames)
+  dummy <- matrix(0, nrow = length(idx), ncol = length(pos), dimnames = dms)
+  for (z in seq_along(pos)) {
+    dummy[ds_basic[[z]] + trunc_n, z] <- 1
+  }
+
+  valid_range <- get_valid_range(object)
+  if (!is.null(valid_range)) {
+    for (z in seq_along(pos)) {
+      nm <- pos[z]
+      if (nm %in% colnames(valid_range)) {
+        start <- valid_range["start", nm]
+        end <- valid_range["end", nm]
+        if (start > 1) dummy[1:(start - 1), z] <- NA_real_
+        if (end < length(idx)) dummy[(end + 1):length(idx), z] <- NA_real_
+      }
+    }
+  }
+
+  structure(
+    res,
+    dummy = dummy,
+    index = idx,
+    series_names = snames,
+    minw = get_minw(object),
+    lag = get_lag(object),
+    n = get_n(object),
+    panel = FALSE,
+    min_duration = min_duration,
+    option = "svadf",
+    method = "SV-ADF (Sarkar & Wells 2026)",
+    valid_range = valid_range,
+    caveat = svadf_caveat,
     class = c("ds_radf", "list")
   )
 }
@@ -490,6 +630,7 @@ print.ds_radf <- function(x, ...) {
     right = get_method(x)
   )
   cli::cat_line()
+  cat_caveat(x)
   print.listof(x)
 }
 

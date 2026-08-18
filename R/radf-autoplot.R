@@ -7,6 +7,9 @@
 #' @inheritParams datestamp.radf_obj
 #'
 #' @param sig_lvl Significance level. It could be one of 90, 95 or 99.
+#' @param option Whether to apply the "gsadf" or "sadf" methodology (default
+#' = "gsadf"). Unlike \code{\link{datestamp}}, \code{"svadf"} is not
+#' supported here -- it has no critical-value band to shade.
 #' @param nonrejected If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
 #' @param select_series 	A vector of column names or numbers specifying the series to be used in plotting.
 #' Note that the order of the series does not alter the order used in plotting.

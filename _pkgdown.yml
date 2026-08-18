@@ -51,7 +51,6 @@ reference:
       - radf_sign_dm
       - radf_sign_dm_cv
       - ssu_test
-      - radf_svadf
 
   - title: Dating and root inference
     desc: >
