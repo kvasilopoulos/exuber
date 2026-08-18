@@ -63,13 +63,15 @@ summary(res_kp, cv = cv_kp)
 ## WLS + kernel volatility with union-of-rejections: `radf_sbz_cv()`
 
 ```{r sbz}
-radf_sbz_cv(sim_data, nboot = 200)
+radf_sbz_cv(sim_data, nboot = 200, seed = 1)
 ```
 
 `supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version, and
 `U` their union -- each with its own bootstrap p-value, so a series can be
-flagged by one without the other (`div` here is significant on `supDF` and
-the union but not on `supBZ`).
+flagged by one without the other: `psy2` is clearly significant across all
+three here, while the rest of this panel sit closer to the boundary, with
+`supBZ`'s p-values consistently the least significant of the three on this
+draw.
 
 ## Which to reach for
 
