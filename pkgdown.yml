@@ -2,11 +2,19 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
+  alternative-tests: alternative-tests.html
+  co-explosivity: co-explosivity.html
+  dating-methods: dating-methods.html
+  experimental-methods: experimental-methods.html
   exuber: exuber.html
+  monitoring: monitoring.html
+  naming-and-analysis: naming-and-analysis.html
   plotting: plotting.html
   radf-tt: radf-tt.html
+  root-inference: root-inference.html
   simulation: simulation.html
-last_built: 2026-08-13T10:02Z
+  volatility-robust-radf: volatility-robust-radf.html
+last_built: 2026-08-18T00:29Z
 urls:
   reference: https://kvasilopoulos.github.io/exuber/reference
   article: https://kvasilopoulos.github.io/exuber/articles

@@ -61,6 +61,13 @@ count cannot. The cost is a genuine joint grid search rather than
 This is an SSR/BIC model-selection dating procedure, not a hypothesis
 test – it needs no critical values at all.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own dating table (model, origination, collapse, recovery) –
+see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -82,10 +89,13 @@ for PSY's original threshold-crossing rule.
 
 ``` r
 # \donttest{
-res <- dating_hls(sim_data$sim_psy1, trim = 0.05)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- dating_hls(sim_data$psy1, trim = 0.05)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── dating_hls (n = 100, trim = 0.05) ───────────────────────────────────────────
+#> 
+#>    series  model  origination  collapse  recovery
+#>   series1      4           41        55        62
+#> 
 # }
 ```

@@ -69,6 +69,18 @@ for critical values, **not**
 which has no dependence on panel width and is badly undersized here once
 `N` grows past a handful of series.
 
+## Note
+
+Returns
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
+own output (computed on the extracted factor), and
+[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md)
+computes the full time-varying boundary alongside the scalar critical
+values, so the full
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
+pipeline works – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+
 ## Status
 
 **\[experimental\]**
@@ -106,15 +118,15 @@ print(res)
 cv <- radf_common_cv(n = 100, N = ncol(sim_data), minw = 20)
 summary(res, cv = cv)
 #> 
-#> ── Summary (minw = 20, lag = 0) ─────────────────── Monte Carlo (nrep = 1000) ──
+#> ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──
 #> 
 #> series1 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.73 0.300 0.620  1.40
-#> 2 sadf   7.15 1.81  2.13   2.68
-#> 3 gsadf  7.15 2.32  2.63   3.25
+#> 1 adf   -2.73 0.519 0.875  1.57
+#> 2 sadf   7.15 1.89  2.25   2.80
+#> 3 gsadf  7.15 2.38  2.68   3.34
 #> 
 # }
 ```

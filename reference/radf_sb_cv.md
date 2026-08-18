@@ -120,9 +120,9 @@ tidy(sb)
 #> # A tibble: 3 × 3
 #>   id    sig   gsadf_panel
 #>   <fct> <fct>       <dbl>
-#> 1 panel 90          0.333
-#> 2 panel 95          0.435
-#> 3 panel 99          0.646
+#> 1 panel 90          0.351
+#> 2 panel 95          0.416
+#> 3 panel 99          0.630
 
 summary(rsim_data, cv = sb)
 #> 
@@ -132,7 +132,7 @@ summary(rsim_data, cv = sb)
 #> # A tibble: 1 × 5
 #>   stat        tstat  `90`  `95`  `99`
 #>   <fct>       <dbl> <dbl> <dbl> <dbl>
-#> 1 gsadf_panel  1.89 0.333 0.435 0.646
+#> 1 gsadf_panel  1.89 0.351 0.416 0.630
 #> 
 
 autoplot(rsim_data, cv = sb)

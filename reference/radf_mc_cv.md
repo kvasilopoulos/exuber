@@ -63,11 +63,11 @@ mc <- radf_mc_cv(n = 100)
 
 tidy(mc)
 #> # A tibble: 3 × 4
-#>   sig      adf  sadf gsadf
-#>   <fct>  <dbl> <dbl> <dbl>
-#> 1 90    -0.520 0.977  1.63
-#> 2 95    -0.238 1.25   1.97
-#> 3 99     0.590 1.77   2.67
+#>   sig       adf  sadf gsadf
+#>   <fct>   <dbl> <dbl> <dbl>
+#> 1 90    -0.408   1.06  1.69
+#> 2 95     0.0507  1.45  1.96
+#> 3 99     0.655   1.84  2.60
 
 # Change the minimum window and the number of simulations
 mc2 <- radf_mc_cv(n = 100, nrep = 600, minw = 20)
@@ -76,9 +76,9 @@ tidy(mc2)
 #> # A tibble: 3 × 4
 #>   sig      adf  sadf gsadf
 #>   <fct>  <dbl> <dbl> <dbl>
-#> 1 90    -0.447 0.941  1.62
-#> 2 95    -0.173 1.25   1.90
-#> 3 99     0.516 1.88   2.34
+#> 1 90    -0.468 0.958  1.68
+#> 2 95    -0.131 1.31   1.97
+#> 3 99     0.595 1.93   2.40
 
 mdist <- radf_mc_distr(n = 100, nrep = 1000)
 

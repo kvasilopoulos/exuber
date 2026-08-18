@@ -45,7 +45,15 @@ explosive-root CLT, not the classical stationary one)."><meta property="og:image
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
+    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
+    <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
+    <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
+    <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -126,6 +134,15 @@ upper doubling-time bounds come from the upper and lower \(\rho\) bounds,
 respectively).</p>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>Returns its own class (not <code>radf_obj</code>), so it does not plug into
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code>\link{datestamp}</code>/<code>tidy</code>/<code>autoplot</code> – prints its own
+confidence-interval summary (this is inference on the root's
+magnitude, not a <code>radf_obj</code>-shaped test result) – see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code> for the full
+picture of which functions do and don't fit that pipeline.</p>
+    </div>
+    <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
 
 
@@ -140,6 +157,47 @@ moderate deviations from a unit root. Journal of Econometrics, 136(1),
 115-130.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">burn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bubble</span> <span class="op">&lt;-</span> <span class="va">burn</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">burn</span><span class="op">)</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.04</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">40</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">burn</span>, <span class="va">bubble</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf.html">radf</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, minw <span class="op">=</span> <span class="fl">20</span>, nrep <span class="op">=</span> <span class="fl">300</span>, seed <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">r</span>, cv <span class="op">=</span> <span class="va">cv</span>, min_duration <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="explosive_root.html">explosive_root</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">ds</span><span class="op">[[</span><span class="st">"series1"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">Start</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">ds</span><span class="op">[[</span><span class="st">"series1"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">End</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">root_ci</span><span class="op">(</span><span class="va">est</span><span class="op">)</span> <span class="co"># true rho = 1.04 -- CI should bracket it</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rho</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.041945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rho_ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.029562 1.054328</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $doubling_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 16.86941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $doubling_time_ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13.10209 23.79234</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">root_ci</span><span class="op">(</span><span class="va">est</span>, type <span class="op">=</span> <span class="st">"cauchy"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rho</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.041945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $rho_ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5007196 1.5831701</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $doubling_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 16.86941</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $doubling_time_ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  1.508714 -1.002079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

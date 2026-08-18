@@ -65,6 +65,12 @@ The critical value is a published closed-table constant (Kurozumi &
 Nishi (2025)'s Table I, via the internal `ssu_q()` helper) – no
 simulation needed.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own statistic/critical-value summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -85,10 +91,13 @@ complements.
 
 ``` r
 # \donttest{
-res <- ssu_test(sim_data$sim_psy1, level = 0.95)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- ssu_test(sim_data$psy1, level = 0.95)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── ssu_test (n = 100, minw = 19, level = 95%, crit = 3.3) ──────────────────────
+#> 
+#>    series   sadf  detected
+#>   series1  4.251      TRUE
+#> 
 # }
 ```

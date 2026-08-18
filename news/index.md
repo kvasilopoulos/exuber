@@ -48,7 +48,7 @@ what was checked and how.
 
 #### Real-time monitoring
 
-- [`radf_monitor()`](https://kvasilopoulos.github.io/exuber/reference/radf_monitor.md)
+- [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
   — Phillips & Shi (2020) training/monitoring orchestration (Family A),
   plus Kurozumi (2020) closed-form `SADF`/ `GSADF_s0` boundaries and
   Homm & Breitung (2012)’s FLUC boundary.
@@ -86,6 +86,19 @@ what was checked and how.
   this unreleased version; renamed before release since none of them are
   actually recursive-ADF-based tests. No deprecated aliases were kept,
   as the old names never shipped in a CRAN release.
+- `radf_monitor()` renamed to
+  [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md),
+  joining
+  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)/
+  [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)/[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  under one discoverable prefix for every real-time monitoring function,
+  ADF-family internals notwithstanding — see
+  [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+- [`exuber_functions()`](https://kvasilopoulos.github.io/exuber/reference/exuber_functions.md)
+  added: a queryable registry of every exported function’s family
+  (`adf`, `test`, `dating`, `monitor`, `root`, `regression`), so “what
+  monitoring functions exist” is an actual function call, not a naming
+  convention to memorize.
 
 #### Other
 

@@ -97,6 +97,13 @@ The step-1 PSY detection/dating pass does use a wild bootstrap critical
 value (`cv`/`nboot`/`seed` below), but only to locate the preliminary
 episode windows, not for the dating step itself.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own dating table (model, origination, collapse, recovery) –
+see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -118,10 +125,14 @@ for PSY's own multi-bubble threshold-crossing dating.
 
 ``` r
 # \donttest{
-res <- dating_hlw(sim_data$sim_psy1, trim = 0.1, nboot = 199L, seed = 1)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- dating_hlw(sim_data$psy1, trim = 0.1, nboot = 199L, seed = 1)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── dating_hlw (n = 100, trim = 0.1) ────────────────────────────────────────────
+#> 
+#> series1:
+#>  model origination collapse recovery
+#>      4          41       55       71
+#> 
 # }
 ```

@@ -53,6 +53,12 @@ here and are not implemented.
 The critical value is closed-form: the standard normal (`qnorm`)
 quantile at `level` – no bootstrap, no simulation, no table needed.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own statistic/critical-value/detected summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -72,10 +78,16 @@ the recursive ADF-family alternative this complements.
 
 ``` r
 # \donttest{
-res <- lbi_test(sim_data$sim_psy1)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+set.seed(1)
+n <- 60
+y <- 100 * 1.03^(1:n) + cumsum(rnorm(n, sd = 1)) # genuine explosive AR
+res <- lbi_test(y)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────
+#> 
+#>    series   stat   crit  detected
+#>   series1  6.885  1.645      TRUE
+#> 
 # }
 ```

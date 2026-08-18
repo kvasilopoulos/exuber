@@ -80,6 +80,14 @@ subsequent down-crossing occurs before the reverse-time sample is
 exhausted, `f_c` is `NA` and `censored = TRUE` (the crisis origination
 predates the observed sample).
 
+## Note
+
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own origination/recovery date summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Caveats
 
 **\[experimental\]**
@@ -121,20 +129,22 @@ complements.
 
 ``` r
 # \donttest{
-res <- radf_recovery(sim_data, nrep = 200)
+set.seed(2)
+n1 <- 40; n2 <- 25; n3 <- 35
+expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
+collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
+recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
+y <- c(expansion, collapse, recovery) # expansion -> collapse -> recovery
+res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 #> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
 print(res)
 #> 
-#> ── radf_recovery (n = 100, minw = 19, level = 95%) ─────────────────────────────
+#> ── radf_recovery (n = 100, minw = 15, level = 95%) ─────────────────────────────
 #> 
 #> ℹ Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
 #> 
-#>   series   f_c   f_r  detected  censored
-#>     psy1  <NA>  <NA>     FALSE     FALSE
-#>     psy2  <NA>  <NA>     FALSE     FALSE
-#>    evans  <NA>  <NA>     FALSE     FALSE
-#>      div  <NA>  <NA>     FALSE     FALSE
-#>     blan  <NA>  <NA>     FALSE     FALSE
+#>    series  f_c  f_r  detected  censored
+#>   series1   35   62      TRUE     FALSE
 #> 
 # }
 ```

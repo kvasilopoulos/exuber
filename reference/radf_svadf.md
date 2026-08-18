@@ -68,6 +68,12 @@ function, unlike
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)/
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md).
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own origination/collapse date summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Caveats
 
 **\[experimental\]**

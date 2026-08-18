@@ -60,6 +60,17 @@ or any other bootstrap – the statistic is pivotal (exactly invariant to
 heteroskedasticity), so its critical values are simulated once, not per
 dataset.
 
+Carries the `radf_obj` class, so
+[`summary()`](https://rdrr.io/r/base/summary.html) and
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) work, but
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`autoplot`
+do not:
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+only computes the three scalar critical values
+[`summary()`](https://rdrr.io/r/base/summary.html) needs, not the
+time-varying boundary those two require. A known gap, not a design
+choice – see `vignette("naming-and- analysis", package = "exuber")`.
+
 ## Level-shift robustness
 
 Harvey, Leybourne, Tatlow & Zu (2025) show this test also retains its
@@ -117,7 +128,57 @@ print(res)
 
 cv <- radf_sign_cv(n = 100, minw = 20)
 summary(res, cv = cv)
-#> Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"): Join columns in `y` must be present in the data.
-#> ✖ Problem with `id`.
+#> 
+#> ── Summary (minw = 20, lag = 0) ──────────────── Sign-Based MC (nboot = 2000) ──
+#> 
+#> psy1 :
+#> # A tibble: 3 × 5
+#>   stat   tstat  `90`  `95`  `99`
+#>   <fct>  <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -0.152 0.868  1.35  2.16
+#> 2 sadf   0.937 2.23   2.62  3.43
+#> 3 gsadf  2.02  2.89   3.34  4.57
+#> 
+#> psy2 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf    2.56 0.868  1.35  2.16
+#> 2 sadf   6.42 2.23   2.62  3.43
+#> 3 gsadf 14.0  2.89   3.34  4.57
+#> 
+#> evans :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf    4.85 0.868  1.35  2.16
+#> 2 sadf   5.76 2.23   2.62  3.43
+#> 3 gsadf  6.85 2.89   3.34  4.57
+#> 
+#> div :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf    1.13 0.868  1.35  2.16
+#> 2 sadf   2.79 2.23   2.62  3.43
+#> 3 gsadf  2.95 2.89   3.34  4.57
+#> 
+#> blan :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf    3.38 0.868  1.35  2.16
+#> 2 sadf   3.38 2.23   2.62  3.43
+#> 3 gsadf  3.68 2.89   3.34  4.57
+#> 
+tidy(res, cv = cv)
+#> # A tibble: 5 × 4
+#>   id       adf  sadf gsadf
+#>   <fct>  <dbl> <dbl> <dbl>
+#> 1 psy1  -0.152 0.937  2.02
+#> 2 psy2   2.56  6.42  14.0 
+#> 3 evans  4.85  5.76   6.85
+#> 4 div    1.13  2.79   2.95
+#> 5 blan   3.38  3.38   3.68
 # }
 ```

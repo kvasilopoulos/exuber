@@ -79,6 +79,12 @@ The critical value is a wild bootstrap of the residuals, computed
 internally on every call (Theorem 2) – there is no separate/reusable cv
 function for this test.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own statistic/critical-value/p-value summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -93,11 +99,13 @@ Bulletin of Economics and Statistics, 84(3), 624-650.
 
 ``` r
 # \donttest{
-res <- cobubble_test(sim_data$sim_psy1, sim_data$sim_psy2, nboot = 199L, seed = 1)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Warning: Unknown or uninitialised column: `sim_psy2`.
-#> Error in y[idx_y]: only 0's may be mixed with negative subscripts
+res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── cobubble_test (lag = -2, nboot = 199) ───────────────────────────────────────
+#> 
+#> S = 1.533, cv(95%) = 0.2998, p-value = 0
+#> Co-explosivity rejected at the 5% level.
+#> 
 # }
 ```

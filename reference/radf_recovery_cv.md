@@ -56,6 +56,18 @@ position, aligned the same way
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)'s
 own `bsadf_cv` aligns to `radf()$bsadf`.
 
+## Note
+
+[`print()`](https://rdrr.io/r/base/print.html)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
+are not yet implemented for this object's own class (`recovery_cv` has
+no `tidy_radf_cv` method, unlike
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)/[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+which fall back to `mc_cv`'s – that fallback does not apply here since
+this object only carries `bsadf_cv`, not the `adf_cv`/
+`sadf_cv`/`gsadf_cv` fields that method expects). Inspect `cv$bsadf_cv`
+directly instead of calling `print(cv)`/ `tidy(cv)`, which currently
+error.
+
 ## Status
 
 **\[experimental\]**
@@ -70,10 +82,7 @@ own `bsadf_cv` aligns to `radf()$bsadf`.
 ``` r
 # \donttest{
 cv <- radf_recovery_cv(n = 100, minw = 20, nrep = 200)
-print(cv)
-#> 
-#> ── Monte Carlo (reverse) (minw = 20, nboot = 200) ──────────────────────────────
-#> 
-#> Error in UseMethod("tidy_radf_cv"): no applicable method for 'tidy_radf_cv' applied to an object of class "c('radf_cv', 'recovery_cv', 'list')"
+range(cv$bsadf_cv)
+#> [1] -0.3351885  1.9060722
 # }
 ```

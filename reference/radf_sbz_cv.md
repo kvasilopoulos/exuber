@@ -82,6 +82,13 @@ critical-value function to pair it with, unlike
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/
 [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md).
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own statistic/critical-value summary (bundles the test
+statistic and its critical value in one object) – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -109,11 +116,11 @@ print(res)
 #> ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────
 #> 
 #>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U
-#>     psy1  1.946  0.2802  1.946    0.045    0.580  0.070
-#>     psy2  7.880  1.5349  7.880    0.000    0.175  0.000
-#>    evans  5.283  1.9138  5.283    0.085    0.285  0.120
-#>      div  1.113  2.2607  1.336    0.100    0.080  0.110
-#>     blan  3.930  1.4008  3.930    0.060    0.235  0.085
+#>     psy1  1.946  0.2802  1.946    0.050    0.625  0.070
+#>     psy2  7.880  1.5349  7.880    0.000    0.195  0.010
+#>    evans  5.283  1.9138  5.283    0.075    0.285  0.100
+#>      div  1.113  2.2607  1.113    0.045    0.080  0.075
+#>     blan  3.930  1.4008  3.930    0.075    0.230  0.095
 #> 
 # }
 ```

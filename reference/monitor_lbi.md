@@ -73,6 +73,12 @@ time-varying-boundary CUSUM test it is compared against.
 The critical value is a published constant boundary (Breitung & Diegel
 (2025)'s Table 1) – a table lookup, no simulation.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own boundary/alarm summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -89,17 +95,30 @@ Journal of Time Series Analysis.
 for the static (known, full-sample bubble window) version.
 [`monitor_cusum`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
 and
-[`radf_monitor`](https://kvasilopoulos.github.io/exuber/reference/radf_monitor.md)
+[`monitor_radf`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
 for structurally different monitoring detectors.
 
 ## Examples
 
 ``` r
 # \donttest{
-res <- monitor_lbi(sim_data$sim_psy1, r_star = 0.5)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
-print(res)
-#> Error: object 'res' not found
+make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
+  y <- numeric(n)
+  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
+  for (t in (T_star + 1):n) {
+    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
+  }
+  y
+}
+set.seed(7)
+y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+res <- monitor_lbi(y, r_star = 100)
+print(res) # alarm should fire soon after t = 150
+#> 
+#> ── monitor_lbi (T* = 100 / 200, c_bar = 0, b_alpha = 1.95) ─────────────────────
+#> 
+#>    series  alarm  alarm_date
+#>   series1    159         159
+#> 
 # }
 ```

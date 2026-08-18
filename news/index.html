@@ -27,7 +27,15 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
+    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
+    <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
+    <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
+    <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -78,7 +86,7 @@
 <div class="section level4">
 <h4 id="real-time-monitoring-development-version">Real-time monitoring<a class="anchor" aria-label="anchor" href="#real-time-monitoring-development-version"></a></h4>
 <ul><li>
-<code><a href="../reference/radf_monitor.html">radf_monitor()</a></code> — Phillips &amp; Shi (2020) training/monitoring orchestration (Family A), plus Kurozumi (2020) closed-form <code>SADF</code>/ <code>GSADF_s0</code> boundaries and Homm &amp; Breitung (2012)’s FLUC boundary.</li>
+<code><a href="../reference/monitor_radf.html">monitor_radf()</a></code> — Phillips &amp; Shi (2020) training/monitoring orchestration (Family A), plus Kurozumi (2020) closed-form <code>SADF</code>/ <code>GSADF_s0</code> boundaries and Homm &amp; Breitung (2012)’s FLUC boundary.</li>
 <li>
 <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> — Homm &amp; Breitung (2012) CUSUM monitoring, plus Astill et al. (2023)’s volatility-robust CUSUMV kernel variant and HB’s finite-sample boundary.</li>
 <li>
@@ -103,6 +111,10 @@
 <div class="section level4">
 <h4 id="naming-development-version">Naming<a class="anchor" aria-label="anchor" href="#naming-development-version"></a></h4>
 <ul><li>12 of the functions above (<code>cobubble_test</code>, <code>contagion_reg</code>, <code>monitor_cusum</code>, <code>dating_hls</code>, <code>dating_hlw</code>, <code>dating_knp</code>, <code>lbi_test</code>, <code>monitor_lbi</code>, <code>dating_pdc</code>, <code>monitor_quantile</code>, <code>quantile_test</code>, <code>ssu_test</code>) were named <code>radf_*</code> in earlier development snapshots of this unreleased version; renamed before release since none of them are actually recursive-ADF-based tests. No deprecated aliases were kept, as the old names never shipped in a CRAN release.</li>
+<li>
+<code>radf_monitor()</code> renamed to <code><a href="../reference/monitor_radf.html">monitor_radf()</a></code>, joining <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>/ <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>/<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> under one discoverable prefix for every real-time monitoring function, ADF-family internals notwithstanding — see <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code>.</li>
+<li>
+<code><a href="../reference/exuber_functions.html">exuber_functions()</a></code> added: a queryable registry of every exported function’s family (<code>adf</code>, <code>test</code>, <code>dating</code>, <code>monitor</code>, <code>root</code>, <code>regression</code>), so “what monitoring functions exist” is an actual function call, not a naming convention to memorize.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="other-development-version">Other<a class="anchor" aria-label="anchor" href="#other-development-version"></a></h4>

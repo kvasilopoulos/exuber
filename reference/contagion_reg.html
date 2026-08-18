@@ -39,7 +39,15 @@ periods later."><meta property="og:image" content="https://kvasilopoulos.github.
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
+    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
+    <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
+    <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
+    <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -139,6 +147,11 @@ source paper itself does.</p>
 inference (no confidence bands, no significance test) on the contagion
 coefficient, so there is no critical value at all for this function –
 don't look for one.</p>
+<p>Returns its own class (not <code>radf_obj</code>), so it does not plug into
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code>\link{datestamp}</code>/<code>tidy</code>/<code>autoplot</code> – prints its own
+coefficient-path summary (it performs no formal inference at all) –
+see <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code> for the full
+picture of which functions do and don't fit that pipeline.</p>
     </div>
     <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
@@ -161,12 +174,13 @@ hypothesis-testing) bivariate bubble relationship.</p></div>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">contagion_reg</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">sim_psy1</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">sim_psy2</span>, d <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `sim_psy1`.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `sim_psy2`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in y[1:n1]:</span> only 0's may be mixed with negative subscripts</span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">contagion_reg</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, d <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'res' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── contagion_reg (n = 100, S = 33, d = 0, h = 0.6567) ──────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> delta_2(r) range: [0.163, 0.182] </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -43,7 +43,15 @@ whichever of the two is more powerful for a given series."><meta property="og:im
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
+    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
+    <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
+    <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
+    <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -141,6 +149,12 @@ across the parallel and non-parallel option when the same seed is used.</p></dd>
 single call – there is no separate un-cv'd statistic function and no
 other critical-value function to pair it with, unlike <code><a href="radf.html">radf()</a></code>/
 <code><a href="radf_wb_cv.html">radf_wb_cv()</a></code>.</p>
+<p>Returns its own class (not <code>radf_obj</code>), so it does not plug into
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code>\link{datestamp}</code>/<code>tidy</code>/<code>autoplot</code> – prints its own
+statistic/critical-value summary (bundles the test statistic and its
+critical value in one object) – see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code> for the full
+picture of which functions do and don't fit that pipeline.</p>
     </div>
     <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
@@ -170,11 +184,11 @@ heteroskedasticity-robust alternative.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  1.946  0.2802  1.946    0.045    0.580  0.070</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2  7.880  1.5349  7.880    0.000    0.175  0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  5.283  1.9138  5.283    0.085    0.285  0.120</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      div  1.113  2.2607  1.336    0.100    0.080  0.110</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  3.930  1.4008  3.930    0.060    0.235  0.085</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  1.946  0.2802  1.946    0.050    0.625  0.070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2  7.880  1.5349  7.880    0.000    0.195  0.010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  5.283  1.9138  5.283    0.075    0.285  0.100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div  1.113  2.2607  1.113    0.045    0.080  0.075</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  3.930  1.4008  3.930    0.075    0.230  0.095</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

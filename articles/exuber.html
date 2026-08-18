@@ -43,7 +43,15 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
+    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
+    <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
+    <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
+    <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -110,7 +118,7 @@ to be simulated for this specific <code>(n, lag)</code> combination –
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">est_stocks</span>, cv <span class="op">=</span> <span class="va">cv_stocks</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Summary (minw = 38, lag = 1) ─────────────────── Monte Carlo (nrep = 1000) ──</span></span>
+<span><span class="co">#&gt; ── Summary (minw = 38, lag = 1) ────────────────── Monte Carlo (nboot = 1000) ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; DAX :</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>

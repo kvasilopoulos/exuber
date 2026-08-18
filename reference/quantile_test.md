@@ -81,6 +81,14 @@ simulated by the same random-walk-plus-OLS-t-stat construction used
 elsewhere in this package (see
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)).
 
+## Note
+
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own statistic/boundary/delta summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -100,10 +108,13 @@ the mean-regression (ADF/SADF/GSADF) family this complements.
 
 ``` r
 # \donttest{
-res <- quantile_test(sim_data$sim_psy1, nrep = 100, seed = 1)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- quantile_test(sim_data$psy2, nrep = 100, seed = 1)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────
+#> 
+#>    series   tau  tstat    crit  delta  detected
+#>   series1  0.35  5.364  0.7143  0.361      TRUE
+#> 
 # }
 ```

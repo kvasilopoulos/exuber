@@ -33,6 +33,15 @@ explosive_root(data, from, to)
 A list with `rho` (the OLS estimate), `se` (its standard error),
 `t_stat`, and `n` (sub-sample size).
 
+## Note
+
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own confidence-interval summary (this is inference on the
+root's magnitude, not a `radf_obj`-shaped test result) – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -49,3 +58,31 @@ The Econometrics Journal, 22(3), 279-303.
 
 [`root_ci`](https://kvasilopoulos.github.io/exuber/reference/root_ci.md)
 for a confidence interval and doubling time based on this estimate.
+
+## Examples
+
+``` r
+set.seed(2026)
+burn <- cumsum(rnorm(60))
+bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+y <- c(burn, bubble)
+
+r <- radf(y, minw = 20)
+cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+ds <- datestamp(r, cv = cv, min_duration = 3)
+
+est <- explosive_root(y, ds[["series1"]]$Start[1], ds[["series1"]]$End[1])
+est
+#> $rho
+#> [1] 1.041945
+#> 
+#> $se
+#> [1] 0.006318027
+#> 
+#> $t_stat
+#> [1] 6.638914
+#> 
+#> $n
+#> [1] 17
+#> 
+```

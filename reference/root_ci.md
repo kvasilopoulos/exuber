@@ -61,6 +61,15 @@ obtained by transforming the endpoints of the \\\hat\rho\\ interval
 upper doubling-time bounds come from the upper and lower \\\rho\\
 bounds, respectively).
 
+## Note
+
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own confidence-interval summary (this is inference on the
+root's magnitude, not a `radf_obj`-shaped test result) – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -72,3 +81,44 @@ The Econometrics Journal, 22(3), 279-303.
 
 Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for moderate
 deviations from a unit root. Journal of Econometrics, 136(1), 115-130.
+
+## Examples
+
+``` r
+set.seed(2026)
+burn <- cumsum(rnorm(60))
+bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+y <- c(burn, bubble)
+
+r <- radf(y, minw = 20)
+cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+ds <- datestamp(r, cv = cv, min_duration = 3)
+
+est <- explosive_root(y, ds[["series1"]]$Start[1], ds[["series1"]]$End[1])
+root_ci(est) # true rho = 1.04 -- CI should bracket it
+#> $rho
+#> [1] 1.041945
+#> 
+#> $rho_ci
+#> [1] 1.029562 1.054328
+#> 
+#> $doubling_time
+#> [1] 16.86941
+#> 
+#> $doubling_time_ci
+#> [1] 13.10209 23.79234
+#> 
+root_ci(est, type = "cauchy")
+#> $rho
+#> [1] 1.041945
+#> 
+#> $rho_ci
+#> [1] 0.5007196 1.5831701
+#> 
+#> $doubling_time
+#> [1] 16.86941
+#> 
+#> $doubling_time_ci
+#> [1]  1.508714 -1.002079
+#> 
+```

@@ -45,7 +45,7 @@ rsim_data <- radf(sim_data)
 summary(rsim_data)
 #> Using `radf_crit` for `cv`.
 #> 
-#> ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──
+#> ── Summary (minw = 19, lag = 0) ────────────────── Monte Carlo (nboot = 2000) ──
 #> 
 #> psy1 :
 #> # A tibble: 3 × 5

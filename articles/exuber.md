@@ -49,7 +49,7 @@ cv_stocks <- radf_mc_cv(NROW(stocks), lag = 1)
 
 summary(est_stocks, cv = cv_stocks)
 #> 
-#> ── Summary (minw = 38, lag = 1) ─────────────────── Monte Carlo (nrep = 1000) ──
+#> ── Summary (minw = 38, lag = 1) ────────────────── Monte Carlo (nboot = 1000) ──
 #> 
 #> DAX :
 #> # A tibble: 3 × 5

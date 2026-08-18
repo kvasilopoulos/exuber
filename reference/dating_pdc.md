@@ -93,6 +93,15 @@ weighted by the inverse of the estimated spot variance. This needs no
 new critical-value theory – like the OLS version, it is point
 estimation, not a threshold-crossing test.
 
+## Note
+
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own dating table (model, origination, collapse, recovery) –
+see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -118,10 +127,9 @@ for the PSY threshold-crossing alternative.
 
 ``` r
 # \donttest{
-res <- dating_pdc(sim_data$sim_psy1, regimes = 3L, trim = 0.05)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
 print(res)
-#> Error: object 'res' not found
+#>         origination collapse
+#> series1          40       54
 # }
 ```

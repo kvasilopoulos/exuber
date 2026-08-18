@@ -78,6 +78,13 @@ confidence bands, no significance test) on the contagion coefficient, so
 there is no critical value at all for this function – don't look for
 one.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own coefficient-path summary (it performs no formal
+inference at all) – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -98,11 +105,12 @@ relationship.
 
 ``` r
 # \donttest{
-res <- contagion_reg(sim_data$sim_psy1, sim_data$sim_psy2, d = 0L)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Warning: Unknown or uninitialised column: `sim_psy2`.
-#> Error in y[1:n1]: only 0's may be mixed with negative subscripts
+res <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0L)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── contagion_reg (n = 100, S = 33, d = 0, h = 0.6567) ──────────────────────────
+#> 
+#> delta_2(r) range: [0.163, 0.182] 
+#> 
 # }
 ```

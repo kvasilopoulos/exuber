@@ -103,6 +103,12 @@ an unexported helper, `qpwy_boundary_sim`) – there is currently no
 reusable/exported cv counterpart for this function (a known,
 separately-tracked gap, not addressed here).
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own statistic/boundary/delta summary – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## References
 
 Wu, R., Shi, S., & Wu, J. (2025). Quantile analysis for financial bubble
@@ -113,17 +119,20 @@ detection and surveillance. Journal of Time Series Analysis, 46(5),
 
 [`quantile_test`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
 for the static, full-sample version of this test.
-[`radf_monitor`](https://kvasilopoulos.github.io/exuber/reference/radf_monitor.md)
+[`monitor_radf`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
 for the OLS-based monitoring alternative.
 
 ## Examples
 
 ``` r
 # \donttest{
-res <- monitor_quantile(sim_data$sim_psy1, tau = 0.5, nrep = 100, seed = 1)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- monitor_quantile(sim_data$psy2, tau = 0.5, nrep = 100, seed = 1)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── monitor_quantile (n = 100, minw = 19, tau = 0.5, level = 95%) ───────────────
+#> 
+#>    series  delta  boundary  alarm  alarm_date
+#>   series1  0.331     1.299     24          24
+#> 
 # }
 ```

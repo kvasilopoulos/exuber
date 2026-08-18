@@ -55,6 +55,18 @@ unlike a bootstrap.
 bootstrap-based alternative, worth considering if
 non-pivotality/finite-sample bootstrap robustness is a specific concern.
 
+## Note
+
+Carries the `radf_obj` class, so
+[`summary()`](https://rdrr.io/r/base/summary.html) and
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) work, but
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`autoplot`
+do not:
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+only computes the three scalar critical values, not the time-varying
+boundary those two need – see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+
 ## References
 
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed Test
@@ -89,7 +101,57 @@ print(res)
 
 cv <- radf_tt_cv(n = 100, minw = 20)
 summary(res, cv = cv)
-#> Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"): Join columns in `y` must be present in the data.
-#> ✖ Problem with `id`.
+#> 
+#> ── Summary (minw = 20, lag = 0) ────────── Time-Transformed MC (nboot = 2000) ──
+#> 
+#> psy1 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.04 0.970  1.44  2.08
+#> 2 sadf   1.27 2.20   2.56  3.15
+#> 3 gsadf  2.20 2.85   3.15  3.88
+#> 
+#> psy2 :
+#> # A tibble: 3 × 5
+#>   stat   tstat  `90`  `95`  `99`
+#>   <fct>  <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -0.860 0.970  1.44  2.08
+#> 2 sadf   2.60  2.20   2.56  3.15
+#> 3 gsadf  3.50  2.85   3.15  3.88
+#> 
+#> evans :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.33 0.970  1.44  2.08
+#> 2 sadf   1.66 2.20   2.56  3.15
+#> 3 gsadf  1.88 2.85   3.15  3.88
+#> 
+#> div :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   0.722 0.970  1.44  2.08
+#> 2 sadf  2.34  2.20   2.56  3.15
+#> 3 gsadf 2.34  2.85   3.15  3.88
+#> 
+#> blan :
+#> # A tibble: 3 × 5
+#>   stat   tstat  `90`  `95`  `99`
+#>   <fct>  <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.34  0.970  1.44  2.08
+#> 2 sadf   0.500 2.20   2.56  3.15
+#> 3 gsadf  1.54  2.85   3.15  3.88
+#> 
+tidy(res, cv = cv)
+#> # A tibble: 5 × 4
+#>   id       adf  sadf gsadf
+#>   <fct>  <dbl> <dbl> <dbl>
+#> 1 psy1  -1.04  1.27   2.20
+#> 2 psy2  -0.860 2.60   3.50
+#> 3 evans -1.33  1.66   1.88
+#> 4 div    0.722 2.34   2.34
+#> 5 blan  -1.34  0.500  1.54
 # }
 ```

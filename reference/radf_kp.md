@@ -70,6 +70,17 @@ implemented. The paper also proposes a without-intercept variant and a
 union-of-rejections test combining both; these are not implemented here
 (see the package's enhancement notes for the cost/benefit reasoning).
 
+## Note
+
+Returns
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s own
+output unmodified, so the full
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
+pipeline works exactly as it does for plain
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) –
+see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+
 ## Status
 
 **\[experimental\]**
@@ -114,47 +125,47 @@ print(res)
 cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
 summary(res, cv = cv)
 #> 
-#> ── Summary (minw = 20, lag = 0) ─────────────────── Monte Carlo (nrep = 1000) ──
+#> ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──
 #> 
 #> psy1 :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -0.439 -0.512 -0.0484 0.534
-#> 2 sadf   0.175  1.01   1.38   2.03 
-#> 3 gsadf  1.67   1.66   1.95   2.61 
+#>   stat   tstat   `90`   `95`  `99`
+#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
+#> 1 adf   -0.439 -0.488 -0.150 0.408
+#> 2 sadf   0.175  0.910  1.26  1.99 
+#> 3 gsadf  1.67   1.62   1.90  2.47 
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.40  -0.512 -0.0484 0.534
-#> 2 sadf   0.918  1.01   1.38   2.03 
-#> 3 gsadf  2.03   1.66   1.95   2.61 
+#>   stat   tstat   `90`   `95`  `99`
+#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
+#> 1 adf   -2.40  -0.488 -0.150 0.408
+#> 2 sadf   0.918  0.910  1.26  1.99 
+#> 3 gsadf  2.03   1.62   1.90  2.47 
 #> 
 #> evans :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -1.93  -0.512 -0.0484 0.534
-#> 2 sadf  -0.714  1.01   1.38   2.03 
-#> 3 gsadf  0.489  1.66   1.95   2.61 
+#>   stat   tstat   `90`   `95`  `99`
+#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
+#> 1 adf   -1.93  -0.488 -0.150 0.408
+#> 2 sadf  -0.714  0.910  1.26  1.99 
+#> 3 gsadf  0.489  1.62   1.90  2.47 
 #> 
 #> div :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.32  -0.512 -0.0484 0.534
-#> 2 sadf   0.584  1.01   1.38   2.03 
-#> 3 gsadf  0.900  1.66   1.95   2.61 
+#>   stat   tstat   `90`   `95`  `99`
+#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
+#> 1 adf   -2.32  -0.488 -0.150 0.408
+#> 2 sadf   0.584  0.910  1.26  1.99 
+#> 3 gsadf  0.900  1.62   1.90  2.47 
 #> 
 #> blan :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.47  -0.512 -0.0484 0.534
-#> 2 sadf  -1.46   1.01   1.38   2.03 
-#> 3 gsadf  0.452  1.66   1.95   2.61 
+#>   stat   tstat   `90`   `95`  `99`
+#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
+#> 1 adf   -2.47  -0.488 -0.150 0.408
+#> 2 sadf  -1.46   0.910  1.26  1.99 
+#> 3 gsadf  0.452  1.62   1.90  2.47 
 #> 
 # }
 ```

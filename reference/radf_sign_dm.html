@@ -39,7 +39,15 @@ than the raw cumulated sign radf_sign uses."><meta property="og:image" content="
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
+    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
+    <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
+    <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
+    <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -112,6 +120,11 @@ condition.</p>
 <code><a href="radf_sign_cv.html">radf_sign_cv</a></code>, which is calibrated to the non-demeaned
 <code><a href="radf_sign.html">radf_sign</a></code> statistic instead) – pivotal like
 <code>radf_sign</code>, so no per-dataset bootstrap is needed.</p>
+<p>Carries the <code>radf_obj</code> class, so <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
+<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> work, but <code><a href="datestamp.html">datestamp</a></code>/<code>autoplot</code> do not
+– same gap as <code><a href="radf_sign.html">radf_sign</a></code>: <code><a href="radf_sign_dm_cv.html">radf_sign_dm_cv()</a></code> only
+computes the three scalar critical values, not a time-varying boundary.
+See <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
@@ -154,8 +167,58 @@ deterministic level shifts. Oxford Bulletin of Economics and Statistics,
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf_sign_dm_cv.html">radf_sign_dm_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in full_join(tidy(x, format = "long"), tidy(y, format = "long"),     by = c("stat", join_by), relationship = "many-to-many"):</span> Join columns in `y` must be present in the data.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Problem with `id`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Summary (minw = 20, lag = 0) ───── Sign-Based MC (demeaned) (nboot = 2000) ──</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> psy1 :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stat    tstat  `90`  `95`  `99`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.071</span><span style="color: #BB0000; text-decoration: underline;">5</span> 0.914  1.33  1.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   2.17   2.37   2.81  3.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  2.98   2.87   3.21  4.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> psy2 :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat  `90`  `95`  `99`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf    1.48 0.914  1.33  1.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   3.00 2.37   2.81  3.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  3.43 2.87   3.21  4.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> evans :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stat   tstat  `90`  `95`  `99`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.14</span>  0.914  1.33  1.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf  -<span style="color: #BB0000;">0.912</span> 2.37   2.81  3.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  1.15  2.87   3.21  4.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> div :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat  `90`  `95`  `99`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.05</span> 0.914  1.33  1.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   2.33 2.37   2.81  3.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  2.37 2.87   3.21  4.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> blan :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   stat   tstat  `90`  `95`  `99`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.173</span> 0.914  1.33  1.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   1.35  2.37   2.81  3.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  1.49  2.87   3.21  4.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id        adf   sadf gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">0.071</span><span style="color: #BB0000; text-decoration: underline;">5</span>  2.17   2.98</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> psy2   1.48    3.00   3.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> evans -<span style="color: #BB0000;">2.14</span>   -<span style="color: #BB0000;">0.912</span>  1.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> div   -<span style="color: #BB0000;">1.05</span>    2.33   2.37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> blan  -<span style="color: #BB0000;">0.173</span>   1.35   1.49</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

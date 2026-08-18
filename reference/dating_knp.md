@@ -52,6 +52,13 @@ An object of class `dating_knp_obj`: a list with `origination`,
 This is a residual-sum-of-squares model-selection dating procedure, not
 a hypothesis test – it needs no critical values at all.
 
+Returns its own class (not `radf_obj`), so it does not plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
+– prints its own dating table (model, origination, collapse, recovery) –
+see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the full picture of which functions do and don't fit that pipeline.
+
 ## Status
 
 **\[experimental\]**
@@ -72,10 +79,13 @@ for related SSR-based dating approaches.
 
 ``` r
 # \donttest{
-res <- dating_knp(sim_data$sim_psy1, trim = 0.05)
-#> Warning: Unknown or uninitialised column: `sim_psy1`.
-#> Error: unsupported class
+res <- dating_knp(sim_data$psy1, trim = 0.05)
 print(res)
-#> Error: object 'res' not found
+#> 
+#> ── dating_knp (n = 100, trim = 0.05, omit = TRUE) ──────────────────────────────
+#> 
+#>    series  origination  collapse  delta
+#>   series1           41        55  0.964
+#> 
 # }
 ```
