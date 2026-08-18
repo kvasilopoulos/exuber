@@ -1,4 +1,4 @@
-context("explosive_root / root_ci")
+context("rootstamp")
 
 test_that("Cauchy two-sided percentiles (Phillips-Magdalinos / Guo Sun Wang
   citation) match Student's t with 1 df exactly -- the standard Cauchy
@@ -13,7 +13,7 @@ test_that("Cauchy two-sided percentiles (Phillips-Magdalinos / Guo Sun Wang
   expect_equal(unname(computed), unname(published), tolerance = 1e-3)
 })
 
-test_that("explosive_root recovers a known rho on a simulated explosive AR(1)", {
+test_that("rootstamp.default recovers a known rho on a simulated explosive AR(1)", {
   set.seed(1)
   rho_true <- 1.03
   n <- 150
@@ -21,13 +21,13 @@ test_that("explosive_root recovers a known rho on a simulated explosive AR(1)", 
   e <- rnorm(n)
   for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
 
-  est <- explosive_root(y, 1, n)
-  expect_equal(est$rho, rho_true, tolerance = 0.01)
-  expect_true(est$se > 0)
-  expect_equal(est$n, n - 1)
+  ci <- rootstamp(y)
+  expect_equal(ci$rho, rho_true, tolerance = 0.01)
+  expect_true(ci$se > 0)
+  expect_equal(ci$n, n - 1)
 })
 
-test_that("root_ci's doubling time is consistent with its own rho estimate", {
+test_that("rootstamp.default's doubling time is consistent with its own rho estimate", {
   set.seed(1)
   rho_true <- 1.03
   n <- 150
@@ -35,8 +35,7 @@ test_that("root_ci's doubling time is consistent with its own rho estimate", {
   e <- rnorm(n)
   for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
 
-  est <- explosive_root(y, 1, n)
-  ci <- root_ci(est)
+  ci <- rootstamp(y)
   expect_equal(ci$doubling_time, log(2) / log(ci$rho))
   # doubling time is decreasing in rho, so the CI bounds should be flipped
   expect_true(ci$doubling_time_ci[1] < ci$doubling_time)
@@ -44,7 +43,7 @@ test_that("root_ci's doubling time is consistent with its own rho estimate", {
   expect_true(ci$rho_ci[1] < ci$rho && ci$rho < ci$rho_ci[2])
 })
 
-test_that("root_ci empirical coverage is in a plausible range at T = 150
+test_that("rootstamp.default empirical coverage is in a plausible range at T = 150
   (Guo, Sun & Wang's asymptotic-normal t-statistic result; not expected to
   be exact at finite T -- reported honestly rather than asserted at nominal)", {
   skip_on_cran()
@@ -55,7 +54,7 @@ test_that("root_ci empirical coverage is in a plausible range at T = 150
     y <- numeric(n)
     e <- rnorm(n)
     for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
-    ci <- root_ci(explosive_root(y, 1, n))
+    ci <- rootstamp(y)
     ci$rho_ci[1] <= rho_true && rho_true <= ci$rho_ci[2]
   })
   # observed ~90% in development; a generous band around that, not the
@@ -63,7 +62,7 @@ test_that("root_ci empirical coverage is in a plausible range at T = 150
   expect_gt(mean(covered), 0.80)
 })
 
-test_that("root_ci(type = 'cauchy') brackets the point estimate and matches
+test_that("rootstamp.default(type = 'cauchy') brackets the point estimate and matches
   the Phillips-Magdalinos fixed-root formula (eq. 27) exactly, not just
   approximately", {
   set.seed(1)
@@ -73,19 +72,18 @@ test_that("root_ci(type = 'cauchy') brackets the point estimate and matches
   e <- rnorm(n)
   for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
 
-  est <- explosive_root(y, 1, n)
-  ci <- root_ci(est, type = "cauchy")
+  ci <- rootstamp(y, type = "cauchy")
 
-  expect_true(ci$rho_ci[1] < est$rho && est$rho < ci$rho_ci[2])
+  expect_true(ci$rho_ci[1] < ci$rho && ci$rho < ci$rho_ci[2])
 
   q <- qcauchy(0.975)
-  half_width <- q * (est$rho^2 - 1) / est$rho^est$n
-  expect_equal(ci$rho_ci, est$rho + c(-1, 1) * half_width)
+  half_width <- q * (ci$rho^2 - 1) / ci$rho^ci$n
+  expect_equal(ci$rho_ci, ci$rho + c(-1, 1) * half_width)
 })
 
-test_that("root_ci_datestamp runs end-to-end on a real datestamp() result
-  and its per-episode rho matches calling explosive_root()/root_ci()
-  directly on the same Start/End positions", {
+test_that("rootstamp.radf_obj runs end-to-end on a real datestamp() result
+  and its per-episode rho matches calling rootstamp.default() directly on the
+  same Start/End positions", {
   set.seed(2026)
   burn <- cumsum(rnorm(60))
   bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
@@ -97,13 +95,13 @@ test_that("root_ci_datestamp runs end-to-end on a real datestamp() result
 
   skip_if(length(ds) == 0, "no episode detected on this draw")
 
-  out <- root_ci_datestamp(r, ds)
+  out <- rootstamp(r, ds)
   expect_type(out, "list")
   expect_named(out, names(ds))
 
   ep <- out[["series1"]]
   first <- ds[["series1"]][1, ]
-  direct <- root_ci(explosive_root(y, first$Start, first$End))
+  direct <- rootstamp(y[first$Start:first$End])
   expect_equal(ep$rho[1], direct$rho)
   expect_equal(ep$rho_lower[1], direct$rho_ci[1])
 })

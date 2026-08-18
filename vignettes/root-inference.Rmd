@@ -20,19 +20,23 @@ library(exuber)
 
 ## A different question from "is there a bubble"
 
-`radf()`/`datestamp()` (and the `dating_*()`/`_test()` families) all answer
-some version of "is there a bubble, and when did it happen." None of them
+`radf()`/`datestamp()` (and the `dating_*()`/`_test()`/`monitor_*()`
+families) all answer some version of "is there a bubble, and when did it
+happen." None of them
 say anything about its *magnitude*: once an explosive episode is dated, how
-fast is the underlying autoregressive root actually growing? `explosive_root()`,
-`root_ci()` and `root_ci_datestamp()` (Phillips & Magdalinos 2007; Guo, Sun &
-Wang 2019) answer exactly that, as a follow-up step *after* detection and
-dating, not a replacement for either.
+fast is the underlying autoregressive root actually growing? `rootstamp()`
+(Phillips & Magdalinos 2007; Guo, Sun & Wang 2019) answers exactly that, as
+a follow-up step *after* detection and dating, not a replacement for either.
 
-They fit a no-intercept AR(1), `y_t = rho * y_{t-1} + e_t`, over a given
-sub-sample and report `rho`'s estimate together with a confidence interval
+It fits a no-intercept AR(1), `y_t = rho * y_{t-1} + e_t`, over a given
+sub-sample and reports `rho`'s estimate together with a confidence interval
 and an implied **doubling time** (`log(2) / log(rho)`: how many periods
-until the bubble doubles in size at the estimated growth rate). None of the
-three carry the `radf_obj` class -- see `vignette("naming-and-analysis")`.
+until the bubble doubles in size at the estimated growth rate). Two
+methods, for two different starting points -- a plain numeric sub-sample
+(fit once, one CI), or a `radf_obj` plus its `datestamp()` result (fit
+every episode at once, no manual loop). Neither method's return value
+carries the `radf_obj` class itself, so `rootstamp()` doesn't plug into
+`summary()`/`tidy()`/`autoplot()` -- see `vignette("naming-and-analysis")`.
 
 ## Detect, date, then estimate the root
 
@@ -54,38 +58,34 @@ ds <- datestamp(r, cv = cv, min_duration = 3)
 ds
 ```
 
-Then estimate the root over the detected episode:
+Then estimate the root over the detected episode -- the default method
+takes the sub-sample directly, sliced by the episode's own `Start`/`End`:
 
 ```{r root}
-est <- explosive_root(y, ds[["series1"]]$Start[1], ds[["series1"]]$End[1])
-est
+ep <- ds[["series1"]]
+rootstamp(y[ep$Start[1]:ep$End[1]]) # normal-t interval (Guo, Sun & Wang 2019), true rho = 1.04
+rootstamp(y[ep$Start[1]:ep$End[1]], type = "cauchy") # fixed-root Cauchy interval (Phillips & Magdalinos 2007)
 ```
 
-`est$rho` recovers something close to the true 1.04. `root_ci()` turns the
-point estimate into an interval and a doubling time:
-
-```{r ci}
-root_ci(est) # normal-t interval (Guo, Sun & Wang 2019)
-root_ci(est, type = "cauchy") # fixed-root Cauchy interval (Phillips & Magdalinos 2007)
-```
-
-The two interval types answer slightly different questions. `type = "normal"`
-(the default) is the safer choice under drift/weak dependence and gives a
-noticeably tighter interval here; `type = "cauchy"` assumes a genuinely
-*fixed*, non-drifting root and, because a Cauchy distribution has much
-fatter tails than a normal, produces a visibly wider interval even at the
-same nominal level.
+`rho` recovers something close to the true 1.04, alongside `rho_ci` and the
+implied `doubling_time`/`doubling_time_ci`. The two interval types answer
+slightly different questions. `type = "normal"` (the default) is the safer
+choice under drift/weak dependence and gives a noticeably tighter interval
+here; `type = "cauchy"` assumes a genuinely *fixed*, non-drifting root and,
+because a Cauchy distribution has much fatter tails than a normal, produces
+a visibly wider interval even at the same nominal level.
 
 ## Every episode at once
 
-For a `datestamp()` result with more than one episode, `root_ci_datestamp()`
-runs `explosive_root()`/`root_ci()` on each one without a manual loop:
+For a `datestamp()` result with more than one episode, the `radf_obj`
+method runs the default method on each one without a manual loop -- pass
+the original `radf()` result and the `datestamp()` result together:
 
-```{r root-ci-datestamp}
-root_ci_datestamp(r, ds)
+```{r rootstamp-radf-obj}
+rootstamp(r, ds)
 ```
 
 Root inference on a very short episode is close to meaningless (too few
 points to estimate an AR(1) coefficient precisely) -- filter with
-`datestamp(..., min_duration = ...)` before piping in, rather than expecting
-`root_ci_datestamp()` to second-guess what counts as "too short."
+`datestamp(..., min_duration = ...)` before piping in, rather than
+expecting this method to second-guess what counts as "too short."
