@@ -60,15 +60,14 @@ which is calibrated to the non-demeaned
 statistic instead) – pivotal like `radf_sign`, so no per-dataset
 bootstrap is needed.
 
-Carries the `radf_obj` class, so
-[`summary()`](https://rdrr.io/r/base/summary.html) and
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) work, but
-[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`autoplot`
-do not – same gap as
-[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md):
+Carries the `radf_obj` class and, as of 2026-08-18, its full
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
+pipeline works, the same fix as
+[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
+–
 [`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)
-only computes the three scalar critical values, not a time-varying
-boundary. See
+now computes `badf_cv`/`bsadf_cv` too, not just the three scalar
+critical values. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
 ## Status
@@ -165,5 +164,16 @@ tidy(res, cv = cv)
 #> 3 evans -2.14   -0.912  1.15
 #> 4 div   -1.05    2.33   2.37
 #> 5 blan  -0.173   1.35   1.49
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ──────────────────── Sign-Based MC (demeaned) ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    39   40  41        2 positive   FALSE
+#> 2    86   95 100       14 negative   FALSE
+#> 
+autoplot(res, cv = cv)
+
 # }
 ```

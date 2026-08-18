@@ -99,6 +99,37 @@ what was checked and how.
   (`adf`, `test`, `dating`, `monitor`, `root`, `regression`), so “what
   monitoring functions exist” is an actual function call, not a naming
   convention to memorize.
+- [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md),
+  [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+  and
+  [`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)
+  now all compute `badf_cv`/`bsadf_cv` (a time-varying boundary), not
+  just the three scalar critical values —
+  [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)/[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)/
+  [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md)
+  results now work with the full
+  [`summary()`](https://rdrr.io/r/base/summary.html)/
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  pipeline, not just [`summary()`](https://rdrr.io/r/base/summary.html)/
+  [`tidy()`](https://generics.r-lib.org/reference/tidy.html). Found
+  first in
+  [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+  (a user-reported
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+  crash on
+  [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
+  prompted checking all three GLS-demeaned-family functions), then
+  confirmed the identical fix applies to the other two. Validated per
+  function: `badf_cv`‘s last row is bit-identical to `adf_cv` (a hard
+  identity), empirical false-alarm rate at or below nominal (`radf_tt`
+  3.3%, `radf_sign` 5.5%, `radf_sign_dm` 3.5%, vs. 5% nominal), and
+  detection power on an identical synthetic bubble in the same range as
+  the established
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+  baseline (16%): `radf_tt` 18%, `radf_sign` 20%, `radf_sign_dm` 8%
+  (lower power a known, expected property of the sign-based tests’
+  heteroskedasticity invariance, not a validation concern) — see
+  [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
 #### Other
 

@@ -60,16 +60,14 @@ or any other bootstrap – the statistic is pivotal (exactly invariant to
 heteroskedasticity), so its critical values are simulated once, not per
 dataset.
 
-Carries the `radf_obj` class, so
-[`summary()`](https://rdrr.io/r/base/summary.html) and
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) work, but
-[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`autoplot`
-do not:
+Carries the `radf_obj` class and, as of 2026-08-18, its full
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
+pipeline works –
 [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
-only computes the three scalar critical values
-[`summary()`](https://rdrr.io/r/base/summary.html) needs, not the
-time-varying boundary those two require. A known gap, not a design
-choice – see `vignette("naming-and- analysis", package = "exuber")`.
+now computes the time-varying `badf_cv`/`bsadf_cv` boundary those last
+two need, not just the three scalar critical values
+[`summary()`](https://rdrr.io/r/base/summary.html) uses. See
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
 ## Level-shift robustness
 
@@ -180,5 +178,24 @@ tidy(res, cv = cv)
 #> 3 evans  4.85  5.76   6.85
 #> 4 div    1.13  2.79   2.95
 #> 5 blan   3.38  3.38   3.68
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   40 100       80 positive    TRUE
+#> 
+#> evans :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   84 100       80 positive    TRUE
+#> 
+#> blan :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    31   43  73       42 negative   FALSE
+#> 2    76  100 100       25 positive    TRUE
+#> 
+autoplot(res, cv = cv)
+
 # }
 ```

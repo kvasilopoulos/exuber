@@ -129,12 +129,12 @@ statistic.</p>
 <code><a href="radf_wb_cv.html">radf_wb_cv</a></code> or any other bootstrap – the statistic is
 pivotal (exactly invariant to heteroskedasticity), so its critical
 values are simulated once, not per dataset.</p>
-<p>Carries the <code>radf_obj</code> class, so <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
-<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> work, but <code><a href="datestamp.html">datestamp</a></code>/<code>autoplot</code> do not:
-<code><a href="radf_sign_cv.html">radf_sign_cv()</a></code> only computes the three scalar critical values
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> needs, not the time-varying boundary those two require.
-A known gap, not a design choice – see <code>vignette("naming-and-
-analysis", package = "exuber")</code>.</p>
+<p>Carries the <code>radf_obj</code> class and, as of 2026-08-18, its full
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="datestamp.html">datestamp</a></code>/<code>tidy</code>/<code>autoplot</code>
+pipeline works – <code><a href="radf_sign_cv.html">radf_sign_cv()</a></code> now computes the time-varying
+<code>badf_cv</code>/<code>bsadf_cv</code> boundary those last two need, not just
+the three scalar critical values <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> uses. See
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="level-shift-robustness">Level-shift robustness<a class="anchor" aria-label="anchor" href="#level-shift-robustness"></a></h2>
@@ -245,6 +245,25 @@ for the standard (non-invariant) test.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> evans  4.85  5.76   6.85</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> div    1.13  2.79   2.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> blan   3.38  3.38   3.68</span>
+<span class="r-in"><span><span class="fu"><a href="datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> psy2 :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    21   40 100       80 positive    TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> evans :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    21   84 100       80 positive    TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> blan :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    31   43  73       42 negative   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    76  100 100       25 positive    TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="radf_sign-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

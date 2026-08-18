@@ -160,6 +160,19 @@ tail(dummy)
 #> 372   0   1   0    0
 ```
 
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+is not the only way to get dates out of the package, and the other two
+answer different questions rather than being alternate ways to get the
+same answer: the `dating_*()` family
+([`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md))
+fits an explicit regime model to date a bubble you already believe is
+there, instead of testing whether one exists; the `monitor_*()` family
+([`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md))
+does real-time detection, watching new observations one at a time rather
+than dating a finished sample. See
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for how every function in the package relates to this one.
+
 ## Plotting
 
 The `autoplot` function returns a faceted ggplot2 object for all the

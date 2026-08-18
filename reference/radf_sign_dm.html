@@ -120,11 +120,12 @@ condition.</p>
 <code><a href="radf_sign_cv.html">radf_sign_cv</a></code>, which is calibrated to the non-demeaned
 <code><a href="radf_sign.html">radf_sign</a></code> statistic instead) – pivotal like
 <code>radf_sign</code>, so no per-dataset bootstrap is needed.</p>
-<p>Carries the <code>radf_obj</code> class, so <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
-<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> work, but <code><a href="datestamp.html">datestamp</a></code>/<code>autoplot</code> do not
-– same gap as <code><a href="radf_sign.html">radf_sign</a></code>: <code><a href="radf_sign_dm_cv.html">radf_sign_dm_cv()</a></code> only
-computes the three scalar critical values, not a time-varying boundary.
-See <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code>.</p>
+<p>Carries the <code>radf_obj</code> class and, as of 2026-08-18, its full
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="datestamp.html">datestamp</a></code>/<code>tidy</code>/<code>autoplot</code>
+pipeline works, the same fix as <code><a href="radf_sign.html">radf_sign</a></code> –
+<code><a href="radf_sign_dm_cv.html">radf_sign_dm_cv()</a></code> now computes <code>badf_cv</code>/<code>bsadf_cv</code>
+too, not just the three scalar critical values. See
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis", package = "exuber")</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
@@ -219,6 +220,17 @@ deterministic level shifts. Oxford Bulletin of Economics and Statistics,
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> evans -<span style="color: #BB0000;">2.14</span>   -<span style="color: #BB0000;">0.912</span>  1.15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> div   -<span style="color: #BB0000;">1.05</span>    2.33   2.37</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> blan  -<span style="color: #BB0000;">0.173</span>   1.35   1.49</span>
+<span class="r-in"><span><span class="fu"><a href="datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Datestamp (min_duration = 0) ──────────────────── Sign-Based MC (demeaned) ──</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> psy2 :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    39   40  41        2 positive   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    86   95 100       14 negative   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="radf_sign_dm-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

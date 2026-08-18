@@ -12,14 +12,23 @@ Plain
 assumes constant innovation variance. Real series rarely have that, and
 under time-varying volatility its standard critical values no longer
 control size. exuber has several fixes for this, each taking a
-structurally different approach, and – unlike most of the other new
-functions – all four here keep the `radf_obj` class, so
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
-still work the same way they do for plain
+structurally different approach. Three of the four below
+([`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md))
+keep the `radf_obj` class and now have full
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+support, the same as plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
 (see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for exactly how far each one plugs into the pipeline).
+for exactly how each one plugs into the pipeline and how that was
+validated);
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
+doesn’t – it bundles the statistic and its own critical value into one
+call with its own class, not a `radf_obj`, so none of those four
+generics apply to it, only its own
+[`print()`](https://rdrr.io/r/base/print.html).
 [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)’s
 time-deformation approach has its own dedicated vignette,
 [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md);
@@ -32,6 +41,14 @@ this one covers the rest.
 | [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md) | Harvey, Leybourne & Zu (2019) | A WLS-weighted test using the same kernel volatility estimator, unioned with the classic supDF via a jointly-sized wild bootstrap. |
 
 ## Sign-based: `radf_sign()`
+
+As of 2026-08-18, this also gets full pipeline support –
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+computes the time-varying `badf_cv`/`bsadf_cv` boundary now, not just
+the scalar critical values
+[`summary()`](https://rdrr.io/r/base/summary.html) needs (see
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for the validation):
 
 ``` r
 
@@ -80,6 +97,22 @@ summary(res, cv = cv)
 #> 1 adf    3.38 0.907  1.28  2.11
 #> 2 sadf   3.38 2.32   2.65  3.42
 #> 3 gsadf  3.68 2.97   3.51  4.42
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   40 100       80 positive    TRUE
+#> 
+#> evans :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   84 100       80 positive    TRUE
+#> 
+#> blan :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    31   43  73       42 negative   FALSE
+#> 2    76  100 100       25 positive    TRUE
 ```
 
 `psy2` and `evans` clear their 99% critical values comfortably; the
@@ -92,12 +125,10 @@ Because
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
 purges volatility and then calls
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-unmodified, it gets **full** pipeline support
-([`summary()`](https://rdrr.io/r/base/summary.html),
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html),
-[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-all work, unlike the sign-based and SBZ variants):
+unmodified, it gets full pipeline support too, the simplest way of all
+(no new critical-value machinery at all –
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+applies unmodified):
 
 ``` r
 
@@ -178,16 +209,19 @@ the three on this draw.
   [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
   (or
   [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md)
-  if a level shift, not just volatility, is a concern).
-- Want to stay inside the full
-  [`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/
-  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-  pipeline:
-  [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
-  – the only one of this group with no gaps there.
+  if a level shift, not just volatility, is a concern). Also full
+  pipeline support.
+- Want to stay closest to plain
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+  no new critical-value machinery at all:
+  [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md).
 - Want the WLS efficiency gain and a union test against the classic
   statistic:
-  [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md).
+  [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
+  – the one function in this group with no
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  support, since it bundles the statistic and its (scalar-only) critical
+  value in one call rather than returning a `radf_obj`.
 - Volatility is the whole story and a bootstrap-free, time-deformation
   approach is preferred:
   [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),

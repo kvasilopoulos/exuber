@@ -75,15 +75,13 @@ carries the `radf_obj` class – and whose paired `_cv()` actually
 computes that time-varying boundary – get the full pipeline. Three
 tiers, in practice:
 
-### Full support: `radf_common()`, `radf_kp()`
+### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`
 
-Both literally return
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)/[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
+literally return
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s
-own output
-([`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
-purges volatility first,
-[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
-extracts a PCA factor first, then calls
+own output (purged of volatility, or computed on a PCA factor,
+respectively, then
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
 unmodified), so every generic works exactly as it does for plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md):
@@ -158,33 +156,125 @@ autoplot(res, cv = cv)
 
 ![](naming-and-analysis_files/figure-html/kp-full-1.png)
 
-### Partial support: `radf_sign()`, `radf_sign_dm()`, `radf_tt()`
-
-These carry the `radf_obj` class too (so
-[`summary()`](https://rdrr.io/r/base/summary.html) and
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) work), but
-their own critical-value functions –
-[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
-[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
-[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-– only ever computed the three scalar critical values
-[`summary()`](https://rdrr.io/r/base/summary.html) needs, never the
-`badf_cv`/`bsadf_cv` time-varying boundary
+The other three are different: they carry the `radf_obj` class but build
+their statistic on `gls_dfstat_grid()` (a no-intercept, GLS-demeaned
+recursive-DF grid, fed the raw series for
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+its cumulated sign for
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+a recursively demeaned cumulated sign for
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md))
+rather than calling
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+directly. Until 2026-08-18 all three had a real gap: their `_cv()`
+functions only ever computed the three scalar critical values
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
+need, discarding the `badf`/`bsadf` path `gls_dfstat_grid()` already
+computes per replicate, so
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-require. This is a real, currently unfixed gap, not a design choice –
-adding it means simulating and calibrating a full recursive boundary the
-way
-[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)/[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md)
-do, which needs this package’s usual validation pass (formula-exact
-check, Monte Carlo size, a replication script) before it ships, not a
-quick patch.
+(which need a *time-varying* boundary) always errored. Fixed for all
+three the same way, once the pattern was confirmed in
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+first and then checked to hold for the other two as well: unlike
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)’s
+own `bsadf_cv` (a
+[`cummax()`](https://rdrr.io/r/base/cumsum.html)-across-replicates
+shortcut around the base C++ engine’s output shape),
+`gls_dfstat_grid()`’s `bsadf` is already the genuine
+sup-over-all-window-starts statistic at each point, so no shortcut
+derivation was needed – just the per-time-point quantile across
+replicates, the construction
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+uses for its own `bsadf_cv`. Validated per function: `badf_cv`’s last
+row is bit-identical to `adf_cv` (`adf` is literally `badf`’s last
+point, per replicate – a hard identity, not an approximate check, and
+true regardless of which series feeds `gls_dfstat_grid()`); empirical
+false-alarm rate under `H0` is at or below nominal (`radf_tt` 3.3%,
+`radf_sign` 5.5%, `radf_sign_dm` 3.5%, all at nominal 5%, n=100,
+minw=20); and detection power on an identical synthetic bubble is in the
+same range as the established
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+baseline (16%) rather than suspiciously higher or lower (`radf_tt` 18%,
+`radf_sign` 20%, `radf_sign_dm` 8% – the sign-based tests trading power
+for their heteroskedasticity invariance is itself the paper’s own
+documented finding, not a validation red flag).
+
+``` r
+
+res <- radf_tt(sim_data, minw = 20)
+cv <- radf_tt_cv(n = 100, minw = 20)
+
+summary(res, cv = cv)
+#> 
+#> ── Summary (minw = 20, lag = 0) ────────── Time-Transformed MC (nboot = 2000) ──
+#> 
+#> psy1 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.04 0.947  1.34  2.05
+#> 2 sadf   1.27 2.18   2.51  3.40
+#> 3 gsadf  2.20 2.81   3.15  4.04
+#> 
+#> psy2 :
+#> # A tibble: 3 × 5
+#>   stat   tstat  `90`  `95`  `99`
+#>   <fct>  <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -0.860 0.947  1.34  2.05
+#> 2 sadf   2.60  2.18   2.51  3.40
+#> 3 gsadf  3.50  2.81   3.15  4.04
+#> 
+#> evans :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.33 0.947  1.34  2.05
+#> 2 sadf   1.66 2.18   2.51  3.40
+#> 3 gsadf  1.88 2.81   3.15  4.04
+#> 
+#> div :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   0.722 0.947  1.34  2.05
+#> 2 sadf  2.34  2.18   2.51  3.40
+#> 3 gsadf 2.34  2.81   3.15  4.04
+#> 
+#> blan :
+#> # A tibble: 3 × 5
+#>   stat   tstat  `90`  `95`  `99`
+#>   <fct>  <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.34  0.947  1.34  2.05
+#> 2 sadf   0.500 2.18   2.51  3.40
+#> 3 gsadf  1.54  2.81   3.15  4.04
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   27  35       14 positive   FALSE
+#> 2    55   55  73       18 positive   FALSE
+tidy(res, cv = cv)
+#> # A tibble: 5 × 4
+#>   id       adf  sadf gsadf
+#>   <fct>  <dbl> <dbl> <dbl>
+#> 1 psy1  -1.04  1.27   2.20
+#> 2 psy2  -0.860 2.60   3.50
+#> 3 evans -1.33  1.66   1.88
+#> 4 div    0.722 2.34   2.34
+#> 5 blan  -1.34  0.500  1.54
+autoplot(res, cv = cv)
+```
+
+![](naming-and-analysis_files/figure-html/tt-full-1.png)
 
 ``` r
 
 res <- radf_sign(sim_data, minw = 20)
 cv <- radf_sign_cv(n = 100, minw = 20)
 
-summary(res, cv = cv) # works
+summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ──────────────── Sign-Based MC (nboot = 2000) ──
 #> 
@@ -192,42 +282,59 @@ summary(res, cv = cv) # works
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.152 0.914  1.33  2.05
-#> 2 sadf   0.937 2.31   2.66  3.47
-#> 3 gsadf  2.02  2.97   3.49  4.48
+#> 1 adf   -0.152 0.920  1.28  1.99
+#> 2 sadf   0.937 2.26   2.62  3.39
+#> 3 gsadf  2.02  2.89   3.31  4.45
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    2.56 0.914  1.33  2.05
-#> 2 sadf   6.42 2.31   2.66  3.47
-#> 3 gsadf 14.0  2.97   3.49  4.48
+#> 1 adf    2.56 0.920  1.28  1.99
+#> 2 sadf   6.42 2.26   2.62  3.39
+#> 3 gsadf 14.0  2.89   3.31  4.45
 #> 
 #> evans :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    4.85 0.914  1.33  2.05
-#> 2 sadf   5.76 2.31   2.66  3.47
-#> 3 gsadf  6.85 2.97   3.49  4.48
+#> 1 adf    4.85 0.920  1.28  1.99
+#> 2 sadf   5.76 2.26   2.62  3.39
+#> 3 gsadf  6.85 2.89   3.31  4.45
 #> 
 #> div :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    1.13 0.914  1.33  2.05
-#> 2 sadf   2.79 2.31   2.66  3.47
-#> 3 gsadf  2.95 2.97   3.49  4.48
+#> 1 adf    1.13 0.920  1.28  1.99
+#> 2 sadf   2.79 2.26   2.62  3.39
+#> 3 gsadf  2.95 2.89   3.31  4.45
 #> 
 #> blan :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    3.38 0.914  1.33  2.05
-#> 2 sadf   3.38 2.31   2.66  3.47
-#> 3 gsadf  3.68 2.97   3.49  4.48
-tidy(res, cv = cv) # works
+#> 1 adf    3.38 0.920  1.28  1.99
+#> 2 sadf   3.38 2.26   2.62  3.39
+#> 3 gsadf  3.68 2.89   3.31  4.45
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   40 100       80 positive    TRUE
+#> 
+#> evans :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   84 100       80 positive    TRUE
+#> 
+#> blan :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    31   43  73       42 negative   FALSE
+#> 2    77   78  79        2 positive   FALSE
+#> 3    80  100 100       21 positive    TRUE
+tidy(res, cv = cv)
 #> # A tibble: 5 × 4
 #>   id       adf  sadf gsadf
 #>   <fct>  <dbl> <dbl> <dbl>
@@ -236,13 +343,10 @@ tidy(res, cv = cv) # works
 #> 3 evans  4.85  5.76   6.85
 #> 4 div    1.13  2.79   2.95
 #> 5 blan   3.38  3.38   3.68
+autoplot(res, cv = cv)
 ```
 
-``` r
-
-datestamp(res, cv = cv) # errors: cv has no bsadf_cv
-autoplot(res, cv = cv) # errors: cv has no bsadf_cv
-```
+![](naming-and-analysis_files/figure-html/sign-full-1.png)
 
 ### No support: everything else
 
@@ -289,6 +393,5 @@ ssu_test(sim_data$psy1, level = 0.95)
 
 | Tier | Functions | [`summary()`](https://rdrr.io/r/base/summary.html) | [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) | [`tidy()`](https://generics.r-lib.org/reference/tidy.html) | [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html) |
 |----|----|----|----|----|----|
-| Full | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md) | yes | yes | yes | yes |
-| Partial | [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md) | yes | no (gap) | yes | no (gap) |
+| Full | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md) | yes | yes | yes | yes |
 | Standalone | everything else | own [`print()`](https://rdrr.io/r/base/print.html) | – | – | – |

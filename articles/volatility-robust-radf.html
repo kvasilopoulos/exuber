@@ -90,13 +90,18 @@
 <p>Plain <code><a href="../reference/radf.html">radf()</a></code> assumes constant innovation variance. Real
 series rarely have that, and under time-varying volatility its standard
 critical values no longer control size. exuber has several fixes for
-this, each taking a structurally different approach, and – unlike most
-of the other new functions – all four here keep the
-<code>radf_obj</code> class, so
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> still work the same way they
-do for plain <code><a href="../reference/radf.html">radf()</a></code> (see
-<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for exactly how far each
-one plugs into the pipeline). <code><a href="../reference/radf_tt.html">radf_tt()</a></code>’s time-deformation
+this, each taking a structurally different approach. Three of the four
+below (<code><a href="../reference/radf_sign.html">radf_sign()</a></code>, <code><a href="../reference/radf_sign_dm.html">radf_sign_dm()</a></code>,
+<code><a href="../reference/radf_kp.html">radf_kp()</a></code>) keep the <code>radf_obj</code> class and now
+have full
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
+support, the same as plain <code><a href="../reference/radf.html">radf()</a></code> (see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for exactly how each one
+plugs into the pipeline and how that was validated);
+<code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> doesn’t – it bundles the statistic and its
+own critical value into one call with its own class, not a
+<code>radf_obj</code>, so none of those four generics apply to it, only
+its own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>. <code><a href="../reference/radf_tt.html">radf_tt()</a></code>’s time-deformation
 approach has its own dedicated vignette,
 <code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>; this one covers the rest.</p>
 <table class="table">
@@ -142,6 +147,11 @@ unioned with the classic supDF via a jointly-sized wild bootstrap.</td>
 <div class="section level2">
 <h2 id="sign-based-radf_sign">Sign-based: <code>radf_sign()</code><a class="anchor" aria-label="anchor" href="#sign-based-radf_sign"></a>
 </h2>
+<p>As of 2026-08-18, this also gets full pipeline support –
+<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> computes the time-varying
+<code>badf_cv</code>/<code>bsadf_cv</code> boundary now, not just the
+scalar critical values <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> needs (see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the validation):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign.html">radf_sign</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign_cv.html">radf_sign_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -187,7 +197,23 @@ unioned with the classic supDF via a jointly-sized wild bootstrap.</td>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    3.38 0.907  1.28  2.11</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   3.38 2.32   2.65  3.42</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  3.68 2.97   3.51  4.42</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  3.68 2.97   3.51  4.42</span></span>
+<span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    21   40 100       80 positive    TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; evans :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    21   84 100       80 positive    TRUE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; blan :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    31   43  73       42 negative   FALSE</span></span>
+<span><span class="co">#&gt; 2    76  100 100       25 positive    TRUE</span></span></code></pre></div>
 <p><code>psy2</code> and <code>evans</code> clear their 99% critical
 values comfortably; the others don’t on this panel – a realistic mixed
 result, not every series in a demo panel is meant to look explosive.</p>
@@ -196,10 +222,9 @@ result, not every series in a demo panel is meant to look explosive.</p>
 <h2 id="kernel-purged-radf_kp">Kernel-purged: <code>radf_kp()</code><a class="anchor" aria-label="anchor" href="#kernel-purged-radf_kp"></a>
 </h2>
 <p>Because <code><a href="../reference/radf_kp.html">radf_kp()</a></code> purges volatility and then calls
-<code><a href="../reference/radf.html">radf()</a></code> unmodified, it gets <strong>full</strong> pipeline
-support (<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code>,
-<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>, <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> all work, unlike the
-sign-based and SBZ variants):</p>
+<code><a href="../reference/radf.html">radf()</a></code> unmodified, it gets full pipeline support too, the
+simplest way of all (no new critical-value machinery at all –
+<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> applies unmodified):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_kp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_kp.html">radf_kp</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv_kp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">res_kp</span>, <span class="st">"n"</span><span class="op">)</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -277,13 +302,14 @@ three on this draw.</p>
 <li>Want exact invariance to <em>any</em> heteroskedasticity pattern
 with no bootstrap at all: <code><a href="../reference/radf_sign.html">radf_sign()</a></code> (or
 <code><a href="../reference/radf_sign_dm.html">radf_sign_dm()</a></code> if a level shift, not just volatility, is a
-concern).</li>
-<li>Want to stay inside the full
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/
-<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> pipeline: <code><a href="../reference/radf_kp.html">radf_kp()</a></code> – the only one
-of this group with no gaps there.</li>
+concern). Also full pipeline support.</li>
+<li>Want to stay closest to plain <code><a href="../reference/radf.html">radf()</a></code>, no new
+critical-value machinery at all: <code><a href="../reference/radf_kp.html">radf_kp()</a></code>.</li>
 <li>Want the WLS efficiency gain and a union test against the classic
-statistic: <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>.</li>
+statistic: <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> – the one function in this group
+with no <code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> support, since
+it bundles the statistic and its (scalar-only) critical value in one
+call rather than returning a <code>radf_obj</code>.</li>
 <li>Volatility is the whole story and a bootstrap-free, time-deformation
 approach is preferred: <code><a href="../reference/radf_tt.html">radf_tt()</a></code>, see
 <code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>.</li>

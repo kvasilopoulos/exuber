@@ -87,3 +87,37 @@ statistic (the single-sup, `r1 = 0` case). exuber’s test suite
 [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)’s
 own Monte Carlo and checks it lands within Monte Carlo/finite-sample
 tolerance of the published numbers.
+
+## Dating and plotting a detected bubble
+
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
+keeps the same `radf_obj` class
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+itself uses, and (as of 2026-08-18)
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+computes the full time-varying boundary needed to date and plot
+episodes, not just the summary-level critical values – so the usual
+pipeline works unchanged:
+
+``` r
+
+res <- radf_tt(sim_data, minw = 20)
+cv <- radf_tt_cv(n = 100, minw = 20)
+
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   27  35       14 positive   FALSE
+#> 2    55   55  73       18 positive   FALSE
+autoplot(res, cv = cv)
+```
+
+![](radf-tt_files/figure-html/radf-tt-datestamp-1.png)
+
+See
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+for which other exuber functions do and don’t plug into this pipeline,
+and why.

@@ -51,6 +51,33 @@ not GSTADF (`gsadf_cv`) – the paper's own GSTADF critical values are not
 given as literal numbers in the text, only as "easily computed from" the
 authors' R code.
 
+## Note
+
+As of 2026-08-18, also computes `badf_cv`/`bsadf_cv` (a time-varying
+boundary, one row per recursion point), so
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`autoplot`
+now work on
+[`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
+results, not just
+[`summary()`](https://rdrr.io/r/base/summary.html)/`tidy`. Unlike
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)'s
+own `bsadf_cv` (a
+[`cummax()`](https://rdrr.io/r/base/cumsum.html)-across- replicates
+shortcut around the base C++ engine's output shape),
+`gls_dfstat_grid()`'s (internal) `bsadf` is already the genuine
+sup-over-all-window-starts statistic at each point, so no such shortcut
+is needed here – just the per-time-point quantile across replicates.
+Validated: `badf_cv`'s last row is bit-identical to `adf_cv` (a hard
+identity, since `adf` is literally `badf`'s last point, per replicate);
+empirical false-alarm rate under `H0` is conservative relative to
+nominal (3.3\\ nrep=2000); and detection power on a synthetic bubble
+matches the established
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+pipeline almost exactly (18\\
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)
+have the same gap, not yet addressed the same way – see
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+
 ## References
 
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed Test
@@ -70,5 +97,18 @@ tidy(cv)
 #> 1 90    0.849  2.15  2.79
 #> 2 95    1.26   2.51  3.22
 #> 3 99    2.07   3.14  4.08
+
+res <- radf_tt(sim_data, minw = 20)
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   27  35       14 positive   FALSE
+#> 2    55   55  73       18 positive   FALSE
+#> 
+autoplot(res, cv = cv)
+
 # }
 ```

@@ -57,14 +57,13 @@ non-pivotality/finite-sample bootstrap robustness is a specific concern.
 
 ## Note
 
-Carries the `radf_obj` class, so
-[`summary()`](https://rdrr.io/r/base/summary.html) and
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) work, but
-[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`autoplot`
-do not:
+Carries the `radf_obj` class and, as of 2026-08-18, its full
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
+pipeline works –
 [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-only computes the three scalar critical values, not the time-varying
-boundary those two need – see
+now computes the time-varying `badf_cv`/`bsadf_cv` boundary those last
+two need, not just the three scalar critical values
+[`summary()`](https://rdrr.io/r/base/summary.html) uses. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
 ## References
@@ -153,5 +152,16 @@ tidy(res, cv = cv)
 #> 3 evans -1.33  1.66   1.88
 #> 4 div    0.722 2.34   2.34
 #> 5 blan  -1.34  0.500  1.54
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   27  35       14 positive   FALSE
+#> 2    55   55  73       18 positive   FALSE
+#> 
+autoplot(res, cv = cv)
+
 # }
 ```
