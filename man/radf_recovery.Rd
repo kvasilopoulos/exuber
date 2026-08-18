@@ -100,7 +100,13 @@ called (see \code{\link{suppressMessages}} to silence it) and stored as
 
 \examples{
 \donttest{
-res <- radf_recovery(sim_data, nrep = 200)
+set.seed(2)
+n1 <- 40; n2 <- 25; n3 <- 35
+expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
+collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
+recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
+y <- c(expansion, collapse, recovery) # expansion -> collapse -> recovery
+res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 print(res)
 }
 

@@ -39,6 +39,20 @@ picture of which functions do and don't fit that pipeline.
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+set.seed(2026)
+burn <- cumsum(rnorm(60))
+bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
+y <- c(burn, bubble)
+
+r <- radf(y, minw = 20)
+cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
+ds <- datestamp(r, cv = cv, min_duration = 3)
+
+est <- explosive_root(y, ds[["series1"]]$Start[1], ds[["series1"]]$End[1])
+est
+
+}
 \references{
 Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for
 moderate deviations from a unit root. Journal of Econometrics, 136(1),

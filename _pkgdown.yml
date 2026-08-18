@@ -1,7 +1,6 @@
 title: exuber
 url: https://kvasilopoulos.github.io/exuber
 
-
 template:
   bootstrap: 5
   params:
@@ -17,10 +16,10 @@ authors:
     href: https://sites.google.com/view/emgeconomics
 
 reference:
-
   - title: Package
     contents:
       - exuber
+      - exuber_functions
 
   - title: Recursive Augmented Dickey Fuller
     desc: >
@@ -73,10 +72,10 @@ reference:
     desc: >
       Sequential/real-time bubble detection; see docs/enhancements/monitoring.md
     contents:
-      - radf_monitor
+      - monitor_radf
       - monitor_cusum
-      - lbi_test
       - monitor_lbi
+      - lbi_test
 
   - title: Multivariate / panel bubble tests
     desc: >
@@ -106,7 +105,6 @@ reference:
       - tidy.radf_cv
       - tidy.radf_distr
       - tidy.ds_radf
-
 
   - title: Plotting
     contents:
@@ -157,9 +155,17 @@ reference:
       - tidy_join.radf_obj
 
 articles:
-- title: All Articles
-  navbar: ~
-  contents:
-  - simulation
-  - plotting
-  - radf-tt
+  - title: All Articles
+    navbar: ~
+    contents:
+      - simulation
+      - plotting
+      - naming-and-analysis
+      - radf-tt
+      - volatility-robust-radf
+      - dating-methods
+      - monitoring
+      - alternative-tests
+      - co-explosivity
+      - root-inference
+      - experimental-methods

@@ -82,7 +82,7 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-res <- quantile_test(sim_data$psy1, nrep = 100, seed = 1)
+res <- quantile_test(sim_data$psy2, nrep = 100, seed = 1)
 print(res)
 }
 

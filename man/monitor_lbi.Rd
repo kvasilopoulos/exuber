@@ -76,8 +76,18 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-res <- monitor_lbi(sim_data$psy1, r_star = 0.5)
-print(res)
+make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
+  y <- numeric(n)
+  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
+  for (t in (T_star + 1):n) {
+    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
+  }
+  y
+}
+set.seed(7)
+y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+res <- monitor_lbi(y, r_star = 100)
+print(res) # alarm should fire soon after t = 150
 }
 
 }
@@ -89,6 +99,6 @@ volatility. Journal of Time Series Analysis.
 \seealso{
 \code{\link{lbi_test}} for the static (known, full-sample
 bubble window) version. \code{\link{monitor_cusum}} and
-\code{\link{radf_monitor}} for structurally different monitoring
+\code{\link{monitor_radf}} for structurally different monitoring
 detectors.
 }

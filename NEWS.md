@@ -37,7 +37,7 @@ what was checked and how.
 
 ### Real-time monitoring
 
-* `radf_monitor()` — Phillips & Shi (2020) training/monitoring
+* `monitor_radf()` — Phillips & Shi (2020) training/monitoring
   orchestration (Family A), plus Kurozumi (2020) closed-form `SADF`/
   `GSADF_s0` boundaries and Homm & Breitung (2012)'s FLUC boundary.
 * `monitor_cusum()` — Homm & Breitung (2012) CUSUM monitoring, plus Astill
@@ -70,6 +70,14 @@ what was checked and how.
   this unreleased version; renamed before release since none of them are
   actually recursive-ADF-based tests. No deprecated aliases were kept, as
   the old names never shipped in a CRAN release.
+* `radf_monitor()` renamed to `monitor_radf()`, joining `monitor_cusum()`/
+  `monitor_lbi()`/`monitor_quantile()` under one discoverable prefix for
+  every real-time monitoring function, ADF-family internals
+  notwithstanding — see `vignette("naming-and-analysis")`.
+* `exuber_functions()` added: a queryable registry of every exported
+  function's family (`adf`, `test`, `dating`, `monitor`, `root`,
+  `regression`), so "what monitoring functions exist" is an actual
+  function call, not a naming convention to memorize.
 
 ### Other
 

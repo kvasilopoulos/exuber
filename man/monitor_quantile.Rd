@@ -90,7 +90,7 @@ picture of which functions do and don't fit that pipeline.
 }
 \examples{
 \donttest{
-res <- monitor_quantile(sim_data$psy1, tau = 0.5, nrep = 100, seed = 1)
+res <- monitor_quantile(sim_data$psy2, tau = 0.5, nrep = 100, seed = 1)
 print(res)
 }
 
@@ -102,6 +102,6 @@ Analysis, 46(5), 908-931.
 }
 \seealso{
 \code{\link{quantile_test}} for the static, full-sample
-version of this test. \code{\link{radf_monitor}} for the OLS-based
+version of this test. \code{\link{monitor_radf}} for the OLS-based
 monitoring alternative.
 }
