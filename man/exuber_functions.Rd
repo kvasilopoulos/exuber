@@ -13,7 +13,7 @@ exuber_functions(family = NULL)
 (real-time/sequential), \code{"root"} (confidence-interval inference on
 the explosive root), \code{"regression"} (point estimation, no test), or
 \code{NULL} (default) for every function. A function can belong to more
-than one family (\code{monitor_radf()} is both \code{"adf"} and
+than one family (\code{monitor()} is both \code{"adf"} and
 \code{"monitor"}).}
 }
 \value{
@@ -24,7 +24,7 @@ A tibble with columns \code{name}, \code{family}, and
 Naming conventions (\code{radf_}/\code{_test}/\code{dating_}/
 \code{monitor_}/\code{root_}, see \code{vignette("naming-and-analysis")})
 are a guide, not a contract -- easy to misremember, and occasionally
-traded off deliberately (\code{monitor_radf()} is ADF-family internally
+traded off deliberately (\code{monitor()} is ADF-family internally
 but named for what it does). This is the actual, queryable source of
 truth: which of the package's test/dating/monitoring/root-inference
 functions belong to which family.

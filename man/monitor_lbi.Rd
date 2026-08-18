@@ -99,6 +99,6 @@ volatility. Journal of Time Series Analysis.
 \seealso{
 \code{\link{lbi_test}} for the static (known, full-sample
 bubble window) version. \code{\link{monitor_cusum}} and
-\code{\link{monitor_radf}} for structurally different monitoring
+\code{\link{monitor}} for structurally different monitoring
 detectors.
 }

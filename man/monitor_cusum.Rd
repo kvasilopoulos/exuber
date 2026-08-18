@@ -81,7 +81,7 @@ constant (\code{boundary = "asymptotic"}, \code{b_alpha = 4.6}) or a
 published finite-sample table lookup (\code{boundary = "finite"}, Homm
 & Breitung (2012)'s Table 8) -- no simulation, no separate cv function.
 
-Unlike \code{\link{monitor_radf}} (Family A, a recursive ADF-family
+Unlike \code{\link{monitor}} (Family A, a recursive ADF-family
 statistic requiring a wild bootstrap to calibrate its boundary), this
 is a structurally different statistic -- a standardized running sum,
 not a recursive regression -- with an asymptotic closed-form boundary
@@ -140,6 +140,6 @@ in financial data in the presence of time-varying volatility. Journal
 of Financial Econometrics, 21(1), 187-227.
 }
 \seealso{
-\code{\link{monitor_radf}} for the recursive-ADF (Family A)
+\code{\link{monitor}} for the recursive-ADF (Family A)
 monitoring alternative.
 }
