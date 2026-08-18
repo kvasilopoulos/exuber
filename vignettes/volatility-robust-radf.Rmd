@@ -1,0 +1,87 @@
+---
+title: "Volatility-Robust Alternatives to radf()"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Volatility-Robust Alternatives to radf()}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, warning = FALSE, message = FALSE,
+  comment = "#>"
+)
+```
+
+```{r load}
+library(exuber)
+```
+
+## The shared problem
+
+Plain `radf()` assumes constant innovation variance. Real series rarely
+have that, and under time-varying volatility its standard critical values
+no longer control size. exuber has several fixes for this, each taking a
+structurally different approach, and -- unlike most of the other new
+functions -- all four here keep the `radf_obj` class, so `summary()`/`tidy()`
+still work the same way they do for plain `radf()` (see
+`vignette("naming-and-analysis")` for exactly how far each one plugs into
+the pipeline). `radf_tt()`'s time-deformation approach has its own
+dedicated vignette, `vignette("radf-tt")`; this one covers the rest.
+
+| Function | Paper | Approach |
+|---|---|---|
+| `radf_sign()` / `radf_sign_dm()` | Harvey, Leybourne & Zu (2020) | Transform to the *cumulated sign* of first differences -- exactly invariant to any heteroskedasticity pattern, no bootstrap needed. `_dm` demeans first for level-shift robustness (Harvey, Leybourne, Tatlow & Zu 2025). |
+| `radf_kp()` | Harvey, Leybourne, Taylor & Zu (2024) | *Purge* volatility: divide each first difference by a kernel spot-volatility estimate, cumulate, then run ordinary PSY on the purged series -- null distribution is identical to the standard homoskedastic one. |
+| `radf_sbz_cv()` | Harvey, Leybourne & Zu (2019) | A WLS-weighted test using the same kernel volatility estimator, unioned with the classic supDF via a jointly-sized wild bootstrap. |
+
+## Sign-based: `radf_sign()`
+
+```{r sign}
+res <- radf_sign(sim_data, minw = 20)
+cv <- radf_sign_cv(n = 100, minw = 20)
+summary(res, cv = cv)
+```
+
+`psy2` and `evans` clear their 99% critical values comfortably; the others
+don't on this panel -- a realistic mixed result, not every series in a
+demo panel is meant to look explosive.
+
+## Kernel-purged: `radf_kp()`
+
+Because `radf_kp()` purges volatility and then calls `radf()` unmodified,
+it gets **full** pipeline support (`summary()`, `datestamp()`, `tidy()`,
+`autoplot()` all work, unlike the sign-based and SBZ variants):
+
+```{r kp}
+res_kp <- radf_kp(sim_data, minw = 20)
+cv_kp <- radf_mc_cv(n = attr(res_kp, "n"), minw = 20)
+summary(res_kp, cv = cv_kp)
+```
+
+## WLS + kernel volatility with union-of-rejections: `radf_sbz_cv()`
+
+```{r sbz}
+radf_sbz_cv(sim_data, nboot = 200)
+```
+
+`supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version, and
+`U` their union -- each with its own bootstrap p-value, so a series can be
+flagged by one without the other (`div` here is significant on `supDF` and
+the union but not on `supBZ`).
+
+## Which to reach for
+
+- Want exact invariance to *any* heteroskedasticity pattern with no
+  bootstrap at all: `radf_sign()` (or `radf_sign_dm()` if a level shift,
+  not just volatility, is a concern).
+- Want to stay inside the full `summary()`/`datestamp()`/`tidy()`/
+  `autoplot()` pipeline: `radf_kp()` -- the only one of this group with no
+  gaps there.
+- Want the WLS efficiency gain and a union test against the classic
+  statistic: `radf_sbz_cv()`.
+- Volatility is the whole story and a bootstrap-free, time-deformation
+  approach is preferred: `radf_tt()`, see `vignette("radf-tt")`.
+- Volatility is genuinely unknown/complex and a bootstrap is acceptable:
+  plain `radf_wb_cv()` remains the general-purpose choice.
