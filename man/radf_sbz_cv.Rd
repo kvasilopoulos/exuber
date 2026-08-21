@@ -2,7 +2,7 @@
 % Please edit documentation in R/radf_sbz.R
 \name{radf_sbz_cv}
 \alias{radf_sbz_cv}
-\title{SBZ Weighted Least Squares Bubble Test with Union-of-Rejections}
+\title{Wild Bootstrap Critical Values for the SBZ Statistic}
 \usage{
 radf_sbz_cv(
   data,
@@ -29,8 +29,9 @@ not supported. When any series is padded this way, the panel statistic
 
 \item{nboot}{A positive integer. Number of bootstraps (default = 500L).}
 
-\item{kernel}{Kernel for the spot-volatility estimator (eq. 6),
-\code{"gaussian"} (default, as in the paper) or \code{"uniform"}.}
+\item{kernel}{Kernel for the spot-volatility estimator (eq. 6 of Harvey,
+Leybourne & Zu 2019), \code{"gaussian"} (default, as in the paper) or
+\code{"uniform"}.}
 
 \item{h}{Bandwidth for the spot-volatility estimator. Default: leave-one-out
 cross-validation over the paper's own search range.}
@@ -43,53 +44,34 @@ return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
 }
 \value{
-A list with bootstrap p-values (\code{p_supDF}, \code{p_supBZ},
-\code{p_U}) and critical values (\code{supDF_cv}, \code{supBZ_cv},
-\code{U_cv}) for each series.
+An object of class \code{radf_cv}/\code{sbz_cv}/\code{wb_cv}: a
+list with critical values \code{adf_cv}, \code{sadf_cv}, \code{gsadf_cv}
+(one row per series) and \code{badf_cv}, \code{bsadf_cv} (one array per
+series, one row per recursion point).
 }
 \description{
 \code{radf_sbz_cv} performs the HLST (2016) wild bootstrap -- the same
-algorithm as \code{\link{radf_wb_cv}} -- \emph{jointly} on the classic
-sup-ADF statistic (\code{supDF}, i.e. \code{radf()}'s \code{sadf}) and the
-WLS/kernel-volatility statistic \code{supBZ} of Harvey, Leybourne & Zu
-(2019), and combines them into the paper's union-of-rejections statistic
-\code{U}. supBZ can have substantially higher power than supDF under
-many time-varying-volatility patterns, at the cost of lower power under
-others (e.g. upward volatility trends); \code{U} is designed to capture
-whichever of the two is more powerful for a given series.
-}
-\note{
-This function bundles the statistic and its critical values in a
-single call -- there is no separate un-cv'd statistic function and no
-other critical-value function to pair it with, unlike \code{radf()}/
-\code{radf_wb_cv()}.
-
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
-statistic/critical-value summary (bundles the test statistic and its
-critical value in one object) -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+algorithm as \code{\link{radf_wb_cv}}, applied to \code{\link{radf_sbz}}'s
+WLS/kernel-volatility statistic instead of the classic \code{supDF} one --
+to generate critical values, including the time-varying
+\code{badf_cv}/\code{bsadf_cv} boundary \code{\link{datestamp}}/
+\code{autoplot} need, not just the three scalar critical values
+\code{summary()} uses.
 }
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
-\examples{
-\donttest{
-res <- radf_sbz_cv(sim_data, nboot = 200)
-print(res)
-}
-
-}
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2019). Testing
 explosive bubbles with time-varying volatility. Econometric Reviews,
 38(10), 1131-1151.
 }
 \seealso{
-\code{\link{radf_wb_cv}} for the underlying (supDF-only) wild
-bootstrap, and \code{\link{radf_tt}} for a bootstrap-free
-heteroskedasticity-robust alternative.
+\code{\link{radf_sbz}} for the statistic this pairs with, and
+\code{\link{radf_sbz_union}} for the bundled union-of-rejections test
+against the classic \code{supDF} statistic (not obtainable from this
+function and \code{\link{radf_wb_cv}} independently -- see that
+function's Details for why).
 }
