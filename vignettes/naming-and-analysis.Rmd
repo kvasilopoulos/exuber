@@ -77,7 +77,7 @@ Only functions whose result actually carries the `radf_obj` class -- and
 whose paired `_cv()` actually computes that time-varying boundary -- get the
 full pipeline. Three tiers, in practice:
 
-### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`
+### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`, `radf_sbz()`
 
 `radf_kp()`/`radf_common()` literally return `radf()`'s own output (purged
 of volatility, or computed on a PCA factor, respectively, then `radf()`
@@ -142,13 +142,54 @@ tidy(res, cv = cv)
 autoplot(res, cv = cv)
 ```
 
+`radf_sbz()` is a fourth, separate case: it builds its statistic (`supBZ`) on
+`wls_dfstat_grid()`, a WLS/kernel-volatility-weighted no-intercept
+recursive-DF grid, not `gls_dfstat_grid()` -- but the same fix applies for
+the same reason, since `wls_dfstat_grid()` already returns the full
+`badf`/`bsadf` path per replicate. `radf_sbz_cv()`'s wild bootstrap is
+therefore built the same way as `radf_tt_cv()`/`radf_sign_cv()`'s Monte
+Carlo simulation: per-time-point quantile across replicates, no `cummax()`
+shortcut needed. Validated the same way: `badf_cv`'s last row is
+bit-identical to `adf_cv`; empirical false-alarm rate under `H0` is 5.0%
+at nominal 5% (n=100, minw=20, 200 replications); and it does reject on a
+sufficiently strong deterministic explosive path, though its
+kernel-volatility weighting trades away enough power on `sim_data`'s milder
+bubbles that none of the five reject at nboot=100-200 -- the same
+power/robustness trade-off already documented for `radf_sbz_union()`'s
+`supBZ` leg below, not a new finding specific to the split.
+
+```{r sbz-full}
+res <- radf_sbz(sim_data, minw = 20)
+cv <- radf_sbz_cv(sim_data, minw = 20, nboot = 200, seed = 1)
+
+summary(res, cv = cv)
+tidy(res, cv = cv)
+```
+
+`datestamp()`/`autoplot()` need at least one rejection to have anything to
+show (they error otherwise, same as for any other `radf_obj`/`radf_cv`
+pair) -- none of `sim_data`'s five series clear `supBZ`'s bar above, so
+here's a series built to:
+
+```{r sbz-full-reject}
+set.seed(7)
+n <- 120; te <- 70
+y <- cumsum(rnorm(n))
+y[(te + 1):n] <- y[te] * 1.15 ^ seq_len(n - te)
+
+res2 <- radf_sbz(y, minw = 20)
+cv2 <- radf_sbz_cv(y, minw = 20, nboot = 100, seed = 1)
+datestamp(res2, cv = cv2)
+autoplot(res2, cv = cv2)
+```
+
 ### No support: everything else
 
 The remaining ~15 functions (`lbi_test()`, `ssu_test()`, `quantile_test()`,
 `cobubble_test()`, the `dating_*()` family, the `monitor()`/`monitor_*()`
 family (including `monitor()` itself, ADF-family internals notwithstanding --
 see above), `contagion_reg()`, `radf_recovery()`, `rootstamp()`,
-`radf_sbz_cv()`) each return their own class with their own `print()` method,
+`radf_sbz_union()`) each return their own class with their own `print()` method,
 because their output genuinely doesn't fit the `radf_obj` shape -- a dating
 table isn't a per-series sup-statistic, a monitoring alarm isn't a critical
 value grid. Trying to force them through `summary()`/`datestamp()`/`tidy()`/

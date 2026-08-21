@@ -29,7 +29,7 @@ if (getRversion() >= "2.15.1") {
       "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
       "value", "value_x", "value_y", "stat", "pval", "panel", "End","Duration",
       "ds_lgl", "rev_badf", "rev_bsadf", "rev_bsadf_panel", "tstat_crit", "data",
-      "Signal", "Ongoing", "Start")
+      "Signal", "Ongoing", "Start", "reject")
   )
 }
 

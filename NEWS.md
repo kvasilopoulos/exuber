@@ -8,7 +8,12 @@ what was checked and how.
 
 ### Volatility-robust tests
 
-* `radf_sbz_cv()` — Herwartz & Siedenburg's WLS/kernel-volatility SBZ test.
+* `radf_sbz()`/`radf_sbz_cv()`/`radf_sbz_union()` — Herwartz & Siedenburg's
+  WLS/kernel-volatility SBZ test, split 2026-08-22 into a statistic
+  (`radf_sbz()`), its bootstrap critical values (`radf_sbz_cv()`, full
+  `datestamp()`/`autoplot()` support), and the union-of-rejections test
+  against classic `supDF` (`radf_sbz_union()`, renamed from the original
+  bundled `radf_sbz_cv()` — see `vignette("volatility-robust-radf")`.
 * `radf_kp()` — kernel-purge heteroskedasticity test.
 * `radf_wb_cv(..., dist_skew = TRUE)` — Hafner (2020) skewness-corrected
   wild bootstrap.
@@ -82,6 +87,19 @@ what was checked and how.
   function's family (`adf`, `test`, `dating`, `monitor`, `root`,
   `regression`), so "what monitoring functions exist" is an actual
   function call, not a naming convention to memorize.
+* `radf_wb_cv2()`/`radf_wb_distr2()` renamed to `radf_wb_ps_cv()`/
+  `radf_wb_ps_distr()` -- the `2` suffix named nothing (just "the second
+  wild bootstrap added"); `_ps` identifies it as Phillips & Shi (2020)'s
+  wild bootstrap (fits a null AR model, resamples residuals, supports a
+  `tb` training-window boundary), as opposed to `radf_wb_cv()`'s Harvey
+  et al. (2016) non-parametric multiplier bootstrap, matching this file's
+  own internal naming (`radf_wb_dgp_ps`/`radf_wb_ps` vs.
+  `radf_wb_dgp_hlst`/`radf_wb_hlst`) and the package-wide
+  `radf_<method>_<qualifier>_cv` pattern (`radf_sign_dm_cv()`). Unlike
+  the renames above, `radf_wb_cv2()` shipped in the 1.0.0 release (the
+  JSS paper), so this one keeps `radf_wb_cv2()`/`radf_wb_distr2()`
+  as deprecated aliases (`.Deprecated()`, warn-and-forward, see
+  `?exuber-deprecated`) rather than a clean break.
 * `radf_tt_cv()`, `radf_sign_cv()`, and `radf_sign_dm_cv()` now all
   compute `badf_cv`/`bsadf_cv` (a time-varying boundary), not just the
   three scalar critical values — `radf_tt()`/`radf_sign()`/
