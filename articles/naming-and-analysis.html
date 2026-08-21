@@ -51,7 +51,7 @@
     <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
-    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -126,8 +126,7 @@ recursion</td>
 <td>
 <code><a href="../reference/radf.html">radf()</a></code>, <code><a href="../reference/radf_tt.html">radf_tt()</a></code>,
 <code><a href="../reference/radf_sign.html">radf_sign()</a></code>, <code><a href="../reference/radf_common.html">radf_common()</a></code>,
-<code><a href="../reference/radf_kp.html">radf_kp()</a></code>, <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>,
-<code><a href="../reference/radf_svadf.html">radf_svadf()</a></code>, and the
+<code><a href="../reference/radf_kp.html">radf_kp()</a></code>, <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>, and the
 <code>_cv</code>/<code>_mc</code>/<code>_sb</code>/<code>_wb</code>
 critical-value engines</td>
 </tr>
@@ -153,17 +152,18 @@ at all</td>
 </tr>
 <tr class="even">
 <td>
-<code>monitor_</code> prefix</td>
+<code>monitor</code>/<code>monitor_</code> prefix</td>
 <td>Real-time/sequential detection – grouped by <em>what it does</em>,
-not by internal mechanism, so this one deliberately crosses the
-ADF-family line: <code><a href="../reference/monitor_radf.html">monitor_radf()</a></code> reuses
-<code>badf</code>/<code>bsadf</code> directly (same as the
-<code>radf_</code> family above) but is named for its monitoring
-behavior, not that internal detail, since that’s what a user searching
-for “what can monitor a series in real time” actually wants to find</td>
+not by internal mechanism. <code><a href="../reference/monitor.html">monitor()</a></code> is this family’s
+flagship, the same role <code><a href="../reference/radf.html">radf()</a></code> plays for the
+<code>radf_</code> family: it reuses
+<code>badf</code>/<code>bsadf</code> directly (genuinely ADF-family
+internals) but carries no <code>radf</code>/<code>sadf</code> token at
+all, specifically so it reads as “the real-time monitor,” not as a
+<code>radf_</code> variant – see below</td>
 <td>
-<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>, <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>,
-<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>, <code><a href="../reference/monitor_radf.html">monitor_radf()</a></code>
+<code><a href="../reference/monitor.html">monitor()</a></code>, <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>,
+<code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>, <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>
 </td>
 </tr>
 <tr class="odd">
@@ -184,9 +184,10 @@ episode at once)</td>
 </tbody>
 </table>
 <p>Naming prefixes are a convention, not a contract – they’re easy to
-misremember and, as <code><a href="../reference/monitor_radf.html">monitor_radf()</a></code> shows, sometimes trade
-off against each other (grouped with its fellow monitors here, at the
-cost of no longer signaling its ADF-family internals). For anything
+misremember and, as <code><a href="../reference/monitor.html">monitor()</a></code> shows, sometimes trade off
+against each other (grouped with its fellow monitors under a name that
+deliberately doesn’t advertise its ADF-family internals, so it can’t be
+mistaken for a <code>radf_*()</code> variant). For anything
 programmatic, don’t parse function names: call
 <code><a href="../reference/exuber_functions.html">exuber_functions()</a></code>, which returns the same categorization
 as actual, queryable data.</p>
@@ -195,7 +196,7 @@ as actual, queryable data.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co">#&gt;   name             family      description                                      </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                            </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> monitor_radf     adf,monitor Real-time monitoring (Family A); reuses radf()'s…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> monitor          adf,monitor Real-time monitoring (Family A); reuses radf()'s…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…</span></span></code></pre></div>
@@ -205,6 +206,11 @@ data – they take no critical value at all. <code><a href="../reference/datesta
 below) is a different thing entirely: the generic that applies PSY’s own
 threshold-crossing rule to any <code>radf_obj</code> +
 <code>radf_cv</code> pair.</p>
+<p>One exception to “<code><a href="../reference/datestamp.html">datestamp()</a></code> always needs a
+<code>radf_cv</code>”: <code>datestamp(object, option = "svadf")</code>
+runs Sarkar &amp; Wells (2026)’s asymmetric-threshold dating directly
+off <code>object$badf</code>, no critical value at all – see
+<code><a href="../articles/experimental-methods.html">vignette("experimental-methods")</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="what-actually-plugs-into-summarydatestamptidyautoplot">What actually plugs into
@@ -477,17 +483,17 @@ flag).</p>
 <div class="section level3">
 <h3 id="no-support-everything-else">No support: everything else<a class="anchor" aria-label="anchor" href="#no-support-everything-else"></a>
 </h3>
-<p>The remaining ~15 functions (<code><a href="../reference/lbi_test.html">lbi_test()</a></code>,
+<p>The remaining ~14 functions (<code><a href="../reference/lbi_test.html">lbi_test()</a></code>,
 <code><a href="../reference/ssu_test.html">ssu_test()</a></code>, <code><a href="../reference/quantile_test.html">quantile_test()</a></code>,
 <code><a href="../reference/cobubble_test.html">cobubble_test()</a></code>, the <code>dating_*()</code> family, the
-<code>monitor_*()</code> family (including <code><a href="../reference/monitor_radf.html">monitor_radf()</a></code>,
-ADF-family internals notwithstanding – see above),
-<code><a href="../reference/contagion_reg.html">contagion_reg()</a></code>, <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>,
-<code><a href="../reference/radf_svadf.html">radf_svadf()</a></code>, <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>) each return their
-own class with their own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method, because their
-output genuinely doesn’t fit the <code>radf_obj</code> shape – a dating
-table isn’t a per-series sup-statistic, a monitoring alarm isn’t a
-critical value grid. Trying to force them through
+<code><a href="../reference/monitor.html">monitor()</a></code>/<code>monitor_*()</code> family (including
+<code><a href="../reference/monitor.html">monitor()</a></code> itself, ADF-family internals notwithstanding –
+see above), <code><a href="../reference/contagion_reg.html">contagion_reg()</a></code>, <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>,
+<code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>) each return their own class with their own
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method, because their output genuinely doesn’t fit
+the <code>radf_obj</code> shape – a dating table isn’t a per-series
+sup-statistic, a monitoring alarm isn’t a critical value grid. Trying to
+force them through
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/
 <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> isn’t a documentation gap to close; the right
 call is their own presentation, shown directly:</p>

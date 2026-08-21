@@ -97,7 +97,7 @@ finite-sample table lookup (`boundary = "finite"`, Homm & Breitung
 (2012)'s Table 8) – no simulation, no separate cv function.
 
 Unlike
-[`monitor_radf`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 (Family A, a recursive ADF-family statistic requiring a wild bootstrap
 to calibrate its boundary), this is a structurally different statistic –
 a standardized running sum, not a recursive regression – with an
@@ -140,7 +140,7 @@ Econometrics, 21(1), 187-227.
 
 ## See also
 
-[`monitor_radf`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 for the recursive-ADF (Family A) monitoring alternative.
 
 ## Examples

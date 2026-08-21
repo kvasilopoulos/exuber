@@ -95,7 +95,7 @@ Journal of Time Series Analysis.
 for the static (known, full-sample bubble window) version.
 [`monitor_cusum`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
 and
-[`monitor_radf`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 for structurally different monitoring detectors.
 
 ## Examples

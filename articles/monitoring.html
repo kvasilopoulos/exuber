@@ -51,7 +51,7 @@
     <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
-    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -101,18 +101,20 @@ shape; they differ in what statistic they monitor and how the boundary
 is calibrated.</p>
 <table class="table">
 <colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
+<col width="25%">
 </colgroup>
 <thead><tr class="header">
 <th>Function</th>
 <th>Statistic monitored</th>
 <th>Boundary</th>
+<th>Static, full-sample counterpart</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><code><a href="../reference/monitor_radf.html">monitor_radf()</a></code></td>
+<td><code><a href="../reference/monitor.html">monitor()</a></code></td>
 <td>
 <code><a href="../reference/radf.html">radf()</a></code>’s own <code>badf</code>/<code>bsadf</code>
 recursion</td>
@@ -120,32 +122,48 @@ recursion</td>
 <code>"bootstrap"</code> (Phillips &amp; Shi 2020 wild-bootstrap
 quantile), <code>"kurozumi"</code> (closed-form, Kurozumi 2020), or
 <code>"fluc"</code> (closed-form, Homm &amp; Breitung 2012)</td>
+<td>
+<code><a href="../reference/radf.html">radf()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code> – not a
+<code>_test()</code>, but the same recursive-ADF core</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code></td>
 <td>A CUSUM of the training-window-standardized series</td>
 <td>Homm &amp; Breitung (2012)’s asymptotic (or finite-sample)
 constant</td>
+<td>none – Homm &amp; Breitung’s CUSUM boundary is inherently a
+training/monitoring construction, with no full-sample form</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code></td>
 <td>Breitung &amp; Diegel (2025)’s locally-best-invariant CUSUM
 (<code>mCUSUM</code>/<code>wCUSUM</code>, via <code>c_bar</code>)</td>
 <td>Their Table 1 constant</td>
+<td>
+<code><a href="../reference/lbi_test.html">lbi_test()</a></code>, the static version of the same
+statistic</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code></td>
 <td>A recursive quantile regression at <code>tau</code>
 </td>
 <td>A simulated first-crossing boundary (Wu, Shi &amp; Wu 2025)</td>
+<td>
+<code><a href="../reference/quantile_test.html">quantile_test()</a></code>, the static version of the same
+statistic</td>
 </tr>
 </tbody>
 </table>
-<p><code><a href="../reference/monitor_radf.html">monitor_radf()</a></code> keeps the <code>radf_</code> internals
-(it reuses <code>badf</code>/<code>bsadf</code> directly) but is named
-for what it <em>does</em> – see
-<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for why the naming
-convention crosses that line deliberately.</p>
+<p><code><a href="../reference/monitor.html">monitor()</a></code> reuses <code>badf</code>/<code>bsadf</code>
+directly (the same recursive-ADF core as the <code>radf_*()</code>
+family) but is named for what it <em>does</em>, not that internal detail
+– see <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for why. Two of its
+three siblings (<code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>,
+<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>) are the sequential extension of an
+existing static test of the same name minus the <code>monitor_</code>
+prefix; <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> has no such counterpart, since its
+source paper (Homm &amp; Breitung 2012) proposed CUSUM as a monitoring
+detector only.</p>
 </div>
 <div class="section level2">
 <h2 id="the-same-bubble-five-monitors">The same bubble, five monitors<a class="anchor" aria-label="anchor" href="#the-same-bubble-five-monitors"></a>
@@ -183,25 +201,42 @@ followed by more random walk, then a genuine explosive regime
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  delta  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1  0.695     1.757    163         163</span></span>
-<span><span class="fu"><a href="../reference/monitor_radf.html">monitor_radf</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/monitor.html">monitor</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── monitor_radf (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ─</span></span>
+<span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1     2.025    160         160</span></span>
-<span><span class="fu"><a href="../reference/monitor_radf.html">monitor_radf</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/monitor.html">monitor</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── monitor_radf (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ──</span></span>
+<span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ───────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1     1.038    161         161</span></span></code></pre></div>
+<p><code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> and <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> each
+have a static, full-sample sibling that asks the retrospective version
+of the same question – run on the whole series rather than watching for
+a first crossing:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── lbi_test (n = 200, level = 95%) ─────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    series   stat   crit  detected</span></span>
+<span><span class="co">#&gt;   series1  6.313  1.645      TRUE</span></span>
+<span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── quantile_test (n = 200, level = 95%) ────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    series  tau  tstat    crit  delta  detected</span></span>
+<span><span class="co">#&gt;   series1  0.5  13.96  0.4221  0.695      TRUE</span></span></code></pre></div>
 <p>Every monitor here alarms within about 15 points of the true bubble
 start (150), none before it – that “never before <code>T*</code> (or the
 true start)” property is exactly what each function’s own test suite
 checks under the null. Alarm <em>timing</em> differs by design:
-<code><a href="../reference/monitor_radf.html">monitor_radf()</a></code>’s ADF-family statistics tend to detect
-mid-sample bubbles fastest (the literature’s own finding, e.g. Kurozumi
-2020/2021), while CUSUM-type detectors (<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>,
+<code><a href="../reference/monitor.html">monitor()</a></code>’s ADF-family statistics tend to detect mid-sample
+bubbles fastest (the literature’s own finding, e.g. Kurozumi 2020/2021),
+while CUSUM-type detectors (<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>,
 <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>) are typically slower but computationally
 simpler and don’t need a bootstrap.</p>
 </div>
@@ -210,9 +245,9 @@ simpler and don’t need a bootstrap.</p>
 </h2>
 <ul>
 <li>Fastest detection, willing to pay for a wild bootstrap per call:
-<code>monitor_radf(boundary = "bootstrap")</code> (the default).</li>
+<code>monitor(boundary = "bootstrap")</code> (the default).</li>
 <li>Same statistic, no bootstrap, an off-the-shelf published constant
-instead: <code>monitor_radf(boundary = "kurozumi")</code> or
+instead: <code>monitor(boundary = "kurozumi")</code> or
 <code>boundary = "fluc"</code>.</li>
 <li>A simpler CUSUM-based alternative with its own closed-form boundary:
 <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>, or <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> for Breitung

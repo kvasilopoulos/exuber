@@ -51,7 +51,7 @@
     <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
-    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -215,11 +215,11 @@ package, and the other two answer different questions rather than being
 alternate ways to get the same answer: the <code>dating_*()</code>
 family (<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>) fits an explicit regime
 model to date a bubble you already believe is there, instead of testing
-whether one exists; the <code>monitor_*()</code> family
-(<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>) does real-time detection, watching
-new observations one at a time rather than dating a finished sample. See
-<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for how every function in
-the package relates to this one.</p>
+whether one exists; the <code><a href="../reference/monitor.html">monitor()</a></code>/<code>monitor_*()</code>
+family (<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>) does real-time detection,
+watching new observations one at a time rather than dating a finished
+sample. See <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for how every
+function in the package relates to this one.</p>
 </div>
 <div class="section level2">
 <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>

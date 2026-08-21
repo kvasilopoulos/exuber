@@ -22,11 +22,14 @@ what was checked and how.
 - [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
   — Kurozumi & Nishi (2025) stochastic explosive-coefficient test
   (minimum-viable subset).
-- [`radf_svadf()`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md)
-  — Sarkar & Wells (2026) SV-ADF asymmetric-threshold dating.
+- `datestamp(..., option = "svadf")` — Sarkar & Wells (2026) SV-ADF
+  asymmetric-threshold dating, folded into
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+  rather than shipped as a separate `radf_svadf()` entry point.
   **Caveat:** the source is a non-peer-reviewed preprint, flagged at
   call time and in
-  [`?radf_svadf`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md).
+  [`?datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+  Caveats section.
 
 #### Dating and root inference
 
@@ -48,7 +51,7 @@ what was checked and how.
 
 #### Real-time monitoring
 
-- [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+- [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
   — Phillips & Shi (2020) training/monitoring orchestration (Family A),
   plus Kurozumi (2020) closed-form `SADF`/ `GSADF_s0` boundaries and
   Homm & Breitung (2012)’s FLUC boundary.
@@ -87,12 +90,13 @@ what was checked and how.
   actually recursive-ADF-based tests. No deprecated aliases were kept,
   as the old names never shipped in a CRAN release.
 - `radf_monitor()` renamed to
-  [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md),
-  joining
-  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)/
-  [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)/[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
-  under one discoverable prefix for every real-time monitoring function,
-  ADF-family internals notwithstanding — see
+  [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+  (via a brief intermediate `monitor_radf()`, never released), the
+  flagship of the real-time monitoring family alongside
+  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)/[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)/
+  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  — deliberately carrying no `radf`/`sadf` token so it can’t be mistaken
+  for a `radf_*()` variant, ADF-family internals notwithstanding — see
   [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 - [`exuber_functions()`](https://kvasilopoulos.github.io/exuber/reference/exuber_functions.md)
   added: a queryable registry of every exported function’s family

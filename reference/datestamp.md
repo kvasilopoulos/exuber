@@ -14,7 +14,7 @@ datestamp(
   cv = NULL,
   min_duration = 0L,
   sig_lvl = 95,
-  option = c("gsadf", "sadf"),
+  option = c("gsadf", "sadf", "svadf"),
   nonrejected = FALSE,
   ...
 )
@@ -41,17 +41,24 @@ datestamp(
 
 - sig_lvl:
 
-  logical. Significance level, one of 90, 95 or 99.
+  logical. Significance level, one of 90, 95 or 99. Ignored when
+  `option = "svadf"`.
 
 - option:
 
-  Whether to apply the "gsadf" or "sadf" methodology (default =
-  "gsadf").
+  one of `"gsadf"`/`"sadf"` (PWY/PSY dating against `cv`'s critical
+  values) or `"svadf"` (Sarkar & Wells 2026's SV-ADF
+  asymmetric-threshold dating –
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
+  own `badf` compared against two closed-form, sample-size-only
+  thresholds, `log(t)/10` for origination and `log(t)/2` for collapse;
+  no `cv` needed). See Caveats.
 
 - nonrejected:
 
   logical. Whether to apply datestamping technique to the series that
-  were not able to reject the Null hypothesis.
+  were not able to reject the Null hypothesis. Ignored when
+  `option = "svadf"`.
 
 ## Value
 
@@ -78,11 +85,23 @@ Datestamp also stores a vector whose elements take the value of 1 when
 there is a period of explosive behaviour and 0 otherwise. This output
 can serve as a dummy variable for the occurrence of exuberance.
 
+## Caveats
+
+`option = "svadf"`: **\[experimental\]** `Sarkar & Wells (2026)` is a
+non-peer-reviewed preprint, a different bar than every other source this
+package implements. The same note is emitted as a message when called
+with this option. Detects at most one origination/collapse pair per
+series (the paper's own procedure), not every recurring episode the way
+`"gsadf"`/`"sadf"` do.
+
 ## References
 
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 56(4), 1043-1078.
+
+Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble? Robust
+date-stamping for periods of exuberance. arXiv:2604.12062.
 
 ## Examples
 
@@ -134,4 +153,34 @@ datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 #> 
 
 autoplot(ds_data)
+
+
+# SV-ADF asymmetric-threshold dating (no critical values needed)
+datestamp(rsim_data, option = "svadf")
+#> Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
+#> 
+#> ── Datestamp (min_duration = 0) ──────────────── SV-ADF (Sarkar & Wells 2026) ──
+#> 
+#> ℹ Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
+#> 
+#> psy1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    48   48  49        1 positive   FALSE
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    23   23  24        1 positive   FALSE
+#> 
+#> evans :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    20   20  21        1 positive   FALSE
+#> 
+#> div :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    22   22  23        1 positive   FALSE
+#> 
+#> blan :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    35   36  37        2 positive   FALSE
+#> 
 ```

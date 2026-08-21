@@ -1,5 +1,6 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://kvasilopoulos.github.io/exuber/404.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/CLAUDE.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/CONTRIBUTING.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/ISSUE_TEMPLATE.html</loc></url>
@@ -43,10 +44,10 @@
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/fetch_crit_bucket.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/index-rd.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/lbi_test.html</loc></url>
+<url><loc>https://kvasilopoulos.github.io/exuber/reference/monitor.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.html</loc></url>
-<url><loc>https://kvasilopoulos.github.io/exuber/reference/monitor_radf.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/parse_crit_bin.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/pipe.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/ps_tb.html</loc></url>
@@ -66,7 +67,6 @@
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.html</loc></url>
-<url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_svadf.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_tt.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.html</loc></url>
 <url><loc>https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.html</loc></url>

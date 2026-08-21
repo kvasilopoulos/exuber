@@ -1,4 +1,4 @@
-# Experimental Methods: radf_recovery() and radf_svadf()
+# Experimental Methods: radf_recovery() and datestamp(option = 'svadf')
 
 ``` r
 
@@ -12,13 +12,11 @@ and pass the package’s standard validation pass (formula-exact check
 against a brute-force reimplementation, published-table lookup, Monte
 Carlo size, power against a genuine alternative).
 [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
-and
-[`radf_svadf()`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md)
-both run that same pass and both come back genuinely useful – but each
-has one specific, disclosed gap that keeps it below that bar. They print
-and emit a caveat message at call time for exactly that reason; treat
-their output as directional, not as calibrated as the rest of the
-package.
+and `datestamp(option = "svadf")` both run that same pass and both come
+back genuinely useful – but each has one specific, disclosed gap that
+keeps it below that bar. They print and emit a caveat message at call
+time for exactly that reason; treat their output as directional, not as
+calibrated as the rest of the package.
 
 ## `radf_recovery()`: dating a collapse *and* a recovery
 
@@ -58,7 +56,7 @@ exploratory pending further validation (see
 Caveats section) – the date-ordering property is solid, the false-alarm
 calibration is not yet.
 
-## `radf_svadf()`: a non-peer-reviewed preprint
+## `datestamp(option = "svadf")`: a non-peer-reviewed preprint
 
 Sarkar & Wells (2026, arXiv, not yet peer reviewed) – flagged explicitly
 because that is a different evidentiary bar than every other paper this
@@ -66,24 +64,26 @@ package implements. Its statistic turns out to be exactly
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s
 own `badf` sequence compared against two closed-form, sample-size-only
 thresholds from the paper’s own applied methodology (no new estimation
-machinery needed), which is why it was cheap to add despite the preprint
-caveat.
+machinery needed), which is why it was cheap to add – as a
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+option rather than a separate entry point, despite the preprint caveat.
 
 ``` r
 
-res <- radf_svadf(sim_data)
-res
+res <- radf(sim_data, lag = 0)
+datestamp(res, option = "svadf", min_duration = psy_ds(nrow(sim_data)))
 #> 
-#> ── radf_svadf (n = 100, minw = 19, min_duration = 5) ───────────────────────────
+#> ── Datestamp (min_duration = 5) ──────────────── SV-ADF (Sarkar & Wells 2026) ──
 #> 
-#> ℹ Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section.
+#> ℹ Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
 #> 
-#>   series  origination  origination_date  collapse  collapse_date
-#>     psy1           48                48        49             49
-#>     psy2           23                23        24             24
-#>    evans           NA              <NA>        NA           <NA>
-#>      div           NA              <NA>        NA           <NA>
-#>     blan           NA              <NA>        NA           <NA>
+#> psy1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    48   48  49        1 positive   FALSE
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    23   23  24        1 positive   FALSE
 ```
 
 `psy1` and `psy2` get clean origination/collapse dates; `evans`, `div`
@@ -94,10 +94,9 @@ realistic, not cherry-picked, mixed result.
 
 Both are worth using –
 [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)’s
-date *ordering* result and
-[`radf_svadf()`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md)’s
-point statistic are both solid – but neither should be the sole basis
-for a claim about false-alarm rates or exact calibration. Prefer
+date *ordering* result and `datestamp(option = "svadf")`’s point
+statistic are both solid – but neither should be the sole basis for a
+claim about false-alarm rates or exact calibration. Prefer
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 or one of the peer-reviewed alternatives in
 [`vignette("alternative-tests")`](https://kvasilopoulos.github.io/exuber/articles/alternative-tests.md)/[`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md)

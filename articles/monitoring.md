@@ -19,18 +19,26 @@ first time the boundary is breached. All four functions share this
 `r_star`/alarm/`alarm_date` shape; they differ in what statistic they
 monitor and how the boundary is calibrated.
 
-| Function | Statistic monitored | Boundary |
-|----|----|----|
-| [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) |
-| [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md) | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)’s asymptotic (or finite-sample) constant |
-| [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md) | Breitung & Diegel (2025)’s locally-best-invariant CUSUM (`mCUSUM`/`wCUSUM`, via `c_bar`) | Their Table 1 constant |
-| [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) | A recursive quantile regression at `tau` | A simulated first-crossing boundary (Wu, Shi & Wu 2025) |
+| Function | Statistic monitored | Boundary | Static, full-sample counterpart |
+|----|----|----|----|
+| [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) – not a `_test()`, but the same recursive-ADF core |
+| [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md) | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)’s asymptotic (or finite-sample) constant | none – Homm & Breitung’s CUSUM boundary is inherently a training/monitoring construction, with no full-sample form |
+| [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md) | Breitung & Diegel (2025)’s locally-best-invariant CUSUM (`mCUSUM`/`wCUSUM`, via `c_bar`) | Their Table 1 constant | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), the static version of the same statistic |
+| [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) | A recursive quantile regression at `tau` | A simulated first-crossing boundary (Wu, Shi & Wu 2025) | [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), the static version of the same statistic |
 
-[`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
-keeps the `radf_` internals (it reuses `badf`/`bsadf` directly) but is
-named for what it *does* – see
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+reuses `badf`/`bsadf` directly (the same recursive-ADF core as the
+`radf_*()` family) but is named for what it *does*, not that internal
+detail – see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for why the naming convention crosses that line deliberately.
+for why. Two of its three siblings
+([`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
+[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md))
+are the sequential extension of an existing static test of the same name
+minus the `monitor_` prefix;
+[`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
+has no such counterpart, since its source paper (Homm & Breitung 2012)
+proposed CUSUM as a monitoring detector only.
 
 ## The same bubble, five monitors
 
@@ -72,25 +80,48 @@ monitor_quantile(y, tau = 0.5, nrep = 200, seed = 1)
 #> 
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1  0.695     1.757    163         163
-monitor_radf(y, r_star = 0.5, nboot = 200, seed = 1)
+monitor(y, r_star = 0.5, nboot = 200, seed = 1)
 #> 
-#> ── monitor_radf (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ─
+#> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────
 #> 
 #>    series  boundary  alarm  alarm_date
 #>   series1     2.025    160         160
-monitor_radf(y, r_star = 0.5, boundary = "kurozumi")
+monitor(y, r_star = 0.5, boundary = "kurozumi")
 #> 
-#> ── monitor_radf (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ──
+#> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ───────
 #> 
 #>    series  boundary  alarm  alarm_date
 #>   series1     1.038    161         161
+```
+
+[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
+and
+[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+each have a static, full-sample sibling that asks the retrospective
+version of the same question – run on the whole series rather than
+watching for a first crossing:
+
+``` r
+
+lbi_test(y)
+#> 
+#> ── lbi_test (n = 200, level = 95%) ─────────────────────────────────────────────
+#> 
+#>    series   stat   crit  detected
+#>   series1  6.313  1.645      TRUE
+quantile_test(y, tau = 0.5)
+#> 
+#> ── quantile_test (n = 200, level = 95%) ────────────────────────────────────────
+#> 
+#>    series  tau  tstat    crit  delta  detected
+#>   series1  0.5  13.96  0.4221  0.695      TRUE
 ```
 
 Every monitor here alarms within about 15 points of the true bubble
 start (150), none before it – that “never before `T*` (or the true
 start)” property is exactly what each function’s own test suite checks
 under the null. Alarm *timing* differs by design:
-[`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)’s
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)’s
 ADF-family statistics tend to detect mid-sample bubbles fastest (the
 literature’s own finding, e.g. Kurozumi 2020/2021), while CUSUM-type
 detectors
@@ -102,9 +133,9 @@ bootstrap.
 ## Which to reach for
 
 - Fastest detection, willing to pay for a wild bootstrap per call:
-  `monitor_radf(boundary = "bootstrap")` (the default).
+  `monitor(boundary = "bootstrap")` (the default).
 - Same statistic, no bootstrap, an off-the-shelf published constant
-  instead: `monitor_radf(boundary = "kurozumi")` or `boundary = "fluc"`.
+  instead: `monitor(boundary = "kurozumi")` or `boundary = "fluc"`.
 - A simpler CUSUM-based alternative with its own closed-form boundary:
   [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
   or

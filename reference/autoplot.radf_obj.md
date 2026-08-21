@@ -62,7 +62,10 @@ shade(
 - option:
 
   Whether to apply the "gsadf" or "sadf" methodology (default =
-  "gsadf").
+  "gsadf"). Unlike
+  [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+  `"svadf"` is not supported here – it has no critical-value band to
+  shade.
 
 - min_duration:
 

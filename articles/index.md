@@ -21,5 +21,5 @@
   contagion_reg()](https://kvasilopoulos.github.io/exuber/articles/co-explosivity.md):
 - [Root Inference: How Fast Is the Bubble
   Growing](https://kvasilopoulos.github.io/exuber/articles/root-inference.md):
-- [Experimental Methods: radf_recovery() and
-  radf_svadf()](https://kvasilopoulos.github.io/exuber/articles/experimental-methods.md):
+- [Experimental Methods: radf_recovery() and datestamp(option =
+  'svadf')](https://kvasilopoulos.github.io/exuber/articles/experimental-methods.md):

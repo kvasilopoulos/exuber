@@ -28,19 +28,20 @@ and which have their own, differently-shaped output instead.
 
 | Pattern | Means | Examples |
 |----|----|----|
-| `radf_` prefix | Genuinely built on the recursive-ADF core: calls [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) directly, or reuses its `badf`/`bsadf` recursion | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md), [`radf_svadf()`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md), and the `_cv`/`_mc`/`_sb`/`_wb` critical-value engines |
+| `radf_` prefix | Genuinely built on the recursive-ADF core: calls [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) directly, or reuses its `badf`/`bsadf` recursion | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md), and the `_cv`/`_mc`/`_sb`/`_wb` critical-value engines |
 | `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive-ADF core | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md) |
 | `dating_` prefix | Point-estimation / model-selection dating, no formal hypothesis test at all | [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md), [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md), [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md), [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md) |
-| `monitor_` prefix | Real-time/sequential detection – grouped by *what it does*, not by internal mechanism, so this one deliberately crosses the ADF-family line: [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md) reuses `badf`/`bsadf` directly (same as the `radf_` family above) but is named for its monitoring behavior, not that internal detail, since that’s what a user searching for “what can monitor a series in real time” actually wants to find | [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md), [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md), [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md), [`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md) |
+| `monitor`/`monitor_` prefix | Real-time/sequential detection – grouped by *what it does*, not by internal mechanism. [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) is this family’s flagship, the same role [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) plays for the `radf_` family: it reuses `badf`/`bsadf` directly (genuinely ADF-family internals) but carries no `radf`/`sadf` token at all, specifically so it reads as “the real-time monitor,” not as a `radf_` variant – see below | [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md), [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md), [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md), [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) |
 | `root_` prefix | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md) (two S3 methods: default for a single sub-sample, `radf_obj` to run every [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) episode at once) |
 | stands alone | A point-estimation tool, not a test | [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md) |
 
 Naming prefixes are a convention, not a contract – they’re easy to
 misremember and, as
-[`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 shows, sometimes trade off against each other (grouped with its fellow
-monitors here, at the cost of no longer signaling its ADF-family
-internals). For anything programmatic, don’t parse function names: call
+monitors under a name that deliberately doesn’t advertise its ADF-family
+internals, so it can’t be mistaken for a `radf_*()` variant). For
+anything programmatic, don’t parse function names: call
 [`exuber_functions()`](https://kvasilopoulos.github.io/exuber/reference/exuber_functions.md),
 which returns the same categorization as actual, queryable data.
 
@@ -50,7 +51,7 @@ exuber_functions(family = "monitor")
 #> # A tibble: 4 × 3
 #>   name             family      description                                      
 #>   <chr>            <chr>       <chr>                                            
-#> 1 monitor_radf     adf,monitor Real-time monitoring (Family A); reuses radf()'s…
+#> 1 monitor          adf,monitor Real-time monitoring (Family A); reuses radf()'s…
 #> 2 monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…
 #> 3 monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…
 #> 4 monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…
@@ -62,6 +63,13 @@ take no critical value at all.
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 (see below) is a different thing entirely: the generic that applies
 PSY’s own threshold-crossing rule to any `radf_obj` + `radf_cv` pair.
+
+One exception to
+“[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+always needs a `radf_cv`”: `datestamp(object, option = "svadf")` runs
+Sarkar & Wells (2026)’s asymmetric-threshold dating directly off
+`object$badf`, no critical value at all – see
+[`vignette("experimental-methods")`](https://kvasilopoulos.github.io/exuber/articles/experimental-methods.md).
 
 ## What actually plugs into `summary()`/`datestamp()`/`tidy()`/`autoplot()`
 
@@ -350,17 +358,18 @@ autoplot(res, cv = cv)
 
 ### No support: everything else
 
-The remaining ~15 functions
+The remaining ~14 functions
 ([`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md),
 [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
 [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md),
 [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md),
-the `dating_*()` family, the `monitor_*()` family (including
-[`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md),
-ADF-family internals notwithstanding – see above),
+the `dating_*()` family, the
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)/`monitor_*()`
+family (including
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+itself, ADF-family internals notwithstanding – see above),
 [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md),
 [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
-[`radf_svadf()`](https://kvasilopoulos.github.io/exuber/reference/radf_svadf.md),
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md))
 each return their own class with their own
 [`print()`](https://rdrr.io/r/base/print.html) method, because their

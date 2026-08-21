@@ -119,7 +119,7 @@ detection and surveillance. Journal of Time Series Analysis, 46(5),
 
 [`quantile_test`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
 for the static, full-sample version of this test.
-[`monitor_radf`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 for the OLS-based monitoring alternative.
 
 ## Examples

@@ -35,7 +35,7 @@
     <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
-    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -206,13 +206,6 @@
 
         </dt>
         <dd>Stochastic Unit Root Bubble Test (Kurozumi &amp; Nishi 2025)</dd>
-
-        <dt>
-
-          <code><a href="radf_svadf.html">radf_svadf()</a></code>
-
-        </dt>
-        <dd>SV-ADF Asymmetric-Threshold Bubble Dating (Sarkar &amp; Wells 2026)</dd>
       </dl></div><div class="section level2">
       <h2 id="dating-and-root-inference">Dating and root inference<a class="anchor" aria-label="anchor" href="#dating-and-root-inference"></a></h2>
 
@@ -274,7 +267,7 @@
       </dl></div><div class="section level2">
       <h2 id="real-time-monitoring">Real-time monitoring<a class="anchor" aria-label="anchor" href="#real-time-monitoring"></a></h2>
 
-      <div class="section-desc"><p>Sequential/real-time bubble detection; see docs/enhancements/monitoring.md</p></div>
+      <div class="section-desc"><p>Sequential/real-time bubble detection; see docs/enhancements/monitoring.md. Each monitor is listed with its static, full-sample counterpart where one exists.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -283,7 +276,7 @@
 
       <dl><dt>
 
-          <code><a href="monitor_radf.html">monitor_radf()</a></code>
+          <code><a href="monitor.html">monitor()</a></code>
 
         </dt>
         <dd>Real-Time Monitoring for Explosive Bubbles</dd>
@@ -308,6 +301,20 @@
 
         </dt>
         <dd>Locally Best Invariant Test for a Bubble (Breitung &amp; Diegel 2025)</dd>
+
+        <dt>
+
+          <code><a href="monitor_quantile.html">monitor_quantile()</a></code>
+
+        </dt>
+        <dd>QPWY Recursive Quantile Monitoring (Wu, Shi &amp; Wu 2025)</dd>
+
+        <dt>
+
+          <code><a href="quantile_test.html">quantile_test()</a></code>
+
+        </dt>
+        <dd>Quantile Unit Root Test for Bubble Detection (Global Test)</dd>
       </dl></div><div class="section level2">
       <h2 id="multivariate-panel-bubble-tests">Multivariate / panel bubble tests<a class="anchor" aria-label="anchor" href="#multivariate-panel-bubble-tests"></a></h2>
 
@@ -345,29 +352,6 @@
 
         </dt>
         <dd>Bubble Contagion Regression (Greenaway-McGrevy &amp; Phillips 2016)</dd>
-      </dl></div><div class="section level2">
-      <h2 id="alternative-paradigms">Alternative paradigms<a class="anchor" aria-label="anchor" href="#alternative-paradigms"></a></h2>
-
-      <div class="section-desc"><p>Non-ADF-family approaches; see docs/enhancements/alternative-paradigms.md</p></div>
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="quantile_test.html">quantile_test()</a></code>
-
-        </dt>
-        <dd>Quantile Unit Root Test for Bubble Detection (Global Test)</dd>
-
-        <dt>
-
-          <code><a href="monitor_quantile.html">monitor_quantile()</a></code>
-
-        </dt>
-        <dd>QPWY Recursive Quantile Monitoring (Wu, Shi &amp; Wu 2025)</dd>
       </dl></div><div class="section level2">
       <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a></h2>
 

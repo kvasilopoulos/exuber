@@ -47,7 +47,7 @@ the first date it is breached."><meta property="og:image" content="https://kvasi
     <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
-    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -166,7 +166,7 @@ training window length <code>T_star</code>, and <code>alarm</code>/<code>alarm_d
 constant (<code>boundary = "asymptotic"</code>, <code>b_alpha = 4.6</code>) or a
 published finite-sample table lookup (<code>boundary = "finite"</code>, Homm
 &amp; Breitung (2012)'s Table 8) – no simulation, no separate cv function.</p>
-<p>Unlike <code><a href="monitor_radf.html">monitor_radf</a></code> (Family A, a recursive ADF-family
+<p>Unlike <code><a href="monitor.html">monitor</a></code> (Family A, a recursive ADF-family
 statistic requiring a wild bootstrap to calibrate its boundary), this
 is a structurally different statistic – a standardized running sum,
 not a recursive regression – with an asymptotic closed-form boundary
@@ -207,7 +207,7 @@ of Financial Econometrics, 21(1), 187-227.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="monitor_radf.html">monitor_radf</a></code> for the recursive-ADF (Family A)
+    <div class="dont-index"><p><code><a href="monitor.html">monitor</a></code> for the recursive-ADF (Family A)
 monitoring alternative.</p></div>
     </div>
 

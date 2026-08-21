@@ -4,7 +4,7 @@ Naming conventions (`radf_`/`_test`/`dating_`/ `monitor_`/`root_`, see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md))
 are a guide, not a contract – easy to misremember, and occasionally
 traded off deliberately
-([`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+([`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 is ADF-family internally but named for what it does). This is the
 actual, queryable source of truth: which of the package's
 test/dating/monitoring/root-inference functions belong to which family.
@@ -26,7 +26,7 @@ exuber_functions(family = NULL)
   explosive root), `"regression"` (point estimation, no test), or `NULL`
   (default) for every function. A function can belong to more than one
   family
-  ([`monitor_radf()`](https://kvasilopoulos.github.io/exuber/reference/monitor_radf.md)
+  ([`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
   is both `"adf"` and `"monitor"`).
 
 ## Value
@@ -44,7 +44,7 @@ for the full naming scheme and which functions plug into
 
 ``` r
 exuber_functions()
-#> # A tibble: 32 × 3
+#> # A tibble: 31 × 3
 #>    name         family description                                              
 #>    <chr>        <chr>  <chr>                                                    
 #>  1 radf         adf    The recursive ADF/SADF/GSADF/BSADF statistic (Phillips, …
@@ -57,12 +57,12 @@ exuber_functions()
 #>  8 radf_sign    adf    Sign-based sPWY/sPSY test, exactly invariant to heterosk…
 #>  9 radf_sign_cv adf    Critical values for radf_sign().                         
 #> 10 radf_sign_dm adf    Recursively demeaned sign-based test, robust to determin…
-#> # ℹ 22 more rows
+#> # ℹ 21 more rows
 exuber_functions(family = "monitor")
 #> # A tibble: 4 × 3
 #>   name             family      description                                      
 #>   <chr>            <chr>       <chr>                                            
-#> 1 monitor_radf     adf,monitor Real-time monitoring (Family A); reuses radf()'s…
+#> 1 monitor          adf,monitor Real-time monitoring (Family A); reuses radf()'s…
 #> 2 monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…
 #> 3 monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…
 #> 4 monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…

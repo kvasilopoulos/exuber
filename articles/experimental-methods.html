@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Experimental Methods: radf_recovery() and radf_svadf() • exuber</title>
+<title>Experimental Methods: radf_recovery() and datestamp(option = 'svadf') • exuber</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Experimental Methods: radf_recovery() and radf_svadf()">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Experimental Methods: radf_recovery() and datestamp(option = 'svadf')">
 <!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-129604855-4"></script><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -51,7 +51,7 @@
     <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
-    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and radf_svadf()</a></li>
+    <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -73,7 +73,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Experimental Methods: radf_recovery() and radf_svadf()</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/kvasilopoulos/exuber/blob/master/vignettes/experimental-methods.Rmd" class="external-link"><code>vignettes/experimental-methods.Rmd</code></a></small>
@@ -91,11 +91,12 @@
 procedure and pass the package’s standard validation pass (formula-exact
 check against a brute-force reimplementation, published-table lookup,
 Monte Carlo size, power against a genuine alternative).
-<code><a href="../reference/radf_recovery.html">radf_recovery()</a></code> and <code><a href="../reference/radf_svadf.html">radf_svadf()</a></code> both run that
-same pass and both come back genuinely useful – but each has one
-specific, disclosed gap that keeps it below that bar. They print and
-emit a caveat message at call time for exactly that reason; treat their
-output as directional, not as calibrated as the rest of the package.</p>
+<code><a href="../reference/radf_recovery.html">radf_recovery()</a></code> and
+<code>datestamp(option = "svadf")</code> both run that same pass and
+both come back genuinely useful – but each has one specific, disclosed
+gap that keeps it below that bar. They print and emit a caveat message
+at call time for exactly that reason; treat their output as directional,
+not as calibrated as the rest of the package.</p>
 </div>
 <div class="section level2">
 <h2 id="radf_recovery-dating-a-collapse-and-a-recovery">
@@ -133,8 +134,9 @@ false-detection rate are exploratory pending further validation (see
 property is solid, the false-alarm calibration is not yet.</p>
 </div>
 <div class="section level2">
-<h2 id="radf_svadf-a-non-peer-reviewed-preprint">
-<code>radf_svadf()</code>: a non-peer-reviewed preprint<a class="anchor" aria-label="anchor" href="#radf_svadf-a-non-peer-reviewed-preprint"></a>
+<h2 id="datestampoption-svadf-a-non-peer-reviewed-preprint">
+<code>datestamp(option = "svadf")</code>: a non-peer-reviewed
+preprint<a class="anchor" aria-label="anchor" href="#datestampoption-svadf-a-non-peer-reviewed-preprint"></a>
 </h2>
 <p>Sarkar &amp; Wells (2026, arXiv, not yet peer reviewed) – flagged
 explicitly because that is a different evidentiary bar than every other
@@ -142,21 +144,23 @@ paper this package implements. Its statistic turns out to be exactly
 <code><a href="../reference/radf.html">radf()</a></code>’s own <code>badf</code> sequence compared against
 two closed-form, sample-size-only thresholds from the paper’s own
 applied methodology (no new estimation machinery needed), which is why
-it was cheap to add despite the preprint caveat.</p>
+it was cheap to add – as a <code><a href="../reference/datestamp.html">datestamp()</a></code> option rather than a
+separate entry point, despite the preprint caveat.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_svadf.html">radf_svadf</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span>
-<span><span class="va">res</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span>, lag <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, option <span class="op">=</span> <span class="st">"svadf"</span>, min_duration <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── radf_svadf (n = 100, minw = 19, min_duration = 5) ───────────────────────────</span></span>
+<span><span class="co">#&gt; ── Datestamp (min_duration = 5) ──────────────── SV-ADF (Sarkar &amp; Wells 2026) ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">ℹ</span> Experimental. Sarkar &amp; Wells (2026) is a non-peer-reviewed preprint; see ?radf_svadf, Caveats section.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">ℹ</span> Experimental. Sarkar &amp; Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   series  origination  origination_date  collapse  collapse_date</span></span>
-<span><span class="co">#&gt;     psy1           48                48        49             49</span></span>
-<span><span class="co">#&gt;     psy2           23                23        24             24</span></span>
-<span><span class="co">#&gt;    evans           NA              &lt;NA&gt;        NA           &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;      div           NA              &lt;NA&gt;        NA           &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;     blan           NA              &lt;NA&gt;        NA           &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; psy1 :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    48   48  49        1 positive   FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    23   23  24        1 positive   FALSE</span></span></code></pre></div>
 <p><code>psy1</code> and <code>psy2</code> get clean
 origination/collapse dates; <code>evans</code>, <code>div</code> and
 <code>blan</code> don’t cross the threshold on this panel at all – again
@@ -166,9 +170,9 @@ a realistic, not cherry-picked, mixed result.</p>
 <h2 id="using-them-responsibly">Using them responsibly<a class="anchor" aria-label="anchor" href="#using-them-responsibly"></a>
 </h2>
 <p>Both are worth using – <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>’s date
-<em>ordering</em> result and <code><a href="../reference/radf_svadf.html">radf_svadf()</a></code>’s point statistic
-are both solid – but neither should be the sole basis for a claim about
-false-alarm rates or exact calibration. Prefer
+<em>ordering</em> result and <code>datestamp(option = "svadf")</code>’s
+point statistic are both solid – but neither should be the sole basis
+for a claim about false-alarm rates or exact calibration. Prefer
 <code><a href="../reference/radf.html">radf()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code> or one of the peer-reviewed
 alternatives in
 <code><a href="../articles/alternative-tests.html">vignette("alternative-tests")</a></code>/<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>

@@ -166,7 +166,9 @@ answer different questions rather than being alternate ways to get the
 same answer: the `dating_*()` family
 ([`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md))
 fits an explicit regime model to date a bubble you already believe is
-there, instead of testing whether one exists; the `monitor_*()` family
+there, instead of testing whether one exists; the
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)/`monitor_*()`
+family
 ([`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md))
 does real-time detection, watching new observations one at a time rather
 than dating a finished sample. See

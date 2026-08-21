@@ -8,10 +8,12 @@ library(exuber)
 ## A different question from “is there a bubble”
 
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-(and the `dating_*()`/`_test()`/`monitor_*()` families) all answer some
-version of “is there a bubble, and when did it happen.” None of them say
-anything about its *magnitude*: once an explosive episode is dated, how
-fast is the underlying autoregressive root actually growing?
+(and the
+`dating_*()`/`_test()`/[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)/`monitor_*()`
+families) all answer some version of “is there a bubble, and when did it
+happen.” None of them say anything about its *magnitude*: once an
+explosive episode is dated, how fast is the underlying autoregressive
+root actually growing?
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
 (Phillips & Magdalinos 2007; Guo, Sun & Wang 2019) answers exactly that,
 as a follow-up step *after* detection and dating, not a replacement for
