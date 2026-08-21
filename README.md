@@ -74,6 +74,9 @@ process into small simple steps:
 - `diagnostics()` shows which series reject the null hypothesis .
 - `datestamp()` computes the origination, termination and duration of
   episodes (if any).
+- `rootstamp()` estimates how fast a detected episode is growing (the
+  explosive root and its doubling time), run over every `datestamp()`
+  episode at once.
 
 These combined provide a comprehensive analysis on the exuberant
 behavior of the model.
