@@ -144,16 +144,24 @@ autoplot(res, cv = cv)
 
 ### No support: everything else
 
-The remaining ~14 functions (`lbi_test()`, `ssu_test()`, `quantile_test()`,
+The remaining ~15 functions (`lbi_test()`, `ssu_test()`, `quantile_test()`,
 `cobubble_test()`, the `dating_*()` family, the `monitor()`/`monitor_*()`
 family (including `monitor()` itself, ADF-family internals notwithstanding --
-see above), `contagion_reg()`, `radf_recovery()`,
+see above), `contagion_reg()`, `radf_recovery()`, `rootstamp()`,
 `radf_sbz_cv()`) each return their own class with their own `print()` method,
 because their output genuinely doesn't fit the `radf_obj` shape -- a dating
 table isn't a per-series sup-statistic, a monitoring alarm isn't a critical
 value grid. Trying to force them through `summary()`/`datestamp()`/`tidy()`/
 `autoplot()` isn't a documentation gap to close; the right call is their own
 presentation, shown directly:
+
+`rootstamp()` is the one exception worth flagging: it's grouped under
+**Analysis** in the [reference index](../reference/index.html) and the
+README's workflow list, right after `datestamp()`, since that's genuinely
+where it belongs in the *sequence of steps* (detect → date → measure
+growth rate) -- but that's a workflow position, not an S3-support tier.
+It's still its own class with its own `print()` method, same as everything
+else in this section; see `vignette("root-inference")`.
 
 ```{r standalone}
 dating_hls(sim_data$psy1, trim = 0.05)
