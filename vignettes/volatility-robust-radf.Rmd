@@ -23,22 +23,23 @@ library(exuber)
 Plain `radf()` assumes constant innovation variance. Real series rarely
 have that, and under time-varying volatility its standard critical values
 no longer control size. exuber has several fixes for this, each taking a
-structurally different approach. Three of the four below (`radf_sign()`,
-`radf_sign_dm()`, `radf_kp()`) keep the `radf_obj` class and now have full
-`summary()`/`datestamp()`/`tidy()`/`autoplot()` support, the same as plain
-`radf()` (see `vignette("naming-and-analysis")` for exactly how each one
-plugs into the pipeline and how that was validated); `radf_sbz_cv()`
-doesn't -- it bundles the statistic and its own critical value into one
-call with its own class, not a `radf_obj`, so none of those four generics
-apply to it, only its own `print()`. `radf_tt()`'s time-deformation
-approach has its own dedicated vignette, `vignette("radf-tt")`; this one
-covers the rest.
+structurally different approach. Four of the five below (`radf_sign()`,
+`radf_sign_dm()`, `radf_kp()`, `radf_sbz()`) keep the `radf_obj` class and
+now have full `summary()`/`datestamp()`/`tidy()`/`autoplot()` support, the
+same as plain `radf()` (see `vignette("naming-and-analysis")` for exactly
+how each one plugs into the pipeline and how that was validated);
+`radf_sbz_union()` doesn't -- it bundles `radf_sbz()`'s statistic and the
+classic `supDF` into one union-of-rejections call with its own class, not
+a `radf_obj`, so none of those four generics apply to it, only its own
+`print()`/`autoplot()`. `radf_tt()`'s time-deformation approach has its
+own dedicated vignette, `vignette("radf-tt")`; this one covers the rest.
 
 | Function | Paper | Approach |
 |---|---|---|
 | `radf_sign()` / `radf_sign_dm()` | Harvey, Leybourne & Zu (2020) | Transform to the *cumulated sign* of first differences -- exactly invariant to any heteroskedasticity pattern, no bootstrap needed. `_dm` demeans first for level-shift robustness (Harvey, Leybourne, Tatlow & Zu 2025). |
 | `radf_kp()` | Harvey, Leybourne, Taylor & Zu (2024) | *Purge* volatility: divide each first difference by a kernel spot-volatility estimate, cumulate, then run ordinary PSY on the purged series -- null distribution is identical to the standard homoskedastic one. |
-| `radf_sbz_cv()` | Harvey, Leybourne & Zu (2019) | A WLS-weighted test using the same kernel volatility estimator, unioned with the classic supDF via a jointly-sized wild bootstrap. |
+| `radf_sbz()` / `radf_sbz_cv()` | Harvey, Leybourne & Zu (2019) | A WLS-weighted recursive-DF statistic (`supBZ`), *weighting* rather than purging or transforming: same kernel spot-volatility estimator as `radf_kp()`, used as regression weights instead. |
+| `radf_sbz_union()` | Harvey, Leybourne & Zu (2019) | `supDF` (classic) and `supBZ` (`radf_sbz()`'s), unioned via a jointly-sized wild bootstrap -- catches whichever of the two has power on a given series. |
 
 ## Sign-based: `radf_sign()`
 
@@ -70,18 +71,45 @@ cv_kp <- radf_mc_cv(n = attr(res_kp, "n"), minw = 20)
 summary(res_kp, cv = cv_kp)
 ```
 
-## WLS + kernel volatility with union-of-rejections: `radf_sbz_cv()`
+## WLS + kernel volatility: `radf_sbz()`
+
+As of 2026-08-22, `radf_sbz()` is split from the union test into its own
+statistic function, with `radf_sbz_cv()` computing the time-varying
+`badf_cv`/`bsadf_cv` boundary the same way `radf_tt_cv()`/`radf_sign_cv()`
+do (see `vignette("naming-and-analysis")` for the validation), so it gets
+full pipeline support:
 
 ```{r sbz}
-radf_sbz_cv(sim_data, nboot = 200, seed = 1)
+res_sbz <- radf_sbz(sim_data, minw = 20)
+cv_sbz <- radf_sbz_cv(sim_data, minw = 20, nboot = 200, seed = 1)
+summary(res_sbz, cv = cv_sbz)
 ```
 
-`supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version, and
-`U` their union -- each with its own bootstrap p-value, so a series can be
-flagged by one without the other: `psy2` is clearly significant across all
-three here, while the rest of this panel sit closer to the boundary, with
-`supBZ`'s p-values consistently the least significant of the three on this
-draw.
+The kernel-volatility weighting that makes `supBZ` heteroskedasticity-robust
+also trades away some power relative to plain `radf()` on series whose
+bubbles aren't accompanied by a volatility shift -- none of this panel
+clears `supBZ`'s 95% critical value here, even though several clear plain
+`radf()`'s. That's the same trade-off `radf_sbz_union()` below exists to
+hedge against by unioning `supBZ` with the classic `supDF`.
+
+## Union-of-rejections: `radf_sbz_union()`
+
+```{r sbz-union}
+radf_sbz_union(sim_data, nboot = 200, seed = 1)
+```
+
+`supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version (the
+same one `radf_sbz()` now returns on its own), and `U` their union -- each
+with its own bootstrap p-value, so a series can be flagged by one without
+the other: `psy2` is clearly significant across all three here, while the
+rest of this panel sit closer to the boundary, with `supBZ`'s p-values
+consistently the least significant of the three on this draw. `U`'s value
+is *defined* using a bootstrap-derived `supDF`/`supBZ` scaling ratio, and
+its size guarantee requires `supDF`/`supBZ` bootstrap draws paired from the
+same resampled series per replicate -- both reasons `radf_sbz_union()`
+can't be reconstructed from separately calling `radf_sbz_cv()` and plain
+`radf_wb_cv()`, and why it stays a single bundled call with its own class
+rather than a `radf_obj`.
 
 ## Which to reach for
 
@@ -90,11 +118,13 @@ draw.
   not just volatility, is a concern). Also full pipeline support.
 - Want to stay closest to plain `radf()`, no new critical-value machinery
   at all: `radf_kp()`.
-- Want the WLS efficiency gain and a union test against the classic
-  statistic: `radf_sbz_cv()` -- the one function in this group with no
-  `datestamp()`/`autoplot()` support, since it bundles the statistic and
-  its (scalar-only) critical value in one call rather than returning a
-  `radf_obj`.
+- Want the WLS efficiency gain with full `datestamp()`/`autoplot()`
+  support: `radf_sbz()` + `radf_sbz_cv()`.
+- Want to hedge between the classic and WLS-weighted statistics on the
+  same series, and don't need `datestamp()`/`autoplot()`:
+  `radf_sbz_union()` -- the one function in this group with no pipeline
+  support, since `U` bundles both statistics and their (scalar-only)
+  joint critical value in one call rather than returning a `radf_obj`.
 - Volatility is the whole story and a bootstrap-free, time-deformation
   approach is preferred: `radf_tt()`, see `vignette("radf-tt")`.
 - Volatility is genuinely unknown/complex and a bootstrap is acceptable:

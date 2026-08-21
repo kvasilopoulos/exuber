@@ -28,7 +28,7 @@ reference:
       - radf
       - radf_mc_cv
       - radf_wb_cv
-      - radf_wb_cv2
+      - radf_wb_ps_cv
       - radf_sb_cv
       - radf_crit
 
@@ -97,7 +97,9 @@ reference:
       Further tests robust to time-varying innovation variance; see
       docs/enhancements/volatility-robustness.md
     contents:
+      - radf_sbz
       - radf_sbz_cv
+      - radf_sbz_union
       - radf_kp
       - radf_sign
       - radf_sign_cv

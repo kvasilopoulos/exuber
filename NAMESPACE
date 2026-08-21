@@ -15,6 +15,7 @@ S3method(augment_radf_cv,wb_cv)
 S3method(autoplot,ds_radf)
 S3method(autoplot,radf_distr)
 S3method(autoplot,radf_obj)
+S3method(autoplot,radf_sbz_union)
 S3method(autoplot,sim)
 S3method(autoplot2,radf_obj)
 S3method(autoplot_radf_distr,mc_distr)
@@ -54,7 +55,7 @@ S3method(print,quantile_test_obj)
 S3method(print,radf_cv)
 S3method(print,radf_obj)
 S3method(print,radf_recovery_obj)
-S3method(print,radf_sbz)
+S3method(print,radf_sbz_union)
 S3method(print,radf_sign_dm_obj)
 S3method(print,radf_sign_obj)
 S3method(print,radf_tt_obj)
@@ -122,7 +123,9 @@ export(radf_recovery)
 export(radf_recovery_cv)
 export(radf_sb_cv)
 export(radf_sb_distr)
+export(radf_sbz)
 export(radf_sbz_cv)
+export(radf_sbz_union)
 export(radf_sign)
 export(radf_sign_cv)
 export(radf_sign_dm)
@@ -198,8 +201,14 @@ importFrom(generics,
 )
 importFrom(ggplot2,
   `%+replace%`,
+  aes,
   autoplot,
+  facet_wrap,
   fortify,
+  geom_point,
+  geom_segment,
+  ggplot,
+  labs,
   scale_color_manual,
   scale_linetype_manual,
   scale_size_manual
