@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Rscript:*)",
+      "Bash(R:*)",
+      "Bash(make:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git checkout -- DESCRIPTION)",
+      "Bash(git checkout -- NAMESPACE)",
+      "Bash(git checkout -- man)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
