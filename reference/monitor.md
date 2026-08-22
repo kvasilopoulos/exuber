@@ -61,7 +61,7 @@ monitor(
 - adflag, type:
 
   Passed to
-  [`radf_wb_cv2`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv2.md)
+  [`radf_wb_ps_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
   (lag length / selection for the wild bootstrap DGP). Ignored unless
   `boundary = "bootstrap"`.
 
@@ -98,12 +98,12 @@ the boundary, `NA` if never).
 
 `boundary = "bootstrap"` (default) implements Phillips & Shi (2020): the
 boundary is a wild-bootstrap quantile of the GSADF-type statistic
-([`radf_wb_cv2`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv2.md),
+([`radf_wb_ps_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md),
 its `tb` parameter), compared against
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
 `bsadf` sequence. Deliberately calibrates on the training window *only*
 (`data[1:T*]`), not the full series:
-[`radf_wb_cv2`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv2.md)'s
+[`radf_wb_ps_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)'s
 underlying null-model fit (`adf_res()`) uses whatever data it is given
 in full, with no internal truncation to `tb` – passing post-`T*`
 (possibly explosive) data to it directly would leak future information
@@ -156,7 +156,7 @@ Econometrics, 10(1), 198-231.
 
 ## See also
 
-[`radf_wb_cv2`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv2.md)
+[`radf_wb_ps_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
 for the underlying wild bootstrap, and
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for the (non-monitoring, full-sample) origination/collapse dating that

@@ -94,9 +94,9 @@ tidy(cv)
 #> # A tibble: 3 × 4
 #>   sig     adf  sadf gsadf
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 90    0.849  2.15  2.79
-#> 2 95    1.26   2.51  3.22
-#> 3 99    2.07   3.14  4.08
+#> 1 90    0.873  2.12  2.75
+#> 2 95    1.31   2.50  3.17
+#> 3 99    2.07   3.10  4.01
 
 res <- radf_tt(sim_data, minw = 20)
 datestamp(res, cv = cv)

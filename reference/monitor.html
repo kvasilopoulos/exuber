@@ -33,16 +33,16 @@ flagging the first date it is breached."><meta property="og:image" content="http
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
-    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
     <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
     <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
-    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
-    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -124,7 +124,7 @@ critical value. Ignored unless <code>boundary = "bootstrap"</code>.</p></dd>
 
 
 <dt id="arg-adflag-type">adflag, type<a class="anchor" aria-label="anchor" href="#arg-adflag-type"></a></dt>
-<dd><p>Passed to <code><a href="radf_wb_cv2.html">radf_wb_cv2</a></code> (lag length /
+<dd><p>Passed to <code><a href="radf_wb_ps_cv.html">radf_wb_ps_cv</a></code> (lag length /
 selection for the wild bootstrap DGP). Ignored unless
 <code>boundary = "bootstrap"</code>.</p></dd>
 
@@ -165,10 +165,10 @@ observation/date at which <code>stat</code> breaches the boundary,
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>boundary = "bootstrap"</code> (default) implements Phillips &amp; Shi
 (2020): the boundary is a wild-bootstrap quantile of the GSADF-type
-statistic (<code><a href="radf_wb_cv2.html">radf_wb_cv2</a></code>, its <code>tb</code> parameter),
+statistic (<code><a href="radf_wb_ps_cv.html">radf_wb_ps_cv</a></code>, its <code>tb</code> parameter),
 compared against <code><a href="radf.html">radf()</a></code>'s <code>bsadf</code> sequence. Deliberately
 calibrates on the training window <em>only</em> (<code>data[1:T*]</code>), not
-the full series: <code><a href="radf_wb_cv2.html">radf_wb_cv2</a></code>'s underlying null-model fit
+the full series: <code><a href="radf_wb_ps_cv.html">radf_wb_ps_cv</a></code>'s underlying null-model fit
 (<code>adf_res()</code>) uses whatever data it is given in full, with no
 internal truncation to <code>tb</code> – passing post-<code>T*</code> (possibly
 explosive) data to it directly would leak future information into the
@@ -218,7 +218,7 @@ Journal of Financial Econometrics, 10(1), 198-231.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="radf_wb_cv2.html">radf_wb_cv2</a></code> for the underlying wild bootstrap,
+    <div class="dont-index"><p><code><a href="radf_wb_ps_cv.html">radf_wb_ps_cv</a></code> for the underlying wild bootstrap,
 and <code><a href="datestamp.html">datestamp</a></code> for the (non-monitoring, full-sample)
 origination/collapse dating that already exists.</p></div>
     </div>

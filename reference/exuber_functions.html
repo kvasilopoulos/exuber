@@ -37,16 +37,16 @@ functions belong to which family."><meta property="og:image" content="https://kv
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
-    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
     <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
     <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
-    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
-    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -110,20 +110,20 @@ the full naming scheme and which functions plug into
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">exuber_functions</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 31 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    name         family description                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> radf         adf    The recursive ADF/SADF/GSADF/BSADF statistic (Phillips, …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> radf_mc_cv   adf    Monte Carlo critical values for radf().                  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> radf_wb_cv   adf    Wild bootstrap critical values for radf() (heteroskedast…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> radf_wb_cv2  adf    Wild bootstrap critical values with a training-window bo…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> radf_sb_cv   adf    Panel sieve bootstrap critical values for radf().        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> radf_tt      adf    Time-transformed test (STADF/GSTADF), bootstrap-free het…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> radf_tt_cv   adf    Pivotal asymptotic critical values for radf_tt().        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> radf_sign    adf    Sign-based sPWY/sPSY test, exactly invariant to heterosk…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> radf_sign_cv adf    Critical values for radf_sign().                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> radf_sign_dm adf    Recursively demeaned sign-based test, robust to determin…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 21 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 33 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    name          family description                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> radf          adf    The recursive ADF/SADF/GSADF/BSADF statistic (Phillips,…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> radf_mc_cv    adf    Monte Carlo critical values for radf().                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> radf_wb_cv    adf    Wild bootstrap critical values for radf() (heteroskedas…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> radf_wb_ps_cv adf    Phillips &amp; Shi (2020) wild bootstrap critical values wi…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> radf_sb_cv    adf    Panel sieve bootstrap critical values for radf().       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> radf_tt       adf    Time-transformed test (STADF/GSTADF), bootstrap-free he…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> radf_tt_cv    adf    Pivotal asymptotic critical values for radf_tt().       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> radf_sign     adf    Sign-based sPWY/sPSY test, exactly invariant to heteros…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> radf_sign_cv  adf    Critical values for radf_sign().                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> radf_sign_dm  adf    Recursively demeaned sign-based test, robust to determi…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more rows</span></span>
 <span class="r-in"><span><span class="fu">exuber_functions</span><span class="op">(</span>family <span class="op">=</span> <span class="st">"monitor"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name             family      description                                      </span>
@@ -134,13 +134,13 @@ the full naming scheme and which functions plug into
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…</span>
 <span class="r-in"><span><span class="fu">exuber_functions</span><span class="op">(</span>family <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   name          family description                                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> lbi_test      test   Locally best invariant test for a bubble spanning the wh…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ssu_test      test   Stochastic explosive-coefficient test on squared first d…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> quantile_test test   Quantile-regression global test, an alternative to the m…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> cobubble_test test   KPSS-type co-explosive test between two series (Evripido…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> radf_sbz_cv   test   SBZ WLS/kernel-volatility test with union-of-rejections;…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   name           family description                                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> lbi_test       test   Locally best invariant test for a bubble spanning the w…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ssu_test       test   Stochastic explosive-coefficient test on squared first …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> quantile_test  test   Quantile-regression global test, an alternative to the …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> cobubble_test  test   KPSS-type co-explosive test between two series (Evripid…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> radf_sbz_union test   SBZ union-of-rejections test (supDF and supBZ, paired b…</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

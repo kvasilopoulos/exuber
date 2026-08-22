@@ -119,41 +119,41 @@ summary(res, cv = cv)
 #> # A tibble: 3 × 5
 #>   stat    tstat  `90`  `95`  `99`
 #>   <fct>   <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.0715 0.914  1.33  1.98
-#> 2 sadf   2.17   2.37   2.81  3.53
-#> 3 gsadf  2.98   2.87   3.21  4.27
+#> 1 adf   -0.0715 0.871  1.27  2.07
+#> 2 sadf   2.17   2.36   2.74  3.58
+#> 3 gsadf  2.98   2.85   3.20  4.17
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    1.48 0.914  1.33  1.98
-#> 2 sadf   3.00 2.37   2.81  3.53
-#> 3 gsadf  3.43 2.87   3.21  4.27
+#> 1 adf    1.48 0.871  1.27  2.07
+#> 2 sadf   3.00 2.36   2.74  3.58
+#> 3 gsadf  3.43 2.85   3.20  4.17
 #> 
 #> evans :
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.14  0.914  1.33  1.98
-#> 2 sadf  -0.912 2.37   2.81  3.53
-#> 3 gsadf  1.15  2.87   3.21  4.27
+#> 1 adf   -2.14  0.871  1.27  2.07
+#> 2 sadf  -0.912 2.36   2.74  3.58
+#> 3 gsadf  1.15  2.85   3.20  4.17
 #> 
 #> div :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.05 0.914  1.33  1.98
-#> 2 sadf   2.33 2.37   2.81  3.53
-#> 3 gsadf  2.37 2.87   3.21  4.27
+#> 1 adf   -1.05 0.871  1.27  2.07
+#> 2 sadf   2.33 2.36   2.74  3.58
+#> 3 gsadf  2.37 2.85   3.20  4.17
 #> 
 #> blan :
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.173 0.914  1.33  1.98
-#> 2 sadf   1.35  2.37   2.81  3.53
-#> 3 gsadf  1.49  2.87   3.21  4.27
+#> 1 adf   -0.173 0.871  1.27  2.07
+#> 2 sadf   1.35  2.36   2.74  3.58
+#> 3 gsadf  1.49  2.85   3.20  4.17
 #> 
 tidy(res, cv = cv)
 #> # A tibble: 5 × 4
@@ -171,7 +171,8 @@ datestamp(res, cv = cv)
 #> psy2 :
 #>   Start Peak End Duration   Signal Ongoing
 #> 1    39   40  41        2 positive   FALSE
-#> 2    86   95 100       14 negative   FALSE
+#> 2    84   84  85        1 positive   FALSE
+#> 3    86   95 100       14 negative   FALSE
 #> 
 autoplot(res, cv = cv)
 

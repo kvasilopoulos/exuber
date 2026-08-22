@@ -41,16 +41,16 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
+<li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
-    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
     <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
     <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
-    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
-    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul>
 </li>
@@ -90,20 +90,22 @@
 <p>Plain <code><a href="../reference/radf.html">radf()</a></code> assumes constant innovation variance. Real
 series rarely have that, and under time-varying volatility its standard
 critical values no longer control size. exuber has several fixes for
-this, each taking a structurally different approach. Three of the four
+this, each taking a structurally different approach. Four of the five
 below (<code><a href="../reference/radf_sign.html">radf_sign()</a></code>, <code><a href="../reference/radf_sign_dm.html">radf_sign_dm()</a></code>,
-<code><a href="../reference/radf_kp.html">radf_kp()</a></code>) keep the <code>radf_obj</code> class and now
-have full
+<code><a href="../reference/radf_kp.html">radf_kp()</a></code>, <code><a href="../reference/radf_sbz.html">radf_sbz()</a></code>) keep the
+<code>radf_obj</code> class and now have full
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
 support, the same as plain <code><a href="../reference/radf.html">radf()</a></code> (see
 <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for exactly how each one
 plugs into the pipeline and how that was validated);
-<code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> doesn’t – it bundles the statistic and its
-own critical value into one call with its own class, not a
+<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> doesn’t – it bundles
+<code><a href="../reference/radf_sbz.html">radf_sbz()</a></code>’s statistic and the classic <code>supDF</code>
+into one union-of-rejections call with its own class, not a
 <code>radf_obj</code>, so none of those four generics apply to it, only
-its own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>. <code><a href="../reference/radf_tt.html">radf_tt()</a></code>’s time-deformation
-approach has its own dedicated vignette,
-<code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>; this one covers the rest.</p>
+its own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>.
+<code><a href="../reference/radf_tt.html">radf_tt()</a></code>’s time-deformation approach has its own dedicated
+vignette, <code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>; this one covers the
+rest.</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -136,10 +138,22 @@ series – null distribution is identical to the standard homoskedastic
 one.</td>
 </tr>
 <tr class="odd">
-<td><code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code></td>
+<td>
+<code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> / <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>
+</td>
 <td>Harvey, Leybourne &amp; Zu (2019)</td>
-<td>A WLS-weighted test using the same kernel volatility estimator,
-unioned with the classic supDF via a jointly-sized wild bootstrap.</td>
+<td>A WLS-weighted recursive-DF statistic (<code>supBZ</code>),
+<em>weighting</em> rather than purging or transforming: same kernel
+spot-volatility estimator as <code><a href="../reference/radf_kp.html">radf_kp()</a></code>, used as regression
+weights instead.</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code></td>
+<td>Harvey, Leybourne &amp; Zu (2019)</td>
+<td>
+<code>supDF</code> (classic) and <code>supBZ</code>
+(<code><a href="../reference/radf_sbz.html">radf_sbz()</a></code>’s), unioned via a jointly-sized wild bootstrap
+– catches whichever of the two has power on a given series.</td>
 </tr>
 </tbody>
 </table>
@@ -273,13 +287,77 @@ simplest way of all (no new critical-value machinery at all –
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  0.452  1.60   1.94   2.41</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="wls-kernel-volatility-with-union-of-rejections-radf_sbz_cv">WLS + kernel volatility with union-of-rejections:
-<code>radf_sbz_cv()</code><a class="anchor" aria-label="anchor" href="#wls-kernel-volatility-with-union-of-rejections-radf_sbz_cv"></a>
+<h2 id="wls-kernel-volatility-radf_sbz">WLS + kernel volatility: <code>radf_sbz()</code><a class="anchor" aria-label="anchor" href="#wls-kernel-volatility-radf_sbz"></a>
 </h2>
+<p>As of 2026-08-22, <code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is split from the union
+test into its own statistic function, with <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>
+computing the time-varying <code>badf_cv</code>/<code>bsadf_cv</code>
+boundary the same way
+<code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code>/<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> do (see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the validation), so it
+gets full pipeline support:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res_sbz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv_sbz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_sbz</span>, cv <span class="op">=</span> <span class="va">cv_sbz</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; psy1 :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat   tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.22</span>  0.544 0.801  1.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.280 1.45  1.63   2.04</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.05  2.03  2.76   3.27</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.07</span> 0.481 0.583 0.745</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.53 1.76  2.72  3.49 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.56 2.35  3.43  4.43 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; evans :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.95</span> 0.599 0.846  1.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  -<span style="color: #BB0000;">1.00</span> 4.35  6.07   8.57</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.70 4.54  6.22   8.57</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; div :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.660  1.10  1.48  1.97</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.26   2.25  2.59  2.98</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.26   2.60  2.82  3.53</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; blan :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">4.14</span> 0.745 0.939  1.59</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.40 2.65  3.63   5.65</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.38 3.82  4.72   6.89</span></span></code></pre></div>
+<p>The kernel-volatility weighting that makes <code>supBZ</code>
+heteroskedasticity-robust also trades away some power relative to plain
+<code><a href="../reference/radf.html">radf()</a></code> on series whose bubbles aren’t accompanied by a
+volatility shift – none of this panel clears <code>supBZ</code>’s 95%
+critical value here, even though several clear plain
+<code><a href="../reference/radf.html">radf()</a></code>’s. That’s the same trade-off
+<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> below exists to hedge against by unioning
+<code>supBZ</code> with the classic <code>supDF</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="union-of-rejections-radf_sbz_union">Union-of-rejections: <code>radf_sbz_union()</code><a class="anchor" aria-label="anchor" href="#union-of-rejections-radf_sbz_union"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/radf_sbz_union.html">radf_sbz_union</a></span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── radf_sbz_union (minw = 19, nboot = 200) ─────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U</span></span>
 <span><span class="co">#&gt;     psy1  1.946  0.2802  1.946    0.055     0.64  0.100</span></span>
@@ -288,12 +366,20 @@ simplest way of all (no new critical-value machinery at all –
 <span><span class="co">#&gt;      div  1.113  2.2607  1.113    0.065     0.10  0.130</span></span>
 <span><span class="co">#&gt;     blan  3.930  1.4008  3.930    0.050     0.25  0.075</span></span></code></pre></div>
 <p><code>supDF</code> is the classic PWY statistic, <code>supBZ</code>
-the WLS-weighted version, and <code>U</code> their union – each with its
-own bootstrap p-value, so a series can be flagged by one without the
-other: <code>psy2</code> is clearly significant across all three here,
-while the rest of this panel sit closer to the boundary, with
+the WLS-weighted version (the same one <code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> now
+returns on its own), and <code>U</code> their union – each with its own
+bootstrap p-value, so a series can be flagged by one without the other:
+<code>psy2</code> is clearly significant across all three here, while
+the rest of this panel sit closer to the boundary, with
 <code>supBZ</code>’s p-values consistently the least significant of the
-three on this draw.</p>
+three on this draw. <code>U</code>’s value is <em>defined</em> using a
+bootstrap-derived <code>supDF</code>/<code>supBZ</code> scaling ratio,
+and its size guarantee requires <code>supDF</code>/<code>supBZ</code>
+bootstrap draws paired from the same resampled series per replicate –
+both reasons <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> can’t be reconstructed from
+separately calling <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> and plain
+<code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code>, and why it stays a single bundled call with
+its own class rather than a <code>radf_obj</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
@@ -305,11 +391,16 @@ with no bootstrap at all: <code><a href="../reference/radf_sign.html">radf_sign(
 concern). Also full pipeline support.</li>
 <li>Want to stay closest to plain <code><a href="../reference/radf.html">radf()</a></code>, no new
 critical-value machinery at all: <code><a href="../reference/radf_kp.html">radf_kp()</a></code>.</li>
-<li>Want the WLS efficiency gain and a union test against the classic
-statistic: <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> – the one function in this group
-with no <code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> support, since
-it bundles the statistic and its (scalar-only) critical value in one
-call rather than returning a <code>radf_obj</code>.</li>
+<li>Want the WLS efficiency gain with full
+<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> support:
+<code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> + <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>.</li>
+<li>Want to hedge between the classic and WLS-weighted statistics on the
+same series, and don’t need
+<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>:
+<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> – the one function in this group with no
+pipeline support, since <code>U</code> bundles both statistics and their
+(scalar-only) joint critical value in one call rather than returning a
+<code>radf_obj</code>.</li>
 <li>Volatility is the whole story and a bootstrap-free, time-deformation
 approach is preferred: <code><a href="../reference/radf_tt.html">radf_tt()</a></code>, see
 <code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>.</li>

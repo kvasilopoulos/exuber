@@ -133,41 +133,41 @@ summary(res, cv = cv)
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.152 0.868  1.35  2.16
-#> 2 sadf   0.937 2.23   2.62  3.43
-#> 3 gsadf  2.02  2.89   3.34  4.57
+#> 1 adf   -0.152 0.853  1.27  2.27
+#> 2 sadf   0.937 2.17   2.59  3.35
+#> 3 gsadf  2.02  2.82   3.33  4.43
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    2.56 0.868  1.35  2.16
-#> 2 sadf   6.42 2.23   2.62  3.43
-#> 3 gsadf 14.0  2.89   3.34  4.57
+#> 1 adf    2.56 0.853  1.27  2.27
+#> 2 sadf   6.42 2.17   2.59  3.35
+#> 3 gsadf 14.0  2.82   3.33  4.43
 #> 
 #> evans :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    4.85 0.868  1.35  2.16
-#> 2 sadf   5.76 2.23   2.62  3.43
-#> 3 gsadf  6.85 2.89   3.34  4.57
+#> 1 adf    4.85 0.853  1.27  2.27
+#> 2 sadf   5.76 2.17   2.59  3.35
+#> 3 gsadf  6.85 2.82   3.33  4.43
 #> 
 #> div :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    1.13 0.868  1.35  2.16
-#> 2 sadf   2.79 2.23   2.62  3.43
-#> 3 gsadf  2.95 2.89   3.34  4.57
+#> 1 adf    1.13 0.853  1.27  2.27
+#> 2 sadf   2.79 2.17   2.59  3.35
+#> 3 gsadf  2.95 2.82   3.33  4.43
 #> 
 #> blan :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    3.38 0.868  1.35  2.16
-#> 2 sadf   3.38 2.23   2.62  3.43
-#> 3 gsadf  3.68 2.89   3.34  4.57
+#> 1 adf    3.38 0.853  1.27  2.27
+#> 2 sadf   3.38 2.17   2.59  3.35
+#> 3 gsadf  3.68 2.82   3.33  4.43
 #> 
 tidy(res, cv = cv)
 #> # A tibble: 5 × 4
@@ -192,8 +192,9 @@ datestamp(res, cv = cv)
 #> 
 #> blan :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    31   43  73       42 negative   FALSE
-#> 2    76  100 100       25 positive    TRUE
+#> 1    31   43  52       21 negative   FALSE
+#> 2    53   58  73       20 positive   FALSE
+#> 3    77  100 100       24 positive    TRUE
 #> 
 autoplot(res, cv = cv)
 

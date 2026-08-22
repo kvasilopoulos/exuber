@@ -83,7 +83,7 @@ carries the `radf_obj` class – and whose paired `_cv()` actually
 computes that time-varying boundary – get the full pipeline. Three
 tiers, in practice:
 
-### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`
+### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`, `radf_sbz()`
 
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)/[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
 literally return
@@ -356,9 +356,117 @@ autoplot(res, cv = cv)
 
 ![](naming-and-analysis_files/figure-html/sign-full-1.png)
 
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
+is a fourth, separate case: it builds its statistic (`supBZ`) on
+`wls_dfstat_grid()`, a WLS/kernel-volatility-weighted no-intercept
+recursive-DF grid, not `gls_dfstat_grid()` – but the same fix applies
+for the same reason, since `wls_dfstat_grid()` already returns the full
+`badf`/`bsadf` path per replicate.
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)’s
+wild bootstrap is therefore built the same way as
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)/[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)’s
+Monte Carlo simulation: per-time-point quantile across replicates, no
+[`cummax()`](https://rdrr.io/r/base/cumsum.html) shortcut needed.
+Validated the same way: `badf_cv`’s last row is bit-identical to
+`adf_cv`; empirical false-alarm rate under `H0` is 5.0% at nominal 5%
+(n=100, minw=20, 200 replications); and it does reject on a sufficiently
+strong deterministic explosive path, though its kernel-volatility
+weighting trades away enough power on `sim_data`’s milder bubbles that
+none of the five reject at nboot=100-200 – the same power/robustness
+trade-off already documented for
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)’s
+`supBZ` leg below, not a new finding specific to the split.
+
+``` r
+
+res <- radf_sbz(sim_data, minw = 20)
+cv <- radf_sbz_cv(sim_data, minw = 20, nboot = 200, seed = 1)
+
+summary(res, cv = cv)
+#> 
+#> ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──
+#> 
+#> psy1 :
+#> # A tibble: 3 × 5
+#>   stat   tstat  `90`  `95`  `99`
+#>   <fct>  <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.22  0.544 0.801  1.22
+#> 2 sadf   0.280 1.45  1.63   2.04
+#> 3 gsadf  1.05  2.03  2.76   3.27
+#> 
+#> psy2 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -1.07 0.481 0.583 0.745
+#> 2 sadf   1.53 1.76  2.72  3.49 
+#> 3 gsadf  1.56 2.35  3.43  4.43 
+#> 
+#> evans :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -2.95 0.599 0.846  1.26
+#> 2 sadf  -1.00 4.35  6.07   8.57
+#> 3 gsadf  1.70 4.54  6.22   8.57
+#> 
+#> div :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   0.660  1.10  1.48  1.97
+#> 2 sadf  2.26   2.25  2.59  2.98
+#> 3 gsadf 2.26   2.60  2.82  3.53
+#> 
+#> blan :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   -4.14 0.745 0.939  1.59
+#> 2 sadf   1.40 2.65  3.63   5.65
+#> 3 gsadf  2.38 3.82  4.72   6.89
+tidy(res, cv = cv)
+#> # A tibble: 5 × 4
+#>   id       adf   sadf gsadf
+#>   <fct>  <dbl>  <dbl> <dbl>
+#> 1 psy1  -1.22   0.280  1.05
+#> 2 psy2  -1.07   1.53   1.56
+#> 3 evans -2.95  -1.00   1.70
+#> 4 div    0.660  2.26   2.26
+#> 5 blan  -4.14   1.40   2.38
+```
+
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+need at least one rejection to have anything to show (they error
+otherwise, same as for any other `radf_obj`/`radf_cv` pair) – none of
+`sim_data`’s five series clear `supBZ`’s bar above, so here’s a series
+built to:
+
+``` r
+
+set.seed(7)
+n <- 120; te <- 70
+y <- cumsum(rnorm(n))
+y[(te + 1):n] <- y[te] * 1.15 ^ seq_len(n - te)
+
+res2 <- radf_sbz(y, minw = 20)
+cv2 <- radf_sbz_cv(y, minw = 20, nboot = 100, seed = 1)
+datestamp(res2, cv = cv2)
+#> 
+#> ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──
+#> 
+#> series1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    27   28  29        2 positive   FALSE
+#> 2    64  120 120       57 positive    TRUE
+autoplot(res2, cv = cv2)
+```
+
+![](naming-and-analysis_files/figure-html/sbz-full-reject-1.png)
+
 ### No support: everything else
 
-The remaining ~14 functions
+The remaining ~15 functions
 ([`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md),
 [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
 [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md),
@@ -370,7 +478,8 @@ family (including
 itself, ADF-family internals notwithstanding – see above),
 [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md),
 [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
-[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md))
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md))
 each return their own class with their own
 [`print()`](https://rdrr.io/r/base/print.html) method, because their
 output genuinely doesn’t fit the `radf_obj` shape – a dating table isn’t
@@ -380,6 +489,19 @@ grid. Trying to force them through
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 isn’t a documentation gap to close; the right call is their own
 presentation, shown directly:
+
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+is the one exception worth flagging: it’s grouped under **Analysis** in
+the [reference
+index](https://kvasilopoulos.github.io/exuber/reference/index.md) and
+the README’s workflow list, right after
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+since that’s genuinely where it belongs in the *sequence of steps*
+(detect → date → measure growth rate) – but that’s a workflow position,
+not an S3-support tier. It’s still its own class with its own
+[`print()`](https://rdrr.io/r/base/print.html) method, same as
+everything else in this section; see
+[`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md).
 
 ``` r
 

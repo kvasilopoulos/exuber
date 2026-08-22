@@ -41,16 +41,16 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
+<li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting with exuber</a></li>
-    <li><a class="dropdown-item" href="../articles/naming-and-analysis.html">Naming Conventions and the Analysis/Tidying/Plotting Pipeline</a></li>
+    <li><a class="dropdown-item" href="../articles/simulation.html">Simulation</a></li>
     <li><a class="dropdown-item" href="../articles/radf-tt.html">Time-Transformed Test (STADF/GSTADF)</a></li>
     <li><a class="dropdown-item" href="../articles/volatility-robust-radf.html">Volatility-Robust Alternatives to radf()</a></li>
+    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
     <li><a class="dropdown-item" href="../articles/dating-methods.html">Dating Methods: Alternatives to datestamp()</a></li>
     <li><a class="dropdown-item" href="../articles/monitoring.html">Real-Time Monitoring</a></li>
-    <li><a class="dropdown-item" href="../articles/alternative-tests.html">Alternative Tests: lbi_test(), ssu_test(), quantile_test()</a></li>
-    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/root-inference.html">Root Inference: How Fast Is the Bubble Growing</a></li>
+    <li><a class="dropdown-item" href="../articles/co-explosivity.html">Bivariate Bubble Relationships: cobubble_test() and contagion_reg()</a></li>
     <li><a class="dropdown-item" href="../articles/experimental-methods.html">Experimental Methods: radf_recovery() and datestamp(option = 'svadf')</a></li>
   </ul>
 </li>
@@ -227,9 +227,9 @@ class – and whose paired <code>_cv()</code> actually computes that
 time-varying boundary – get the full pipeline. Three tiers, in
 practice:</p>
 <div class="section level3">
-<h3 id="full-support-radf_common-radf_kp-radf_tt-radf_sign-radf_sign_dm">Full support: <code>radf_common()</code>, <code>radf_kp()</code>,
+<h3 id="full-support-radf_common-radf_kp-radf_tt-radf_sign-radf_sign_dm-radf_sbz">Full support: <code>radf_common()</code>, <code>radf_kp()</code>,
 <code>radf_tt()</code>, <code>radf_sign()</code>,
-<code>radf_sign_dm()</code><a class="anchor" aria-label="anchor" href="#full-support-radf_common-radf_kp-radf_tt-radf_sign-radf_sign_dm"></a>
+<code>radf_sign_dm()</code>, <code>radf_sbz()</code><a class="anchor" aria-label="anchor" href="#full-support-radf_common-radf_kp-radf_tt-radf_sign-radf_sign_dm-radf_sbz"></a>
 </h3>
 <p><code><a href="../reference/radf_kp.html">radf_kp()</a></code>/<code><a href="../reference/radf_common.html">radf_common()</a></code> literally return
 <code><a href="../reference/radf.html">radf()</a></code>’s own output (purged of volatility, or computed on a
@@ -479,25 +479,131 @@ flag).</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> blan   3.38  3.38   3.68</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/sign-full-1.png" class="r-plt" alt="" width="700"></p>
+<p><code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is a fourth, separate case: it builds its
+statistic (<code>supBZ</code>) on <code>wls_dfstat_grid()</code>, a
+WLS/kernel-volatility-weighted no-intercept recursive-DF grid, not
+<code>gls_dfstat_grid()</code> – but the same fix applies for the same
+reason, since <code>wls_dfstat_grid()</code> already returns the full
+<code>badf</code>/<code>bsadf</code> path per replicate.
+<code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>’s wild bootstrap is therefore built the same
+way as <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code>/<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code>’s Monte
+Carlo simulation: per-time-point quantile across replicates, no
+<code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code> shortcut needed. Validated the same way:
+<code>badf_cv</code>’s last row is bit-identical to <code>adf_cv</code>;
+empirical false-alarm rate under <code>H0</code> is 5.0% at nominal 5%
+(n=100, minw=20, 200 replications); and it does reject on a sufficiently
+strong deterministic explosive path, though its kernel-volatility
+weighting trades away enough power on <code>sim_data</code>’s milder
+bubbles that none of the five reject at nboot=100-200 – the same
+power/robustness trade-off already documented for
+<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>’s <code>supBZ</code> leg below, not a new
+finding specific to the split.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; psy1 :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat   tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.22</span>  0.544 0.801  1.22</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.280 1.45  1.63   2.04</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.05  2.03  2.76   3.27</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.07</span> 0.481 0.583 0.745</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.53 1.76  2.72  3.49 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.56 2.35  3.43  4.43 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; evans :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.95</span> 0.599 0.846  1.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  -<span style="color: #BB0000;">1.00</span> 4.35  6.07   8.57</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.70 4.54  6.22   8.57</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; div :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.660  1.10  1.48  1.97</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.26   2.25  2.59  2.98</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.26   2.60  2.82  3.53</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; blan :</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">4.14</span> 0.745 0.939  1.59</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.40 2.65  3.63   5.65</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.38 3.82  4.72   6.89</span></span>
+<span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
+<span><span class="co">#&gt;   id       adf   sadf gsadf</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">1.22</span>   0.280  1.05</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> psy2  -<span style="color: #BB0000;">1.07</span>   1.53   1.56</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> evans -<span style="color: #BB0000;">2.95</span>  -<span style="color: #BB0000;">1.00</span>   1.70</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> div    0.660  2.26   2.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> blan  -<span style="color: #BB0000;">4.14</span>   1.40   2.38</span></span></code></pre></div>
+<p><code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> need at least one
+rejection to have anything to show (they error otherwise, same as for
+any other <code>radf_obj</code>/<code>radf_cv</code> pair) – none of
+<code>sim_data</code>’s five series clear <code>supBZ</code>’s bar
+above, so here’s a series built to:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">120</span>; <span class="va">te</span> <span class="op">&lt;-</span> <span class="fl">70</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">y</span><span class="op">[</span><span class="op">(</span><span class="va">te</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">te</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.15</span> <span class="op">^</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="va">te</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res2</span>, cv <span class="op">=</span> <span class="va">cv2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; series1 :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    27   28  29        2 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2    64  120 120       57 positive    TRUE</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res2</span>, cv <span class="op">=</span> <span class="va">cv2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="naming-and-analysis_files/figure-html/sbz-full-reject-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="no-support-everything-else">No support: everything else<a class="anchor" aria-label="anchor" href="#no-support-everything-else"></a>
 </h3>
-<p>The remaining ~14 functions (<code><a href="../reference/lbi_test.html">lbi_test()</a></code>,
+<p>The remaining ~15 functions (<code><a href="../reference/lbi_test.html">lbi_test()</a></code>,
 <code><a href="../reference/ssu_test.html">ssu_test()</a></code>, <code><a href="../reference/quantile_test.html">quantile_test()</a></code>,
 <code><a href="../reference/cobubble_test.html">cobubble_test()</a></code>, the <code>dating_*()</code> family, the
 <code><a href="../reference/monitor.html">monitor()</a></code>/<code>monitor_*()</code> family (including
 <code><a href="../reference/monitor.html">monitor()</a></code> itself, ADF-family internals notwithstanding –
 see above), <code><a href="../reference/contagion_reg.html">contagion_reg()</a></code>, <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>,
-<code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>) each return their own class with their own
-<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method, because their output genuinely doesn’t fit
-the <code>radf_obj</code> shape – a dating table isn’t a per-series
-sup-statistic, a monitoring alarm isn’t a critical value grid. Trying to
-force them through
+<code><a href="../reference/rootstamp.html">rootstamp()</a></code>, <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>) each return
+their own class with their own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method, because
+their output genuinely doesn’t fit the <code>radf_obj</code> shape – a
+dating table isn’t a per-series sup-statistic, a monitoring alarm isn’t
+a critical value grid. Trying to force them through
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/
 <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> isn’t a documentation gap to close; the right
 call is their own presentation, shown directly:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p><code><a href="../reference/rootstamp.html">rootstamp()</a></code> is the one exception worth flagging: it’s
+grouped under <strong>Analysis</strong> in the <a href="../reference/index.html">reference index</a> and the README’s
+workflow list, right after <code><a href="../reference/datestamp.html">datestamp()</a></code>, since that’s
+genuinely where it belongs in the <em>sequence of steps</em> (detect →
+date → measure growth rate) – but that’s a workflow position, not an
+S3-support tier. It’s still its own class with its own
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method, same as everything else in this section;
+see <code><a href="../articles/root-inference.html">vignette("root-inference")</a></code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_hls.html">dating_hls</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── dating_hls (n = 100, trim = 0.05) ───────────────────────────────────────────</span></span>

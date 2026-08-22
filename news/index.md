@@ -10,8 +10,20 @@ what was checked and how.
 
 #### Volatility-robust tests
 
-- [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
-  — Herwartz & Siedenburg’s WLS/kernel-volatility SBZ test.
+- [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)/[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)/[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+  — Herwartz & Siedenburg’s WLS/kernel-volatility SBZ test, split
+  2026-08-22 into a statistic
+  ([`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)),
+  its bootstrap critical values
+  ([`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
+  full
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  support), and the union-of-rejections test against classic `supDF`
+  ([`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+  renamed from the original bundled
+  [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
+  — see
+  [`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md).
 - [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
   — kernel-purge heteroskedasticity test.
 - `radf_wb_cv(..., dist_skew = TRUE)` — Hafner (2020) skewness-corrected
@@ -103,6 +115,27 @@ what was checked and how.
   (`adf`, `test`, `dating`, `monitor`, `root`, `regression`), so “what
   monitoring functions exist” is an actual function call, not a naming
   convention to memorize.
+- [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+  renamed to
+  [`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)/
+  [`radf_wb_ps_distr()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
+  – the `2` suffix named nothing (just “the second wild bootstrap
+  added”); `_ps` identifies it as Phillips & Shi (2020)’s wild bootstrap
+  (fits a null AR model, resamples residuals, supports a `tb`
+  training-window boundary), as opposed to
+  [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)’s
+  Harvey et al. (2016) non-parametric multiplier bootstrap, matching
+  this file’s own internal naming (`radf_wb_dgp_ps`/`radf_wb_ps` vs.
+  `radf_wb_dgp_hlst`/`radf_wb_hlst`) and the package-wide
+  `radf_<method>_<qualifier>_cv` pattern
+  ([`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)).
+  Unlike the renames above,
+  [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+  shipped in the 1.0.0 release (the JSS paper), so this one keeps
+  [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+  as deprecated aliases
+  ([`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html),
+  warn-and-forward, see `?exuber-deprecated`) rather than a clean break.
 - [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md),
   [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
   and

@@ -1,17 +1,16 @@
-# SBZ Weighted Least Squares Bubble Test with Union-of-Rejections
+# Wild Bootstrap Critical Values for the SBZ Statistic
 
 `radf_sbz_cv` performs the HLST (2016) wild bootstrap – the same
 algorithm as
-[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
-– *jointly* on the classic sup-ADF statistic (`supDF`, i.e.
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-`sadf`) and the WLS/kernel-volatility statistic `supBZ` of Harvey,
-Leybourne & Zu (2019), and combines them into the paper's
-union-of-rejections statistic `U`. supBZ can have substantially higher
-power than supDF under many time-varying-volatility patterns, at the
-cost of lower power under others (e.g. upward volatility trends); `U` is
-designed to capture whichever of the two is more powerful for a given
-series.
+[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+applied to
+[`radf_sbz`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)'s
+WLS/kernel-volatility statistic instead of the classic `supDF` one – to
+generate critical values, including the time-varying
+`badf_cv`/`bsadf_cv` boundary
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/
+`autoplot` need, not just the three scalar critical values
+[`summary()`](https://rdrr.io/r/base/summary.html) uses.
 
 ## Usage
 
@@ -51,8 +50,8 @@ radf_sbz_cv(
 
 - kernel:
 
-  Kernel for the spot-volatility estimator (eq. 6), `"gaussian"`
-  (default, as in the paper) or `"uniform"`.
+  Kernel for the spot-volatility estimator (eq. 6 of Harvey, Leybourne &
+  Zu 2019), `"gaussian"` (default, as in the paper) or `"uniform"`.
 
 - h:
 
@@ -71,23 +70,10 @@ radf_sbz_cv(
 
 ## Value
 
-A list with bootstrap p-values (`p_supDF`, `p_supBZ`, `p_U`) and
-critical values (`supDF_cv`, `supBZ_cv`, `U_cv`) for each series.
-
-## Note
-
-This function bundles the statistic and its critical values in a single
-call – there is no separate un-cv'd statistic function and no other
-critical-value function to pair it with, unlike
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/
-[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md).
-
-Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/critical-value summary (bundles the test
-statistic and its critical value in one object) – see
-[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the full picture of which functions do and don't fit that pipeline.
+An object of class `radf_cv`/`sbz_cv`/`wb_cv`: a list with critical
+values `adf_cv`, `sadf_cv`, `gsadf_cv` (one row per series) and
+`badf_cv`, `bsadf_cv` (one array per series, one row per recursion
+point).
 
 ## Status
 
@@ -101,26 +87,10 @@ bubbles with time-varying volatility. Econometric Reviews, 38(10),
 
 ## See also
 
+[`radf_sbz`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
+for the statistic this pairs with, and
+[`radf_sbz_union`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+for the bundled union-of-rejections test against the classic `supDF`
+statistic (not obtainable from this function and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
-for the underlying (supDF-only) wild bootstrap, and
-[`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
-for a bootstrap-free heteroskedasticity-robust alternative.
-
-## Examples
-
-``` r
-# \donttest{
-res <- radf_sbz_cv(sim_data, nboot = 200)
-print(res)
-#> 
-#> ── radf_sbz (minw = 19, nboot = 200) ───────────────────────────────────────────
-#> 
-#>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U
-#>     psy1  1.946  0.2802  1.946    0.050    0.625  0.070
-#>     psy2  7.880  1.5349  7.880    0.000    0.195  0.010
-#>    evans  5.283  1.9138  5.283    0.075    0.285  0.100
-#>      div  1.113  2.2607  1.113    0.045    0.080  0.075
-#>     blan  3.930  1.4008  3.930    0.075    0.230  0.095
-#> 
-# }
-```
+independently – see that function's Details for why).

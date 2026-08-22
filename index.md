@@ -65,6 +65,11 @@ process into small simple steps:
 - [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
   computes the origination, termination and duration of episodes (if
   any).
+- [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+  estimates how fast a detected episode is growing (the explosive root
+  and its doubling time), run over every
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+  episode at once.
 
 These combined provide a comprehensive analysis on the exuberant
 behavior of the model.
