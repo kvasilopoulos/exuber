@@ -55,6 +55,22 @@ sb_cv <- function(data, minw = NULL, nboot = 1000L, seed = NULL) {
   radf_sb_cv(data, minw = minw, nboot = nboot, seed = seed)
 }
 
+#' @rdname exuber-deprecated
+#' @export
+radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
+                        type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
+  .Deprecated(new = "radf_wb_ps_cv()", package = "exuber")
+  radf_wb_ps_cv(data, minw = minw, nboot = nboot, adflag = adflag, type = type, tb = tb, seed = seed)
+}
+
+#' @rdname exuber-deprecated
+#' @export
+radf_wb_distr2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
+                           type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
+  .Deprecated(new = "radf_wb_ps_distr()", package = "exuber")
+  radf_wb_ps_distr(data, minw = minw, nboot = nboot, adflag = adflag, type = type, tb = tb, seed = seed)
+}
+
 
 # Defunct -----------------------------------------------------------------
 

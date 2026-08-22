@@ -108,7 +108,7 @@ lag_select_table <- function(data, max_lag) {
 # tb = NULL
 # type = "fixed"
 # seed = NULL
-# radf_wb_cv2(sim_data, minw, nboot, lag, tb = NULL)
+# radf_wb_ps_cv(sim_data, minw, nboot, lag, tb = NULL)
 
 radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) {
 
@@ -177,12 +177,16 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
     )
 }
 
-#' Wild Bootstrap Critical Values
+#' Wild Bootstrap Critical Values (Phillips & Shi 2020)
 #'
-#' \code{radf_wb_cv} performs the Phillips & Shi (2020) wild bootstrap re-sampling
-#' scheme, which is asymptotically robust to non-stationary volatility, to
-#' generate critical values for the recursive unit root tests. \code{radf_wb_distr2}
-#' computes the distribution.
+#' \code{radf_wb_ps_cv} performs the Phillips & Shi (2020) wild bootstrap
+#' re-sampling scheme -- fit a null AR model, resample its residuals --
+#' which is asymptotically robust to non-stationary volatility, to
+#' generate critical values for the recursive unit root tests.
+#' \code{radf_wb_ps_distr} computes the distribution. Unlike
+#' \code{\link{radf_wb_cv}}'s Harvey et al. (2016) non-parametric multiplier
+#' bootstrap, this one supports a training-window boundary (\code{tb}),
+#' which is what \code{\link{monitor}} uses it for.
 #'
 #' @inheritParams radf
 #' @inheritParams radf_mc_cv
@@ -194,8 +198,8 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' @param tb A positive integer. The simulated sample size.
 #'
 #'
-#' @return  For \code{radf_wb_cv2} a list that contains the critical values for the ADF,
-#' BADF, BSADF and GSADF tests. For \code{radf_wb_distr} a list that
+#' @return  For \code{radf_wb_ps_cv} a list that contains the critical values for the ADF,
+#' BADF, BSADF and GSADF tests. For \code{radf_wb_ps_distr} a list that
 #' contains the ADF, SADF and GSADF distributions.
 #'
 #' @references Phillips, P. C., & Shi, S. (2020). Real time monitoring of
@@ -205,7 +209,8 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
 #'
-#' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
+#' @seealso \code{\link{radf_wb_cv}} for the Harvey et al. (2016) wild
+#' bootstrap, \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
 #'
 #' @importFrom foreach foreach
@@ -217,21 +222,21 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' @examples
 #' \donttest{
 #' # Default minimum window
-#' wb <- radf_wb_cv2(sim_data)
+#' wb <- radf_wb_ps_cv(sim_data)
 #'
 #' tidy(wb)
 #'
 #' # Change the minimum window and the number of bootstraps
-#' wb2 <- radf_wb_cv2(sim_data, nboot = 600, minw = 20)
+#' wb2 <- radf_wb_ps_cv(sim_data, nboot = 600, minw = 20)
 #'
 #'tidy(wb2)
 #'
 #' # Simulate distribution
-#' wdist <- radf_wb_distr(sim_data)
+#' wdist <- radf_wb_ps_distr(sim_data)
 #'
 #' autoplot(wdist)
 #' }
-radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
+radf_wb_ps_cv <- function(data, minw = NULL, nboot = 500L, adflag = 0,
                         type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
 
   type <- match.arg(type)
@@ -278,10 +283,10 @@ radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
 }
 
 
-#' @rdname radf_wb_cv2
+#' @rdname radf_wb_ps_cv
 #' @inheritParams radf_wb_cv
 #' @export
-radf_wb_distr2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
+radf_wb_ps_distr <- function(data, minw = NULL, nboot = 500L, adflag = 0,
                            type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
 
   results <- radf_wb_ps(data, minw = minw, nboot = nboot,

@@ -42,7 +42,7 @@ critical value. Ignored unless \code{boundary = "bootstrap"}.}
 (default \code{0.95}). When \code{boundary} is \code{"kurozumi"} or
 \code{"fluc"}, must be one of \code{0.90}, \code{0.95}, \code{0.99}.}
 
-\item{adflag, type}{Passed to \code{\link{radf_wb_cv2}} (lag length /
+\item{adflag, type}{Passed to \code{\link{radf_wb_ps_cv}} (lag length /
 selection for the wild bootstrap DGP). Ignored unless
 \code{boundary = "bootstrap"}.}
 
@@ -81,10 +81,10 @@ flagging the first date it is breached.
 \details{
 \code{boundary = "bootstrap"} (default) implements Phillips & Shi
 (2020): the boundary is a wild-bootstrap quantile of the GSADF-type
-statistic (\code{\link{radf_wb_cv2}}, its \code{tb} parameter),
+statistic (\code{\link{radf_wb_ps_cv}}, its \code{tb} parameter),
 compared against \code{radf()}'s \code{bsadf} sequence. Deliberately
 calibrates on the training window \emph{only} (\code{data[1:T*]}), not
-the full series: \code{\link{radf_wb_cv2}}'s underlying null-model fit
+the full series: \code{\link{radf_wb_ps_cv}}'s underlying null-model fit
 (\code{adf_res()}) uses whatever data it is given in full, with no
 internal truncation to \code{tb} -- passing post-\code{T*} (possibly
 explosive) data to it directly would leak future information into the
@@ -146,7 +146,7 @@ bubbles in stock markets: A comparison of alternative methods.
 Journal of Financial Econometrics, 10(1), 198-231.
 }
 \seealso{
-\code{\link{radf_wb_cv2}} for the underlying wild bootstrap,
+\code{\link{radf_wb_ps_cv}} for the underlying wild bootstrap,
 and \code{\link{datestamp}} for the (non-monitoring, full-sample)
 origination/collapse dating that already exists.
 }

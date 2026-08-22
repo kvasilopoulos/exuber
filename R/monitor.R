@@ -6,7 +6,7 @@
 # value on it, then walk the sample forward comparing the running
 # recursive statistic against that fixed boundary.
 #
-# This is an orchestration layer, not a new statistic: radf_wb_cv2()
+# This is an orchestration layer, not a new statistic: radf_wb_ps_cv()
 # already implements the PS wild bootstrap and already has a `tb`
 # parameter for exactly this training-critical-value use (its own roxygen
 # docs cite PS 2020); radf()'s own BSADF sequence at time t depends only
@@ -228,10 +228,10 @@ hb_fluc_q <- function(level, n_train, k) {
 #'
 #' \code{boundary = "bootstrap"} (default) implements Phillips & Shi
 #' (2020): the boundary is a wild-bootstrap quantile of the GSADF-type
-#' statistic (\code{\link{radf_wb_cv2}}, its \code{tb} parameter),
+#' statistic (\code{\link{radf_wb_ps_cv}}, its \code{tb} parameter),
 #' compared against \code{radf()}'s \code{bsadf} sequence. Deliberately
 #' calibrates on the training window \emph{only} (\code{data[1:T*]}), not
-#' the full series: \code{\link{radf_wb_cv2}}'s underlying null-model fit
+#' the full series: \code{\link{radf_wb_ps_cv}}'s underlying null-model fit
 #' (\code{adf_res()}) uses whatever data it is given in full, with no
 #' internal truncation to \code{tb} -- passing post-\code{T*} (possibly
 #' explosive) data to it directly would leak future information into the
@@ -264,7 +264,7 @@ hb_fluc_q <- function(level, n_train, k) {
 #' @param level Nominal confidence level for the monitoring boundary
 #' (default \code{0.95}). When \code{boundary} is \code{"kurozumi"} or
 #' \code{"fluc"}, must be one of \code{0.90}, \code{0.95}, \code{0.99}.
-#' @param adflag,type Passed to \code{\link{radf_wb_cv2}} (lag length /
+#' @param adflag,type Passed to \code{\link{radf_wb_ps_cv}} (lag length /
 #' selection for the wild bootstrap DGP). Ignored unless
 #' \code{boundary = "bootstrap"}.
 #' @param seed Optional seed for the bootstrap draws. Ignored unless
@@ -300,7 +300,7 @@ hb_fluc_q <- function(level, n_train, k) {
 #' bubbles in stock markets: A comparison of alternative methods.
 #' Journal of Financial Econometrics, 10(1), 198-231.
 #'
-#' @seealso \code{\link{radf_wb_cv2}} for the underlying wild bootstrap,
+#' @seealso \code{\link{radf_wb_ps_cv}} for the underlying wild bootstrap,
 #' and \code{\link{datestamp}} for the (non-monitoring, full-sample)
 #' origination/collapse dating that already exists.
 #'
@@ -403,7 +403,7 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
     iter <- NA_integer_
   } else {
     lvl_lab <- paste0(level * 100, "%")
-    cv <- radf_wb_cv2(x[1:T_star, , drop = FALSE], minw = minw, nboot = nboot,
+    cv <- radf_wb_ps_cv(x[1:T_star, , drop = FALSE], minw = minw, nboot = nboot,
                        adflag = adflag, type = type, tb = T_star, seed = seed)
     boundary_vec <- setNames(cv$gsadf_cv[, lvl_lab], snames)
     stat_path <- full$bsadf

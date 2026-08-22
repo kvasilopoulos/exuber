@@ -6,6 +6,8 @@
 \alias{mc_cv}
 \alias{wb_cv}
 \alias{sb_cv}
+\alias{radf_wb_cv2}
+\alias{radf_wb_distr2}
 \title{Deprecated functions in package \pkg{exuber}.}
 \usage{
 col_names(x)
@@ -15,6 +17,26 @@ mc_cv(n, minw = NULL, nrep = 1000L, seed = NULL)
 wb_cv(data, minw = NULL, nboot = 1000L, seed = NULL)
 
 sb_cv(data, minw = NULL, nboot = 1000L, seed = NULL)
+
+radf_wb_cv2(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+)
+
+radf_wb_distr2(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+)
 }
 \description{
 The functions listed below are deprecated and will be defunct in
