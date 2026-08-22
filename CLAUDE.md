@@ -74,6 +74,47 @@ CI installs it explicitly as a separate step (see `.github/workflows/*.yaml`);
 These are the CRAN-facing gates; match them locally with `devtools::check()`
 before pushing rather than inventing new lint/CI config.
 
+## Release process (CRAN)
+
+1. Land NEWS.md entries under the `# exuber (development version)` heading
+   as features/fixes ship (already the ongoing convention, see the file).
+2. Bump version: `usethis::use_version()` (or hand-edit `DESCRIPTION`'s
+   `Version:`), and retitle NEWS.md's top heading to match, e.g.
+   `# exuber 1.2.0`.
+3. Refresh `cran-comments.md` — test environments and the R CMD check
+   NOTEs section — with the current run's actual output, not last
+   release's.
+4. Run the CRAN-facing gates before submitting — these are the same ones
+   listed above, not new checks invented for release day:
+   `devtools::check(cran = TRUE)` locally, `devtools::check_win_devel()`
+   (win-builder), and trigger `.github/workflows/rhub.yaml` manually for
+   R-hub CRAN-platform checks.
+5. Submit via `devtools::release()` (walks the standard checklist) or
+   upload directly at <https://cran.r-project.org/submit.html> with
+   `cran-comments.md` as the covering note.
+6. After acceptance: tag the release commit, cut a GitHub release, retitle
+   NEWS.md's top heading back to `# exuber (development version)` for the
+   next cycle.
+
+## Deprecation policy
+
+Depends on whether the old name ever shipped in a CRAN release — check
+that first, not habit:
+
+- **Never shipped on CRAN** (unreleased dev version, or renamed in the
+  same PR before merge): clean break, no shim. This is most renames — see
+  "Naming" below (2026-08-13/2026-08-18 entries).
+- **Already shipped on CRAN**: keep a thin `.Deprecated(new = "...")`
+  wrapper in `R/deprecate.R` (documented under `?exuber-deprecated`) that
+  calls through to the new name. Precedent: `col_names()`/`mc_cv()`/
+  `wb_cv()`/`sb_cv()`, and `radf_wb_cv2()`/`radf_wb_distr2()` (2026-08-22,
+  see "Naming" below — the first rename of a CRAN-released name in this
+  project's history).
+
+Either way, a rename or removal updates, in one commit: the function,
+`exuber_functions()`'s registry, `_pkgdown.yml`, `NEWS.md`, this file, and
+the naming-and-analysis vignette.
+
 ## Naming: not everything is `radf_*` anymore
 
 **2026-08-13**: 12 exported functions that were never actually
@@ -129,6 +170,24 @@ return shape (a `ds_radf` list, `Start`/`Peak`/`End`/`Duration`/`Signal`/
 `radf_` / `_test` / `dating_` naming call at all in the end — one option
 value on an existing generic, no new exported name to place in the table
 above.
+
+**2026-08-22**: `radf_wb_cv2()`/`radf_wb_distr2()` renamed to
+`radf_wb_ps_cv()`/`radf_wb_ps_distr()` — the `2` suffix was purely
+sequential (second wild bootstrap added to the file), not descriptive;
+`_ps` (Phillips & Shi 2020) matches this file's own internal DGP naming
+(`radf_wb_dgp_ps`/`radf_wb_ps` vs. `radf_wb_dgp_hlst`/`radf_wb_hlst`,
+already split into `# DGP_PS`/`# DGP_HLST` sections in `R/radf_wb.R`)
+and the package-wide `radf_<method>_<qualifier>_cv` pattern
+(`radf_sign_dm_cv()`). **First rename in this project's history to keep
+a deprecated alias instead of a clean break** — every prior rename
+above was justified by "never shipped in a CRAN release" (this
+unreleased dev version, or a same-PR rename before merge); `radf_wb_cv2()`
+shipped in 1.0.0 (the JSS-paper release), so real user code may already
+call it. Kept as a thin `.Deprecated()`-warning wrapper in
+`R/deprecate.R` (`?exuber-deprecated`), same mechanism already used for
+`col_names()`/`mc_cv()`/`wb_cv()`/`sb_cv()` — check whether a rename
+target already shipped on CRAN before reaching for the clean-break
+precedent above; only unreleased names get that treatment.
 
 ## Implementing items from docs/enhancements/
 
