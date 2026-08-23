@@ -89,6 +89,30 @@ asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42, pp. 61-80
 integrated systems: Revisiting the money-income relationship.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Training window controlling size over a 2-year span of monthly data</span></span></span>
+<span class="r-in"><span><span class="va">tb</span> <span class="op">&lt;-</span> <span class="fu">ps_tb</span><span class="op">(</span><span class="fl">100</span>, freq <span class="op">=</span> <span class="st">"monthly"</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tb</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 42</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Use it directly as monitor()'s training window</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="monitor.html">monitor</a></span><span class="op">(</span><span class="va">sim_data</span>, r_star <span class="op">=</span> <span class="va">tb</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor (T* = 42 / 100, minw = 19, level = 95%, boundary = kurozumi) ────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series  boundary  alarm  alarm_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1     1.038     50          50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan     1.038     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

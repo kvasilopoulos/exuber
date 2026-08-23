@@ -11,6 +11,9 @@ BIC.
 
 ``` r
 dating_hls(data, trim = 0.05)
+
+# S3 method for class 'dating_hls_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -32,6 +35,10 @@ dating_hls(data, trim = 0.05)
   Minimum fraction of the (differenced) sample required in every regime
   (default 0.05, following Harvey, Leybourne & Sollis's own
   empirical-application choice; their simulations use 0.1).
+
+- object:
+
+  An object of class `dating_hls_obj`, the output of `dating_hls`.
 
 ## Value
 
@@ -97,5 +104,13 @@ print(res)
 #>    series  model  origination  collapse  recovery
 #>   series1      4           41        55        62
 #> 
+
+# Plot the series with the selected model's breakpoint(s) overlaid
+autoplot(res)
+
+
+# A whole panel at once, faceted one subplot per series
+autoplot(dating_hls(sim_data, trim = 0.05))
+
 # }
 ```

@@ -91,7 +91,8 @@ Paper.
 ## Examples
 
 ``` r
-sim_common(n_series = 5, n = 100, seed = 123)
+x <- sim_common(n_series = 5, n = 100, seed = 123)
+x
 #>     series_1  series_2  series_3 series_4  series_5
 #> 1   30.47309 114.59266  47.69801 192.3043 120.37827
 #> 2   29.42740 110.20056  46.01287 185.3331 115.69045
@@ -193,4 +194,11 @@ sim_common(n_series = 5, n = 100, seed = 123)
 #> 98  48.49363 182.78768  76.13092 307.1078 191.80216
 #> 99  52.02949 194.56735  81.09303 327.0415 204.41187
 #> 100 51.19496 192.96756  80.35920 324.1082 202.63747
+
+# Plot every observed series (grey) against the shared latent factor (red)
+matplot(x, type = "l", col = "grey60", lty = 1, xlab = "t", ylab = "value",
+  main = "sim_common(): observed series driven by one latent bubble factor")
+lines(attr(x, "factor"), col = "red", lwd = 2)
+legend("topleft", legend = c("observed series", "latent factor"),
+  col = c("grey60", "red"), lty = 1, bty = "n")
 ```

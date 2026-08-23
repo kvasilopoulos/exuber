@@ -128,5 +128,18 @@ summary(res, cv = cv)
 #> 2 sadf   7.15 1.89  2.25   2.80
 #> 3 gsadf  7.15 2.38  2.68   3.34
 #> 
+
+# The result is an ordinary radf_obj, so autoplot()/datestamp() work directly
+autoplot(res, cv = cv)
+
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──
+#> 
+#> series1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    21   40  41       20 negative   FALSE
+#> 2    66   70  71        5 negative   FALSE
+#> 
 # }
 ```

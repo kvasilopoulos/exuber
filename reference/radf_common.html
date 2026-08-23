@@ -183,6 +183,19 @@ values.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   7.15 1.89  2.25   2.80</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  7.15 2.38  2.68   3.34</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The result is an ordinary radf_obj, so autoplot()/datestamp() work directly</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="radf_common-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> series1 :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    21   40  41       20 negative   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    66   70  71        5 negative   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -19,6 +19,9 @@ radf_recovery(
   sig_lvl = 95,
   seed = NULL
 )
+
+# S3 method for class 'radf_recovery_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -58,6 +61,10 @@ radf_recovery(
 - seed:
 
   Optional seed for the Monte Carlo draws.
+
+- object:
+
+  An object of class `radf_recovery_obj`, the output of `radf_recovery`.
 
 ## Value
 
@@ -129,12 +136,8 @@ complements.
 
 ``` r
 # \donttest{
-set.seed(2)
-n1 <- 40; n2 <- 25; n3 <- 35
-expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
-collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
-recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
-y <- c(expansion, collapse, recovery) # expansion -> collapse -> recovery
+# sim_ps1()'s own expansion -> bubble -> collapse -> recovery DGP
+y <- sim_ps1(n = 100, seed = 1)
 res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 #> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
 print(res)
@@ -144,7 +147,11 @@ print(res)
 #> ℹ Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
 #> 
 #>    series  f_c  f_r  detected  censored
-#>   series1   35   62      TRUE     FALSE
+#>   series1   57   67      TRUE     FALSE
 #> 
+
+# Plot the series with the estimated collapse (f_c) / recovery (f_r) points
+autoplot(res)
+
 # }
 ```

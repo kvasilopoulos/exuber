@@ -23,6 +23,9 @@ dating_hlw(
   nboot = 199L,
   seed = NULL
 )
+
+# S3 method for class 'dating_hlw_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -73,6 +76,10 @@ dating_hlw(
   Passed to
   [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
   when `cv` is not supplied.
+
+- object:
+
+  An object of class `dating_hlw_obj`, the output of `dating_hlw`.
 
 ## Value
 
@@ -134,5 +141,14 @@ print(res)
 #>  model origination collapse recovery
 #>      4          41       55       71
 #> 
+
+# Plot every detected episode's breakpoints over the series
+autoplot(res)
+
+
+# A two-bubble series: dating_hls() alone would only fit one bubble
+res2 <- dating_hlw(sim_psy2(n = 200, seed = 123), trim = 0.1, nboot = 199L, seed = 1)
+autoplot(res2)
+
 # }
 ```

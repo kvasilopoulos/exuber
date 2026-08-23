@@ -19,6 +19,9 @@ dating_pdc(
   kernel = c("gaussian", "uniform"),
   h = NULL
 )
+
+# S3 method for class 'dating_pdc_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -61,6 +64,10 @@ dating_pdc(
 
   Bandwidth for the spot-volatility estimator when `type = "wls"`.
   Default: leave-one-out cross-validation. Ignored when `type = "ols"`.
+
+- object:
+
+  An object of class `dating_pdc_obj`, the output of `dating_pdc`.
 
 ## Value
 
@@ -131,5 +138,16 @@ res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
 print(res)
 #>         origination collapse
 #> series1          40       54
+autoplot(res)
+
+
+# 4-regime extension, adding a post-collapse recovery breakpoint
+res4 <- dating_pdc(sim_data$psy1, regimes = 4L, trim = 0.05)
+autoplot(res4)
+
+
+# Volatility-weighted (WLS) variant, robust to time-varying volatility
+autoplot(dating_pdc(sim_data$psy1, type = "wls"))
+
 # }
 ```

@@ -84,7 +84,10 @@ no-intercept AR(1) model, in \(O(T)\) via cumulative sums.</p>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ols"</span>, <span class="st">"wls"</span><span class="op">)</span>,</span>
 <span>  kernel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gaussian"</span>, <span class="st">"uniform"</span><span class="op">)</span>,</span>
 <span>  h <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'dating_pdc_obj'</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -131,6 +134,10 @@ Ignored when <code>type = "ols"</code>.</p></dd>
 <dd><p>Bandwidth for the spot-volatility estimator when
 <code>type = "wls"</code>. Default: leave-one-out cross-validation. Ignored
 when <code>type = "ols"</code>.</p></dd>
+
+
+<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+<dd><p>An object of class <code>dating_pdc_obj</code>, the output of <code>dating_pdc</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -200,6 +207,17 @@ alternative.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         origination collapse</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> series1          40       54</span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="dating_pdc-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 4-regime extension, adding a post-collapse recovery breakpoint</span></span></span>
+<span class="r-in"><span><span class="va">res4</span> <span class="op">&lt;-</span> <span class="fu">dating_pdc</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, regimes <span class="op">=</span> <span class="fl">4L</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res4</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="dating_pdc-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Volatility-weighted (WLS) variant, robust to time-varying volatility</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="fu">dating_pdc</span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, type <span class="op">=</span> <span class="st">"wls"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="dating_pdc-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

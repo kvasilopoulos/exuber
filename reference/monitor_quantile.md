@@ -21,6 +21,9 @@ monitor_quantile(
   level = 95,
   seed = NULL
 )
+
+# S3 method for class 'monitor_quantile_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -61,6 +64,11 @@ monitor_quantile(
 - seed:
 
   Optional seed for the Monte Carlo draws.
+
+- object:
+
+  An object of class `monitor_quantile_obj`, the output of
+  `monitor_quantile`.
 
 ## Value
 
@@ -134,5 +142,15 @@ print(res)
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1  0.331     1.299     24          24
 #> 
+autoplot(res)
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
+
+# Upper-quantile monitoring is typically more powerful for right-tailed bubbles
+autoplot(monitor_quantile(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
 # }
 ```

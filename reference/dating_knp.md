@@ -14,6 +14,9 @@ minimising.
 
 ``` r
 dating_knp(data, trim = 0.05, omit = TRUE)
+
+# S3 method for class 'dating_knp_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -41,6 +44,10 @@ dating_knp(data, trim = 0.05, omit = TRUE)
   (default `TRUE`). `FALSE` gives the plain, provably inconsistent OLS
   estimator (their Theorem 1) – kept mainly to demonstrate the
   correction's effect, not for practical dating.
+
+- object:
+
+  An object of class `dating_knp_obj`, the output of `dating_knp`.
 
 ## Value
 
@@ -87,5 +94,14 @@ print(res)
 #>    series  origination  collapse  delta
 #>   series1           41        55  0.964
 #> 
+autoplot(res)
+
+
+# Compare the bias-corrected estimate against the plain (inconsistent) OLS
+# one, layering an extra reference line onto the internal autoplot() output
+res_plain <- dating_knp(sim_data$psy1, trim = 0.05, omit = FALSE)
+autoplot(res) +
+  ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)
+
 # }
 ```

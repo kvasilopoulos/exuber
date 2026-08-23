@@ -21,6 +21,9 @@ monitor_cusum(
   N = 20,
   kernel = c("gaussian", "uniform")
 )
+
+# S3 method for class 'monitor_cusum_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -81,6 +84,10 @@ monitor_cusum(
   Kernel for the spot-variance estimator when `type = "kernel"`,
   `"gaussian"` (default) or `"uniform"`. Ignored when
   `type = "standard"`.
+
+- object:
+
+  An object of class `monitor_cusum_obj`, the output of `monitor_cusum`.
 
 ## Value
 
@@ -147,23 +154,26 @@ for the recursive-ADF (Family A) monitoring alternative.
 
 ``` r
 # \donttest{
-make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-  y <- numeric(n)
-  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-  for (t in (T_star + 1):n) {
-    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-  }
-  y
-}
-set.seed(7)
-y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+# A martingale training window, explosive from t = 150 to the sample end
+y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 res <- monitor_cusum(y, r_star = 0.5)
 print(res) # alarm should fire soon after t = 150
 #> 
 #> ── monitor_cusum (T* = 100 / 200, b_alpha = 4.6) ───────────────────────────────
 #> 
 #>    series  alarm  alarm_date
-#>   series1    164         164
+#>   series1    160         160
 #> 
+autoplot(res)
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
+
+# Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023)
+res_kernel <- monitor_cusum(y, r_star = 0.5, type = "kernel")
+autoplot(res_kernel)
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
 # }
 ```

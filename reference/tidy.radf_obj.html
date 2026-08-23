@@ -107,24 +107,24 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      adf   sadf  gsadf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">2.78</span> -<span style="color: #BB0000;">0.713</span> -<span style="color: #BB0000;">0.187</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> psy2  -<span style="color: #BB0000;">2.58</span>  4.03   4.87 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">1.94</span> -<span style="color: #BB0000;">0.685</span> -<span style="color: #BB0000;">0.223</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> psy2  -<span style="color: #BB0000;">2.52</span>  4.65   5.36 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get the test statisticsequences</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 162 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      key index id     data  badf bsadf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>    20    20 psy1  109.  -<span style="color: #BB0000;">1.76</span> -<span style="color: #BB0000;">1.76</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>    20    20 psy2   72.8 -<span style="color: #BB0000;">1.10</span> -<span style="color: #BB0000;">1.10</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>    21    21 psy1  108.  -<span style="color: #BB0000;">1.71</span> -<span style="color: #BB0000;">1.62</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>    21    21 psy2   79.4 -<span style="color: #BB0000;">1.27</span> -<span style="color: #BB0000;">1.03</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>    22    22 psy1   96.5 -<span style="color: #BB0000;">2.27</span> -<span style="color: #BB0000;">2.15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>    22    22 psy2   78.4 -<span style="color: #BB0000;">1.30</span> -<span style="color: #BB0000;">1.06</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>    23    23 psy1  100.  -<span style="color: #BB0000;">2.34</span> -<span style="color: #BB0000;">2.22</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    23    23 psy2   84.8 -<span style="color: #BB0000;">1.37</span> -<span style="color: #BB0000;">1.11</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    24    24 psy1  111.  -<span style="color: #BB0000;">2.04</span> -<span style="color: #BB0000;">1.95</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    24    24 psy2   89.8 -<span style="color: #BB0000;">1.36</span> -<span style="color: #BB0000;">1.09</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      key index id     data   badf  bsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>    20    20 psy1  111.  -<span style="color: #BB0000;">1.62</span>  -<span style="color: #BB0000;">1.62</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>    20    20 psy2   83.0 -<span style="color: #BB0000;">0.993</span> -<span style="color: #BB0000;">0.993</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>    21    21 psy1   99.1 -<span style="color: #BB0000;">2.19</span>  -<span style="color: #BB0000;">2.15</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>    21    21 psy2   82.3 -<span style="color: #BB0000;">1.02</span>  -<span style="color: #BB0000;">1.02</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>    22    22 psy1  103.  -<span style="color: #BB0000;">2.26</span>  -<span style="color: #BB0000;">2.22</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>    22    22 psy2   88.9 -<span style="color: #BB0000;">1.13</span>  -<span style="color: #BB0000;">1.13</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>    23    23 psy1  114.  -<span style="color: #BB0000;">1.97</span>  -<span style="color: #BB0000;">1.95</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>    23    23 psy2   94.1 -<span style="color: #BB0000;">1.15</span>  -<span style="color: #BB0000;">1.15</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>    24    24 psy1  103.  -<span style="color: #BB0000;">2.53</span>  -<span style="color: #BB0000;">2.51</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>    24    24 psy2   88.7 -<span style="color: #BB0000;">1.21</span>  -<span style="color: #BB0000;">1.21</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 152 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Get the panel test statistic</span></span></span>
@@ -132,7 +132,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   gsadf_panel</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        2.02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        2.11</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

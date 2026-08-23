@@ -13,6 +13,9 @@ no published table.
 
 ``` r
 lbi_test(data, level = 0.95)
+
+# S3 method for class 'lbi_test_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -33,6 +36,10 @@ lbi_test(data, level = 0.95)
 
   Nominal confidence level for the (one-sided, right-tailed – positive
   bubbles only) test (default `0.95`).
+
+- object:
+
+  An object of class `lbi_test_obj`, the output of `lbi_test`.
 
 ## Value
 
@@ -78,16 +85,18 @@ the recursive ADF-family alternative this complements.
 
 ``` r
 # \donttest{
-set.seed(1)
-n <- 60
-y <- 100 * 1.03^(1:n) + cumsum(rnorm(n, sd = 1)) # genuine explosive AR
+y <- sim_psy1(n = 60, te = 1, tf = 60, seed = 1) # explosive from the start
 res <- lbi_test(y)
 print(res)
 #> 
 #> ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────
 #> 
 #>    series   stat   crit  detected
-#>   series1  6.885  1.645      TRUE
+#>   series1  4.892  1.645      TRUE
 #> 
+
+# Compare the statistic to its critical value
+autoplot(res)
+
 # }
 ```

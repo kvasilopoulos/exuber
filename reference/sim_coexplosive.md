@@ -76,7 +76,8 @@ Evripidou, C., Harvey, D.I., Leybourne, S.J. & Sollis, R. (2022).
 ## Examples
 
 ``` r
-sim_coexplosive(n = 100, lag = 5, seed = 123)
+x <- sim_coexplosive(n = 100, lag = 5, seed = 123)
+x
 #>             x         y
 #> 1   100.00000        NA
 #> 2    96.19437        NA
@@ -178,4 +179,10 @@ sim_coexplosive(n = 100, lag = 5, seed = 123)
 #> 98  159.57421 146.28045
 #> 99  169.98063 135.32650
 #> 100 168.38023 135.40933
+
+# x's explosive episode should visibly lead y's by 5 periods
+matplot(x, type = "l", lty = 1, col = c("steelblue", "tomato"),
+  xlab = "t", ylab = "value", main = "sim_coexplosive(): x leads y by 5 periods")
+legend("topleft", legend = c("x", "y"), col = c("steelblue", "tomato"),
+  lty = 1, bty = "n")
 ```

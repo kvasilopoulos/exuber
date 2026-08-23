@@ -136,5 +136,9 @@ summary(rsim_data, cv = wb)
 #> 2 sadf   3.93  3.10  4.62     6.92 
 #> 3 gsadf 11.0   6.40  7.98    13.8  
 #> 
+
+# summary() reports the same numbers autoplot() draws
+autoplot(rsim_data, cv = wb)
+
 # }
 ```

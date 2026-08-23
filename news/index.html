@@ -125,6 +125,11 @@
 <ul><li>
 <code><a href="../reference/rootstamp.html">rootstamp()</a></code> — confidence interval and doubling time on the explosive root, via S3 dispatch: the default method fits a single sub-sample, the <code>radf_obj</code> method runs every <code><a href="../reference/datestamp.html">datestamp()</a></code> episode at once (previously three separate functions – <code>explosive_root()</code>, <code>root_ci()</code>, <code>root_ci_datestamp()</code> – consolidated before release).</li>
 </ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<ul><li>
+<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>/<code><a href="../reference/autoplot2.html">autoplot2()</a></code>’s <code>sig_lvl</code> argument now actually controls whether a series counts as rejecting the null. Previously, <code><a href="../reference/diagnostics.html">diagnostics.radf_obj()</a></code> (used internally to decide which series get dated/plotted at all) hardcoded the 95% critical value for that decision regardless of <code>sig_lvl</code>, so e.g. <code>datestamp(x, cv, sig_lvl = 90)</code> could throw <code>"Cannot reject H0 at the 5% significance level"</code> for a series that clearly rejects at the 10% level the caller asked for – <code>sig_lvl</code> only ever reached the within-series episode threshold curve, never the series-eligibility gate. <code><a href="../reference/diagnostics.html">diagnostics()</a></code> gained a <code>sig_lvl</code> argument (default 95, so default-call behavior is unchanged) and <code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>/<code><a href="../reference/autoplot2.html">autoplot2()</a></code> now thread their own <code>sig_lvl</code> through to it.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.0" id="exuber-110">exuber 1.1.0<a class="anchor" aria-label="anchor" href="#exuber-110"></a></h2><p class="text-muted">CRAN release: 2025-08-31</p>

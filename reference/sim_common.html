@@ -151,7 +151,8 @@ Discussion Paper.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">sim_common</span><span class="op">(</span>n_series <span class="op">=</span> <span class="fl">5</span>, n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">sim_common</span><span class="op">(</span>n_series <span class="op">=</span> <span class="fl">5</span>, n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     series_1  series_2  series_3 series_4  series_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   30.47309 114.59266  47.69801 192.3043 120.37827</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   29.42740 110.20056  46.01287 185.3331 115.69045</span>
@@ -253,6 +254,14 @@ Discussion Paper.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 98  48.49363 182.78768  76.13092 307.1078 191.80216</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 99  52.02949 194.56735  81.09303 327.0415 204.41187</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 100 51.19496 192.96756  80.35920 324.1082 202.63747</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plot every observed series (grey) against the shared latent factor (red)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/matplot.html" class="external-link">matplot</a></span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"grey60"</span>, lty <span class="op">=</span> <span class="fl">1</span>, xlab <span class="op">=</span> <span class="st">"t"</span>, ylab <span class="op">=</span> <span class="st">"value"</span>,</span></span>
+<span class="r-in"><span>  main <span class="op">=</span> <span class="st">"sim_common(): observed series driven by one latent bubble factor"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"factor"</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topleft"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"observed series"</span>, <span class="st">"latent factor"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey60"</span>, <span class="st">"red"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">1</span>, bty <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="sim_common-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

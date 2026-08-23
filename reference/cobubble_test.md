@@ -19,6 +19,9 @@ cobubble_test(
   level = 0.05,
   seed = NULL
 )
+
+# S3 method for class 'cobubble_test'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -52,6 +55,10 @@ cobubble_test(
 - seed:
 
   Optional seed for the bootstrap draws.
+
+- object:
+
+  An object of class `cobubble_test`, the output of `cobubble_test`.
 
 ## Value
 
@@ -107,5 +114,19 @@ print(res)
 #> S = 1.533, cv(95%) = 0.2998, p-value = 0
 #> Co-explosivity rejected at the 5% level.
 #> 
+
+# Force a specific lead/lag instead of estimating it
+res_lag0 <- cobubble_test(sim_data$psy1, sim_data$psy2, lag = 0L, nboot = 199L, seed = 1)
+print(res_lag0)
+#> 
+#> ── cobubble_test (lag = 0, nboot = 199) ────────────────────────────────────────
+#> 
+#> S = 1.802, cv(95%) = 0.3759, p-value = 0
+#> Co-explosivity rejected at the 5% level.
+#> 
+
+# Plot the two series being tested for co-explosivity
+autoplot(res)
+
 # }
 ```

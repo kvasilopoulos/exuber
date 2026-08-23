@@ -10,7 +10,7 @@ in a dataset.
 diagnostics(object, cv = NULL, ...)
 
 # S3 method for class 'radf_obj'
-diagnostics(object, cv = NULL, option = c("gsadf", "sadf"), ...)
+diagnostics(object, cv = NULL, option = c("gsadf", "sadf"), sig_lvl = 95, ...)
 ```
 
 ## Arguments
@@ -31,6 +31,12 @@ diagnostics(object, cv = NULL, option = c("gsadf", "sadf"), ...)
 
   Whether to apply the "gsadf" or "sadf" methodology (default =
   "gsadf").
+
+- sig_lvl:
+
+  Significance level, one of 90, 95 or 99, that decides whether a series
+  counts as "positive" (rejects the null). Independent of `option`'s
+  choice of test statistic.
 
 ## Value
 
@@ -69,6 +75,19 @@ diagnostics(rsim_data, option = "sadf")
 #> psy2:     Rejects H0 at the 1% significance level
 #> evans:    Rejects H0 at the 1% significance level
 #> div:      Rejects H0 at the 10% significance level
+#> blan:     Rejects H0 at the 1% significance level
+#> 
+
+# Gate on the 90% critical value instead of the 95% default
+diagnostics(rsim_data, sig_lvl = 90)
+#> Using `radf_crit` for `cv`.
+#> 
+#> ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──
+#> 
+#> psy1:     Rejects H0 at the 1% significance level
+#> psy2:     Rejects H0 at the 1% significance level
+#> evans:    Rejects H0 at the 1% significance level
+#> div:      Cannot reject H0 
 #> blan:     Rejects H0 at the 1% significance level
 #> 
 ```

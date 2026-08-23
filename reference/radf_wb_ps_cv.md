@@ -162,5 +162,10 @@ wdist <- radf_wb_ps_distr(sim_data)
 
 autoplot(wdist)
 
+
+# Apply the critical values to actual data
+rsim_data <- radf(sim_data, minw = 20)
+autoplot(rsim_data, cv = wb2)
+
 # }
 ```

@@ -11,6 +11,9 @@ plain ADF regression's innovations.
 
 ``` r
 ssu_test(data, minw = NULL, level = 0.95)
+
+# S3 method for class 'ssu_test_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -36,6 +39,10 @@ ssu_test(data, minw = NULL, level = 0.95)
 
   Nominal confidence level, one of `0.90`, `0.95`, `0.99` (the levels
   Kurozumi & Nishi's Table I tabulates).
+
+- object:
+
+  An object of class `ssu_test_obj`, the output of `ssu_test`.
 
 ## Value
 
@@ -99,5 +106,9 @@ print(res)
 #>    series   sadf  detected
 #>   series1  4.251      TRUE
 #> 
+
+# Plot the recursive SSU statistic path against its critical value
+autoplot(res)
+
 # }
 ```

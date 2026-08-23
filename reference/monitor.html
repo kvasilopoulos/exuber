@@ -82,7 +82,10 @@ flagging the first date it is breached.</p>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bootstrap"</span>, <span class="st">"kurozumi"</span>, <span class="st">"fluc"</span><span class="op">)</span>,</span>
 <span>  s0 <span class="op">=</span> <span class="fl">0</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'monitor_obj'</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -148,6 +151,10 @@ training length, only used when <code>boundary = "kurozumi"</code>.
 case (window start ranges over <code>[1, floor(T* * s0)]</code>), the only
 two values his boundary function's scaling constants are tabulated
 for.</p></dd>
+
+
+<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+<dd><p>An object of class <code>monitor_obj</code>, the output of <code>monitor</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -233,26 +240,53 @@ origination/collapse dating that already exists.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = bootstrap) ───────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   series  boundary  alarm  alarm_date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1     1.641     51          51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2     1.774     65          65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    evans     2.006     67          67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      div     1.658     NA        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     blan     1.958     85          85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1     1.869     51          51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2     2.625     66          66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    evans     2.121     67          67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      div     1.457     NA        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     blan     2.103     85          85</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">mon</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-plt img"><img src="monitor-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Kurozumi (2020) closed-form boundary -- no bootstrap needed</span></span></span>
 <span class="r-in"><span><span class="va">mon_kz</span> <span class="op">&lt;-</span> <span class="fu">monitor</span><span class="op">(</span><span class="va">sim_data</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mon_kz</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = kurozumi) ────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   series  boundary  alarm  alarm_date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1     1.038     51          51</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2     1.038     NA        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    evans     1.038     NA        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      div     1.038     NA        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     blan     1.038     NA        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">mon_kz</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-plt img"><img src="monitor-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Homm &amp; Breitung (2012) FLUC boundary</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="fu">monitor</span><span class="op">(</span><span class="va">sim_data</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"fluc"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_segment()`).</span>
+<span class="r-plt img"><img src="monitor-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

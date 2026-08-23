@@ -19,6 +19,9 @@ quantile_test(
   level = 95,
   seed = NULL
 )
+
+# S3 method for class 'quantile_test_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -57,6 +60,10 @@ quantile_test(
 - seed:
 
   Optional seed for the Monte Carlo draws.
+
+- object:
+
+  An object of class `quantile_test_obj`, the output of `quantile_test`.
 
 ## Value
 
@@ -116,5 +123,11 @@ print(res)
 #>    series   tau  tstat    crit  delta  detected
 #>   series1  0.35  5.364  0.7143  0.361      TRUE
 #> 
+autoplot(res)
+
+
+# Test at a fixed upper quantile instead of the optimal one
+autoplot(quantile_test(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
+
 # }
 ```

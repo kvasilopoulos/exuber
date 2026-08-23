@@ -179,6 +179,25 @@ what was checked and how.
   `explosive_root()`, `root_ci()`, `root_ci_datestamp()` – consolidated
   before release).
 
+#### Bug fixes
+
+- [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)/[`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)’s
+  `sig_lvl` argument now actually controls whether a series counts as
+  rejecting the null. Previously,
+  [`diagnostics.radf_obj()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)
+  (used internally to decide which series get dated/plotted at all)
+  hardcoded the 95% critical value for that decision regardless of
+  `sig_lvl`, so e.g. `datestamp(x, cv, sig_lvl = 90)` could throw
+  `"Cannot reject H0 at the 5% significance level"` for a series that
+  clearly rejects at the 10% level the caller asked for – `sig_lvl` only
+  ever reached the within-series episode threshold curve, never the
+  series-eligibility gate.
+  [`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)
+  gained a `sig_lvl` argument (default 95, so default-call behavior is
+  unchanged) and
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)/[`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)
+  now thread their own `sig_lvl` through to it.
+
 ## exuber 1.1.0
 
 CRAN release: 2025-08-31

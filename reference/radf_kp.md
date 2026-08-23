@@ -167,5 +167,7 @@ summary(res, cv = cv)
 #> 2 sadf  -1.46   0.910  1.26  1.99 
 #> 3 gsadf  0.452  1.62   1.90  2.47 
 #> 
+autoplot(res, cv = cv)
+
 # }
 ```

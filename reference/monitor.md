@@ -21,6 +21,9 @@ monitor(
   boundary = c("bootstrap", "kurozumi", "fluc"),
   s0 = 0
 )
+
+# S3 method for class 'monitor_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -84,6 +87,10 @@ monitor(
   the `GSADF_{s0}` case (window start ranges over
   `[1, floor(T* * s0)]`), the only two values his boundary function's
   scaling constants are tabulated for.
+
+- object:
+
+  An object of class `monitor_obj`, the output of `monitor`.
 
 ## Value
 
@@ -173,25 +180,52 @@ print(mon)
 #> ── monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = bootstrap) ───────
 #> 
 #>   series  boundary  alarm  alarm_date
-#>     psy1     1.641     51          51
-#>     psy2     1.774     65          65
-#>    evans     2.006     67          67
-#>      div     1.658     NA        <NA>
-#>     blan     1.958     85          85
+#>     psy1     1.869     51          51
+#>     psy2     2.625     66          66
+#>    evans     2.121     67          67
+#>      div     1.457     NA        <NA>
+#>     blan     2.103     85          85
 #> 
+autoplot(mon)
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
 
 # Kurozumi (2020) closed-form boundary -- no bootstrap needed
 mon_kz <- monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
-print(mon_kz)
-#> 
-#> ── monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = kurozumi) ────────
-#> 
-#>   series  boundary  alarm  alarm_date
-#>     psy1     1.038     51          51
-#>     psy2     1.038     NA        <NA>
-#>    evans     1.038     NA        <NA>
-#>      div     1.038     NA        <NA>
-#>     blan     1.038     NA        <NA>
-#> 
+autoplot(mon_kz)
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
+
+# Homm & Breitung (2012) FLUC boundary
+autoplot(monitor(sim_data, r_star = 0.5, boundary = "fluc"))
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
 # }
 ```

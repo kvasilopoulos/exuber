@@ -84,7 +84,10 @@ original time index.</p>
 <span>  nrep <span class="op">=</span> <span class="fl">1000L</span>,</span>
 <span>  sig_lvl <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'radf_recovery_obj'</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -123,6 +126,10 @@ not supported. When any series is padded this way, the panel statistic
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
 <dd><p>Optional seed for the Monte Carlo draws.</p></dd>
+
+
+<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
+<dd><p>An object of class <code>radf_recovery_obj</code>, the output of <code>radf_recovery</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -196,12 +203,8 @@ origination/collapse dating this complements.</p></div>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">40</span>; <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">25</span>; <span class="va">n3</span> <span class="op">&lt;-</span> <span class="fl">35</span></span></span>
-<span class="r-in"><span><span class="va">expansion</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">1.03</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">collapse</span> <span class="op">&lt;-</span> <span class="va">expansion</span><span class="op">[</span><span class="va">n1</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.5</span><span class="op">^</span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n2</span><span class="op">)</span> <span class="op">/</span> <span class="va">n2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">recovery</span> <span class="op">&lt;-</span> <span class="va">collapse</span><span class="op">[</span><span class="va">n2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n3</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n3</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.5</span></span></span>
-<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">expansion</span>, <span class="va">collapse</span>, <span class="va">recovery</span><span class="op">)</span> <span class="co"># expansion -&gt; collapse -&gt; recovery</span></span></span>
+<span class="r-in"><span><span class="co"># sim_ps1()'s own expansion -&gt; bubble -&gt; collapse -&gt; recovery DGP</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_ps1.html">sim_ps1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_recovery</span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">15</span>, nrep <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
@@ -211,8 +214,12 @@ origination/collapse dating this complements.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">ℹ</span> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    series  f_c  f_r  detected  censored</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   series1   35   62      TRUE     FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series1   57   67      TRUE     FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Plot the series with the estimated collapse (f_c) / recovery (f_r) points</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="radf_recovery-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -27,15 +27,20 @@ rootstamp(object, level = 0.95, type = c("normal", "cauchy"), ...)
 
 # S3 method for class 'radf_obj'
 rootstamp(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
+
+# S3 method for class 'rootstamp_est'
+autoplot(object, ...)
+
+# S3 method for class 'rootstamp_episodes'
+autoplot(object, ...)
 ```
 
 ## Arguments
 
 - object:
 
-  For the default method, a numeric vector (the sub-sample to fit –
-  already sliced to the episode of interest). For the `radf_obj` method,
-  the `radf_obj` that `ds` was computed on.
+  An object of class `rootstamp_est` (default method) or
+  `rootstamp_episodes` (`radf_obj` method) to plot.
 
 - ...:
 
@@ -127,46 +132,54 @@ deviations from a unit root. Journal of Econometrics, 136(1), 115-130.
 ## Examples
 
 ``` r
-set.seed(2026)
-burn <- cumsum(rnorm(60))
-bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
-y <- c(burn, bubble)
+# sim_psy1()'s own martingale -> explosive DGP, explosive through the sample end
+y <- sim_psy1(n = 100, te = 60, tf = 100, seed = 2026)
 
 r <- radf(y, minw = 20)
 cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
 ds <- datestamp(r, cv = cv, min_duration = 3)
 
 # default method: one episode, sliced by hand
-rootstamp(y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]) # true rho = 1.04
+ep <- y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]
+fit <- rootstamp(ep) # recovers the DGP's explosive AR coefficient
+fit
 #> 
-#> ── rootstamp (n = 17, level = 95%, type = normal) ──────────────────────────────
-#> 
-#>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
-#>   1.042  0.006318   6.639       1.03      1.054          16.87      13.1
-#>   dt_upper
-#>      23.79
-#> 
-rootstamp(y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]], type = "cauchy")
-#> 
-#> ── rootstamp (n = 17, level = 95%, type = cauchy) ──────────────────────────────
+#> ── rootstamp (n = 22, level = 95%, type = normal) ──────────────────────────────
 #> 
 #>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
-#>   1.042  0.006318   6.639     0.5007      1.583          16.87     1.509
+#>   1.059  0.005279   11.17      1.049      1.069           12.1     10.34
 #>   dt_upper
-#>     -1.002
+#>       14.6
 #> 
+rootstamp(ep, type = "cauchy")
+#> 
+#> ── rootstamp (n = 22, level = 95%, type = cauchy) ──────────────────────────────
+#> 
+#>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
+#>   1.059  0.005279   11.17     0.6216      1.496           12.1      1.72
+#>   dt_upper
+#>     -1.458
+#> 
+
+# Plot the episode with the fitted explosive-root path overlaid
+autoplot(fit)
+
 
 
 # radf_obj method: every datestamped episode at once
-rootstamp(r, ds)
+res_all <- rootstamp(r, ds)
+res_all
 #> 
 #> ── rootstamp (level = 95%, type = normal) ──────────────────────────────────────
 #> 
 #> series1 :
 #>   Start End   rho rho_lower rho_upper doubling_time doubling_time_lower
-#> 1    83 100 1.042      1.03     1.054         16.87                13.1
+#> 1    78 100 1.059     1.049     1.069          12.1               10.34
 #>   doubling_time_upper
-#> 1               23.79
+#> 1                14.6
 #> 
 #> 
+
+# Plot the estimated rho (with its CI) for every episode
+autoplot(res_all)
 ```

@@ -92,7 +92,29 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">rfd</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">series_names</span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "psy1"  "psy2"  "evans" "div"   "blan" </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Rename the series -- propagates through tidy()/autoplot()'s facet labels</span></span></span>
+<span class="r-in"><span><span class="fu">series_names</span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bubble A"</span>, <span class="st">"Bubble B"</span>, <span class="st">"Bubble C"</span>, <span class="st">"Bubble D"</span>, <span class="st">"Bubble E"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">series_names</span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Bubble A" "Bubble B" "Bubble C" "Bubble D" "Bubble E"</span>
+<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id         adf  sadf gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Bubble A -<span style="color: #BB0000;">2.46</span>  1.95  5.19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Bubble B -<span style="color: #BB0000;">2.86</span>  7.88  7.88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> Bubble C -<span style="color: #BB0000;">5.83</span>  5.28  5.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> Bubble D -<span style="color: #BB0000;">1.95</span>  1.11  1.34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> Bubble E -<span style="color: #BB0000;">5.15</span>  3.93 11.0 </span>
+<span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-plt img"><img src="series_names-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Simulate bubble processes</span></span></span>
 <span class="r-in"><span><span class="va">dta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>psy1 <span class="op">=</span> <span class="fu"><a href="sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, psy2 <span class="op">=</span> <span class="fu"><a href="sim_psy2.html">sim_psy2</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

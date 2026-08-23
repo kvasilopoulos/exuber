@@ -13,6 +13,9 @@ breached.
 
 ``` r
 monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
+
+# S3 method for class 'monitor_lbi_obj'
+autoplot(object, ...)
 ```
 
 ## Arguments
@@ -48,6 +51,10 @@ monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
 
   Nominal confidence level, one of `0.90`, `0.95`, `0.975`, `0.99`,
   `0.995` (Breitung & Diegel's Table 1 only tabulates these).
+
+- object:
+
+  An object of class `monitor_lbi_obj`, the output of `monitor_lbi`.
 
 ## Value
 
@@ -102,23 +109,25 @@ for structurally different monitoring detectors.
 
 ``` r
 # \donttest{
-make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-  y <- numeric(n)
-  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-  for (t in (T_star + 1):n) {
-    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-  }
-  y
-}
-set.seed(7)
-y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+# A martingale training window, explosive from t = 150 to the sample end
+y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 res <- monitor_lbi(y, r_star = 100)
 print(res) # alarm should fire soon after t = 150
 #> 
 #> ── monitor_lbi (T* = 100 / 200, c_bar = 0, b_alpha = 1.95) ─────────────────────
 #> 
 #>    series  alarm  alarm_date
-#>   series1    159         159
+#>   series1    155         155
 #> 
+autoplot(res)
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
+
+# wCUSUM: exponentially up-weight later monitoring observations
+autoplot(monitor_lbi(y, r_star = 100, c_bar = 2))
+#> Warning: Removed 1 row containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
 # }
 ```
