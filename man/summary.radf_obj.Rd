@@ -34,5 +34,8 @@ summary(rsim_data)
 wb <- radf_wb_cv(sim_data)
 
 summary(rsim_data, cv = wb)
+
+# summary() reports the same numbers autoplot() draws
+autoplot(rsim_data, cv = wb)
 }
 }

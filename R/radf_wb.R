@@ -235,6 +235,10 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' wdist <- radf_wb_ps_distr(sim_data)
 #'
 #' autoplot(wdist)
+#'
+#' # Apply the critical values to actual data
+#' rsim_data <- radf(sim_data, minw = 20)
+#' autoplot(rsim_data, cv = wb2)
 #' }
 radf_wb_ps_cv <- function(data, minw = NULL, nboot = 500L, adflag = 0,
                         type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
@@ -458,6 +462,10 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 #' wdist <- radf_wb_distr(sim_data)
 #'
 #' autoplot(wdist)
+#'
+#' # Apply the critical values to actual data
+#' rsim_data <- radf(sim_data, minw = 20)
+#' autoplot(rsim_data, cv = wb2)
 #' }
 radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
                         dist_skew = FALSE, seed = NULL) {

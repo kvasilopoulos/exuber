@@ -185,10 +185,13 @@ tidy_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
 #'
 #' @export
 #' @examples
-#' \dontrun{
-#' mc <- mc_cv(n = 100)
+#' \donttest{
+#' mdist <- radf_mc_distr(n = 100, nrep = 1000)
 #'
-#' tidy(mc)
+#' tidy(mdist)
+#'
+#' # Plot the resulting statistic distributions
+#' autoplot(mdist)
 #' }
 tidy.radf_distr <- function(x, ...) {
   tidy_radf_distr(x, ...)
@@ -248,6 +251,21 @@ tidy_radf_distr.sb_distr <- function(x, ...) {
 #' @param ... Further arguments passed to methods, used only in `wb_distr` facet options.
 #'
 #' @return A [ggplot2::ggplot()]
+#'
+#' @examples
+#' \donttest{
+#' # Monte Carlo distribution
+#' mdist <- radf_mc_distr(n = 100, nrep = 1000)
+#' autoplot(mdist)
+#'
+#' # Wild bootstrap distribution (one facet per series)
+#' wdist <- radf_wb_distr(sim_data)
+#' autoplot(wdist)
+#'
+#' # Panel sieve bootstrap distribution
+#' sdist <- radf_sb_distr(sim_data, nboot = 500)
+#' autoplot(sdist)
+#' }
 #'
 #' @export
 autoplot.radf_distr <- function(object, ...) {
@@ -327,6 +345,18 @@ tidy_join <- function(x, y, ...) {
 #' @param  ... Further arguments passed to methods. Not used.
 #'
 #' @details `tidy_join` also calls `augment_join` when `cv` is of class `sb_cv`.
+#'
+#' @examples
+#' \donttest{
+#' rsim_data <- radf(sim_data, minw = 20)
+#' cv <- radf_wb_cv(sim_data, minw = 20)
+#'
+#' # One row per series/statistic, statistic and critical value side by side
+#' tidy_join(rsim_data, cv)
+#'
+#' # summary() and diagnostics() are themselves built on top of tidy_join()
+#' summary(rsim_data, cv = cv)
+#' }
 #'
 #' @importFrom dplyr full_join case_when select_at
 #' @export
@@ -608,6 +638,26 @@ augment_join <- function(x, y, ...) {
 }
 
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
+#'
+#' @examples
+#' \donttest{
+#' rsim_data <- radf(sim_data, minw = 20)
+#' cv <- radf_wb_cv(sim_data, minw = 20)
+#'
+#' # Full statistic-path/critical-value-path join -- the table autoplot() is built on
+#' aj <- augment_join(rsim_data, cv)
+#' aj
+#'
+#' # Reproduce (a simplified version of) autoplot()'s own bsadf-vs-crit line plot
+#' library(ggplot2)
+#' aj %>%
+#'   dplyr::filter(sig == 95, stat == "bsadf") %>%
+#'   tidyr::pivot_longer(c(tstat, crit), names_to = "series") %>%
+#'   ggplot(aes(index, value, col = series)) +
+#'   geom_line() +
+#'   facet_wrap(~id, scales = "free")
+#' }
+#'
 #' @export
 #' @rdname tidy_join.radf_obj
 #' @importFrom dplyr inner_join select case_when all_of

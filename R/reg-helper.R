@@ -65,6 +65,16 @@ psy_ds <- function(n, rule = 1, delta = 1) {
 #' @references Shi, S., Hurn, S., Phillips, P.C.B., 2018. Causal change detection in possibly
 #' integrated systems: Revisiting the money-income relationship.
 #'
+#' @examples
+#' # Training window controlling size over a 2-year span of monthly data
+#' tb <- ps_tb(100, freq = "monthly", size = 2)
+#' tb
+#'
+#' \donttest{
+#' # Use it directly as monitor()'s training window
+#' monitor(sim_data, r_star = tb, boundary = "kurozumi")
+#' }
+#'
 #' @export
 ps_tb <- function(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2) {
   if (!is_n(n)) n <- NROW(n)

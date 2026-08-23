@@ -55,7 +55,15 @@ other \code{sim_*} function, this returns a multi-column
 shape) rather than a single numeric vector.
 }
 \examples{
-sim_common(n_series = 5, n = 100, seed = 123)
+x <- sim_common(n_series = 5, n = 100, seed = 123)
+x
+
+# Plot every observed series (grey) against the shared latent factor (red)
+matplot(x, type = "l", col = "grey60", lty = 1, xlab = "t", ylab = "value",
+  main = "sim_common(): observed series driven by one latent bubble factor")
+lines(attr(x, "factor"), col = "red", lwd = 2)
+legend("topleft", legend = c("observed series", "latent factor"),
+  col = c("grey60", "red"), lty = 1, bty = "n")
 }
 \references{
 Chen, Y., Phillips, P.C.B. & Shi, S. (2023). "Common Bubble

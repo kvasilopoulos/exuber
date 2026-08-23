@@ -29,6 +29,9 @@
 #' wb <- radf_wb_cv(sim_data)
 #'
 #' summary(rsim_data, cv = wb)
+#'
+#' # summary() reports the same numbers autoplot() draws
+#' autoplot(rsim_data, cv = wb)
 #' }
 #' @export
 summary.radf_obj <- function(object, cv = NULL, ...) {
@@ -655,6 +658,21 @@ print.ds_radf <- function(x, ...) {
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_rows
 #' @importFrom rlang !!!
+#'
+#' @examples
+#' \donttest{
+#' rsim_data <- radf(sim_data)
+#' ds_data <- datestamp(rsim_data)
+#'
+#' # One row per detected explosive episode, across all series
+#' tidy(ds_data)
+#'
+#' # Feeds straight into ggplot2 if autoplot()'s default layout isn't wanted
+#' library(ggplot2)
+#' tidy(ds_data) %>%
+#'   ggplot(aes(y = id)) +
+#'   geom_segment(aes(x = Start, xend = End, yend = id), linewidth = 3)
+#' }
 #'
 #' @export
 tidy.ds_radf <- function(x, ...) {

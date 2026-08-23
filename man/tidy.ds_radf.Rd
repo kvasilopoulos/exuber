@@ -14,3 +14,19 @@
 \description{
 Summarizes information about \code{ds_radf} object.
 }
+\examples{
+\donttest{
+rsim_data <- radf(sim_data)
+ds_data <- datestamp(rsim_data)
+
+# One row per detected explosive episode, across all series
+tidy(ds_data)
+
+# Feeds straight into ggplot2 if autoplot()'s default layout isn't wanted
+library(ggplot2)
+tidy(ds_data) \%>\%
+  ggplot(aes(y = id)) +
+  geom_segment(aes(x = Start, xend = End, yend = id), linewidth = 3)
+}
+
+}
