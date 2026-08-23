@@ -114,7 +114,7 @@ autoplot.radf_obj <- function(
   pos_series <- if (nonrejected) {
     if (is_sb(cv)) "panel" else snames
   } else {
-    diagnostics_internal(object, cv)$positive # internal to make the check here
+    diagnostics_internal(object, cv, sig_lvl = sig_lvl)$positive # internal to make the check here
   }
 
   if (is.numeric(select_series)) {
@@ -142,7 +142,7 @@ autoplot.radf_obj <- function(
 
   gg <- gg + na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
 
-  all_negative <- all(series %in% diagnostics(object, cv)$negative)
+  all_negative <- all(series %in% diagnostics(object, cv, sig_lvl = sig_lvl)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
     ds_data <- tidy(datestamp(object, cv, sig_lvl = sig_lvl, option = option, nonrejected = nonrejected)) %>%
@@ -199,7 +199,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
   pos_series <- if (nonrejected) {
     if (is_sb(cv)) "panel" else snames
   } else {
-    diagnostics_internal(object, cv)$positive # internal to make the check here
+    diagnostics_internal(object, cv, sig_lvl = sig_lvl)$positive # internal to make the check here
   }
 
   if (is.numeric(select_series)) {
@@ -226,7 +226,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
 
   gg <- gg + na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
 
-  all_negative <- all(series %in% diagnostics(object, cv)$negative)
+  all_negative <- all(series %in% diagnostics(object, cv, sig_lvl = sig_lvl)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
     ds_data <- tidy(datestamp(object, cv, sig_lvl = sig_lvl, option = option, nonrejected = nonrejected)) %>%

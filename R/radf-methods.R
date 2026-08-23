@@ -112,6 +112,9 @@ diagnostics <- function(object, cv = NULL, ...) {
 #' @rdname diagnostics
 #' @importFrom dplyr case_when
 #' @param option Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").
+#' @param sig_lvl Significance level, one of 90, 95 or 99, that decides
+#' whether a series counts as "positive" (rejects the null). Independent of
+#' \code{option}'s choice of test statistic.
 #' @export
 #' @examples
 #'
@@ -119,13 +122,17 @@ diagnostics <- function(object, cv = NULL, ...) {
 #' diagnostics(rsim_data)
 #'
 #' diagnostics(rsim_data, option = "sadf")
+#'
+#' # Gate on the 90% critical value instead of the 95% default
+#' diagnostics(rsim_data, sig_lvl = 90)
 diagnostics.radf_obj <- function(object, cv = NULL,
-                                 option = c("gsadf", "sadf"), ...) {
+                                 option = c("gsadf", "sadf"), sig_lvl = 95, ...) {
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   assert_match(object, cv)
   option <- match.arg(option)
+  stopifnot(sig_lvl %in% c(90, 95, 99))
 
   if (option == "sadf" && is_sb(cv)) {
     stop_glue("argument 'option' cannot  be be set to 'sadf' when cv is of class 'sb_cv'")
@@ -137,10 +144,11 @@ diagnostics.radf_obj <- function(object, cv = NULL,
   out <- tidy_join(object, cv) %>%
     pivot_wider(names_from = sig, values_from = crit, names_prefix = "cv") %>%
     filter(stat == option)
+  cv_col <- out[[paste0("cv", sig_lvl)]]
   # in case of simulation exercises
   dummy <- case_when(
-    out$tstat < out$cv95 ~ 0,
-    out$tstat >= out$cv95 ~ 1
+    out$tstat < cv_col ~ 0,
+    out$tstat >= cv_col ~ 1
   )
   sig <- case_when(
     out$tstat < out$cv90 ~ "Reject",
@@ -167,6 +175,7 @@ diagnostics.radf_obj <- function(object, cv = NULL,
       series_names = if (!is_sb(cv)) snames,
       method = get_method(cv),
       option = option,
+      sig_lvl = sig_lvl,
     ) %>%
     add_class("dg_radf")
 }
@@ -187,7 +196,8 @@ tidy.dg_radf <- function(x, ...) {
 diagnostics_internal <- function(...) {
   dg <- diagnostics(...)
   if (all(dg$dummy == 0)) {
-    stop_glue("Cannot reject H0 at the 5% significance level")
+    test_lvl <- 100 - (attr(dg, "sig_lvl") %||% 95)
+    stop_glue("Cannot reject H0 at the {test_lvl}% significance level")
   }
   if (purrr::is_bare_character(dg$positive, n = 0)) {
     stop_glue("Cannot reject H0")
@@ -333,7 +343,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
   pos <- if (isTRUE(nonrejected)) {
     if (is_panel) "panel" else snames
   } else {
-    diagnostics_internal(object, cv)$positive # internal to make the check here
+    diagnostics_internal(object, cv, sig_lvl = sig_lvl)$positive # internal to make the check here
   }
 
   filter_option <- if (option == "gsadf") c("bsadf_panel", "bsadf") else c("bsadf_panel", "badf")
@@ -359,7 +369,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
   ds_full <- purrr::map(ds_stamp_index, add_ongoing, idx, cv)
 
   if (isTRUE(nonrejected)) {
-    dg <- diagnostics(object, cv)$negative
+    dg <- diagnostics(object, cv, sig_lvl = sig_lvl)$negative
     ds_full <- map2(ds_full, pos %in% dg, ~ mutate(.x, Nonrejected = .y))
   }
 
