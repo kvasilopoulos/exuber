@@ -62,6 +62,17 @@ print.crit <- function(x, ...) {
 #'   date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 #' )
 #' }
+#'
+#' @examples
+#' # Explore the five bundled series before running any test
+#' matplot(sim_data, type = "l", lty = 1, xlab = "t", ylab = "value",
+#'   main = "sim_data: the five bundled example series")
+#' legend("topleft", legend = colnames(sim_data), col = 1:5, lty = 1, bty = "n")
+#'
+#' \donttest{
+#' # The usual next step: run radf() and plot with the bundled critical values
+#' autoplot(radf(sim_data))
+#' }
 "sim_data"
 
 #' @rdname sim_data

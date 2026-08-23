@@ -10,6 +10,26 @@
 #' pseudo-index is generated which is a sequential numeric series. After the estimation,
 #' the user can use `index()` to retrieve or `index<-()` to replace the index.
 #' The index can be either numeric or Date.
+#'
+#' @examples
+#' \donttest{
+#' # A plain numeric vector gets a pseudo-index (1, 2, 3, ...)
+#' rsim <- radf(sim_data)
+#' head(index(rsim))
+#'
+#' # A data.frame with a Date column uses it as the index automatically
+#' rsim_wdate <- radf(sim_data_wdate)
+#' head(index(rsim_wdate))
+#' class(index(rsim_wdate))
+#'
+#' # autoplot() uses index() internally for the x-axis
+#' autoplot(rsim_wdate)
+#'
+#' # Replace the index, e.g. with a custom Date sequence
+#' index(rsim) <- seq(as.Date("2000-01-01"), by = "month", length.out = length(index(rsim)))
+#' head(index(rsim))
+#' autoplot(rsim)
+#' }
 #' @export
 #' @name index-rd
 index <- function(x, ...) {

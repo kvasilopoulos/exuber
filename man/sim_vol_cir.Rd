@@ -47,7 +47,8 @@ reflected at zero if a step would take it negative. Default parameters
 design, "representative of Bollerslev and Zhou (2002)".
 }
 \examples{
-sim_vol_cir(199, seed = 1)
+sim_vol_cir(199, seed = 1) \%>\%
+  autoplot()
 }
 \references{
 Harvey, D.I., Leybourne, S.J. & Zu, Y. (2019). "Testing

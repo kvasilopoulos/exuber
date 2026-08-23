@@ -39,7 +39,8 @@ truncated at \code{max(200, n)} lags with a matching burn-in (dropped
 before returning) to limit truncation bias in the early observations.
 }
 \examples{
-sim_fi(199, d = 0.2, seed = 1)
+sim_fi(199, d = 0.2, seed = 1) \%>\%
+  autoplot()
 }
 \references{
 Lui, Y.L., Phillips, P.C.B. & Yu, J. (2024). "Robust testing

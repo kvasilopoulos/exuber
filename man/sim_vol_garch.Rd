@@ -45,9 +45,11 @@ with \eqn{\epsilon_t \sim NIID(0,1)}{eps[t] ~ NIID(0,1)} and
 negative shocks).
 }
 \examples{
-sim_vol_garch(199, seed = 1)
+sim_vol_garch(199, seed = 1) \%>\%
+  autoplot()
 # NASDAQ-calibrated TGARCH (Monschang & Wilfling 2021)
-sim_vol_garch(199, omega = 0.4387, alpha = 0, beta = 0.9319, gamma = 0.1306, seed = 1)
+sim_vol_garch(199, omega = 0.4387, alpha = 0, beta = 0.9319, gamma = 0.1306, seed = 1) \%>\%
+  autoplot()
 }
 \references{
 Whitehouse, E.J., Harvey, D.I. & Leybourne, S.J. (2025).

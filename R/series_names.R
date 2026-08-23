@@ -4,6 +4,18 @@
 #'
 #' @param x An object.
 #' @param ... Further arguments passed to methods.
+#'
+#' @examples
+#' \donttest{
+#' rfd <- radf(sim_data)
+#' series_names(rfd)
+#'
+#' # Rename the series -- propagates through tidy()/autoplot()'s facet labels
+#' series_names(rfd) <- c("Bubble A", "Bubble B", "Bubble C", "Bubble D", "Bubble E")
+#' series_names(rfd)
+#' tidy(rfd)
+#' autoplot(rfd)
+#' }
 #' @export
 #'
 series_names <- function(x, ...) {

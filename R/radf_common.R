@@ -71,6 +71,10 @@
 #' # radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
 #' cv <- radf_common_cv(n = 100, N = ncol(sim_data), minw = 20)
 #' summary(res, cv = cv)
+#'
+#' # The result is an ordinary radf_obj, so autoplot()/datestamp() work directly
+#' autoplot(res, cv = cv)
+#' datestamp(res, cv = cv)
 #' }
 #'
 #' @export

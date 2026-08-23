@@ -15,19 +15,26 @@ calc_pvalue(x, distr = NULL)
 Calculate p-values from \code{distr} object
 }
 \examples{
-\dontrun{
+\donttest{
 radf_psy1 <- radf(sim_psy1(100))
 
-calc_pvalue(radf_psy1)
+# Default: p-values against a Monte Carlo null distribution
+pv <- calc_pvalue(radf_psy1)
+pv
 
-# Using the Wild-Bootstrapped
+# Using the Wild-Bootstrapped null instead
 wb_psy1 <- radf_wb_distr(sim_psy1(100))
 
 calc_pvalue(radf_psy1, wb_psy1)
 
-sb_psy1 <- radf_sb_distr(sim_data)
+sb_psy1 <- radf_sb_distr(sim_data, nboot = 500)
 
 calc_pvalue(radf(sim_data), sb_psy1)
+
+# Plot the three p-values for this series
+barplot(unlist(pv[, c("adf", "sadf", "gsadf")]), ylab = "p-value",
+  main = "calc_pvalue(): rejects at the usual 5\% level if the bar is short")
+abline(h = 0.05, col = "red", lty = 2)
 }
 }
 \keyword{internal}

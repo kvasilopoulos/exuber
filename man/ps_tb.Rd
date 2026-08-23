@@ -17,6 +17,17 @@ ps_tb(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2)
 This function helps to find the number of observations in the window
 over which size is to be controlled.
 }
+\examples{
+# Training window controlling size over a 2-year span of monthly data
+tb <- ps_tb(100, freq = "monthly", size = 2)
+tb
+
+\donttest{
+# Use it directly as monitor()'s training window
+monitor(sim_data, r_star = tb, boundary = "kurozumi")
+}
+
+}
 \references{
 Phillips, P. C., & Shi, S. (2020). Real time monitoring of
 asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42, pp. 61-80). Elsevier.
