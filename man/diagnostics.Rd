@@ -7,7 +7,7 @@
 \usage{
 diagnostics(object, cv = NULL, ...)
 
-\method{diagnostics}{radf_obj}(object, cv = NULL, option = c("gsadf", "sadf"), ...)
+\method{diagnostics}{radf_obj}(object, cv = NULL, option = c("gsadf", "sadf"), sig_lvl = 95, ...)
 }
 \arguments{
 \item{object}{An object of class \code{obj}.}
@@ -17,6 +17,10 @@ diagnostics(object, cv = NULL, ...)
 \item{...}{Further arguments passed to methods.}
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
+
+\item{sig_lvl}{Significance level, one of 90, 95 or 99, that decides
+whether a series counts as "positive" (rejects the null). Independent of
+\code{option}'s choice of test statistic.}
 }
 \value{
 Returns a list with the series that reject (positive) and the series
@@ -36,4 +40,7 @@ rsim_data <- radf(sim_data)
 diagnostics(rsim_data)
 
 diagnostics(rsim_data, option = "sadf")
+
+# Gate on the 90\% critical value instead of the 95\% default
+diagnostics(rsim_data, sig_lvl = 90)
 }
