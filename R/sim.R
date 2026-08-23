@@ -171,7 +171,12 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' @seealso \code{\link{sim_psy1}}
 #'
 #' @examples
-#' sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)
+#' sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1) %>%
+#'   autoplot()
+#'
+#' # Feed skew-t innovations into sim_psy1() instead of i.i.d. Gaussian
+#' sim_psy1(n = 200, seed = 123, e = sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)) %>%
+#'   autoplot()
 sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
                       df = 5, xi = 0, seed = NULL) {
   dist <- match.arg(dist)
@@ -237,9 +242,11 @@ sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
 #' @seealso \code{\link{sim_psy1}}
 #'
 #' @examples
-#' sim_vol_garch(199, seed = 1)
+#' sim_vol_garch(199, seed = 1) %>%
+#'   autoplot()
 #' # NASDAQ-calibrated TGARCH (Monschang & Wilfling 2021)
-#' sim_vol_garch(199, omega = 0.4387, alpha = 0, beta = 0.9319, gamma = 0.1306, seed = 1)
+#' sim_vol_garch(199, omega = 0.4387, alpha = 0, beta = 0.9319, gamma = 0.1306, seed = 1) %>%
+#'   autoplot()
 sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0,
                           seed = NULL) {
   assert_positive_int(n)
@@ -296,7 +303,8 @@ sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0,
 #' @seealso \code{\link{sim_psy1}}, \code{\link{sim_vol_sv}}
 #'
 #' @examples
-#' sim_vol_cir(199, seed = 1)
+#' sim_vol_cir(199, seed = 1) %>%
+#'   autoplot()
 sim_vol_cir <- function(n, kappa = 0.03, theta = 0.25, xi = 0.1,
                         sigma0_sq = theta, seed = NULL) {
   assert_positive_int(n)
@@ -347,7 +355,8 @@ sim_vol_cir <- function(n, kappa = 0.03, theta = 0.25, xi = 0.1,
 #' @seealso \code{\link{sim_psy1}}, \code{\link{sim_vol_cir}}
 #'
 #' @examples
-#' sim_vol_sv(199, seed = 1)
+#' sim_vol_sv(199, seed = 1) %>%
+#'   autoplot()
 sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0,
                        seed = NULL) {
   assert_positive_int(n)
@@ -396,7 +405,8 @@ sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0,
 #' @seealso \code{\link{sim_psy1}}
 #'
 #' @examples
-#' sim_fi(199, d = 0.2, seed = 1)
+#' sim_fi(199, d = 0.2, seed = 1) %>%
+#'   autoplot()
 sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
   assert_positive_int(n)
   stopifnot(d > 0, d < 0.5, sigma > 0)
@@ -1106,7 +1116,15 @@ sim_mar <- function(n, phi1 = 0.7, psi1 = 0.7, dist = c("cauchy", "t"),
 #' @seealso \code{\link{sim_psy1}}
 #'
 #' @examples
-#' sim_common(n_series = 5, n = 100, seed = 123)
+#' x <- sim_common(n_series = 5, n = 100, seed = 123)
+#' x
+#'
+#' # Plot every observed series (grey) against the shared latent factor (red)
+#' matplot(x, type = "l", col = "grey60", lty = 1, xlab = "t", ylab = "value",
+#'   main = "sim_common(): observed series driven by one latent bubble factor")
+#' lines(attr(x, "factor"), col = "red", lwd = 2)
+#' legend("topleft", legend = c("observed series", "latent factor"),
+#'   col = c("grey60", "red"), lty = 1, bty = "n")
 sim_common <- function(n_series, n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
                        alpha = 0.6, sigma = 6.79, sigma_e = 0.1, seed = NULL) {
   assert_positive_int(n_series)
@@ -1149,7 +1167,14 @@ sim_common <- function(n_series, n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' @seealso \code{\link{sim_psy1}}
 #'
 #' @examples
-#' sim_coexplosive(n = 100, lag = 5, seed = 123)
+#' x <- sim_coexplosive(n = 100, lag = 5, seed = 123)
+#' x
+#'
+#' # x's explosive episode should visibly lead y's by 5 periods
+#' matplot(x, type = "l", lty = 1, col = c("steelblue", "tomato"),
+#'   xlab = "t", ylab = "value", main = "sim_coexplosive(): x leads y by 5 periods")
+#' legend("topleft", legend = c("x", "y"), col = c("steelblue", "tomato"),
+#'   lty = 1, bty = "n")
 sim_coexplosive <- function(n, lag = 0, phi_x = 1, phi_z = 0, mu_y = 0,
                             sigma_y = 6.79, x_args = list(), z_args = list(),
                             seed = NULL) {

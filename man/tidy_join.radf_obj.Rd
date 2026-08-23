@@ -27,3 +27,34 @@ are provided the function will return the panel test statistic.
 \details{
 \code{tidy_join} also calls \code{augment_join} when \code{cv} is of class \code{sb_cv}.
 }
+\examples{
+\donttest{
+rsim_data <- radf(sim_data, minw = 20)
+cv <- radf_wb_cv(sim_data, minw = 20)
+
+# One row per series/statistic, statistic and critical value side by side
+tidy_join(rsim_data, cv)
+
+# summary() and diagnostics() are themselves built on top of tidy_join()
+summary(rsim_data, cv = cv)
+}
+
+\donttest{
+rsim_data <- radf(sim_data, minw = 20)
+cv <- radf_wb_cv(sim_data, minw = 20)
+
+# Full statistic-path/critical-value-path join -- the table autoplot() is built on
+aj <- augment_join(rsim_data, cv)
+aj
+
+# Reproduce (a simplified version of) autoplot()'s own bsadf-vs-crit line plot
+library(ggplot2)
+aj \%>\%
+  dplyr::filter(sig == 95, stat == "bsadf") \%>\%
+  tidyr::pivot_longer(c(tstat, crit), names_to = "series") \%>\%
+  ggplot(aes(index, value, col = series)) +
+  geom_line() +
+  facet_wrap(~id, scales = "free")
+}
+
+}

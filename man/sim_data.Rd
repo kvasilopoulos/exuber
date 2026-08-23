@@ -40,6 +40,16 @@ sim_data_wdate <- tibble(
   date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 )
 }
+
+# Explore the five bundled series before running any test
+matplot(sim_data, type = "l", lty = 1, xlab = "t", ylab = "value",
+  main = "sim_data: the five bundled example series")
+legend("topleft", legend = colnames(sim_data), col = 1:5, lty = 1, bty = "n")
+
+\donttest{
+# The usual next step: run radf() and plot with the bundled critical values
+autoplot(radf(sim_data))
+}
 }
 \seealso{
 sim_psy1 sim_psy1 sim_evans sim_div sim_blan

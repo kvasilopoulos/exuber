@@ -52,7 +52,12 @@ through the Beta function). \code{xi > 0} skews right, \code{xi < 0} skews
 left, \code{xi = 0} reduces to the symmetric \code{t} case.
 }
 \examples{
-sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)
+sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1) \%>\%
+  autoplot()
+
+# Feed skew-t innovations into sim_psy1() instead of i.i.d. Gaussian
+sim_psy1(n = 200, seed = 123, e = sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)) \%>\%
+  autoplot()
 }
 \references{
 Wu, R., Shi, S. & Wu, J. (2025). "Quantile analysis for

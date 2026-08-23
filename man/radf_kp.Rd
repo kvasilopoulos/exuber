@@ -70,6 +70,7 @@ print(res)
 # radf_mc_cv() applies unmodified -- see Details
 cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
 summary(res, cv = cv)
+autoplot(res, cv = cv)
 }
 
 }

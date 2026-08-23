@@ -38,7 +38,8 @@ with \code{phi} close to (but below) 1 for the "double local-to-unity"
 near-integrated-variance case studied in the source.
 }
 \examples{
-sim_vol_sv(199, seed = 1)
+sim_vol_sv(199, seed = 1) \%>\%
+  autoplot()
 }
 \references{
 Sarkar, A. & Wells, M.T. (2025). "Double Local-to-Unity."

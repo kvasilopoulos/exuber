@@ -47,7 +47,14 @@ mu_y + phi_x*x[t-i] + phi_z*z[t] + eps_y[t]}. \code{i > 0} means
 \code{x}'s explosive episode leads \code{y}'s; \code{i < 0} means it lags.
 }
 \examples{
-sim_coexplosive(n = 100, lag = 5, seed = 123)
+x <- sim_coexplosive(n = 100, lag = 5, seed = 123)
+x
+
+# x's explosive episode should visibly lead y's by 5 periods
+matplot(x, type = "l", lty = 1, col = c("steelblue", "tomato"),
+  xlab = "t", ylab = "value", main = "sim_coexplosive(): x leads y by 5 periods")
+legend("topleft", legend = c("x", "y"), col = c("steelblue", "tomato"),
+  lty = 1, bty = "n")
 }
 \references{
 Evripidou, C., Harvey, D.I., Leybourne, S.J. & Sollis, R.

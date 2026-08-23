@@ -51,6 +51,10 @@ tidy(mc2)
 mdist <- radf_mc_distr(n = 100, nrep = 1000)
 
 autoplot(mdist)
+
+# Apply the critical values to actual data
+rsim_data <- radf(sim_data, minw = 20)
+autoplot(rsim_data, cv = mc2)
 }
 }
 \seealso{

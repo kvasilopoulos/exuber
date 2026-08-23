@@ -18,9 +18,12 @@ A \code{\link[tibble:tibble]{tibble::tibble()}}
 Summarizes information about \code{radf_distr} object.
 }
 \examples{
-\dontrun{
-mc <- mc_cv(n = 100)
+\donttest{
+mdist <- radf_mc_distr(n = 100, nrep = 1000)
 
-tidy(mc)
+tidy(mdist)
+
+# Plot the resulting statistic distributions
+autoplot(mdist)
 }
 }

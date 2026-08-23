@@ -29,6 +29,16 @@ series_names(x) <- value
 Retrieve or replace the series names of an object.
 }
 \examples{
+\donttest{
+rfd <- radf(sim_data)
+series_names(rfd)
+
+# Rename the series -- propagates through tidy()/autoplot()'s facet labels
+series_names(rfd) <- c("Bubble A", "Bubble B", "Bubble C", "Bubble D", "Bubble E")
+series_names(rfd)
+tidy(rfd)
+autoplot(rfd)
+}
 
 # Simulate bubble processes
 dta <- data.frame(psy1 = sim_psy1(n = 100), psy2 = sim_psy2(n = 100))
