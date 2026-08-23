@@ -111,6 +111,13 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' \donttest{
 #' res <- dating_knp(sim_data$psy1, trim = 0.05)
 #' print(res)
+#' autoplot(res)
+#'
+#' # Compare the bias-corrected estimate against the plain (inconsistent) OLS
+#' # one, layering an extra reference line onto the internal autoplot() output
+#' res_plain <- dating_knp(sim_data$psy1, trim = 0.05, omit = FALSE)
+#' autoplot(res) +
+#'   ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)
 #' }
 #'
 #' @export
@@ -136,8 +143,17 @@ dating_knp <- function(data, trim = 0.05, omit = TRUE) {
   }
 
   list(origination = origination, collapse = collapse, delta = delta) %>%
-    add_attr(index = idx, series_names = snames, n = n, trim = trim, omit = omit) %>%
+    add_attr(index = idx, series_names = snames, n = n, trim = trim, omit = omit, mat = x) %>%
     add_class("dating_knp_obj")
+}
+
+#' @rdname dating_knp
+#' @param object An object of class \code{dating_knp_obj}, the output of \code{\link{dating_knp}}.
+#' @export
+autoplot.dating_knp_obj <- function(object, ...) {
+  idx <- index(object)
+  breaks <- breaks_tbl(idx, origination = object$origination, collapse = object$collapse)
+  autoplot_series_breaks(mat(object), idx, breaks)
 }
 
 #' @export

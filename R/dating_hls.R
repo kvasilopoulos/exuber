@@ -247,6 +247,12 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #' \donttest{
 #' res <- dating_hls(sim_data$psy1, trim = 0.05)
 #' print(res)
+#'
+#' # Plot the series with the selected model's breakpoint(s) overlaid
+#' autoplot(res)
+#'
+#' # A whole panel at once, faceted one subplot per series
+#' autoplot(dating_hls(sim_data, trim = 0.05))
 #' }
 #'
 #' @export
@@ -277,7 +283,7 @@ dating_hls <- function(data, trim = 0.05) {
     model = model, origination = origination, collapse = collapse,
     recovery = recovery, bic = bic_mat
   ) %>%
-    add_attr(index = idx, series_names = snames, n = n, trim = trim) %>%
+    add_attr(index = idx, series_names = snames, n = n, trim = trim, mat = x) %>%
     add_class("dating_hls_obj")
 }
 
@@ -294,4 +300,17 @@ print.dating_hls_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
     digits = digits, print.gap = 2L, row.names = FALSE
   )
   cat_line()
+}
+
+#' @rdname dating_hls
+#' @param object An object of class \code{dating_hls_obj}, the output of \code{\link{dating_hls}}.
+#' @export
+autoplot.dating_hls_obj <- function(object, ...) {
+  idx <- index(object)
+  breaks <- breaks_tbl(idx,
+    origination = object$origination,
+    collapse = object$collapse,
+    recovery = object$recovery
+  )
+  autoplot_series_breaks(mat(object), idx, breaks)
 }

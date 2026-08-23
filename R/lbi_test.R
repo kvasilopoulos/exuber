@@ -71,11 +71,12 @@
 #'
 #' @examples
 #' \donttest{
-#' set.seed(1)
-#' n <- 60
-#' y <- 100 * 1.03^(1:n) + cumsum(rnorm(n, sd = 1)) # genuine explosive AR
+#' y <- sim_psy1(n = 60, te = 1, tf = 60, seed = 1) # explosive from the start
 #' res <- lbi_test(y)
 #' print(res)
+#'
+#' # Compare the statistic to its critical value
+#' autoplot(res)
 #' }
 #'
 #' @importFrom stats qnorm
@@ -100,6 +101,13 @@ lbi_test <- function(data, level = 0.95) {
   list(stat = stat, crit = crit, detected = detected) %>%
     add_attr(series_names = snames, n = n, level = level) %>%
     add_class("lbi_test_obj")
+}
+
+#' @rdname lbi_test
+#' @param object An object of class \code{lbi_test_obj}, the output of \code{\link{lbi_test}}.
+#' @export
+autoplot.lbi_test_obj <- function(object, ...) {
+  autoplot_stat_bar(object$stat, object$crit, object$detected, ylab = "LBI statistic")
 }
 
 #' @export
@@ -247,18 +255,14 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #'
 #' @examples
 #' \donttest{
-#' make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-#'   y <- numeric(n)
-#'   y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-#'   for (t in (T_star + 1):n) {
-#'     y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-#'   }
-#'   y
-#' }
-#' set.seed(7)
-#' y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+#' # A martingale training window, explosive from t = 150 to the sample end
+#' y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 #' res <- monitor_lbi(y, r_star = 100)
 #' print(res) # alarm should fire soon after t = 150
+#' autoplot(res)
+#'
+#' # wCUSUM: exponentially up-weight later monitoring observations
+#' autoplot(monitor_lbi(y, r_star = 100, c_bar = 2))
 #' }
 #'
 #' @export
@@ -308,6 +312,15 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
       index = idx, series_names = snames, n = n, c_bar = c_bar, level = level
     ) %>%
     add_class("monitor_lbi_obj")
+}
+
+#' @rdname monitor_lbi
+#' @param object An object of class \code{monitor_lbi_obj}, the output of \code{\link{monitor_lbi}}.
+#' @export
+autoplot.monitor_lbi_obj <- function(object, ...) {
+  pos <- object$T_star + seq_len(nrow(object$stat))
+  vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
+  autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines, ylab = "LBI CUSUM")
 }
 
 #' @export

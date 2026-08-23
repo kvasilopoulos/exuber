@@ -2,6 +2,7 @@
 % Please edit documentation in R/monitor_cusum.R
 \name{monitor_cusum}
 \alias{monitor_cusum}
+\alias{autoplot.monitor_cusum_obj}
 \title{CUSUM Real-Time Monitoring for Explosive Bubbles}
 \usage{
 monitor_cusum(
@@ -14,6 +15,8 @@ monitor_cusum(
   N = 20,
   kernel = c("gaussian", "uniform")
 )
+
+\method{autoplot}{monitor_cusum_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -59,6 +62,8 @@ robustness and power). Ignored when \code{type = "standard"}.}
 \item{kernel}{Kernel for the spot-variance estimator when
 \code{type = "kernel"}, \code{"gaussian"} (default) or \code{"uniform"}.
 Ignored when \code{type = "standard"}.}
+
+\item{object}{An object of class \code{monitor_cusum_obj}, the output of \code{\link{monitor_cusum}}.}
 }
 \value{
 An object of class \code{monitor_cusum_obj}: a list with the
@@ -111,18 +116,15 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-  y <- numeric(n)
-  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-  for (t in (T_star + 1):n) {
-    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-  }
-  y
-}
-set.seed(7)
-y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+# A martingale training window, explosive from t = 150 to the sample end
+y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 res <- monitor_cusum(y, r_star = 0.5)
 print(res) # alarm should fire soon after t = 150
+autoplot(res)
+
+# Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023)
+res_kernel <- monitor_cusum(y, r_star = 0.5, type = "kernel")
+autoplot(res_kernel)
 }
 
 }

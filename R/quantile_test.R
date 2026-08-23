@@ -117,6 +117,10 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' \donttest{
 #' res <- quantile_test(sim_data$psy2, nrep = 100, seed = 1)
 #' print(res)
+#' autoplot(res)
+#'
+#' # Test at a fixed upper quantile instead of the optimal one
+#' autoplot(quantile_test(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
 #' }
 #'
 #' @importFrom stats coef dnorm lm quantile bw.nrd0 rnorm cor
@@ -173,6 +177,13 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
       level = level, iter = nrep, seed = get_rng_state(seed)
     ) %>%
     add_class("quantile_test_obj")
+}
+
+#' @rdname quantile_test
+#' @param object An object of class \code{quantile_test_obj}, the output of \code{\link{quantile_test}}.
+#' @export
+autoplot.quantile_test_obj <- function(object, ...) {
+  autoplot_stat_bar(object$tstat, object$crit, object$detected, ylab = "quantile-DF statistic")
 }
 
 #' @export
