@@ -2,6 +2,7 @@
 % Please edit documentation in R/cobubble_test.R
 \name{cobubble_test}
 \alias{cobubble_test}
+\alias{autoplot.cobubble_test}
 \title{Test for Co-explosive Behaviour Between Two Series}
 \usage{
 cobubble_test(
@@ -13,6 +14,8 @@ cobubble_test(
   level = 0.05,
   seed = NULL
 )
+
+\method{autoplot}{cobubble_test}(object, ...)
 }
 \arguments{
 \item{y, x}{Numeric vectors of equal length, or objects coercible to one
@@ -31,6 +34,8 @@ Default \code{-6:6}, as in the paper's own simulation design.}
 \item{level}{Nominal test size (upper-tail rejection region).}
 
 \item{seed}{Optional seed for the bootstrap draws.}
+
+\item{object}{An object of class \code{cobubble_test}, the output of \code{\link{cobubble_test}}.}
 }
 \value{
 An object of class \code{cobubble_test}: a list with the
@@ -78,6 +83,13 @@ picture of which functions do and don't fit that pipeline.
 \donttest{
 res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
 print(res)
+
+# Force a specific lead/lag instead of estimating it
+res_lag0 <- cobubble_test(sim_data$psy1, sim_data$psy2, lag = 0L, nboot = 199L, seed = 1)
+print(res_lag0)
+
+# Plot the two series being tested for co-explosivity
+autoplot(res)
 }
 
 }

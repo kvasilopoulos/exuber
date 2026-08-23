@@ -110,6 +110,13 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' \donttest{
 #' res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
 #' print(res)
+#'
+#' # Force a specific lead/lag instead of estimating it
+#' res_lag0 <- cobubble_test(sim_data$psy1, sim_data$psy2, lag = 0L, nboot = 199L, seed = 1)
+#' print(res_lag0)
+#'
+#' # Plot the two series being tested for co-explosivity
+#' autoplot(res)
 #' }
 #'
 #' @export
@@ -148,8 +155,22 @@ cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
   list(
     S = fit$S, lag = lag, cv = cv, p_value = p_value, reject = fit$S > cv
   ) %>%
-    add_attr(level = level, iter = nboot, lags = lags) %>%
+    add_attr(level = level, iter = nboot, lags = lags, mat = cbind(y = y, x = x)) %>%
     add_class("cobubble_test")
+}
+
+#' @rdname cobubble_test
+#' @param object An object of class \code{cobubble_test}, the output of \code{\link{cobubble_test}}.
+#' @export
+autoplot.cobubble_test <- function(object, ...) {
+  as.data.frame(attr(object, "mat")) %>%
+    mutate(index = seq_len(nrow(.))) %>%
+    pivot_longer(-index, names_to = "id", values_to = "value") %>%
+    ggplot(aes(index, value, color = id)) +
+    geom_line() +
+    labs(title = paste0("cobubble_test: S = ", round(object$S, 2), ", lag = ", object$lag)) +
+    theme_exuber() +
+    theme(legend.position = "bottom", legend.title = element_blank())
 }
 
 #' @export

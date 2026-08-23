@@ -2,6 +2,7 @@
 % Please edit documentation in R/contagion_reg.R
 \name{contagion_reg}
 \alias{contagion_reg}
+\alias{autoplot.contagion_reg_obj}
 \title{Bubble Contagion Regression (Greenaway-McGrevy & Phillips 2016)}
 \usage{
 contagion_reg(
@@ -12,6 +13,8 @@ contagion_reg(
   h = NULL,
   r_grid = seq(0, 1, length.out = 100)
 )
+
+\method{autoplot}{contagion_reg_obj}(object, ...)
 }
 \arguments{
 \item{y}{Satellite (dependent) series, numeric vector.}
@@ -29,6 +32,8 @@ contagion_reg(
 
 \item{r_grid}{Evaluation points for the time-varying coefficient,
 as fractions of the sample (default \code{seq(0, 1, length.out = 100)}).}
+
+\item{object}{An object of class \code{contagion_reg_obj}, the output of \code{\link{contagion_reg}}.}
 }
 \value{
 An object of class \code{contagion_reg_obj}: a list with the
@@ -81,6 +86,15 @@ picture of which functions do and don't fit that pipeline.
 \donttest{
 res <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0L)
 print(res)
+
+# Plot the estimated time-varying contagion coefficient
+autoplot(res)
+
+# Compare a one-period lead (d = 1) against the contemporaneous case
+res_d1 <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 1L)
+autoplot(res) +
+  ggplot2::geom_line(data = data.frame(r = res_d1$r_grid, delta2 = res_d1$delta2),
+    ggplot2::aes(r, delta2), color = "red", inherit.aes = FALSE)
 }
 
 }

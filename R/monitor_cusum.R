@@ -228,18 +228,15 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #'
 #' @examples
 #' \donttest{
-#' make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-#'   y <- numeric(n)
-#'   y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-#'   for (t in (T_star + 1):n) {
-#'     y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-#'   }
-#'   y
-#' }
-#' set.seed(7)
-#' y <- make_bubble_series(200, T_star = 100, bstart = 150) # bubble starts at 150
+#' # A martingale training window, explosive from t = 150 to the sample end
+#' y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 #' res <- monitor_cusum(y, r_star = 0.5)
 #' print(res) # alarm should fire soon after t = 150
+#' autoplot(res)
+#'
+#' # Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023)
+#' res_kernel <- monitor_cusum(y, r_star = 0.5, type = "kernel")
+#' autoplot(res_kernel)
 #' }
 #'
 #' @export
@@ -295,6 +292,19 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
       index = idx, series_names = snames, n = n, b_alpha = b_alpha
     ) %>%
     add_class("monitor_cusum_obj")
+}
+
+#' @rdname monitor_cusum
+#' @param object An object of class \code{monitor_cusum_obj}, the output of \code{\link{monitor_cusum}}.
+#' @export
+autoplot.monitor_cusum_obj <- function(object, ...) {
+  pos <- object$T_star + seq_len(nrow(object$S))
+  snames <- colnames(object$S)
+  vlines <- bind_rows(
+    tibble(id = snames, label = "training end", at = object$T_star),
+    tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
+  )
+  autoplot_stat_boundary(pos, object$S, object$boundary, vlines = vlines, ylab = "CUSUM")
 }
 
 #' @export

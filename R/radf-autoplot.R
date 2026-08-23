@@ -352,6 +352,125 @@ na_pad_layer <- function(pad_rects) {
   )
 }
 
+# Shared plotting helpers for the dating_* autoplot methods below: these
+# classes don't carry a radf_obj-shaped statistic sequence, so they don't fit
+# augment_join()'s pipeline, but they do carry the original series (via a
+# `mat` attribute, the same convention radf() itself uses) and one or more
+# named breakpoints/episodes to mark on it.
+
+# A named-character-vector-per-breakpoint-type set (e.g.
+# `origination = c(series1 = "12", series2 = NA)`) into one tidy
+# id/label/at table, "at" converted to the index's own type (Date or
+# numeric) so it lines up with a Date or numeric x-axis. NA breakpoints
+# (a series with no detected episode) are dropped.
+breaks_tbl <- function(idx, ...) {
+  dots <- list(...)
+  is_date <- lubridate::is.Date(idx)
+  purrr::imap_dfr(dots, function(vals, label) {
+    tibble(
+      id = names(vals), label = label,
+      at = if (is_date) as.Date(unname(vals)) else as.numeric(unname(vals))
+    )
+  }) %>%
+    tidyr::drop_na(at)
+}
+
+# A plain series-vs-index line (faceted by series when there is more than
+# one), with dashed vertical lines at `breaks` (see breaks_tbl()) -- the
+# shared shape behind autoplot.dating_hls_obj/dating_hlw_obj/dating_knp_obj/
+# dating_pdc_obj.
+autoplot_series_breaks <- function(mat, idx, breaks = NULL, title = NULL) {
+  snames <- colnames(mat)
+  df <- as.data.frame(mat) %>%
+    mutate(index = idx) %>%
+    pivot_longer(cols = all_of(snames), names_to = "id", values_to = "value") %>%
+    mutate(id = factor(id, levels = snames))
+
+  gg <- ggplot(df, aes(index, value)) +
+    geom_line() +
+    theme_exuber() +
+    theme(legend.position = "bottom", legend.title = element_blank())
+
+  if (!is.null(breaks) && nrow(breaks) > 0) {
+    breaks <- mutate(breaks, id = factor(id, levels = snames))
+    gg <- gg + geom_vline(data = breaks, aes(xintercept = at, color = label, linetype = label))
+  }
+
+  if (length(snames) > 1) {
+    gg + facet_wrap(~id, scales = "free")
+  } else {
+    gg + ggtitle(title %||% snames)
+  }
+}
+
+# A statistic path vs. its (flat or time-varying) boundary, with an
+# optional vertical marker for a training-window end and/or a detected
+# alarm -- the shared shape behind autoplot.monitor_obj/monitor_cusum_obj/
+# monitor_quantile_obj/monitor_lbi_obj/ssu_test_obj.
+autoplot_stat_boundary <- function(pos, stat, boundary, vlines = NULL, ylab = "statistic") {
+  snames <- colnames(stat)
+  df <- tibble(index = rep(pos, length(snames)), id = rep(snames, each = length(pos)), stat = c(stat)) %>%
+    mutate(id = factor(id, levels = snames))
+
+  if (is.matrix(boundary)) {
+    df$boundary <- c(boundary)
+  } else if (!is.null(names(boundary))) {
+    df <- full_join(df, tibble(id = factor(names(boundary), levels = snames), boundary = unname(boundary)), by = "id")
+  } else {
+    # A scalar (one flat value for every series) or a length(pos) vector (one
+    # value per time step, shared identically across every series' block) --
+    # either way, tibble's `$<-` requires an exact-length RHS, unlike base
+    # data.frame's more permissive recycling, so replicate explicitly.
+    df$boundary <- rep(boundary, length.out = nrow(df))
+  }
+
+  gg <- df %>%
+    tidyr::pivot_longer(c(stat, boundary), names_to = "series", values_to = "value") %>%
+    ggplot(aes(index, value, color = series, linetype = series)) +
+    geom_line() +
+    scale_color_manual(values = c(stat = "black", boundary = "red")) +
+    scale_linetype_manual(values = c(stat = 1, boundary = 2)) +
+    labs(y = ylab) +
+    theme_exuber() +
+    theme(legend.position = "bottom", legend.title = element_blank())
+
+  if (!is.null(vlines) && nrow(vlines) > 0) {
+    vlines <- mutate(vlines, id = factor(id, levels = snames))
+    gg <- gg + geom_vline(data = vlines, aes(xintercept = at, linetype = label), color = "grey40", show.legend = FALSE)
+  }
+
+  if (length(snames) > 1) {
+    gg + facet_wrap(~id, scales = "free")
+  } else {
+    gg + ggtitle(snames)
+  }
+}
+
+# A per-series bar (stat) against its critical value(s) -- the shared shape
+# behind autoplot.lbi_test_obj/quantile_test_obj/ssu_test_obj (when plotted
+# as a single summary rather than a full recursive path).
+autoplot_stat_bar <- function(stat, crit, detected = NULL, ylab = "statistic") {
+  snames <- names(stat)
+  df <- tibble(id = factor(snames, levels = snames), stat = unname(stat))
+  df$detected <- if (is.null(detected)) unname(stat) > crit else unname(detected)
+
+  gg <- ggplot(df, aes(id, stat, fill = detected)) +
+    geom_col(width = 0.5) +
+    scale_fill_manual(values = c(`TRUE` = "tomato", `FALSE` = "grey70")) +
+    labs(y = ylab, x = NULL) +
+    theme_exuber() +
+    theme(legend.position = "none")
+
+  if (length(crit) == 1) {
+    gg + geom_hline(yintercept = crit, color = "red", linetype = 2)
+  } else {
+    gg + geom_point(
+      data = tibble(id = factor(snames, levels = snames), crit = unname(crit)),
+      aes(id, crit), inherit.aes = FALSE, color = "red", shape = 4, size = 3
+    )
+  }
+}
+
 #' Exuber scale and theme functions
 #'
 #' `scale_exuber_manual` allows specifying the color, size and linetype in

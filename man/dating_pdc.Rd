@@ -2,6 +2,7 @@
 % Please edit documentation in R/dating_pdc.R
 \name{dating_pdc}
 \alias{dating_pdc}
+\alias{autoplot.dating_pdc_obj}
 \title{Sequential Sample-Splitting Bubble Dating (PDC/KS)}
 \usage{
 dating_pdc(
@@ -12,6 +13,8 @@ dating_pdc(
   kernel = c("gaussian", "uniform"),
   h = NULL
 )
+
+\method{autoplot}{dating_pdc_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -43,6 +46,8 @@ Ignored when \code{type = "ols"}.}
 \item{h}{Bandwidth for the spot-volatility estimator when
 \code{type = "wls"}. Default: leave-one-out cross-validation. Ignored
 when \code{type = "ols"}.}
+
+\item{object}{An object of class \code{dating_pdc_obj}, the output of \code{\link{dating_pdc}}.}
 }
 \value{
 A \code{data.frame} with one row per series and columns
@@ -97,6 +102,14 @@ picture of which functions do and don't fit that pipeline.
 \donttest{
 res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
 print(res)
+autoplot(res)
+
+# 4-regime extension, adding a post-collapse recovery breakpoint
+res4 <- dating_pdc(sim_data$psy1, regimes = 4L, trim = 0.05)
+autoplot(res4)
+
+# Volatility-weighted (WLS) variant, robust to time-varying volatility
+autoplot(dating_pdc(sim_data$psy1, type = "wls"))
 }
 
 }

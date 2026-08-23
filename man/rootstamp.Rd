@@ -4,6 +4,8 @@
 \alias{rootstamp}
 \alias{rootstamp.default}
 \alias{rootstamp.radf_obj}
+\alias{autoplot.rootstamp_est}
+\alias{autoplot.rootstamp_episodes}
 \title{Confidence Interval and Doubling Time for an Explosive Root}
 \usage{
 rootstamp(object, ...)
@@ -11,11 +13,14 @@ rootstamp(object, ...)
 \method{rootstamp}{default}(object, level = 0.95, type = c("normal", "cauchy"), ...)
 
 \method{rootstamp}{radf_obj}(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
+
+\method{autoplot}{rootstamp_est}(object, ...)
+
+\method{autoplot}{rootstamp_episodes}(object, ...)
 }
 \arguments{
-\item{object}{For the default method, a numeric vector (the sub-sample to
-fit -- already sliced to the episode of interest). For the \code{radf_obj}
-method, the \code{radf_obj} that \code{ds} was computed on.}
+\item{object}{An object of class \code{rootstamp_est} (default method) or
+\code{rootstamp_episodes} (\code{radf_obj} method) to plot.}
 
 \item{...}{further arguments passed to methods.}
 
@@ -105,22 +110,29 @@ of which functions do and don't fit that pipeline.
 }
 
 \examples{
-set.seed(2026)
-burn <- cumsum(rnorm(60))
-bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
-y <- c(burn, bubble)
+# sim_psy1()'s own martingale -> explosive DGP, explosive through the sample end
+y <- sim_psy1(n = 100, te = 60, tf = 100, seed = 2026)
 
 r <- radf(y, minw = 20)
 cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
 ds <- datestamp(r, cv = cv, min_duration = 3)
 
 # default method: one episode, sliced by hand
-rootstamp(y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]) # true rho = 1.04
-rootstamp(y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]], type = "cauchy")
+ep <- y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]
+fit <- rootstamp(ep) # recovers the DGP's explosive AR coefficient
+fit
+rootstamp(ep, type = "cauchy")
+
+# Plot the episode with the fitted explosive-root path overlaid
+autoplot(fit)
 
 
 # radf_obj method: every datestamped episode at once
-rootstamp(r, ds)
+res_all <- rootstamp(r, ds)
+res_all
+
+# Plot the estimated rho (with its CI) for every episode
+autoplot(res_all)
 }
 \references{
 Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate

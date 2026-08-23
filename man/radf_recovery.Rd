@@ -2,6 +2,7 @@
 % Please edit documentation in R/radf_recovery.R
 \name{radf_recovery}
 \alias{radf_recovery}
+\alias{autoplot.radf_recovery_obj}
 \title{Reverse-Regression Dating of Crisis Origination and Market Recovery}
 \usage{
 radf_recovery(
@@ -12,6 +13,8 @@ radf_recovery(
   sig_lvl = 95,
   seed = NULL
 )
+
+\method{autoplot}{radf_recovery_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -35,6 +38,8 @@ not supported. When any series is padded this way, the panel statistic
 \item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
+
+\item{object}{An object of class \code{radf_recovery_obj}, the output of \code{\link{radf_recovery}}.}
 }
 \value{
 An object of class \code{radf_recovery_obj}: a list with
@@ -100,14 +105,13 @@ called (see \code{\link{suppressMessages}} to silence it) and stored as
 
 \examples{
 \donttest{
-set.seed(2)
-n1 <- 40; n2 <- 25; n3 <- 35
-expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
-collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
-recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
-y <- c(expansion, collapse, recovery) # expansion -> collapse -> recovery
+# sim_ps1()'s own expansion -> bubble -> collapse -> recovery DGP
+y <- sim_ps1(n = 100, seed = 1)
 res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 print(res)
+
+# Plot the series with the estimated collapse (f_c) / recovery (f_r) points
+autoplot(res)
 }
 
 }

@@ -2,9 +2,12 @@
 % Please edit documentation in R/dating_knp.R
 \name{dating_knp}
 \alias{dating_knp}
+\alias{autoplot.dating_knp_obj}
 \title{Bias-Corrected Single-Bubble Dating (Kejriwal, Nguyen & Perron 2025)}
 \usage{
 dating_knp(data, trim = 0.05, omit = TRUE)
+
+\method{autoplot}{dating_knp_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -24,6 +27,8 @@ each regime (default 0.05).}
 correction (default \code{TRUE}). \code{FALSE} gives the plain,
 provably inconsistent OLS estimator (their Theorem 1) -- kept mainly
 to demonstrate the correction's effect, not for practical dating.}
+
+\item{object}{An object of class \code{dating_knp_obj}, the output of \code{\link{dating_knp}}.}
 }
 \value{
 An object of class \code{dating_knp_obj}: a list with
@@ -60,6 +65,13 @@ picture of which functions do and don't fit that pipeline.
 \donttest{
 res <- dating_knp(sim_data$psy1, trim = 0.05)
 print(res)
+autoplot(res)
+
+# Compare the bias-corrected estimate against the plain (inconsistent) OLS
+# one, layering an extra reference line onto the internal autoplot() output
+res_plain <- dating_knp(sim_data$psy1, trim = 0.05, omit = FALSE)
+autoplot(res) +
+  ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)
 }
 
 }
