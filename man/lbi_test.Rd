@@ -2,9 +2,12 @@
 % Please edit documentation in R/lbi_test.R
 \name{lbi_test}
 \alias{lbi_test}
+\alias{autoplot.lbi_test_obj}
 \title{Locally Best Invariant Test for a Bubble (Breitung & Diegel 2025)}
 \usage{
 lbi_test(data, level = 0.95)
+
+\method{autoplot}{lbi_test_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -19,6 +22,8 @@ not supported. When any series is padded this way, the panel statistic
 
 \item{level}{Nominal confidence level for the (one-sided, right-tailed
 -- positive bubbles only) test (default \code{0.95}).}
+
+\item{object}{An object of class \code{lbi_test_obj}, the output of \code{\link{lbi_test}}.}
 }
 \value{
 An object of class \code{lbi_test_obj}: a list with the test
@@ -60,11 +65,12 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-set.seed(1)
-n <- 60
-y <- 100 * 1.03^(1:n) + cumsum(rnorm(n, sd = 1)) # genuine explosive AR
+y <- sim_psy1(n = 60, te = 1, tf = 60, seed = 1) # explosive from the start
 res <- lbi_test(y)
 print(res)
+
+# Compare the statistic to its critical value
+autoplot(res)
 }
 
 }

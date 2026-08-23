@@ -211,14 +211,13 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #'
 #' @examples
 #' \donttest{
-#' set.seed(2)
-#' n1 <- 40; n2 <- 25; n3 <- 35
-#' expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
-#' collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
-#' recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
-#' y <- c(expansion, collapse, recovery) # expansion -> collapse -> recovery
+#' # sim_ps1()'s own expansion -> bubble -> collapse -> recovery DGP
+#' y <- sim_ps1(n = 100, seed = 1)
 #' res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 #' print(res)
+#'
+#' # Plot the series with the estimated collapse (f_c) / recovery (f_r) points
+#' autoplot(res)
 #' }
 #'
 #' @export
@@ -277,9 +276,18 @@ radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
   ) %>%
     add_attr(
       index = idx, series_names = snames, minw = minw, lag = lag,
-      n = n, sig_lvl = sig_lvl, iter = nrep, caveat = caveat
+      n = n, sig_lvl = sig_lvl, iter = nrep, caveat = caveat, mat = x
     ) %>%
     add_class("radf_recovery_obj")
+}
+
+#' @rdname radf_recovery
+#' @param object An object of class \code{radf_recovery_obj}, the output of \code{\link{radf_recovery}}.
+#' @export
+autoplot.radf_recovery_obj <- function(object, ...) {
+  idx <- index(object)
+  breaks <- breaks_tbl(idx, collapse = object$f_c_date, recovery = object$f_r_date)
+  autoplot_series_breaks(mat(object), idx, breaks)
 }
 
 #' @export

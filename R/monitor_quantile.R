@@ -142,6 +142,10 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' \donttest{
 #' res <- monitor_quantile(sim_data$psy2, tau = 0.5, nrep = 100, seed = 1)
 #' print(res)
+#' autoplot(res)
+#'
+#' # Upper-quantile monitoring is typically more powerful for right-tailed bubbles
+#' autoplot(monitor_quantile(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
 #' }
 #'
 #' @export
@@ -204,6 +208,17 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 
       tau = tau, level = level, iter = nrep
     ) %>%
     add_class("monitor_quantile_obj")
+}
+
+#' @rdname monitor_quantile
+#' @param object An object of class \code{monitor_quantile_obj}, the output of \code{\link{monitor_quantile}}.
+#' @export
+autoplot.monitor_quantile_obj <- function(object, ...) {
+  minw <- attr(object, "minw")
+  pos <- (minw + 1L):(minw + nrow(object$stat))
+  snames <- colnames(object$stat)
+  vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
+  autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines, ylab = "QPWY statistic")
 }
 
 #' @export

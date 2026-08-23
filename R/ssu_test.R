@@ -175,6 +175,9 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' \donttest{
 #' res <- ssu_test(sim_data$psy1, level = 0.95)
 #' print(res)
+#'
+#' # Plot the recursive SSU statistic path against its critical value
+#' autoplot(res)
 #' }
 #'
 #' @export
@@ -202,6 +205,15 @@ ssu_test <- function(data, minw = NULL, level = 0.95) {
   list(stat = stat_path, sadf = sadf, crit = crit, detected = detected) %>%
     add_attr(index = idx, series_names = snames, n = n, minw = minw, level = level) %>%
     add_class("ssu_test_obj")
+}
+
+#' @rdname ssu_test
+#' @param object An object of class \code{ssu_test_obj}, the output of \code{\link{ssu_test}}.
+#' @export
+autoplot.ssu_test_obj <- function(object, ...) {
+  minw <- attr(object, "minw")
+  pos <- minw:(minw + nrow(object$stat) - 1L)
+  autoplot_stat_boundary(pos, object$stat, object$crit, ylab = "SSU statistic")
 }
 
 # Kurozumi & Nishi (2025) Table I: SSU's own published asymptotic

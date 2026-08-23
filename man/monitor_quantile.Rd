@@ -2,6 +2,7 @@
 % Please edit documentation in R/monitor_quantile.R
 \name{monitor_quantile}
 \alias{monitor_quantile}
+\alias{autoplot.monitor_quantile_obj}
 \title{QPWY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)}
 \usage{
 monitor_quantile(
@@ -12,6 +13,8 @@ monitor_quantile(
   level = 95,
   seed = NULL
 )
+
+\method{autoplot}{monitor_quantile_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -37,6 +40,8 @@ statistic, not re-selected at each recursion point).}
 \item{level}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
+
+\item{object}{An object of class \code{monitor_quantile_obj}, the output of \code{\link{monitor_quantile}}.}
 }
 \value{
 An object of class \code{monitor_quantile_obj}: a list with the
@@ -92,6 +97,10 @@ picture of which functions do and don't fit that pipeline.
 \donttest{
 res <- monitor_quantile(sim_data$psy2, tau = 0.5, nrep = 100, seed = 1)
 print(res)
+autoplot(res)
+
+# Upper-quantile monitoring is typically more powerful for right-tailed bubbles
+autoplot(monitor_quantile(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
 }
 
 }

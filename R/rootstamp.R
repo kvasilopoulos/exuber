@@ -97,18 +97,21 @@
 #' `r lifecycle::badge("experimental")`
 #'
 #' @examples
-#' set.seed(2026)
-#' burn <- cumsum(rnorm(60))
-#' bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
-#' y <- c(burn, bubble)
+#' # sim_psy1()'s own martingale -> explosive DGP, explosive through the sample end
+#' y <- sim_psy1(n = 100, te = 60, tf = 100, seed = 2026)
 #'
 #' r <- radf(y, minw = 20)
 #' cv <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
 #' ds <- datestamp(r, cv = cv, min_duration = 3)
 #'
 #' # default method: one episode, sliced by hand
-#' rootstamp(y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]) # true rho = 1.04
-#' rootstamp(y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]], type = "cauchy")
+#' ep <- y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]
+#' fit <- rootstamp(ep) # recovers the DGP's explosive AR coefficient
+#' fit
+#' rootstamp(ep, type = "cauchy")
+#'
+#' # Plot the episode with the fitted explosive-root path overlaid
+#' autoplot(fit)
 #'
 #' @export
 rootstamp <- function(object, ...) {
@@ -152,7 +155,7 @@ rootstamp.default <- function(object, level = 0.95, type = c("normal", "cauchy")
     doubling_time = dt(rho),
     doubling_time_ci = c(dt(rho_ci[2]), dt(rho_ci[1]))
   ) %>%
-    add_attr(level = level, type = type) %>%
+    add_attr(level = level, type = type, y = y) %>%
     add_class("rootstamp_est")
 }
 
@@ -163,7 +166,11 @@ rootstamp.default <- function(object, level = 0.95, type = c("normal", "cauchy")
 #' @examples
 #'
 #' # radf_obj method: every datestamped episode at once
-#' rootstamp(r, ds)
+#' res_all <- rootstamp(r, ds)
+#' res_all
+#'
+#' # Plot the estimated rho (with its CI) for every episode
+#' autoplot(res_all)
 rootstamp.radf_obj <- function(object, ds, level = 0.95, type = c("normal", "cauchy"), ...) {
   type <- match.arg(type)
   x <- mat(object)
@@ -219,6 +226,28 @@ print.rootstamp_est <- function(x, digits = max(3L, getOption("digits") - 3L), .
   invisible(x)
 }
 
+#' @rdname rootstamp
+#' @param object An object of class \code{rootstamp_est} (default method) or
+#' \code{rootstamp_episodes} (\code{radf_obj} method) to plot.
+#' @export
+autoplot.rootstamp_est <- function(object, ...) {
+  y <- attr(object, "y")
+  n <- length(y)
+  fitted <- y[1] * object$rho^(0:(n - 1L))
+  tibble(t = seq_len(n), y = y, fitted = fitted) %>%
+    pivot_longer(c(y, fitted), names_to = "series", values_to = "value") %>%
+    ggplot(aes(t, value, color = series, linetype = series)) +
+    geom_line() +
+    scale_color_manual(values = c(y = "black", fitted = "red")) +
+    scale_linetype_manual(values = c(y = 1, fitted = 2)) +
+    labs(title = paste0(
+      "rootstamp: rho = ", round(object$rho, 3),
+      ", doubling time = ", round(object$doubling_time, 1)
+    )) +
+    theme_exuber() +
+    theme(legend.position = "bottom", legend.title = element_blank())
+}
+
 #' @export
 print.rootstamp_episodes <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   if (length(x) == 0) {
@@ -232,4 +261,16 @@ print.rootstamp_episodes <- function(x, digits = max(3L, getOption("digits") - 3
   print.listof(x, digits = digits)
   cli::cat_line()
   invisible(x)
+}
+
+#' @rdname rootstamp
+#' @export
+autoplot.rootstamp_episodes <- function(object, ...) {
+  df <- object %>%
+    purrr::imap_dfr(~ mutate(.x, id = .y, mid = (Start + End) / 2))
+  gg <- ggplot(df, aes(mid, rho)) +
+    geom_pointrange(aes(ymin = rho_lower, ymax = rho_upper)) +
+    labs(x = NULL, y = "rho (with CI)", title = "rootstamp: explosive-root estimate per episode") +
+    theme_exuber()
+  if (length(unique(df$id)) > 1) gg + facet_wrap(~id, scales = "free_x") else gg
 }

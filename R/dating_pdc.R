@@ -158,6 +158,14 @@ pdc_regime_resid <- function(y, breaks) {
 #' \donttest{
 #' res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
 #' print(res)
+#' autoplot(res)
+#'
+#' # 4-regime extension, adding a post-collapse recovery breakpoint
+#' res4 <- dating_pdc(sim_data$psy1, regimes = 4L, trim = 0.05)
+#' autoplot(res4)
+#'
+#' # Volatility-weighted (WLS) variant, robust to time-varying volatility
+#' autoplot(dating_pdc(sim_data$psy1, type = "wls"))
 #' }
 #'
 #' @export
@@ -215,5 +223,21 @@ dating_pdc <- function(data, regimes = 3L, trim = 0.05,
 
   out <- do.call(rbind.data.frame, rows)
   rownames(out) <- snames
-  out
+  out %>%
+    add_attr(index = idx, series_names = snames, mat = x) %>%
+    add_class("dating_pdc_obj")
+}
+
+#' @rdname dating_pdc
+#' @param object An object of class \code{dating_pdc_obj}, the output of \code{\link{dating_pdc}}.
+#' @importFrom tibble rownames_to_column
+#' @export
+autoplot.dating_pdc_obj <- function(object, ...) {
+  idx <- attr(object, "index")
+  cols <- intersect(c("origination", "collapse", "recovery"), colnames(object))
+  breaks <- object %>%
+    rownames_to_column("id") %>%
+    pivot_longer(all_of(cols), names_to = "label", values_to = "at") %>%
+    select(id, label, at)
+  autoplot_series_breaks(attr(object, "mat"), idx, breaks)
 }

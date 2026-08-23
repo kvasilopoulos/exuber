@@ -319,10 +319,14 @@ hb_fluc_q <- function(level, n_train, k) {
 #' # Default: Phillips & Shi (2020) wild bootstrap boundary
 #' mon <- monitor(sim_data, r_star = 0.5, nboot = 200)
 #' print(mon)
+#' autoplot(mon)
 #'
 #' # Kurozumi (2020) closed-form boundary -- no bootstrap needed
 #' mon_kz <- monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
-#' print(mon_kz)
+#' autoplot(mon_kz)
+#'
+#' # Homm & Breitung (2012) FLUC boundary
+#' autoplot(monitor(sim_data, r_star = 0.5, boundary = "fluc"))
 #' }
 #'
 #' @export
@@ -379,7 +383,7 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
         add_attr(
           index = idx, series_names = snames, minw = minw, lag = adflag,
           n = n, level = level, iter = NA_integer_, boundary_type = "kurozumi",
-          s0 = s0, q = q
+          s0 = s0, q = q, stat_offset = T_star
         ) %>%
         add_class("monitor_obj")
     )
@@ -427,9 +431,24 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   ) %>%
     add_attr(
       index = idx, series_names = snames, minw = minw, lag = adflag,
-      n = n, level = level, iter = iter, boundary_type = boundary, s0 = 0
+      n = n, level = level, iter = iter, boundary_type = boundary, s0 = 0,
+      stat_offset = minw + adflag
     ) %>%
     add_class("monitor_obj")
+}
+
+#' @rdname monitor
+#' @param object An object of class \code{monitor_obj}, the output of \code{\link{monitor}}.
+#' @export
+autoplot.monitor_obj <- function(object, ...) {
+  offset <- attr(object, "stat_offset")
+  pos <- seq_len(nrow(object$stat)) + offset
+  snames <- colnames(object$stat)
+  vlines <- bind_rows(
+    tibble(id = snames, label = "training end", at = object$T_star),
+    tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
+  )
+  autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines)
 }
 
 #' @export

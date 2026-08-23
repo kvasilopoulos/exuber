@@ -2,6 +2,7 @@
 % Please edit documentation in R/dating_hlw.R
 \name{dating_hlw}
 \alias{dating_hlw}
+\alias{autoplot.dating_hlw_obj}
 \title{Multi-Bubble SSR/BIC Dating (Harvey, Leybourne & Whitehouse 2020)}
 \usage{
 dating_hlw(
@@ -13,6 +14,8 @@ dating_hlw(
   nboot = 199L,
   seed = NULL
 )
+
+\method{autoplot}{dating_hlw_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -42,6 +45,8 @@ PSY episode to be counted. Default \code{\link{psy_ds}} (HLW's own
 
 \item{nboot, seed}{Passed to \code{\link{radf_wb_cv}} when \code{cv}
 is not supplied.}
+
+\item{object}{An object of class \code{dating_hlw_obj}, the output of \code{\link{dating_hlw}}.}
 }
 \value{
 An object of class \code{dating_hlw_obj}: a list, one element
@@ -86,6 +91,13 @@ picture of which functions do and don't fit that pipeline.
 \donttest{
 res <- dating_hlw(sim_data$psy1, trim = 0.1, nboot = 199L, seed = 1)
 print(res)
+
+# Plot every detected episode's breakpoints over the series
+autoplot(res)
+
+# A two-bubble series: dating_hls() alone would only fit one bubble
+res2 <- dating_hlw(sim_psy2(n = 200, seed = 123), trim = 0.1, nboot = 199L, seed = 1)
+autoplot(res2)
 }
 
 }

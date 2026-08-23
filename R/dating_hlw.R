@@ -93,6 +93,13 @@ hlw_local_to_global <- function(local_tau, s) {
 #' \donttest{
 #' res <- dating_hlw(sim_data$psy1, trim = 0.1, nboot = 199L, seed = 1)
 #' print(res)
+#'
+#' # Plot every detected episode's breakpoints over the series
+#' autoplot(res)
+#'
+#' # A two-bubble series: dating_hls() alone would only fit one bubble
+#' res2 <- dating_hlw(sim_psy2(n = 200, seed = 123), trim = 0.1, nboot = 199L, seed = 1)
+#' autoplot(res2)
 #' }
 #'
 #' @export
@@ -176,8 +183,24 @@ dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
   }
 
   results %>%
-    add_attr(index = idx, series_names = snames, n = n, trim = trim, minw = minw) %>%
+    add_attr(index = idx, series_names = snames, n = n, trim = trim, minw = minw, mat = x) %>%
     add_class("dating_hlw_obj")
+}
+
+#' @rdname dating_hlw
+#' @param object An object of class \code{dating_hlw_obj}, the output of \code{\link{dating_hlw}}.
+#' @importFrom tidyr drop_na
+#' @export
+autoplot.dating_hlw_obj <- function(object, ...) {
+  idx <- index(object)
+  is_date <- lubridate::is.Date(idx)
+  breaks <- object %>%
+    purrr::imap_dfr(~ mutate(.x, id = .y)) %>%
+    pivot_longer(c(origination, collapse, recovery), names_to = "label", values_to = "at") %>%
+    mutate(at = if (is_date) as.Date(at) else as.numeric(at)) %>%
+    drop_na(at) %>%
+    select(id, label, at)
+  autoplot_series_breaks(mat(object), idx, breaks)
 }
 
 #' @export
