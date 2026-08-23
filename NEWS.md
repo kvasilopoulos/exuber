@@ -126,6 +126,21 @@ what was checked and how.
   three separate functions -- `explosive_root()`, `root_ci()`,
   `root_ci_datestamp()` -- consolidated before release).
 
+### Bug fixes
+
+* `datestamp()`/`autoplot()`/`autoplot2()`'s `sig_lvl` argument now
+  actually controls whether a series counts as rejecting the null.
+  Previously, `diagnostics.radf_obj()` (used internally to decide which
+  series get dated/plotted at all) hardcoded the 95% critical value for
+  that decision regardless of `sig_lvl`, so e.g. `datestamp(x, cv,
+  sig_lvl = 90)` could throw `"Cannot reject H0 at the 5% significance
+  level"` for a series that clearly rejects at the 10% level the caller
+  asked for -- `sig_lvl` only ever reached the within-series episode
+  threshold curve, never the series-eligibility gate. `diagnostics()`
+  gained a `sig_lvl` argument (default 95, so default-call behavior is
+  unchanged) and `datestamp()`/`autoplot()`/`autoplot2()` now thread
+  their own `sig_lvl` through to it.
+
 # exuber 1.1.0
 
 * Fixed \link{} targets not in the package itself nor in the base packages to
