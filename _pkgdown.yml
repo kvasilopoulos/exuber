@@ -3,9 +3,30 @@ url: https://kvasilopoulos.github.io/exuber
 
 template:
   bootstrap: 5
-  params:
-    ganalytics: UA-129604855-4
-    bootswatch: cosmo
+  light-switch: true
+  bslib:
+    preset: flatly
+    primary: "#1b4b91"
+    danger: "#d7263d"
+    base_font: {google: "Inter"}
+    code_font: {google: "JetBrains Mono"}
+    font_scale: 0.85
+
+navbar:
+  structure:
+    right: [search, cran, github, lightswitch]
+  components:
+    cran:
+      icon: fa-box
+      href: https://cran.r-project.org/package=exuber
+      aria-label: CRAN
+
+footer:
+  structure:
+    left: [developed_by, license]
+    right: built_with
+  components:
+    license: "&middot; License: GPL-3"
 
 authors:
   Kostas Vasilopoulos:
