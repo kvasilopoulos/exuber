@@ -15,6 +15,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 [![R-CMD-check](https://github.com/kvasilopoulos/exuber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kvasilopoulos/exuber/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/kvasilopoulos/exuber/graph/badge.svg)](https://app.codecov.io/gh/kvasilopoulos/exuber)
+[![JSS](https://img.shields.io/badge/JSS-10.18637%2Fjss.v103.i10-b31b1b.svg)](https://doi.org/10.18637/jss.v103.i10)
 <!-- badges: end -->
 
 Testing for and dating periods of explosive dynamics (exuberance) in
@@ -192,6 +193,40 @@ autoplot(rsim_data)
 ```
 
 ![](man/figures/usage-1.png)<!-- -->
+
+### Citation
+
+`exuber` is the product of ongoing research – if it’s useful in your
+own work, please support it by citing the accompanying paper in the
+*Journal of Statistical Software*:
+
+> Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022).
+> exuber: Recursive Right-Tailed Unit Root Testing with R. *Journal of
+> Statistical Software*, 103(10), 1-26.
+> [doi:10.18637/jss.v103.i10](https://doi.org/10.18637/jss.v103.i10)
+
+``` r
+citation("exuber")
+#> To cite exuber in publications use:
+#> 
+#>   Vasilopoulos K, Pavlidis E, Martínez-García E (2022). "exuber:
+#>   Recursive Right-Tailed Unit Root Testing with R." _Journal of
+#>   Statistical Software_, *103*(10), 1-26. doi:10.18637/jss.v103.i10
+#>   <https://doi.org/10.18637/jss.v103.i10>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{,
+#>     title = {{exuber}: Recursive Right-Tailed Unit Root Testing with {R}},
+#>     author = {Kostas Vasilopoulos and Efthymios Pavlidis and Enrique Mart{\'i}nez-Garc{\'i}a},
+#>     journal = {Journal of Statistical Software},
+#>     year = {2022},
+#>     volume = {103},
+#>     number = {10},
+#>     pages = {1--26},
+#>     doi = {10.18637/jss.v103.i10},
+#>   }
+```
 
 ------------------------------------------------------------------------
 
