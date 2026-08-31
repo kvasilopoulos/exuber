@@ -57,34 +57,6 @@ reference:
       - autoplot.ds_radf
       - scale_exuber_manual
 
-  - title: Simulation
-    contents:
-      - sim_psy1
-      - sim_psy2
-      - sim_ps1
-      - sim_blan
-      - sim_evans
-      - sim_div
-
-  - title: Simulation (additional DGPs)
-    desc: >
-      Data-generating processes for axes exuber's original sim_*()
-      functions don't cover -- time-varying volatility, non-Gaussian
-      innovations, long memory, and distinct multi-series/branching
-      mechanisms; see docs/enhancements/simulation-dgps.md
-    contents:
-      - sim_innov
-      - sim_vol_garch
-      - sim_vol_cir
-      - sim_vol_sv
-      - sim_fi
-      - sim_common
-      - sim_coexplosive
-      - sim_tree
-      - sim_mar
-      - sim_msbubble
-      - sim_falsebubble
-
   - title: Heteroskedasticity-robust (time-transformed)
     desc: >
       Bootstrap-free alternative to radf_wb_cv() under time-varying volatility
@@ -142,6 +114,34 @@ reference:
       - radf_common_cv
       - cobubble_test
       - contagion_reg
+
+  - title: Simulation
+    contents:
+      - sim_psy1
+      - sim_psy2
+      - sim_ps1
+      - sim_blan
+      - sim_evans
+      - sim_div
+
+  - title: Simulation (additional DGPs)
+    desc: >
+      Data-generating processes for axes exuber's original sim_*()
+      functions don't cover -- time-varying volatility, non-Gaussian
+      innovations, long memory, and distinct multi-series/branching
+      mechanisms; see docs/enhancements/simulation-dgps.md
+    contents:
+      - sim_innov
+      - sim_vol_garch
+      - sim_vol_cir
+      - sim_vol_sv
+      - sim_fi
+      - sim_common
+      - sim_coexplosive
+      - sim_tree
+      - sim_mar
+      - sim_msbubble
+      - sim_falsebubble
 
   - title: Helpers
     contents:
