@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite the accompanying Journal of
+  Statistical Software paper (see preferred-citation below).
+type: software
+title: "exuber: Econometric Analysis of Explosive Time Series"
+version: 1.1.0
+date-released: "2025-08-31"
+license: GPL-3.0-only
+repository-code: "https://github.com/kvasilopoulos/exuber"
+url: "https://kvasilopoulos.github.io/exuber/"
+authors:
+  - family-names: Vasilopoulos
+    given-names: Kostas
+    email: k.vasilopoulo@gmail.com
+  - family-names: Pavlidis
+    given-names: Efthymios
+    email: e.pavlidis@lancaster.ac.uk
+  - family-names: Martínez-García
+    given-names: Enrique
+    email: emg.economics@gmail.com
+  - family-names: Spavound
+    given-names: Simon
+    email: simon.spavound@googlemail.com
+preferred-citation:
+  type: article
+  title: "exuber: Recursive Right-Tailed Unit Root Testing with R"
+  authors:
+    - family-names: Vasilopoulos
+      given-names: Kostas
+    - family-names: Pavlidis
+      given-names: Efthymios
+    - family-names: Martínez-García
+      given-names: Enrique
+  journal: "Journal of Statistical Software"
+  year: 2022
+  volume: 103
+  issue: 10
+  pages: "1-26"
+  doi: "10.18637/jss.v103.i10"
+  url: "https://doi.org/10.18637/jss.v103.i10"
