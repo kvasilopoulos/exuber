@@ -22,6 +22,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/kvasilopoulos/exuber/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kvasilopoulos/exuber/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/kvasilopoulos/exuber/graph/badge.svg)](https://app.codecov.io/gh/kvasilopoulos/exuber)
+[![JSS](https://img.shields.io/badge/JSS-10.18637%2Fjss.v103.i10-b31b1b.svg)](https://doi.org/10.18637/jss.v103.i10)
 <!-- badges: end -->
 
 
@@ -101,6 +102,16 @@ datestamp(rsim_data)
 
 autoplot(rsim_data)
 
+```
+
+### Citation
+
+`exuber` is the product of ongoing research -- if it's useful in your own work, please support it by citing the accompanying paper in the *Journal of Statistical Software*:
+
+> Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022). exuber: Recursive Right-Tailed Unit Root Testing with R. *Journal of Statistical Software*, 103(10), 1-26. [doi:10.18637/jss.v103.i10](https://doi.org/10.18637/jss.v103.i10)
+
+```{r citation}
+citation("exuber")
 ```
 
 ---
