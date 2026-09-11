@@ -1,5 +1,6 @@
 #include "exubercore/radf.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <stdexcept>
 #include <vector>
@@ -176,30 +177,50 @@ arma::vec radf_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min,
       }
     }
   } else {
+    // Plain arrays and hand-written nc x nc updates: the per-window work is
+    // a handful of tiny matrix-vector products, and Armadillo temporaries
+    // (heap allocations, BLAS calls) per window cost more than the flops.
     const arma::mat x = yxmat.cols(1, nc);
     const arma::vec y = yxmat.col(0);
-    arma::mat xtx(nc, nc), g(nc, nc);
-    arma::vec xty(nc), b(nc);
+    std::vector<double> xtx(nc * nc), xty(nc), g(nc * nc), b(nc), gx(nc), xe(nc);
     for (int j = 0; j + mmin - 1 < R; ++j) {
-      xtx.zeros(); xty.zeros();
+      std::fill(xtx.begin(), xtx.end(), 0.0);
+      std::fill(xty.begin(), xty.end(), 0.0);
       double yty = 0;
       for (int e = j; e < R; ++e) {
-        const arma::rowvec xe = x.row(e);
-        xtx += xe.t() * xe;
-        xty += xe.t() * y(e);
-        yty += y(e) * y(e);
+        for (int a = 0; a < nc; ++a) xe[a] = x(e, a);
+        const double ye = y(e);
+        for (int a = 0; a < nc; ++a) {
+          xty[a] += xe[a] * ye;
+          for (int c = 0; c < nc; ++c) xtx[a * nc + c] += xe[a] * xe[c];
+        }
+        yty += ye * ye;
         const int T = e - j + 1;
         if (T < mmin) continue;
         if (T == mmin) {
-          g = arma::inv_sympd(xtx);
+          const arma::mat ginv = arma::inv_sympd(arma::mat(xtx.data(), nc, nc));
+          for (int a = 0; a < nc; ++a)
+            for (int c = 0; c < nc; ++c) g[a * nc + c] = ginv(a, c);
         } else {
           // Sherman-Morrison rank-1 update of (X'X)^-1, as radf() does.
-          const arma::vec gx = g * xe.t();
-          g -= (gx * gx.t()) / (1 + arma::as_scalar(xe * gx));
+          double denom = 1.0;
+          for (int a = 0; a < nc; ++a) {
+            double acc = 0;
+            for (int c = 0; c < nc; ++c) acc += g[a * nc + c] * xe[c];
+            gx[a] = acc;
+            denom += xe[a] * acc;
+          }
+          for (int a = 0; a < nc; ++a)
+            for (int c = 0; c < nc; ++c) g[a * nc + c] -= gx[a] * gx[c] / denom;
         }
-        b = g * xty;
-        const double ssr = yty - arma::dot(b, xty);
-        const double t = (b(1) - 1) / std::sqrt(ssr / (T - nc) * g(1, 1));
+        double ssr = yty;
+        for (int a = 0; a < nc; ++a) {
+          double acc = 0;
+          for (int c = 0; c < nc; ++c) acc += g[a * nc + c] * xty[c];
+          b[a] = acc;
+          ssr -= acc * xty[a];
+        }
+        const double t = (b[1] - 1) / std::sqrt(ssr / (T - nc) * g[1 * nc + 1]);
         if (j == 0) w0(e) = t;
         if (t > pmax(e)) pmax(e) = t;
       }
