@@ -77,6 +77,26 @@ test_that("sim_innov standardizes each distribution to mean 0 / sd sigma", {
   expect_true(sample_skewness(z_skew) < 0) # left-skewed for xi < 0
 })
 
+test_that("sim_vol_break shifts the innovation sd by `ratio` at floor(tau * n)", {
+  z <- sim_vol_break(10000, tau = 0.5, ratio = 3, sigma = 2, seed = 1)
+  expect_length(z, 10000)
+  expect_equal(sd(z[1:5000]), 2, tolerance = 0.05)
+  expect_equal(sd(z[5001:10000]), 6, tolerance = 0.05)
+  # exact construction check: same seed, same draws, scaled by the sd path
+  set.seed(3)
+  z2 <- sim_vol_break(7, tau = 0.3, ratio = 0.5, sigma = 1, seed = NULL)
+  set.seed(3)
+  expect_equal(as.numeric(z2), rnorm(7, sd = c(1, 1, 0.5, 0.5, 0.5, 0.5, 0.5)))
+})
+
+test_that("sim_psy1()/sim_ps1() seed covers a lazily-evaluated `e` generator", {
+  a <- sim_psy1(50, seed = 1, e = sim_vol_break(49))
+  b <- sim_psy1(50, seed = 1, e = sim_vol_break(49))
+  expect_identical(as.numeric(a), as.numeric(b))
+  expect_identical(as.numeric(sim_ps1(50, seed = 2)),
+                   as.numeric(sim_ps1(50, seed = 2, e = rnorm(49, sd = 6.79))))
+})
+
 test_that("sim_vol_garch reproduces the GARCH(1,1) recursion exactly (formula check)", {
   set.seed(11)
   n <- 15

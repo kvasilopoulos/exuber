@@ -210,6 +210,7 @@ reference:
       mechanisms; see docs/enhancements/simulation-dgps.md
     contents:
       - sim_innov
+      - sim_vol_break
       - sim_vol_garch
       - sim_vol_cir
       - sim_vol_sv
