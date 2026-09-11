@@ -5,3 +5,7 @@ rls_gsadf <- function(yxmat, min_win, lag = 0L) {
     .Call(`_exuber_rls_gsadf`, yxmat, min_win, lag)
 }
 
+rls_nested <- function(yxmat, minw, n_min, lag = 0L) {
+    .Call(`_exuber_rls_nested`, yxmat, minw, n_min, lag)
+}
+

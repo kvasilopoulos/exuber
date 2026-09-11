@@ -1,6 +1,8 @@
 #include "exubercore/radf.hpp"
 
+#include <cmath>
 #include <stdexcept>
+#include <vector>
 
 namespace exubercore {
 
@@ -112,6 +114,115 @@ arma::vec radf(const arma::mat& yxmat, int min_win, int lag) {
   results.row(total+2)=gsadf;
   results.rows(total+3,2*total+2)=bsadf;
   return results;
+}
+
+arma::vec radf_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min, int lag) {
+  if (lag < 0) throw std::invalid_argument("lag must be non-negative");
+  const int K = static_cast<int>(minw.n_elem);
+  if (K < 1) throw std::invalid_argument("minw must be non-empty");
+  const int R = static_cast<int>(yxmat.n_rows);
+  const int N = n_min + K - 1;
+  if (R != N - 1 - lag) {
+    throw std::invalid_argument("nrow(yxmat) must equal n_min + length(minw) - 2 - lag");
+  }
+  const int nc = static_cast<int>(yxmat.n_cols) - 1;  // regressors
+  if (lag > 0 && nc < lag + 2) {
+    throw std::invalid_argument("yxmat must have at least lag + 2 columns when lag > 0");
+  }
+  const int mmin = minw.min();
+  const int need = (lag == 0) ? 3 : nc + 1;  // T - (#params) >= 1 for the variance
+  if (mmin < need) throw std::invalid_argument("min(minw) is too small for the regression");
+  for (int k = 0; k < K; ++k) {
+    const int Rn = n_min + k - 1 - lag;
+    if (minw(k) < mmin || Rn - minw(k) < 0) {
+      throw std::invalid_argument("minw[k] must leave at least one window inside n = n_min + k");
+    }
+  }
+
+  // Distinct window sizes, so the per-m prefix maxima are tracked once each.
+  arma::ivec ms = arma::unique(minw);
+  const int M = static_cast<int>(ms.n_elem);
+  std::vector<int> m_index(minw.max() + 1, -1);
+  for (int a = 0; a < M; ++a) m_index[ms(a)] = a;
+
+  arma::vec w0(R);  w0.fill(arma::datum::nan);
+  // pmax(e) = max over starts j' <= j (so far) of W(j', e).
+  arma::vec pmax(R);  pmax.fill(-arma::datum::inf);
+  // gm(a, e) = W with window >= ms(a) ending at e, maximised over starts:
+  // i.e. the bsadf sequence for window ms(a).
+  arma::mat gm(M, R);  gm.fill(-arma::datum::inf);
+
+  if (lag == 0) {
+    const arma::vec y = yxmat.col(0);
+    const arma::vec x = yxmat.col(1);
+    for (int j = 0; j + mmin - 1 < R; ++j) {
+      double sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
+      for (int e = j; e < R; ++e) {
+        sx += x(e); sy += y(e); sxx += x(e) * x(e); sxy += x(e) * y(e); syy += y(e) * y(e);
+        const int T = e - j + 1;
+        if (T < mmin) continue;
+        const double sxx_c = sxx - sx * sx / T;
+        const double sxy_c = sxy - sx * sy / T;
+        const double syy_c = syy - sy * sy / T;
+        const double beta = sxy_c / sxx_c;
+        const double ssr = syy_c - beta * sxy_c;
+        const double t = (beta - 1) / std::sqrt(ssr / (T - 2) / sxx_c);
+        if (j == 0) w0(e) = t;
+        if (t > pmax(e)) pmax(e) = t;
+      }
+      for (int a = 0; a < M; ++a) {
+        const int e = j + ms(a) - 1;
+        if (e < R) gm(a, e) = pmax(e);
+      }
+    }
+  } else {
+    const arma::mat x = yxmat.cols(1, nc);
+    const arma::vec y = yxmat.col(0);
+    arma::mat xtx(nc, nc), g(nc, nc);
+    arma::vec xty(nc), b(nc);
+    for (int j = 0; j + mmin - 1 < R; ++j) {
+      xtx.zeros(); xty.zeros();
+      double yty = 0;
+      for (int e = j; e < R; ++e) {
+        const arma::rowvec xe = x.row(e);
+        xtx += xe.t() * xe;
+        xty += xe.t() * y(e);
+        yty += y(e) * y(e);
+        const int T = e - j + 1;
+        if (T < mmin) continue;
+        if (T == mmin) {
+          g = arma::inv_sympd(xtx);
+        } else {
+          // Sherman-Morrison rank-1 update of (X'X)^-1, as radf() does.
+          const arma::vec gx = g * xe.t();
+          g -= (gx * gx.t()) / (1 + arma::as_scalar(xe * gx));
+        }
+        b = g * xty;
+        const double ssr = yty - arma::dot(b, xty);
+        const double t = (b(1) - 1) / std::sqrt(ssr / (T - nc) * g(1, 1));
+        if (j == 0) w0(e) = t;
+        if (t > pmax(e)) pmax(e) = t;
+      }
+      for (int a = 0; a < M; ++a) {
+        const int e = j + ms(a) - 1;
+        if (e < R) gm(a, e) = pmax(e);
+      }
+    }
+  }
+
+  // gsadf for n = sup over ends e <= R_n - 1 of the window-m(n) bsadf.
+  for (int a = 0; a < M; ++a) {
+    for (int e = 1; e < R; ++e) {
+      if (gm(a, e - 1) > gm(a, e)) gm(a, e) = gm(a, e - 1);
+    }
+  }
+  arma::vec out(R + K);
+  out.rows(0, R - 1) = w0;
+  for (int k = 0; k < K; ++k) {
+    const int Rn = n_min + k - 1 - lag;
+    out(R + k) = gm(m_index[minw(k)], Rn - 1);
+  }
+  return out;
 }
 
 } // namespace exubercore
