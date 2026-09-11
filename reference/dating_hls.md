@@ -11,9 +11,6 @@ BIC.
 
 ``` r
 dating_hls(data, trim = 0.05)
-
-# S3 method for class 'dating_hls_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -35,10 +32,6 @@ autoplot(object, ...)
   Minimum fraction of the (differenced) sample required in every regime
   (default 0.05, following Harvey, Leybourne & Sollis's own
   empirical-application choice; their simulations use 0.1).
-
-- object:
-
-  An object of class `dating_hls_obj`, the output of `dating_hls`.
 
 ## Value
 

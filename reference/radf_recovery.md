@@ -19,9 +19,6 @@ radf_recovery(
   sig_lvl = 95,
   seed = NULL
 )
-
-# S3 method for class 'radf_recovery_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -61,10 +58,6 @@ autoplot(object, ...)
 - seed:
 
   Optional seed for the Monte Carlo draws.
-
-- object:
-
-  An object of class `radf_recovery_obj`, the output of `radf_recovery`.
 
 ## Value
 

@@ -11,9 +11,6 @@ plain ADF regression's innovations.
 
 ``` r
 ssu_test(data, minw = NULL, level = 0.95)
-
-# S3 method for class 'ssu_test_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -39,10 +36,6 @@ autoplot(object, ...)
 
   Nominal confidence level, one of `0.90`, `0.95`, `0.99` (the levels
   Kurozumi & Nishi's Table I tabulates).
-
-- object:
-
-  An object of class `ssu_test_obj`, the output of `ssu_test`.
 
 ## Value
 
@@ -98,13 +91,17 @@ complements.
 
 ``` r
 # \donttest{
-res <- ssu_test(sim_data$psy1, level = 0.95)
+# A stochastically varying explosive root, rho_t = 1 + 3/n + 4 * u_t / sqrt(n):
+# the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
+y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
+  coef_noise = rnorm(149), coef_a = 4)
+res <- ssu_test(y, level = 0.95)
 print(res)
 #> 
-#> ── ssu_test (n = 100, minw = 19, level = 95%, crit = 3.3) ──────────────────────
+#> ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────
 #> 
 #>    series   sadf  detected
-#>   series1  4.251      TRUE
+#>   series1  3.128     FALSE
 #> 
 
 # Plot the recursive SSU statistic path against its critical value

@@ -123,8 +123,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="other-development-version">Other<a class="anchor" aria-label="anchor" href="#other-development-version"></a></h4>
-<ul><li>
-<code><a href="../reference/rootstamp.html">rootstamp()</a></code> — confidence interval and doubling time on the explosive root, via S3 dispatch: the default method fits a single sub-sample, the <code>radf_obj</code> method runs every <code><a href="../reference/datestamp.html">datestamp()</a></code> episode at once (previously three separate functions – <code>explosive_root()</code>, <code>root_ci()</code>, <code>root_ci_datestamp()</code> – consolidated before release).</li>
+<ul><li><p><code><a href="../reference/rootstamp.html">rootstamp()</a></code> — confidence interval and doubling time on the explosive root, via S3 dispatch: the default method fits a single sub-sample, the <code>radf_obj</code> method runs every <code><a href="../reference/datestamp.html">datestamp()</a></code> episode at once (previously three separate functions – <code>explosive_root()</code>, <code>root_ci()</code>, <code>root_ci_datestamp()</code> – consolidated before release).</p></li>
+<li><p>Documentation: every <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> method now has its own help page instead of sharing one with the function it plots/tidies (<code><a href="../reference/autoplot.monitor_cusum_obj.html">?autoplot.monitor_cusum_obj</a></code>, <code><a href="../reference/augment.radf_obj.html">?augment.radf_obj</a></code>, …). The pkgdown reference index is reorganised into per-function subsections so each function is listed next to the methods that consume its output.</p></li>
 </ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
@@ -247,7 +247,7 @@
 <li>
 <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> methods for objects of class <code>radf</code> and <code>cv</code>.</li>
 <li>
-<code><a href="../reference/tidy_join.html">augment_join()</a></code> to combine object <code>radf</code> and <code>cv</code> into a single data.frame.</li>
+<code><a href="../reference/augment_join.html">augment_join()</a></code> to combine object <code>radf</code> and <code>cv</code> into a single data.frame.</li>
 <li>
 <code>glance()</code> method for objects of class <code>radf</code>.</li>
 </ul></div>

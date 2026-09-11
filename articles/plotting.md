@@ -80,7 +80,7 @@ autoplot(estimation, crit_values, shade_opt = shade(fill = "pink", opacity = 0.3
 ## Custom plotting
 
 Custom plotting is also very easy with the
-[`augment_join()`](https://kvasilopoulos.github.io/exuber/reference/tidy_join.md),
+[`augment_join()`](https://kvasilopoulos.github.io/exuber/reference/augment_join.md),
 that merge the output of the estimation and and critical values in a
 ggplot2-friendly way.
 

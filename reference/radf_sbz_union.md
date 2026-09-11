@@ -24,9 +24,6 @@ radf_sbz_union(
   h = NULL,
   seed = NULL
 )
-
-# S3 method for class 'radf_sbz_union'
-autoplot(object, sig_lvl = 95, ...)
 ```
 
 ## Arguments
@@ -71,19 +68,6 @@ autoplot(object, sig_lvl = 95, ...)
   change rng state, and return .Random.seed as the "seed" attribute.
   Results are reproducible across the parallel and non-parallel option
   when the same seed is used.
-
-- object:
-
-  A `radf_sbz_union` object.
-
-- sig_lvl:
-
-  Significance level to plot the critical value at, one of `90`, `95`
-  (default), `99`.
-
-- ...:
-
-  Further arguments passed to methods. Not used.
 
 ## Value
 

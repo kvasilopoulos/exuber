@@ -13,9 +13,6 @@ breached.
 
 ``` r
 monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
-
-# S3 method for class 'monitor_lbi_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -51,10 +48,6 @@ autoplot(object, ...)
 
   Nominal confidence level, one of `0.90`, `0.95`, `0.975`, `0.99`,
   `0.995` (Breitung & Diegel's Table 1 only tabulates these).
-
-- object:
-
-  An object of class `monitor_lbi_obj`, the output of `monitor_lbi`.
 
 ## Value
 

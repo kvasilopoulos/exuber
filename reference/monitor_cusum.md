@@ -21,9 +21,6 @@ monitor_cusum(
   N = 20,
   kernel = c("gaussian", "uniform")
 )
-
-# S3 method for class 'monitor_cusum_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -84,10 +81,6 @@ autoplot(object, ...)
   Kernel for the spot-variance estimator when `type = "kernel"`,
   `"gaussian"` (default) or `"uniform"`. Ignored when
   `type = "standard"`.
-
-- object:
-
-  An object of class `monitor_cusum_obj`, the output of `monitor_cusum`.
 
 ## Value
 
@@ -169,11 +162,14 @@ autoplot(res)
 #> (`geom_segment()`).
 
 
-# Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023)
-res_kernel <- monitor_cusum(y, r_star = 0.5, type = "kernel")
+# Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023):
+# same bubble, but volatility triples at t = 120, after the training window
+y_vol <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
+  e = sim_vol_break(199, tau = 0.6))
+#> Error in sim_vol_break(199, tau = 0.6): could not find function "sim_vol_break"
+res_kernel <- monitor_cusum(y_vol, r_star = 0.5, type = "kernel")
+#> Error: object 'y_vol' not found
 autoplot(res_kernel)
-#> Warning: Removed 2 rows containing missing values or values outside the scale range
-#> (`geom_segment()`).
-
+#> Error: object 'res_kernel' not found
 # }
 ```

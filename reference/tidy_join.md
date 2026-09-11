@@ -6,8 +6,6 @@ Tidy or augment and then join objects.
 
 ``` r
 tidy_join(x, y, ...)
-
-augment_join(x, y, ...)
 ```
 
 ## Arguments

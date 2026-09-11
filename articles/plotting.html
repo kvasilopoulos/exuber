@@ -155,10 +155,10 @@ to <code>NULL</code>.</p>
 <h2 id="custom-plotting">Custom plotting<a class="anchor" aria-label="anchor" href="#custom-plotting"></a>
 </h2>
 <p>Custom plotting is also very easy with the
-<code><a href="../reference/tidy_join.html">augment_join()</a></code>, that merge the output of the estimation and
+<code><a href="../reference/augment_join.html">augment_join()</a></code>, that merge the output of the estimation and
 and critical values in a ggplot2-friendly way.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">joined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tidy_join.html">augment_join</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">joined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment_join.html">augment_join</a></span><span class="op">(</span><span class="va">estimation</span>, <span class="va">crit_values</span><span class="op">)</span></span>
 <span><span class="va">joined</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1,926 × 8</span></span></span>
 <span><span class="co">#&gt;      key index id        data stat   tstat sig    crit</span></span>

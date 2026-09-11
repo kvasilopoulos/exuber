@@ -31,7 +31,7 @@ pv
 #> # A tibble: 1 × 4
 #>   id        adf  sadf gsadf
 #>   <fct>   <dbl> <dbl> <dbl>
-#> 1 series1 0.868     0     0
+#> 1 series1 0.743     0     0
 
 # Using the Wild-Bootstrapped null instead
 wb_psy1 <- radf_wb_distr(sim_psy1(100))
@@ -40,7 +40,7 @@ calc_pvalue(radf_psy1, wb_psy1)
 #> # A tibble: 1 × 4
 #>   id        adf  sadf gsadf
 #>   <chr>   <dbl> <dbl> <dbl>
-#> 1 series1  0.96 0.016 0.026
+#> 1 series1 0.932 0.036 0.036
 
 sb_psy1 <- radf_sb_distr(sim_data, nboot = 500)
 

@@ -19,9 +19,6 @@ cobubble_test(
   level = 0.05,
   seed = NULL
 )
-
-# S3 method for class 'cobubble_test'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -55,10 +52,6 @@ autoplot(object, ...)
 - seed:
 
   Optional seed for the bootstrap draws.
-
-- object:
-
-  An object of class `cobubble_test`, the output of `cobubble_test`.
 
 ## Value
 
@@ -106,22 +99,33 @@ Bulletin of Economics and Statistics, 84(3), 624-650.
 
 ``` r
 # \donttest{
-res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
+# A genuinely co-explosive pair (Evripidou et al.'s own DGP): not rejected
+xy <- sim_coexplosive(n = 100, seed = 123)
+res <- cobubble_test(xy$y, xy$x, nboot = 199L, seed = 1)
 print(res)
 #> 
-#> ── cobubble_test (lag = -2, nboot = 199) ───────────────────────────────────────
+#> ── cobubble_test (lag = 0, nboot = 199) ────────────────────────────────────────
 #> 
-#> S = 1.533, cv(95%) = 0.2998, p-value = 0
-#> Co-explosivity rejected at the 5% level.
+#> S = 0.2364, cv(95%) = 0.4048, p-value = 0.1508
+#> Co-explosivity not rejected at the 5% level.
 #> 
 
 # Force a specific lead/lag instead of estimating it
-res_lag0 <- cobubble_test(sim_data$psy1, sim_data$psy2, lag = 0L, nboot = 199L, seed = 1)
+res_lag0 <- cobubble_test(xy$y, xy$x, lag = 0L, nboot = 199L, seed = 1)
 print(res_lag0)
 #> 
 #> ── cobubble_test (lag = 0, nboot = 199) ────────────────────────────────────────
 #> 
-#> S = 1.802, cv(95%) = 0.3759, p-value = 0
+#> S = 0.2364, cv(95%) = 0.4048, p-value = 0.1508
+#> Co-explosivity not rejected at the 5% level.
+#> 
+
+# Two independent bubbles: co-explosivity correctly rejected
+cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
+#> 
+#> ── cobubble_test (lag = -2, nboot = 199) ───────────────────────────────────────
+#> 
+#> S = 1.533, cv(95%) = 0.2998, p-value = 0
 #> Co-explosivity rejected at the 5% level.
 #> 
 

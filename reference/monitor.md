@@ -21,9 +21,6 @@ monitor(
   boundary = c("bootstrap", "kurozumi", "fluc"),
   s0 = 0
 )
-
-# S3 method for class 'monitor_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -87,10 +84,6 @@ autoplot(object, ...)
   the `GSADF_{s0}` case (window start ranges over
   `[1, floor(T* * s0)]`), the only two values his boundary function's
   scaling constants are tabulated for.
-
-- object:
-
-  An object of class `monitor_obj`, the output of `monitor`.
 
 ## Value
 
@@ -173,58 +166,32 @@ already exists.
 
 ``` r
 # \donttest{
+# A bubble-free training window (first half), explosive from t = 150 on
+y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 # Default: Phillips & Shi (2020) wild bootstrap boundary
-mon <- monitor(sim_data, r_star = 0.5, nboot = 200)
+mon <- monitor(y, r_star = 0.5, nboot = 200)
 print(mon)
 #> 
-#> ── monitor (T* = 50 / 100, minw = 19, level = 95%, boundary = bootstrap) ───────
+#> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────
 #> 
-#>   series  boundary  alarm  alarm_date
-#>     psy1     1.869     51          51
-#>     psy2     2.625     66          66
-#>    evans     2.121     67          67
-#>      div     1.457     NA        <NA>
-#>     blan     2.103     85          85
+#>    series  boundary  alarm  alarm_date
+#>   series1     2.051    156         156
 #> 
 autoplot(mon)
-#> Warning: Removed 2 rows containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 2 rows containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 2 rows containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
 #> (`geom_segment()`).
 
 
 # Kurozumi (2020) closed-form boundary -- no bootstrap needed
-mon_kz <- monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+mon_kz <- monitor(y, r_star = 0.5, boundary = "kurozumi")
 autoplot(mon_kz)
 #> Warning: Removed 2 rows containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
 #> (`geom_segment()`).
 
 
 # Homm & Breitung (2012) FLUC boundary
-autoplot(monitor(sim_data, r_star = 0.5, boundary = "fluc"))
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
-#> (`geom_segment()`).
-#> Warning: Removed 1 row containing missing values or values outside the scale range
+autoplot(monitor(y, r_star = 0.5, boundary = "fluc"))
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
 #> (`geom_segment()`).
 
 # }

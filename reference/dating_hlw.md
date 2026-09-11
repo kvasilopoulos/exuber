@@ -23,9 +23,6 @@ dating_hlw(
   nboot = 199L,
   seed = NULL
 )
-
-# S3 method for class 'dating_hlw_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -76,10 +73,6 @@ autoplot(object, ...)
   Passed to
   [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
   when `cv` is not supplied.
-
-- object:
-
-  An object of class `dating_hlw_obj`, the output of `dating_hlw`.
 
 ## Value
 

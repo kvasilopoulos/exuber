@@ -19,9 +19,6 @@ quantile_test(
   level = 95,
   seed = NULL
 )
-
-# S3 method for class 'quantile_test_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -60,10 +57,6 @@ autoplot(object, ...)
 - seed:
 
   Optional seed for the Monte Carlo draws.
-
-- object:
-
-  An object of class `quantile_test_obj`, the output of `quantile_test`.
 
 ## Value
 
@@ -115,19 +108,21 @@ the mean-regression (ADF/SADF/GSADF) family this complements.
 
 ``` r
 # \donttest{
-res <- quantile_test(sim_data$psy2, nrep = 100, seed = 1)
+# Heavy-tailed (t3) innovations: where a quantile test earns its keep over the mean
+y <- sim_psy1(n = 100, seed = 1, e = sim_innov(99, dist = "t", df = 3))
+res <- quantile_test(y, nrep = 100, seed = 1)
 print(res)
 #> 
 #> ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────
 #> 
-#>    series   tau  tstat    crit  delta  detected
-#>   series1  0.35  5.364  0.7143  0.361      TRUE
+#>    series  tau   tstat   crit  delta  detected
+#>   series1  0.4  0.2724  0.576  0.439     FALSE
 #> 
 autoplot(res)
 
 
 # Test at a fixed upper quantile instead of the optimal one
-autoplot(quantile_test(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
+autoplot(quantile_test(y, tau = 0.9, nrep = 100, seed = 1))
 
 # }
 ```

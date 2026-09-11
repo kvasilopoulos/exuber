@@ -76,9 +76,14 @@
         </dt>
         <dd>Look Up exuber's Test/Procedure Functions by Family</dd>
       </dl></div><div class="section level2">
-      <h2 id="recursive-augmented-dickey-fuller">Recursive Augmented Dickey Fuller<a class="anchor" aria-label="anchor" href="#recursive-augmented-dickey-fuller"></a></h2>
+      <h2 id="recursive-augmented-dickey-fuller">Recursive Augmented Dickey-Fuller<a class="anchor" aria-label="anchor" href="#recursive-augmented-dickey-fuller"></a></h2>
 
-      <div class="section-desc"><p>Estimation &amp; Critical Values – the cornerstone of the package</p></div>
+      <div class="section-desc"><p>Estimation &amp; critical values – the cornerstone of the package. Each function is listed with the methods that consume its output.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="radf-">radf()<a class="anchor" aria-label="anchor" href="#radf-"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
@@ -93,6 +98,43 @@
         <dd>Recursive Augmented Dickey-Fuller Test</dd>
 
         <dt>
+
+          <code><a href="summary.radf_obj.html">summary(<i>&lt;radf_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Summarizing <code>radf</code> models</dd>
+
+        <dt>
+
+          <code><a href="tidy.radf_obj.html">tidy(<i>&lt;radf_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Tidy a <code>radf_obj</code> object</dd>
+
+        <dt>
+
+          <code><a href="augment.radf_obj.html">augment(<i>&lt;radf_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Augment a <code>radf_obj</code> object</dd>
+
+        <dt>
+
+          <code><a href="autoplot.radf_obj.html">autoplot(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="autoplot.radf_obj.html">autoplot2(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="autoplot.radf_obj.html">shade()</a></code>
+
+        </dt>
+        <dd>Plotting <code>radf</code> models</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="critical-values">Critical values<a class="anchor" aria-label="anchor" href="#critical-values"></a></h3>
+      <div class="section-desc"><p>One engine per null distribution; each <code>_cv()</code> has a <code>_distr()</code> twin that returns the full simulated distribution instead of its quantiles</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="radf_mc_cv.html">radf_mc_cv()</a></code> <code><a href="radf_mc_cv.html">radf_mc_distr()</a></code>
 
@@ -126,66 +168,20 @@
 
         </dt>
         <dd>Stored Monte Carlo Critical Values</dd>
-      </dl></div><div class="section level2">
-      <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a></h2>
-
-      <div class="section-desc"><p>The core workflow, in order: summarize the fit, check which series reject the null, date the explosive episodes, then quantify how fast each one is growing</p></div>
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="summary.radf_obj.html">summary(<i>&lt;radf_obj&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Summarizing <code>radf</code> models</dd>
 
         <dt>
 
-          <code><a href="diagnostics.html">diagnostics()</a></code>
-
-        </dt>
-        <dd>Diagnostics on hypothesis testing</dd>
-
-        <dt>
-
-          <code><a href="datestamp.html">datestamp()</a></code>
-
-        </dt>
-        <dd>Date-stamping periods of mildly explosive behavior</dd>
-
-        <dt>
-
-          <code><a href="rootstamp.html">rootstamp()</a></code> <code><a href="rootstamp.html">autoplot(<i>&lt;rootstamp_est&gt;</i>)</a></code> <code><a href="rootstamp.html">autoplot(<i>&lt;rootstamp_episodes&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Confidence Interval and Doubling Time for an Explosive Root</dd>
-      </dl></div><div class="section level2">
-      <h2 id="tidying">Tidying<a class="anchor" aria-label="anchor" href="#tidying"></a></h2>
-
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="tidy.radf_obj.html">tidy(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="tidy.radf_obj.html">augment(<i>&lt;radf_obj&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Tidy a <code>radf_obj</code> object</dd>
-
-        <dt>
-
-          <code><a href="tidy.radf_cv.html">tidy(<i>&lt;radf_cv&gt;</i>)</a></code> <code><a href="tidy.radf_cv.html">augment(<i>&lt;radf_cv&gt;</i>)</a></code>
+          <code><a href="tidy.radf_cv.html">tidy(<i>&lt;radf_cv&gt;</i>)</a></code>
 
         </dt>
         <dd>Tidy a <code>radf_cv</code> object</dd>
+
+        <dt>
+
+          <code><a href="augment.radf_cv.html">augment(<i>&lt;radf_cv&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Augment a <code>radf_cv</code> object</dd>
 
         <dt>
 
@@ -196,13 +192,13 @@
 
         <dt>
 
-          <code><a href="tidy.ds_radf.html">tidy(<i>&lt;ds_radf&gt;</i>)</a></code>
+          <code><a href="autoplot.radf_distr.html">autoplot(<i>&lt;radf_distr&gt;</i>)</a></code>
 
         </dt>
-        <dd>Tidy a <code>ds_radf</code> object</dd>
+        <dd>Plotting a <code>radf_distr</code> object</dd>
       </dl></div><div class="section level2">
-      <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a></h2>
 
+      <h3 id="joining-statistics-and-critical-values">Joining statistics and critical values<a class="anchor" aria-label="anchor" href="#joining-statistics-and-critical-values"></a></h3>
 
 
       <dl></dl></div><div class="section level2">
@@ -212,17 +208,75 @@
 
       <dl><dt>
 
-          <code><a href="autoplot.radf_obj.html">autoplot(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="autoplot.radf_obj.html">autoplot2(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="autoplot.radf_obj.html">shade()</a></code>
+          <code><a href="tidy_join.html">tidy_join()</a></code>
 
         </dt>
-        <dd>Plotting <code>radf</code> models</dd>
+        <dd>Tidy into a joint model</dd>
 
         <dt>
 
-          <code><a href="autoplot.radf_distr.html">autoplot(<i>&lt;radf_distr&gt;</i>)</a></code>
+          <code><a href="tidy_join.radf_obj.html">tidy_join(<i>&lt;radf_obj&gt;</i>)</a></code>
 
         </dt>
-        <dd>Plotting a <code>radf_distr</code> object</dd>
+        <dd>Tidy into a joint model</dd>
+
+        <dt>
+
+          <code><a href="augment_join.html">augment_join()</a></code>
+
+        </dt>
+        <dd>Augment into a joint model</dd>
+
+        <dt>
+
+          <code><a href="augment_join.radf_obj.html">augment_join(<i>&lt;radf_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Augment into a joint model</dd>
+      </dl></div><div class="section level2">
+      <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a></h2>
+
+      <div class="section-desc"><p>The core workflow, in order: check which series reject the null, date the explosive episodes, then quantify how fast each one is growing</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="diagnostics-">diagnostics()<a class="anchor" aria-label="anchor" href="#diagnostics-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="diagnostics.html">diagnostics()</a></code>
+
+        </dt>
+        <dd>Diagnostics on hypothesis testing</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="datestamp-">datestamp()<a class="anchor" aria-label="anchor" href="#datestamp-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="datestamp.html">datestamp()</a></code>
+
+        </dt>
+        <dd>Date-stamping periods of mildly explosive behavior</dd>
+
+        <dt>
+
+          <code><a href="tidy.ds_radf.html">tidy(<i>&lt;ds_radf&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Tidy a <code>ds_radf</code> object</dd>
 
         <dt>
 
@@ -230,13 +284,36 @@
 
         </dt>
         <dd>Plotting a <code>ds_radf</code> object</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="rootstamp-">rootstamp()<a class="anchor" aria-label="anchor" href="#rootstamp-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="rootstamp.html">rootstamp()</a></code>
+
+        </dt>
+        <dd>Confidence Interval and Doubling Time for an Explosive Root</dd>
 
         <dt>
 
-          <code><a href="scale_exuber_manual.html">scale_exuber_manual()</a></code> <code><a href="scale_exuber_manual.html">theme_exuber()</a></code>
+          <code><a href="autoplot.rootstamp_est.html">autoplot(<i>&lt;rootstamp_est&gt;</i>)</a></code>
 
         </dt>
-        <dd>Exuber scale and theme functions</dd>
+        <dd>Plot method for rootstamp() output on a single sub-sample</dd>
+
+        <dt>
+
+          <code><a href="autoplot.rootstamp_episodes.html">autoplot(<i>&lt;rootstamp_episodes&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for rootstamp() output on datestamped episodes</dd>
       </dl></div><div class="section level2">
       <h2 id="heteroskedasticity-robust-time-transformed-">Heteroskedasticity-robust (time-transformed)<a class="anchor" aria-label="anchor" href="#heteroskedasticity-robust-time-transformed-"></a></h2>
 
@@ -267,6 +344,11 @@
 
       <dl></dl></div><div class="section level2">
 
+      <h3 id="radf-sbz-">radf_sbz()<a class="anchor" aria-label="anchor" href="#radf-sbz-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
 
 
 
@@ -286,19 +368,28 @@
 
         <dt>
 
-          <code><a href="radf_sbz_union.html">radf_sbz_union()</a></code> <code><a href="radf_sbz_union.html">autoplot(<i>&lt;radf_sbz_union&gt;</i>)</a></code>
+          <code><a href="radf_sbz_union.html">radf_sbz_union()</a></code>
 
         </dt>
         <dd>SBZ Weighted Least Squares Bubble Test with Union-of-Rejections</dd>
 
         <dt>
 
-          <code><a href="radf_kp.html">radf_kp()</a></code>
+          <code><a href="autoplot.radf_sbz_union.html">autoplot(<i>&lt;radf_sbz_union&gt;</i>)</a></code>
 
         </dt>
-        <dd>Kernel-Purged Heteroskedasticity-Robust PSY Test</dd>
+        <dd>Plot method for radf_sbz_union() output</dd>
+      </dl></div><div class="section level2">
 
-        <dt>
+      <h3 id="radf-sign-">radf_sign()<a class="anchor" aria-label="anchor" href="#radf-sign-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="radf_sign.html">radf_sign()</a></code>
 
@@ -325,17 +416,10 @@
 
         </dt>
         <dd>Monte Carlo Critical Values for the Recursively Demeaned Sign-Based Test</dd>
-
-        <dt>
-
-          <code><a href="ssu_test.html">ssu_test()</a></code> <code><a href="ssu_test.html">autoplot(<i>&lt;ssu_test_obj&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Stochastic Unit Root Bubble Test (Kurozumi &amp; Nishi 2025)</dd>
       </dl></div><div class="section level2">
-      <h2 id="dating-and-root-inference">Dating and root inference<a class="anchor" aria-label="anchor" href="#dating-and-root-inference"></a></h2>
 
-      <div class="section-desc"><p>Standalone dating procedures with no critical value needed, and recovery dating; see docs/enhancements/dating-and-root-inference.md. rootstamp() itself now lives under Analysis above – it’s the last step of the core workflow, not an alternative to datestamp()</p></div>
+      <h3 id="ssu-test-">ssu_test()<a class="anchor" aria-label="anchor" href="#ssu-test-"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
@@ -344,14 +428,143 @@
 
       <dl><dt>
 
-          <code><a href="dating_pdc.html">dating_pdc()</a></code> <code><a href="dating_pdc.html">autoplot(<i>&lt;dating_pdc_obj&gt;</i>)</a></code>
+          <code><a href="ssu_test.html">ssu_test()</a></code>
+
+        </dt>
+        <dd>Stochastic Unit Root Bubble Test (Kurozumi &amp; Nishi 2025)</dd>
+
+        <dt>
+
+          <code><a href="autoplot.ssu_test_obj.html">autoplot(<i>&lt;ssu_test_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for ssu_test() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="radf-kp-">radf_kp()<a class="anchor" aria-label="anchor" href="#radf-kp-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="radf_kp.html">radf_kp()</a></code>
+
+        </dt>
+        <dd>Kernel-Purged Heteroskedasticity-Robust PSY Test</dd>
+      </dl></div><div class="section level2">
+      <h2 id="dating-procedures">Dating procedures<a class="anchor" aria-label="anchor" href="#dating-procedures"></a></h2>
+
+      <div class="section-desc"><p>Standalone dating procedures with no critical value needed, and recovery dating; see docs/enhancements/dating-and-root-inference.md. rootstamp() itself lives under Analysis above – it’s the last step of the core workflow, not an alternative to datestamp()</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="dating-pdc-">dating_pdc()<a class="anchor" aria-label="anchor" href="#dating-pdc-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="dating_pdc.html">dating_pdc()</a></code>
 
         </dt>
         <dd>Sequential Sample-Splitting Bubble Dating (PDC/KS)</dd>
 
         <dt>
 
-          <code><a href="radf_recovery.html">radf_recovery()</a></code> <code><a href="radf_recovery.html">autoplot(<i>&lt;radf_recovery_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.dating_pdc_obj.html">autoplot(<i>&lt;dating_pdc_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for dating_pdc() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="dating-hls-">dating_hls()<a class="anchor" aria-label="anchor" href="#dating-hls-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="dating_hls.html">dating_hls()</a></code>
+
+        </dt>
+        <dd>SSR/BIC Bubble Dating (Harvey, Leybourne &amp; Sollis 2017)</dd>
+
+        <dt>
+
+          <code><a href="autoplot.dating_hls_obj.html">autoplot(<i>&lt;dating_hls_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for dating_hls() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="dating-hlw-">dating_hlw()<a class="anchor" aria-label="anchor" href="#dating-hlw-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="dating_hlw.html">dating_hlw()</a></code>
+
+        </dt>
+        <dd>Multi-Bubble SSR/BIC Dating (Harvey, Leybourne &amp; Whitehouse 2020)</dd>
+
+        <dt>
+
+          <code><a href="autoplot.dating_hlw_obj.html">autoplot(<i>&lt;dating_hlw_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for dating_hlw() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="dating-knp-">dating_knp()<a class="anchor" aria-label="anchor" href="#dating-knp-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="dating_knp.html">dating_knp()</a></code>
+
+        </dt>
+        <dd>Bias-Corrected Single-Bubble Dating (Kejriwal, Nguyen &amp; Perron 2025)</dd>
+
+        <dt>
+
+          <code><a href="autoplot.dating_knp_obj.html">autoplot(<i>&lt;dating_knp_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for dating_knp() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="radf-recovery-">radf_recovery()<a class="anchor" aria-label="anchor" href="#radf-recovery-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="radf_recovery.html">radf_recovery()</a></code>
 
         </dt>
         <dd>Reverse-Regression Dating of Crisis Origination and Market Recovery</dd>
@@ -365,28 +578,19 @@
 
         <dt>
 
-          <code><a href="dating_hls.html">dating_hls()</a></code> <code><a href="dating_hls.html">autoplot(<i>&lt;dating_hls_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.radf_recovery_obj.html">autoplot(<i>&lt;radf_recovery_obj&gt;</i>)</a></code>
 
         </dt>
-        <dd>SSR/BIC Bubble Dating (Harvey, Leybourne &amp; Sollis 2017)</dd>
-
-        <dt>
-
-          <code><a href="dating_hlw.html">dating_hlw()</a></code> <code><a href="dating_hlw.html">autoplot(<i>&lt;dating_hlw_obj&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Multi-Bubble SSR/BIC Dating (Harvey, Leybourne &amp; Whitehouse 2020)</dd>
-
-        <dt>
-
-          <code><a href="dating_knp.html">dating_knp()</a></code> <code><a href="dating_knp.html">autoplot(<i>&lt;dating_knp_obj&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Bias-Corrected Single-Bubble Dating (Kejriwal, Nguyen &amp; Perron 2025)</dd>
+        <dd>Plot method for radf_recovery() output</dd>
       </dl></div><div class="section level2">
       <h2 id="real-time-monitoring">Real-time monitoring<a class="anchor" aria-label="anchor" href="#real-time-monitoring"></a></h2>
 
       <div class="section-desc"><p>Sequential/real-time bubble detection; see docs/enhancements/monitoring.md. Each monitor is listed with its static, full-sample counterpart where one exists.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="monitor-">monitor()<a class="anchor" aria-label="anchor" href="#monitor-"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
@@ -395,49 +599,123 @@
 
       <dl><dt>
 
-          <code><a href="monitor.html">monitor()</a></code> <code><a href="monitor.html">autoplot(<i>&lt;monitor_obj&gt;</i>)</a></code>
+          <code><a href="monitor.html">monitor()</a></code>
 
         </dt>
         <dd>Real-Time Monitoring for Explosive Bubbles</dd>
 
         <dt>
 
-          <code><a href="monitor_cusum.html">monitor_cusum()</a></code> <code><a href="monitor_cusum.html">autoplot(<i>&lt;monitor_cusum_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.monitor_obj.html">autoplot(<i>&lt;monitor_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for monitor() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="monitor-cusum-">monitor_cusum()<a class="anchor" aria-label="anchor" href="#monitor-cusum-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="monitor_cusum.html">monitor_cusum()</a></code>
 
         </dt>
         <dd>CUSUM Real-Time Monitoring for Explosive Bubbles</dd>
 
         <dt>
 
-          <code><a href="monitor_lbi.html">monitor_lbi()</a></code> <code><a href="monitor_lbi.html">autoplot(<i>&lt;monitor_lbi_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.monitor_cusum_obj.html">autoplot(<i>&lt;monitor_cusum_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for monitor_cusum() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="monitor-lbi-">monitor_lbi()<a class="anchor" aria-label="anchor" href="#monitor-lbi-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="monitor_lbi.html">monitor_lbi()</a></code>
 
         </dt>
         <dd>Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung &amp; Diegel 2025)</dd>
 
         <dt>
 
-          <code><a href="lbi_test.html">lbi_test()</a></code> <code><a href="lbi_test.html">autoplot(<i>&lt;lbi_test_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.monitor_lbi_obj.html">autoplot(<i>&lt;monitor_lbi_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for monitor_lbi() output</dd>
+
+        <dt>
+
+          <code><a href="lbi_test.html">lbi_test()</a></code>
 
         </dt>
         <dd>Locally Best Invariant Test for a Bubble (Breitung &amp; Diegel 2025)</dd>
 
         <dt>
 
-          <code><a href="monitor_quantile.html">monitor_quantile()</a></code> <code><a href="monitor_quantile.html">autoplot(<i>&lt;monitor_quantile_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.lbi_test_obj.html">autoplot(<i>&lt;lbi_test_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for lbi_test() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="monitor-quantile-">monitor_quantile()<a class="anchor" aria-label="anchor" href="#monitor-quantile-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="monitor_quantile.html">monitor_quantile()</a></code>
 
         </dt>
         <dd>QPWY Recursive Quantile Monitoring (Wu, Shi &amp; Wu 2025)</dd>
 
         <dt>
 
-          <code><a href="quantile_test.html">quantile_test()</a></code> <code><a href="quantile_test.html">autoplot(<i>&lt;quantile_test_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.monitor_quantile_obj.html">autoplot(<i>&lt;monitor_quantile_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for monitor_quantile() output</dd>
+
+        <dt>
+
+          <code><a href="quantile_test.html">quantile_test()</a></code>
 
         </dt>
         <dd>Quantile Unit Root Test for Bubble Detection (Global Test)</dd>
+
+        <dt>
+
+          <code><a href="autoplot.quantile_test_obj.html">autoplot(<i>&lt;quantile_test_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for quantile_test() output</dd>
       </dl></div><div class="section level2">
       <h2 id="multivariate-panel-bubble-tests">Multivariate / panel bubble tests<a class="anchor" aria-label="anchor" href="#multivariate-panel-bubble-tests"></a></h2>
 
       <div class="section-desc"><p>Panel and cross-series tests; see docs/enhancements/multivariate.md</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="radf-common-">radf_common()<a class="anchor" aria-label="anchor" href="#radf-common-"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
@@ -457,23 +735,60 @@
 
         </dt>
         <dd>Critical Values for the Common-Bubble (PCA + PSY) Test</dd>
+      </dl></div><div class="section level2">
 
-        <dt>
+      <h3 id="cobubble-test-">cobubble_test()<a class="anchor" aria-label="anchor" href="#cobubble-test-"></a></h3>
 
-          <code><a href="cobubble_test.html">cobubble_test()</a></code> <code><a href="cobubble_test.html">autoplot(<i>&lt;cobubble_test&gt;</i>)</a></code>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="cobubble_test.html">cobubble_test()</a></code>
 
         </dt>
         <dd>Test for Co-explosive Behaviour Between Two Series</dd>
 
         <dt>
 
-          <code><a href="contagion_reg.html">contagion_reg()</a></code> <code><a href="contagion_reg.html">autoplot(<i>&lt;contagion_reg_obj&gt;</i>)</a></code>
+          <code><a href="autoplot.cobubble_test.html">autoplot(<i>&lt;cobubble_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for cobubble_test() output</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="contagion-reg-">contagion_reg()<a class="anchor" aria-label="anchor" href="#contagion-reg-"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="contagion_reg.html">contagion_reg()</a></code>
 
         </dt>
         <dd>Bubble Contagion Regression (Greenaway-McGrevy &amp; Phillips 2016)</dd>
+
+        <dt>
+
+          <code><a href="autoplot.contagion_reg_obj.html">autoplot(<i>&lt;contagion_reg_obj&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plot method for contagion_reg() output</dd>
       </dl></div><div class="section level2">
       <h2 id="simulation">Simulation<a class="anchor" aria-label="anchor" href="#simulation"></a></h2>
 
+
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="original-dgps">Original DGPs<a class="anchor" aria-label="anchor" href="#original-dgps"></a></h3>
 
 
       <dl></dl></div><div class="section level2">
@@ -523,8 +838,8 @@
         </dt>
         <dd>Simulation of dividends</dd>
       </dl></div><div class="section level2">
-      <h2 id="simulation-additional-dgps-">Simulation (additional DGPs)<a class="anchor" aria-label="anchor" href="#simulation-additional-dgps-"></a></h2>
 
+      <h3 id="additional-dgps">Additional DGPs<a class="anchor" aria-label="anchor" href="#additional-dgps"></a></h3>
       <div class="section-desc"><p>Data-generating processes for axes exuber’s original sim_*() functions don’t cover – time-varying volatility, non-Gaussian innovations, long memory, and distinct multi-series/branching mechanisms; see docs/enhancements/simulation-dgps.md</p></div>
 
       <dl></dl></div><div class="section level2">
@@ -609,6 +924,22 @@
         </dt>
         <dd>Simulation of a deterministic technology-adoption "false bubble" null</dd>
       </dl></div><div class="section level2">
+
+      <h3 id="bundled-data">Bundled data<a class="anchor" aria-label="anchor" href="#bundled-data"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="sim_data.html">sim_data</a></code> <code><a href="sim_data.html">sim_data_wdate</a></code>
+
+        </dt>
+        <dd>Simulated dataset</dd>
+      </dl></div><div class="section level2">
       <h2 id="helpers">Helpers<a class="anchor" aria-label="anchor" href="#helpers"></a></h2>
 
 
@@ -645,29 +976,13 @@
 
         </dt>
         <dd>Helper function to find <code>tb</code> from the Phillips and Shi (2020)</dd>
-      </dl></div><div class="section level2">
-      <h2 id="extra-tidying-methods">Extra tidying methods<a class="anchor" aria-label="anchor" href="#extra-tidying-methods"></a></h2>
-
-
-
-      <dl></dl></div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="tidy_join.html">tidy_join()</a></code> <code><a href="tidy_join.html">augment_join()</a></code>
-
-        </dt>
-        <dd>Tidy into a joint model</dd>
 
         <dt>
 
-          <code><a href="tidy_join.radf_obj.html">tidy_join(<i>&lt;radf_obj&gt;</i>)</a></code> <code><a href="tidy_join.radf_obj.html">augment_join(<i>&lt;radf_obj&gt;</i>)</a></code>
+          <code><a href="scale_exuber_manual.html">scale_exuber_manual()</a></code> <code><a href="scale_exuber_manual.html">theme_exuber()</a></code>
 
         </dt>
-        <dd>Tidy into a joint model</dd>
+        <dd>Exuber scale and theme functions</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

@@ -18,9 +18,6 @@ contagion_reg(
   h = NULL,
   r_grid = seq(0, 1, length.out = 100)
 )
-
-# S3 method for class 'contagion_reg_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -51,10 +48,6 @@ autoplot(object, ...)
 
   Evaluation points for the time-varying coefficient, as fractions of
   the sample (default `seq(0, 1, length.out = 100)`).
-
-- object:
-
-  An object of class `contagion_reg_obj`, the output of `contagion_reg`.
 
 ## Value
 
@@ -112,12 +105,14 @@ relationship.
 
 ``` r
 # \donttest{
-res <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0L)
+# A co-explosive pair: y's AR coefficient tracks x's almost one-for-one
+xy <- sim_coexplosive(n = 100, seed = 123)
+res <- contagion_reg(xy$y, xy$x, d = 0L)
 print(res)
 #> 
 #> ── contagion_reg (n = 100, S = 33, d = 0, h = 0.6567) ──────────────────────────
 #> 
-#> delta_2(r) range: [0.163, 0.182] 
+#> delta_2(r) range: [0.948, 0.965] 
 #> 
 
 # Plot the estimated time-varying contagion coefficient
@@ -125,7 +120,7 @@ autoplot(res)
 
 
 # Compare a one-period lead (d = 1) against the contemporaneous case
-res_d1 <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 1L)
+res_d1 <- contagion_reg(xy$y, xy$x, d = 1L)
 autoplot(res) +
   ggplot2::geom_line(data = data.frame(r = res_d1$r_grid, delta2 = res_d1$delta2),
     ggplot2::aes(r, delta2), color = "red", inherit.aes = FALSE)

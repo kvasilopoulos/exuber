@@ -14,9 +14,6 @@ minimising.
 
 ``` r
 dating_knp(data, trim = 0.05, omit = TRUE)
-
-# S3 method for class 'dating_knp_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -44,10 +41,6 @@ autoplot(object, ...)
   (default `TRUE`). `FALSE` gives the plain, provably inconsistent OLS
   estimator (their Theorem 1) – kept mainly to demonstrate the
   correction's effect, not for practical dating.
-
-- object:
-
-  An object of class `dating_knp_obj`, the output of `dating_knp`.
 
 ## Value
 

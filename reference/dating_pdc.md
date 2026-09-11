@@ -19,9 +19,6 @@ dating_pdc(
   kernel = c("gaussian", "uniform"),
   h = NULL
 )
-
-# S3 method for class 'dating_pdc_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -64,10 +61,6 @@ autoplot(object, ...)
 
   Bandwidth for the spot-volatility estimator when `type = "wls"`.
   Default: leave-one-out cross-validation. Ignored when `type = "ols"`.
-
-- object:
-
-  An object of class `dating_pdc_obj`, the output of `dating_pdc`.
 
 ## Value
 
@@ -134,20 +127,25 @@ for the PSY threshold-crossing alternative.
 
 ``` r
 # \donttest{
-res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
+# sim_ps1()'s unit-root -> explosive -> collapse -> recovery DGP is exactly
+# the regime structure dating_pdc() fits (true breaks at 40, 60, 70)
+y <- sim_ps1(n = 100, seed = 1)
+res <- dating_pdc(y, regimes = 3L, trim = 0.05)
 print(res)
 #>         origination collapse
-#> series1          40       54
+#> series1          38       59
 autoplot(res)
 
 
 # 4-regime extension, adding a post-collapse recovery breakpoint
-res4 <- dating_pdc(sim_data$psy1, regimes = 4L, trim = 0.05)
+res4 <- dating_pdc(y, regimes = 4L, trim = 0.05)
 autoplot(res4)
 
 
 # Volatility-weighted (WLS) variant, robust to time-varying volatility
-autoplot(dating_pdc(sim_data$psy1, type = "wls"))
-
+y_vol <- sim_ps1(n = 100, seed = 1, e = sim_vol_break(99))
+#> Error in sim_vol_break(99): could not find function "sim_vol_break"
+autoplot(dating_pdc(y_vol, type = "wls"))
+#> Error: object 'y_vol' not found
 # }
 ```

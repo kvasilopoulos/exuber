@@ -13,9 +13,6 @@ no published table.
 
 ``` r
 lbi_test(data, level = 0.95)
-
-# S3 method for class 'lbi_test_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -36,10 +33,6 @@ autoplot(object, ...)
 
   Nominal confidence level for the (one-sided, right-tailed – positive
   bubbles only) test (default `0.95`).
-
-- object:
-
-  An object of class `lbi_test_obj`, the output of `lbi_test`.
 
 ## Value
 

@@ -21,9 +21,6 @@ monitor_quantile(
   level = 95,
   seed = NULL
 )
-
-# S3 method for class 'monitor_quantile_obj'
-autoplot(object, ...)
 ```
 
 ## Arguments
@@ -64,11 +61,6 @@ autoplot(object, ...)
 - seed:
 
   Optional seed for the Monte Carlo draws.
-
-- object:
-
-  An object of class `monitor_quantile_obj`, the output of
-  `monitor_quantile`.
 
 ## Value
 
@@ -134,13 +126,16 @@ for the OLS-based monitoring alternative.
 
 ``` r
 # \donttest{
-res <- monitor_quantile(sim_data$psy2, tau = 0.5, nrep = 100, seed = 1)
+# Heavy-tailed (t3) innovations, explosive from t = 150 to the sample end
+y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
+  e = sim_innov(199, dist = "t", df = 3))
+res <- monitor_quantile(y, tau = 0.5, nrep = 100, seed = 1)
 print(res)
 #> 
-#> ── monitor_quantile (n = 100, minw = 19, tau = 0.5, level = 95%) ───────────────
+#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
-#>   series1  0.331     1.299     24          24
+#>   series1    0.7     1.615    166         166
 #> 
 autoplot(res)
 #> Warning: Removed 1 row containing missing values or values outside the scale range
@@ -148,7 +143,7 @@ autoplot(res)
 
 
 # Upper-quantile monitoring is typically more powerful for right-tailed bubbles
-autoplot(monitor_quantile(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
+autoplot(monitor_quantile(y, tau = 0.9, nrep = 100, seed = 1))
 #> Warning: Removed 1 row containing missing values or values outside the scale range
 #> (`geom_segment()`).
 

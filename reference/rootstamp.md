@@ -27,20 +27,15 @@ rootstamp(object, level = 0.95, type = c("normal", "cauchy"), ...)
 
 # S3 method for class 'radf_obj'
 rootstamp(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
-
-# S3 method for class 'rootstamp_est'
-autoplot(object, ...)
-
-# S3 method for class 'rootstamp_episodes'
-autoplot(object, ...)
 ```
 
 ## Arguments
 
 - object:
 
-  An object of class `rootstamp_est` (default method) or
-  `rootstamp_episodes` (`radf_obj` method) to plot.
+  For the default method, a numeric vector (the sub-sample to fit –
+  already sliced to the episode of interest). For the `radf_obj` method,
+  the `radf_obj` that `ds` was computed on.
 
 - ...:
 

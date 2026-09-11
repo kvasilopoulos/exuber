@@ -179,6 +179,17 @@ what was checked and how.
   `explosive_root()`, `root_ci()`, `root_ci_datestamp()` – consolidated
   before release).
 
+- Documentation: every
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  and [`augment()`](https://generics.r-lib.org/reference/augment.html)
+  method now has its own help page instead of sharing one with the
+  function it plots/tidies
+  ([`?autoplot.monitor_cusum_obj`](https://kvasilopoulos.github.io/exuber/reference/autoplot.monitor_cusum_obj.md),
+  [`?augment.radf_obj`](https://kvasilopoulos.github.io/exuber/reference/augment.radf_obj.md),
+  …). The pkgdown reference index is reorganised into per-function
+  subsections so each function is listed next to the methods that
+  consume its output.
+
 #### Bug fixes
 
 - [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)/[`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)’s
@@ -392,7 +403,7 @@ particular plot with ggplot2, respectively.
   objects of class `radf`, `cv`.
 - [`augment()`](https://generics.r-lib.org/reference/augment.html)
   methods for objects of class `radf` and `cv`.
-- [`augment_join()`](https://kvasilopoulos.github.io/exuber/reference/tidy_join.md)
+- [`augment_join()`](https://kvasilopoulos.github.io/exuber/reference/augment_join.md)
   to combine object `radf` and `cv` into a single data.frame.
 - `glance()` method for objects of class `radf`.
 

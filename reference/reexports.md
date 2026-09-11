@@ -25,5 +25,5 @@ to see their documentation.
 [`tidy.radf_cv`](https://kvasilopoulos.github.io/exuber/reference/tidy.radf_cv.md)
 [`tidy.radf_distr`](https://kvasilopoulos.github.io/exuber/reference/tidy.radf_distr.md)
 
-[`augment.radf_obj`](https://kvasilopoulos.github.io/exuber/reference/tidy.radf_obj.md)
-[`augment.radf_cv`](https://kvasilopoulos.github.io/exuber/reference/tidy.radf_cv.md)
+[`augment.radf_obj`](https://kvasilopoulos.github.io/exuber/reference/augment.radf_obj.md)
+[`augment.radf_cv`](https://kvasilopoulos.github.io/exuber/reference/augment.radf_cv.md)
