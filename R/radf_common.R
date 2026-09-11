@@ -65,11 +65,13 @@
 #'
 #' @examples
 #' \donttest{
-#' res <- radf_common(sim_data, minw = 20)
+#' # A panel of 5 series driven by one shared latent bubble factor
+#' x <- sim_common(n_series = 5, n = 100, seed = 123)
+#' res <- radf_common(x, minw = 20)
 #' print(res)
 #'
 #' # radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
-#' cv <- radf_common_cv(n = 100, N = ncol(sim_data), minw = 20)
+#' cv <- radf_common_cv(n = 100, N = ncol(x), minw = 20)
 #' summary(res, cv = cv)
 #'
 #' # The result is an ordinary radf_obj, so autoplot()/datestamp() work directly

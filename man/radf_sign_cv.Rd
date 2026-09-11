@@ -44,7 +44,7 @@ for \code{minw/n = 0.1}, (10\\%, 5\\%, 1\\%) = (2.410, 2.734, 3.248).
 
 \examples{
 \donttest{
-cv <- radf_sign_cv(n = 100, minw = 20)
+cv <- radf_sign_cv(n = 200, minw = 20)
 tidy(cv)
 }
 
