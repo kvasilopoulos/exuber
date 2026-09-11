@@ -417,8 +417,15 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
 
 # augment -----------------------------------------------------------------
 
+#' Augment a `radf_obj` object
+#'
+#' Returns the full test-statistic sequences (badf, bsadf) of a `radf_obj`,
+#' one row per observation; see \code{\link{tidy.radf_obj}} for the scalar
+#' statistics.
+#'
+#' @inheritParams tidy.radf_obj
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
-#' @rdname tidy.radf_obj
+#' @return A [tibble::tibble()]
 #'
 #' @importFrom dplyr rename as_tibble everything
 #' @importFrom tidyr gather pivot_longer drop_na
@@ -499,9 +506,15 @@ extract_obj_mat <- function(x) {
 
 # augment-cv --------------------------------------------------------------
 
-#' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
-#' @rdname tidy.radf_cv
+#' Augment a `radf_cv` object
+#'
+#' Returns the full critical-value sequences (badf_cv, bsadf_cv) of a
+#' `radf_cv`, one row per observation; see \code{\link{tidy.radf_cv}} for the
+#' scalar critical values.
+#'
 #' @inheritParams tidy.radf_cv
+#' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
+#' @return A [tibble::tibble()]
 #'
 #' @importFrom rlang as_double set_names
 #' @importFrom tidyr gather
@@ -631,13 +644,24 @@ extract_sb_stat <- function(x, stat = "bsadf_panel_cv") {
 
 
 
-#' @rdname tidy_join
+#' Augment into a joint model
+#'
+#' Augment and then join objects.
+#'
+#' @inheritParams tidy_join
 #' @export
 augment_join <- function(x, y, ...) {
   UseMethod("augment_join")
 }
 
+#' Augment into a joint model
+#'
+#' Augment and then join the full statistic sequences of a `radf_obj` with
+#' the critical-value sequences of a `radf_cv`, one row per observation --
+#' the table \code{\link{autoplot.radf_obj}} is built on.
+#'
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
+#' @return A [tibble::tibble()]
 #'
 #' @examples
 #' \donttest{
@@ -658,8 +682,8 @@ augment_join <- function(x, y, ...) {
 #'   facet_wrap(~id, scales = "free")
 #' }
 #'
+#' @inheritParams tidy_join.radf_obj
 #' @export
-#' @rdname tidy_join.radf_obj
 #' @importFrom dplyr inner_join select case_when all_of
 augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
   y <- y %||% retrieve_crit(x)

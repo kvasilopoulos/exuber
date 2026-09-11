@@ -108,12 +108,17 @@ coexplosive_select_lag <- function(y, x, lags) {
 #'
 #' @examples
 #' \donttest{
-#' res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
+#' # A genuinely co-explosive pair (Evripidou et al.'s own DGP): not rejected
+#' xy <- sim_coexplosive(n = 100, seed = 123)
+#' res <- cobubble_test(xy$y, xy$x, nboot = 199L, seed = 1)
 #' print(res)
 #'
 #' # Force a specific lead/lag instead of estimating it
-#' res_lag0 <- cobubble_test(sim_data$psy1, sim_data$psy2, lag = 0L, nboot = 199L, seed = 1)
+#' res_lag0 <- cobubble_test(xy$y, xy$x, lag = 0L, nboot = 199L, seed = 1)
 #' print(res_lag0)
+#'
+#' # Two independent bubbles: co-explosivity correctly rejected
+#' cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
 #'
 #' # Plot the two series being tested for co-explosivity
 #' autoplot(res)
@@ -159,8 +164,15 @@ cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
     add_class("cobubble_test")
 }
 
-#' @rdname cobubble_test
+#' Plot method for cobubble_test() output
+#'
+#' Plots the two input series over the sample, with the test statistic and lag in the title.
+#'
 #' @param object An object of class \code{cobubble_test}, the output of \code{\link{cobubble_test}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{cobubble_test}}
 #' @export
 autoplot.cobubble_test <- function(object, ...) {
   as.data.frame(attr(object, "mat")) %>%

@@ -173,7 +173,11 @@ ssu_stat_path <- function(ps, hi_idx) {
 #'
 #' @examples
 #' \donttest{
-#' res <- ssu_test(sim_data$psy1, level = 0.95)
+#' # A stochastically varying explosive root, rho_t = 1 + 3/n + 4 * u_t / sqrt(n):
+#' # the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
+#' y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
+#'   coef_noise = rnorm(149), coef_a = 4)
+#' res <- ssu_test(y, level = 0.95)
 #' print(res)
 #'
 #' # Plot the recursive SSU statistic path against its critical value
@@ -207,8 +211,15 @@ ssu_test <- function(data, minw = NULL, level = 0.95) {
     add_class("ssu_test_obj")
 }
 
-#' @rdname ssu_test
+#' Plot method for ssu_test() output
+#'
+#' Plots the recursive SSU statistic path against its critical value, one panel per series.
+#'
 #' @param object An object of class \code{ssu_test_obj}, the output of \code{\link{ssu_test}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{ssu_test}}
 #' @export
 autoplot.ssu_test_obj <- function(object, ...) {
   minw <- attr(object, "minw")

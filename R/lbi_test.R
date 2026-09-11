@@ -103,8 +103,15 @@ lbi_test <- function(data, level = 0.95) {
     add_class("lbi_test_obj")
 }
 
-#' @rdname lbi_test
+#' Plot method for lbi_test() output
+#'
+#' Bar chart of the LBI statistic per series against its critical value; series that exceed it are flagged as detected.
+#'
 #' @param object An object of class \code{lbi_test_obj}, the output of \code{\link{lbi_test}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{lbi_test}}
 #' @export
 autoplot.lbi_test_obj <- function(object, ...) {
   autoplot_stat_bar(object$stat, object$crit, object$detected, ylab = "LBI statistic")
@@ -314,8 +321,15 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
     add_class("monitor_lbi_obj")
 }
 
-#' @rdname monitor_lbi
+#' Plot method for monitor_lbi() output
+#'
+#' Plots the LBI CUSUM detector path against its boundary, one panel per series, with a vertical marker at the alarm date.
+#'
 #' @param object An object of class \code{monitor_lbi_obj}, the output of \code{\link{monitor_lbi}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{monitor_lbi}}
 #' @export
 autoplot.monitor_lbi_obj <- function(object, ...) {
   pos <- object$T_star + seq_len(nrow(object$stat))

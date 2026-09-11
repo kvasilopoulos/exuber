@@ -4,8 +4,6 @@
 \alias{rootstamp}
 \alias{rootstamp.default}
 \alias{rootstamp.radf_obj}
-\alias{autoplot.rootstamp_est}
-\alias{autoplot.rootstamp_episodes}
 \title{Confidence Interval and Doubling Time for an Explosive Root}
 \usage{
 rootstamp(object, ...)
@@ -13,14 +11,11 @@ rootstamp(object, ...)
 \method{rootstamp}{default}(object, level = 0.95, type = c("normal", "cauchy"), ...)
 
 \method{rootstamp}{radf_obj}(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
-
-\method{autoplot}{rootstamp_est}(object, ...)
-
-\method{autoplot}{rootstamp_episodes}(object, ...)
 }
 \arguments{
-\item{object}{An object of class \code{rootstamp_est} (default method) or
-\code{rootstamp_episodes} (\code{radf_obj} method) to plot.}
+\item{object}{For the default method, a numeric vector (the sub-sample to
+fit -- already sliced to the episode of interest). For the \code{radf_obj}
+method, the \code{radf_obj} that \code{ds} was computed on.}
 
 \item{...}{further arguments passed to methods.}
 

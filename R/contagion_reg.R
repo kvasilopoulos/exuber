@@ -225,14 +225,16 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #'
 #' @examples
 #' \donttest{
-#' res <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0L)
+#' # A co-explosive pair: y's AR coefficient tracks x's almost one-for-one
+#' xy <- sim_coexplosive(n = 100, seed = 123)
+#' res <- contagion_reg(xy$y, xy$x, d = 0L)
 #' print(res)
 #'
 #' # Plot the estimated time-varying contagion coefficient
 #' autoplot(res)
 #'
 #' # Compare a one-period lead (d = 1) against the contemporaneous case
-#' res_d1 <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 1L)
+#' res_d1 <- contagion_reg(xy$y, xy$x, d = 1L)
 #' autoplot(res) +
 #'   ggplot2::geom_line(data = data.frame(r = res_d1$r_grid, delta2 = res_d1$delta2),
 #'     ggplot2::aes(r, delta2), color = "red", inherit.aes = FALSE)
@@ -268,8 +270,15 @@ contagion_reg <- function(y, core, S = NULL, d = 0L, h = NULL,
     add_class("contagion_reg_obj")
 }
 
-#' @rdname contagion_reg
+#' Plot method for contagion_reg() output
+#'
+#' Plots the time-varying contagion coefficient \eqn{\delta_2(r)} against the sample fraction \eqn{r}, with a zero reference line.
+#'
 #' @param object An object of class \code{contagion_reg_obj}, the output of \code{\link{contagion_reg}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{contagion_reg}}
 #' @export
 autoplot.contagion_reg_obj <- function(object, ...) {
   tibble(r = object$r_grid, delta2 = object$delta2) %>%

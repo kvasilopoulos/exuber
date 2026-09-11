@@ -2,7 +2,6 @@
 % Please edit documentation in R/quantile_test.R
 \name{quantile_test}
 \alias{quantile_test}
-\alias{autoplot.quantile_test_obj}
 \title{Quantile Unit Root Test for Bubble Detection (Global Test)}
 \usage{
 quantile_test(
@@ -13,8 +12,6 @@ quantile_test(
   level = 95,
   seed = NULL
 )
-
-\method{autoplot}{quantile_test_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -39,8 +36,6 @@ practical range (excluding the extreme quantiles 0.1/0.9).}
 \item{level}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
-
-\item{object}{An object of class \code{quantile_test_obj}, the output of \code{\link{quantile_test}}.}
 }
 \value{
 An object of class \code{quantile_test_obj}: a list with the
@@ -87,12 +82,14 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-res <- quantile_test(sim_data$psy2, nrep = 100, seed = 1)
+# Heavy-tailed (t3) innovations: where a quantile test earns its keep over the mean
+y <- sim_psy1(n = 100, seed = 1, e = sim_innov(99, dist = "t", df = 3))
+res <- quantile_test(y, nrep = 100, seed = 1)
 print(res)
 autoplot(res)
 
 # Test at a fixed upper quantile instead of the optimal one
-autoplot(quantile_test(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
+autoplot(quantile_test(y, tau = 0.9, nrep = 100, seed = 1))
 }
 
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/radf_recovery.R
 \name{radf_recovery}
 \alias{radf_recovery}
-\alias{autoplot.radf_recovery_obj}
 \title{Reverse-Regression Dating of Crisis Origination and Market Recovery}
 \usage{
 radf_recovery(
@@ -13,8 +12,6 @@ radf_recovery(
   sig_lvl = 95,
   seed = NULL
 )
-
-\method{autoplot}{radf_recovery_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -38,8 +35,6 @@ not supported. When any series is padded this way, the panel statistic
 \item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
-
-\item{object}{An object of class \code{radf_recovery_obj}, the output of \code{\link{radf_recovery}}.}
 }
 \value{
 An object of class \code{radf_recovery_obj}: a list with

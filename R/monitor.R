@@ -316,17 +316,19 @@ hb_fluc_q <- function(level, n_train, k) {
 #'
 #' @examples
 #' \donttest{
+#' # A bubble-free training window (first half), explosive from t = 150 on
+#' y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 #' # Default: Phillips & Shi (2020) wild bootstrap boundary
-#' mon <- monitor(sim_data, r_star = 0.5, nboot = 200)
+#' mon <- monitor(y, r_star = 0.5, nboot = 200)
 #' print(mon)
 #' autoplot(mon)
 #'
 #' # Kurozumi (2020) closed-form boundary -- no bootstrap needed
-#' mon_kz <- monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+#' mon_kz <- monitor(y, r_star = 0.5, boundary = "kurozumi")
 #' autoplot(mon_kz)
 #'
 #' # Homm & Breitung (2012) FLUC boundary
-#' autoplot(monitor(sim_data, r_star = 0.5, boundary = "fluc"))
+#' autoplot(monitor(y, r_star = 0.5, boundary = "fluc"))
 #' }
 #'
 #' @export
@@ -437,8 +439,15 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
     add_class("monitor_obj")
 }
 
-#' @rdname monitor
+#' Plot method for monitor() output
+#'
+#' Plots the monitoring statistic against its boundary, one panel per series, with vertical markers at the end of the training sample and at the alarm date.
+#'
 #' @param object An object of class \code{monitor_obj}, the output of \code{\link{monitor}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{monitor}}
 #' @export
 autoplot.monitor_obj <- function(object, ...) {
   offset <- attr(object, "stat_offset")

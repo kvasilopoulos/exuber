@@ -302,8 +302,15 @@ print.dating_hls_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
   cat_line()
 }
 
-#' @rdname dating_hls
+#' Plot method for dating_hls() output
+#'
+#' Plots each series with vertical markers at the estimated origination, collapse and recovery dates.
+#'
 #' @param object An object of class \code{dating_hls_obj}, the output of \code{\link{dating_hls}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{dating_hls}}
 #' @export
 autoplot.dating_hls_obj <- function(object, ...) {
   idx <- index(object)

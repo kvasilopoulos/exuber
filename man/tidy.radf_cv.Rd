@@ -2,12 +2,9 @@
 % Please edit documentation in R/radf-tidiers.R
 \name{tidy.radf_cv}
 \alias{tidy.radf_cv}
-\alias{augment.radf_cv}
 \title{Tidy a \code{radf_cv} object}
 \usage{
 \method{tidy}{radf_cv}(x, format = c("wide", "long"), ...)
-
-\method{augment}{radf_cv}(x, format = c("wide", "long"), trunc = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{radf_cv}.}
@@ -15,8 +12,6 @@
 \item{format}{Long or wide format (default = "wide").}
 
 \item{...}{Further arguments passed to methods. Not used.}
-
-\item{trunc}{Whether to remove the period of the minimum window from the plot (default = TRUE).}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}
