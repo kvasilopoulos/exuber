@@ -115,8 +115,8 @@ print(res)
 #> 
 #> ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────
 #> 
-#>    series  tau   tstat   crit  delta  detected
-#>   series1  0.4  0.2724  0.576  0.439     FALSE
+#>    series   tau  tstat    crit  delta  detected
+#>   series1  0.25  4.684  0.6824  0.379      TRUE
 #> 
 autoplot(res)
 

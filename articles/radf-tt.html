@@ -111,16 +111,25 @@ needed.</p>
 <div class="section level2">
 <h2 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
+<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> targets <em>non-stationary</em> volatility – a
+permanent shift or trend in the unconditional innovation variance, the
+setting of Kurozumi, Skrobotov &amp; Tsarev’s own simulations.
+(Stationary conditional heteroskedasticity such as GARCH is not the
+target: its variance profile is asymptotically flat, so the
+time-deformation is close to the identity and plain <code><a href="../reference/radf.html">radf()</a></code>
+is already size-correct there.) <code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code> generates
+exactly such innovations, and <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s <code>e</code>
+argument injects them into the PSY bubble DGP – here the innovation
+standard deviation triples half-way through the sample:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── radf_tt (minw = 19, kernel = uniform) ───────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── radf_tt (minw = 27, kernel = uniform) ───────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series      adf   sadf  gsadf</span></span>
-<span><span class="co">#&gt;   series1  -0.7186  2.662  3.083</span></span></code></pre></div>
+<span><span class="co">#&gt;   series1  -0.9972  3.275  4.165</span></span></code></pre></div>
 <p><code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> gives the matching (pivotal) asymptotic
 critical values; because the null distribution doesn’t depend on the
 volatility path, one call with a large <code>n</code> approximates the
@@ -175,17 +184,17 @@ Monte Carlo/finite-sample tolerance of the published numbers.</p>
 to date and plot episodes, not just the summary-level critical values –
 so the usual pipeline works unchanged:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    21   27  35       14 positive   FALSE</span></span>
-<span><span class="co">#&gt; 2    55   55  73       18 positive   FALSE</span></span>
+<span><span class="co">#&gt; 1    21   38  89       68 negative   FALSE</span></span>
+<span><span class="co">#&gt; 2   148  148 150        2 positive   FALSE</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="radf-tt_files/figure-html/radf-tt-datestamp-1.png" class="r-plt" alt="" width="700"></p>
 <p>See <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for which other

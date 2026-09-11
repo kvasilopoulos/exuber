@@ -31,14 +31,29 @@ Neither carries the `radf_obj` class – see
 
 ## `cobubble_test()`: are these the same bubble?
 
-`sim_data$psy1` and `sim_data$psy2` are independently simulated
-explosive episodes, so a correct test should reject co-explosivity
-between them:
+[`sim_coexplosive()`](https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.md)
+is Evripidou et al.’s own DGP: `y` is a linear function of an explosive
+`x` (plus noise), so the pair *is* co-explosive and a correct test
+should not reject:
 
 ``` r
 
-res <- cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199, seed = 1)
+xy <- sim_coexplosive(n = 100, seed = 123)
+res <- cobubble_test(xy$y, xy$x, nboot = 199, seed = 1)
 res
+#> 
+#> ── cobubble_test (lag = 0, nboot = 199) ────────────────────────────────────────
+#> 
+#> S = 0.2364, cv(95%) = 0.4048, p-value = 0.1508
+#> Co-explosivity not rejected at the 5% level.
+```
+
+For contrast, `sim_data$psy1` and `sim_data$psy2` are independently
+simulated explosive episodes, sharing no bubble process by construction:
+
+``` r
+
+cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199, seed = 1)
 #> 
 #> ── cobubble_test (lag = -2, nboot = 199) ───────────────────────────────────────
 #> 
@@ -46,21 +61,23 @@ res
 #> Co-explosivity rejected at the 5% level.
 ```
 
-It does: `S` comfortably exceeds its (wild-bootstrap,
-heteroskedasticity-robust) critical value, and co-explosivity is
-rejected – correctly, since these two series share no common bubble
-process by construction.
+Here `S` comfortably exceeds its (wild-bootstrap,
+heteroskedasticity-robust) critical value and co-explosivity is rejected
+– correctly.
 
 ## `contagion_reg()`: how strongly do they co-move, and when?
 
+On the co-explosive pair, `y`’s AR(1) coefficient tracks `x`’s almost
+one-for-one throughout the sample:
+
 ``` r
 
-cr <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0)
+cr <- contagion_reg(xy$y, xy$x, d = 0)
 cr
 #> 
 #> ── contagion_reg (n = 100, S = 33, d = 0, h = 0.6567) ──────────────────────────
 #> 
-#> delta_2(r) range: [0.163, 0.182]
+#> delta_2(r) range: [0.948, 0.965]
 ```
 
 `cr$delta2` is the full estimated path over `cr$r_grid`, not just the
@@ -75,19 +92,16 @@ plot(cr$r_grid, cr$delta2, type = "l",
 
 ![](co-explosivity_files/figure-html/contagion-plot-1.png)
 
-For contrast, a series with no relationship to `psy2` at all – a plain
-random walk – gives a visibly different, wider-ranging path that also
-crosses zero:
+For contrast, the two independent `sim_data` series give a coefficient
+path sitting far below one:
 
 ``` r
 
-set.seed(5)
-indep <- cumsum(rnorm(100))
-cr_null <- contagion_reg(indep, sim_data$psy2, d = 0)
+cr_null <- contagion_reg(sim_data$psy1, sim_data$psy2, d = 0)
 range(cr_null$delta2)
-#> [1] -0.0124587  0.4871175
-range(cr$delta2)
 #> [1] 0.1628972 0.1823787
+range(cr$delta2)
+#> [1] 0.9476613 0.9652861
 ```
 
 ## Which to reach for

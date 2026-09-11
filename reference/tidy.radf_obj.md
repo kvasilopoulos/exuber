@@ -45,24 +45,24 @@ tidy(rfd)
 #> # A tibble: 2 × 4
 #>   id      adf  sadf gsadf
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 psy1  -2.36  4.81  4.81
-#> 2 psy2  -2.92  3.17  3.84
+#> 1 psy1  -2.44  4.04  4.25
+#> 2 psy2  -2.44  5.86  6.01
 
 # Get the test statisticsequences
 augment(rfd)
 #> # A tibble: 162 × 6
-#>      key index id     data  badf bsadf
-#>    <int> <dbl> <chr> <dbl> <dbl> <dbl>
-#>  1    20    20 psy1  115.  -1.29 -1.29
-#>  2    20    20 psy2   98.2 -1.16 -1.16
-#>  3    21    21 psy1  113.  -1.43 -1.43
-#>  4    21    21 psy2  105.  -1.29 -1.29
-#>  5    22    22 psy1  107.  -1.57 -1.57
-#>  6    22    22 psy2  116.  -1.20 -1.20
-#>  7    23    23 psy1   96.3 -1.52 -1.52
-#>  8    23    23 psy2  115.  -1.26 -1.26
-#>  9    24    24 psy1  101.  -1.69 -1.69
-#> 10    24    24 psy2  123.  -1.00 -1.00
+#>      key index id     data   badf  bsadf
+#>    <int> <dbl> <chr> <dbl>  <dbl>  <dbl>
+#>  1    20    20 psy1   133. -1.39  -1.39 
+#>  2    20    20 psy2   123. -3.04  -3.04 
+#>  3    21    21 psy1   134. -1.42  -0.930
+#>  4    21    21 psy2   126. -2.30  -1.90 
+#>  5    22    22 psy1   134. -1.53  -1.03 
+#>  6    22    22 psy2   123. -2.34  -1.96 
+#>  7    23    23 psy1   133. -1.63  -1.12 
+#>  8    23    23 psy2   124. -2.21  -1.82 
+#>  9    24    24 psy1   121. -2.11  -1.65 
+#> 10    24    24 psy2   144. -0.783 -0.476
 #> # ℹ 152 more rows
 
 # Get the panel test statistic
@@ -70,6 +70,6 @@ tidy(rfd, panel = TRUE)
 #> # A tibble: 1 × 1
 #>   gsadf_panel
 #>         <dbl>
-#> 1        1.67
+#> 1        2.20
 # }
 ```

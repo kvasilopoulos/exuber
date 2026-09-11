@@ -92,73 +92,51 @@ own output (purged of volatility, or computed on a PCA factor,
 respectively, then
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
 unmodified), so every generic works exactly as it does for plain
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md):
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md).
+The running series for this whole section is the one these tests are
+built for –
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+bubble with a permanent volatility break
+([`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md),
+innovation standard deviation tripling half-way through), see
+[`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md):
 
 ``` r
 
-res <- radf_kp(sim_data, minw = 20)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+```
+
+``` r
+
+res <- radf_kp(y, minw = 20)
 cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
 
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──
 #> 
-#> psy1 :
+#> series1 :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -0.439 -0.423 -0.152 0.677
-#> 2 sadf   0.175  1.07   1.40  1.78 
-#> 3 gsadf  1.67   1.58   1.90  2.51 
-#> 
-#> psy2 :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -2.40  -0.423 -0.152 0.677
-#> 2 sadf   0.918  1.07   1.40  1.78 
-#> 3 gsadf  2.03   1.58   1.90  2.51 
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -1.93  -0.423 -0.152 0.677
-#> 2 sadf  -0.714  1.07   1.40  1.78 
-#> 3 gsadf  0.489  1.58   1.90  2.51 
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -2.32  -0.423 -0.152 0.677
-#> 2 sadf   0.584  1.07   1.40  1.78 
-#> 3 gsadf  0.900  1.58   1.90  2.51 
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -2.47  -0.423 -0.152 0.677
-#> 2 sadf  -1.46   1.07   1.40  1.78 
-#> 3 gsadf  0.452  1.58   1.90  2.51
+#>   stat  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -1.72 -0.328 0.00172 0.572
+#> 2 sadf   1.50  1.19  1.48    1.97 
+#> 3 gsadf  2.63  1.99  2.27    2.87
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    22   30  36       14 positive   FALSE
-#> 2    60   65  70       10 positive   FALSE
+#> 1    90   95 105       15 positive   FALSE
+#> 2   106  106 109        3 positive   FALSE
+#> 3   141  141 142        1 positive   FALSE
+#> 4   145  146 147        2 negative   FALSE
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id       adf   sadf gsadf
-#>   <fct>  <dbl>  <dbl> <dbl>
-#> 1 psy1  -0.439  0.175 1.67 
-#> 2 psy2  -2.40   0.918 2.03 
-#> 3 evans -1.93  -0.714 0.489
-#> 4 div   -2.32   0.584 0.900
-#> 5 blan  -2.47  -1.46  0.452
+#> # A tibble: 1 × 4
+#>   id        adf  sadf gsadf
+#>   <fct>   <dbl> <dbl> <dbl>
+#> 1 series1 -1.72  1.50  2.63
 autoplot(res, cv = cv)
 ```
 
@@ -209,69 +187,33 @@ documented finding, not a validation red flag).
 
 ``` r
 
-res <- radf_tt(sim_data, minw = 20)
-cv <- radf_tt_cv(n = 100, minw = 20)
+res <- radf_tt(y, minw = 20)
+cv <- radf_tt_cv(n = 200, minw = 20)
 
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────── Time-Transformed MC (nboot = 2000) ──
 #> 
-#> psy1 :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.04 0.947  1.34  2.05
-#> 2 sadf   1.27 2.18   2.51  3.40
-#> 3 gsadf  2.20 2.81   3.15  4.04
-#> 
-#> psy2 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.860 0.947  1.34  2.05
-#> 2 sadf   2.60  2.18   2.51  3.40
-#> 3 gsadf  3.50  2.81   3.15  4.04
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.33 0.947  1.34  2.05
-#> 2 sadf   1.66 2.18   2.51  3.40
-#> 3 gsadf  1.88 2.81   3.15  4.04
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   0.722 0.947  1.34  2.05
-#> 2 sadf  2.34  2.18   2.51  3.40
-#> 3 gsadf 2.34  2.81   3.15  4.04
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.34  0.947  1.34  2.05
-#> 2 sadf   0.500 2.18   2.51  3.40
-#> 3 gsadf  1.54  2.81   3.15  4.04
+#> 1 adf   -0.997 0.832  1.26  2.04
+#> 2 sadf   3.27  2.32   2.66  3.32
+#> 3 gsadf  4.23  3.26   3.65  4.38
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   27  35       14 positive   FALSE
-#> 2    55   55  73       18 positive   FALSE
+#> 1    21   38  89       68 negative   FALSE
+#> 2   148  148 150        2 positive   FALSE
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id       adf  sadf gsadf
-#>   <fct>  <dbl> <dbl> <dbl>
-#> 1 psy1  -1.04  1.27   2.20
-#> 2 psy2  -0.860 2.60   3.50
-#> 3 evans -1.33  1.66   1.88
-#> 4 div    0.722 2.34   2.34
-#> 5 blan  -1.34  0.500  1.54
+#> # A tibble: 1 × 4
+#>   id         adf  sadf gsadf
+#>   <fct>    <dbl> <dbl> <dbl>
+#> 1 series1 -0.997  3.27  4.23
 autoplot(res, cv = cv)
 ```
 
@@ -279,78 +221,34 @@ autoplot(res, cv = cv)
 
 ``` r
 
-res <- radf_sign(sim_data, minw = 20)
-cv <- radf_sign_cv(n = 100, minw = 20)
+res <- radf_sign(y, minw = 20)
+cv <- radf_sign_cv(n = 200, minw = 20)
 
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ──────────────── Sign-Based MC (nboot = 2000) ──
 #> 
-#> psy1 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.152 0.920  1.28  1.99
-#> 2 sadf   0.937 2.26   2.62  3.39
-#> 3 gsadf  2.02  2.89   3.31  4.45
-#> 
-#> psy2 :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    2.56 0.920  1.28  1.99
-#> 2 sadf   6.42 2.26   2.62  3.39
-#> 3 gsadf 14.0  2.89   3.31  4.45
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    4.85 0.920  1.28  1.99
-#> 2 sadf   5.76 2.26   2.62  3.39
-#> 3 gsadf  6.85 2.89   3.31  4.45
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    1.13 0.920  1.28  1.99
-#> 2 sadf   2.79 2.26   2.62  3.39
-#> 3 gsadf  2.95 2.89   3.31  4.45
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    3.38 0.920  1.28  1.99
-#> 2 sadf   3.38 2.26   2.62  3.39
-#> 3 gsadf  3.68 2.89   3.31  4.45
+#> 1 adf   -0.293 0.932  1.35  2.14
+#> 2 sadf   4.47  2.43   2.78  3.26
+#> 3 gsadf  8.88  3.46   3.88  4.98
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   40 100       80 positive    TRUE
-#> 
-#> evans :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    21   84 100       80 positive    TRUE
-#> 
-#> blan :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    31   43  73       42 negative   FALSE
-#> 2    77   78  79        2 positive   FALSE
-#> 3    80  100 100       21 positive    TRUE
+#> 1    84   84  85        1 positive   FALSE
+#> 2    87  103 122       35 positive   FALSE
+#> 3   123  123 124        1 positive   FALSE
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id       adf  sadf gsadf
-#>   <fct>  <dbl> <dbl> <dbl>
-#> 1 psy1  -0.152 0.937  2.02
-#> 2 psy2   2.56  6.42  14.0 
-#> 3 evans  4.85  5.76   6.85
-#> 4 div    1.13  2.79   2.95
-#> 5 blan   3.38  3.38   3.68
+#> # A tibble: 1 × 4
+#>   id         adf  sadf gsadf
+#>   <fct>    <dbl> <dbl> <dbl>
+#> 1 series1 -0.293  4.47  8.88
 autoplot(res, cv = cv)
 ```
 
@@ -371,94 +269,60 @@ Validated the same way: `badf_cv`’s last row is bit-identical to
 `adf_cv`; empirical false-alarm rate under `H0` is 5.0% at nominal 5%
 (n=100, minw=20, 200 replications); and it does reject on a sufficiently
 strong deterministic explosive path, though its kernel-volatility
-weighting trades away enough power on `sim_data`’s milder bubbles that
-none of the five reject at nboot=100-200 – the same power/robustness
-trade-off already documented for
+weighting trades away enough power on
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+default, milder bubble that it doesn’t reject on the series above at
+nboot=100-200 – the same power/robustness trade-off already documented
+for
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)’s
 `supBZ` leg below, not a new finding specific to the split.
 
 ``` r
 
-res <- radf_sbz(sim_data, minw = 20)
-cv <- radf_sbz_cv(sim_data, minw = 20, nboot = 200, seed = 1)
+res <- radf_sbz(y, minw = 20)
+cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
 
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──
 #> 
-#> psy1 :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.22  0.544 0.801  1.22
-#> 2 sadf   0.280 1.45  1.63   2.04
-#> 3 gsadf  1.05  2.03  2.76   3.27
-#> 
-#> psy2 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.07 0.481 0.583 0.745
-#> 2 sadf   1.53 1.76  2.72  3.49 
-#> 3 gsadf  1.56 2.35  3.43  4.43 
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.95 0.599 0.846  1.26
-#> 2 sadf  -1.00 4.35  6.07   8.57
-#> 3 gsadf  1.70 4.54  6.22   8.57
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   0.660  1.10  1.48  1.97
-#> 2 sadf  2.26   2.25  2.59  2.98
-#> 3 gsadf 2.26   2.60  2.82  3.53
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -4.14 0.745 0.939  1.59
-#> 2 sadf   1.40 2.65  3.63   5.65
-#> 3 gsadf  2.38 3.82  4.72   6.89
+#> 1 adf   -1.39 0.825  1.13  1.61
+#> 2 sadf   1.67 1.58   2.11  3.36
+#> 3 gsadf  1.91 3.37   5.06  6.21
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id       adf   sadf gsadf
-#>   <fct>  <dbl>  <dbl> <dbl>
-#> 1 psy1  -1.22   0.280  1.05
-#> 2 psy2  -1.07   1.53   1.56
-#> 3 evans -2.95  -1.00   1.70
-#> 4 div    0.660  2.26   2.26
-#> 5 blan  -4.14   1.40   2.38
+#> # A tibble: 1 × 4
+#>   id        adf  sadf gsadf
+#>   <fct>   <dbl> <dbl> <dbl>
+#> 1 series1 -1.39  1.67  1.91
 ```
 
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 need at least one rejection to have anything to show (they error
-otherwise, same as for any other `radf_obj`/`radf_cv` pair) – none of
-`sim_data`’s five series clear `supBZ`’s bar above, so here’s a series
-built to:
+otherwise, same as for any other `radf_obj`/`radf_cv` pair) – the series
+above doesn’t clear `supBZ`’s bar, so here’s the same volatility break
+under a stronger, uncollapsed explosive regime (`rho = 1.03` from
+`t = 120` to the sample end), which does:
 
 ``` r
 
-set.seed(7)
-n <- 120; te <- 70
-y <- cumsum(rnorm(n))
-y[(te + 1):n] <- y[te] * 1.15 ^ seq_len(n - te)
+y_strong <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+                     e = sim_vol_break(199))
 
-res2 <- radf_sbz(y, minw = 20)
-cv2 <- radf_sbz_cv(y, minw = 20, nboot = 100, seed = 1)
+res2 <- radf_sbz(y_strong, minw = 20)
+cv2 <- radf_sbz_cv(y_strong, minw = 20, nboot = 100, seed = 1)
 datestamp(res2, cv = cv2)
 #> 
 #> ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──
 #> 
 #> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    27   28  29        2 positive   FALSE
-#> 2    64  120 120       57 positive    TRUE
+#> 1   128  129 130        2 positive   FALSE
+#> 2   132  134 135        3 positive   FALSE
+#> 3   172  200 200       29 positive    TRUE
 autoplot(res2, cv = cv2)
 ```
 

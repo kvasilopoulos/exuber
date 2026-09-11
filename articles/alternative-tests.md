@@ -33,15 +33,13 @@ lose power:
 
 ``` r
 
-set.seed(1)
-n <- 60
-y <- 100 * 1.03^(1:n) + cumsum(rnorm(n, sd = 1)) # fixed rho = 1.03
+y <- sim_psy1(n = 60, te = 1, tf = 60, c = 0.03, alpha = 0, seed = 1) # fixed rho = 1.03 throughout
 lbi_test(y)
 #> 
 #> ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────
 #> 
-#>    series   stat   crit  detected
-#>   series1  6.885  1.645      TRUE
+#>    series  stat   crit  detected
+#>   series1  6.12  1.645      TRUE
 ```
 
 ## A different alternative: where `lbi_test()` misses and `ssu_test()` doesn’t
@@ -50,24 +48,15 @@ lbi_test(y)
 is designed for a root that itself varies stochastically over time, not
 a fixed one:
 
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+`coef_noise`/`coef_a` arguments generate exactly that alternative,
+`rho_t = 1 + c/n + coef_a * u_t / sqrt(n)`, a random root rather than a
+fixed one:
+
 ``` r
 
-make_stochastic_bubble <- function(n, te_frac = 0.5, c1 = 3, a = 4) {
-  y <- numeric(n)
-  y[1] <- rnorm(1)
-  Te <- round(te_frac * n)
-  for (t in 2:n) {
-    if (t <= Te) {
-      y[t] <- y[t - 1] + rnorm(1)
-    } else {
-      rho_t <- 1 + c1 / n + a * rnorm(1) / sqrt(n) # random root, not fixed
-      y[t] <- rho_t * y[t - 1] + rnorm(1)
-    }
-  }
-  y
-}
-set.seed(2001)
-y <- make_stochastic_bubble(150)
+y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
+              coef_noise = rnorm(149), coef_a = 4)
 ```
 
 ``` r
@@ -76,14 +65,14 @@ ssu_test(y, level = 0.95)
 #> 
 #> ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────
 #> 
-#>    series  sadf  detected
-#>   series1  12.2      TRUE
+#>    series   sadf  detected
+#>   series1  14.53      TRUE
 lbi_test(y)
 #> 
 #> ── lbi_test (n = 150, level = 95%) ─────────────────────────────────────────────
 #> 
-#>    series   stat   crit  detected
-#>   series1  0.147  1.645     FALSE
+#>    series    stat   crit  detected
+#>   series1  0.3121  1.645     FALSE
 ```
 
 [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
@@ -100,16 +89,19 @@ everywhere.
 
 [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
 picks (or is given) a quantile `tau` and tests for explosiveness there
-instead of in the conditional mean:
+instead of in the conditional mean – the setting where that pays off is
+heavy-tailed innovations, where the conditional-mean regression is least
+reliable, so the DGP here drives the PSY bubble with `t(3)` shocks:
 
 ``` r
 
-quantile_test(sim_data$psy2, nrep = 100, seed = 1)
+y_t3 <- sim_psy1(n = 100, seed = 1, e = sim_innov(99, dist = "t", df = 3))
+quantile_test(y_t3, nrep = 100, seed = 1)
 #> 
 #> ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────
 #> 
 #>    series   tau  tstat    crit  delta  detected
-#>   series1  0.35  5.364  0.7143  0.361      TRUE
+#>   series1  0.25  4.684  0.6824  0.379      TRUE
 ```
 
 `tau = "optimal"` (the default) searches `tau_grid` and reports the

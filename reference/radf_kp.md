@@ -105,20 +105,19 @@ for another bootstrap-free alternative.
 
 ``` r
 # \donttest{
-res <- radf_kp(sim_data, minw = 20)
+# Volatility triples half-way through the sample: the non-stationary-volatility
+# case this test is built for (plain radf() over-rejects here)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+res <- radf_kp(y, minw = 20)
 print(res)
 #> 
 #> ── radf (minw = 20, lag = 0) ───────────────────────────────────────────────────
 #> 
-#>      id      adf     sadf   gsadf
-#>    psy1  -0.4387   0.1754  1.6743
-#>    psy2  -2.4026   0.9183  2.0255
-#>   evans  -1.9339  -0.7140  0.4889
-#>     div  -2.3185   0.5835  0.8997
-#>    blan  -2.4701  -1.4602  0.4523
+#>        id     adf   sadf  gsadf
+#>   series1  -1.715  1.503  2.633
 #> 
 #>   gsadf_panel
-#>     -0.002803
+#>         2.633
 #> 
 
 # radf_mc_cv() applies unmodified -- see Details
@@ -127,45 +126,13 @@ summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──
 #> 
-#> psy1 :
+#> series1 :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -0.439 -0.488 -0.150 0.408
-#> 2 sadf   0.175  0.910  1.26  1.99 
-#> 3 gsadf  1.67   1.62   1.90  2.47 
-#> 
-#> psy2 :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -2.40  -0.488 -0.150 0.408
-#> 2 sadf   0.918  0.910  1.26  1.99 
-#> 3 gsadf  2.03   1.62   1.90  2.47 
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -1.93  -0.488 -0.150 0.408
-#> 2 sadf  -0.714  0.910  1.26  1.99 
-#> 3 gsadf  0.489  1.62   1.90  2.47 
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -2.32  -0.488 -0.150 0.408
-#> 2 sadf   0.584  0.910  1.26  1.99 
-#> 3 gsadf  0.900  1.62   1.90  2.47 
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`   `95`  `99`
-#>   <fct>  <dbl>  <dbl>  <dbl> <dbl>
-#> 1 adf   -2.47  -0.488 -0.150 0.408
-#> 2 sadf  -1.46   0.910  1.26  1.99 
-#> 3 gsadf  0.452  1.62   1.90  2.47 
+#>   stat  tstat   `90`    `95`  `99`
+#>   <fct> <dbl>  <dbl>   <dbl> <dbl>
+#> 1 adf   -1.72 -0.328 0.00172 0.572
+#> 2 sadf   1.50  1.19  1.48    1.97 
+#> 3 gsadf  2.63  1.99  2.27    2.87 
 #> 
 autoplot(res, cv = cv)
 

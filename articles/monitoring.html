@@ -174,49 +174,42 @@ detector only.</p>
 </h2>
 <p>A training window of pure random walk (<code>T* = 100</code>),
 followed by more random walk, then a genuine explosive regime
-(<code>rho = 1.04</code>) starting at <code>t = 150</code>:</p>
+(<code>rho = 1.04</code>) from <code>t = 150</code> to the end of the
+sample – <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> with the bubble pushed past the
+training window and no collapse:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">make_bubble_series</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">T_star</span>, <span class="va">bstart</span>, <span class="va">rho</span> <span class="op">=</span> <span class="fl">1.04</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
-<span>  <span class="va">y</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">T_star</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">T_star</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">t</span> <span class="kw">in</span> <span class="op">(</span><span class="va">T_star</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">y</span><span class="op">[</span><span class="va">t</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="va">t</span> <span class="op">&lt;</span> <span class="va">bstart</span><span class="op">)</span> <span class="va">y</span><span class="op">[</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="kw">else</span> <span class="va">rho</span> <span class="op">*</span> <span class="va">y</span><span class="op">[</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">y</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">make_bubble_series</span><span class="op">(</span><span class="fl">200</span>, T_star <span class="op">=</span> <span class="fl">100</span>, bstart <span class="op">=</span> <span class="fl">150</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, te <span class="op">=</span> <span class="fl">150</span>, tf <span class="op">=</span> <span class="fl">200</span>, c <span class="op">=</span> <span class="fl">0.04</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/monitor_lbi.html">monitor_lbi</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── monitor_lbi (T* = 100 / 200, c_bar = 0, b_alpha = 1.95) ─────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  alarm  alarm_date</span></span>
-<span><span class="co">#&gt;   series1    159         159</span></span>
+<span><span class="co">#&gt;   series1    156         156</span></span>
 <span><span class="fu"><a href="../reference/monitor_cusum.html">monitor_cusum</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── monitor_cusum (T* = 100 / 200, b_alpha = 4.6) ───────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  alarm  alarm_date</span></span>
-<span><span class="co">#&gt;   series1    164         164</span></span>
+<span><span class="co">#&gt;   series1    161         161</span></span>
 <span><span class="fu"><a href="../reference/monitor_quantile.html">monitor_quantile</a></span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span>, nrep <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  delta  boundary  alarm  alarm_date</span></span>
-<span><span class="co">#&gt;   series1  0.695     1.757    163         163</span></span>
+<span><span class="co">#&gt;   series1   0.64     1.867    161         161</span></span>
 <span><span class="fu"><a href="../reference/monitor.html">monitor</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
-<span><span class="co">#&gt;   series1     2.025    160         160</span></span>
+<span><span class="co">#&gt;   series1      2.17    156         156</span></span>
 <span><span class="fu"><a href="../reference/monitor.html">monitor</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ───────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
-<span><span class="co">#&gt;   series1     1.038    161         161</span></span></code></pre></div>
+<span><span class="co">#&gt;   series1     1.038    159         159</span></span></code></pre></div>
 <p><code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> and <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> each
 have a static, full-sample sibling that asks the retrospective version
 of the same question – run on the whole series rather than watching for
@@ -227,13 +220,13 @@ a first crossing:</p>
 <span><span class="co">#&gt; ── lbi_test (n = 200, level = 95%) ─────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   stat   crit  detected</span></span>
-<span><span class="co">#&gt;   series1  6.313  1.645      TRUE</span></span>
+<span><span class="co">#&gt;   series1  6.502  1.645      TRUE</span></span>
 <span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── quantile_test (n = 200, level = 95%) ────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  tau  tstat    crit  delta  detected</span></span>
-<span><span class="co">#&gt;   series1  0.5  13.96  0.4221  0.695      TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;   series1  0.5  20.25  0.5041   0.64      TRUE</span></span></code></pre></div>
 <p>Every monitor here alarms within about 15 points of the true bubble
 start (150), none before it – that “never before <code>T*</code> (or the
 true start)” property is exactly what each function’s own test suite

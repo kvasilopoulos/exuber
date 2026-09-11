@@ -33,7 +33,8 @@ sim_ps1(
   alpha = 0.6,
   beta = 0.5,
   sigma = 6.79,
-  seed = NULL
+  seed = NULL,
+  e = NULL
 )
 ```
 
@@ -102,6 +103,24 @@ sim_ps1(
   change rng state, and return .Random.seed as the "seed" attribute.
   Results are reproducible across the parallel and non-parallel option
   when the same seed is used.
+
+- e:
+
+  An optional numeric vector of length `n - 1` of innovations to use in
+  place of `rnorm(n - 1, sd = sigma)`. Lets the plain PSY equation above
+  be driven by a non-Gaussian/heteroskedastic/dependent shock sequence
+  instead of i.i.d. Gaussian noise – see
+  [`sim_innov`](https://kvasilopoulos.github.io/exuber/reference/sim_innov.md)
+  (heavy-tailed/skewed),
+  [`sim_vol_break`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
+  (permanent volatility break),
+  [`sim_vol_garch`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md)
+  (GARCH/TGARCH),
+  [`sim_vol_cir`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)/[`sim_vol_sv`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md)
+  (stochastic volatility) and
+  [`sim_fi`](https://kvasilopoulos.github.io/exuber/reference/sim_fi.md)
+  (long-memory) for ready-made generators. Default `NULL` reproduces the
+  plain i.i.d. Gaussian DGP exactly.
 
 ## Value
 

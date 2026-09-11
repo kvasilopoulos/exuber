@@ -85,81 +85,44 @@ Taylor).
 
 ``` r
 # \donttest{
-res <- radf_tt(sim_data, minw = 20)
+# Volatility triples half-way through the sample: the non-stationary-volatility
+# case this test is built for (plain radf() over-rejects here)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+res <- radf_tt(y, minw = 20)
 print(res)
 #> 
 #> ── radf_tt (minw = 20, kernel = uniform) ───────────────────────────────────────
 #> 
-#>   series      adf    sadf  gsadf
-#>     psy1  -1.0366  1.2750  2.204
-#>     psy2  -0.8600  2.5960  3.505
-#>    evans  -1.3349  1.6556  1.883
-#>      div   0.7217  2.3440  2.344
-#>     blan  -1.3363  0.4998  1.541
+#>    series      adf   sadf  gsadf
+#>   series1  -0.9972  3.275  4.229
 #> 
 
-cv <- radf_tt_cv(n = 100, minw = 20)
+cv <- radf_tt_cv(n = 200, minw = 20)
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────── Time-Transformed MC (nboot = 2000) ──
 #> 
-#> psy1 :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.04 0.978  1.36  2.02
-#> 2 sadf   1.27 2.21   2.55  3.25
-#> 3 gsadf  2.20 2.84   3.22  3.90
-#> 
-#> psy2 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.860 0.978  1.36  2.02
-#> 2 sadf   2.60  2.21   2.55  3.25
-#> 3 gsadf  3.50  2.84   3.22  3.90
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.33 0.978  1.36  2.02
-#> 2 sadf   1.66 2.21   2.55  3.25
-#> 3 gsadf  1.88 2.84   3.22  3.90
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   0.722 0.978  1.36  2.02
-#> 2 sadf  2.34  2.21   2.55  3.25
-#> 3 gsadf 2.34  2.84   3.22  3.90
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.34  0.978  1.36  2.02
-#> 2 sadf   0.500 2.21   2.55  3.25
-#> 3 gsadf  1.54  2.84   3.22  3.90
+#> 1 adf   -0.997 0.833  1.21  1.97
+#> 2 sadf   3.27  2.31   2.65  3.35
+#> 3 gsadf  4.23  3.27   3.65  4.42
 #> 
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id       adf  sadf gsadf
-#>   <fct>  <dbl> <dbl> <dbl>
-#> 1 psy1  -1.04  1.27   2.20
-#> 2 psy2  -0.860 2.60   3.50
-#> 3 evans -1.33  1.66   1.88
-#> 4 div    0.722 2.34   2.34
-#> 5 blan  -1.34  0.500  1.54
+#> # A tibble: 1 × 4
+#>   id         adf  sadf gsadf
+#>   <fct>    <dbl> <dbl> <dbl>
+#> 1 series1 -0.997  3.27  4.23
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   27  35       14 positive   FALSE
-#> 2    55   55  73       18 positive   FALSE
+#> 1    21   38  89       68 negative   FALSE
+#> 2   148  148 149        1 positive   FALSE
 #> 
 autoplot(res, cv = cv)
 

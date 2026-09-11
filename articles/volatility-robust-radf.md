@@ -37,6 +37,25 @@ time-deformation approach has its own dedicated vignette,
 [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md);
 this one covers the rest.
 
+All of them target *non-stationary* volatility – a permanent shift or
+trend in the unconditional innovation variance, not stationary
+GARCH-type conditional heteroskedasticity (whose variance profile is
+asymptotically flat, leaving plain
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+size-correct). So the running example is
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+bubble driven by
+[`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
+innovations, whose standard deviation triples half-way through the
+sample – the case where plain
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+over-rejects most:
+
+``` r
+
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+```
+
 | Function | Paper | Approach |
 |----|----|----|
 | [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md) / [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md) | Harvey, Leybourne & Zu (2020) | Transform to the *cumulated sign* of first differences – exactly invariant to any heteroskedasticity pattern, no bootstrap needed. `_dm` demeans first for level-shift robustness (Harvey, Leybourne, Tatlow & Zu 2025). |
@@ -56,72 +75,29 @@ for the validation):
 
 ``` r
 
-res <- radf_sign(sim_data, minw = 20)
-cv <- radf_sign_cv(n = 100, minw = 20)
+res <- radf_sign(y, minw = 20)
+cv <- radf_sign_cv(n = 200, minw = 20)
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ──────────────── Sign-Based MC (nboot = 2000) ──
 #> 
-#> psy1 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat   tstat  `90`  `95`  `99`
 #>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.152 0.907  1.28  2.11
-#> 2 sadf   0.937 2.32   2.65  3.42
-#> 3 gsadf  2.02  2.97   3.51  4.42
-#> 
-#> psy2 :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    2.56 0.907  1.28  2.11
-#> 2 sadf   6.42 2.32   2.65  3.42
-#> 3 gsadf 14.0  2.97   3.51  4.42
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    4.85 0.907  1.28  2.11
-#> 2 sadf   5.76 2.32   2.65  3.42
-#> 3 gsadf  6.85 2.97   3.51  4.42
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    1.13 0.907  1.28  2.11
-#> 2 sadf   2.79 2.32   2.65  3.42
-#> 3 gsadf  2.95 2.97   3.51  4.42
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    3.38 0.907  1.28  2.11
-#> 2 sadf   3.38 2.32   2.65  3.42
-#> 3 gsadf  3.68 2.97   3.51  4.42
+#> 1 adf   -0.293 0.855  1.32  2.06
+#> 2 sadf   4.47  2.34   2.70  3.43
+#> 3 gsadf  8.88  3.51   3.91  4.92
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   40 100       80 positive    TRUE
-#> 
-#> evans :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    21   84 100       80 positive    TRUE
-#> 
-#> blan :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    31   43  73       42 negative   FALSE
-#> 2    76  100 100       25 positive    TRUE
+#> 1    84   84  85        1 positive   FALSE
+#> 2    87  103 122       35 positive   FALSE
+#> 3   123  123 124        1 positive   FALSE
 ```
-
-`psy2` and `evans` clear their 99% critical values comfortably; the
-others don’t on this panel – a realistic mixed result, not every series
-in a demo panel is meant to look explosive.
 
 ## Kernel-purged: `radf_kp()`
 
@@ -136,51 +112,19 @@ applies unmodified):
 
 ``` r
 
-res_kp <- radf_kp(sim_data, minw = 20)
+res_kp <- radf_kp(y, minw = 20)
 cv_kp <- radf_mc_cv(n = attr(res_kp, "n"), minw = 20)
 summary(res_kp, cv = cv_kp)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──
 #> 
-#> psy1 :
+#> series1 :
 #> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -0.439 -0.377 -0.0198 0.608
-#> 2 sadf   0.175  0.916  1.23   1.79 
-#> 3 gsadf  1.67   1.60   1.94   2.41 
-#> 
-#> psy2 :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.40  -0.377 -0.0198 0.608
-#> 2 sadf   0.918  0.916  1.23   1.79 
-#> 3 gsadf  2.03   1.60   1.94   2.41 
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -1.93  -0.377 -0.0198 0.608
-#> 2 sadf  -0.714  0.916  1.23   1.79 
-#> 3 gsadf  0.489  1.60   1.94   2.41 
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.32  -0.377 -0.0198 0.608
-#> 2 sadf   0.584  0.916  1.23   1.79 
-#> 3 gsadf  0.900  1.60   1.94   2.41 
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat   tstat   `90`    `95`  `99`
-#>   <fct>  <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.47  -0.377 -0.0198 0.608
-#> 2 sadf  -1.46   0.916  1.23   1.79 
-#> 3 gsadf  0.452  1.60   1.94   2.41
+#>   stat  tstat   `90`   `95`  `99`
+#>   <fct> <dbl>  <dbl>  <dbl> <dbl>
+#> 1 adf   -1.72 -0.470 -0.140 0.535
+#> 2 sadf   1.50  1.07   1.37  1.90 
+#> 3 gsadf  2.63  1.98   2.25  2.80
 ```
 
 ## WLS + kernel volatility: `radf_sbz()`
@@ -197,60 +141,60 @@ for the validation), so it gets full pipeline support:
 
 ``` r
 
-res_sbz <- radf_sbz(sim_data, minw = 20)
-cv_sbz <- radf_sbz_cv(sim_data, minw = 20, nboot = 200, seed = 1)
+res_sbz <- radf_sbz(y, minw = 20)
+cv_sbz <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
 summary(res_sbz, cv = cv_sbz)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──
 #> 
-#> psy1 :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.22  0.544 0.801  1.22
-#> 2 sadf   0.280 1.45  1.63   2.04
-#> 3 gsadf  1.05  2.03  2.76   3.27
-#> 
-#> psy2 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.07 0.481 0.583 0.745
-#> 2 sadf   1.53 1.76  2.72  3.49 
-#> 3 gsadf  1.56 2.35  3.43  4.43 
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.95 0.599 0.846  1.26
-#> 2 sadf  -1.00 4.35  6.07   8.57
-#> 3 gsadf  1.70 4.54  6.22   8.57
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   0.660  1.10  1.48  1.97
-#> 2 sadf  2.26   2.25  2.59  2.98
-#> 3 gsadf 2.26   2.60  2.82  3.53
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -4.14 0.745 0.939  1.59
-#> 2 sadf   1.40 2.65  3.63   5.65
-#> 3 gsadf  2.38 3.82  4.72   6.89
+#> 1 adf   -1.39 0.825  1.13  1.61
+#> 2 sadf   1.67 1.58   2.11  3.36
+#> 3 gsadf  1.91 3.37   5.06  6.21
 ```
 
 The kernel-volatility weighting that makes `supBZ`
-heteroskedasticity-robust also trades away some power relative to plain
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) on
-series whose bubbles aren’t accompanied by a volatility shift – none of
-this panel clears `supBZ`’s 95% critical value here, even though several
-clear plain
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s.
+heteroskedasticity-robust also trades away some power relative to the
+other tests:
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+default, mild bubble (30 periods at `rho = 1 + 200^-0.6`, then a
+collapse) doesn’t clear `supBZ`’s 95% critical value here, even though
+every other test above rejects on the same series. A stronger,
+uncollapsed episode – `rho = 1.03` from `t = 120` to the sample end, on
+the same volatility break – does:
+
+``` r
+
+y_strong <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+                     e = sim_vol_break(199))
+res_sbz2 <- radf_sbz(y_strong, minw = 20)
+cv_sbz2 <- radf_sbz_cv(y_strong, minw = 20, nboot = 200, seed = 1)
+summary(res_sbz2, cv = cv_sbz2)
+#> 
+#> ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──
+#> 
+#> series1 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf    4.83 0.948  1.65  2.65
+#> 2 sadf   4.83 2.24   2.49  3.26
+#> 3 gsadf  5.29 2.77   3.00  3.58
+datestamp(res_sbz2, cv = cv_sbz2)
+#> 
+#> ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──
+#> 
+#> series1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1   129  129 130        1 positive   FALSE
+#> 2   132  132 133        1 positive   FALSE
+#> 3   134  134 135        1 positive   FALSE
+#> 4   172  200 200       29 positive    TRUE
+```
+
 That’s the same trade-off
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
 below exists to hedge against by unioning `supBZ` with the classic
@@ -260,29 +204,24 @@ below exists to hedge against by unioning `supBZ` with the classic
 
 ``` r
 
-radf_sbz_union(sim_data, nboot = 200, seed = 1)
+radf_sbz_union(y, nboot = 200, seed = 1)
 #> 
-#> ── radf_sbz_union (minw = 19, nboot = 200) ─────────────────────────────────────
+#> ── radf_sbz_union (minw = 27, nboot = 200) ─────────────────────────────────────
 #> 
-#>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U
-#>     psy1  1.946  0.2802  1.946    0.055     0.64  0.100
-#>     psy2  7.880  1.5349  7.880    0.000     0.14  0.000
-#>    evans  5.283  1.9138  5.283    0.130     0.30  0.165
-#>      div  1.113  2.2607  1.113    0.065     0.10  0.130
-#>     blan  3.930  1.4008  3.930    0.050     0.25  0.075
+#>    series  supDF  supBZ      U  p_supDF  p_supBZ    p_U
+#>   series1  9.329   1.67  9.329        0    0.085  0.005
 ```
 
 `supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version
 (the same one
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
 now returns on its own), and `U` their union – each with its own
-bootstrap p-value, so a series can be flagged by one without the other:
-`psy2` is clearly significant across all three here, while the rest of
-this panel sit closer to the boundary, with `supBZ`’s p-values
-consistently the least significant of the three on this draw. `U`’s
-value is *defined* using a bootstrap-derived `supDF`/`supBZ` scaling
-ratio, and its size guarantee requires `supDF`/`supBZ` bootstrap draws
-paired from the same resampled series per replicate – both reasons
+bootstrap p-value, so a series can be flagged by one without the other,
+as here: `supDF` rejects, `supBZ` doesn’t, and the union `U` follows
+`supDF`. `U`’s value is *defined* using a bootstrap-derived
+`supDF`/`supBZ` scaling ratio, and its size guarantee requires
+`supDF`/`supBZ` bootstrap draws paired from the same resampled series
+per replicate – both reasons
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
 can’t be reconstructed from separately calling
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)

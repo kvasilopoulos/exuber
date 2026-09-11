@@ -120,53 +120,63 @@ Nadaraya-Watson kernel regression.</li>
 <h2 id="cobubble_test-are-these-the-same-bubble">
 <code>cobubble_test()</code>: are these the same bubble?<a class="anchor" aria-label="anchor" href="#cobubble_test-are-these-the-same-bubble"></a>
 </h2>
-<p><code>sim_data$psy1</code> and <code>sim_data$psy2</code> are
-independently simulated explosive episodes, so a correct test should
-reject co-explosivity between them:</p>
+<p><code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code> is Evripidou et al.’s own DGP:
+<code>y</code> is a linear function of an explosive <code>x</code> (plus
+noise), so the pair <em>is</em> co-explosive and a correct test should
+not reject:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cobubble_test.html">cobubble_test</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, nboot <span class="op">=</span> <span class="fl">199</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">xy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_coexplosive.html">sim_coexplosive</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cobubble_test.html">cobubble_test</a></span><span class="op">(</span><span class="va">xy</span><span class="op">$</span><span class="va">y</span>, <span class="va">xy</span><span class="op">$</span><span class="va">x</span>, nboot <span class="op">=</span> <span class="fl">199</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── cobubble_test (lag = 0, nboot = 199) ────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; S = 0.2364, cv(95%) = 0.4048, p-value = 0.1508</span></span>
+<span><span class="co">#&gt; Co-explosivity not rejected at the 5% level.</span></span></code></pre></div>
+<p>For contrast, <code>sim_data$psy1</code> and
+<code>sim_data$psy2</code> are independently simulated explosive
+episodes, sharing no bubble process by construction:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cobubble_test.html">cobubble_test</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, nboot <span class="op">=</span> <span class="fl">199</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── cobubble_test (lag = -2, nboot = 199) ───────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; S = 1.533, cv(95%) = 0.2998, p-value = 0</span></span>
 <span><span class="co">#&gt; Co-explosivity rejected at the 5% level.</span></span></code></pre></div>
-<p>It does: <code>S</code> comfortably exceeds its (wild-bootstrap,
-heteroskedasticity-robust) critical value, and co-explosivity is
-rejected – correctly, since these two series share no common bubble
-process by construction.</p>
+<p>Here <code>S</code> comfortably exceeds its (wild-bootstrap,
+heteroskedasticity-robust) critical value and co-explosivity is rejected
+– correctly.</p>
 </div>
 <div class="section level2">
 <h2 id="contagion_reg-how-strongly-do-they-co-move-and-when">
 <code>contagion_reg()</code>: how strongly do they co-move, and
 when?<a class="anchor" aria-label="anchor" href="#contagion_reg-how-strongly-do-they-co-move-and-when"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contagion_reg.html">contagion_reg</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<p>On the co-explosive pair, <code>y</code>’s AR(1) coefficient tracks
+<code>x</code>’s almost one-for-one throughout the sample:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contagion_reg.html">contagion_reg</a></span><span class="op">(</span><span class="va">xy</span><span class="op">$</span><span class="va">y</span>, <span class="va">xy</span><span class="op">$</span><span class="va">x</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">cr</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── contagion_reg (n = 100, S = 33, d = 0, h = 0.6567) ──────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; delta_2(r) range: [0.163, 0.182]</span></span></code></pre></div>
+<span><span class="co">#&gt; delta_2(r) range: [0.948, 0.965]</span></span></code></pre></div>
 <p><code>cr$delta2</code> is the full estimated path over
 <code>cr$r_grid</code>, not just the range <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>
 shows:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cr</span><span class="op">$</span><span class="va">r_grid</span>, <span class="va">cr</span><span class="op">$</span><span class="va">delta2</span>, type <span class="op">=</span> <span class="st">"l"</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"r (fraction of sample)"</span>, ylab <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="va">delta</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>     main <span class="op">=</span> <span class="st">"Estimated time-varying contagion coefficient"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="co-explosivity_files/figure-html/contagion-plot-1.png" class="r-plt" alt="" width="576"></p>
-<p>For contrast, a series with no relationship to <code>psy2</code> at
-all – a plain random walk – gives a visibly different, wider-ranging
-path that also crosses zero:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="va">indep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cr_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contagion_reg.html">contagion_reg</a></span><span class="op">(</span><span class="va">indep</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<p>For contrast, the two independent <code>sim_data</code> series give a
+coefficient path sitting far below one:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cr_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/contagion_reg.html">contagion_reg</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, <span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, d <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">cr_null</span><span class="op">$</span><span class="va">delta2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] -0.0124587  0.4871175</span></span>
+<span><span class="co">#&gt; [1] 0.1628972 0.1823787</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="va">cr</span><span class="op">$</span><span class="va">delta2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.1628972 0.1823787</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.9476613 0.9652861</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>

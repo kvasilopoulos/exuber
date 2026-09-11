@@ -96,96 +96,53 @@ the classic `supDF` statistic.
 
 ``` r
 # \donttest{
-res <- radf_sbz(sim_data, minw = 20)
+# Volatility triples at t = 100, then a strong explosive regime (rho = 1.03)
+# from t = 120 to the sample end: supBZ's kernel-volatility weighting trades
+# away enough power that sim_psy1()'s default, milder bubble doesn't clear it
+y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+  e = sim_vol_break(199))
+res <- radf_sbz(y, minw = 20)
 print(res)
 #> 
 #> ── radf (minw = 20, lag = 0) ───────────────────────────────────────────────────
 #> 
-#>      id      adf     sadf  gsadf
-#>    psy1  -1.2166   0.2802  1.047
-#>    psy2  -1.0665   1.5349  1.563
-#>   evans  -2.9534  -1.0012  1.705
-#>     div   0.6601   2.2607  2.261
-#>    blan  -4.1432   1.4008  2.381
+#>        id    adf   sadf  gsadf
+#>   series1  4.829  4.829  5.287
 #> 
 #> [1] gsadf_panel
 #> <0 rows> (or 0-length row.names)
 #> 
 
-cv <- radf_sbz_cv(sim_data, minw = 20, nboot = 200)
+cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──
 #> 
-#> psy1 :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.22  0.623 0.826  1.18
-#> 2 sadf   0.280 1.62  1.97   2.54
-#> 3 gsadf  1.05  1.96  2.84   3.87
-#> 
-#> psy2 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.07 0.476 0.615 0.833
-#> 2 sadf   1.53 2.13  2.65  4.39 
-#> 3 gsadf  1.56 2.52  3.11  5.58 
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.95 0.589 0.806 0.993
-#> 2 sadf  -1.00 4.04  5.44  7.43 
-#> 3 gsadf  1.70 4.65  5.75  8.23 
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   0.660 0.922  1.24  1.94
-#> 2 sadf  2.26  2.07   2.37  3.13
-#> 3 gsadf 2.26  2.39   2.75  3.31
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -4.14 0.609  1.09  1.39
-#> 2 sadf   1.40 2.44   3.51  7.38
-#> 3 gsadf  2.38 3.28   4.43  7.57
+#> 1 adf    4.83 0.948  1.65  2.65
+#> 2 sadf   4.83 2.24   2.49  3.26
+#> 3 gsadf  5.29 2.77   3.00  3.58
 #> 
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id       adf   sadf gsadf
-#>   <fct>  <dbl>  <dbl> <dbl>
-#> 1 psy1  -1.22   0.280  1.05
-#> 2 psy2  -1.07   1.53   1.56
-#> 3 evans -2.95  -1.00   1.70
-#> 4 div    0.660  2.26   2.26
-#> 5 blan  -4.14   1.40   2.38
-
-# datestamp()/autoplot() need at least one rejection; supBZ's
-# kernel-volatility weighting trades away enough power that none of
-# sim_data's five series clear it, so use a series built to reject:
-set.seed(7)
-n <- 120; te <- 70
-y <- cumsum(rnorm(n))
-y[(te + 1):n] <- y[te] * 1.15 ^ seq_len(n - te)
-res2 <- radf_sbz(y, minw = 20)
-cv2 <- radf_sbz_cv(y, minw = 20, nboot = 100, seed = 1)
-datestamp(res2, cv = cv2)
+#> # A tibble: 1 × 4
+#>   id        adf  sadf gsadf
+#>   <fct>   <dbl> <dbl> <dbl>
+#> 1 series1  4.83  4.83  5.29
+datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──
 #> 
 #> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    27   28  29        2 positive   FALSE
-#> 2    64  120 120       57 positive    TRUE
+#> 1   129  129 130        1 positive   FALSE
+#> 2   132  132 133        1 positive   FALSE
+#> 3   134  134 135        1 positive   FALSE
+#> 4   172  200 200       29 positive    TRUE
 #> 
-autoplot(res2, cv = cv2)
+autoplot(res, cv = cv)
 
 # }
 ```

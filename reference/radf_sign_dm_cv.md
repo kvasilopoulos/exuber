@@ -54,13 +54,13 @@ deterministically time-varying volatility. Econometric Theory, 36(1),
 
 ``` r
 # \donttest{
-cv <- radf_sign_dm_cv(n = 100, minw = 20)
+cv <- radf_sign_dm_cv(n = 200, minw = 20)
 tidy(cv)
 #> # A tibble: 3 × 4
 #>   sig     adf  sadf gsadf
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 90    0.897  2.37  2.74
-#> 2 95    1.26   2.64  3.12
-#> 3 99    2.03   3.32  3.82
+#> 1 90    0.861  2.54  3.36
+#> 2 95    1.33   2.87  3.82
+#> 3 99    1.97   3.53  4.88
 # }
 ```

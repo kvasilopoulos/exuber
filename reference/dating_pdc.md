@@ -144,8 +144,7 @@ autoplot(res4)
 
 # Volatility-weighted (WLS) variant, robust to time-varying volatility
 y_vol <- sim_ps1(n = 100, seed = 1, e = sim_vol_break(99))
-#> Error in sim_vol_break(99): could not find function "sim_vol_break"
 autoplot(dating_pdc(y_vol, type = "wls"))
-#> Error: object 'y_vol' not found
+
 # }
 ```

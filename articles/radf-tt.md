@@ -29,17 +29,30 @@ no bootstrap, and no per-dataset resimulation needed.
 
 ## Basic usage
 
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
+targets *non-stationary* volatility – a permanent shift or trend in the
+unconditional innovation variance, the setting of Kurozumi, Skrobotov &
+Tsarev’s own simulations. (Stationary conditional heteroskedasticity
+such as GARCH is not the target: its variance profile is asymptotically
+flat, so the time-deformation is close to the identity and plain
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) is
+already size-correct there.)
+[`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
+generates exactly such innovations, and
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+`e` argument injects them into the PSY bubble DGP – here the innovation
+standard deviation triples half-way through the sample:
+
 ``` r
 
-set.seed(1)
-y <- sim_psy1(100)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_tt(y)
 res
 #> 
-#> ── radf_tt (minw = 19, kernel = uniform) ───────────────────────────────────────
+#> ── radf_tt (minw = 27, kernel = uniform) ───────────────────────────────────────
 #> 
 #>    series      adf   sadf  gsadf
-#>   series1  -0.7186  2.662  3.083
+#>   series1  -0.9972  3.275  4.165
 ```
 
 [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
@@ -101,17 +114,17 @@ pipeline works unchanged:
 
 ``` r
 
-res <- radf_tt(sim_data, minw = 20)
-cv <- radf_tt_cv(n = 100, minw = 20)
+res <- radf_tt(y, minw = 20)
+cv <- radf_tt_cv(n = 200, minw = 20)
 
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   27  35       14 positive   FALSE
-#> 2    55   55  73       18 positive   FALSE
+#> 1    21   38  89       68 negative   FALSE
+#> 2   148  148 150        2 positive   FALSE
 autoplot(res, cv = cv)
 ```
 

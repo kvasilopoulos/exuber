@@ -101,7 +101,7 @@ print(res)
 #> ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────
 #> 
 #>    series   sadf  detected
-#>   series1  3.128     FALSE
+#>   series1  14.53      TRUE
 #> 
 
 # Plot the recursive SSU statistic path against its critical value

@@ -154,33 +154,32 @@ picture. Each prints its own dating table instead.</p>
 <div class="section level2">
 <h2 id="a-single-bubble-four-verdicts">A single bubble, four verdicts<a class="anchor" aria-label="anchor" href="#a-single-bubble-four-verdicts"></a>
 </h2>
-<p>One simulated series: a unit-root run-up, a genuine explosive regime
-(<code>rho = 1.03</code>, true origination at 51), then a volatile
-collapse back to a unit root (true collapse at 80).</p>
+<p>One simulated series from <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code>, Phillips &amp; Shi
+(2018)’s own single-bubble DGP: a unit-root run-up, a genuine explosive
+regime (true origination at 40), a mildly-integrated collapse regime
+(starting at 61) and a return to a unit root (recovery at 70) – exactly
+the regime structure these estimators are built for.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">11</span><span class="op">)</span></span>
-<span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">50</span>; <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">30</span>; <span class="va">n3</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
-<span><span class="va">expansion</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">1.03</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n1</span><span class="op">)</span><span class="op">)</span>, <span class="va">expansion</span>, <span class="va">expansion</span><span class="op">[</span><span class="va">n2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n3</span>, sd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>True origination is 51, true collapse is 80. Running all four:</p>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_ps1.html">sim_ps1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p>True origination is 40, true collapse is 61. Running all four:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_hls.html">dating_hls</a></span><span class="op">(</span><span class="va">y</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── dating_hls (n = 100, trim = 0.05) ───────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  model  origination  collapse  recovery</span></span>
-<span><span class="co">#&gt;   series1      2           50        55      &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt;   series1      4           39        60        70</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_knp.html">dating_knp</a></span><span class="op">(</span><span class="va">y</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── dating_knp (n = 100, trim = 0.05, omit = TRUE) ──────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  origination  collapse   delta</span></span>
-<span><span class="co">#&gt;   series1           28        50  0.1126</span></span></code></pre></div>
+<span><span class="co">#&gt;   series1           60        70  0.9178</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_pdc.html">dating_pdc</a></span><span class="op">(</span><span class="va">y</span>, regimes <span class="op">=</span> <span class="fl">3</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         origination collapse</span></span>
-<span><span class="co">#&gt; series1          50       79</span></span></code></pre></div>
+<span><span class="co">#&gt; series1          38       59</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_hlw.html">dating_hlw</a></span><span class="op">(</span><span class="va">y</span>, trim <span class="op">=</span> <span class="fl">0.1</span>, nboot <span class="op">=</span> <span class="fl">199</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -188,17 +187,17 @@ collapse back to a unit root (true collapse at 80).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; series1:</span></span>
 <span><span class="co">#&gt;  model origination collapse recovery</span></span>
-<span><span class="co">#&gt;      2          50       59     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;      2          64       80     &lt;NA&gt;</span></span></code></pre></div>
-<p>On this draw, <code><a href="../reference/dating_pdc.html">dating_pdc()</a></code> lands closest to both true
-dates (50, 79). <code><a href="../reference/dating_hls.html">dating_hls()</a></code> gets the origination right
-(50) but its BIC-selected model puts the collapse far too early (55) – a
-real, visible failure mode, not a contrived one.
-<code><a href="../reference/dating_hlw.html">dating_hlw()</a></code>’s preliminary <code><a href="../reference/datestamp.html">datestamp()</a></code> step
-splits the episode into two separate windows here, and its second
-window’s collapse (80) is exact even though the first window is
-spurious. <code><a href="../reference/dating_knp.html">dating_knp()</a></code>’s origination (28) is the least
-accurate of the four on this particular draw.</p>
+<span><span class="co">#&gt;      4          39       60       70</span></span></code></pre></div>
+<p>On this draw, <code><a href="../reference/dating_hls.html">dating_hls()</a></code> and <code><a href="../reference/dating_hlw.html">dating_hlw()</a></code>
+both select the 4-regime model and land within a point of every true
+date (39/60/70 against 40/61/70); <code><a href="../reference/dating_pdc.html">dating_pdc()</a></code> is a point
+or two early on both (38/59). <code><a href="../reference/dating_knp.html">dating_knp()</a></code> is the visible
+failure mode here: its model assumes an <em>instantaneous</em> collapse
+(unit root resuming from a shifted level), so <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code>’s
+ten-period mildly-integrated crash (61-70) is a regime it has no room
+for, and it dates that crash as the episode instead, reporting 60/70 – a
+real, not contrived, consequence of a model mismatch, not of the
+estimator’s bias correction.</p>
 <p>The point of running all four side by side isn’t that one is
 “correct” – it’s that these are genuinely different estimators with
 different failure modes, and disagreement between them on real data is

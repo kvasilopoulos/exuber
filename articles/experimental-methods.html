@@ -114,12 +114,8 @@ episode, reversed, turns the collapse into an explosive regime and the
 recovery into its unwind – so the existing forward machinery, run
 backwards, dates both.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">40</span>; <span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">25</span>; <span class="va">n3</span> <span class="op">&lt;-</span> <span class="fl">35</span></span>
-<span><span class="va">expansion</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">1.03</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">collapse</span> <span class="op">&lt;-</span> <span class="va">expansion</span><span class="op">[</span><span class="va">n1</span><span class="op">]</span> <span class="op">*</span> <span class="fl">0.5</span><span class="op">^</span><span class="op">(</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n2</span><span class="op">)</span> <span class="op">/</span> <span class="va">n2</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">recovery</span> <span class="op">&lt;-</span> <span class="va">collapse</span><span class="op">[</span><span class="va">n2</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n3</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n3</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.5</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">expansion</span>, <span class="va">collapse</span>, <span class="va">recovery</span><span class="op">)</span> <span class="co"># expansion -&gt; collapse -&gt; recovery</span></span>
+<code class="sourceCode R"><span><span class="co"># sim_ps1(): unit root -&gt; explosive (40-60) -&gt; collapse (61-70) -&gt; recovery (71+)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_ps1.html">sim_ps1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_recovery.html">radf_recovery</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">15</span>, nrep <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -128,13 +124,14 @@ backwards, dates both.</p>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">ℹ</span> Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  f_c  f_r  detected  censored</span></span>
-<span><span class="co">#&gt;   series1   35   62      TRUE     FALSE</span></span></code></pre></div>
-<p><code>f_c</code> (crisis onset) lands near the true collapse start
-(40) and <code>f_r</code> (recovery) after it (62), in the right order –
-by construction, since the down-crossing search only ever starts at the
-up-crossing. The disclosed gap: <code>f_c</code> and the overall
-false-detection rate are exploratory pending further validation (see
-<code><a href="../reference/radf_recovery.html">?radf_recovery</a></code>, Caveats section) – the date-ordering
+<span><span class="co">#&gt;   series1   57   67      TRUE     FALSE</span></span></code></pre></div>
+<p><code>f_c</code> (crisis onset, 57) lands just ahead of the true
+collapse start (61) and <code>f_r</code> (recovery, 67) after it, inside
+the collapse regime and ahead of the true recovery date (70) – in the
+right order by construction, since the down-crossing search only ever
+starts at the up-crossing. The disclosed gap: <code>f_c</code> and the
+overall false-detection rate are exploratory pending further validation
+(see <code><a href="../reference/radf_recovery.html">?radf_recovery</a></code>, Caveats section) – the date-ordering
 property is solid, the false-alarm calibration is not yet.</p>
 </div>
 <div class="section level2">

@@ -135,7 +135,7 @@ print(res)
 #> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
-#>   series1    0.7     1.615    166         166
+#>   series1  0.623      1.53    164         164
 #> 
 autoplot(res)
 #> Warning: Removed 1 row containing missing values or values outside the scale range

@@ -41,10 +41,7 @@ A unit-root run-up followed by a genuine explosive regime with
 
 ``` r
 
-set.seed(2026)
-burn <- cumsum(rnorm(60))
-bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
-y <- c(burn, bubble)
+y <- sim_psy1(n = 100, te = 60, tf = 100, c = 0.04, alpha = 0, sigma = 1, seed = 2026)
 ```
 
 Detect and date it first, the ordinary way:
@@ -60,7 +57,7 @@ ds
 #> 
 #> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    83  100 100       18 negative    TRUE
+#> 1    63  100 100       38 positive    TRUE
 ```
 
 Then estimate the root over the detected episode – the default method
@@ -72,20 +69,20 @@ takes the sub-sample directly, sliced by the episode’s own
 ep <- ds[["series1"]]
 rootstamp(y[ep$Start[1]:ep$End[1]]) # normal-t interval (Guo, Sun & Wang 2019), true rho = 1.04
 #> 
-#> ── rootstamp (n = 17, level = 95%, type = normal) ──────────────────────────────
+#> ── rootstamp (n = 37, level = 95%, type = normal) ──────────────────────────────
 #> 
-#>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
-#>   1.042  0.006318   6.639       1.03      1.054          16.87      13.1
+#>    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
+#>   1.04  0.0007295    54.2      1.038      1.041          17.87     17.26
 #>   dt_upper
-#>      23.79
+#>      18.53
 rootstamp(y[ep$Start[1]:ep$End[1]], type = "cauchy") # fixed-root Cauchy interval (Phillips & Magdalinos 2007)
 #> 
-#> ── rootstamp (n = 17, level = 95%, type = cauchy) ──────────────────────────────
+#> ── rootstamp (n = 37, level = 95%, type = cauchy) ──────────────────────────────
 #> 
-#>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
-#>   1.042  0.006318   6.639     0.5007      1.583          16.87     1.509
+#>    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
+#>   1.04  0.0007295    54.2     0.7955      1.284          17.87     2.776
 #>   dt_upper
-#>     -1.002
+#>      -3.03
 ```
 
 `rho` recovers something close to the true 1.04, alongside `rho_ci` and
@@ -115,10 +112,10 @@ rootstamp(r, ds)
 #> ── rootstamp (level = 95%, type = normal) ──────────────────────────────────────
 #> 
 #> series1 :
-#>   Start End   rho rho_lower rho_upper doubling_time doubling_time_lower
-#> 1    83 100 1.042      1.03     1.054         16.87                13.1
+#>   Start End  rho rho_lower rho_upper doubling_time doubling_time_lower
+#> 1    63 100 1.04     1.038     1.041         17.87               17.26
 #>   doubling_time_upper
-#> 1               23.79
+#> 1               18.53
 ```
 
 Root inference on a very short episode is close to meaningless (too few

@@ -71,6 +71,8 @@ sim_psy1(
   instead of i.i.d. Gaussian noise – see
   [`sim_innov`](https://kvasilopoulos.github.io/exuber/reference/sim_innov.md)
   (heavy-tailed/skewed),
+  [`sim_vol_break`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
+  (permanent volatility break),
   [`sim_vol_garch`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md)
   (GARCH/TGARCH),
   [`sim_vol_cir`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)/[`sim_vol_sv`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md)

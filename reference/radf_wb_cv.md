@@ -110,60 +110,39 @@ for sieve bootstrap critical values.
 
 ``` r
 # \donttest{
+# Volatility triples half-way through the sample: the non-stationary-volatility
+# case the wild bootstrap is built for (plain radf_mc_cv() over-rejects here)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 # Default minimum window
-wb <- radf_wb_cv(sim_data)
+wb <- radf_wb_cv(y)
 
 tidy(wb)
-#> # A tibble: 15 × 5
-#>    id    sig        adf   sadf gsadf
-#>    <fct> <fct>    <dbl>  <dbl> <dbl>
-#>  1 psy1  90    -0.543    1.53   2.71
-#>  2 psy2  90    -0.622    3.07   4.06
-#>  3 evans 90    -0.497    5.38   7.05
-#>  4 div   90    -0.473    0.848  1.72
-#>  5 blan  90    -0.211    2.87   6.25
-#>  6 psy1  95    -0.342    2.16   3.39
-#>  7 psy2  95    -0.507    3.81   4.89
-#>  8 evans 95    -0.324    6.77   9.28
-#>  9 div   95    -0.145    1.14   2.06
-#> 10 blan  95    -0.00843  4.08   7.37
-#> 11 psy1  99     0.0446   3.16   4.75
-#> 12 psy2  99    -0.294    5.29   6.15
-#> 13 evans 99    -0.0223  10.4   13.6 
-#> 14 div   99     0.227    1.94   2.56
-#> 15 blan  99     0.389    7.62  10.8 
+#> # A tibble: 3 × 5
+#>   id      sig      adf  sadf gsadf
+#>   <fct>   <fct>  <dbl> <dbl> <dbl>
+#> 1 series1 90    -0.135  3.82  4.32
+#> 2 series1 95     0.276  4.81  5.22
+#> 3 series1 99     1.16   6.57  7.24
 
 # Change the minimum window and the number of bootstraps
-wb2 <- radf_wb_cv(sim_data, nboot = 600, minw = 20)
+wb2 <- radf_wb_cv(y, nboot = 600, minw = 20)
 
 tidy(wb2)
-#> # A tibble: 15 × 5
-#>    id    sig       adf   sadf gsadf
-#>    <fct> <fct>   <dbl>  <dbl> <dbl>
-#>  1 psy1  90    -0.555   1.48   2.74
-#>  2 psy2  90    -0.665   2.72   3.78
-#>  3 evans 90    -0.547   5.06   8.40
-#>  4 div   90    -0.436   0.905  1.76
-#>  5 blan  90    -0.247   2.86   5.92
-#>  6 psy1  95    -0.430   2.03   3.19
-#>  7 psy2  95    -0.502   3.34   4.55
-#>  8 evans 95    -0.346   7.54  10.5 
-#>  9 div   95    -0.0561  1.21   1.99
-#> 10 blan  95     0.0278  4.31   7.65
-#> 11 psy1  99    -0.0550  3.09   4.56
-#> 12 psy2  99    -0.171   4.62   5.60
-#> 13 evans 99    -0.0145 11.7   14.0 
-#> 14 div   99     0.486   1.93   2.50
-#> 15 blan  99     0.605   6.68  12.4 
+#> # A tibble: 3 × 5
+#>   id      sig       adf  sadf gsadf
+#>   <fct>   <fct>   <dbl> <dbl> <dbl>
+#> 1 series1 90    -0.209   3.98  4.52
+#> 2 series1 95     0.0593  5.02  5.37
+#> 3 series1 99     0.913   7.01  7.39
 
 # Simulate distribution
-wdist <- radf_wb_distr(sim_data)
+wdist <- radf_wb_distr(y)
 
 autoplot(wdist)
 
 
 # Apply the critical values to actual data
-rsim_data <- radf(sim_data, minw = 20)
+rsim_data <- radf(y, minw = 20)
 autoplot(rsim_data, cv = wb2)
 
 # }

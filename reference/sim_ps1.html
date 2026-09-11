@@ -108,7 +108,8 @@ you have to provide <code>tf</code> as well.</p>
 <span>  alpha <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>  beta <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  sigma <span class="op">=</span> <span class="fl">6.79</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  e <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -167,6 +168,18 @@ should be initialized. Either NULL or an integer will be used in a call to
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.</p></dd>
+
+
+<dt id="arg-e">e<a class="anchor" aria-label="anchor" href="#arg-e"></a></dt>
+<dd><p>An optional numeric vector of length <code>n - 1</code> of innovations
+to use in place of <code>rnorm(n - 1, sd = sigma)</code>. Lets the plain PSY
+equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
+sequence instead of i.i.d. Gaussian noise – see <code><a href="sim_innov.html">sim_innov</a></code>
+(heavy-tailed/skewed), <code><a href="sim_vol_break.html">sim_vol_break</a></code> (permanent
+volatility break), <code><a href="sim_vol_garch.html">sim_vol_garch</a></code> (GARCH/TGARCH),
+<code><a href="sim_vol_cir.html">sim_vol_cir</a></code>/<code><a href="sim_vol_sv.html">sim_vol_sv</a></code> (stochastic volatility)
+and <code><a href="sim_fi.html">sim_fi</a></code> (long-memory) for ready-made generators. Default
+<code>NULL</code> reproduces the plain i.i.d. Gaussian DGP exactly.</p></dd>
 
 </dl></div>
     <div class="section level2">

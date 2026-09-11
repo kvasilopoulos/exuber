@@ -89,24 +89,27 @@ Econometrics.
 
 ``` r
 # \donttest{
-cv <- radf_tt_cv(n = 100, minw = 20)
+cv <- radf_tt_cv(n = 200, minw = 20)
 tidy(cv)
 #> # A tibble: 3 × 4
 #>   sig     adf  sadf gsadf
 #>   <fct> <dbl> <dbl> <dbl>
-#> 1 90    0.873  2.12  2.75
-#> 2 95    1.31   2.50  3.17
-#> 3 99    2.07   3.10  4.01
+#> 1 90    0.899  2.35  3.32
+#> 2 95    1.34   2.63  3.67
+#> 3 99    1.97   3.27  4.39
 
-res <- radf_tt(sim_data, minw = 20)
+# Volatility triples half-way through the sample: the non-stationary-volatility
+# case this test is built for (plain radf() over-rejects here)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+res <- radf_tt(y, minw = 20)
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   27  35       14 positive   FALSE
-#> 2    55   55  73       18 positive   FALSE
+#> 1    21   38  89       68 negative   FALSE
+#> 2   148  148 149        1 positive   FALSE
 #> 
 autoplot(res, cv = cv)
 

@@ -198,17 +198,15 @@ for a bootstrap-free heteroskedasticity-robust alternative.</p></div>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_sbz_union</span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, te <span class="op">=</span> <span class="fl">120</span>, tf <span class="op">=</span> <span class="fl">200</span>, c <span class="op">=</span> <span class="fl">0.03</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  e <span class="op">=</span> <span class="fu"><a href="sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">radf_sbz_union</span><span class="op">(</span><span class="va">y</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_sbz_union (minw = 19, nboot = 200) ─────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── radf_sbz_union (minw = 27, nboot = 200) ─────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy1  1.946  0.2802  1.946    0.055    0.675  0.105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     psy2  7.880  1.5349  7.880    0.000    0.175  0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    evans  5.283  1.9138  5.283    0.120    0.285  0.190</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      div  1.113  2.2607  1.338    0.090    0.100  0.130</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     blan  3.930  1.4008  3.930    0.080    0.240  0.130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    series  supDF  supBZ      U  p_supDF  p_supBZ    p_U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series1  9.264  4.829  9.264        0    0.005  0.005</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="radf_sbz_union-1.png" alt="" width="700" height="433"></span>

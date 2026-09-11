@@ -102,20 +102,22 @@ for its (panel-width-specific) critical values.
 
 ``` r
 # \donttest{
-res <- radf_common(sim_data, minw = 20)
+# A panel of 5 series driven by one shared latent bubble factor
+x <- sim_common(n_series = 5, n = 100, seed = 123)
+res <- radf_common(x, minw = 20)
 print(res)
 #> 
 #> ── radf (minw = 20, lag = 0) ───────────────────────────────────────────────────
 #> 
-#>        id     adf   sadf  gsadf
-#>   series1  -2.734  7.145  7.145
+#>        id     adf  sadf  gsadf
+#>   series1  -2.577  5.78  5.922
 #> 
 #>   gsadf_panel
-#>         7.145
+#>         5.922
 #> 
 
 # radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
-cv <- radf_common_cv(n = 100, N = ncol(sim_data), minw = 20)
+cv <- radf_common_cv(n = 100, N = ncol(x), minw = 20)
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──
@@ -124,9 +126,9 @@ summary(res, cv = cv)
 #> # A tibble: 3 × 5
 #>   stat  tstat  `90`  `95`  `99`
 #>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.73 0.519 0.875  1.57
-#> 2 sadf   7.15 1.89  2.25   2.80
-#> 3 gsadf  7.15 2.38  2.68   3.34
+#> 1 adf   -2.58 0.333 0.676  1.32
+#> 2 sadf   5.78 1.86  2.12   2.71
+#> 3 gsadf  5.92 2.26  2.55   3.22
 #> 
 
 # The result is an ordinary radf_obj, so autoplot()/datestamp() work directly
@@ -138,8 +140,7 @@ datestamp(res, cv = cv)
 #> 
 #> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    21   40  41       20 negative   FALSE
-#> 2    66   70  71        5 negative   FALSE
+#> 1    46   55  56       10 positive   FALSE
 #> 
 # }
 ```

@@ -190,6 +190,45 @@ what was checked and how.
   subsections so each function is listed next to the methods that
   consume its output.
 
+- [`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
+  – i.i.d. Gaussian innovations whose standard deviation shifts
+  permanently at a chosen break fraction, the non-stationary volatility
+  DGP (Cavaliere & Taylor 2007) the volatility-robust tests are actually
+  built for, unlike stationary GARCH.
+  [`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md)
+  gained the same `e` innovation-injection argument
+  [`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
+  already had, and the `c`/`c1`/`c2` arguments of
+  [`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)/[`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md)
+  now accept any positive scalar (as documented), so a fixed explosive
+  root is expressible directly (`c = 0.04, alpha = 0`).
+
+- Examples and vignettes now demonstrate each method on the DGP it
+  targets rather than on `sim_data` throughout: volatility-robust tests
+  ([`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+  [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+  [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+  [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+  `monitor_cusum(type = "kernel")`, `dating_pdc(type = "wls")`) on a
+  volatility break,
+  [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)/[`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
+  on
+  [`sim_coexplosive()`](https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.md),
+  [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
+  on
+  [`sim_common()`](https://kvasilopoulos.github.io/exuber/reference/sim_common.md),
+  [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
+  on a stochastic root,
+  [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)/[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  on heavy-tailed innovations,
+  `dating_*()`/[`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
+  on
+  [`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md),
+  and every monitor on a bubble that starts after its training window.
+  Hand-rolled `cumsum(rnorm())` DGPs in the vignettes are replaced by
+  the package’s own generators.
+
 #### Bug fixes
 
 - [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)/[`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)’s
@@ -208,6 +247,21 @@ what was checked and how.
   unchanged) and
   [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)/[`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)
   now thread their own `sig_lvl` through to it.
+
+- [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  (and everything built on it) errored with `subscript out of bounds` on
+  a *named* numeric vector, e.g. a
+  [`prcomp()`](https://rdrr.io/r/stats/prcomp.html) score column – which
+  is exactly what
+  [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
+  feeds it – because the names leaked into the internal NA-edge
+  bookkeeping.
+
+- [`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+  `seed` argument now also covers a generator passed lazily to
+  `e`/`coef_noise`
+  (e.g. `sim_psy1(n, seed = 1, e = sim_vol_break(n - 1))`); previously
+  those were forced before the seed was set.
 
 ## exuber 1.1.0
 

@@ -131,17 +131,15 @@ for a bootstrap-free heteroskedasticity-robust alternative.
 
 ``` r
 # \donttest{
-res <- radf_sbz_union(sim_data, nboot = 200)
+y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+  e = sim_vol_break(199))
+res <- radf_sbz_union(y, nboot = 200, seed = 1)
 print(res)
 #> 
-#> ── radf_sbz_union (minw = 19, nboot = 200) ─────────────────────────────────────
+#> ── radf_sbz_union (minw = 27, nboot = 200) ─────────────────────────────────────
 #> 
-#>   series  supDF   supBZ      U  p_supDF  p_supBZ    p_U
-#>     psy1  1.946  0.2802  1.946    0.055    0.675  0.105
-#>     psy2  7.880  1.5349  7.880    0.000    0.175  0.000
-#>    evans  5.283  1.9138  5.283    0.120    0.285  0.190
-#>      div  1.113  2.2607  1.338    0.090    0.100  0.130
-#>     blan  3.930  1.4008  3.930    0.080    0.240  0.130
+#>    series  supDF  supBZ      U  p_supDF  p_supBZ    p_U
+#>   series1  9.264  4.829  9.264        0    0.005  0.005
 #> 
 autoplot(res)
 

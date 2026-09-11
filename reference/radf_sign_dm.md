@@ -97,82 +97,45 @@ for the non-demeaned sign-based analogue.
 
 ``` r
 # \donttest{
-res <- radf_sign_dm(sim_data, minw = 20)
+# Volatility triples half-way through the sample: the non-stationary-volatility
+# case this test is built for (plain radf() over-rejects here)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+res <- radf_sign_dm(y, minw = 20)
 print(res)
 #> 
 #> ── radf_sign_dm (minw = 20) ────────────────────────────────────────────────────
 #> 
-#>   series       adf     sadf  gsadf
-#>     psy1  -0.07152   2.1729  2.976
-#>     psy2   1.47812   3.0005  3.433
-#>    evans  -2.14492  -0.9121  1.149
-#>      div  -1.05486   2.3305  2.369
-#>     blan  -0.17252   1.3508  1.489
+#>    series       adf   sadf  gsadf
+#>   series1  -0.03298  2.492  6.081
 #> 
 
-cv <- radf_sign_dm_cv(n = 100, minw = 20)
+cv <- radf_sign_dm_cv(n = 200, minw = 20)
 summary(res, cv = cv)
 #> 
 #> ── Summary (minw = 20, lag = 0) ───── Sign-Based MC (demeaned) (nboot = 2000) ──
 #> 
-#> psy1 :
+#> series1 :
 #> # A tibble: 3 × 5
 #>   stat    tstat  `90`  `95`  `99`
 #>   <fct>   <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.0715 0.871  1.27  2.07
-#> 2 sadf   2.17   2.36   2.74  3.58
-#> 3 gsadf  2.98   2.85   3.20  4.17
-#> 
-#> psy2 :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf    1.48 0.871  1.27  2.07
-#> 2 sadf   3.00 2.36   2.74  3.58
-#> 3 gsadf  3.43 2.85   3.20  4.17
-#> 
-#> evans :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -2.14  0.871  1.27  2.07
-#> 2 sadf  -0.912 2.36   2.74  3.58
-#> 3 gsadf  1.15  2.85   3.20  4.17
-#> 
-#> div :
-#> # A tibble: 3 × 5
-#>   stat  tstat  `90`  `95`  `99`
-#>   <fct> <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -1.05 0.871  1.27  2.07
-#> 2 sadf   2.33 2.36   2.74  3.58
-#> 3 gsadf  2.37 2.85   3.20  4.17
-#> 
-#> blan :
-#> # A tibble: 3 × 5
-#>   stat   tstat  `90`  `95`  `99`
-#>   <fct>  <dbl> <dbl> <dbl> <dbl>
-#> 1 adf   -0.173 0.871  1.27  2.07
-#> 2 sadf   1.35  2.36   2.74  3.58
-#> 3 gsadf  1.49  2.85   3.20  4.17
+#> 1 adf   -0.0330 0.853  1.28  2.09
+#> 2 sadf   2.49   2.45   2.80  3.46
+#> 3 gsadf  6.08   3.32   3.66  4.58
 #> 
 tidy(res, cv = cv)
-#> # A tibble: 5 × 4
-#>   id        adf   sadf gsadf
-#>   <fct>   <dbl>  <dbl> <dbl>
-#> 1 psy1  -0.0715  2.17   2.98
-#> 2 psy2   1.48    3.00   3.43
-#> 3 evans -2.14   -0.912  1.15
-#> 4 div   -1.05    2.33   2.37
-#> 5 blan  -0.173   1.35   1.49
+#> # A tibble: 1 × 4
+#>   id          adf  sadf gsadf
+#>   <fct>     <dbl> <dbl> <dbl>
+#> 1 series1 -0.0330  2.49  6.08
 datestamp(res, cv = cv)
 #> 
 #> ── Datestamp (min_duration = 0) ──────────────────── Sign-Based MC (demeaned) ──
 #> 
-#> psy2 :
+#> series1 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    39   40  41        2 positive   FALSE
-#> 2    84   84  85        1 positive   FALSE
-#> 3    86   95 100       14 negative   FALSE
+#> 1    91  103 115       24 positive   FALSE
+#> 2   156  157 158        2 negative   FALSE
+#> 3   159  160 161        2 negative   FALSE
 #> 
 autoplot(res, cv = cv)
 

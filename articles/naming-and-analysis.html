@@ -238,71 +238,44 @@ practice:</p>
 <p><code><a href="../reference/radf_kp.html">radf_kp()</a></code>/<code><a href="../reference/radf_common.html">radf_common()</a></code> literally return
 <code><a href="../reference/radf.html">radf()</a></code>’s own output (purged of volatility, or computed on a
 PCA factor, respectively, then <code><a href="../reference/radf.html">radf()</a></code> unmodified), so every
-generic works exactly as it does for plain <code><a href="../reference/radf.html">radf()</a></code>:</p>
+generic works exactly as it does for plain <code><a href="../reference/radf.html">radf()</a></code>. The
+running series for this whole section is the one these tests are built
+for – <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s bubble with a permanent volatility break
+(<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>, innovation standard deviation tripling
+half-way through), see
+<code><a href="../articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_kp.html">radf_kp</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_kp.html">radf_kp</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">res</span>, <span class="st">"n"</span><span class="op">)</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Summary (minw = 20, lag = 0) ────────────────── Monte Carlo (nboot = 1000) ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy1 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat   `90`   `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.439</span> -<span style="color: #BB0000;">0.423</span> -<span style="color: #BB0000;">0.152</span> 0.677</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.175  1.07   1.40  1.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.67   1.58   1.90  2.51 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat   `90`   `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.40</span>  -<span style="color: #BB0000;">0.423</span> -<span style="color: #BB0000;">0.152</span> 0.677</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.918  1.07   1.40  1.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.03   1.58   1.90  2.51 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; evans :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat   `90`   `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.93</span>  -<span style="color: #BB0000;">0.423</span> -<span style="color: #BB0000;">0.152</span> 0.677</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  -<span style="color: #BB0000;">0.714</span>  1.07   1.40  1.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  0.489  1.58   1.90  2.51 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; div :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat   `90`   `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.32</span>  -<span style="color: #BB0000;">0.423</span> -<span style="color: #BB0000;">0.152</span> 0.677</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.584  1.07   1.40  1.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  0.900  1.58   1.90  2.51 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; blan :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat   `90`   `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.47</span>  -<span style="color: #BB0000;">0.423</span> -<span style="color: #BB0000;">0.152</span> 0.677</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  -<span style="color: #BB0000;">1.46</span>   1.07   1.40  1.78 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  0.452  1.58   1.90  2.51</span></span>
+<span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.72</span> -<span style="color: #BB0000;">0.328</span> 0.001<span style="text-decoration: underline;">72</span> 0.572</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.50  1.19  1.48    1.97 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.63  1.99  2.27    2.87</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    22   30  36       14 positive   FALSE</span></span>
-<span><span class="co">#&gt; 2    60   65  70       10 positive   FALSE</span></span>
+<span><span class="co">#&gt; 1    90   95 105       15 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2   106  106 109        3 positive   FALSE</span></span>
+<span><span class="co">#&gt; 3   141  141 142        1 positive   FALSE</span></span>
+<span><span class="co">#&gt; 4   145  146 147        2 negative   FALSE</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   id       adf   sadf gsadf</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">0.439</span>  0.175 1.67 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> psy2  -<span style="color: #BB0000;">2.40</span>   0.918 2.03 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> evans -<span style="color: #BB0000;">1.93</span>  -<span style="color: #BB0000;">0.714</span> 0.489</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> div   -<span style="color: #BB0000;">2.32</span>   0.584 0.900</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> blan  -<span style="color: #BB0000;">2.47</span>  -<span style="color: #BB0000;">1.46</span>  0.452</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   id        adf  sadf gsadf</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">1.72</span>  1.50  2.63</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/kp-full-1.png" class="r-plt" alt="" width="700"></p>
 <p>The other three are different: they carry the <code>radf_obj</code>
@@ -342,145 +315,65 @@ suspiciously higher or lower (<code>radf_tt</code> 18%,
 sign-based tests trading power for their heteroskedasticity invariance
 is itself the paper’s own documented finding, not a validation red
 flag).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Summary (minw = 20, lag = 0) ────────── Time-Transformed MC (nboot = 2000) ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy1 :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.04</span> 0.947  1.34  2.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.27 2.18   2.51  3.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.20 2.81   3.15  4.04</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
 <span><span class="co">#&gt;   stat   tstat  `90`  `95`  `99`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.860</span> 0.947  1.34  2.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   2.60  2.18   2.51  3.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  3.50  2.81   3.15  4.04</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; evans :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.33</span> 0.947  1.34  2.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.66 2.18   2.51  3.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.88 2.81   3.15  4.04</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; div :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.722 0.947  1.34  2.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.34  2.18   2.51  3.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.34  2.81   3.15  4.04</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; blan :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.34</span>  0.947  1.34  2.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.500 2.18   2.51  3.40</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.54  2.81   3.15  4.04</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.997</span> 0.832  1.26  2.04</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   3.27  2.32   2.66  3.32</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  4.23  3.26   3.65  4.38</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Datestamp (min_duration = 0) ───────────────────────── Time-Transformed MC ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    21   27  35       14 positive   FALSE</span></span>
-<span><span class="co">#&gt; 2    55   55  73       18 positive   FALSE</span></span>
+<span><span class="co">#&gt; 1    21   38  89       68 negative   FALSE</span></span>
+<span><span class="co">#&gt; 2   148  148 150        2 positive   FALSE</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   id       adf  sadf gsadf</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">1.04</span>  1.27   2.20</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> psy2  -<span style="color: #BB0000;">0.860</span> 2.60   3.50</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> evans -<span style="color: #BB0000;">1.33</span>  1.66   1.88</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> div    0.722 2.34   2.34</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> blan  -<span style="color: #BB0000;">1.34</span>  0.500  1.54</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   id         adf  sadf gsadf</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">0.997</span>  3.27  4.23</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/tt-full-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign.html">radf_sign</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign_cv.html">radf_sign_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign.html">radf_sign</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign_cv.html">radf_sign_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Summary (minw = 20, lag = 0) ──────────────── Sign-Based MC (nboot = 2000) ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy1 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
 <span><span class="co">#&gt;   stat   tstat  `90`  `95`  `99`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.152</span> 0.920  1.28  1.99</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.937 2.26   2.62  3.39</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.02  2.89   3.31  4.45</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    2.56 0.920  1.28  1.99</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   6.42 2.26   2.62  3.39</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 14.0  2.89   3.31  4.45</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; evans :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    4.85 0.920  1.28  1.99</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   5.76 2.26   2.62  3.39</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  6.85 2.89   3.31  4.45</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; div :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    1.13 0.920  1.28  1.99</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   2.79 2.26   2.62  3.39</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.95 2.89   3.31  4.45</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; blan :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf    3.38 0.920  1.28  1.99</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   3.38 2.26   2.62  3.39</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  3.68 2.89   3.31  4.45</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">0.293</span> 0.932  1.35  2.14</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   4.47  2.43   2.78  3.26</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  8.88  3.46   3.88  4.98</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Datestamp (min_duration = 0) ─────────────────────────────── Sign-Based MC ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    21   40 100       80 positive    TRUE</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; evans :</span></span>
-<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    21   84 100       80 positive    TRUE</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; blan :</span></span>
-<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    31   43  73       42 negative   FALSE</span></span>
-<span><span class="co">#&gt; 2    77   78  79        2 positive   FALSE</span></span>
-<span><span class="co">#&gt; 3    80  100 100       21 positive    TRUE</span></span>
+<span><span class="co">#&gt; 1    84   84  85        1 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2    87  103 122       35 positive   FALSE</span></span>
+<span><span class="co">#&gt; 3   123  123 124        1 positive   FALSE</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   id       adf  sadf gsadf</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">0.152</span> 0.937  2.02</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> psy2   2.56  6.42  14.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> evans  4.85  5.76   6.85</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> div    1.13  2.79   2.95</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> blan   3.38  3.38   3.68</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   id         adf  sadf gsadf</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">0.293</span>  4.47  8.88</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/sign-full-1.png" class="r-plt" alt="" width="700"></p>
 <p><code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is a fourth, separate case: it builds its
@@ -497,88 +390,53 @@ Carlo simulation: per-time-point quantile across replicates, no
 empirical false-alarm rate under <code>H0</code> is 5.0% at nominal 5%
 (n=100, minw=20, 200 replications); and it does reject on a sufficiently
 strong deterministic explosive path, though its kernel-volatility
-weighting trades away enough power on <code>sim_data</code>’s milder
-bubbles that none of the five reject at nboot=100-200 – the same
-power/robustness trade-off already documented for
-<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>’s <code>supBZ</code> leg below, not a new
-finding specific to the split.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+weighting trades away enough power on <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s default,
+milder bubble that it doesn’t reject on the series above at
+nboot=100-200 – the same power/robustness trade-off already documented
+for <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>’s <code>supBZ</code> leg below, not a
+new finding specific to the split.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy1 :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat   tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.22</span>  0.544 0.801  1.22</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   0.280 1.45  1.63   2.04</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.05  2.03  2.76   3.27</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; psy2 :</span></span>
+<span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
 <span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.07</span> 0.481 0.583 0.745</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.53 1.76  2.72  3.49 </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.56 2.35  3.43  4.43 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; evans :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.95</span> 0.599 0.846  1.26</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  -<span style="color: #BB0000;">1.00</span> 4.35  6.07   8.57</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.70 4.54  6.22   8.57</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; div :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.660  1.10  1.48  1.97</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.26   2.25  2.59  2.98</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.26   2.60  2.82  3.53</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; blan :</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
-<span><span class="co">#&gt;   stat  tstat  `90`  `95`  `99`</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">4.14</span> 0.745 0.939  1.59</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.40 2.65  3.63   5.65</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  2.38 3.82  4.72   6.89</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.39</span> 0.825  1.13  1.61</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf   1.67 1.58   2.11  3.36</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf  1.91 3.37   5.06  6.21</span></span>
 <span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   id       adf   sadf gsadf</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> psy1  -<span style="color: #BB0000;">1.22</span>   0.280  1.05</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> psy2  -<span style="color: #BB0000;">1.07</span>   1.53   1.56</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> evans -<span style="color: #BB0000;">2.95</span>  -<span style="color: #BB0000;">1.00</span>   1.70</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> div    0.660  2.26   2.26</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> blan  -<span style="color: #BB0000;">4.14</span>   1.40   2.38</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">#&gt;   id        adf  sadf gsadf</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">1.39</span>  1.67  1.91</span></span></code></pre></div>
 <p><code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> need at least one
 rejection to have anything to show (they error otherwise, same as for
-any other <code>radf_obj</code>/<code>radf_cv</code> pair) – none of
-<code>sim_data</code>’s five series clear <code>supBZ</code>’s bar
-above, so here’s a series built to:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">120</span>; <span class="va">te</span> <span class="op">&lt;-</span> <span class="fl">70</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">y</span><span class="op">[</span><span class="op">(</span><span class="va">te</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">te</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.15</span> <span class="op">^</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span> <span class="op">-</span> <span class="va">te</span><span class="op">)</span></span>
+any other <code>radf_obj</code>/<code>radf_cv</code> pair) – the series
+above doesn’t clear <code>supBZ</code>’s bar, so here’s the same
+volatility break under a stronger, uncollapsed explosive regime
+(<code>rho = 1.03</code> from <code>t = 120</code> to the sample end),
+which does:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">y_strong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, te <span class="op">=</span> <span class="fl">120</span>, tf <span class="op">=</span> <span class="fl">200</span>, c <span class="op">=</span> <span class="fl">0.03</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                     e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="va">cv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">res2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">y_strong</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">cv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">y_strong</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res2</span>, cv <span class="op">=</span> <span class="va">cv2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    27   28  29        2 positive   FALSE</span></span>
-<span><span class="co">#&gt; 2    64  120 120       57 positive    TRUE</span></span>
+<span><span class="co">#&gt; 1   128  129 130        2 positive   FALSE</span></span>
+<span><span class="co">#&gt; 2   132  134 135        3 positive   FALSE</span></span>
+<span><span class="co">#&gt; 3   172  200 200       29 positive    TRUE</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res2</span>, cv <span class="op">=</span> <span class="va">cv2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/sbz-full-reject-1.png" class="r-plt" alt="" width="700"></p>
 </div>
@@ -607,7 +465,7 @@ date → measure growth rate) – but that’s a workflow position, not an
 S3-support tier. It’s still its own class with its own
 <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method, same as everything else in this section;
 see <code><a href="../articles/root-inference.html">vignette("root-inference")</a></code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_hls.html">dating_hls</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── dating_hls (n = 100, trim = 0.05) ───────────────────────────────────────────</span></span>

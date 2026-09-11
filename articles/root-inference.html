@@ -119,10 +119,7 @@ value carries the <code>radf_obj</code> class itself, so
 <p>A unit-root run-up followed by a genuine explosive regime with
 <code>rho = 1.04</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
-<span><span class="va">burn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">bubble</span> <span class="op">&lt;-</span> <span class="va">burn</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">burn</span><span class="op">)</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.04</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">40</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">burn</span>, <span class="va">bubble</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, te <span class="op">=</span> <span class="fl">60</span>, tf <span class="op">=</span> <span class="fl">100</span>, c <span class="op">=</span> <span class="fl">0.04</span>, alpha <span class="op">=</span> <span class="fl">0</span>, sigma <span class="op">=</span> <span class="fl">1</span>, seed <span class="op">=</span> <span class="fl">2026</span><span class="op">)</span></span></code></pre></div>
 <p>Detect and date it first, the ordinary way:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -134,7 +131,7 @@ value carries the <code>radf_obj</code> class itself, so
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    83  100 100       18 negative    TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    63  100 100       38 positive    TRUE</span></span></code></pre></div>
 <p>Then estimate the root over the detected episode – the default method
 takes the sub-sample directly, sliced by the episode’s own
 <code>Start</code>/<code>End</code>:</p>
@@ -142,20 +139,20 @@ takes the sub-sample directly, sliced by the episode’s own
 <code class="sourceCode R"><span><span class="va">ep</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">[[</span><span class="st">"series1"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/rootstamp.html">rootstamp</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="va">ep</span><span class="op">$</span><span class="va">Start</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">ep</span><span class="op">$</span><span class="va">End</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># normal-t interval (Guo, Sun &amp; Wang 2019), true rho = 1.04</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── rootstamp (n = 17, level = 95%, type = normal) ──────────────────────────────</span></span>
+<span><span class="co">#&gt; ── rootstamp (n = 37, level = 95%, type = normal) ──────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower</span></span>
-<span><span class="co">#&gt;   1.042  0.006318   6.639       1.03      1.054          16.87      13.1</span></span>
+<span><span class="co">#&gt;    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower</span></span>
+<span><span class="co">#&gt;   1.04  0.0007295    54.2      1.038      1.041          17.87     17.26</span></span>
 <span><span class="co">#&gt;   dt_upper</span></span>
-<span><span class="co">#&gt;      23.79</span></span>
+<span><span class="co">#&gt;      18.53</span></span>
 <span><span class="fu"><a href="../reference/rootstamp.html">rootstamp</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="va">ep</span><span class="op">$</span><span class="va">Start</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">ep</span><span class="op">$</span><span class="va">End</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"cauchy"</span><span class="op">)</span> <span class="co"># fixed-root Cauchy interval (Phillips &amp; Magdalinos 2007)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── rootstamp (n = 17, level = 95%, type = cauchy) ──────────────────────────────</span></span>
+<span><span class="co">#&gt; ── rootstamp (n = 37, level = 95%, type = cauchy) ──────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower</span></span>
-<span><span class="co">#&gt;   1.042  0.006318   6.639     0.5007      1.583          16.87     1.509</span></span>
+<span><span class="co">#&gt;    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower</span></span>
+<span><span class="co">#&gt;   1.04  0.0007295    54.2     0.7955      1.284          17.87     2.776</span></span>
 <span><span class="co">#&gt;   dt_upper</span></span>
-<span><span class="co">#&gt;     -1.002</span></span></code></pre></div>
+<span><span class="co">#&gt;      -3.03</span></span></code></pre></div>
 <p><code>rho</code> recovers something close to the true 1.04, alongside
 <code>rho_ci</code> and the implied
 <code>doubling_time</code>/<code>doubling_time_ci</code>. The two
@@ -180,10 +177,10 @@ a manual loop – pass the original <code><a href="../reference/radf.html">radf(
 <span><span class="co">#&gt; ── rootstamp (level = 95%, type = normal) ──────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; series1 :</span></span>
-<span><span class="co">#&gt;   Start End   rho rho_lower rho_upper doubling_time doubling_time_lower</span></span>
-<span><span class="co">#&gt; 1    83 100 1.042      1.03     1.054         16.87                13.1</span></span>
+<span><span class="co">#&gt;   Start End  rho rho_lower rho_upper doubling_time doubling_time_lower</span></span>
+<span><span class="co">#&gt; 1    63 100 1.04     1.038     1.041         17.87               17.26</span></span>
 <span><span class="co">#&gt;   doubling_time_upper</span></span>
-<span><span class="co">#&gt; 1               23.79</span></span></code></pre></div>
+<span><span class="co">#&gt; 1               18.53</span></span></code></pre></div>
 <p>Root inference on a very short episode is close to meaningless (too
 few points to estimate an AR(1) coefficient precisely) – filter with
 <code>datestamp(..., min_duration = ...)</code> before piping in, rather

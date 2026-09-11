@@ -138,15 +138,13 @@ the root itself has a random component, not a fixed value.</td>
 <h2 id="same-alternative-lbi_test-detects">Same alternative, <code>lbi_test()</code> detects<a class="anchor" aria-label="anchor" href="#same-alternative-lbi_test-detects"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">60</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="op">*</span> <span class="fl">1.03</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="co"># fixed rho = 1.03</span></span>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">60</span>, te <span class="op">=</span> <span class="fl">1</span>, tf <span class="op">=</span> <span class="fl">60</span>, c <span class="op">=</span> <span class="fl">0.03</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># fixed rho = 1.03 throughout</span></span>
 <span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    series   stat   crit  detected</span></span>
-<span><span class="co">#&gt;   series1  6.885  1.645      TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;    series  stat   crit  detected</span></span>
+<span><span class="co">#&gt;   series1  6.12  1.645      TRUE</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="a-different-alternative-where-lbi_test-misses-and-ssu_test-doesnt">A different alternative: where <code>lbi_test()</code> misses and
@@ -154,36 +152,26 @@ the root itself has a random component, not a fixed value.</td>
 </h2>
 <p><code><a href="../reference/ssu_test.html">ssu_test()</a></code> is designed for a root that itself varies
 stochastically over time, not a fixed one:</p>
+<p><code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s <code>coef_noise</code>/<code>coef_a</code>
+arguments generate exactly that alternative,
+<code>rho_t = 1 + c/n + coef_a * u_t / sqrt(n)</code>, a random root
+rather than a fixed one:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">make_stochastic_bubble</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">te_frac</span> <span class="op">=</span> <span class="fl">0.5</span>, <span class="va">c1</span> <span class="op">=</span> <span class="fl">3</span>, <span class="va">a</span> <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
-<span>  <span class="va">y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="va">Te</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">te_frac</span> <span class="op">*</span> <span class="va">n</span><span class="op">)</span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">t</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">t</span> <span class="op">&lt;=</span> <span class="va">Te</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">y</span><span class="op">[</span><span class="va">t</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">[</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>      <span class="va">rho_t</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">+</span> <span class="va">c1</span> <span class="op">/</span> <span class="va">n</span> <span class="op">+</span> <span class="va">a</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="co"># random root, not fixed</span></span>
-<span>      <span class="va">y</span><span class="op">[</span><span class="va">t</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">rho_t</span> <span class="op">*</span> <span class="va">y</span><span class="op">[</span><span class="va">t</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">y</span></span>
-<span><span class="op">}</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2001</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">make_stochastic_bubble</span><span class="op">(</span><span class="fl">150</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">150</span>, te <span class="op">=</span> <span class="fl">75</span>, tf <span class="op">=</span> <span class="fl">150</span>, c <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">1</span>, seed <span class="op">=</span> <span class="fl">2001</span>,</span>
+<span>              coef_noise <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">149</span><span class="op">)</span>, coef_a <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ssu_test.html">ssu_test</a></span><span class="op">(</span><span class="va">y</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    series  sadf  detected</span></span>
-<span><span class="co">#&gt;   series1  12.2      TRUE</span></span>
+<span><span class="co">#&gt;    series   sadf  detected</span></span>
+<span><span class="co">#&gt;   series1  14.53      TRUE</span></span>
 <span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── lbi_test (n = 150, level = 95%) ─────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    series   stat   crit  detected</span></span>
-<span><span class="co">#&gt;   series1  0.147  1.645     FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt;    series    stat   crit  detected</span></span>
+<span><span class="co">#&gt;   series1  0.3121  1.645     FALSE</span></span></code></pre></div>
 <p><code><a href="../reference/ssu_test.html">ssu_test()</a></code> detects it; <code><a href="../reference/lbi_test.html">lbi_test()</a></code>, built
 for a fixed root, does not on this same draw. This isn’t a defect in
 <code><a href="../reference/lbi_test.html">lbi_test()</a></code> – it’s the whole reason two tests exist: each is
@@ -195,14 +183,17 @@ dominates the other everywhere.</p>
 </h2>
 <p><code><a href="../reference/quantile_test.html">quantile_test()</a></code> picks (or is given) a quantile
 <code>tau</code> and tests for explosiveness there instead of in the
-conditional mean:</p>
+conditional mean – the setting where that pays off is heavy-tailed
+innovations, where the conditional-mean regression is least reliable, so
+the DGP here drives the PSY bubble with <code>t(3)</code> shocks:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy2</span>, nrep <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">y_t3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_innov.html">sim_innov</a></span><span class="op">(</span><span class="fl">99</span>, dist <span class="op">=</span> <span class="st">"t"</span>, df <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">y_t3</span>, nrep <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   tau  tstat    crit  delta  detected</span></span>
-<span><span class="co">#&gt;   series1  0.35  5.364  0.7143  0.361      TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt;   series1  0.25  4.684  0.6824  0.379      TRUE</span></span></code></pre></div>
 <p><code>tau = "optimal"</code> (the default) searches
 <code>tau_grid</code> and reports the quantile with the strongest
 signal, shown here fixed at a specific value for a faster, reproducible

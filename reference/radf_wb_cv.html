@@ -168,60 +168,39 @@ Econometrics, 18(2), 233-249.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Volatility triples half-way through the sample: the non-stationary-volatility</span></span></span>
+<span class="r-in"><span><span class="co"># case the wild bootstrap is built for (plain radf_mc_cv() over-rejects here)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Default minimum window</span></span></span>
-<span class="r-in"><span><span class="va">wb</span> <span class="op">&lt;-</span> <span class="fu">radf_wb_cv</span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wb</span> <span class="op">&lt;-</span> <span class="fu">radf_wb_cv</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">wb</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 15 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    sig        adf   sadf gsadf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> psy1  90    -<span style="color: #BB0000;">0.543</span>    1.53   2.71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> psy2  90    -<span style="color: #BB0000;">0.622</span>    3.07   4.06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> evans 90    -<span style="color: #BB0000;">0.497</span>    5.38   7.05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> div   90    -<span style="color: #BB0000;">0.473</span>    0.848  1.72</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> blan  90    -<span style="color: #BB0000;">0.211</span>    2.87   6.25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> psy1  95    -<span style="color: #BB0000;">0.342</span>    2.16   3.39</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> psy2  95    -<span style="color: #BB0000;">0.507</span>    3.81   4.89</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> evans 95    -<span style="color: #BB0000;">0.324</span>    6.77   9.28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> div   95    -<span style="color: #BB0000;">0.145</span>    1.14   2.06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> blan  95    -<span style="color: #BB0000;">0.008</span><span style="color: #BB0000; text-decoration: underline;">43</span>  4.08   7.37</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> psy1  99     0.044<span style="text-decoration: underline;">6</span>   3.16   4.75</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> psy2  99    -<span style="color: #BB0000;">0.294</span>    5.29   6.15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> evans 99    -<span style="color: #BB0000;">0.022</span><span style="color: #BB0000; text-decoration: underline;">3</span>  10.4   13.6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> div   99     0.227    1.94   2.56</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> blan  99     0.389    7.62  10.8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id      sig      adf  sadf gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> series1 90    -<span style="color: #BB0000;">0.135</span>  3.82  4.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> series1 95     0.276  4.81  5.22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> series1 99     1.16   6.57  7.24</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Change the minimum window and the number of bootstraps</span></span></span>
-<span class="r-in"><span><span class="va">wb2</span> <span class="op">&lt;-</span> <span class="fu">radf_wb_cv</span><span class="op">(</span><span class="va">sim_data</span>, nboot <span class="op">=</span> <span class="fl">600</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wb2</span> <span class="op">&lt;-</span> <span class="fu">radf_wb_cv</span><span class="op">(</span><span class="va">y</span>, nboot <span class="op">=</span> <span class="fl">600</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">wb2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 15 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    sig       adf   sadf gsadf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> psy1  90    -<span style="color: #BB0000;">0.555</span>   1.48   2.74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> psy2  90    -<span style="color: #BB0000;">0.665</span>   2.72   3.78</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> evans 90    -<span style="color: #BB0000;">0.547</span>   5.06   8.40</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> div   90    -<span style="color: #BB0000;">0.436</span>   0.905  1.76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> blan  90    -<span style="color: #BB0000;">0.247</span>   2.86   5.92</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> psy1  95    -<span style="color: #BB0000;">0.430</span>   2.03   3.19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> psy2  95    -<span style="color: #BB0000;">0.502</span>   3.34   4.55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> evans 95    -<span style="color: #BB0000;">0.346</span>   7.54  10.5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> div   95    -<span style="color: #BB0000;">0.056</span><span style="color: #BB0000; text-decoration: underline;">1</span>  1.21   1.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> blan  95     0.027<span style="text-decoration: underline;">8</span>  4.31   7.65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> psy1  99    -<span style="color: #BB0000;">0.055</span><span style="color: #BB0000; text-decoration: underline;">0</span>  3.09   4.56</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> psy2  99    -<span style="color: #BB0000;">0.171</span>   4.62   5.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> evans 99    -<span style="color: #BB0000;">0.014</span><span style="color: #BB0000; text-decoration: underline;">5</span> 11.7   14.0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> div   99     0.486   1.93   2.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> blan  99     0.605   6.68  12.4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id      sig       adf  sadf gsadf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> series1 90    -<span style="color: #BB0000;">0.209</span>   3.98  4.52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> series1 95     0.059<span style="text-decoration: underline;">3</span>  5.02  5.37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> series1 99     0.913   7.01  7.39</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Simulate distribution</span></span></span>
-<span class="r-in"><span><span class="va">wdist</span> <span class="op">&lt;-</span> <span class="fu">radf_wb_distr</span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wdist</span> <span class="op">&lt;-</span> <span class="fu">radf_wb_distr</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">wdist</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="radf_wb_cv-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Apply the critical values to actual data</span></span></span>
-<span class="r-in"><span><span class="va">rsim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">rsim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf.html">radf</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, cv <span class="op">=</span> <span class="va">wb2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="radf_wb_cv-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

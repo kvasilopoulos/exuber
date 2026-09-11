@@ -43,21 +43,14 @@ proposed CUSUM as a monitoring detector only.
 ## The same bubble, five monitors
 
 A training window of pure random walk (`T* = 100`), followed by more
-random walk, then a genuine explosive regime (`rho = 1.04`) starting at
-`t = 150`:
+random walk, then a genuine explosive regime (`rho = 1.04`) from
+`t = 150` to the end of the sample –
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
+with the bubble pushed past the training window and no collapse:
 
 ``` r
 
-make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-  y <- numeric(n)
-  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-  for (t in (T_star + 1):n) {
-    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-  }
-  y
-}
-set.seed(7)
-y <- make_bubble_series(200, T_star = 100, bstart = 150)
+y <- sim_psy1(n = 200, te = 150, tf = 200, c = 0.04, alpha = 0, seed = 7)
 ```
 
 ``` r
@@ -67,31 +60,31 @@ monitor_lbi(y, r_star = 100)
 #> ── monitor_lbi (T* = 100 / 200, c_bar = 0, b_alpha = 1.95) ─────────────────────
 #> 
 #>    series  alarm  alarm_date
-#>   series1    159         159
+#>   series1    156         156
 monitor_cusum(y, r_star = 0.5)
 #> 
 #> ── monitor_cusum (T* = 100 / 200, b_alpha = 4.6) ───────────────────────────────
 #> 
 #>    series  alarm  alarm_date
-#>   series1    164         164
+#>   series1    161         161
 monitor_quantile(y, tau = 0.5, nrep = 200, seed = 1)
 #> 
 #> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
-#>   series1  0.695     1.757    163         163
+#>   series1   0.64     1.867    161         161
 monitor(y, r_star = 0.5, nboot = 200, seed = 1)
 #> 
 #> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────
 #> 
 #>    series  boundary  alarm  alarm_date
-#>   series1     2.025    160         160
+#>   series1      2.17    156         156
 monitor(y, r_star = 0.5, boundary = "kurozumi")
 #> 
 #> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ───────
 #> 
 #>    series  boundary  alarm  alarm_date
-#>   series1     1.038    161         161
+#>   series1     1.038    159         159
 ```
 
 [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
@@ -108,13 +101,13 @@ lbi_test(y)
 #> ── lbi_test (n = 200, level = 95%) ─────────────────────────────────────────────
 #> 
 #>    series   stat   crit  detected
-#>   series1  6.313  1.645      TRUE
+#>   series1  6.502  1.645      TRUE
 quantile_test(y, tau = 0.5)
 #> 
 #> ── quantile_test (n = 200, level = 95%) ────────────────────────────────────────
 #> 
 #>    series  tau  tstat    crit  delta  detected
-#>   series1  0.5  13.96  0.4221  0.695      TRUE
+#>   series1  0.5  20.25  0.5041   0.64      TRUE
 ```
 
 Every monitor here alarms within about 15 points of the true bubble

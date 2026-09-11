@@ -166,10 +166,10 @@ autoplot(res)
 # same bubble, but volatility triples at t = 120, after the training window
 y_vol <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
   e = sim_vol_break(199, tau = 0.6))
-#> Error in sim_vol_break(199, tau = 0.6): could not find function "sim_vol_break"
 res_kernel <- monitor_cusum(y_vol, r_star = 0.5, type = "kernel")
-#> Error: object 'y_vol' not found
 autoplot(res_kernel)
-#> Error: object 'res_kernel' not found
+#> Warning: Removed 2 rows containing missing values or values outside the scale range
+#> (`geom_segment()`).
+
 # }
 ```

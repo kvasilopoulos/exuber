@@ -37,19 +37,19 @@ for the full pipeline picture. Each prints its own dating table instead.
 
 ## A single bubble, four verdicts
 
-One simulated series: a unit-root run-up, a genuine explosive regime
-(`rho = 1.03`, true origination at 51), then a volatile collapse back to
-a unit root (true collapse at 80).
+One simulated series from
+[`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md),
+Phillips & Shi (2018)’s own single-bubble DGP: a unit-root run-up, a
+genuine explosive regime (true origination at 40), a mildly-integrated
+collapse regime (starting at 61) and a return to a unit root (recovery
+at 70) – exactly the regime structure these estimators are built for.
 
 ``` r
 
-set.seed(11)
-n1 <- 50; n2 <- 30; n3 <- 20
-expansion <- 100 * 1.03^(1:n2) + cumsum(rnorm(n2, sd = 1))
-y <- c(cumsum(rnorm(n1)), expansion, expansion[n2] + cumsum(rnorm(n3, sd = 1.5)))
+y <- sim_ps1(n = 100, seed = 1)
 ```
 
-True origination is 51, true collapse is 80. Running all four:
+True origination is 40, true collapse is 61. Running all four:
 
 ``` r
 
@@ -58,7 +58,7 @@ dating_hls(y, trim = 0.05)
 #> ── dating_hls (n = 100, trim = 0.05) ───────────────────────────────────────────
 #> 
 #>    series  model  origination  collapse  recovery
-#>   series1      2           50        55      <NA>
+#>   series1      4           39        60        70
 ```
 
 ``` r
@@ -68,14 +68,14 @@ dating_knp(y, trim = 0.05)
 #> ── dating_knp (n = 100, trim = 0.05, omit = TRUE) ──────────────────────────────
 #> 
 #>    series  origination  collapse   delta
-#>   series1           28        50  0.1126
+#>   series1           60        70  0.9178
 ```
 
 ``` r
 
 dating_pdc(y, regimes = 3, trim = 0.05)
 #>         origination collapse
-#> series1          50       79
+#> series1          38       59
 ```
 
 ``` r
@@ -86,26 +86,25 @@ dating_hlw(y, trim = 0.1, nboot = 199, seed = 1)
 #> 
 #> series1:
 #>  model origination collapse recovery
-#>      2          50       59     <NA>
-#>      2          64       80     <NA>
+#>      4          39       60       70
 ```
 
 On this draw,
-[`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md)
-lands closest to both true dates (50, 79).
 [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md)
-gets the origination right (50) but its BIC-selected model puts the
-collapse far too early (55) – a real, visible failure mode, not a
-contrived one.
-[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md)’s
-preliminary
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-step splits the episode into two separate windows here, and its second
-window’s collapse (80) is exact even though the first window is
-spurious.
-[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md)’s
-origination (28) is the least accurate of the four on this particular
-draw.
+and
+[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md)
+both select the 4-regime model and land within a point of every true
+date (39/60/70 against 40/61/70);
+[`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md)
+is a point or two early on both (38/59).
+[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md)
+is the visible failure mode here: its model assumes an *instantaneous*
+collapse (unit root resuming from a shifted level), so
+[`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md)’s
+ten-period mildly-integrated crash (61-70) is a regime it has no room
+for, and it dates that crash as the episode instead, reporting 60/70 – a
+real, not contrived, consequence of a model mismatch, not of the
+estimator’s bias correction.
 
 The point of running all four side by side isn’t that one is “correct” –
 it’s that these are genuinely different estimators with different

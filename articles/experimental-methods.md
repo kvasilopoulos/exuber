@@ -30,12 +30,8 @@ forward machinery, run backwards, dates both.
 
 ``` r
 
-set.seed(2)
-n1 <- 40; n2 <- 25; n3 <- 35
-expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
-collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
-recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
-y <- c(expansion, collapse, recovery) # expansion -> collapse -> recovery
+# sim_ps1(): unit root -> explosive (40-60) -> collapse (61-70) -> recovery (71+)
+y <- sim_ps1(n = 100, seed = 2)
 res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 res
 #> 
@@ -44,14 +40,15 @@ res
 #> ℹ Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section.
 #> 
 #>    series  f_c  f_r  detected  censored
-#>   series1   35   62      TRUE     FALSE
+#>   series1   57   67      TRUE     FALSE
 ```
 
-`f_c` (crisis onset) lands near the true collapse start (40) and `f_r`
-(recovery) after it (62), in the right order – by construction, since
-the down-crossing search only ever starts at the up-crossing. The
-disclosed gap: `f_c` and the overall false-detection rate are
-exploratory pending further validation (see
+`f_c` (crisis onset, 57) lands just ahead of the true collapse start
+(61) and `f_r` (recovery, 67) after it, inside the collapse regime and
+ahead of the true recovery date (70) – in the right order by
+construction, since the down-crossing search only ever starts at the
+up-crossing. The disclosed gap: `f_c` and the overall false-detection
+rate are exploratory pending further validation (see
 [`?radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
 Caveats section) – the date-ordering property is solid, the false-alarm
 calibration is not yet.
