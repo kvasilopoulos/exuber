@@ -24,9 +24,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rls_nested
+arma::vec rls_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min, int lag);
+RcppExport SEXP _exuber_rls_nested(SEXP yxmatSEXP, SEXP minwSEXP, SEXP n_minSEXP, SEXP lagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type yxmat(yxmatSEXP);
+    Rcpp::traits::input_parameter< const arma::ivec& >::type minw(minwSEXP);
+    Rcpp::traits::input_parameter< int >::type n_min(n_minSEXP);
+    Rcpp::traits::input_parameter< int >::type lag(lagSEXP);
+    rcpp_result_gen = Rcpp::wrap(rls_nested(yxmat, minw, n_min, lag));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_exuber_rls_gsadf", (DL_FUNC) &_exuber_rls_gsadf, 3},
+    {"_exuber_rls_nested", (DL_FUNC) &_exuber_rls_nested, 4},
     {NULL, NULL, 0}
 };
 
