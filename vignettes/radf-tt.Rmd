@@ -37,9 +37,18 @@ bootstrap, and no per-dataset resimulation needed.
 
 ## Basic usage
 
+`radf_tt()` targets *non-stationary* volatility -- a permanent shift or
+trend in the unconditional innovation variance, the setting of Kurozumi,
+Skrobotov & Tsarev's own simulations. (Stationary conditional
+heteroskedasticity such as GARCH is not the target: its variance profile
+is asymptotically flat, so the time-deformation is close to the identity
+and plain `radf()` is already size-correct there.) `sim_vol_break()`
+generates exactly such innovations, and `sim_psy1()`'s `e` argument
+injects them into the PSY bubble DGP -- here the innovation standard
+deviation triples half-way through the sample:
+
 ```{r radf-tt}
-set.seed(1)
-y <- sim_psy1(100)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_tt(y)
 res
 ```
@@ -89,8 +98,8 @@ needed to date and plot episodes, not just the summary-level critical
 values -- so the usual pipeline works unchanged:
 
 ```{r radf-tt-datestamp}
-res <- radf_tt(sim_data, minw = 20)
-cv <- radf_tt_cv(n = 100, minw = 20)
+res <- radf_tt(y, minw = 20)
+cv <- radf_tt_cv(n = 200, minw = 20)
 
 datestamp(res, cv = cv)
 autoplot(res, cv = cv)

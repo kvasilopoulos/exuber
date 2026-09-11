@@ -43,10 +43,7 @@ carries the `radf_obj` class itself, so `rootstamp()` doesn't plug into
 A unit-root run-up followed by a genuine explosive regime with `rho = 1.04`:
 
 ```{r dgp}
-set.seed(2026)
-burn <- cumsum(rnorm(60))
-bubble <- burn[length(burn)] * 1.04^(1:40) + cumsum(rnorm(40, sd = 0.5))
-y <- c(burn, bubble)
+y <- sim_psy1(n = 100, te = 60, tf = 100, c = 0.04, alpha = 0, sigma = 1, seed = 2026)
 ```
 
 Detect and date it first, the ordinary way:
