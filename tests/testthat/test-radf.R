@@ -53,3 +53,8 @@ test_that("NA handling", {
   dta_na_interior[50, 3] <- NA
   expect_error(radf(dta_na_interior), "interior NA")
 })
+
+test_that("radf() accepts a named numeric vector (e.g. a prcomp() score column)", {
+  y <- setNames(sim_data$psy1, seq_along(sim_data$psy1))
+  expect_equal(radf(y)$gsadf, radf(unname(y))$gsadf)
+})
