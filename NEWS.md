@@ -132,6 +132,27 @@ what was checked and how.
   reference index is reorganised into per-function subsections so each
   function is listed next to the methods that consume its output.
 
+* `sim_vol_break()` -- i.i.d. Gaussian innovations whose standard deviation
+  shifts permanently at a chosen break fraction, the non-stationary
+  volatility DGP (Cavaliere & Taylor 2007) the volatility-robust tests are
+  actually built for, unlike stationary GARCH. `sim_ps1()` gained the same
+  `e` innovation-injection argument `sim_psy1()` already had, and the
+  `c`/`c1`/`c2` arguments of `sim_psy1()`/`sim_ps1()` now accept any
+  positive scalar (as documented), so a fixed explosive root is expressible
+  directly (`c = 0.04, alpha = 0`).
+
+* Examples and vignettes now demonstrate each method on the DGP it targets
+  rather than on `sim_data` throughout: volatility-robust tests
+  (`radf_tt()`, `radf_kp()`, `radf_sign()`, `radf_sbz()`, `radf_wb_cv()`,
+  `monitor_cusum(type = "kernel")`, `dating_pdc(type = "wls")`) on a
+  volatility break, `cobubble_test()`/`contagion_reg()` on
+  `sim_coexplosive()`, `radf_common()` on `sim_common()`, `ssu_test()` on a
+  stochastic root, `quantile_test()`/`monitor_quantile()` on heavy-tailed
+  innovations, `dating_*()`/`radf_recovery()` on `sim_ps1()`, and every
+  monitor on a bubble that starts after its training window. Hand-rolled
+  `cumsum(rnorm())` DGPs in the vignettes are replaced by the package's own
+  generators.
+
 ### Bug fixes
 
 * `datestamp()`/`autoplot()`/`autoplot2()`'s `sig_lvl` argument now
@@ -146,6 +167,15 @@ what was checked and how.
   gained a `sig_lvl` argument (default 95, so default-call behavior is
   unchanged) and `datestamp()`/`autoplot()`/`autoplot2()` now thread
   their own `sig_lvl` through to it.
+
+* `radf()` (and everything built on it) errored with `subscript out of
+  bounds` on a *named* numeric vector, e.g. a `prcomp()` score column --
+  which is exactly what `radf_common()` feeds it -- because the names
+  leaked into the internal NA-edge bookkeeping.
+
+* `sim_psy1()`'s `seed` argument now also covers a generator passed lazily
+  to `e`/`coef_noise` (e.g. `sim_psy1(n, seed = 1, e = sim_vol_break(n - 1))`);
+  previously those were forced before the seed was set.
 
 # exuber 1.1.0
 

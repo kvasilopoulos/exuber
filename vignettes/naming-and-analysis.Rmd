@@ -81,10 +81,18 @@ full pipeline. Three tiers, in practice:
 
 `radf_kp()`/`radf_common()` literally return `radf()`'s own output (purged
 of volatility, or computed on a PCA factor, respectively, then `radf()`
-unmodified), so every generic works exactly as it does for plain `radf()`:
+unmodified), so every generic works exactly as it does for plain `radf()`.
+The running series for this whole section is the one these tests are built
+for -- `sim_psy1()`'s bubble with a permanent volatility break
+(`sim_vol_break()`, innovation standard deviation tripling half-way
+through), see `vignette("volatility-robust-radf")`:
+
+```{r vol-dgp}
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+```
 
 ```{r kp-full}
-res <- radf_kp(sim_data, minw = 20)
+res <- radf_kp(y, minw = 20)
 cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
 
 summary(res, cv = cv)
@@ -123,8 +131,8 @@ heteroskedasticity invariance is itself the paper's own documented
 finding, not a validation red flag).
 
 ```{r tt-full}
-res <- radf_tt(sim_data, minw = 20)
-cv <- radf_tt_cv(n = 100, minw = 20)
+res <- radf_tt(y, minw = 20)
+cv <- radf_tt_cv(n = 200, minw = 20)
 
 summary(res, cv = cv)
 datestamp(res, cv = cv)
@@ -133,8 +141,8 @@ autoplot(res, cv = cv)
 ```
 
 ```{r sign-full}
-res <- radf_sign(sim_data, minw = 20)
-cv <- radf_sign_cv(n = 100, minw = 20)
+res <- radf_sign(y, minw = 20)
+cv <- radf_sign_cv(n = 200, minw = 20)
 
 summary(res, cv = cv)
 datestamp(res, cv = cv)
@@ -153,14 +161,15 @@ shortcut needed. Validated the same way: `badf_cv`'s last row is
 bit-identical to `adf_cv`; empirical false-alarm rate under `H0` is 5.0%
 at nominal 5% (n=100, minw=20, 200 replications); and it does reject on a
 sufficiently strong deterministic explosive path, though its
-kernel-volatility weighting trades away enough power on `sim_data`'s milder
-bubbles that none of the five reject at nboot=100-200 -- the same
-power/robustness trade-off already documented for `radf_sbz_union()`'s
-`supBZ` leg below, not a new finding specific to the split.
+kernel-volatility weighting trades away enough power on `sim_psy1()`'s
+default, milder bubble that it doesn't reject on the series above at
+nboot=100-200 -- the same power/robustness trade-off already documented
+for `radf_sbz_union()`'s `supBZ` leg below, not a new finding specific to
+the split.
 
 ```{r sbz-full}
-res <- radf_sbz(sim_data, minw = 20)
-cv <- radf_sbz_cv(sim_data, minw = 20, nboot = 200, seed = 1)
+res <- radf_sbz(y, minw = 20)
+cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
 
 summary(res, cv = cv)
 tidy(res, cv = cv)
@@ -168,17 +177,16 @@ tidy(res, cv = cv)
 
 `datestamp()`/`autoplot()` need at least one rejection to have anything to
 show (they error otherwise, same as for any other `radf_obj`/`radf_cv`
-pair) -- none of `sim_data`'s five series clear `supBZ`'s bar above, so
-here's a series built to:
+pair) -- the series above doesn't clear `supBZ`'s bar, so here's the same
+volatility break under a stronger, uncollapsed explosive regime
+(`rho = 1.03` from `t = 120` to the sample end), which does:
 
 ```{r sbz-full-reject}
-set.seed(7)
-n <- 120; te <- 70
-y <- cumsum(rnorm(n))
-y[(te + 1):n] <- y[te] * 1.15 ^ seq_len(n - te)
+y_strong <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+                     e = sim_vol_break(199))
 
-res2 <- radf_sbz(y, minw = 20)
-cv2 <- radf_sbz_cv(y, minw = 20, nboot = 100, seed = 1)
+res2 <- radf_sbz(y_strong, minw = 20)
+cv2 <- radf_sbz_cv(y_strong, minw = 20, nboot = 100, seed = 1)
 datestamp(res2, cv = cv2)
 autoplot(res2, cv = cv2)
 ```
