@@ -71,9 +71,8 @@ retrieve_crit <- function(x) {
     cv <- fetch_crit_bucket(nr, lag = lag)
     if (is.null(cv)) {
       stop_glue(
-        "Cannot reach the critical-value store for n = {nr}, lag = {lag} ",
-        "(either unreachable, or that combination hasn't been simulated ",
-        "yet). Check your network connection and try again."
+        "Critical values for n = {nr}, lag = {lag} haven't been simulated ",
+        "yet. Pass `cv` explicitly, e.g. `cv = radf_mc_cv({nr}, lag = {lag})`."
       )
     }
     message_glue("Using extended critical values for `cv`.")

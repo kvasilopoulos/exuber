@@ -49,13 +49,24 @@ parse_crit_bin <- function(path) {
 #' Fetch simulated critical values for a given (n, lag), disk-cached
 #'
 #' Checks a persistent local cache first (survives across sessions), then
-#' the bucket proxy. Returns `NULL` (rather than erroring) if neither has
-#' it, so callers can fail gracefully.
+#' the bucket proxy. Returns `NULL` when the store answers 404 (that
+#' combination hasn't been simulated yet) so callers can fail gracefully;
+#' any other failure (no network, proxy down) is an error, since retrying
+#' later may well succeed.
 #' @keywords internal
 fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
   cache_path <- crit_cache_path(n, lag)
   if (file.exists(cache_path)) {
     return(tryCatch(parse_crit_bin(cache_path), error = function(e) NULL))
+  }
+  # download.file() surfaces an HTTP 404 as a warning before its error, so
+  # the same handler serves both conditions.
+  on_fail <- function(cnd) {
+    if (grepl("404", conditionMessage(cnd), fixed = TRUE)) return(NULL)
+    stop_glue(
+      "Cannot reach the critical-value store ({conditionMessage(cnd)}). ",
+      "Check your network connection and try again."
+    )
   }
   tryCatch(
     {
@@ -67,7 +78,7 @@ fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
       file.copy(dest, cache_path, overwrite = TRUE)
       cv
     },
-    error = function(e) NULL,
-    warning = function(w) NULL
+    error = on_fail,
+    warning = on_fail
   )
 }

@@ -8,7 +8,9 @@ fetch_crit_bucket(n, lag = 0, base_url = crit_bucket_base_url)
 }
 \description{
 Checks a persistent local cache first (survives across sessions), then
-the bucket proxy. Returns \code{NULL} (rather than erroring) if neither has
-it, so callers can fail gracefully.
+the bucket proxy. Returns \code{NULL} when the store answers 404 (that
+combination hasn't been simulated yet) so callers can fail gracefully;
+any other failure (no network, proxy down) is an error, since retrying
+later may well succeed.
 }
 \keyword{internal}
