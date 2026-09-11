@@ -16,7 +16,8 @@ sim_ps1(
   alpha = 0.6,
   beta = 0.5,
   sigma = 6.79,
-  seed = NULL
+  seed = NULL,
+  e = NULL
 )
 }
 \arguments{
@@ -48,6 +49,16 @@ should be initialized. Either NULL or an integer will be used in a call to
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
+
+\item{e}{An optional numeric vector of length \code{n - 1} of innovations
+to use in place of \code{rnorm(n - 1, sd = sigma)}. Lets the plain PSY
+equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
+sequence instead of i.i.d. Gaussian noise -- see \code{\link{sim_innov}}
+(heavy-tailed/skewed), \code{\link{sim_vol_break}} (permanent
+volatility break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
+\code{\link{sim_vol_cir}}/\code{\link{sim_vol_sv}} (stochastic volatility)
+and \code{\link{sim_fi}} (long-memory) for ready-made generators. Default
+\code{NULL} reproduces the plain i.i.d. Gaussian DGP exactly.}
 }
 \value{
 A numeric vector of length \code{n}.

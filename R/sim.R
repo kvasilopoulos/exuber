@@ -40,7 +40,8 @@
 #' to use in place of \code{rnorm(n - 1, sd = sigma)}. Lets the plain PSY
 #' equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
 #' sequence instead of i.i.d. Gaussian noise -- see \code{\link{sim_innov}}
-#' (heavy-tailed/skewed), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
+#' (heavy-tailed/skewed), \code{\link{sim_vol_break}} (permanent
+#' volatility break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
 #' \code{\link{sim_vol_cir}}/\code{\link{sim_vol_sv}} (stochastic volatility)
 #' and \code{\link{sim_fi}} (long-memory) for ready-made generators. Default
 #' \code{NULL} reproduces the plain i.i.d. Gaussian DGP exactly.
@@ -92,17 +93,20 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
   assert_positive_int(n)
   assert_between(te, 0, n)
   assert_between(tf, te, n)
-  assert_positive_int(c)
+  stopifnot(c > 0)
   assert_between(alpha, 0, 1)
   stopifnot(sigma >= 0)
+
+  # seed before forcing `e`/`coef_noise`, so a lazily-evaluated generator
+  # passed there (e.g. `e = sim_vol_break(n - 1)`) is covered by `seed` too
+  set_rng(seed)
+
   if (!is.null(e) && length(e) != n - 1) {
     stop_glue("Argument 'e' should have length n - 1")
   }
   if (!is.null(coef_noise) && length(coef_noise) != n - 1) {
     stop_glue("Argument 'coef_noise' should have length n - 1")
   }
-
-  set_rng(seed)
 
   delta <- 1 + c * n ^ (-alpha)
   eps <- e %||% rnorm(n - 1, sd = sigma)
@@ -268,6 +272,59 @@ sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0,
   }
 
   z %>%
+    add_attr(seed = get_rng_state(seed)) %>%
+    add_class(class = "sim")
+}
+
+#' Simulate innovations with a permanent volatility break
+#'
+#' Generates i.i.d. Gaussian shocks whose standard deviation shifts
+#' permanently from \code{sigma} to \code{sigma * ratio} at observation
+#' \code{tau * n}, for use as \code{sim_psy1(..., e = sim_vol_break(...))}.
+#' This is the \emph{non-stationary} volatility DGP (Cavaliere & Taylor
+#' 2007's single break) under which \code{\link{radf}}'s standard critical
+#' values lose size control, and the one the volatility-robust tests
+#' (\code{\link{radf_tt}}, \code{\link{radf_kp}}, \code{\link{radf_sbz}},
+#' \code{\link{radf_sign}}, \code{\link{radf_wb_cv}}) are designed for --
+#' unlike stationary conditional heteroskedasticity
+#' (\code{\link{sim_vol_garch}}), whose variance profile is asymptotically
+#' flat.
+#'
+#' @param n Number of innovations to generate.
+#' @param tau Break fraction in (0, 1): the shift happens after observation
+#' \code{floor(tau * n)}.
+#' @param ratio Positive post-/pre-break standard deviation ratio;
+#' \code{ratio > 1} is an upward break (the case where \code{radf()}
+#' over-rejects most), \code{ratio < 1} a downward one.
+#' @inheritParams sim_innov
+#'
+#' @return A numeric vector of length \code{n}.
+#' @export
+#'
+#' @references Cavaliere, G. & Taylor, A.M.R. (2007). "Testing for unit
+#' roots in time series models with non-stationary volatility." Journal of
+#' Econometrics, 140, 919-947. Harvey, D.I., Leybourne, S.J., Sollis, R. &
+#' Taylor, A.M.R. (2016). "Tests for explosive financial bubbles in the
+#' presence of non-stationary volatility." Journal of Empirical Finance, 38,
+#' 548-574.
+#'
+#' @seealso \code{\link{sim_psy1}}, \code{\link{sim_vol_garch}}
+#'
+#' @examples
+#' sim_vol_break(199, seed = 1) %>%
+#'   autoplot()
+#' # Volatility triples half-way through a PSY bubble series
+#' sim_psy1(n = 200, seed = 123, e = sim_vol_break(199, seed = 123)) %>%
+#'   autoplot()
+sim_vol_break <- function(n, tau = 0.5, ratio = 3, sigma = 6.79, seed = NULL) {
+  assert_positive_int(n)
+  assert_between(tau, 0, 1)
+  stopifnot(ratio > 0, sigma >= 0)
+
+  set_rng(seed)
+
+  sd_t <- sigma * ifelse(seq_len(n) > floor(tau * n), ratio, 1)
+  rnorm(n, sd = sd_t) %>%
     add_attr(seed = get_rng_state(seed)) %>%
     add_class(class = "sim")
 }
@@ -585,20 +642,24 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
                     c = 1, c1 = 1, c2 = 1, eta = 0.6, alpha = 0.6, beta = 0.5,
-                    sigma = 6.79, seed = NULL) {
+                    sigma = 6.79, seed = NULL, e = NULL) {
 
   assert_positive_int(n)
   assert_between(te, 0, n)
   assert_between(tf, te, n)
   assert_between(tr, tf, n)
-  assert_positive_int(c)
-  assert_positive_int(c1)
-  assert_positive_int(c2)
+  stopifnot(c > 0)
+  stopifnot(c1 > 0)
+  stopifnot(c2 > 0)
   assert_between(alpha, 0, 1)
   assert_between(beta, 0, 1)
   stopifnot(eta > 0.5, sigma >= 0)
 
   set_rng(seed)
+  if (!is.null(e) && length(e) != n - 1) {
+    stop_glue("Argument 'e' should have length n - 1")
+  }
+  eps <- e %||% rnorm(n - 1, sd = sigma)
   drift <- c*n^(-eta)
   delta <- 1 + c1 * n^(-alpha)
   gamma <- 1 - c2 * n^(-beta)
@@ -606,13 +667,13 @@ sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
 
   for (t in 2:n) {
     if (t < te) {
-      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma)
+      y[t] <- drift + y[t - 1] + eps[t - 1]
     } else if (t >= te & t <= tf) {
-      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma)
+      y[t] <- delta * y[t - 1] + eps[t - 1]
     } else if (t > tf & t <= tr ) {
-      y[t] <- gamma * y[t - 1] + rnorm(1, sd = sigma)
+      y[t] <- gamma * y[t - 1] + eps[t - 1]
     } else {
-      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma)
+      y[t] <- drift + y[t - 1] + eps[t - 1]
     }
   }
   y %>%
@@ -625,7 +686,7 @@ sim_ps2 <- function(n,
                     te1 = 0.2 * n, tf1 = te1 + 0.2 * n , tr1 = tf1 + 0.1*n,
                     te2 = 0.6 * n, tf2 = te2 + 0.15 * n , tr2 = tf2 + 0.1*n,
                     c = 1, c1 = 1, c2 = 1, eta = 0.6, alpha = 0.6, beta = 0.5,
-                    sigma = 6.79, seed = NULL) {
+                    sigma = 6.79, seed = NULL, e = NULL) {
 
   assert_positive_int(n)
   assert_between(te1, 0, n)
@@ -635,14 +696,18 @@ sim_ps2 <- function(n,
   assert_between(tf2, te2, n)
   assert_between(tr2, tf2, n)
   assert_between(alpha, 0, 1)
-  assert_positive_int(c)
-  assert_positive_int(c1)
-  assert_positive_int(c2)
+  stopifnot(c > 0)
+  stopifnot(c1 > 0)
+  stopifnot(c2 > 0)
   assert_between(alpha, 0, 1)
   assert_between(beta, 0, 1)
   stopifnot(eta > 0.5, sigma >= 0)
 
   set_rng(seed)
+  if (!is.null(e) && length(e) != n - 1) {
+    stop_glue("Argument 'e' should have length n - 1")
+  }
+  eps <- e %||% rnorm(n - 1, sd = sigma)
   drift <- c*n^(-eta)
   delta <- 1 + c1 * n^(-alpha)
   gamma <- 1 - c2 * n^(-beta)
@@ -650,19 +715,19 @@ sim_ps2 <- function(n,
 
   for (t in 2:n) {
     if (t < te1) {
-      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma) # normal
+      y[t] <- drift + y[t - 1] + eps[t - 1] # normal
     } else if (t >= te1 & t <= tf1) {
-      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma) # bubble1
+      y[t] <- delta * y[t - 1] + eps[t - 1] # bubble1
     } else if (t > tf1 & t <= tr1 ) {
-      y[t] <- gamma * y[t - 1] + rnorm(1, sd = sigma) # collapse 1
+      y[t] <- gamma * y[t - 1] + eps[t - 1] # collapse 1
     }  else if (t > tr1 + 1 & t < te2) {
-      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma) # normal 2
+      y[t] <- drift + y[t - 1] + eps[t - 1] # normal 2
     }  else if (t >= te2 + 1 & t <= tf2) {
-      y[t] <- delta * y[t - 1] + rnorm(1, sd = sigma) # bubble 2
+      y[t] <- delta * y[t - 1] + eps[t - 1] # bubble 2
     }  else if (t > tf2 + 1 & t <= tr2) {
-      y[t] <- gamma * y[t - 1] + rnorm(1, sd = sigma) # collapse 2
+      y[t] <- gamma * y[t - 1] + eps[t - 1] # collapse 2
     } else {
-      y[t] <- drift + y[t - 1] + rnorm(1, sd = sigma) # normal 3
+      y[t] <- drift + y[t - 1] + eps[t - 1] # normal 3
     }
   }
   y %>%
