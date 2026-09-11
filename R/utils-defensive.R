@@ -81,7 +81,7 @@ assert_na <- function(x) {
 na_edges <- function(x) {
   out <- vapply(seq_len(ncol(x)), function(i) {
     col <- x[, i]
-    valid <- which(!is.na(col))
+    valid <- unname(which(!is.na(col))) # names would otherwise leak into the start/end rownames
     if (length(valid) == 0) {
       stop_glue("series '{colnames(x)[i]}' is entirely NA")
     }
