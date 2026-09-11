@@ -126,6 +126,12 @@ what was checked and how.
   three separate functions -- `explosive_root()`, `root_ci()`,
   `root_ci_datestamp()` -- consolidated before release).
 
+* Documentation: every `autoplot()` and `augment()` method now has its own
+  help page instead of sharing one with the function it plots/tidies
+  (`?autoplot.monitor_cusum_obj`, `?augment.radf_obj`, ...). The pkgdown
+  reference index is reorganised into per-function subsections so each
+  function is listed next to the methods that consume its output.
+
 ### Bug fixes
 
 * `datestamp()`/`autoplot()`/`autoplot2()`'s `sig_lvl` argument now
