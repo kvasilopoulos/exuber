@@ -39,7 +39,7 @@ set.seed(123)
 sims <- tibble(
   sim_psy1 = sim_psy1(100),
   sim_psy2 = sim_psy2(100),
-  sim_evans = sim_blan(100),
+  sim_evans = sim_evans(100),
   sim_blan = sim_evans(100),
 ) 
 

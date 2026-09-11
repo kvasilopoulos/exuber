@@ -49,19 +49,12 @@ detector only.
 ## The same bubble, five monitors
 
 A training window of pure random walk (`T* = 100`), followed by more random
-walk, then a genuine explosive regime (`rho = 1.04`) starting at `t = 150`:
+walk, then a genuine explosive regime (`rho = 1.04`) from `t = 150` to the
+end of the sample -- `sim_psy1()` with the bubble pushed past the training
+window and no collapse:
 
 ```{r dgp}
-make_bubble_series <- function(n, T_star, bstart, rho = 1.04) {
-  y <- numeric(n)
-  y[seq_len(T_star)] <- cumsum(rnorm(T_star))
-  for (t in (T_star + 1):n) {
-    y[t] <- if (t < bstart) y[t - 1] + rnorm(1) else rho * y[t - 1] + rnorm(1)
-  }
-  y
-}
-set.seed(7)
-y <- make_bubble_series(200, T_star = 100, bstart = 150)
+y <- sim_psy1(n = 200, te = 150, tf = 200, c = 0.04, alpha = 0, seed = 7)
 ```
 
 ```{r monitors}
