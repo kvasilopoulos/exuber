@@ -2,12 +2,9 @@
 % Please edit documentation in R/radf-tidiers.R
 \name{tidy_join.radf_obj}
 \alias{tidy_join.radf_obj}
-\alias{augment_join.radf_obj}
 \title{Tidy into a joint model}
 \usage{
 \method{tidy_join}{radf_obj}(x, y = NULL, ...)
-
-\method{augment_join}{radf_obj}(x, y = NULL, trunc = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{radf_obj}.}
@@ -16,8 +13,6 @@
 critical value.}
 
 \item{...}{Further arguments passed to methods. Not used.}
-
-\item{trunc}{Whether to remove the period of the minimum window from the plot (default = TRUE).}
 }
 \description{
 Tidy or augment  and then join objects of class \code{radf_obj} and \code{radf_cv}. The
@@ -37,24 +32,6 @@ tidy_join(rsim_data, cv)
 
 # summary() and diagnostics() are themselves built on top of tidy_join()
 summary(rsim_data, cv = cv)
-}
-
-\donttest{
-rsim_data <- radf(sim_data, minw = 20)
-cv <- radf_wb_cv(sim_data, minw = 20)
-
-# Full statistic-path/critical-value-path join -- the table autoplot() is built on
-aj <- augment_join(rsim_data, cv)
-aj
-
-# Reproduce (a simplified version of) autoplot()'s own bsadf-vs-crit line plot
-library(ggplot2)
-aj \%>\%
-  dplyr::filter(sig == 95, stat == "bsadf") \%>\%
-  tidyr::pivot_longer(c(tstat, crit), names_to = "series") \%>\%
-  ggplot(aes(index, value, col = series)) +
-  geom_line() +
-  facet_wrap(~id, scales = "free")
 }
 
 }

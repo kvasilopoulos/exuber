@@ -140,12 +140,15 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' res <- monitor_quantile(sim_data$psy2, tau = 0.5, nrep = 100, seed = 1)
+#' # Heavy-tailed (t3) innovations, explosive from t = 150 to the sample end
+#' y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
+#'   e = sim_innov(199, dist = "t", df = 3))
+#' res <- monitor_quantile(y, tau = 0.5, nrep = 100, seed = 1)
 #' print(res)
 #' autoplot(res)
 #'
 #' # Upper-quantile monitoring is typically more powerful for right-tailed bubbles
-#' autoplot(monitor_quantile(sim_data$psy2, tau = 0.9, nrep = 100, seed = 1))
+#' autoplot(monitor_quantile(y, tau = 0.9, nrep = 100, seed = 1))
 #' }
 #'
 #' @export
@@ -210,8 +213,15 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 
     add_class("monitor_quantile_obj")
 }
 
-#' @rdname monitor_quantile
+#' Plot method for monitor_quantile() output
+#'
+#' Plots the quantile monitoring statistic against its boundary, one panel per series, with a vertical marker at the alarm date.
+#'
 #' @param object An object of class \code{monitor_quantile_obj}, the output of \code{\link{monitor_quantile}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{monitor_quantile}}
 #' @export
 autoplot.monitor_quantile_obj <- function(object, ...) {
   minw <- attr(object, "minw")

@@ -2,12 +2,9 @@
 % Please edit documentation in R/radf-tidiers.R
 \name{tidy.radf_obj}
 \alias{tidy.radf_obj}
-\alias{augment.radf_obj}
 \title{Tidy a \code{radf_obj} object}
 \usage{
 \method{tidy}{radf_obj}(x, format = c("wide", "long"), panel = FALSE, ...)
-
-\method{augment}{radf_obj}(x, format = c("wide", "long"), panel = FALSE, trunc = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{radf_obj}.}
@@ -17,8 +14,6 @@
 \item{panel}{If TRUE then returns the panel statistics}
 
 \item{...}{Further arguments passed to methods. Not used.}
-
-\item{trunc}{Whether to remove the period of the minimum window from the plot (default = TRUE).}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble::tibble()}}

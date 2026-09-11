@@ -2,7 +2,6 @@
 % Please edit documentation in R/radf_sbz.R
 \name{radf_sbz_union}
 \alias{radf_sbz_union}
-\alias{autoplot.radf_sbz_union}
 \title{SBZ Weighted Least Squares Bubble Test with Union-of-Rejections}
 \usage{
 radf_sbz_union(
@@ -13,8 +12,6 @@ radf_sbz_union(
   h = NULL,
   seed = NULL
 )
-
-\method{autoplot}{radf_sbz_union}(object, sig_lvl = 95, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -44,13 +41,6 @@ should be initialized. Either NULL or an integer will be used in a call to
 of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
-
-\item{object}{A \code{radf_sbz_union} object.}
-
-\item{sig_lvl}{Significance level to plot the critical value at, one of
-\code{90}, \code{95} (default), \code{99}.}
-
-\item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
 A list with bootstrap p-values (\code{p_supDF}, \code{p_supBZ},

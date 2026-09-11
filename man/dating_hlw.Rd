@@ -2,7 +2,6 @@
 % Please edit documentation in R/dating_hlw.R
 \name{dating_hlw}
 \alias{dating_hlw}
-\alias{autoplot.dating_hlw_obj}
 \title{Multi-Bubble SSR/BIC Dating (Harvey, Leybourne & Whitehouse 2020)}
 \usage{
 dating_hlw(
@@ -14,8 +13,6 @@ dating_hlw(
   nboot = 199L,
   seed = NULL
 )
-
-\method{autoplot}{dating_hlw_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -45,8 +42,6 @@ PSY episode to be counted. Default \code{\link{psy_ds}} (HLW's own
 
 \item{nboot, seed}{Passed to \code{\link{radf_wb_cv}} when \code{cv}
 is not supplied.}
-
-\item{object}{An object of class \code{dating_hlw_obj}, the output of \code{\link{dating_hlw}}.}
 }
 \value{
 An object of class \code{dating_hlw_obj}: a list, one element

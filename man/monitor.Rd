@@ -2,7 +2,6 @@
 % Please edit documentation in R/monitor.R
 \name{monitor}
 \alias{monitor}
-\alias{autoplot.monitor_obj}
 \title{Real-Time Monitoring for Explosive Bubbles}
 \usage{
 monitor(
@@ -17,8 +16,6 @@ monitor(
   boundary = c("bootstrap", "kurozumi", "fluc"),
   s0 = 0
 )
-
-\method{autoplot}{monitor_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -63,8 +60,6 @@ training length, only used when \code{boundary = "kurozumi"}.
 case (window start ranges over \code{[1, floor(T* * s0)]}), the only
 two values his boundary function's scaling constants are tabulated
 for.}
-
-\item{object}{An object of class \code{monitor_obj}, the output of \code{\link{monitor}}.}
 }
 \value{
 An object of class \code{monitor_obj}: a list with the
@@ -128,17 +123,19 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
+# A bubble-free training window (first half), explosive from t = 150 on
+y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 # Default: Phillips & Shi (2020) wild bootstrap boundary
-mon <- monitor(sim_data, r_star = 0.5, nboot = 200)
+mon <- monitor(y, r_star = 0.5, nboot = 200)
 print(mon)
 autoplot(mon)
 
 # Kurozumi (2020) closed-form boundary -- no bootstrap needed
-mon_kz <- monitor(sim_data, r_star = 0.5, boundary = "kurozumi")
+mon_kz <- monitor(y, r_star = 0.5, boundary = "kurozumi")
 autoplot(mon_kz)
 
 # Homm & Breitung (2012) FLUC boundary
-autoplot(monitor(sim_data, r_star = 0.5, boundary = "fluc"))
+autoplot(monitor(y, r_star = 0.5, boundary = "fluc"))
 }
 
 }

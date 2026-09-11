@@ -2,12 +2,9 @@
 % Please edit documentation in R/dating_hls.R
 \name{dating_hls}
 \alias{dating_hls}
-\alias{autoplot.dating_hls_obj}
 \title{SSR/BIC Bubble Dating (Harvey, Leybourne & Sollis 2017)}
 \usage{
 dating_hls(data, trim = 0.05)
-
-\method{autoplot}{dating_hls_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -23,8 +20,6 @@ not supported. When any series is padded this way, the panel statistic
 \item{trim}{Minimum fraction of the (differenced) sample required in
 every regime (default 0.05, following Harvey, Leybourne & Sollis's own
 empirical-application choice; their simulations use 0.1).}
-
-\item{object}{An object of class \code{dating_hls_obj}, the output of \code{\link{dating_hls}}.}
 }
 \value{
 An object of class \code{dating_hls_obj}: a list with the

@@ -187,8 +187,15 @@ dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
     add_class("dating_hlw_obj")
 }
 
-#' @rdname dating_hlw
+#' Plot method for dating_hlw() output
+#'
+#' Plots each series with vertical markers at every estimated origination, collapse and recovery date.
+#'
 #' @param object An object of class \code{dating_hlw_obj}, the output of \code{\link{dating_hlw}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{dating_hlw}}
 #' @importFrom tidyr drop_na
 #' @export
 autoplot.dating_hlw_obj <- function(object, ...) {
