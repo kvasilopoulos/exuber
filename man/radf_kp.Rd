@@ -64,7 +64,10 @@ pipeline works exactly as it does for plain \code{radf()} -- see
 
 \examples{
 \donttest{
-res <- radf_kp(sim_data, minw = 20)
+# Volatility triples half-way through the sample: the non-stationary-volatility
+# case this test is built for (plain radf() over-rejects here)
+y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+res <- radf_kp(y, minw = 20)
 print(res)
 
 # radf_mc_cv() applies unmodified -- see Details

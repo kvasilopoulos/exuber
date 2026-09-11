@@ -116,10 +116,13 @@ gls_dfstat_grid <- function(y, minw) {
 #'
 #' @examples
 #' \donttest{
-#' cv <- radf_tt_cv(n = 100, minw = 20)
+#' cv <- radf_tt_cv(n = 200, minw = 20)
 #' tidy(cv)
 #'
-#' res <- radf_tt(sim_data, minw = 20)
+#' # Volatility triples half-way through the sample: the non-stationary-volatility
+#' # case this test is built for (plain radf() over-rejects here)
+#' y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+#' res <- radf_tt(y, minw = 20)
 #' datestamp(res, cv = cv)
 #' autoplot(res, cv = cv)
 #' }
@@ -262,10 +265,13 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' res <- radf_tt(sim_data, minw = 20)
+#' # Volatility triples half-way through the sample: the non-stationary-volatility
+#' # case this test is built for (plain radf() over-rejects here)
+#' y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+#' res <- radf_tt(y, minw = 20)
 #' print(res)
 #'
-#' cv <- radf_tt_cv(n = 100, minw = 20)
+#' cv <- radf_tt_cv(n = 200, minw = 20)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
 #' datestamp(res, cv = cv)

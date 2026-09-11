@@ -35,7 +35,7 @@ dataset.
 
 \examples{
 \donttest{
-cv <- radf_sign_dm_cv(n = 100, minw = 20)
+cv <- radf_sign_dm_cv(n = 200, minw = 20)
 tidy(cv)
 }
 

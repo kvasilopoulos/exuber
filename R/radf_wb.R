@@ -448,23 +448,26 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 #'
 #' @examples
 #' \donttest{
+#' # Volatility triples half-way through the sample: the non-stationary-volatility
+#' # case the wild bootstrap is built for (plain radf_mc_cv() over-rejects here)
+#' y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 #' # Default minimum window
-#' wb <- radf_wb_cv(sim_data)
+#' wb <- radf_wb_cv(y)
 #'
 #' tidy(wb)
 #'
 #' # Change the minimum window and the number of bootstraps
-#' wb2 <- radf_wb_cv(sim_data, nboot = 600, minw = 20)
+#' wb2 <- radf_wb_cv(y, nboot = 600, minw = 20)
 #'
 #'tidy(wb2)
 #'
 #' # Simulate distribution
-#' wdist <- radf_wb_distr(sim_data)
+#' wdist <- radf_wb_distr(y)
 #'
 #' autoplot(wdist)
 #'
 #' # Apply the critical values to actual data
-#' rsim_data <- radf(sim_data, minw = 20)
+#' rsim_data <- radf(y, minw = 20)
 #' autoplot(rsim_data, cv = wb2)
 #' }
 radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,

@@ -157,24 +157,19 @@ wls_dfstat_grid <- function(y, sigma2, minw) {
 #'
 #' @examples
 #' \donttest{
-#' res <- radf_sbz(sim_data, minw = 20)
+#' # Volatility triples at t = 100, then a strong explosive regime (rho = 1.03)
+#' # from t = 120 to the sample end: supBZ's kernel-volatility weighting trades
+#' # away enough power that sim_psy1()'s default, milder bubble doesn't clear it
+#' y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+#'   e = sim_vol_break(199))
+#' res <- radf_sbz(y, minw = 20)
 #' print(res)
 #'
-#' cv <- radf_sbz_cv(sim_data, minw = 20, nboot = 200)
+#' cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
-#'
-#' # datestamp()/autoplot() need at least one rejection; supBZ's
-#' # kernel-volatility weighting trades away enough power that none of
-#' # sim_data's five series clear it, so use a series built to reject:
-#' set.seed(7)
-#' n <- 120; te <- 70
-#' y <- cumsum(rnorm(n))
-#' y[(te + 1):n] <- y[te] * 1.15 ^ seq_len(n - te)
-#' res2 <- radf_sbz(y, minw = 20)
-#' cv2 <- radf_sbz_cv(y, minw = 20, nboot = 100, seed = 1)
-#' datestamp(res2, cv = cv2)
-#' autoplot(res2, cv = cv2)
+#' datestamp(res, cv = cv)
+#' autoplot(res, cv = cv)
 #' }
 #'
 #' @importFrom stats setNames
@@ -365,7 +360,9 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
 #'
 #' @examples
 #' \donttest{
-#' res <- radf_sbz_union(sim_data, nboot = 200)
+#' y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+#'   e = sim_vol_break(199))
+#' res <- radf_sbz_union(y, nboot = 200, seed = 1)
 #' print(res)
 #' autoplot(res)
 #' }
