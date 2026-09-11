@@ -281,8 +281,15 @@ radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
     add_class("radf_recovery_obj")
 }
 
-#' @rdname radf_recovery
+#' Plot method for radf_recovery() output
+#'
+#' Plots each series with vertical markers at the estimated collapse and recovery dates.
+#'
 #' @param object An object of class \code{radf_recovery_obj}, the output of \code{\link{radf_recovery}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{radf_recovery}}
 #' @export
 autoplot.radf_recovery_obj <- function(object, ...) {
   idx <- index(object)

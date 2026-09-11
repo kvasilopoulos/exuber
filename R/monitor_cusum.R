@@ -234,8 +234,11 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' print(res) # alarm should fire soon after t = 150
 #' autoplot(res)
 #'
-#' # Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023)
-#' res_kernel <- monitor_cusum(y, r_star = 0.5, type = "kernel")
+#' # Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023):
+#' # same bubble, but volatility triples at t = 120, after the training window
+#' y_vol <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
+#'   e = sim_vol_break(199, tau = 0.6))
+#' res_kernel <- monitor_cusum(y_vol, r_star = 0.5, type = "kernel")
 #' autoplot(res_kernel)
 #' }
 #'
@@ -294,8 +297,15 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
     add_class("monitor_cusum_obj")
 }
 
-#' @rdname monitor_cusum
+#' Plot method for monitor_cusum() output
+#'
+#' Plots the CUSUM detector path against its boundary, one panel per series, with vertical markers at the end of the training sample and at the alarm date.
+#'
 #' @param object An object of class \code{monitor_cusum_obj}, the output of \code{\link{monitor_cusum}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{monitor_cusum}}
 #' @export
 autoplot.monitor_cusum_obj <- function(object, ...) {
   pos <- object$T_star + seq_len(nrow(object$S))

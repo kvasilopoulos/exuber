@@ -2,13 +2,10 @@
 % Please edit documentation in R/lbi_test.R
 \name{monitor_lbi}
 \alias{monitor_lbi}
-\alias{autoplot.monitor_lbi_obj}
 \title{Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung &
 Diegel 2025)}
 \usage{
 monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
-
-\method{autoplot}{monitor_lbi_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -36,8 +33,6 @@ Critical values (\code{level}) are the same for every \code{c_bar}.}
 \item{level}{Nominal confidence level, one of \code{0.90}, \code{0.95},
 \code{0.975}, \code{0.99}, \code{0.995} (Breitung & Diegel's Table 1
 only tabulates these).}
-
-\item{object}{An object of class \code{monitor_lbi_obj}, the output of \code{\link{monitor_lbi}}.}
 }
 \value{
 An object of class \code{monitor_lbi_obj}: a list with the

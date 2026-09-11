@@ -156,16 +156,20 @@ pdc_regime_resid <- function(y, breaks) {
 #'
 #' @examples
 #' \donttest{
-#' res <- dating_pdc(sim_data$psy1, regimes = 3L, trim = 0.05)
+#' # sim_ps1()'s unit-root -> explosive -> collapse -> recovery DGP is exactly
+#' # the regime structure dating_pdc() fits (true breaks at 40, 60, 70)
+#' y <- sim_ps1(n = 100, seed = 1)
+#' res <- dating_pdc(y, regimes = 3L, trim = 0.05)
 #' print(res)
 #' autoplot(res)
 #'
 #' # 4-regime extension, adding a post-collapse recovery breakpoint
-#' res4 <- dating_pdc(sim_data$psy1, regimes = 4L, trim = 0.05)
+#' res4 <- dating_pdc(y, regimes = 4L, trim = 0.05)
 #' autoplot(res4)
 #'
 #' # Volatility-weighted (WLS) variant, robust to time-varying volatility
-#' autoplot(dating_pdc(sim_data$psy1, type = "wls"))
+#' y_vol <- sim_ps1(n = 100, seed = 1, e = sim_vol_break(99))
+#' autoplot(dating_pdc(y_vol, type = "wls"))
 #' }
 #'
 #' @export
@@ -228,8 +232,15 @@ dating_pdc <- function(data, regimes = 3L, trim = 0.05,
     add_class("dating_pdc_obj")
 }
 
-#' @rdname dating_pdc
+#' Plot method for dating_pdc() output
+#'
+#' Plots each series with vertical markers at the estimated origination, collapse and (where estimated) recovery dates.
+#'
 #' @param object An object of class \code{dating_pdc_obj}, the output of \code{\link{dating_pdc}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{dating_pdc}}
 #' @importFrom tibble rownames_to_column
 #' @export
 autoplot.dating_pdc_obj <- function(object, ...) {

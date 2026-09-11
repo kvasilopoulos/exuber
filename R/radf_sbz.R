@@ -445,7 +445,13 @@ print.radf_sbz_union <- function(x, digits = max(3L, getOption("digits") - 3L), 
   cat_line()
 }
 
-#' @rdname radf_sbz_union
+#' Plot method for radf_sbz_union() output
+#'
+#' Plots, for each series, the supDF, supBZ and union statistics against
+#' their bootstrap critical values at the chosen significance level.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{radf_sbz_union}}
 #' @importFrom ggplot2 autoplot ggplot aes geom_point geom_segment facet_wrap labs scale_color_manual
 #' @param object A \code{radf_sbz_union} object.
 #' @param sig_lvl Significance level to plot the critical value at, one of

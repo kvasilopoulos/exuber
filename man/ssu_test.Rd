@@ -2,12 +2,9 @@
 % Please edit documentation in R/ssu_test.R
 \name{ssu_test}
 \alias{ssu_test}
-\alias{autoplot.ssu_test_obj}
 \title{Stochastic Unit Root Bubble Test (Kurozumi & Nishi 2025)}
 \usage{
 ssu_test(data, minw = NULL, level = 0.95)
-
-\method{autoplot}{ssu_test_obj}(object, ...)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -25,8 +22,6 @@ not supported. When any series is padded this way, the panel statistic
 
 \item{level}{Nominal confidence level, one of \code{0.90}, \code{0.95},
 \code{0.99} (the levels Kurozumi & Nishi's Table I tabulates).}
-
-\item{object}{An object of class \code{ssu_test_obj}, the output of \code{\link{ssu_test}}.}
 }
 \value{
 An object of class \code{ssu_test_obj}: a list with the
@@ -75,7 +70,11 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-res <- ssu_test(sim_data$psy1, level = 0.95)
+# A stochastically varying explosive root, rho_t = 1 + 3/n + 4 * u_t / sqrt(n):
+# the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
+y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
+  coef_noise = rnorm(149), coef_a = 4)
+res <- ssu_test(y, level = 0.95)
 print(res)
 
 # Plot the recursive SSU statistic path against its critical value

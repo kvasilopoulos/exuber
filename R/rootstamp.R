@@ -226,9 +226,17 @@ print.rootstamp_est <- function(x, digits = max(3L, getOption("digits") - 3L), .
   invisible(x)
 }
 
-#' @rdname rootstamp
-#' @param object An object of class \code{rootstamp_est} (default method) or
-#' \code{rootstamp_episodes} (\code{radf_obj} method) to plot.
+#' Plot method for rootstamp() output on a single sub-sample
+#'
+#' Plots the sub-sample against the fitted explosive path implied by the
+#' estimated root, \eqn{y_1 \rho^{t-1}}.
+#'
+#' @param object An object of class \code{rootstamp_est}, the output of the
+#' default \code{\link{rootstamp}} method.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{rootstamp}}
 #' @export
 autoplot.rootstamp_est <- function(object, ...) {
   y <- attr(object, "y")
@@ -263,7 +271,17 @@ print.rootstamp_episodes <- function(x, digits = max(3L, getOption("digits") - 3
   invisible(x)
 }
 
-#' @rdname rootstamp
+#' Plot method for rootstamp() output on datestamped episodes
+#'
+#' Plots the estimated root and its confidence interval for every episode,
+#' one panel per series.
+#'
+#' @param object An object of class \code{rootstamp_episodes}, the output of
+#' the \code{radf_obj} \code{\link{rootstamp}} method.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{rootstamp}}
 #' @export
 autoplot.rootstamp_episodes <- function(object, ...) {
   df <- object %>%

@@ -147,8 +147,15 @@ dating_knp <- function(data, trim = 0.05, omit = TRUE) {
     add_class("dating_knp_obj")
 }
 
-#' @rdname dating_knp
+#' Plot method for dating_knp() output
+#'
+#' Plots each series with vertical markers at the estimated origination and collapse dates.
+#'
 #' @param object An object of class \code{dating_knp_obj}, the output of \code{\link{dating_knp}}.
+#' @param ... Further arguments passed to methods. Not used.
+#'
+#' @return A \link[ggplot2]{ggplot}
+#' @seealso \code{\link{dating_knp}}
 #' @export
 autoplot.dating_knp_obj <- function(object, ...) {
   idx <- index(object)
