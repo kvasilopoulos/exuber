@@ -123,10 +123,13 @@ sign_demean_transform <- function(y) {
 #'
 #' @examples
 #' \donttest{
-#' res <- radf_sign(sim_data, minw = 20)
+#' # Volatility triples half-way through the sample: the non-stationary-volatility
+#' # case this test is built for (plain radf() over-rejects here)
+#' y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+#' res <- radf_sign(y, minw = 20)
 #' print(res)
 #'
-#' cv <- radf_sign_cv(n = 100, minw = 20)
+#' cv <- radf_sign_cv(n = 200, minw = 20)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
 #' datestamp(res, cv = cv)
@@ -211,7 +214,7 @@ print.radf_sign_obj <- function(x, digits = max(3L, getOption("digits") - 3L), .
 #'
 #' @examples
 #' \donttest{
-#' cv <- radf_sign_cv(n = 100, minw = 20)
+#' cv <- radf_sign_cv(n = 200, minw = 20)
 #' tidy(cv)
 #' }
 #'
@@ -309,10 +312,13 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #'
 #' @examples
 #' \donttest{
-#' res <- radf_sign_dm(sim_data, minw = 20)
+#' # Volatility triples half-way through the sample: the non-stationary-volatility
+#' # case this test is built for (plain radf() over-rejects here)
+#' y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
+#' res <- radf_sign_dm(y, minw = 20)
 #' print(res)
 #'
-#' cv <- radf_sign_dm_cv(n = 100, minw = 20)
+#' cv <- radf_sign_dm_cv(n = 200, minw = 20)
 #' summary(res, cv = cv)
 #' tidy(res, cv = cv)
 #' datestamp(res, cv = cv)
@@ -389,7 +395,7 @@ print.radf_sign_dm_obj <- function(x, digits = max(3L, getOption("digits") - 3L)
 #'
 #' @examples
 #' \donttest{
-#' cv <- radf_sign_dm_cv(n = 100, minw = 20)
+#' cv <- radf_sign_dm_cv(n = 200, minw = 20)
 #' tidy(cv)
 #' }
 #'

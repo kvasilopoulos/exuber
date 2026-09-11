@@ -95,7 +95,9 @@ don't fit the shared pipeline.
 
 \examples{
 \donttest{
-res <- radf_sbz_union(sim_data, nboot = 200)
+y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
+  e = sim_vol_break(199))
+res <- radf_sbz_union(y, nboot = 200, seed = 1)
 print(res)
 autoplot(res)
 }
