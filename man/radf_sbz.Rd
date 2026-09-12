@@ -18,7 +18,7 @@ not supported. When any series is padded this way, the panel statistic
 \code{NA}, with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
-\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
+\eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{kernel}{Kernel for the spot-volatility estimator (eq. 6 of Harvey,
 Leybourne & Zu 2019), \code{"gaussian"} (default, as in the paper) or

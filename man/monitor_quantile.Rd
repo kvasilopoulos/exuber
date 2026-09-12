@@ -30,7 +30,7 @@ eq. 25 takes \code{tau} as a given parameter for the monitoring
 statistic, not re-selected at each recursion point).}
 
 \item{minw}{A positive integer. The minimum window size (default =
-\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
+\eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{nrep}{Number of Monte Carlo replications for the boundary.}
 
