@@ -21,7 +21,7 @@ what was checked and how.
   offline route.
 * `radf_crit` (the bundled lag-0, n <= 600 table) is removed, along with
   its `print.crit` method and `data-raw/sim-crit.R`; the simulation now
-  lives in the sibling `crit` repository.
+  lives in the sibling `exubercrit` repository.
 
 ### Volatility-robust tests
 
