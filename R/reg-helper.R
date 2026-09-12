@@ -27,7 +27,7 @@ psy_minw <- function(n) {
 #'
 #' @details For the minimum duration period, \code{psy_ds} allows the user to choose from two rules:
 #'
-#' \deqn{rule_1 = \delta \log(n) \quad\& \quad rule_2 = \delta \log(n)/n}{rule_1 = d*log(n) & rule 2 = d*log(n)/n}
+#' \deqn{\text{rule}_1 = \delta \log(n) \quad \text{and} \quad \text{rule}_2 = \delta \log(n)/n}{rule_1 = d*log(n) & rule 2 = d*log(n)/n}
 #'
 #' \code{delta } depends on the frequency of the data and the minimal duration condition.
 #'
