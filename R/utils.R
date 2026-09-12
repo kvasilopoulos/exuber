@@ -63,22 +63,21 @@ retrieve_crit <- function(x) {
   nr <- NROW(index(x))
   lag <- get_lag(x) %||% 0
 
-  if (lag == 0 && nr > 5 && nr <= length(exuber::radf_crit)) {
-    message_glue("Using `radf_crit` for `cv`.")
-    return(exuber::radf_crit[[nr]])
+  if (nr <= 5 || nr > 5000) {
+    stop_glue(
+      "Precomputed critical values cover 6 <= n <= 5000 (n = {nr}); ",
+      "pass `cv` explicitly, e.g. `cv = radf_mc_cv({nr}, lag = {lag})`."
+    )
   }
-  if (nr > 5 && nr <= 5000) {
-    cv <- fetch_crit_bucket(nr, lag = lag)
-    if (is.null(cv)) {
-      stop_glue(
-        "Critical values for n = {nr}, lag = {lag} haven't been simulated ",
-        "yet. Pass `cv` explicitly, e.g. `cv = radf_mc_cv({nr}, lag = {lag})`."
-      )
-    }
-    message_glue("Using extended critical values for `cv`.")
-    return(cv)
+  cv <- fetch_crit_bucket(nr, lag = lag)
+  if (is.null(cv)) {
+    stop_glue(
+      "Critical values for n = {nr}, lag = {lag} haven't been simulated ",
+      "yet. Pass `cv` explicitly, e.g. `cv = radf_mc_cv({nr}, lag = {lag})`."
+    )
   }
-  stop_glue("Cannot provide critical values see `help(radf_crit)`.")
+  message_glue("Using precomputed critical values for `cv`.")
+  cv
 }
 
 
