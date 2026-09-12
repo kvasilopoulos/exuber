@@ -12,7 +12,7 @@
 #' (\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
 #' \code{NA}, with a warning.
 #' @param minw A positive integer. The minimum window size (default =
-#' \eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).
+#' \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).
 #' @param lag A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).
 #'
 #' @details The \code{radf()} function is vectorized, i.e., it can handle multiple series

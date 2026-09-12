@@ -47,7 +47,7 @@ If log is set to FALSE (default value) dividends follow:
 \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t],}
 
 where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
-are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (the initial value of the dividend sequence).
+are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d_0 = 1.3}{d[0] = 1.3} (the initial value of the dividend sequence).
 The above equation can be solved to yield the fundamental price:
 
 \deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r.}

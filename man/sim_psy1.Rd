@@ -88,7 +88,7 @@ with \eqn{c>0}, \eqn{\alpha \in (0,1)}{\alpha in (0,1)},
 and \eqn{\tau_f = [T r_f]}{tf = [T rf]} dates the collapse of the bubble.
 During the pre- and post- bubble periods, \eqn{[1, \tau_e)}{[1, te)},
 \eqn{X_t}{Xt} is a pure random walk process. During the bubble expansion period
-\eqn{\tau_e, \tau_f]}{[te,tf]} becomes a mildly explosive process with expansion rate
+\eqn{[\tau_e, \tau_f]}{[te,tf]} becomes a mildly explosive process with expansion rate
 given by the autoregressive coefficient \eqn{\delta_T}{\delta[T]}; and, finally
 during the post-bubble period, \eqn{(\tau_f, \tau]}{(tf, t]}  \eqn{X_t}{Xt} reverts to a martingale.
 

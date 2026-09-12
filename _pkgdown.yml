@@ -4,6 +4,10 @@ url: https://kvasilopoulos.github.io/exuber
 template:
   bootstrap: 5
   light-switch: true
+  # Rd \eqn/\deqn reach the reference pages as raw \(..\)/$$..$$ text; the
+  # default "mathml" only converts pandoc-built pages, so nothing would
+  # render them. katex renders both (auto-render.js + katex-auto.js).
+  math-rendering: katex
   bslib:
     preset: flatly
     primary: "#1b4b91"

@@ -18,7 +18,7 @@ not supported. When any series is padded this way, the panel statistic
 \code{NA}, with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
-\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
+\eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{r}{Number of principal components to extract (default 1, the
 paper's own recommendation: "sufficient... for the purpose of bubble

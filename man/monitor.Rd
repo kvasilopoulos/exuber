@@ -33,7 +33,7 @@ not supported. When any series is padded this way, the panel statistic
 observation count if \code{>= 1}.}
 
 \item{minw}{A positive integer. The minimum window size (default =
-\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
+\eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{nboot}{Number of wild bootstrap replications for the training
 critical value. Ignored unless \code{boundary = "bootstrap"}.}

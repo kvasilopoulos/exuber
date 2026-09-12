@@ -29,7 +29,7 @@
 #'  and \eqn{\tau_f = [T r_f]}{tf = [T rf]} dates the collapse of the bubble.
 #' During the pre- and post- bubble periods, \eqn{[1, \tau_e)}{[1, te)},
 #' \eqn{X_t}{Xt} is a pure random walk process. During the bubble expansion period
-#'  \eqn{\tau_e, \tau_f]}{[te,tf]} becomes a mildly explosive process with expansion rate
+#'  \eqn{[\tau_e, \tau_f]}{[te,tf]} becomes a mildly explosive process with expansion rate
 #'  given by the autoregressive coefficient \eqn{\delta_T}{\delta[T]}; and, finally
 #'  during the post-bubble period, \eqn{(\tau_f, \tau]}{(tf, t]}  \eqn{X_t}{Xt} reverts to a martingale.
 #'
@@ -502,14 +502,15 @@ sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
 #' @details
 #' The two-bubble data generating process is given by (see also \code{sim_psy1}):
 #'
-#' \deqn{X_t = X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
-#' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X_{\tau_{1f}}\right) 1\{t \in N_1\} }{
+#' \deqn{\begin{aligned}
+#' X_t = {} & X_{t-1}1\{t \in N_0\}+ \delta_T X_{t-1}1\{t \in B_1 \cup B_2\} +
+#' \left(\sum_{k=\tau_{1f}+1}^t \epsilon_k + X_{\tau_{1f}}\right) 1\{t \in N_1\} \\
+#' & + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X_{\tau_{2f}}\right) 1\{t \in N_2\} +
+#' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}
+#' \end{aligned}}{
 #' X[t]=X[t-1] 1{t in N[0]}+ \delta[T] * X[t-1] 1{t in B[1] union B[2]} +
 #' (\sum[k=t1f+1]^t \epsilon[k] + X'[t1f]) 1{t in N[1]} +
-#' }
-#'
-#' \deqn{ + \left(\sum_{l=\tau_{2f}+1}^t \epsilon_l + X_{\tau_{2f}}\right) 1\{t \in N_2\} +
-#' \epsilon_t 1\{t \in N_0 \cup B_1 \cup B_2\}}{(\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
+#' (\sum[l=t2f+1]^t \epsilon[l] + X'[t2f]) 1{t in N[2]} +
 #' \epsilon[t] 1{t in N[0] union B[1] union B[2]},}
 #'
 #' where the autoregressive coefficient \eqn{\delta_T}{\delta[T]} is:
@@ -874,9 +875,9 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
 #'
 #' When \eqn{B_t > \alpha}{B[t] > \alpha} the bubble expands at the increased rate of \eqn{(1+r)\pi^{-1}}:
 #'
-#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta B_t )]u_{t+1},}{B[t+1] = \delta*(1+r)/\pi* (B[t]-\delta/(1+r))) *u[t+1],}
+#' \deqn{B_{t+1} =  [\delta + (1+r)\pi^{-1} \theta_{t+1}(B_t -  (1+r)^{-1}\delta)]u_{t+1},}{B[t+1] = [\delta + (1+r)/\pi * \theta[t+1] * (B[t] - \delta/(1+r))] * u[t+1],}
 #'
-#' where \eqn{\theta} theta is a binary variable that takes the value 0 with probability \eqn{1-\pi} and 1 with probability \eqn{\pi}.
+#' where \eqn{\theta} is a binary variable that takes the value 0 with probability \eqn{1-\pi} and 1 with probability \eqn{\pi}.
 #' In the second phase, there is a (\eqn{1-\pi})  probability of the bubble process collapsing to \code{delta}.
 #' By modifying the values of \code{delta}, \code{alpha} and \code{pi} the user can change the frequency at which bubbles appear, the mean duration of a bubble before collapse and the scale of the bubble.
 #'
@@ -944,7 +945,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
 #' \deqn{d_t = \mu + d_{t-1} + \epsilon_t}{d[t] = \mu + d[t-1] + \epsilon[t],}
 #'
 #' where \eqn{\epsilon \sim \mathcal{N}(0, \sigma^2)}{\epsilon - N(0, \sigma^2)}. The default parameters
-#' are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d[0] = 1.3} (the initial value of the dividend sequence).
+#' are \eqn{\mu = 0.0373}, \eqn{\sigma^2 = 0.1574} and \eqn{d_0 = 1.3}{d[0] = 1.3} (the initial value of the dividend sequence).
 #' The above equation can be solved to yield the fundamental price:
 #'
 #' \deqn{F_t = \mu(1+r)r^{-2} + r^{-1}d_t}{F[t] = \mu * (1 + r)/r^2 + d[t]/r.}

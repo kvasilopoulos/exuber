@@ -10,7 +10,7 @@ radf_tt_cv(n, minw = NULL, nrep = 2000L, seed = NULL)
 \item{n}{A positive integer. The sample size.}
 
 \item{minw}{A positive integer. The minimum window size (default =
-\eqn{(0.01 + 1.8/\sqrt(T))T}{(0.01 + 1.8 / \sqrtT)T}, where T denotes the sample size).}
+\eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
