@@ -108,7 +108,7 @@ library(exuber)
 rsim_data <- radf(sim_data)
 
 summary(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──
 #> 
@@ -153,7 +153,7 @@ summary(rsim_data)
 #> 3 gsadf 11.0   1.71   1.97   2.57
 
 diagnostics(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──
 #> 
@@ -164,7 +164,7 @@ diagnostics(rsim_data)
 #> blan:     Rejects H0 at the 1% significance level
 
 datestamp(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──
 #> 
@@ -189,7 +189,7 @@ datestamp(rsim_data)
 #> 2    84   86  87        3 positive   FALSE
 
 autoplot(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 ```
 
 ![](man/figures/usage-1.png)<!-- -->

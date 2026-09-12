@@ -6,6 +6,23 @@ table lookup, or a direct Monte Carlo reproduction of the source paper's
 own theorem) — see `docs/enhancements/README.md` for the full record of
 what was checked and how.
 
+### Critical values
+
+* Default critical values now come from a shared precomputed store instead
+  of the bundled `radf_crit` dataset: lag 0-4, every `n` from the smallest
+  the PSY window allows up to 4000, 2000 replications each. `radf()`
+  followed by `summary()`/`datestamp()`/`autoplot()` fetches the one
+  `(n, lag)` table it needs on first use and caches it on disk
+  (`tools::R_user_dir("exuber", "cache")`), so a lagged specification no
+  longer requires simulating your own `cv`. The tables are *nested* (every
+  `n` of a lag from the same seeded paths); values differ from the old
+  bundled ones by Monte Carlo noise. Needs network access the first time a
+  given `(n, lag)` is used; `radf_mc_cv()`/`radf_wb_cv()` remain the
+  offline route.
+* `radf_crit` (the bundled lag-0, n <= 600 table) is removed, along with
+  its `print.crit` method and `data-raw/sim-crit.R`; the simulation now
+  lives in the sibling `crit` repository.
+
 ### Volatility-robust tests
 
 * `radf_sbz()`/`radf_sbz_cv()`/`radf_sbz_union()` — Herwartz & Siedenburg's

@@ -62,7 +62,6 @@ reference:
       - radf_wb_cv
       - radf_wb_ps_cv
       - radf_sb_cv
-      - radf_crit
       - tidy.radf_cv
       - augment.radf_cv
       - tidy.radf_distr
