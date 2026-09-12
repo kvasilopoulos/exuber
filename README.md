@@ -57,13 +57,15 @@ index.
 There are several options for generating critical values:
 
 - `radf_mc_cv()`: Monte Carlo
-- `radf_wb_cv()`: Wild Bootstrap
+- `radf_wb_cv()`, `radf_wb_ps_cv()`: Wild Bootstrap (Harvey et al. 2016;
+  Phillips & Shi 2020)
 - `radf_sb_cv()`: Sieve Bootstrap (Panel)
 
-On default `exuber` will use Monte Carlo simulated critical values if no
-other option is provided. The package offers these critical values in
-the form of `data` (up to 600 observations), that are obtained with the
-`mc_cv()` function.
+When `cv` is omitted, `exuber` uses precomputed Monte Carlo critical
+values: a shared store covering `lag = 0` to `4` and every sample size
+up to 4000, fetched once per `(n, lag)` and cached on disk.
+`radf_mc_cv()` and the bootstrap functions are the offline route, and
+the only route for other lags or larger samples.
 
 ### Analysis
 
@@ -80,7 +82,40 @@ process into small simple steps:
   episode at once.
 
 These combined provide a comprehensive analysis on the exuberant
-behavior of the model.
+behavior of the model. See `vignette("exuber")` for this workflow end to
+end and `vignette("plotting")` for the `autoplot()` methods that go with
+it.
+
+### Beyond `radf()`
+
+The recursive ADF test is the core, but not the whole package. Each
+family below has its own vignette and its own section of the reference
+index:
+
+- **Volatility-robust tests** (`radf_tt()`, `radf_sign()`, `radf_kp()`,
+  `radf_sbz()`): the same question as `radf()` under time-varying
+  innovation variance – `vignette("radf-tt")`,
+  `vignette("volatility-robust-radf")`.
+- **Dating procedures** (`dating_hls()`, `dating_knp()`, `dating_pdc()`,
+  `dating_hlw()`, `radf_recovery()`): regime-model estimates of when a
+  bubble you already believe in starts and ends, no critical value
+  needed – `vignette("dating-methods")`.
+- **Real-time monitoring** (`monitor()`, `monitor_cusum()`,
+  `monitor_lbi()`, `monitor_quantile()`): calibrate on a training
+  window, then raise an alarm as new observations arrive –
+  `vignette("monitoring")`.
+- **Root inference** (`rootstamp()`): how fast a detected episode is
+  growing – `vignette("root-inference")`.
+- **Multivariate** (`radf_common()`, `cobubble_test()`,
+  `contagion_reg()`): shared and transmitted bubbles across series –
+  `vignette("co-explosivity")`.
+- **Simulation** (`sim_*()`): the bubble processes and innovation
+  generators every test above is validated on –
+  `vignette("simulation")`.
+
+`vignette("naming-and-analysis")` explains the naming scheme (`radf_`,
+`_test`, `dating_`, `monitor_`) and which results plug into
+`summary()`/`datestamp()`/`tidy()`/`autoplot()`.
 
 ### Installation
 
@@ -110,47 +145,47 @@ rsim_data <- radf(sim_data)
 summary(rsim_data)
 #> Using precomputed critical values for `cv`.
 #> 
-#> ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──
+#> ── Summary (minw = 19, lag = 0) ────────────────── Monte Carlo (nboot = 2000) ──
 #> 
 #> psy1 :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.46 -0.413 -0.0812 0.652
-#> 2 sadf   1.95  0.988  1.29   1.92 
-#> 3 gsadf  5.19  1.71   1.97   2.57 
+#> 1 adf   -2.46 -0.412 -0.0178 0.644
+#> 2 sadf   1.95  0.965  1.25   1.77 
+#> 3 gsadf  5.19  1.65   1.93   2.60 
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.86 -0.413 -0.0812 0.652
-#> 2 sadf   7.88  0.988  1.29   1.92 
-#> 3 gsadf  7.88  1.71   1.97   2.57 
+#> 1 adf   -2.86 -0.412 -0.0178 0.644
+#> 2 sadf   7.88  0.965  1.25   1.77 
+#> 3 gsadf  7.88  1.65   1.93   2.60 
 #> 
 #> evans :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -5.83 -0.413 -0.0812 0.652
-#> 2 sadf   5.28  0.988  1.29   1.92 
-#> 3 gsadf  5.99  1.71   1.97   2.57 
+#> 1 adf   -5.83 -0.412 -0.0178 0.644
+#> 2 sadf   5.28  0.965  1.25   1.77 
+#> 3 gsadf  5.99  1.65   1.93   2.60 
 #> 
 #> div :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -1.95 -0.413 -0.0812 0.652
-#> 2 sadf   1.11  0.988  1.29   1.92 
-#> 3 gsadf  1.34  1.71   1.97   2.57 
+#> 1 adf   -1.95 -0.412 -0.0178 0.644
+#> 2 sadf   1.11  0.965  1.25   1.77 
+#> 3 gsadf  1.34  1.65   1.93   2.60 
 #> 
 #> blan :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -5.15 -0.413 -0.0812 0.652
-#> 2 sadf   3.93  0.988  1.29   1.92 
-#> 3 gsadf 11.0   1.71   1.97   2.57
+#> 1 adf   -5.15 -0.412 -0.0178 0.644
+#> 2 sadf   3.93  0.965  1.25   1.77 
+#> 3 gsadf 11.0   1.65   1.93   2.60
 
 diagnostics(rsim_data)
 #> Using precomputed critical values for `cv`.
@@ -174,7 +209,7 @@ datestamp(rsim_data)
 #> 
 #> psy2 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    22   40  41       19 positive   FALSE
+#> 1    23   40  41       18 positive   FALSE
 #> 2    62   70  71        9 positive   FALSE
 #> 
 #> evans :
@@ -190,18 +225,25 @@ datestamp(rsim_data)
 
 autoplot(rsim_data)
 #> Using precomputed critical values for `cv`.
+#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+#> ℹ Please use `linewidth` instead.
+#> ℹ The deprecated feature was likely used in the exuber package.
+#>   Please report the issue at <https://github.com/kvasilopoulos/exuber/issues>.
+#> This warning is displayed once per session.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
 ```
 
 ![](man/figures/usage-1.png)<!-- -->
 
 ### Citation
 
-`exuber` is the product of ongoing research – if it’s useful in your
-own work, please support it by citing the accompanying paper in the
-*Journal of Statistical Software*:
+`exuber` is the product of ongoing research – if it’s useful in your own
+work, please support it by citing the accompanying paper in the *Journal
+of Statistical Software*:
 
-> Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022).
-> exuber: Recursive Right-Tailed Unit Root Testing with R. *Journal of
+> Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022). exuber:
+> Recursive Right-Tailed Unit Root Testing with R. *Journal of
 > Statistical Software*, 103(10), 1-26.
 > [doi:10.18637/jss.v103.i10](https://doi.org/10.18637/jss.v103.i10)
 

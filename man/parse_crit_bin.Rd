@@ -3,7 +3,7 @@
 \name{parse_crit_bin}
 \alias{parse_crit_bin}
 \title{Parse the fixed little-endian binary layout written by
-data-raw/crit-bucket/simulate-and-upload.R:
+exubercrit's simulate-crit.R:
 int32 x4: n, minw, lag, nrows
 float64 x3: adf_cv, x3: sadf_cv, x3: gsadf_cv
 float64 x(nrows*3): bsadf_cv (row-major)
@@ -14,7 +14,7 @@ parse_crit_bin(path)
 }
 \description{
 Parse the fixed little-endian binary layout written by
-data-raw/crit-bucket/simulate-and-upload.R:
+exubercrit's simulate-crit.R:
 int32 x4: n, minw, lag, nrows
 float64 x3: adf_cv, x3: sadf_cv, x3: gsadf_cv
 float64 x(nrows*3): bsadf_cv (row-major)

@@ -9,165 +9,177 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  message = FALSE,
-  fig.width = 10
+  collapse = TRUE, warning = FALSE, message = FALSE,
+  comment = "#>", fig.width = 8, fig.height = 4.5
 )
 ```
 
-```{r load, echo=FALSE, message=FALSE}
+```{r load}
 library(exuber)
-options(exuber.show_progress = FALSE)
-library(dplyr)
 library(ggplot2)
-library(tidyr)
 ```
 
-```{r options, echo=FALSE}
-options(exuber.parallel = FALSE)
+## One `autoplot()` per object
+
+Every result object in the package has an `autoplot()` method, so the
+plotting call is the same whatever you ran -- `autoplot(x)` -- and what it
+draws depends on what `x` is. All of them return a plain `ggplot` object,
+so anything ggplot2 can do (themes, scales, extra layers, `facet_*()`
+arguments) applies on top.
+
+| What you have | What `autoplot()` draws |
+|---|---|
+| `radf()` result (`radf_obj`) | Test statistic vs. critical-value sequence, one facet per series that rejects the null, with the explosive episodes shaded |
+| `datestamp()` result (`ds_radf`) | Just the episodes, one horizontal segment per series -- the view for many series at once |
+| `radf_*_distr()` result (`radf_distr`) | The simulated null distribution of the ADF/SADF/GSADF statistics |
+| Any `sim_*()` series | The series itself |
+| `monitor()`, `monitor_*()` | Monitored statistic vs. its boundary, with training-end and alarm markers |
+| `dating_*()`, `radf_recovery()` | The series with vertical markers at the estimated break dates |
+| `rootstamp()` | Estimated root and its confidence interval per episode |
+| `lbi_test()`, `quantile_test()`, `radf_sbz_union()` | Statistic vs. critical value per series |
+
+The rest of this vignette is about the first three -- the `radf()`
+workflow -- and about building your own plot from the tidied tables when
+the defaults don't fit. The other methods take no options beyond the
+object and are shown in their own vignettes (`vignette("monitoring")`,
+`vignette("dating-methods")`, `vignette("root-inference")`).
+
+## The `radf()` plot
+
+Four simulated series, one from each of the package's classic bubble
+DGPs (see `vignette("simulation")`), estimated with one lag. With a lag
+the critical values depend on `(n, lag)`, so we simulate them once and
+pass them to every call -- the same pattern as `vignette("exuber")`:
+
+```{r data}
+sims <- data.frame(
+  psy1 = sim_psy1(100, seed = 1),
+  psy2 = sim_psy2(100, seed = 2),
+  evans = sim_evans(100, seed = 3),
+  blan = sim_blan(100, seed = 4)
+)
+est <- radf(sims, lag = 1)
+cv <- radf_mc_cv(100, lag = 1, seed = 1)
 ```
-
-### The plotting API has changed in exuber 0.4.0
-
-The new design offers full flexibility and customization to produce publication-ready plots. `exuber` used to plot graph individually in a list, and then you could modify each plot and arrange them into a single grob with `ggarrange()`(which now is defunct). However, newer versions of exuber focus on providing a faceted plot as it easier to change the aesthetics and themes.
-
-Let's start by simulating some data.
-
-```{r tstats-cv}
-set.seed(123)
-sims <- tibble(
-  sim_psy1 = sim_psy1(100),
-  sim_psy2 = sim_psy2(100),
-  sim_evans = sim_evans(100),
-  sim_blan = sim_evans(100),
-) 
-
-# Esimation
-estimation <- radf(sims, lag = 1)
-  
-# Critical Values
-crit_values <- radf_mc_cv(nrow(sims))
-```
-
-## Same Appearance with New Features
-
-The visual output of autoplot in `v0.4.0` is exactly the same as before.
 
 ```{r autoplot-basic}
-autoplot(estimation, crit_values)
+autoplot(est, cv)
 ```
-However, almost all aspects of the plot can be easily changed.
 
-### Change color and theme
+Only series that reject the null at 5% are drawn. The options that change
+*what* is plotted are arguments of `autoplot()` itself:
 
-The custom color for autoplot are "blue and "red", however the user can easily override 
-this option with `ggplot2::scale_color_manual`.
+```{r autoplot-options, fig.height = 3}
+# Every series, whether or not it rejects
+autoplot(est, cv, nonrejected = TRUE)
 
-```{r autoplot-color-theme}
-autoplot(estimation, crit_values) +
-  scale_color_manual(values = c("grey","black")) + 
+# A subset, by name or position; the SADF sequence instead of the BSADF one
+autoplot(est, cv, select_series = c("psy1", "evans"), option = "sadf")
+```
+
+The shading of the explosive episodes is a `geom_rect()` layer controlled
+through `shade_opt` and the `shade()` helper; `shade_opt = NULL` removes it:
+
+```{r autoplot-shade, fig.height = 3}
+autoplot(est, cv, select_series = "psy2",
+         shade_opt = shade(fill = "pink", opacity = 0.3))
+```
+
+`autoplot2()` draws the *series* instead of the statistic, with the same
+shading, which is often the more readable view for a non-technical
+audience; `datestamp()`'s own method reduces each series to its episodes:
+
+```{r autoplot2, fig.height = 3}
+autoplot2(est, cv, select_series = "psy2")
+```
+
+```{r autoplot-ds, fig.height = 2}
+datestamp(est, cv) %>%
+  autoplot()
+```
+
+### Changing the appearance
+
+Everything else -- colors, line types, theme -- is ggplot2 territory.
+`autoplot()` maps the statistic and the critical value to `color`, `size`
+and `linetype`, so the ggplot2 `scale_*_manual()` functions override
+them; `scale_exuber_manual()` sets all three at once, and `theme_exuber()`
+is the package's default theme, exported so you can apply it to your own
+plots too:
+
+```{r autoplot-theme, fig.height = 3}
+autoplot(est, cv, select_series = "psy2") +
+  scale_exuber_manual(color_values = c("grey40", "black"),
+                      linetype_values = c(3, 1)) +
   theme_classic()
 ```
 
-### Changed the shaded region with shade_opt
+Arguments `autoplot()` doesn't recognise are forwarded to
+`ggplot2::facet_wrap()`, so `scales = "free_y"`, `ncol`, `labeller`, etc.
+work directly -- see `?autoplot.radf_obj` for a labeller example that
+renames the facets.
 
-`shade_opt` allows the user to manipulate the `geom_rect()` layer of the ggplot, using
-the `shade` function. Alternatively, it can be omitted if it set to `NULL`.
+## Building your own plot
 
-```{r autoplot-shade}
-autoplot(estimation, crit_values, shade_opt = shade(fill = "pink", opacity = 0.3))
-```
+When the default layout isn't what you need, skip `autoplot()` and start
+from the same table it is built on. `augment_join()` joins the full
+statistic sequences of a `radf_obj` with the critical-value sequences of a
+`radf_cv`, one row per observation, series, statistic and significance
+level -- ggplot2-ready as is:
 
-## Custom plotting
-
-Custom plotting is also very easy with the `augment_join()`, that merge the output 
-of the estimation and and critical values in a ggplot2-friendly way.
-
-```{r join-sets}
-joined <- augment_join(estimation, crit_values)
+```{r augment-join}
+joined <- augment_join(est, cv)
 joined
 ```
 
-The output of `augment_join` returns data in tidy format and offers full flexibility to the user. 
-After this point plotting becomes extremely trivial.
-
-```{r facet-joined}
-joined %>% 
+```{r custom-facet, fig.height = 6}
+joined %>%
   ggplot(aes(x = index)) +
   geom_line(aes(y = tstat)) +
-  geom_line(aes(y = crit)) +
-  facet_grid(sig + stat ~  id  , scales = "free_y")
-```
-
-We also offer two functions `scale_exuber_manual` and `theme_exuber` that offer some
-extra functionality. 
-
-```{r facet-joined-theme-exuber, warning=FALSE}
-joined %>%
-  pivot_longer(cols = c("tstat", "crit"), names_to = "nms") %>% 
-  ggplot(aes(x = index, y = value, col = nms)) +
-  geom_line() +
-  facet_grid(sig + stat ~  id  , scales = "free_y") +
-  scale_exuber_manual() +
+  geom_line(aes(y = crit), linetype = 2) +
+  facet_grid(sig + stat ~ id, scales = "free_y") +
   theme_exuber()
 ```
 
-## Distribution
+`tidy_join()` is the scalar counterpart (one row per series and statistic,
+the table `summary()` prints), and `tidy()`/`augment()` on either object
+alone give the un-joined halves -- see `vignette("naming-and-analysis")`
+for the full pipeline.
 
-In addition to critical values, we can also calculate the empirical distribution
-by utilizing the family of *_distr functions. For example if we can simulate
-the distribution of the supADF tests with Monte Carlo method.
+## Distributions
 
-```{r distributions}
-distr <- radf_mc_distr(n = 300)
+The `radf_*_distr()` twins of the critical-value functions return the
+whole simulated null distribution rather than its quantiles, and have
+their own `autoplot()`:
+
+```{r distr}
+distr <- radf_mc_distr(n = 100, nrep = 1000, seed = 1)
 autoplot(distr)
 ```
 
-### Empirical distribution
-
-This part is made just for fun.
+As with everything else, `tidy()` gives the underlying table, so an
+empirical CDF or any other summary is a few ggplot2 lines away:
 
 ```{r ecdf}
-library(tidyr)
 distr %>%
   tidy() %>%
-  rename_all(~ stringr::str_to_upper(.)) %>%
-  gather(Statistic, value, factor_key = TRUE) %>%
-  ggplot(aes(value, color = Statistic)) +
+  tidyr::pivot_longer(everything(), names_to = "statistic") %>%
+  ggplot(aes(value, color = statistic)) +
   stat_ecdf() +
-  ggtitle("Empirical Cumulative Distribution") +
-  geom_hline(yintercept = 0.95, linetype = "dashed") + theme_bw()
+  geom_hline(yintercept = 0.95, linetype = 2) +
+  labs(title = "Empirical CDF of the null distributions", y = NULL) +
+  theme_exuber()
 ```
 
-## Old Functionality
+## Which to reach for
 
-To return to the old functionality there are several ways.
-
-```{r lapply-arrange}
-library(gridExtra)
-
-# To choose only positive series (i.e. statistically significant for 5%)
-positive_series <- diagnostics(estimation, crit_values)$positive 
-
-# Through a loop on positive series 
-plot_list1 <- list()
-for (as in positive_series) {
-  plot_list1[[as]] <- autoplot(estimation, crit_values, select_series = as)
-}
-
-# Alternatively  with lapply
-plot_list2 <- lapply(positive_series, function(x) autoplot(estimation, crit_values, select_series = x))
-names(plot_list2) <- positive_series
-
-do.call(gridExtra::grid.arrange, plot_list1)
-```
-
-With the old functionality you had to make changes one at a time
-```{r example-old}
-plot_list1[[1]] <- plot_list1[[1]] + theme_classic()
-```
-and then reconstruct the plot with `grid.arrange` or some other function that arranges all plots into a single grob.
-
-
-Enjoy Plotting with `exuber` !!!
+- A quick look at which series are explosive and when:
+  `autoplot(est, cv)`; add `nonrejected = TRUE` to see the ones that
+  aren't.
+- The series itself with the episodes shaded, for a non-technical reader:
+  `autoplot2(est, cv)`.
+- Many series, only the episodes: `autoplot(datestamp(est, cv))`.
+- Cosmetic changes: keep `autoplot()` and add ggplot2 layers, scales or a
+  theme; `scale_exuber_manual()` for the statistic/critical-value styling.
+- A different layout altogether: `augment_join(est, cv)` and build it
+  yourself.
