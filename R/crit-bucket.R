@@ -1,9 +1,9 @@
-# Simulated critical values for n > 600 and/or lag > 0 live in a small
-# object-storage bucket, one object per (lag, n) combination -- not one big
-# blob, since any single analysis only ever needs exactly one (n, lag)
-# table. Served read-only through a proxy so no credentials are needed on
-# the client side. See data-raw/crit-bucket/ for how objects are produced
-# and uploaded, and exuber-fn.ts for the proxy itself.
+# Precomputed Monte Carlo critical values (lag 0-4, n up to 4000) live in a
+# small object-storage bucket, one object per (lag, n) combination -- not
+# one big blob, since any single analysis only ever needs exactly one
+# (n, lag) table. Served read-only through a proxy so no credentials are
+# needed on the client side. The producer side (simulation, upload, and
+# the proxy source) lives in the sibling `crit` repo.
 crit_bucket_base_url <- "https://exuber.up.railway.app/crit2"
 
 #' Local cache directory for downloaded critical-value tables
@@ -19,7 +19,7 @@ crit_cache_path <- function(n, lag) {
 }
 
 #' Parse the fixed little-endian binary layout written by
-#' data-raw/crit-bucket/simulate-and-upload.R:
+#' the `crit` repo's simulate-crit.R:
 #'   int32 x4: n, minw, lag, nrows
 #'   float64 x3: adf_cv, x3: sadf_cv, x3: gsadf_cv
 #'   float64 x(nrows*3): bsadf_cv (row-major)
