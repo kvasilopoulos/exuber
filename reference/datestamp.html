@@ -162,7 +162,7 @@ Robust date-stamping for periods of exuberance. arXiv:2604.12062.</p>
 <span class="r-in"><span><span class="va">rsim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ds_data</span> <span class="op">&lt;-</span> <span class="fu">datestamp</span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-in"><span><span class="va">ds_data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──</span>
@@ -173,7 +173,7 @@ Robust date-stamping for periods of exuberance. arXiv:2604.12062.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> psy2 :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    22   40  41       19 positive   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    23   40  41       18 positive   FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    62   70  71        9 positive   FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> evans :</span>
@@ -190,7 +190,7 @@ Robust date-stamping for periods of exuberance. arXiv:2604.12062.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Choose minimum window</span></span></span>
 <span class="r-in"><span><span class="fu">datestamp</span><span class="op">(</span><span class="va">rsim_data</span>, min_duration <span class="op">=</span> <span class="fu"><a href="psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Datestamp (min_duration = 5) ───────────────────────────────── Monte Carlo ──</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -200,7 +200,7 @@ Robust date-stamping for periods of exuberance. arXiv:2604.12062.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> psy2 :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Start Peak End Duration   Signal Ongoing</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    22   40  41       19 positive   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    23   40  41       18 positive   FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    62   70  71        9 positive   FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>

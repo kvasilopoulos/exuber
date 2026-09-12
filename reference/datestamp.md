@@ -110,7 +110,7 @@ date-stamping for periods of exuberance. arXiv:2604.12062.
 rsim_data <- radf(sim_data)
 
 ds_data <- datestamp(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 ds_data
 #> 
 #> ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──
@@ -121,7 +121,7 @@ ds_data
 #> 
 #> psy2 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    22   40  41       19 positive   FALSE
+#> 1    23   40  41       18 positive   FALSE
 #> 2    62   70  71        9 positive   FALSE
 #> 
 #> evans :
@@ -138,7 +138,7 @@ ds_data
 
 # Choose minimum window
 datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Datestamp (min_duration = 5) ───────────────────────────────── Monte Carlo ──
 #> 
@@ -148,7 +148,7 @@ datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 #> 
 #> psy2 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    22   40  41       19 positive   FALSE
+#> 1    23   40  41       18 positive   FALSE
 #> 2    62   70  71        9 positive   FALSE
 #> 
 

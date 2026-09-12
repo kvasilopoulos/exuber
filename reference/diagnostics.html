@@ -111,7 +111,7 @@ there is a period of explosive behaviour and 0 otherwise.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">rsim_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">diagnostics</span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -123,7 +123,7 @@ there is a period of explosive behaviour and 0 otherwise.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">diagnostics</span><span class="op">(</span><span class="va">rsim_data</span>, option <span class="op">=</span> <span class="st">"sadf"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Diagnostics (option = sadf) ────────────────────────────────── Monte Carlo ──</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -136,7 +136,7 @@ there is a period of explosive behaviour and 0 otherwise.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Gate on the 90% critical value instead of the 95% default</span></span></span>
 <span class="r-in"><span><span class="fu">diagnostics</span><span class="op">(</span><span class="va">rsim_data</span>, sig_lvl <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

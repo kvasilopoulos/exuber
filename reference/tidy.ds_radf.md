@@ -25,7 +25,7 @@ tidy(x, ...)
 # \donttest{
 rsim_data <- radf(sim_data)
 ds_data <- datestamp(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 
 # One row per detected explosive episode, across all series
 tidy(ds_data)
@@ -33,7 +33,7 @@ tidy(ds_data)
 #>   id    Start  Peak   End Duration Signal   Ongoing
 #>   <fct> <dbl> <dbl> <dbl>    <dbl> <chr>    <lgl>  
 #> 1 psy1     44    48    56       12 positive FALSE  
-#> 2 psy2     22    40    41       19 positive FALSE  
+#> 2 psy2     23    40    41       18 positive FALSE  
 #> 3 psy2     62    70    71        9 positive FALSE  
 #> 4 evans    20    20    21        1 positive FALSE  
 #> 5 evans    44    44    45        1 positive FALSE  

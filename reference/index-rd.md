@@ -51,7 +51,7 @@ class(index(rsim_wdate))
 
 # autoplot() uses index() internally for the x-axis
 autoplot(rsim_wdate)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 
 
 # Replace the index, e.g. with a custom Date sequence
@@ -60,7 +60,7 @@ head(index(rsim))
 #> [1] "2000-01-01" "2000-02-01" "2000-03-01" "2000-04-01" "2000-05-01"
 #> [6] "2000-06-01"
 autoplot(rsim)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 
 # }
 ```

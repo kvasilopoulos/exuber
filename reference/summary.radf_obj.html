@@ -95,7 +95,7 @@ SADF, and GSADF test statistics and the corresponding critical values</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summary, diagnostics and datestamp (default)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── Summary (minw = 19, lag = 0) ────────────────── Monte Carlo (nboot = 2000) ──</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -103,41 +103,41 @@ SADF, and GSADF test statistics and the corresponding critical values</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat   `90`    `95`  `99`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.46</span> -<span style="color: #BB0000;">0.413</span> -<span style="color: #BB0000;">0.081</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   1.95  0.988  1.29   1.92 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  5.19  1.71   1.97   2.57 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.46</span> -<span style="color: #BB0000;">0.412</span> -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   1.95  0.965  1.25   1.77 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  5.19  1.65   1.93   2.60 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> psy2 :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat   `90`    `95`  `99`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.86</span> -<span style="color: #BB0000;">0.413</span> -<span style="color: #BB0000;">0.081</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   7.88  0.988  1.29   1.92 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  7.88  1.71   1.97   2.57 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">2.86</span> -<span style="color: #BB0000;">0.412</span> -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   7.88  0.965  1.25   1.77 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  7.88  1.65   1.93   2.60 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> evans :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat   `90`    `95`  `99`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">5.83</span> -<span style="color: #BB0000;">0.413</span> -<span style="color: #BB0000;">0.081</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   5.28  0.988  1.29   1.92 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  5.99  1.71   1.97   2.57 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">5.83</span> -<span style="color: #BB0000;">0.412</span> -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   5.28  0.965  1.25   1.77 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  5.99  1.65   1.93   2.60 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> div :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat   `90`    `95`  `99`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.95</span> -<span style="color: #BB0000;">0.413</span> -<span style="color: #BB0000;">0.081</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   1.11  0.988  1.29   1.92 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  1.34  1.71   1.97   2.57 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">1.95</span> -<span style="color: #BB0000;">0.412</span> -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   1.11  0.965  1.25   1.77 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf  1.34  1.65   1.93   2.60 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> blan :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stat  tstat   `90`    `95`  `99`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">5.15</span> -<span style="color: #BB0000;">0.413</span> -<span style="color: #BB0000;">0.081</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.652</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   3.93  0.988  1.29   1.92 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf 11.0   1.71   1.97   2.57 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> adf   -<span style="color: #BB0000;">5.15</span> -<span style="color: #BB0000;">0.412</span> -<span style="color: #BB0000;">0.017</span><span style="color: #BB0000; text-decoration: underline;">8</span> 0.644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> sadf   3.93  0.965  1.25   1.77 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> gsadf 11.0   1.65   1.93   2.60 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summary, diagnostics and datestamp (wild bootstrap critical values)</span></span></span>

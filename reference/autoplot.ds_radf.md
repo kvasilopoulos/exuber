@@ -41,7 +41,7 @@ sim_data_wdate %>%
   datestamp() %>%
   autoplot()
 #> Using `date` as index variable.
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 #> ℹ Please use `linewidth` instead.
 #> ℹ The deprecated feature was likely used in the exuber package.
@@ -55,7 +55,7 @@ sim_data_wdate %>%
   autoplot() +
   ggplot2::scale_colour_manual(values = rep("black", 4))
 #> Using `date` as index variable.
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 
 # }
 ```

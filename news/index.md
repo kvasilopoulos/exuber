@@ -8,6 +8,26 @@ table lookup, or a direct Monte Carlo reproduction of the source paper’s
 own theorem) — see `docs/enhancements/README.md` for the full record of
 what was checked and how.
 
+#### Critical values
+
+- Default critical values now come from a shared precomputed store
+  instead of the bundled `radf_crit` dataset: lag 0-4, every `n` from
+  the smallest the PSY window allows up to 4000, 2000 replications each.
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  followed by
+  [`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  fetches the one `(n, lag)` table it needs on first use and caches it
+  on disk (`tools::R_user_dir("exuber", "cache")`), so a lagged
+  specification no longer requires simulating your own `cv`. The tables
+  are *nested* (every `n` of a lag from the same seeded paths); values
+  differ from the old bundled ones by Monte Carlo noise. Needs network
+  access the first time a given `(n, lag)` is used;
+  [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)/[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
+  remain the offline route.
+- `radf_crit` (the bundled lag-0, n \<= 600 table) is removed, along
+  with its `print.crit` method and `data-raw/sim-crit.R`; the simulation
+  now lives in the sibling `crit` repository.
+
 #### Volatility-robust tests
 
 - [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)/[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)/[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)

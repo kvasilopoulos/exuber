@@ -55,7 +55,7 @@ there is a period of explosive behaviour and 0 otherwise.
 
 rsim_data <- radf(sim_data)
 diagnostics(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──
 #> 
@@ -67,7 +67,7 @@ diagnostics(rsim_data)
 #> 
 
 diagnostics(rsim_data, option = "sadf")
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Diagnostics (option = sadf) ────────────────────────────────── Monte Carlo ──
 #> 
@@ -80,7 +80,7 @@ diagnostics(rsim_data, option = "sadf")
 
 # Gate on the 90% critical value instead of the 95% default
 diagnostics(rsim_data, sig_lvl = 90)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Diagnostics (option = gsadf) ───────────────────────────────── Monte Carlo ──
 #> 

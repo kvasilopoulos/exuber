@@ -55,7 +55,7 @@ tidy(rfd)
 #> 4 Bubble D -1.95  1.11  1.34
 #> 5 Bubble E -5.15  3.93 11.0 
 autoplot(rfd)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 
 # }
 

@@ -43,7 +43,7 @@ rsim_data <- radf(sim_data)
 
 # Summary, diagnostics and datestamp (default)
 summary(rsim_data)
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 #> 
 #> ── Summary (minw = 19, lag = 0) ────────────────── Monte Carlo (nboot = 2000) ──
 #> 
@@ -51,41 +51,41 @@ summary(rsim_data)
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.46 -0.413 -0.0812 0.652
-#> 2 sadf   1.95  0.988  1.29   1.92 
-#> 3 gsadf  5.19  1.71   1.97   2.57 
+#> 1 adf   -2.46 -0.412 -0.0178 0.644
+#> 2 sadf   1.95  0.965  1.25   1.77 
+#> 3 gsadf  5.19  1.65   1.93   2.60 
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.86 -0.413 -0.0812 0.652
-#> 2 sadf   7.88  0.988  1.29   1.92 
-#> 3 gsadf  7.88  1.71   1.97   2.57 
+#> 1 adf   -2.86 -0.412 -0.0178 0.644
+#> 2 sadf   7.88  0.965  1.25   1.77 
+#> 3 gsadf  7.88  1.65   1.93   2.60 
 #> 
 #> evans :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -5.83 -0.413 -0.0812 0.652
-#> 2 sadf   5.28  0.988  1.29   1.92 
-#> 3 gsadf  5.99  1.71   1.97   2.57 
+#> 1 adf   -5.83 -0.412 -0.0178 0.644
+#> 2 sadf   5.28  0.965  1.25   1.77 
+#> 3 gsadf  5.99  1.65   1.93   2.60 
 #> 
 #> div :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -1.95 -0.413 -0.0812 0.652
-#> 2 sadf   1.11  0.988  1.29   1.92 
-#> 3 gsadf  1.34  1.71   1.97   2.57 
+#> 1 adf   -1.95 -0.412 -0.0178 0.644
+#> 2 sadf   1.11  0.965  1.25   1.77 
+#> 3 gsadf  1.34  1.65   1.93   2.60 
 #> 
 #> blan :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -5.15 -0.413 -0.0812 0.652
-#> 2 sadf   3.93  0.988  1.29   1.92 
-#> 3 gsadf 11.0   1.71   1.97   2.57 
+#> 1 adf   -5.15 -0.412 -0.0178 0.644
+#> 2 sadf   3.93  0.965  1.25   1.77 
+#> 3 gsadf 11.0   1.65   1.93   2.60 
 #> 
 
 # Summary, diagnostics and datestamp (wild bootstrap critical values)

@@ -185,38 +185,38 @@ the null hypothesis.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using `date` as index variable.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Modify facet_wrap options through ellipsis</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, scales <span class="op">=</span> <span class="st">"free_y"</span>, dir <span class="op">=</span> <span class="st">"v"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Modify the shading options</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, shade_opt <span class="op">=</span> <span class="fu">shade</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"pink"</span>, opacity <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Allow for nonrejected series to be plotted</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, nonrejected <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove the shading completely (2 ways)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, shade_opt <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, shade_opt <span class="op">=</span> <span class="fu">shade</span><span class="op">(</span>opacity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Plot only the series with the shading options</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="autoplot2.html">autoplot2</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="autoplot2.html">autoplot2</a></span><span class="op">(</span><span class="va">rsim_data</span>, trunc <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># keep the minw period</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># We will need ggplot2 from here on out</span></span></span>
@@ -227,7 +227,7 @@ the null hypothesis.</p></dd>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_size_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_linetype_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"solid"</span>, <span class="st">"solid"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">colour</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">colour</span>, which will replace the existing scale.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">size</span> is already present.</span>
@@ -239,7 +239,7 @@ the null hypothesis.</p></dd>
 <span class="r-in"><span><span class="co"># Change names through labeller (first way)</span></span></span>
 <span class="r-in"><span><span class="va">custom_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"psy1"</span> <span class="op">=</span> <span class="st">"new_name_for_psy1"</span>, <span class="st">"psy2"</span> <span class="op">=</span> <span class="st">"new_name_for_psy2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, labeller <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labeller.html" class="external-link">labeller</a></span><span class="op">(</span>.default <span class="op">=</span> <span class="va">label_value</span>, id <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/as_labeller.html" class="external-link">as_labeller</a></span><span class="op">(</span><span class="va">custom_labels</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-10.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Change names through labeller (second way)</span></span></span>
@@ -247,19 +247,19 @@ the null hypothesis.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">custom_labels2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">custom_labels2</span></span></span>
 <span class="r-in"><span><span class="va">custom_labels2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Evans"</span>, <span class="st">"Blanchard"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, labeller <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labeller.html" class="external-link">labeller</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">custom_labels2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-11.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or change names before plotting</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="series_names.html">series_names</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-12.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Change Theme options</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using `radf_crit` for `cv`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using precomputed critical values for `cv`.</span>
 <span class="r-plt img"><img src="autoplot.radf_obj-13.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

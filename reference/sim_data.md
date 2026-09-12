@@ -56,7 +56,7 @@ legend("topleft", legend = colnames(sim_data), col = 1:5, lty = 1, bty = "n")
 # \donttest{
 # The usual next step: run radf() and plot with the bundled critical values
 autoplot(radf(sim_data))
-#> Using `radf_crit` for `cv`.
+#> Using precomputed critical values for `cv`.
 
 # }
 ```
