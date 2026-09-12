@@ -41,16 +41,18 @@ There are several options for generating critical values:
 
 - [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md):
   Monte Carlo
-- [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md):
-  Wild Bootstrap
+- [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+  [`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md):
+  Wild Bootstrap (Harvey et al. 2016; Phillips & Shi 2020)
 - [`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md):
   Sieve Bootstrap (Panel)
 
-On default `exuber` will use Monte Carlo simulated critical values if no
-other option is provided. The package offers these critical values in
-the form of `data` (up to 600 observations), that are obtained with the
-[`mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
-function.
+When `cv` is omitted, `exuber` uses precomputed Monte Carlo critical
+values: a shared store covering `lag = 0` to `4` and every sample size
+up to 4000, fetched once per `(n, lag)` and cached on disk.
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+and the bootstrap functions are the offline route, and the only route
+for other lags or larger samples.
 
 ### Analysis
 
@@ -72,7 +74,65 @@ process into small simple steps:
   episode at once.
 
 These combined provide a comprehensive analysis on the exuberant
-behavior of the model.
+behavior of the model. See
+[`vignette("exuber")`](https://kvasilopoulos.github.io/exuber/articles/exuber.md)
+for this workflow end to end and
+[`vignette("plotting")`](https://kvasilopoulos.github.io/exuber/articles/plotting.md)
+for the
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods that go with it.
+
+### Beyond `radf()`
+
+The recursive ADF test is the core, but not the whole package. Each
+family below has its own vignette and its own section of the reference
+index:
+
+- **Volatility-robust tests**
+  ([`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+  [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+  [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)):
+  the same question as
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  under time-varying innovation variance –
+  [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md),
+  [`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md).
+- **Dating procedures**
+  ([`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md),
+  [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
+  [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md),
+  [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
+  [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)):
+  regime-model estimates of when a bubble you already believe in starts
+  and ends, no critical value needed –
+  [`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md).
+- **Real-time monitoring**
+  ([`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
+  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+  [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
+  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)):
+  calibrate on a training window, then raise an alarm as new
+  observations arrive –
+  [`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md).
+- **Root inference**
+  ([`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)):
+  how fast a detected episode is growing –
+  [`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md).
+- **Multivariate**
+  ([`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md),
+  [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md),
+  [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)):
+  shared and transmitted bubbles across series –
+  [`vignette("co-explosivity")`](https://kvasilopoulos.github.io/exuber/articles/co-explosivity.md).
+- **Simulation** (`sim_*()`): the bubble processes and innovation
+  generators every test above is validated on –
+  [`vignette("simulation")`](https://kvasilopoulos.github.io/exuber/articles/simulation.md).
+
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
+explains the naming scheme (`radf_`, `_test`, `dating_`, `monitor_`) and
+which results plug into
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html).
 
 ### Installation
 
@@ -105,47 +165,47 @@ rsim_data <- radf(sim_data)
 summary(rsim_data)
 #> Using precomputed critical values for `cv`.
 #> 
-#> ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──
+#> ── Summary (minw = 19, lag = 0) ────────────────── Monte Carlo (nboot = 2000) ──
 #> 
 #> psy1 :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.46 -0.413 -0.0812 0.652
-#> 2 sadf   1.95  0.988  1.29   1.92 
-#> 3 gsadf  5.19  1.71   1.97   2.57 
+#> 1 adf   -2.46 -0.412 -0.0178 0.644
+#> 2 sadf   1.95  0.965  1.25   1.77 
+#> 3 gsadf  5.19  1.65   1.93   2.60 
 #> 
 #> psy2 :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -2.86 -0.413 -0.0812 0.652
-#> 2 sadf   7.88  0.988  1.29   1.92 
-#> 3 gsadf  7.88  1.71   1.97   2.57 
+#> 1 adf   -2.86 -0.412 -0.0178 0.644
+#> 2 sadf   7.88  0.965  1.25   1.77 
+#> 3 gsadf  7.88  1.65   1.93   2.60 
 #> 
 #> evans :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -5.83 -0.413 -0.0812 0.652
-#> 2 sadf   5.28  0.988  1.29   1.92 
-#> 3 gsadf  5.99  1.71   1.97   2.57 
+#> 1 adf   -5.83 -0.412 -0.0178 0.644
+#> 2 sadf   5.28  0.965  1.25   1.77 
+#> 3 gsadf  5.99  1.65   1.93   2.60 
 #> 
 #> div :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -1.95 -0.413 -0.0812 0.652
-#> 2 sadf   1.11  0.988  1.29   1.92 
-#> 3 gsadf  1.34  1.71   1.97   2.57 
+#> 1 adf   -1.95 -0.412 -0.0178 0.644
+#> 2 sadf   1.11  0.965  1.25   1.77 
+#> 3 gsadf  1.34  1.65   1.93   2.60 
 #> 
 #> blan :
 #> # A tibble: 3 × 5
 #>   stat  tstat   `90`    `95`  `99`
 #>   <fct> <dbl>  <dbl>   <dbl> <dbl>
-#> 1 adf   -5.15 -0.413 -0.0812 0.652
-#> 2 sadf   3.93  0.988  1.29   1.92 
-#> 3 gsadf 11.0   1.71   1.97   2.57
+#> 1 adf   -5.15 -0.412 -0.0178 0.644
+#> 2 sadf   3.93  0.965  1.25   1.77 
+#> 3 gsadf 11.0   1.65   1.93   2.60
 
 diagnostics(rsim_data)
 #> Using precomputed critical values for `cv`.
@@ -169,7 +229,7 @@ datestamp(rsim_data)
 #> 
 #> psy2 :
 #>   Start Peak End Duration   Signal Ongoing
-#> 1    22   40  41       19 positive   FALSE
+#> 1    23   40  41       18 positive   FALSE
 #> 2    62   70  71        9 positive   FALSE
 #> 
 #> evans :
@@ -185,6 +245,13 @@ datestamp(rsim_data)
 
 autoplot(rsim_data)
 #> Using precomputed critical values for `cv`.
+#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+#> ℹ Please use `linewidth` instead.
+#> ℹ The deprecated feature was likely used in the exuber package.
+#>   Please report the issue at <https://github.com/kvasilopoulos/exuber/issues>.
+#> This warning is displayed once per session.
+#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+#> generated.
 ```
 
 ![](reference/figures/usage-1.png)

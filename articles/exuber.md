@@ -29,16 +29,14 @@ est_stocks <- radf(stocks, lag = 1)
 ## Analysis
 
 The summary will print the test statistic and the critical values for
-10%, 5% and 1% significance level. For a plain recursive ADF (`lag = 0`)
-and up to 600 observations, the package ships pre-simulated critical
-values that
+10%, 5% and 1% significance level. When `cv` is omitted,
 [`summary()`](https://rdrr.io/r/base/summary.html)/[`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-use automatically when `cv` is omitted. With `lag = 1` (as estimated
-above), critical values instead need to be simulated for this specific
-`(n, lag)` combination –
+fetch precomputed Monte Carlo critical values for this `(n, lag)` from a
+shared store (lags 0-4, samples up to 4000; needs network access the
+first time, cached on disk after). Here we simulate them locally with
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-does that locally, and we pass the result via `cv` to every downstream
-call.
+instead, and pass the result via `cv` to every downstream call – the
+offline route, and the one to use for other lags or larger samples.
 
 ``` r
 

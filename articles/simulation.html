@@ -86,68 +86,222 @@
 
     
     
-<p>The exuber package has numerous functions which allow the creation of
-time series which incorporate rational bubble models. These include
-<code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>, which generates a time series with a single
-episode of explosive behavior, <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> which generates a
-time series with two episodes of explosive behavior. Two rational bubble
-models are also currently included; <code><a href="../reference/sim_blan.html">sim_blan()</a></code> which
-generates a time series containing rational bubbles as proposed by
-Blanchard (1979). The final function, <code><a href="../reference/sim_evans.html">sim_evans()</a></code> generates
-a periodically collapsing rational bubble model series. It is the latter
-type of bubbles that the GSADF test that PSY attempts to detect.</p>
-<p>To test the GSADF test and its associated date-stamping strategy, the
-BSADF test, PSY utilize a model of dividends and incorporate an Evans
-(1991) type bubble. We replicate that here to show 1) the ability of
-exuber to generate realistic simulated time series which incorporate
-bubbles and 2) to demonstrate the capabilities of <code><a href="../reference/radf.html">radf()</a></code> to
-detect them.</p>
-<p>Let’s start be generating a realistic prices series incorporating an
-Evans (1991) type periodically collapsing bubble with the function
-<code><a href="../reference/sim_evans.html">sim_evans()</a></code>. We will use the monthly parameterisation
-detailed in PSY (2015a), which corresponds to the empirical values from
-the S&amp;P 500. {exuber} contains a function <code><a href="../reference/sim_div.html">sim_div()</a></code>
-which can be used to generate simulated dividends streams from a random
-walk with drift model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">125</span><span class="op">)</span></span>
-<span><span class="co"># The fundamental value from the Lucas pricing model</span></span>
-<span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_div.html">sim_div</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># The Evans bubble term</span></span>
-<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">400</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># the scaling factor for the bubble</span></span>
-<span><span class="va">kappa</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># The simulated price</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">pf</span> <span class="op">+</span> <span class="va">kappa</span><span class="op">*</span><span class="va">pb</span></span></code></pre></div>
-<p>We can now plot this data to see what it looks like:</p>
-<p><img src="simulation_files/figure-html/plot%20simulation-1.png" class="r-plt" alt="" width="864"></p>
-<p>Let’s repeat</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kvasilopoulos.github.io/exuber/">exuber</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="what-the-sim_-family-is-for">What the <code>sim_*()</code> family is for<a class="anchor" aria-label="anchor" href="#what-the-sim_-family-is-for"></a>
+</h2>
+<p>Every test in the package is calibrated and validated on simulated
+data, and the same data-generating processes are exported so you can do
+the same: check size under a null you choose, check power against a
+bubble you choose, or just see what a given test does to a series whose
+true break dates you know. There are three kinds:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Kind</th>
+<th>Functions</th>
+<th>Returns</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Bubble processes</td>
+<td>
+<code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>, <code><a href="../reference/sim_psy2.html">sim_psy2()</a></code>,
+<code><a href="../reference/sim_ps1.html">sim_ps1()</a></code>, <code><a href="../reference/sim_blan.html">sim_blan()</a></code>,
+<code><a href="../reference/sim_evans.html">sim_evans()</a></code>, <code><a href="../reference/sim_div.html">sim_div()</a></code>,
+<code><a href="../reference/sim_tree.html">sim_tree()</a></code>, <code><a href="../reference/sim_mar.html">sim_mar()</a></code>,
+<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code>, <code><a href="../reference/sim_falsebubble.html">sim_falsebubble()</a></code>
+</td>
+<td>One series (<code>class "sim"</code>, plots with
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>)</td>
+</tr>
+<tr class="even">
+<td>Innovation generators</td>
+<td>
+<code><a href="../reference/sim_innov.html">sim_innov()</a></code>, <code><a href="../reference/sim_vol_garch.html">sim_vol_garch()</a></code>,
+<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>, <code><a href="../reference/sim_vol_cir.html">sim_vol_cir()</a></code>,
+<code><a href="../reference/sim_vol_sv.html">sim_vol_sv()</a></code>, <code><a href="../reference/sim_fi.html">sim_fi()</a></code>
+</td>
+<td>One series of shocks, to feed into a bubble process through its
+<code>e</code> argument</td>
+</tr>
+<tr class="odd">
+<td>Multi-series processes</td>
+<td>
+<code><a href="../reference/sim_common.html">sim_common()</a></code>, <code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code>
+</td>
+<td>A <code>data.frame</code>, one column per series</td>
+</tr>
+</tbody>
+</table>
+<p>Plus <code>sim_data</code>/<code>sim_data_wdate</code>, a bundled
+<code>data.frame</code> of five of the classic series (with and without
+a date column) used throughout the examples.</p>
+<p>Every function takes a <code>seed</code> argument, so a series is
+reproducible without a surrounding <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>, and the
+bubble processes take the break dates (<code>te</code>, <code>tf</code>,
+…) as arguments, so the truth you are testing against is explicit.</p>
+<p>The bubble processes split into two families.
+<code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>/<code><a href="../reference/sim_psy2.html">sim_psy2()</a></code>/ <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code>
+are the <em>regime</em> DGPs of Phillips, Shi &amp; Yu (2015) and
+Phillips &amp; Shi (2018): a unit root, then an explosive AR(1) between
+fixed dates, then a collapse and a return to a unit root – the design
+every paper in this literature uses for size and power.
+<code><a href="../reference/sim_blan.html">sim_blan()</a></code>, <code><a href="../reference/sim_evans.html">sim_evans()</a></code>,
+<code><a href="../reference/sim_tree.html">sim_tree()</a></code>, <code><a href="../reference/sim_mar.html">sim_mar()</a></code> and
+<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code> are <em>rational bubble</em> models: the
+explosive behaviour and its collapse are stochastic, driven by a
+probability of bursting each period rather than by fixed dates.
+<code><a href="../reference/sim_evans.html">sim_evans()</a></code>’s periodically collapsing bubble is the one
+PSY’s GSADF test was designed to catch, and the one the earlier tests it
+replaced could not.</p>
+</div>
+<div class="section level2">
+<h2 id="the-psy-experiment">The PSY experiment<a class="anchor" aria-label="anchor" href="#the-psy-experiment"></a>
+</h2>
+<p>PSY validate the GSADF test on a price built from Lucas-model
+fundamentals plus an Evans (1991) bubble. <code><a href="../reference/sim_div.html">sim_div()</a></code> gives
+the fundamental price from a random walk with drift in dividends (West
+1988’s S&amp;P 500 parameterisation by default),
+<code><a href="../reference/sim_evans.html">sim_evans()</a></code> gives the bubble term, and a scaling factor
+<code>kappa</code> sets how much of the price the bubble accounts
+for:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/" class="external-link">purrr</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span>  sim_psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span>  sim_psy2 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span>  sim_evans <span class="op">=</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span>  sim_blan <span class="op">=</span> <span class="fu"><a href="../reference/sim_blan.html">sim_blan</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p>To plot them altogether we can use the<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method
-for “sim” objects. However, <code>autoplot.sim()</code> is for
-individual object thus we need some functional programming to plot them
-together. We can use the <code><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">purrr::map()</a></code> function, which
-iterates through every column of the data.frame and stores them into a
-list of “ggplot” objects, and then we can arrange with the
-<code><a href="../reference/exuber-defunct.html">ggarrange()</a></code> function into a 2x2 grid.</p>
+<code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
+<span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_div.html">sim_div</a></span><span class="op">(</span><span class="va">n</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>          <span class="co"># fundamental price</span></span>
+<span><span class="va">pb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="va">n</span>, seed <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>        <span class="co"># periodically collapsing bubble</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">pf</span> <span class="op">+</span> <span class="fl">20</span> <span class="op">*</span> <span class="va">pb</span>                   <span class="co"># kappa = 20</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span>, fundamental <span class="op">=</span> <span class="va">pf</span>, price <span class="op">=</span> <span class="va">p</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">index</span>, <span class="va">value</span>, color <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="cn">NULL</span>, color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="simulation_files/figure-html/psy-plot-1.png" class="r-plt" alt="" width="768"></p>
+<p>The point of the exercise is that <code><a href="../reference/radf.html">radf()</a></code> finds the
+episodes:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="va">n</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="va">cv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Datestamp (min_duration = 0) ───────────────────────────────── Monte Carlo ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; series1 :</span></span>
+<span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
+<span><span class="co">#&gt; 1    75   81  82        7 positive   FALSE</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="plotting-a-simulated-series">Plotting a simulated series<a class="anchor" aria-label="anchor" href="#plotting-a-simulated-series"></a>
+</h2>
+<p>Each series has an <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="simulation_files/figure-html/autoplot-sim-1.png" class="r-plt" alt="" width="768"></p>
+<p>Several at once go into a <code>data.frame</code> – which is also
+exactly what <code><a href="../reference/radf.html">radf()</a></code> takes, so the same object serves
+both:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  psy2 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  evans <span class="op">=</span> <span class="fu"><a href="../reference/sim_evans.html">sim_evans</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  blan <span class="op">=</span> <span class="fu"><a href="../reference/sim_blan.html">sim_blan</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">autoplot</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">grid.arrange</span>, <span class="va">.</span><span class="op">)</span></span></code></pre></div>
-<p><img src="simulation_files/figure-html/autoplot-sim-1.png" class="r-plt" alt="" width="864"></p>
-  </main>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">as.numeric</span><span class="op">)</span>, index <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">index</span>, names_to <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">index</span>, <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">id</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="simulation_files/figure-html/sims-plot-1.png" class="r-plt" alt="" width="768"></p>
+</div>
+<div class="section level2">
+<h2 id="swapping-the-innovations">Swapping the innovations<a class="anchor" aria-label="anchor" href="#swapping-the-innovations"></a>
+</h2>
+<p>By default the regime DGPs are driven by i.i.d. Gaussian shocks.
+Every bubble process accepts a vector of innovations through
+<code>e</code> instead, and the innovation generators exist to fill it:
+heavy-tailed or skewed marginals (<code><a href="../reference/sim_innov.html">sim_innov()</a></code>), conditional
+heteroskedasticity (<code><a href="../reference/sim_vol_garch.html">sim_vol_garch()</a></code>), a one-off variance
+break (<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>), stochastic volatility
+(<code><a href="../reference/sim_vol_cir.html">sim_vol_cir()</a></code>, <code><a href="../reference/sim_vol_sv.html">sim_vol_sv()</a></code>) or long memory
+(<code><a href="../reference/sim_fi.html">sim_fi()</a></code>). The bubble dates stay where you put them; only
+the noise changes – which is how the volatility-robust tests in
+<code><a href="../articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code> are compared against
+plain <code><a href="../reference/radf.html">radf()</a></code> on an equal footing:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Same bubble, same seed, volatility tripling half-way through the sample</span></span>
+<span><span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="simulation_files/figure-html/innovations-1.png" class="r-plt" alt="" width="768"></p>
+<p>The innovation vector is one shorter than <code>n</code> because the
+first observation is the starting value, not a shock.</p>
+</div>
+<div class="section level2">
+<h2 id="multi-series-processes">Multi-series processes<a class="anchor" aria-label="anchor" href="#multi-series-processes"></a>
+</h2>
+<p><code><a href="../reference/sim_common.html">sim_common()</a></code> draws <code>n_series</code> series that
+share one latent bubble plus idiosyncratic noise, the design behind the
+panel test <code><a href="../reference/radf_common.html">radf_common()</a></code>; <code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code>
+draws a pair where <code>y</code> is a linear function of a (possibly
+lagged) explosive <code>x</code>, the design behind
+<code><a href="../reference/cobubble_test.html">cobubble_test()</a></code> and <code><a href="../reference/contagion_reg.html">contagion_reg()</a></code> (see
+<code><a href="../articles/co-explosivity.html">vignette("co-explosivity")</a></code>):</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/sim_common.html">sim_common</a></span><span class="op">(</span>n_series <span class="op">=</span> <span class="fl">3</span>, n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   series_1 series_2 series_3</span></span>
+<span><span class="co">#&gt; 1 63.51506 156.4806 53.64832</span></span>
+<span><span class="co">#&gt; 2 60.82614 150.0373 51.29328</span></span>
+<span><span class="co">#&gt; 3 61.68536 151.9221 52.08866</span></span>
+<span><span class="co">#&gt; 4 57.95947 143.0566 48.83047</span></span>
+<span><span class="co">#&gt; 5 65.01851 160.0944 54.52820</span></span>
+<span><span class="co">#&gt; 6 66.25556 163.4051 55.81010</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/sim_coexplosive.html">sim_coexplosive</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, lag <span class="op">=</span> <span class="fl">2</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;           x         y</span></span>
+<span><span class="co">#&gt; 1 100.00000        NA</span></span>
+<span><span class="co">#&gt; 2  95.74638        NA</span></span>
+<span><span class="co">#&gt; 3  96.99332 100.28597</span></span>
+<span><span class="co">#&gt; 4  91.31940  89.56122</span></span>
+<span><span class="co">#&gt; 5 102.15136  98.06633</span></span>
+<span><span class="co">#&gt; 6 104.38871  86.87477</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
+</h2>
+<ul>
+<li>Size or power of a test against a bubble with <strong>known
+dates</strong>: <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> (one episode),
+<code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> (two), <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code> (one, with a
+distinct collapse regime – the design the <code>dating_*()</code>
+estimators assume).</li>
+<li>A <strong>rational</strong>, stochastically collapsing bubble:
+<code><a href="../reference/sim_evans.html">sim_evans()</a></code> on its own or on top of <code><a href="../reference/sim_div.html">sim_div()</a></code>
+fundamentals, as in PSY; <code><a href="../reference/sim_blan.html">sim_blan()</a></code> for the Blanchard
+version; <code><a href="../reference/sim_tree.html">sim_tree()</a></code>, <code><a href="../reference/sim_mar.html">sim_mar()</a></code>,
+<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code> for the newer ones.</li>
+<li>A <strong>null that looks like a bubble</strong> but isn’t:
+<code><a href="../reference/sim_falsebubble.html">sim_falsebubble()</a></code>.</li>
+<li>Non-Gaussian or <strong>heteroskedastic</strong> shocks under any of
+the above: build the shocks with an innovation generator and pass them
+as <code>e</code>.</li>
+<li>
+<strong>Several series</strong>: <code><a href="../reference/sim_common.html">sim_common()</a></code> for a
+shared bubble, <code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code> for a linked pair, or a
+<code>data.frame</code> of independent draws.</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

@@ -111,11 +111,11 @@
 <li>
 <code><a href="reference/radf_mc_cv.html">radf_mc_cv()</a></code>: Monte Carlo</li>
 <li>
-<code><a href="reference/radf_wb_cv.html">radf_wb_cv()</a></code>: Wild Bootstrap</li>
+<code><a href="reference/radf_wb_cv.html">radf_wb_cv()</a></code>, <code><a href="reference/radf_wb_ps_cv.html">radf_wb_ps_cv()</a></code>: Wild Bootstrap (Harvey et al. 2016; Phillips &amp; Shi 2020)</li>
 <li>
 <code><a href="reference/radf_sb_cv.html">radf_sb_cv()</a></code>: Sieve Bootstrap (Panel)</li>
 </ul>
-<p>On default <code>exuber</code> will use Monte Carlo simulated critical values if no other option is provided. The package offers these critical values in the form of <code>data</code> (up to 600 observations), that are obtained with the <code><a href="reference/exuber-deprecated.html">mc_cv()</a></code> function.</p>
+<p>When <code>cv</code> is omitted, <code>exuber</code> uses precomputed Monte Carlo critical values: a shared store covering <code>lag = 0</code> to <code>4</code> and every sample size up to 4000, fetched once per <code>(n, lag)</code> and cached on disk. <code><a href="reference/radf_mc_cv.html">radf_mc_cv()</a></code> and the bootstrap functions are the offline route, and the only route for other lags or larger samples.</p>
 </div>
 </div>
 <div class="section level3">
@@ -132,7 +132,28 @@
 <li>
 <code><a href="reference/rootstamp.html">rootstamp()</a></code> estimates how fast a detected episode is growing (the explosive root and its doubling time), run over every <code><a href="reference/datestamp.html">datestamp()</a></code> episode at once.</li>
 </ul>
-<p>These combined provide a comprehensive analysis on the exuberant behavior of the model.</p>
+<p>These combined provide a comprehensive analysis on the exuberant behavior of the model. See <code><a href="articles/exuber.html">vignette("exuber")</a></code> for this workflow end to end and <code><a href="articles/plotting.html">vignette("plotting")</a></code> for the <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> methods that go with it.</p>
+</div>
+<div class="section level3">
+<h3 id="beyond-radf">Beyond <code>radf()</code>
+<a class="anchor" aria-label="anchor" href="#beyond-radf"></a>
+</h3>
+<p>The recursive ADF test is the core, but not the whole package. Each family below has its own vignette and its own section of the reference index:</p>
+<ul>
+<li>
+<strong>Volatility-robust tests</strong> (<code><a href="reference/radf_tt.html">radf_tt()</a></code>, <code><a href="reference/radf_sign.html">radf_sign()</a></code>, <code><a href="reference/radf_kp.html">radf_kp()</a></code>, <code><a href="reference/radf_sbz.html">radf_sbz()</a></code>): the same question as <code><a href="reference/radf.html">radf()</a></code> under time-varying innovation variance – <code><a href="articles/radf-tt.html">vignette("radf-tt")</a></code>, <code><a href="articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code>.</li>
+<li>
+<strong>Dating procedures</strong> (<code><a href="reference/dating_hls.html">dating_hls()</a></code>, <code><a href="reference/dating_knp.html">dating_knp()</a></code>, <code><a href="reference/dating_pdc.html">dating_pdc()</a></code>, <code><a href="reference/dating_hlw.html">dating_hlw()</a></code>, <code><a href="reference/radf_recovery.html">radf_recovery()</a></code>): regime-model estimates of when a bubble you already believe in starts and ends, no critical value needed – <code><a href="articles/dating-methods.html">vignette("dating-methods")</a></code>.</li>
+<li>
+<strong>Real-time monitoring</strong> (<code><a href="reference/monitor.html">monitor()</a></code>, <code><a href="reference/monitor_cusum.html">monitor_cusum()</a></code>, <code><a href="reference/monitor_lbi.html">monitor_lbi()</a></code>, <code><a href="reference/monitor_quantile.html">monitor_quantile()</a></code>): calibrate on a training window, then raise an alarm as new observations arrive – <code><a href="articles/monitoring.html">vignette("monitoring")</a></code>.</li>
+<li>
+<strong>Root inference</strong> (<code><a href="reference/rootstamp.html">rootstamp()</a></code>): how fast a detected episode is growing – <code><a href="articles/root-inference.html">vignette("root-inference")</a></code>.</li>
+<li>
+<strong>Multivariate</strong> (<code><a href="reference/radf_common.html">radf_common()</a></code>, <code><a href="reference/cobubble_test.html">cobubble_test()</a></code>, <code><a href="reference/contagion_reg.html">contagion_reg()</a></code>): shared and transmitted bubbles across series – <code><a href="articles/co-explosivity.html">vignette("co-explosivity")</a></code>.</li>
+<li>
+<strong>Simulation</strong> (<code>sim_*()</code>): the bubble processes and innovation generators every test above is validated on – <code><a href="articles/simulation.html">vignette("simulation")</a></code>.</li>
+</ul>
+<p><code><a href="articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> explains the naming scheme (<code>radf_</code>, <code>_test</code>, <code>dating_</code>, <code>monitor_</code>) and which results plug into <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -158,47 +179,47 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using precomputed critical values for `cv`.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Summary (minw = 19, lag = 0) ─────────────────── Monte Carlo (nrep = 2000) ──</span></span>
+<span><span class="co">#&gt; ── Summary (minw = 19, lag = 0) ────────────────── Monte Carlo (nboot = 2000) ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; psy1 :</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 5</span></span>
 <span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 adf   -2.46 -0.413 -0.0812 0.652</span></span>
-<span><span class="co">#&gt; 2 sadf   1.95  0.988  1.29   1.92 </span></span>
-<span><span class="co">#&gt; 3 gsadf  5.19  1.71   1.97   2.57 </span></span>
+<span><span class="co">#&gt; 1 adf   -2.46 -0.412 -0.0178 0.644</span></span>
+<span><span class="co">#&gt; 2 sadf   1.95  0.965  1.25   1.77 </span></span>
+<span><span class="co">#&gt; 3 gsadf  5.19  1.65   1.93   2.60 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; psy2 :</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 5</span></span>
 <span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 adf   -2.86 -0.413 -0.0812 0.652</span></span>
-<span><span class="co">#&gt; 2 sadf   7.88  0.988  1.29   1.92 </span></span>
-<span><span class="co">#&gt; 3 gsadf  7.88  1.71   1.97   2.57 </span></span>
+<span><span class="co">#&gt; 1 adf   -2.86 -0.412 -0.0178 0.644</span></span>
+<span><span class="co">#&gt; 2 sadf   7.88  0.965  1.25   1.77 </span></span>
+<span><span class="co">#&gt; 3 gsadf  7.88  1.65   1.93   2.60 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; evans :</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 5</span></span>
 <span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 adf   -5.83 -0.413 -0.0812 0.652</span></span>
-<span><span class="co">#&gt; 2 sadf   5.28  0.988  1.29   1.92 </span></span>
-<span><span class="co">#&gt; 3 gsadf  5.99  1.71   1.97   2.57 </span></span>
+<span><span class="co">#&gt; 1 adf   -5.83 -0.412 -0.0178 0.644</span></span>
+<span><span class="co">#&gt; 2 sadf   5.28  0.965  1.25   1.77 </span></span>
+<span><span class="co">#&gt; 3 gsadf  5.99  1.65   1.93   2.60 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; div :</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 5</span></span>
 <span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 adf   -1.95 -0.413 -0.0812 0.652</span></span>
-<span><span class="co">#&gt; 2 sadf   1.11  0.988  1.29   1.92 </span></span>
-<span><span class="co">#&gt; 3 gsadf  1.34  1.71   1.97   2.57 </span></span>
+<span><span class="co">#&gt; 1 adf   -1.95 -0.412 -0.0178 0.644</span></span>
+<span><span class="co">#&gt; 2 sadf   1.11  0.965  1.25   1.77 </span></span>
+<span><span class="co">#&gt; 3 gsadf  1.34  1.65   1.93   2.60 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; blan :</span></span>
 <span><span class="co">#&gt; # A tibble: 3 × 5</span></span>
 <span><span class="co">#&gt;   stat  tstat   `90`    `95`  `99`</span></span>
 <span><span class="co">#&gt;   &lt;fct&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 adf   -5.15 -0.413 -0.0812 0.652</span></span>
-<span><span class="co">#&gt; 2 sadf   3.93  0.988  1.29   1.92 </span></span>
-<span><span class="co">#&gt; 3 gsadf 11.0   1.71   1.97   2.57</span></span>
+<span><span class="co">#&gt; 1 adf   -5.15 -0.412 -0.0178 0.644</span></span>
+<span><span class="co">#&gt; 2 sadf   3.93  0.965  1.25   1.77 </span></span>
+<span><span class="co">#&gt; 3 gsadf 11.0   1.65   1.93   2.60</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Using precomputed critical values for `cv`.</span></span>
@@ -222,7 +243,7 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; psy2 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
-<span><span class="co">#&gt; 1    22   40  41       19 positive   FALSE</span></span>
+<span><span class="co">#&gt; 1    23   40  41       18 positive   FALSE</span></span>
 <span><span class="co">#&gt; 2    62   70  71        9 positive   FALSE</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; evans :</span></span>
@@ -237,7 +258,14 @@
 <span><span class="co">#&gt; 2    84   86  87        3 positive   FALSE</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Using precomputed critical values for `cv`.</span></span></code></pre></div>
+<span><span class="co">#&gt; Using precomputed critical values for `cv`.</span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; ℹ Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; ℹ The deprecated feature was likely used in the exuber package.</span></span>
+<span><span class="co">#&gt;   Please report the issue at &lt;https://github.com/kvasilopoulos/exuber/issues&gt;.</span></span>
+<span><span class="co">#&gt; This warning is displayed once per session.</span></span>
+<span><span class="co">#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span>
+<span><span class="co">#&gt; generated.</span></span></code></pre></div>
 <p><img src="reference/figures/usage-1.png"><!-- --></p>
 </div>
 <div class="section level3">

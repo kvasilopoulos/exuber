@@ -108,15 +108,14 @@ Dickey-Fuller test with 1 lag.</p>
 <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h2>
 <p>The summary will print the test statistic and the critical values for
-10%, 5% and 1% significance level. For a plain recursive ADF
-(<code>lag = 0</code>) and up to 600 observations, the package ships
-pre-simulated critical values that
+10%, 5% and 1% significance level. When <code>cv</code> is omitted,
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/diagnostics.html">diagnostics()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-use automatically when <code>cv</code> is omitted. With
-<code>lag = 1</code> (as estimated above), critical values instead need
-to be simulated for this specific <code>(n, lag)</code> combination –
-<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> does that locally, and we pass the result via
-<code>cv</code> to every downstream call.</p>
+fetch precomputed Monte Carlo critical values for this
+<code>(n, lag)</code> from a shared store (lags 0-4, samples up to 4000;
+needs network access the first time, cached on disk after). Here we
+simulate them locally with <code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> instead, and pass
+the result via <code>cv</code> to every downstream call – the offline
+route, and the one to use for other lags or larger samples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
