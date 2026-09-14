@@ -1,7 +1,7 @@
-context("radf_qpwy")
+context("monitor_quantile")
 
 test_that("qpwy_stat_path at the full sample matches a manual replicate
-  of radf_quantile()'s own per-window QR t-ratio formula exactly", {
+  of quantile_test()'s own per-window QR t-ratio formula exactly", {
   set.seed(3)
   y <- cumsum(rnorm(60))
   full_stat <- exuber:::qpwy_stat_path(y, 0.5, 60)
@@ -32,7 +32,7 @@ test_that("qpwy_boundary_sim's simulated Q paths have the same length as
   expect_equal(nrow(Q), 5)
 })
 
-test_that("radf_qpwy runs end to end and returns a well-formed object", {
+test_that("monitor_quantile runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(80))
   out <- monitor_quantile(y, tau = 0.5, nrep = 50, seed = 1)
@@ -44,7 +44,7 @@ test_that("radf_qpwy runs end to end and returns a well-formed object", {
   expect_output(print(out), "monitor_quantile")
 })
 
-test_that("radf_qpwy's boundary is the quantile of simulated PATH
+test_that("monitor_quantile's boundary is the quantile of simulated PATH
   MAXIMA (controlling the supremum/first-crossing probability), not a
   per-r marginal quantile -- the bug an initial version had (~50%
   false-alarm rate against a nominal 5%) before this was fixed", {
@@ -64,13 +64,13 @@ test_that("radf_qpwy's boundary is the quantile of simulated PATH
   expect_gte(sup_boundary, marginal_boundary)
 })
 
-test_that("radf_qpwy rejects an out-of-range tau or level", {
+test_that("monitor_quantile rejects an out-of-range tau or level", {
   y <- cumsum(rnorm(60))
   expect_error(monitor_quantile(y, tau = 1.5))
-  expect_error(monitor_quantile(y, level = 80))
+  expect_error(monitor_quantile(y, sig_lvl = 80))
 })
 
-test_that("radf_qpwy's false-alarm rate under H0 is not wildly inflated", {
+test_that("monitor_quantile's false-alarm rate under H0 is not wildly inflated", {
   skip_on_cran()
   set.seed(2)
   nrep_mc <- 30
@@ -83,7 +83,7 @@ test_that("radf_qpwy's false-alarm rate under H0 is not wildly inflated", {
   expect_lt(fa, 0.30)
 })
 
-test_that("radf_qpwy has non-trivial detection power on a genuine
+test_that("monitor_quantile has non-trivial detection power on a genuine
   explosive DGP", {
   skip_on_cran()
   set.seed(3)

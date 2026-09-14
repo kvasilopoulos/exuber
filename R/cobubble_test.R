@@ -79,17 +79,19 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' via \code{as.numeric()}. \code{x} is the (candidate) explosive-episode
 #' regressor; \code{y} is tested for co-explosivity with \code{x_{t-lag}}.
 #' @param lag The lead/lag \code{i} in \code{x_{t-lag}}. If \code{NULL}
-#' (default), it is estimated from \code{lags} by minimizing the residual
+#' (default), it is estimated from \code{lag_grid} by minimizing the residual
 #' variance (Section VI's \code{i_hat}).
-#' @param lags Candidate lag values searched when \code{lag = NULL}.
+#' @param lag_grid Candidate lag values searched when \code{lag = NULL}.
 #' Default \code{-6:6}, as in the paper's own simulation design.
 #' @param nboot Number of wild bootstrap replications.
-#' @param level Nominal test size (upper-tail rejection region).
+#' @param sig_lvl Significance level, on the same 0-100 scale as
+#'   \code{\link{datestamp}}'s \code{sig_lvl} (default \code{95}, i.e. a 5\%
+#'   upper-tail rejection region).
 #' @param seed Optional seed for the bootstrap draws.
 #'
-#' @return An object of class \code{cobubble_test}: a list with the
+#' @return An object of class \code{cobubble_test_obj}: a list with the
 #' observed statistic \code{S}, the (given or estimated) \code{lag}, the
-#' bootstrap critical value \code{cv} at \code{level}, the bootstrap
+#' bootstrap critical value \code{cv} at \code{sig_lvl}, the bootstrap
 #' p-value \code{p_value}, and \code{reject} (\code{TRUE} if \code{S}
 #' exceeds \code{cv}, i.e. co-explosivity is rejected).
 #'
@@ -98,7 +100,8 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' Oxford Bulletin of Economics and Statistics, 84(3), 624-650.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' statistic/critical-value/p-value summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -124,9 +127,11 @@ coexplosive_select_lag <- function(y, x, lags) {
 #' autoplot(res)
 #' }
 #'
+#' @family multivariate
 #' @export
-cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
-                           level = 0.05, seed = NULL) {
+cobubble_test <- function(y, x, lag = NULL, lag_grid = -6:6, nboot = 499L,
+                           sig_lvl = 95, seed = NULL) {
+  assert_sig_lvl(sig_lvl)
   y <- as.numeric(y)
   x <- as.numeric(x)
   if (length(y) != length(x)) {
@@ -135,7 +140,7 @@ cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
   assert_positive_int(nboot, greater_than = 2)
 
   if (is.null(lag)) {
-    lag <- coexplosive_select_lag(y, x, lags)
+    lag <- coexplosive_select_lag(y, x, lag_grid)
   }
 
   Tn <- length(y)
@@ -154,14 +159,14 @@ cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
     boot_S[b] <- coexplosive_stat_aligned(ystar, xreg)$S
   }
 
-  cv <- quantile_narm(boot_S, 1 - level, names = FALSE)
+  cv <- quantile_narm(boot_S, sig_lvl / 100, names = FALSE)
   p_value <- mean(boot_S > fit$S)
 
   list(
     S = fit$S, lag = lag, cv = cv, p_value = p_value, reject = fit$S > cv
   ) %>%
-    add_attr(level = level, iter = nboot, lags = lags, mat = cbind(y = y, x = x)) %>%
-    add_class("cobubble_test")
+    add_attr(sig_lvl = sig_lvl, iter = nboot, lag_grid = lag_grid, mat = cbind(y = y, x = x)) %>%
+    add_class("cobubble_test_obj")
 }
 
 #' Plot method for cobubble_test() output
@@ -174,7 +179,7 @@ cobubble_test <- function(y, x, lag = NULL, lags = -6:6, nboot = 499L,
 #' @return A \link[ggplot2]{ggplot}
 #' @seealso \code{\link{cobubble_test}}
 #' @export
-autoplot.cobubble_test <- function(object, ...) {
+autoplot.cobubble_test_obj <- function(object, ...) {
   as.data.frame(attr(object, "mat")) %>%
     mutate(index = seq_len(nrow(.))) %>%
     pivot_longer(-index, names_to = "id", values_to = "value") %>%
@@ -186,18 +191,18 @@ autoplot.cobubble_test <- function(object, ...) {
 }
 
 #' @export
-print.cobubble_test <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.cobubble_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue("cobubble_test (lag = {x$lag}, nboot = {attr(x, 'iter')})"))
   cat_line()
   cat_line(glue(
     "S = {format(x$S, digits = digits)}, ",
-    "cv({(1 - attr(x, 'level')) * 100}%) = {format(x$cv, digits = digits)}, ",
+    "cv({attr(x, 'sig_lvl')}%) = {format(x$cv, digits = digits)}, ",
     "p-value = {format(x$p_value, digits = digits)}"
   ))
   cat_line(glue(
     "Co-explosivity ", if (x$reject) "rejected" else "not rejected",
-    " at the {attr(x, 'level') * 100}% level."
+    " at the {100 - attr(x, 'sig_lvl')}% level."
   ))
   cat_line()
 }

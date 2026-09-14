@@ -9,8 +9,8 @@ monitor(
   r_star = 0.5,
   minw = NULL,
   nboot = 500L,
-  level = 0.95,
-  adflag = 0,
+  sig_lvl = 95,
+  lag = 0L,
   type = c("fixed", "aic", "bic"),
   seed = NULL,
   boundary = c("bootstrap", "kurozumi", "fluc"),
@@ -38,13 +38,14 @@ observation count if \code{>= 1}.}
 \item{nboot}{Number of wild bootstrap replications for the training
 critical value. Ignored unless \code{boundary = "bootstrap"}.}
 
-\item{level}{Nominal confidence level for the monitoring boundary
-(default \code{0.95}). When \code{boundary} is \code{"kurozumi"} or
-\code{"fluc"}, must be one of \code{0.90}, \code{0.95}, \code{0.99}.}
+\item{sig_lvl}{Significance level for the monitoring boundary on the
+package-wide 0-100 scale, one of \code{90}, \code{95} (default),
+\code{99}.}
 
-\item{adflag, type}{Passed to \code{\link{radf_wb_ps_cv}} (lag length /
-selection for the wild bootstrap DGP). Ignored unless
-\code{boundary = "bootstrap"}.}
+\item{lag}{A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).}
+
+\item{type}{Lag selection for the wild bootstrap DGP, passed to
+\code{\link{radf_wb_ps_cv}}. Ignored unless \code{boundary = "bootstrap"}.}
 
 \item{seed}{Optional seed for the bootstrap draws. Ignored unless
 \code{boundary = "bootstrap"}.}
@@ -99,18 +100,19 @@ switches to his \code{GSADF_{s0}(k)} generalization: the window start
 is allowed to range over \code{[1, floor(T* * s0)]} rather than being
 fixed at \code{1}, compared against his \code{k}-varying (not
 constant) boundary function and its own published scaling constant.
-\code{level} must be one of \code{0.90}, \code{0.95}, or \code{0.99}
+\code{sig_lvl} must be one of \code{90}, \code{95}, or \code{99}
 (the levels his table tabulates).
 
 \code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
 detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
 \code{badf} sequence, compared against a published constant from
 their Table 7 (no detrending case) rather than a simulated one.
-\code{level} must be one of \code{0.90}, \code{0.95}, \code{0.99}.
+\code{sig_lvl} must be one of \code{90}, \code{95}, \code{99}.
 }
 \note{
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 boundary/alarm summary (real-time monitoring output, not a
 per-series sup-statistic table) -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
@@ -155,4 +157,10 @@ Journal of Financial Econometrics, 10(1), 198-231.
 \code{\link{radf_wb_ps_cv}} for the underlying wild bootstrap,
 and \code{\link{datestamp}} for the (non-monitoring, full-sample)
 origination/collapse dating that already exists.
+
+Other monitoring:
+\code{\link[=monitor_cusum]{monitor_cusum()}},
+\code{\link[=monitor_lbi]{monitor_lbi()}},
+\code{\link[=monitor_quantile]{monitor_quantile()}}
 }
+\concept{monitoring}

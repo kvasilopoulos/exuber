@@ -35,7 +35,9 @@ Diagnostics also stores a vector whose elements take the value of 1 when
 there is a period of explosive behaviour and 0 otherwise.
 }
 \examples{
-
+\donttest{
+# The default `cv` is fetched from the shared critical-value store
+# (network on first use); pass `cv = radf_mc_cv(nrow(sim_data))` to stay offline
 rsim_data <- radf(sim_data)
 diagnostics(rsim_data)
 
@@ -43,4 +45,5 @@ diagnostics(rsim_data, option = "sadf")
 
 # Gate on the 90\% critical value instead of the 95\% default
 diagnostics(rsim_data, sig_lvl = 90)
+}
 }

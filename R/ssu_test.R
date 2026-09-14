@@ -146,8 +146,9 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' helper) -- no simulation needed.
 #'
 #' @inheritParams radf
-#' @param level Nominal confidence level, one of \code{0.90}, \code{0.95},
-#' \code{0.99} (the levels Kurozumi & Nishi's Table I tabulates).
+#' @param sig_lvl Significance level on the package-wide 0-100 scale, one
+#' of \code{90}, \code{95}, \code{99} (the levels Kurozumi & Nishi's Table I
+#' tabulates).
 #'
 #' @return An object of class \code{ssu_test_obj}: a list with the
 #' statistic path (\code{stat}, one value per candidate end point from
@@ -163,7 +164,8 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' recursive ADF-family alternative this complements.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' statistic/critical-value summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -177,21 +179,22 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' # the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
 #' y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
 #'   coef_noise = rnorm(149), coef_a = 4)
-#' res <- ssu_test(y, level = 0.95)
+#' res <- ssu_test(y, sig_lvl = 95)
 #' print(res)
 #'
 #' # Plot the recursive SSU statistic path against its critical value
 #' autoplot(res)
 #' }
 #'
+#' @family volatility-robust tests
 #' @export
-ssu_test <- function(data, minw = NULL, level = 0.95) {
+ssu_test <- function(data, minw = NULL, sig_lvl = 95) {
   x <- parse_data(data)
   n <- nrow(x)
   minw <- minw %||% psy_minw(n)
   assert_positive_int(minw, greater_than = 2)
 
-  crit <- ssu_q(level)
+  crit <- ssu_q(sig_lvl)
   snames <- colnames(x)
   idx <- index(x)
   nc <- ncol(x)
@@ -207,7 +210,7 @@ ssu_test <- function(data, minw = NULL, level = 0.95) {
   detected <- setNames(sadf > crit, snames)
 
   list(stat = stat_path, sadf = sadf, crit = crit, detected = detected) %>%
-    add_attr(index = idx, series_names = snames, n = n, minw = minw, level = level) %>%
+    add_attr(index = idx, series_names = snames, n = n, minw = minw, sig_lvl = sig_lvl) %>%
     add_class("ssu_test_obj")
 }
 
@@ -231,13 +234,12 @@ autoplot.ssu_test_obj <- function(object, ...) {
 # critical value, one scalar per significance level (their own 10,000
 # -rep Monte Carlo, r0 = 0.01 + 1.8/sqrt(T) -- exactly psy_minw()'s own
 # formula).
-ssu_q <- function(level) {
-  beta <- 1 - level
-  beta_choices <- c(0.10, 0.05, 0.01)
-  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+ssu_q <- function(sig_lvl) {
+  choices <- c(90, 95, 99)
+  match_idx <- which(abs(sig_lvl - choices) < 1e-8)
   if (length(match_idx) == 0L) {
     stop_glue(
-      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "'sig_lvl' must be one of {paste(choices, collapse = ', ')} ",
       "(Kurozumi & Nishi (2025)'s Table I only tabulates these ",
       "significance levels)."
     )
@@ -250,7 +252,7 @@ print.ssu_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
   cat_line()
   cat_rule(left = glue(
     "ssu_test (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
-    "level = {attr(x, 'level') * 100}%, crit = {x$crit})"
+    "sig_lvl = {attr(x, 'sig_lvl')}%, crit = {x$crit})"
   ))
   cat_line()
   print(

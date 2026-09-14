@@ -80,11 +80,11 @@ other critical-value function to pair it with, unlike \code{radf()}/
 bootstrap, see Details).
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
-statistic/critical-value summary (bundles the test statistic and its
-critical value in one object), but has its own \code{autoplot} method
-(a per-series comparison of \code{supDF}/\code{supBZ}/\code{U} against
-their critical values) -- see \code{vignette("naming-and-analysis",
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own statistic/critical-value
+summary (bundles the test statistic and its critical value in one
+object); the \code{autoplot()} method is a per-series comparison of \code{supDF}/\code{supBZ}/\code{U} against
+their critical values -- see \code{vignette("naming-and-analysis",
 package = "exuber")} for the full picture of which functions do and
 don't fit the shared pipeline.
 }
@@ -113,4 +113,13 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 bootstrap, \code{\link{radf_sbz}}/\code{\link{radf_sbz_cv}} for the
 supBZ-only route with full pipeline support, and \code{\link{radf_tt}}
 for a bootstrap-free heteroskedasticity-robust alternative.
+
+Other volatility-robust tests:
+\code{\link[=radf_kp]{radf_kp()}},
+\code{\link[=radf_sbz]{radf_sbz()}},
+\code{\link[=radf_sign]{radf_sign()}},
+\code{\link[=radf_sign_dm]{radf_sign_dm()}},
+\code{\link[=radf_tt]{radf_tt()}},
+\code{\link[=ssu_test]{ssu_test()}}
 }
+\concept{volatility-robust tests}

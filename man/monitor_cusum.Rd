@@ -9,9 +9,9 @@ monitor_cusum(
   r_star = 0.5,
   b_alpha = 4.6,
   boundary = c("asymptotic", "finite"),
-  level = 0.95,
+  sig_lvl = 95,
   type = c("standard", "kernel"),
-  N = 20,
+  h = 20,
   kernel = c("gaussian", "uniform")
 )
 }
@@ -39,18 +39,19 @@ so it is typically conservative in finite samples. Ignored when
 
 \item{boundary}{\code{"asymptotic"} (default) uses \code{b_alpha}
 directly. \code{"finite"} instead looks up HB's own finite-sample
-boundary constant (their Table 8) from \code{level} and the realized
-training length/monitoring-horizon ratio -- \code{level} must then be
-one of \code{0.90}, \code{0.95}, \code{0.99}.}
+boundary constant (their Table 8) from \code{sig_lvl} and the realized
+training length/monitoring-horizon ratio -- \code{sig_lvl} must then be
+one of \code{90}, \code{95}, \code{99}.}
 
-\item{level}{Nominal confidence level when \code{boundary = "finite"}
-(default \code{0.95}); ignored when \code{boundary = "asymptotic"}.}
+\item{sig_lvl}{Significance level on the package-wide 0-100 scale when
+\code{boundary = "finite"} (default \code{95}); ignored when
+\code{boundary = "asymptotic"}.}
 
 \item{type}{\code{"standard"} (default) for Homm & Breitung (2012)'s
 original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
 Leybourne, Taylor & Zu (2023)'s volatility-robust "CUSUMV" variant.}
 
-\item{N}{Bandwidth/window length for the one-sided kernel spot-variance
+\item{h}{Bandwidth/window length (AHLTZ's \code{N}) for the one-sided kernel spot-variance
 estimator when \code{type = "kernel"}. Default \code{20}, the authors'
 own empirically-recommended value (their Section 3: "setting H = 20
 delivered a procedure with the best trade-off" between false-alarm
@@ -99,7 +100,8 @@ time-varying volatility, unlike the standard CUSUM statistic, which
 requires homoskedasticity for its own size-control result to hold.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 boundary/alarm summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -142,4 +144,10 @@ of Financial Econometrics, 21(1), 187-227.
 \seealso{
 \code{\link{monitor}} for the recursive-ADF (Family A)
 monitoring alternative.
+
+Other monitoring:
+\code{\link[=monitor]{monitor()}},
+\code{\link[=monitor_lbi]{monitor_lbi()}},
+\code{\link[=monitor_quantile]{monitor_quantile()}}
 }
+\concept{monitoring}

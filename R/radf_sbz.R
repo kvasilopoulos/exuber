@@ -173,6 +173,7 @@ wls_dfstat_grid <- function(y, sigma2, minw) {
 #' }
 #'
 #' @importFrom stats setNames
+#' @family volatility-robust tests
 #' @export
 radf_sbz <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL) {
   kernel <- match.arg(kernel)
@@ -208,6 +209,21 @@ radf_sbz <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = N
     add_class("radf_sbz_obj", "radf_obj")
 }
 
+#' @export
+print.radf_sbz_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+  cat_line()
+  cat_rule(left = glue("radf_sbz (minw = {get_minw(x)}, kernel = {attr(x, 'kernel')})"))
+  cat_line()
+  print(
+    data.frame(series = names(x$adf), adf = x$adf, sadf = x$sadf, gsadf = x$gsadf,
+      row.names = NULL
+    ),
+    digits = digits, print.gap = 2L, row.names = FALSE
+  )
+  cat_line()
+  invisible(x)
+}
+
 #' Wild Bootstrap Critical Values for the SBZ Statistic
 #'
 #' \code{radf_sbz_cv} performs the HLST (2016) wild bootstrap -- the same
@@ -239,6 +255,15 @@ radf_sbz <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = N
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
+#' @examples
+#' \donttest{
+#' y <- sim_psy1(150, seed = 1)
+#' res <- radf_sbz(y, minw = 20)
+#' cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
+#' summary(res, cv = cv)
+#' datestamp(res, cv = cv)
+#' }
+#' @family critical values
 #' @export
 radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", "uniform"),
                          h = NULL, seed = NULL) {
@@ -347,11 +372,11 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
 #' bootstrap, see Details).
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
-#' statistic/critical-value summary (bundles the test statistic and its
-#' critical value in one object), but has its own \code{autoplot} method
-#' (a per-series comparison of \code{supDF}/\code{supBZ}/\code{U} against
-#' their critical values) -- see \code{vignette("naming-and-analysis",
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own statistic/critical-value
+#' summary (bundles the test statistic and its critical value in one
+#' object); the `autoplot()` method is a per-series comparison of \code{supDF}/\code{supBZ}/\code{U} against
+#' their critical values -- see \code{vignette("naming-and-analysis",
 #' package = "exuber")} for the full picture of which functions do and
 #' don't fit the shared pipeline.
 #'
@@ -367,6 +392,7 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
 #' autoplot(res)
 #' }
 #'
+#' @family volatility-robust tests
 #' @export
 radf_sbz_union <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", "uniform"),
                             h = NULL, seed = NULL) {
@@ -424,11 +450,11 @@ radf_sbz_union <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian
       series_names = snames, method = "Wild Bootstrap (SBZ)", n = nrow(y),
       minw = minw, iter = nboot, kernel = kernel
     ) %>%
-    add_class("radf_sbz_union")
+    add_class("radf_sbz_union_obj")
 }
 
 #' @export
-print.radf_sbz_union <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.radf_sbz_union_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue("radf_sbz_union (minw = {get_minw(x)}, nboot = {get_iter(x)})"))
   cat_line()
@@ -455,8 +481,8 @@ print.radf_sbz_union <- function(x, digits = max(3L, getOption("digits") - 3L), 
 #' \code{90}, \code{95} (default), \code{99}.
 #' @param ... Further arguments passed to methods. Not used.
 #' @export
-autoplot.radf_sbz_union <- function(object, sig_lvl = 95, ...) {
-  stopifnot(sig_lvl %in% c(90, 95, 99))
+autoplot.radf_sbz_union_obj <- function(object, sig_lvl = 95, ...) {
+  assert_sig_lvl(sig_lvl)
   col <- paste0(sig_lvl, "%")
   snames <- names(object$supDF)
 

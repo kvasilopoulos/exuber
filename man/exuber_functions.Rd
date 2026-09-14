@@ -22,7 +22,7 @@ A tibble with columns \code{name}, \code{family}, and
 }
 \description{
 Naming conventions (\code{radf_}/\code{_test}/\code{dating_}/
-\code{monitor_}/\code{root_}, see \code{vignette("naming-and-analysis")})
+\code{monitor_}, see \code{vignette("naming-and-analysis")})
 are a guide, not a contract -- easy to misremember, and occasionally
 traded off deliberately (\code{monitor()} is ADF-family internally
 but named for what it does). This is the actual, queryable source of

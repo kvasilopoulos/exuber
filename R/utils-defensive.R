@@ -52,6 +52,23 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
   }
 }
 
+# Package-wide significance-level convention: `sig_lvl` is on the 0-100 scale
+# (95 = a 5% test / 95% confidence), as in datestamp()/autoplot(). `choices`
+# restricts to a tabulated set; NULL allows any value strictly inside (0, 100).
+assert_sig_lvl <- function(sig_lvl, choices = c(90, 95, 99)) {
+  if (length(sig_lvl) != 1L || !is.numeric(sig_lvl)) {
+    stop_glue("Argument 'sig_lvl' should be a single number on the 0-100 scale")
+  }
+  if (is.null(choices)) {
+    if (sig_lvl < 50 || sig_lvl >= 100) {
+      stop_glue("Argument 'sig_lvl' is on the 0-100 scale (e.g. 95, not 0.95) and should be in [50, 100)")
+    }
+  } else if (!any(abs(sig_lvl - choices) < 1e-8)) {
+    stop_glue("Argument 'sig_lvl' should be one of {paste(choices, collapse = ', ')}")
+  }
+  invisible(sig_lvl)
+}
+
 assert_between <- function(x, arg1, arg2) {
   xname <- enexpr(x)
   if (!dplyr::between(x, arg1, arg2)) {

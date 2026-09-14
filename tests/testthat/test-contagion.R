@@ -1,4 +1,4 @@
-context("radf_contagion")
+context("contagion_reg")
 
 test_that("contagion_fixed_window_beta matches a brute-force lm() fit
   exactly, at several window-end dates (S levels per window, S-1
@@ -111,7 +111,7 @@ test_that("contagion_bandwidth_cv picks a bandwidth inside eq. 7's own
   expect_lte(sse_opt, sse_hi + 1e-6)
 })
 
-test_that("radf_contagion runs end to end and returns a well-formed
+test_that("contagion_reg runs end to end and returns a well-formed
   object", {
   set.seed(1)
   n <- 150
@@ -126,7 +126,7 @@ test_that("radf_contagion runs end to end and returns a well-formed
   expect_output(print(out), "contagion_reg")
 })
 
-test_that("radf_contagion accepts a user-supplied bandwidth, skipping CV", {
+test_that("contagion_reg accepts a user-supplied bandwidth, skipping CV", {
   set.seed(1)
   n <- 150
   core <- cumsum(rnorm(n))
@@ -135,11 +135,11 @@ test_that("radf_contagion accepts a user-supplied bandwidth, skipping CV", {
   expect_equal(out$h, 0.3)
 })
 
-test_that("radf_contagion rejects mismatched series lengths", {
+test_that("contagion_reg rejects mismatched series lengths", {
   expect_error(contagion_reg(rnorm(10), rnorm(11)))
 })
 
-test_that("radf_contagion's estimated delta2(r) varies more over r for a
+test_that("contagion_reg's estimated delta2(r) varies more over r for a
   series with a genuine time-varying relationship to the core than for
   one independent of it", {
   skip_on_cran()
