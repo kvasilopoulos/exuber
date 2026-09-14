@@ -70,7 +70,7 @@ LinkingTo:
     RcppArmadillo (>= 0.9.400.2.0)
 VignetteBuilder:
     knitr
-Config/exuber/exubercore-version: v0.3.0
+Config/exuber/exubercore-version: v0.3.1
 Encoding: UTF-8
 Language: en-US
 LazyData: true
