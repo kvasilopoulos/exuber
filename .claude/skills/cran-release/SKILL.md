@@ -35,29 +35,27 @@ acceptance `usethis::use_github_release()`, `use_dev_version(push = TRUE)`,
 and the website/CHANGELOG follow-ups the repo checklist lists.
 
 **Monitoring by email.** win-builder, macbuilder and CRAN only report by
-mail, to the `cre` address in `DESCRIPTION` — **`k.vasilopoulo@gmail.com`,
-the release mailbox**. Read it through the local MCP server
-`gmail-maintainer`: `mcp__gmail-maintainer__search_emails` (`query`,
-`maxResults`) → `mcp__gmail-maintainer__read_email` (`messageId`). If those
-tools are absent the server isn't authorized yet: it is registered in
-user scope as `node .../@gongrzhe/server-gmail-autoauth-mcp/dist/index.js`
-(global npm install, plus `uuid` which the package forgets to declare) and
-needs `C:\Users\User\.gmail-mcp\gcp-oauth.keys.json` (Google Cloud
-Desktop-app OAuth client) followed by `gmail-mcp auth` in a browser session
-signed in as the maintainer. Tell the user, and ask them to paste the mail
-meanwhile. The claude.ai Gmail connector (`mcp__claude_ai_Gmail__*`) is
-`kostasvasilo91@gmail.com`, the personal account — not used for releases.
+mail, to the `cre` address in `DESCRIPTION` — `k.vasilopoulo@gmail.com`,
+which is the account behind the claude.ai Gmail connector. Use
+`mcp__claude_ai_Gmail__search_threads` (`query`, Gmail syntax), then
+`mcp__claude_ai_Gmail__get_thread` with `messageFormat: PLAIN_TEXT`. Before
+trusting a hit, check its `toRecipients` is the `cre` address (if the
+connector is ever re-pointed at another account, say so and ask the user
+to paste the mail). Sender/subject shapes as actually received:
 
-win-builder mails link to a results page — fetch its `00check.log` with
-WebFetch. Queries (`PKG` = package name):
+| Stage | From | Subject |
+|---|---|---|
+| win-builder result (one mail per R version, ~15–20 min after upload) | `ligges@statistik.tu-dortmund.de` | `winbuilder: Package PKG_X.Y.Z.tar.gz has been checked and built` — body has `Status: OK` / `Status: 1 ERROR`, the R version, and a results URL; fetch `<url>/00check.log` with curl/WebFetch. Several uploads share one thread — match by R version and time, not by thread |
+| submission confirmation link | `cransubmit@r-project.org` | `CRAN Submission of PKG X.Y.Z - Confirmation Link` (human clicks it — gate 3) |
+| submission receipt | `cransubmit@xmbombadil.wu.ac.at` (to cran-submissions, maintainer CC'd) | `CRAN Submission PKG X.Y.Z` |
+| pretest verdict | `ligges@statistik.tu-dortmund.de` | `[CRAN-pretest-publish] CRAN Submission PKG X.Y.Z` ("on its way to CRAN") or `[CRAN-pretest-archived] …` (rejected, log in body) or `[CRAN-pretest-inspect] …` (human review) |
+| reviewer comments / on CRAN | a CRAN team member / `CRAN-submissions@R-project.org` | `CRAN Submission PKG X.Y.Z` thread / `CRAN package PKG X.Y.Z published` |
+| post-publication problems | `CRAN@R-project.org` / a CRAN team member | `CRAN package PKG` … "check problems", "will be archived", "please correct before <date>" |
 
 ```
-# win-builder (~20-60 min after upload) and macbuilder
-PKG ("win-builder" OR winbuilder OR "has been built" OR "mac.r-project.org") newer_than:2d
-# CRAN pipeline: confirmation link → pretest result → reviewer comments → "on its way" → on CRAN
-PKG (from:r-project.org OR "CRAN submission" OR "CRAN package" OR pretest) newer_than:14d
-# post-publication check failures ("Dear maintainer, ... please correct before ...")
-PKG from:r-project.org (subject:"CRAN package" OR "check problems" OR "will be archived") newer_than:30d
+in:anywhere PKG (winbuilder OR "win-builder" OR from:statistik.tu-dortmund.de) newer_than:2d
+PKG (from:cransubmit OR from:r-project.org OR subject:"CRAN Submission" OR subject:pretest) newer_than:14d
+PKG (from:r-project.org OR subject:"CRAN package") ("check problems" OR archived OR "please correct") newer_than:30d
 ```
 
 Cadence: win-builder every 15 min until the mail lands (two mails if both
