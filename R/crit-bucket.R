@@ -55,9 +55,18 @@ parse_crit_bin <- function(path) {
 #' later may well succeed.
 #' @keywords internal
 fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
+  # Parsed once per session: summary()/datestamp()/autoplot() each call
+  # retrieve_crit() and would otherwise re-read and xz-decompress the file.
+  key <- sprintf("lag%d-n%d", lag, n)
+  if (!is.null(.pkgenv$crit[[key]])) return(.pkgenv$crit[[key]])
   cache_path <- crit_cache_path(n, lag)
   if (file.exists(cache_path)) {
-    return(tryCatch(parse_crit_bin(cache_path), error = function(e) NULL))
+    cv <- suppressWarnings(tryCatch(parse_crit_bin(cache_path), error = function(e) NULL))
+    if (!is.null(cv)) {
+      .pkgenv$crit[[key]] <- cv
+      return(cv)
+    }
+    unlink(cache_path) # corrupt/truncated download: refetch instead of "not simulated"
   }
   # download.file() surfaces an HTTP 404 as a warning before its error, so
   # the same handler serves both conditions.
@@ -76,6 +85,7 @@ fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
       utils::download.file(url_, dest, mode = "wb", quiet = TRUE)
       cv <- parse_crit_bin(dest)
       file.copy(dest, cache_path, overwrite = TRUE)
+      .pkgenv$crit[[key]] <- cv
       cv
     },
     error = on_fail,
