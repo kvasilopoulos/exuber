@@ -285,13 +285,7 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, sig_lvl = 95) {
   x <- parse_data(data)
   n <- nrow(x)
 
-  T_star <- if (r_star < 1) round(r_star * n) else as.integer(r_star)
-  if (T_star < 3L) {
-    stop_glue("Training window ('r_star') is too short.")
-  }
-  if (T_star >= n) {
-    stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
-  }
+  T_star <- training_window(r_star, n)
   T_m <- n - T_star
   w <- bd_cusum_weights(T_m, c_bar)
 

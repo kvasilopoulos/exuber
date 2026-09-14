@@ -69,6 +69,20 @@ assert_sig_lvl <- function(sig_lvl, choices = c(90, 95, 99)) {
   invisible(sig_lvl)
 }
 
+# Shared by every monitor: `r_star` is a fraction of the sample (< 1) or an
+# observation count (>= 1); returns the training-window length T*, which
+# must be at least `min_len` and leave at least one monitoring observation.
+training_window <- function(r_star, n, min_len = 3L) {
+  T_star <- if (r_star < 1) round(r_star * n) else as.integer(r_star)
+  if (T_star < min_len) {
+    stop_glue("Training window ('r_star') is too short: needs at least {min_len} observations.")
+  }
+  if (T_star >= n) {
+    stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
+  }
+  T_star
+}
+
 assert_between <- function(x, arg1, arg2) {
   xname <- enexpr(x)
   if (!dplyr::between(x, arg1, arg2)) {
