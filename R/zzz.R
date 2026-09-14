@@ -22,6 +22,10 @@
   invisible(NULL)
 }
 
+.onUnload <- function(libpath) {
+  if (!is.null(.pkgenv$cluster)) parallel::stopCluster(.pkgenv$cluster)
+}
+
 # Set Global Variables to avoid NOTES in cmdchecks
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(

@@ -91,10 +91,24 @@ show_pb <- function() {
 }
 
 #' @importFrom progressr with_progress handler_txtprogressbar
+# One PSOCK cluster per session, started on the first parallel call and
+# reused: future::multisession started fresh workers on every call (and the
+# plan reset on exit stopped them), a few seconds of overhead that dominated
+# every small job. Stopped in .onUnload().
+# ponytail: no liveness check; if a worker dies, restart the session.
+par_cluster <- function(n) {
+  cl <- .pkgenv$cluster
+  if (is.null(cl) || length(cl) != n) {
+    if (!is.null(cl)) parallel::stopCluster(cl)
+    cl <- .pkgenv$cluster <- parallel::makeCluster(n)
+  }
+  cl
+}
+
 with_backend <- function(expr) {
   do_par <- getOption("exuber.parallel")
   oplan <- if (do_par) {
-    future::plan(future::multisession, workers = getOption("exuber.ncores"))
+    future::plan(future::cluster, workers = par_cluster(getOption("exuber.ncores")))
   } else {
     future::plan(future::sequential)
   }
