@@ -80,6 +80,15 @@ before pushing rather than inventing new lint/CI config.
 
 ## Release process (CRAN)
 
+`cran-release-checklist.md` (dev-only, `.Rbuildignore`d) is the
+consolidated usethis / r-pkgs.org / CRAN-policy checklist with the
+per-item status of the last release pass — update it in place rather than
+re-deriving it. Two local quirks it records: `devtools::check()` on this
+Windows machine always leaves an empty `'NULL'` dir behind (a local-only
+"non-standard things in the check directory" NOTE), and a session-long
+worker cluster in examples trips `R CMD check`'s "connections left open",
+which is why `exuber.parallel` defaults to `interactive()`.
+
 1. Land NEWS.md entries under the `# exuber (development version)` heading
    as features/fixes ship (already the ongoing convention, see the file).
 2. Bump version: `usethis::use_version()` (or hand-edit `DESCRIPTION`'s
