@@ -1,4 +1,3 @@
-# TODO revisit this function if you have time
 
 #' Calculate p-values
 #'

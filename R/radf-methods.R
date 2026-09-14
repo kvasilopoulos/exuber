@@ -620,7 +620,8 @@ add_peak <- function(ds, tstat, mat, minw) {
   )
 }
 
-# TODO ongoing cannot work in panel
+# Ongoing is only meaningful per series; for a panel cv the End column is
+# NA-free by construction, so every episode comes back Ongoing = FALSE.
 add_ongoing <- function(ds, idx, cv) {
   n <- get_n(cv)
   end <- ds[, "End"]

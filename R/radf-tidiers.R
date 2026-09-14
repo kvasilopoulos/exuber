@@ -375,22 +375,12 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
   assert_match(x, y)
 
   if (is_sb(y)) {
-    if (utils::packageVersion("dplyr") >= "1.1.0.9000") {
-      tbl <- inner_join(
-        tidy(x, format = "long", panel = TRUE),
-        tidy(y, format = "long"),
-        by = c("id", "stat"),
-        relationship = "many-to-many"
-      )
-    } else {
-      # TODO: Remove this branch when dplyr 1.1.1 is on CRAN
-      tbl <- inner_join(
-        tidy(x, format = "long", panel = TRUE),
-        tidy(y, format = "long"),
-        by = c("id", "stat"),
-        multiple = "all"
-      )
-    }
+    tbl <- inner_join(
+      tidy(x, format = "long", panel = TRUE),
+      tidy(y, format = "long"),
+      by = c("id", "stat"),
+      relationship = "many-to-many"
+    )
 
     tbl <- arrange(tbl, stat)
     return(tbl)
@@ -398,22 +388,12 @@ tidy_join.radf_obj <- function(x, y = NULL, ...) {
 
   join_by <- if (!is_mc(y)) c("id") else NULL
 
-  if (utils::packageVersion("dplyr") >= "1.1.0.9000") {
-    tbl <- full_join(
-      tidy(x, format = "long"),
-      tidy(y, format = "long"),
-      by = c("stat", join_by),
-      relationship = "many-to-many"
-    )
-  } else {
-    # TODO: Remove this branch when dplyr 1.1.1 is on CRAN
-    tbl <- full_join(
-      tidy(x, format = "long"),
-      tidy(y, format = "long"),
-      by = c("stat", join_by),
-      multiple = "all"
-    )
-  }
+  tbl <- full_join(
+    tidy(x, format = "long"),
+    tidy(y, format = "long"),
+    by = c("stat", join_by),
+    relationship = "many-to-many"
+  )
 
   tbl %>%
     mutate(
@@ -709,24 +689,13 @@ augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
   # key_if_date <- if (is_idx_date) "key"  else NULL
   id_lvls <- if (is_panel) "panel" else series_names(x)
 
-  if (utils::packageVersion("dplyr") >= "1.1.0.9000") {
-    tbl <- full_join(
-      augment(x, "long", panel = is_panel, trunc = trunc),
-      augment(y, "long", trunc = trunc) %>%
-        select_at(vars(-all_of(idx_if_date))),
-      by = c("key", "stat", join_by),
-      relationship = "many-to-many"
-    )
-  } else {
-    # TODO: Remove this branch when dplyr 1.1.1 is on CRAN
-    tbl <- full_join(
-      augment(x, "long", panel = is_panel, trunc = trunc),
-      augment(y, "long", trunc = trunc) %>%
-        select_at(vars(-all_of(idx_if_date))),
-      by = c("key", "stat", join_by),
-      multiple = "all"
-    )
-  }
+  tbl <- full_join(
+    augment(x, "long", panel = is_panel, trunc = trunc),
+    augment(y, "long", trunc = trunc) %>%
+      select_at(vars(-all_of(idx_if_date))),
+    by = c("key", "stat", join_by),
+    relationship = "many-to-many"
+  )
 
   tbl %>%
     # drop_na(index) %>%
