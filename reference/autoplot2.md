@@ -20,6 +20,11 @@ autoplot2(object, ...)
 
   other arguments passed to specific methods
 
+## Value
+
+A [`ggplot`](https://ggplot2.tidyverse.org/reference/ggplot.html)
+object, produced by the method.
+
 ## See also
 
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)

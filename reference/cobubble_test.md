@@ -14,9 +14,9 @@ cobubble_test(
   y,
   x,
   lag = NULL,
-  lags = -6:6,
+  lag_grid = -6:6,
   nboot = 499L,
-  level = 0.05,
+  sig_lvl = 95,
   seed = NULL
 )
 ```
@@ -33,10 +33,10 @@ cobubble_test(
 - lag:
 
   The lead/lag `i` in `x_{t-lag}`. If `NULL` (default), it is estimated
-  from `lags` by minimizing the residual variance (Section VI's
+  from `lag_grid` by minimizing the residual variance (Section VI's
   `i_hat`).
 
-- lags:
+- lag_grid:
 
   Candidate lag values searched when `lag = NULL`. Default `-6:6`, as in
   the paper's own simulation design.
@@ -45,9 +45,11 @@ cobubble_test(
 
   Number of wild bootstrap replications.
 
-- level:
+- sig_lvl:
 
-  Nominal test size (upper-tail rejection region).
+  Significance level, on the same 0-100 scale as
+  [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)'s
+  `sig_lvl` (default `95`, i.e. a 5\\ upper-tail rejection region).
 
 - seed:
 
@@ -55,10 +57,10 @@ cobubble_test(
 
 ## Value
 
-An object of class `cobubble_test`: a list with the observed statistic
-`S`, the (given or estimated) `lag`, the bootstrap critical value `cv`
-at `level`, the bootstrap p-value `p_value`, and `reject` (`TRUE` if `S`
-exceeds `cv`, i.e. co-explosivity is rejected).
+An object of class `cobubble_test_obj`: a list with the observed
+statistic `S`, the (given or estimated) `lag`, the bootstrap critical
+value `cv` at `sig_lvl`, the bootstrap p-value `p_value`, and `reject`
+(`TRUE` if `S` exceeds `cv`, i.e. co-explosivity is rejected).
 
 ## Details
 
@@ -80,8 +82,11 @@ internally on every call (Theorem 2) – there is no separate/reusable cv
 function for this test.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/critical-value/p-value summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own statistic/critical-value/p-value summary
+– see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -94,6 +99,12 @@ for the full picture of which functions do and don't fit that pipeline.
 Evripidou, A. C., Harvey, D. I., Leybourne, S. J., & Sollis, R. (2022).
 Testing for co-explosive behaviour in financial time series. Oxford
 Bulletin of Economics and Statistics, 84(3), 624-650.
+
+## See also
+
+Other multivariate:
+[`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md),
+[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
 
 ## Examples
 

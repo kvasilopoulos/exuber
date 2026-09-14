@@ -122,8 +122,8 @@ and \\X\_{\tau_f} = X\_{\tau_e} + X'\\ with \\X' = O_p(1)\\, \\\tau_e =
 \[T r_e\]\\ dates the origination of the bubble, and \\\tau_f = \[T
 r_f\]\\ dates the collapse of the bubble. During the pre- and post-
 bubble periods, \\\[1, \tau_e)\\, \\X_t\\ is a pure random walk process.
-During the bubble expansion period \\\tau_e, \tau_f\]\\ becomes a mildly
-explosive process with expansion rate given by the autoregressive
+During the bubble expansion period \\\[\tau_e, \tau_f\]\\ becomes a
+mildly explosive process with expansion rate given by the autoregressive
 coefficient \\\delta_T\\; and, finally during the post-bubble period,
 \\(\tau_f, \tau\]\\ \\X_t\\ reverts to a martingale.
 
@@ -134,6 +134,7 @@ For further details see Phillips et al. (2015) p. 1054.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 5 6(4), 1043-1078.
+[doi:10.1111/iere.12132](https://doi.org/10.1111/iere.12132)
 
 ## See also
 

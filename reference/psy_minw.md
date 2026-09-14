@@ -28,12 +28,18 @@ psy_ds(n, rule = 1, delta = 1)
 
   Frequency-dependent parameter (default; delta = 1). See details.
 
+## Value
+
+`psy_minw`: a single integer, the minimum window length. `psy_ds`: a
+single integer, the minimum episode duration in observations.
+
 ## Details
 
 For the minimum duration period, `psy_ds` allows the user to choose from
 two rules:
 
-\$\$rule_1 = \delta \log(n) \quad\\ \quad rule_2 = \delta \log(n)/n\$\$
+\$\$\text{rule}\_1 = \delta \log(n) \quad \text{and} \quad
+\text{rule}\_2 = \delta \log(n)/n\$\$
 
 `delta ` depends on the frequency of the data and the minimal duration
 condition.
@@ -43,6 +49,7 @@ condition.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 56(4), 1043-1078.
+[doi:10.1111/iere.12132](https://doi.org/10.1111/iere.12132)
 
 ## Examples
 

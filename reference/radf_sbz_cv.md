@@ -42,7 +42,7 @@ radf_sbz_cv(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nboot:
 
@@ -94,3 +94,46 @@ for the bundled union-of-rejections test against the classic `supDF`
 statistic (not obtainable from this function and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
 independently – see that function's Details for why).
+
+Other critical values:
+[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md),
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+[`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md),
+[`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md),
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md),
+[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
+
+## Examples
+
+``` r
+# \donttest{
+y <- sim_psy1(150, seed = 1)
+res <- radf_sbz(y, minw = 20)
+cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
+summary(res, cv = cv)
+#> 
+#> ── Summary (minw = 20, lag = 0) ────────── Wild Bootstrap (SBZ) (nboot = 200) ──
+#> 
+#> series1 :
+#> # A tibble: 3 × 5
+#>   stat  tstat  `90`  `95`  `99`
+#>   <fct> <dbl> <dbl> <dbl> <dbl>
+#> 1 adf   0.103  1.14  1.56  1.81
+#> 2 sadf  3.95   2.13  2.48  3.24
+#> 3 gsadf 4.49   2.60  2.92  3.50
+#> 
+datestamp(res, cv = cv)
+#> 
+#> ── Datestamp (min_duration = 0) ──────────────────────── Wild Bootstrap (SBZ) ──
+#> 
+#> series1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    64   82 102       38 positive   FALSE
+#> 2   109  111 113        4 positive   FALSE
+#> 3   114  114 115        1 positive   FALSE
+#> 
+# }
+```

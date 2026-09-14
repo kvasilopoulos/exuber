@@ -79,9 +79,11 @@ there is no critical value at all for this function – don't look for
 one.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own coefficient-path summary (it performs no formal
-inference at all) – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own coefficient-path summary (it performs no
+formal inference at all) – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -100,6 +102,10 @@ centres. New Zealand Economic Papers, 50(1), 88-113.
 [`cobubble_test`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)
 for a different (symmetric, hypothesis-testing) bivariate bubble
 relationship.
+
+Other multivariate:
+[`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md),
+[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
 
 ## Examples
 

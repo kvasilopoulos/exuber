@@ -23,10 +23,10 @@ Wang's explosive-root CLT, not the classical stationary one).
 rootstamp(object, ...)
 
 # Default S3 method
-rootstamp(object, level = 0.95, type = c("normal", "cauchy"), ...)
+rootstamp(object, sig_lvl = 95, type = c("normal", "cauchy"), ...)
 
 # S3 method for class 'radf_obj'
-rootstamp(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
+rootstamp(object, ds, sig_lvl = 95, type = c("normal", "cauchy"), ...)
 ```
 
 ## Arguments
@@ -41,9 +41,10 @@ rootstamp(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
 
   further arguments passed to methods.
 
-- level:
+- sig_lvl:
 
-  Confidence level (default 0.95).
+  Confidence level of the interval on the package-wide 0-100 scale
+  (default `95`); any value in `[50, 100)`.
 
 - type:
 
@@ -124,6 +125,15 @@ The Econometrics Journal, 22(3), 279-303.
 Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for moderate
 deviations from a unit root. Journal of Econometrics, 136(1), 115-130.
 
+## See also
+
+Other dating:
+[`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md),
+[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
+[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
+[`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md),
+[`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
+
 ## Examples
 
 ``` r
@@ -139,7 +149,7 @@ ep <- y[ds[["series1"]]$Start[1]:ds[["series1"]]$End[1]]
 fit <- rootstamp(ep) # recovers the DGP's explosive AR coefficient
 fit
 #> 
-#> ── rootstamp (n = 22, level = 95%, type = normal) ──────────────────────────────
+#> ── rootstamp (n = 22, sig_lvl = 95%, type = normal) ────────────────────────────
 #> 
 #>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
 #>   1.059  0.005279   11.17      1.049      1.069           12.1     10.34
@@ -148,7 +158,7 @@ fit
 #> 
 rootstamp(ep, type = "cauchy")
 #> 
-#> ── rootstamp (n = 22, level = 95%, type = cauchy) ──────────────────────────────
+#> ── rootstamp (n = 22, sig_lvl = 95%, type = cauchy) ────────────────────────────
 #> 
 #>     rho        se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
 #>   1.059  0.005279   11.17     0.6216      1.496           12.1      1.72
@@ -165,7 +175,7 @@ autoplot(fit)
 res_all <- rootstamp(r, ds)
 res_all
 #> 
-#> ── rootstamp (level = 95%, type = normal) ──────────────────────────────────────
+#> ── rootstamp (sig_lvl = 95%, type = normal) ────────────────────────────────────
 #> 
 #> series1 :
 #>   Start End   rho rho_lower rho_upper doubling_time doubling_time_lower

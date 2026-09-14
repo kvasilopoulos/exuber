@@ -10,7 +10,7 @@ plain ADF regression's innovations.
 ## Usage
 
 ``` r
-ssu_test(data, minw = NULL, level = 0.95)
+ssu_test(data, minw = NULL, sig_lvl = 95)
 ```
 
 ## Arguments
@@ -30,12 +30,12 @@ ssu_test(data, minw = NULL, level = 0.95)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
-- level:
+- sig_lvl:
 
-  Nominal confidence level, one of `0.90`, `0.95`, `0.99` (the levels
-  Kurozumi & Nishi's Table I tabulates).
+  Significance level on the package-wide 0-100 scale, one of `90`, `95`,
+  `99` (the levels Kurozumi & Nishi's Table I tabulates).
 
 ## Value
 
@@ -66,8 +66,10 @@ Nishi (2025)'s Table I, via the internal `ssu_q()` helper) – no
 simulation needed.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/critical-value summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own statistic/critical-value summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -87,6 +89,14 @@ varying explosive coefficient. Journal of Time Series Analysis, 46(5),
 the deterministic-coefficient recursive ADF-family alternative this
 complements.
 
+Other volatility-robust tests:
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
+
 ## Examples
 
 ``` r
@@ -95,10 +105,10 @@ complements.
 # the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
 y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
   coef_noise = rnorm(149), coef_a = 4)
-res <- ssu_test(y, level = 0.95)
+res <- ssu_test(y, sig_lvl = 95)
 print(res)
 #> 
-#> ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────
+#> ── ssu_test (n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ────────────────────
 #> 
 #>    series   sadf  detected
 #>   series1  14.53      TRUE

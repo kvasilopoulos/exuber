@@ -23,6 +23,13 @@ ps_tb(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2)
 
   The size to be controlled.
 
+## Value
+
+A single integer, the training-window length in observations, suitable
+for
+[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)'s
+`r_star`.
+
 ## References
 
 Phillips, P. C., & Shi, S. (2020). Real time monitoring of asset
@@ -44,7 +51,7 @@ tb
 # Use it directly as monitor()'s training window
 monitor(sim_data, r_star = tb, boundary = "kurozumi")
 #> 
-#> ── monitor (T* = 42 / 100, minw = 19, level = 95%, boundary = kurozumi) ────────
+#> ── monitor (T* = 42 / 100, minw = 19, sig_lvl = 95%, boundary = kurozumi) ──────
 #> 
 #>   series  boundary  alarm  alarm_date
 #>     psy1     1.038     50          50

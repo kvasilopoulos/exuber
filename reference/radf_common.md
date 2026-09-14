@@ -33,7 +33,7 @@ radf_common(data, minw = NULL, r = 1)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - r:
 
@@ -97,6 +97,10 @@ Econometrics, 21(4), 989-1063.
 the underlying (unmodified) test, and
 [`radf_common_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md)
 for its (panel-width-specific) critical values.
+
+Other multivariate:
+[`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md),
+[`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
 
 ## Examples
 

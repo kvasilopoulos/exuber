@@ -18,7 +18,7 @@ monitor_quantile(
   tau = 0.5,
   minw = NULL,
   nrep = 500L,
-  level = 95,
+  sig_lvl = 95,
   seed = NULL
 )
 ```
@@ -48,13 +48,13 @@ monitor_quantile(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nrep:
 
   Number of Monte Carlo replications for the boundary.
 
-- level:
+- sig_lvl:
 
   Significance level, one of `90`, `95`, `99`.
 
@@ -104,10 +104,16 @@ reusable/exported cv counterpart for this function (a known,
 separately-tracked gap, not addressed here).
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/boundary/delta summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own statistic/boundary/delta summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
+
+## Status
+
+**\[experimental\]**
 
 ## References
 
@@ -122,6 +128,11 @@ for the static, full-sample version of this test.
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 for the OLS-based monitoring alternative.
 
+Other monitoring:
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
+[`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
+
 ## Examples
 
 ``` r
@@ -132,7 +143,7 @@ y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
 res <- monitor_quantile(y, tau = 0.5, nrep = 100, seed = 1)
 print(res)
 #> 
-#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────
+#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ─────────────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1  0.623      1.53    164         164

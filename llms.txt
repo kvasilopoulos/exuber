@@ -245,13 +245,6 @@ datestamp(rsim_data)
 
 autoplot(rsim_data)
 #> Using precomputed critical values for `cv`.
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> ℹ The deprecated feature was likely used in the exuber package.
-#>   Please report the issue at <https://github.com/kvasilopoulos/exuber/issues>.
-#> This warning is displayed once per session.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
 ```
 
 ![](reference/figures/usage-1.png)

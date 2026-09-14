@@ -38,7 +38,7 @@ radf_common_cv(n, N, minw = NULL, nrep = 1000L, seed = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nrep:
 
@@ -79,6 +79,17 @@ Econometrics, 21(4), 989-1063.
 
 [`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md),
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+
+Other critical values:
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+[`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md),
+[`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md),
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md),
+[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
 
 ## Examples
 

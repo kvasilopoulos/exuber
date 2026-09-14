@@ -181,13 +181,6 @@ series that reject the null hypothesis at 5% significance level.
 ``` r
 
 autoplot(est_stocks, cv = cv_stocks)
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> ℹ The deprecated feature was likely used in the exuber package.
-#>   Please report the issue at <https://github.com/kvasilopoulos/exuber/issues>.
-#> This warning is displayed once per session.
-#> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-#> generated.
 ```
 
 ![](exuber_files/figure-html/plot-radf-1.png)

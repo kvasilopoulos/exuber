@@ -175,13 +175,13 @@ library(ggplot2)
 # Change (overwrite) color, size or linetype
 autoplot(rsim_data) +
   scale_color_manual(values = c("black", "black")) +
-  scale_size_manual(values = c(0.9, 1)) +
+  scale_linewidth_manual(values = c(0.9, 1)) +
   scale_linetype_manual(values = c("solid", "solid"))
 #> Using precomputed critical values for `cv`.
 #> Scale for colour is already present.
 #> Adding another scale for colour, which will replace the existing scale.
-#> Scale for size is already present.
-#> Adding another scale for size, which will replace the existing scale.
+#> Scale for linewidth is already present.
+#> Adding another scale for linewidth, which will replace the existing scale.
 #> Scale for linetype is already present.
 #> Adding another scale for linetype, which will replace the existing scale.
 

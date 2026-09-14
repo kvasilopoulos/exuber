@@ -69,19 +69,19 @@ monitor_cusum(y, r_star = 0.5)
 #>   series1    161         161
 monitor_quantile(y, tau = 0.5, nrep = 200, seed = 1)
 #> 
-#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────
+#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ─────────────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1   0.64     1.867    161         161
 monitor(y, r_star = 0.5, nboot = 200, seed = 1)
 #> 
-#> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────
+#> ── monitor (T* = 100 / 200, minw = 27, sig_lvl = 95%, boundary = bootstrap) ────
 #> 
 #>    series  boundary  alarm  alarm_date
 #>   series1      2.17    156         156
 monitor(y, r_star = 0.5, boundary = "kurozumi")
 #> 
-#> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ───────
+#> ── monitor (T* = 100 / 200, minw = 27, sig_lvl = 95%, boundary = kurozumi) ─────
 #> 
 #>    series  boundary  alarm  alarm_date
 #>   series1     1.038    159         159
@@ -98,13 +98,13 @@ watching for a first crossing:
 
 lbi_test(y)
 #> 
-#> ── lbi_test (n = 200, level = 95%) ─────────────────────────────────────────────
+#> ── lbi_test (n = 200, sig_lvl = 95%) ───────────────────────────────────────────
 #> 
 #>    series   stat   crit  detected
 #>   series1  6.502  1.645      TRUE
 quantile_test(y, tau = 0.5)
 #> 
-#> ── quantile_test (n = 200, level = 95%) ────────────────────────────────────────
+#> ── quantile_test (n = 200, sig_lvl = 95%) ──────────────────────────────────────
 #> 
 #>    series  tau  tstat    crit  delta  detected
 #>   series1  0.5  20.25  0.5041   0.64      TRUE

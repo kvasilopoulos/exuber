@@ -33,7 +33,15 @@ radf_sign_dm(data, minw = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
+
+## Value
+
+An object of class `radf_sign_dm_obj`/`radf_obj`: the same
+`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md); pair
+with
+[`radf_sign_dm_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md).
 
 ## Details
 
@@ -92,6 +100,14 @@ level shifts. Oxford Bulletin of Economics and Statistics, 87(5),
 for critical values, and
 [`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
 for the non-demeaned sign-based analogue.
+
+Other volatility-robust tests:
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+[`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
 
 ## Examples
 

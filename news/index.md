@@ -188,6 +188,59 @@ what was checked and how.
   heteroskedasticity invariance, not a validation concern) — see
   [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
+#### API consistency (2026-09-14 review)
+
+- One significance-level convention across the whole package: every
+  function that took a `level` argument now takes `sig_lvl` on the 0-100
+  scale already used by
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  (`sig_lvl = 95` = a 5% test / 95% confidence). Affected (all
+  unreleased, so no shims):
+  [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md),
+  [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
+  (`0.95` -\> `95`, `0.975` -\> `97.5`, …),
+  [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
+  [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
+  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+  [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+  (was a `0.95`-style confidence level),
+  [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)/[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  (already 0-100, renamed only), and
+  [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)
+  (was a *size*, `level = 0.05`; now `sig_lvl = 95`). A shared
+  `assert_sig_lvl()` makes `sig_lvl = 0.95` an immediate error
+  everywhere rather than a silently wrong quantile.
+- `monitor(adflag = )` -\> `lag`, matching
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md);
+  `monitor_cusum(N = )` -\> `h`, matching every other kernel-bandwidth
+  argument; `cobubble_test(lags = )` -\> `lag_grid`, so `lag`/`lags` can
+  no longer be confused (mirrors
+  [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)’s
+  `tau`/`tau_grid`).
+- [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)
+  and
+  [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+  now return `cobubble_test_obj`/ `radf_sbz_union_obj`, the `_obj`
+  suffix every other standalone class already carried.
+- [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md)
+  and
+  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
+  gained their own [`print()`](https://rdrr.io/r/base/print.html)
+  methods (the former fell through to `print.data.frame`, hiding its
+  attributes; the latter printed as a plain `radf`).
+- `scale_exuber_manual(size_values = )` is deprecated in favour of
+  `linewidth_values` (ggplot2 \>= 3.4.0’s `linewidth` aesthetic replaces
+  `size` for lines; the deprecation warning ggplot2 emitted from every
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  is gone). `autoplot(include_negative = )`, deprecated since 1.0.0, is
+  now actually forwarded to `nonrejected` instead of ignored.
+- [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)/[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)/[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  carry the same experimental badge as the other new methods; the “does
+  not plug into `autoplot`” note on every standalone function was wrong
+  (each has had its own
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  method) and now says so.
+
 #### Other
 
 - [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
@@ -276,6 +329,10 @@ what was checked and how.
   [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
   feeds it – because the names leaked into the internal NA-edge
   bookkeeping.
+
+- The default-`cv` range check said the store covers `n <= 5000`; it
+  covers `n <= 4000` and `lag <= 4`, and now says so before trying the
+  network.
 
 - [`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
   `seed` argument now also covers a generator passed lazily to

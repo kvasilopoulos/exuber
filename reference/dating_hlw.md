@@ -98,9 +98,11 @@ value (`cv`/`nboot`/`seed` below), but only to locate the preliminary
 episode windows, not for the dating step itself.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own dating table (model, origination, collapse, recovery) –
-see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own dating table (model, origination,
+collapse, recovery) – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -120,6 +122,13 @@ Date-stamping multiple bubble regimes. Journal of Empirical Finance, 58,
 for the single-bubble fitting this wraps, and
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for PSY's own multi-bubble threshold-crossing dating.
+
+Other dating:
+[`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md),
+[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
+[`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md),
+[`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
 
 ## Examples
 

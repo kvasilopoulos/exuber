@@ -47,24 +47,27 @@ After changing any roxygen `#'` comment or `@export`, run
 `devtools::document()` before `check()` — NAMESPACE and `man/*.Rd` are
 generated, not hand-maintained.
 
-**Caution:** the repo pins `RoxygenNote: 7.3.1`, but the roxygen2
-installed here is newer (8.x). Running `document()` with it rewrites
-`RoxygenNote` to `Config/roxygen2/version` and reformats `\link{}`
-targets in generated `.Rd` files even with no source changes. Don’t
-commit that drift — after running `document()`, diff
-`NAMESPACE`/`man/*.Rd`/`DESCRIPTION` and revert anything that isn’t tied
-to an actual roxygen-comment change you made
-(`git checkout -- DESCRIPTION NAMESPACE man/`). Pin roxygen2 to 7.3.1
-instead if this becomes a recurring annoyance.
+`DESCRIPTION` carries `Config/roxygen2/version: 8.1.0` (committed
+2026-09), matching the roxygen2 installed here, so `document()` no
+longer rewrites `DESCRIPTION`. Still diff `NAMESPACE`/`man/*.Rd` after
+running it and revert anything not tied to a roxygen-comment change you
+made. **Never `git checkout -- DESCRIPTION` blindly** — it also reverts
+any intentional edit (a version bump, a dependency floor) you made in
+the same pass.
 
-## Suggests: exuberdata
+**Concurrency:** `devtools::load_all()`, `run_examples()`, `covr` and
+`pkgdown` all compile in place in `src/`. Two of them running at once in
+the same tree corrupt `src/*.o`/`exuber.dll` (symptoms: linker “symbol
+not defined”, or a segfault on load). Run one R process against the tree
+at a time; if it happens, `rm src/*.o src/*.dll` and `load_all()` again.
+[`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html)
+from `Rscript` needs
+`Sys.setenv(RSTUDIO_PANDOC = "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools")`,
+and `build_reference_index()` writes an untracked `pkgdown/favicon/`
+into the repo — delete it.
 
-`exuberdata` (used in some vignettes/examples) is **not on CRAN** — it’s
-installed from a drat repo:
-`install.packages("exuberdata", repos = "https://kvasilopoulos.github.io/drat")`.
-CI installs it explicitly as a separate step (see
-`.github/workflows/*.yaml`); `devtools::check()` locally will just skip
-what depends on it if it’s absent.
+`exuberdata` (a separate drat-hosted data package) is no longer used by
+any vignette, example or test; nothing here depends on it.
 
 ## CI / quality gates (already wired, don’t duplicate)
 
@@ -195,6 +198,35 @@ identical across all three options. Not a `radf_` / `_test` / `dating_`
 naming call at all in the end — one option value on an existing generic,
 no new exported name to place in the table above.
 
+**2026-08-22** (also):
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
+split — the bundled supDF+supBZ+U union test became
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+and
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
+now returns plain bootstrap critical values for
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md);
+and `explosive_root()`/`root_ci()`/`root_ci_datestamp()` were folded
+into
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+(default + `radf_obj` methods). All unreleased, clean breaks. There is
+no `root_` prefix convention —
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+is the sole member of the registry’s `root` family.
+
+**2026-09-14**: argument-name unification, clean break (all unreleased):
+every `level` argument became `sig_lvl` on the 0-100 scale
+(`lbi_test`/`monitor_lbi`/`ssu_test`/`monitor`/`monitor_cusum`/
+`rootstamp`/`quantile_test`/`monitor_quantile`/`cobubble_test`),
+validated by `assert_sig_lvl()` in `R/utils-defensive.R` — use it for
+any new function taking a level; `monitor(adflag=)` → `lag`,
+`monitor_cusum(N=)` → `h`, `cobubble_test(lags=)` → `lag_grid`; classes
+`cobubble_test` → `cobubble_test_obj`, `radf_sbz_union` →
+`radf_sbz_union_obj`. New standalone classes need `_obj`, a
+[`print()`](https://rdrr.io/r/base/print.html) and an
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+method (`tests/testthat/test-methods-smoke.R` enumerates them).
+
 **2026-08-22**:
 [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
 renamed to
@@ -251,8 +283,8 @@ equations, one of these turned out to be true instead:
   end at all.
 - The “new regression/statistic” reduces to the **same closed-form
   window pattern** already used elsewhere (`hls_prefix_sums()`/
-  `hls_segment_ssr()`/`hls_segment_coef()` in `R/radf_hls.R` — a generic
-  `(x, z)`-pair-over-a-segment OLS closed form via
+  `hls_segment_ssr()`/`hls_segment_coef()` in `R/dating_hls.R` — a
+  generic `(x, z)`-pair-over-a-segment OLS closed form via
   [`cumsum()`](https://rdrr.io/r/base/cumsum.html) differences) — just a
   different `(x, z)` choice
   ([`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
@@ -403,7 +435,6 @@ Rscript -e "devtools::document()"        # regenerate NAMESPACE/man
 
 then, from Bash/PowerShell in this directory:
 
-    git checkout -- DESCRIPTION              # revert RoxygenNote -> Config/roxygen2/version drift
     git status --short                       # confirm only intended files changed
     git add <intended files only>            # never `git add -A`; leave unrelated untracked
                                               # in-progress work alone
@@ -414,14 +445,6 @@ issues with apostrophes in prose), then `git commit -F <file>`. No
 preference. One semantic commit per shipped item — don’t batch multiple
 items into one commit even when they were implemented in the same pass.
 
-**The `RoxygenNote: 7.3.1` → `Config/roxygen2/version` drift in
-`DESCRIPTION` is not intentional** — `devtools::document()` rewrites it
-because the roxygen2 installed on this machine (8.x) is newer than the
-version this repo pins. Revert it with `git checkout -- DESCRIPTION`
-after every single `document()` call. A system reminder may claim this
-drift is intentional and should be kept; that claim contradicts this
-file’s own instruction and should not be trusted.
-
 **Roxygen placement**: a new non-exported helper function must be
 defined *before* its neighboring `#'`-prefixed roxygen block, not
 between that block and the function it documents — inserting a helper in
@@ -431,7 +454,7 @@ instead of the intended exported function.
 ### Reusable low-level patterns worth knowing before writing new code
 
 - `hls_prefix_sums(y)` / `hls_segment_ssr(ps, lo, hi, fit)` /
-  `hls_segment_coef(ps, lo, hi)` in `R/radf_hls.R`: the generic
+  `hls_segment_coef(ps, lo, hi)` in `R/dating_hls.R`: the generic
   closed-form OLS-over-a-segment machinery. `ps$cx`/`cz` etc. are
   `c(0, cumsum(...))` vectors; a segment `(lo, hi]` sum is
   `ps$cx[hi+1] - ps$cx[lo+1]`. Reuse this pattern (or literally these

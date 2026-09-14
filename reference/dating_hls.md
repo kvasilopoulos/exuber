@@ -62,9 +62,11 @@ This is an SSR/BIC model-selection dating procedure, not a hypothesis
 test – it needs no critical values at all.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own dating table (model, origination, collapse, recovery) –
-see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own dating table (model, origination,
+collapse, recovery) – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -84,6 +86,13 @@ Empirical Finance, 40, 121-138.
 for the cheaper sequential-splitting alternative this complements, and
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for PSY's original threshold-crossing rule.
+
+Other dating:
+[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
+[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
+[`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md),
+[`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
 
 ## Examples
 

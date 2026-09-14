@@ -44,7 +44,7 @@ radf_wb_distr(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nboot:
 
@@ -94,6 +94,7 @@ volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 56(4), 1043-1078.
+[doi:10.1111/iere.12132](https://doi.org/10.1111/iere.12132)
 
 Hafner, C. M. (2020). Testing for bubbles in cryptocurrencies with
 time-varying volatility. Journal of Financial Econometrics, 18(2),
@@ -105,6 +106,17 @@ time-varying volatility. Journal of Financial Econometrics, 18(2),
 for Monte Carlo critical values and
 [`radf_sb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md)
 for sieve bootstrap critical values.
+
+Other critical values:
+[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md),
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+[`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md),
+[`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md),
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md),
+[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
 
 ## Examples
 

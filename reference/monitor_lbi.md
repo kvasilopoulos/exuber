@@ -12,7 +12,7 @@ breached.
 ## Usage
 
 ``` r
-monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
+monitor_lbi(data, r_star = 0.5, c_bar = 0, sig_lvl = 95)
 ```
 
 ## Arguments
@@ -41,13 +41,14 @@ monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
   flat-weight "mCUSUM" variant, appropriate when a bubble is equally
   likely to start at any point in the monitoring window; the paper's own
   suggested value for a moderate power boost when a bubble partway
-  through is more plausible is `2`. Critical values (`level`) are the
+  through is more plausible is `2`. Critical values (`sig_lvl`) are the
   same for every `c_bar`.
 
-- level:
+- sig_lvl:
 
-  Nominal confidence level, one of `0.90`, `0.95`, `0.975`, `0.99`,
-  `0.995` (Breitung & Diegel's Table 1 only tabulates these).
+  Significance level on the package-wide 0-100 scale, one of `90`, `95`,
+  `97.5`, `99`, `99.5` (Breitung & Diegel's Table 1 only tabulates
+  these).
 
 ## Value
 
@@ -74,8 +75,10 @@ The critical value is a published constant boundary (Breitung & Diegel
 (2025)'s Table 1) – a table lookup, no simulation.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own boundary/alarm summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own boundary/alarm summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -97,6 +100,11 @@ for the static (known, full-sample bubble window) version.
 and
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 for structurally different monitoring detectors.
+
+Other monitoring:
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
+[`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
 
 ## Examples
 

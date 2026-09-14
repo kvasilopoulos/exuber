@@ -34,7 +34,7 @@ radf_sbz(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - kernel:
 
@@ -92,6 +92,14 @@ for critical values, and
 for the paper's own headline bootstrap union-of-rejections test against
 the classic `supDF` statistic.
 
+Other volatility-robust tests:
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+[`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
+
 ## Examples
 
 ``` r
@@ -104,13 +112,10 @@ y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
 res <- radf_sbz(y, minw = 20)
 print(res)
 #> 
-#> ── radf (minw = 20, lag = 0) ───────────────────────────────────────────────────
+#> ── radf_sbz (minw = 20, kernel = gaussian) ─────────────────────────────────────
 #> 
-#>        id    adf   sadf  gsadf
+#>    series    adf   sadf  gsadf
 #>   series1  4.829  4.829  5.287
-#> 
-#> [1] gsadf_panel
-#> <0 rows> (or 0-length row.names)
 #> 
 
 cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)

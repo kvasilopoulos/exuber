@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Alternative Tests: lbi_test(), ssu_test(), quantile_test() • exuber</title>
-<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Inter-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
@@ -141,7 +142,7 @@ the root itself has a random component, not a fixed value.</td>
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">60</span>, te <span class="op">=</span> <span class="fl">1</span>, tf <span class="op">=</span> <span class="fl">60</span>, c <span class="op">=</span> <span class="fl">0.03</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># fixed rho = 1.03 throughout</span></span>
 <span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── lbi_test (n = 60, sig_lvl = 95%) ────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  stat   crit  detected</span></span>
 <span><span class="co">#&gt;   series1  6.12  1.645      TRUE</span></span></code></pre></div>
@@ -160,15 +161,15 @@ rather than a fixed one:</p>
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">150</span>, te <span class="op">=</span> <span class="fl">75</span>, tf <span class="op">=</span> <span class="fl">150</span>, c <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">1</span>, seed <span class="op">=</span> <span class="fl">2001</span>,</span>
 <span>              coef_noise <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">149</span><span class="op">)</span>, coef_a <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/ssu_test.html">ssu_test</a></span><span class="op">(</span><span class="va">y</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ssu_test.html">ssu_test</a></span><span class="op">(</span><span class="va">y</span>, sig_lvl <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────</span></span>
+<span><span class="co">#&gt; ── ssu_test (n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   sadf  detected</span></span>
 <span><span class="co">#&gt;   series1  14.53      TRUE</span></span>
 <span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── lbi_test (n = 150, level = 95%) ─────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── lbi_test (n = 150, sig_lvl = 95%) ───────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series    stat   crit  detected</span></span>
 <span><span class="co">#&gt;   series1  0.3121  1.645     FALSE</span></span></code></pre></div>
@@ -190,7 +191,7 @@ the DGP here drives the PSY bubble with <code>t(3)</code> shocks:</p>
 <code class="sourceCode R"><span><span class="va">y_t3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_innov.html">sim_innov</a></span><span class="op">(</span><span class="fl">99</span>, dist <span class="op">=</span> <span class="st">"t"</span>, df <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">y_t3</span>, nrep <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── quantile_test (n = 100, sig_lvl = 95%) ──────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   tau  tstat    crit  delta  detected</span></span>
 <span><span class="co">#&gt;   series1  0.25  4.684  0.6824  0.379      TRUE</span></span></code></pre></div>

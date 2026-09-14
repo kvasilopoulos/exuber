@@ -42,10 +42,6 @@ sim_data_wdate %>%
   autoplot()
 #> Using `date` as index variable.
 #> Using precomputed critical values for `cv`.
-#> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-#> ℹ Please use `linewidth` instead.
-#> ℹ The deprecated feature was likely used in the exuber package.
-#>   Please report the issue at <https://github.com/kvasilopoulos/exuber/issues>.
 
 
 # Change the colour manually

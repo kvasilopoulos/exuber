@@ -12,7 +12,7 @@ no published table.
 ## Usage
 
 ``` r
-lbi_test(data, level = 0.95)
+lbi_test(data, sig_lvl = 95)
 ```
 
 ## Arguments
@@ -29,10 +29,12 @@ lbi_test(data, level = 0.95)
   (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
   `NA`, with a warning.
 
-- level:
+- sig_lvl:
 
-  Nominal confidence level for the (one-sided, right-tailed – positive
-  bubbles only) test (default `0.95`).
+  Significance level for the (one-sided, right-tailed – positive bubbles
+  only) test, on the package-wide 0-100 scale (default `95`); any value
+  in `[50, 100)` is accepted since the critical value is a closed-form
+  normal quantile.
 
 ## Value
 
@@ -51,11 +53,14 @@ here and are not implemented.
 ## Note
 
 The critical value is closed-form: the standard normal (`qnorm`)
-quantile at `level` – no bootstrap, no simulation, no table needed.
+quantile at `sig_lvl` – no bootstrap, no simulation, no table needed.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/critical-value/detected summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own statistic/critical-value/detected
+summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -74,6 +79,9 @@ Journal of Time Series Analysis.
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) for
 the recursive ADF-family alternative this complements.
 
+Other alternative tests:
+[`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
+
 ## Examples
 
 ``` r
@@ -82,7 +90,7 @@ y <- sim_psy1(n = 60, te = 1, tf = 60, seed = 1) # explosive from the start
 res <- lbi_test(y)
 print(res)
 #> 
-#> ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────
+#> ── lbi_test (n = 60, sig_lvl = 95%) ────────────────────────────────────────────
 #> 
 #>    series   stat   crit  detected
 #>   series1  4.892  1.645      TRUE

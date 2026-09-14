@@ -30,7 +30,7 @@ radf_tt(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - kernel:
 
@@ -42,6 +42,16 @@ radf_tt(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL)
   Bandwidth for the variance-profile kernel regression. Default
   `T^(-2/5)`, the midpoint (on the log scale) of the paper's
   cross-validation search range \\\[T^{-0.5}, T^{-0.3}\]\\.
+
+## Value
+
+An object of class `radf_tt_obj`/`radf_obj`: the same
+`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+computed on the time-transformed series, so it plugs into
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+paired with
+[`radf_tt_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md).
 
 ## Details
 
@@ -66,6 +76,10 @@ two need, not just the three scalar critical values
 [`summary()`](https://rdrr.io/r/base/summary.html) uses. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
+## Status
+
+**\[experimental\]**
+
 ## References
 
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed Test
@@ -80,6 +94,14 @@ for the (pivotal, bootstrap-free) asymptotic critical values, and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
 for the bootstrap-based alternative (Harvey, Leybourne, Sollis &
 Taylor).
+
+Other volatility-robust tests:
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
 
 ## Examples
 

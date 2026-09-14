@@ -16,9 +16,9 @@ monitor_cusum(
   r_star = 0.5,
   b_alpha = 4.6,
   boundary = c("asymptotic", "finite"),
-  level = 0.95,
+  sig_lvl = 95,
   type = c("standard", "kernel"),
-  N = 20,
+  h = 20,
   kernel = c("gaussian", "uniform")
 )
 ```
@@ -54,13 +54,14 @@ monitor_cusum(
 
   `"asymptotic"` (default) uses `b_alpha` directly. `"finite"` instead
   looks up HB's own finite-sample boundary constant (their Table 8) from
-  `level` and the realized training length/monitoring-horizon ratio –
-  `level` must then be one of `0.90`, `0.95`, `0.99`.
+  `sig_lvl` and the realized training length/monitoring-horizon ratio –
+  `sig_lvl` must then be one of `90`, `95`, `99`.
 
-- level:
+- sig_lvl:
 
-  Nominal confidence level when `boundary = "finite"` (default `0.95`);
-  ignored when `boundary = "asymptotic"`.
+  Significance level on the package-wide 0-100 scale when
+  `boundary = "finite"` (default `95`); ignored when
+  `boundary = "asymptotic"`.
 
 - type:
 
@@ -68,13 +69,13 @@ monitor_cusum(
   statistic, or `"kernel"` for Astill, Harvey, Leybourne, Taylor & Zu
   (2023)'s volatility-robust "CUSUMV" variant.
 
-- N:
+- h:
 
-  Bandwidth/window length for the one-sided kernel spot-variance
-  estimator when `type = "kernel"`. Default `20`, the authors' own
-  empirically-recommended value (their Section 3: "setting H = 20
-  delivered a procedure with the best trade-off" between false-alarm
-  robustness and power). Ignored when `type = "standard"`.
+  Bandwidth/window length (AHLTZ's `N`) for the one-sided kernel
+  spot-variance estimator when `type = "kernel"`. Default `20`, the
+  authors' own empirically-recommended value (their Section 3: "setting
+  H = 20 delivered a procedure with the best trade-off" between
+  false-alarm robustness and power). Ignored when `type = "standard"`.
 
 - kernel:
 
@@ -115,8 +116,10 @@ time-varying volatility, unlike the standard CUSUM statistic, which
 requires homoskedasticity for its own size-control result to hold.
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own boundary/alarm summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own boundary/alarm summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -142,6 +145,11 @@ Econometrics, 21(1), 187-227.
 
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 for the recursive-ADF (Family A) monitoring alternative.
+
+Other monitoring:
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
+[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
+[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
 
 ## Examples
 

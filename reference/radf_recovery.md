@@ -38,7 +38,7 @@ radf_recovery(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - lag:
 
@@ -83,8 +83,10 @@ predates the observed sample).
 ## Note
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own origination/recovery date summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own origination/recovery date summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -124,6 +126,13 @@ University. Published in Econometric Theory.
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for the (forward, non-reversed) origination/collapse dating this
 complements.
+
+Other dating:
+[`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md),
+[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
+[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
+[`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md),
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
 
 ## Examples
 

@@ -31,7 +31,7 @@ radf_kp(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - kernel:
 
@@ -100,6 +100,14 @@ for this test's (unmodified) critical values,
 for a bootstrap-based alternative, and
 [`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
 for another bootstrap-free alternative.
+
+Other volatility-robust tests:
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+[`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
 
 ## Examples
 

@@ -74,8 +74,11 @@ dating_knp(y, trim = 0.05)
 ``` r
 
 dating_pdc(y, regimes = 3, trim = 0.05)
-#>         origination collapse
-#> series1          38       59
+#> 
+#> ── dating_pdc (n = 100, regimes = 3, type = ols) ───────────────────────────────
+#> 
+#>    series  origination  collapse
+#>   series1           38        59
 ```
 
 ``` r

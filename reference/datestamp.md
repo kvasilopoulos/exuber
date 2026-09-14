@@ -99,6 +99,7 @@ series (the paper's own procedure), not every recurring episode the way
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 56(4), 1043-1078.
+[doi:10.1111/iere.12132](https://doi.org/10.1111/iere.12132)
 
 Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble? Robust
 date-stamping for periods of exuberance. arXiv:2604.12062.
@@ -106,9 +107,40 @@ date-stamping for periods of exuberance. arXiv:2604.12062.
 ## Examples
 
 ``` r
-
 rsim_data <- radf(sim_data)
 
+# SV-ADF asymmetric-threshold dating (no critical values needed)
+datestamp(rsim_data, option = "svadf")
+#> Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
+#> 
+#> ── Datestamp (min_duration = 0) ──────────────── SV-ADF (Sarkar & Wells 2026) ──
+#> 
+#> ℹ Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
+#> 
+#> psy1 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    48   48  49        1 positive   FALSE
+#> 
+#> psy2 :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    23   23  24        1 positive   FALSE
+#> 
+#> evans :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    20   20  21        1 positive   FALSE
+#> 
+#> div :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    22   22  23        1 positive   FALSE
+#> 
+#> blan :
+#>   Start Peak End Duration   Signal Ongoing
+#> 1    35   36  37        2 positive   FALSE
+#> 
+
+# \donttest{
+# The default `cv` is fetched from the shared critical-value store
+# (network on first use); pass `cv = radf_mc_cv(nrow(sim_data))` to stay offline
 ds_data <- datestamp(rsim_data)
 #> Using precomputed critical values for `cv`.
 ds_data
@@ -154,33 +186,5 @@ datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 
 autoplot(ds_data)
 
-
-# SV-ADF asymmetric-threshold dating (no critical values needed)
-datestamp(rsim_data, option = "svadf")
-#> Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
-#> 
-#> ── Datestamp (min_duration = 0) ──────────────── SV-ADF (Sarkar & Wells 2026) ──
-#> 
-#> ℹ Experimental. Sarkar & Wells (2026) is a non-peer-reviewed preprint; see ?datestamp, Caveats section.
-#> 
-#> psy1 :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    48   48  49        1 positive   FALSE
-#> 
-#> psy2 :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    23   23  24        1 positive   FALSE
-#> 
-#> evans :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    20   20  21        1 positive   FALSE
-#> 
-#> div :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    22   22  23        1 positive   FALSE
-#> 
-#> blan :
-#>   Start Peak End Duration   Signal Ongoing
-#> 1    35   36  37        2 positive   FALSE
-#> 
+# }
 ```

@@ -69,7 +69,7 @@ takes the sub-sample directly, sliced by the episode’s own
 ep <- ds[["series1"]]
 rootstamp(y[ep$Start[1]:ep$End[1]]) # normal-t interval (Guo, Sun & Wang 2019), true rho = 1.04
 #> 
-#> ── rootstamp (n = 37, level = 95%, type = normal) ──────────────────────────────
+#> ── rootstamp (n = 37, sig_lvl = 95%, type = normal) ────────────────────────────
 #> 
 #>    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
 #>   1.04  0.0007295    54.2      1.038      1.041          17.87     17.26
@@ -77,7 +77,7 @@ rootstamp(y[ep$Start[1]:ep$End[1]]) # normal-t interval (Guo, Sun & Wang 2019), 
 #>      18.53
 rootstamp(y[ep$Start[1]:ep$End[1]], type = "cauchy") # fixed-root Cauchy interval (Phillips & Magdalinos 2007)
 #> 
-#> ── rootstamp (n = 37, level = 95%, type = cauchy) ──────────────────────────────
+#> ── rootstamp (n = 37, sig_lvl = 95%, type = cauchy) ────────────────────────────
 #> 
 #>    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower
 #>   1.04  0.0007295    54.2     0.7955      1.284          17.87     2.776
@@ -109,7 +109,7 @@ result together:
 
 rootstamp(r, ds)
 #> 
-#> ── rootstamp (level = 95%, type = normal) ──────────────────────────────────────
+#> ── rootstamp (sig_lvl = 95%, type = normal) ────────────────────────────────────
 #> 
 #> series1 :
 #>   Start End  rho rho_lower rho_upper doubling_time doubling_time_lower

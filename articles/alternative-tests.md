@@ -36,7 +36,7 @@ lose power:
 y <- sim_psy1(n = 60, te = 1, tf = 60, c = 0.03, alpha = 0, seed = 1) # fixed rho = 1.03 throughout
 lbi_test(y)
 #> 
-#> ── lbi_test (n = 60, level = 95%) ──────────────────────────────────────────────
+#> ── lbi_test (n = 60, sig_lvl = 95%) ────────────────────────────────────────────
 #> 
 #>    series  stat   crit  detected
 #>   series1  6.12  1.645      TRUE
@@ -61,15 +61,15 @@ y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
 
 ``` r
 
-ssu_test(y, level = 0.95)
+ssu_test(y, sig_lvl = 95)
 #> 
-#> ── ssu_test (n = 150, minw = 23, level = 95%, crit = 3.3) ──────────────────────
+#> ── ssu_test (n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ────────────────────
 #> 
 #>    series   sadf  detected
 #>   series1  14.53      TRUE
 lbi_test(y)
 #> 
-#> ── lbi_test (n = 150, level = 95%) ─────────────────────────────────────────────
+#> ── lbi_test (n = 150, sig_lvl = 95%) ───────────────────────────────────────────
 #> 
 #>    series    stat   crit  detected
 #>   series1  0.3121  1.645     FALSE
@@ -98,7 +98,7 @@ reliable, so the DGP here drives the PSY bubble with `t(3)` shocks:
 y_t3 <- sim_psy1(n = 100, seed = 1, e = sim_innov(99, dist = "t", df = 3))
 quantile_test(y_t3, nrep = 100, seed = 1)
 #> 
-#> ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────
+#> ── quantile_test (n = 100, sig_lvl = 95%) ──────────────────────────────────────
 #> 
 #>    series   tau  tstat    crit  delta  detected
 #>   series1  0.25  4.684  0.6824  0.379      TRUE

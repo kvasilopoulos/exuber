@@ -22,12 +22,20 @@ processes. Details can be found in Vasilopoulos et al. (2022)
 
 `exuber.parallel`
 
-- Should lengthy operations use parallel computation? Default: TRUE
+- Should lengthy operations use parallel computation? Default: TRUE.
+  Honored by the `radf_*_cv()`/`radf_*_distr()` simulation engines
+  ([`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+  [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+  [`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md),
+  [`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md),
+  [`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md));
+  the standalone tests and monitors run serially regardless.
 
 `exuber.ncores`
 
 - How many cores to use for parallel computation. Default: system
-  cores - 1
+  cores - 1 (2 in a non-interactive session), capped by the `MC_CORES`
+  environment variable when it is set.
 
 `exuber.global_seed`
 

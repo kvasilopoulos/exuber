@@ -21,3 +21,8 @@ augment_join(x, y, ...)
 - ...:
 
   Further arguments passed to methods.
+
+## Value
+
+A `tibble` joining the augmented statistics of `x` with the augmented
+critical values of `y`; see the methods for the exact columns.

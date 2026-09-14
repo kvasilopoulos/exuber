@@ -16,7 +16,7 @@ quantile_test(
   tau = "optimal",
   tau_grid = seq(0.2, 0.8, by = 0.05),
   nrep = 1000L,
-  level = 95,
+  sig_lvl = 95,
   seed = NULL
 )
 ```
@@ -50,7 +50,7 @@ quantile_test(
 
   Number of Monte Carlo replications for the critical value.
 
-- level:
+- sig_lvl:
 
   Significance level, one of `90`, `95`, `99`.
 
@@ -84,8 +84,10 @@ elsewhere in this package (see
 ## Note
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/boundary/delta summary – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own statistic/boundary/delta summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -104,6 +106,9 @@ detection and surveillance. Journal of Time Series Analysis, 46(5),
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) for
 the mean-regression (ADF/SADF/GSADF) family this complements.
 
+Other alternative tests:
+[`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md)
+
 ## Examples
 
 ``` r
@@ -113,7 +118,7 @@ y <- sim_psy1(n = 100, seed = 1, e = sim_innov(99, dist = "t", df = 3))
 res <- quantile_test(y, nrep = 100, seed = 1)
 print(res)
 #> 
-#> ── quantile_test (n = 100, level = 95%) ────────────────────────────────────────
+#> ── quantile_test (n = 100, sig_lvl = 95%) ──────────────────────────────────────
 #> 
 #>    series   tau  tstat    crit  delta  detected
 #>   series1  0.25  4.684  0.6824  0.379      TRUE

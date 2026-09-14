@@ -33,6 +33,11 @@ series_names(x) <- value
 
   n ordered vector of the same length as the "index" attribute of x.
 
+## Value
+
+A character vector of series names; the replacement form returns the
+modified object.
+
 ## Examples
 
 ``` r

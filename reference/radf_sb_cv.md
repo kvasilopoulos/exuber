@@ -45,7 +45,7 @@ radf_sb_distr(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - lag:
 
@@ -94,6 +94,7 @@ Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García, E.,
 Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing
 markets: In search of the smoking gun. The Journal of Real Estate
 Finance and Economics, 53(4), 419-449.
+[doi:10.1007/s11146-015-9531-2](https://doi.org/10.1007/s11146-015-9531-2)
 
 Pedersen, T. Q., & Schütte, E. C. M. (2020). Testing for explosive
 bubbles in the presence of autocorrelated innovations. Journal of
@@ -105,6 +106,17 @@ Empirical Finance, 58, 207-225.
 for Monte Carlo critical values and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
 for wild Bootstrap critical values
+
+Other critical values:
+[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md),
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+[`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md),
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md),
+[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
 
 ## Examples
 

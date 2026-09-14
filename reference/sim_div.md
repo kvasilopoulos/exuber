@@ -66,7 +66,7 @@ If log is set to FALSE (default value) dividends follow:
 \$\$d_t = \mu + d\_{t-1} + \epsilon_t\$\$
 
 where \\\epsilon \sim \mathcal{N}(0, \sigma^2)\\. The default parameters
-are \\\mu = 0.0373\\, \\\sigma^2 = 0.1574\\ and \\d\[0\] = 1.3\\ (the
+are \\\mu = 0.0373\\, \\\sigma^2 = 0.1574\\ and \\d_0 = 1.3\\ (the
 initial value of the dividend sequence). The above equation can be
 solved to yield the fundamental price:
 

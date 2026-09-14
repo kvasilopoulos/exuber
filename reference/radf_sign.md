@@ -36,7 +36,15 @@ radf_sign(data, minw = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
+
+## Value
+
+An object of class `radf_sign_obj`/`radf_obj`: the same
+`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+computed on the sign-transformed series; pair with
+[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md).
 
 ## Details
 
@@ -106,6 +114,14 @@ for the recursively demeaned sign-based analogue (sharing the same
 level-shift robustness), and
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) for
 the standard (non-invariant) test.
+
+Other volatility-robust tests:
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+[`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
 
 ## Examples
 

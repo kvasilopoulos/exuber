@@ -26,7 +26,7 @@ radf(data, minw = NULL, lag = 0L)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - lag:
 
@@ -107,11 +107,13 @@ Economic Review, 52(1), 201-226.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 56(4), 1043-1078.
+[doi:10.1111/iere.12132](https://doi.org/10.1111/iere.12132)
 
 Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García, E.,
 Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing
 markets: in search of the smoking gun. The Journal of Real Estate
 Finance and Economics, 53(4), 419-449.
+[doi:10.1007/s11146-015-9531-2](https://doi.org/10.1007/s11146-015-9531-2)
 
 ## Examples
 

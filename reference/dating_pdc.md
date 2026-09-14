@@ -64,9 +64,13 @@ dating_pdc(
 
 ## Value
 
-A `data.frame` with one row per series and columns `origination`,
-`collapse`, and (if `regimes = 4`) `recovery`, giving the estimated
-break dates (or observation indices, if no date index is available).
+An object of class `dating_pdc_obj` (a `data.frame` with one row per
+series and columns `origination`, `collapse`, and (if `regimes = 4`)
+`recovery`, giving the estimated break dates (or observation indices, if
+no date index is available); it has its own
+[`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods.
 
 ## Details
 
@@ -96,9 +100,11 @@ estimation, not a threshold-crossing test.
 ## Note
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own dating table (model, origination, collapse, recovery) –
-see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own dating table (model, origination,
+collapse, recovery) – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -123,6 +129,13 @@ date estimators under time-varying volatility. arXiv:2306.02977.
 [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 for the PSY threshold-crossing alternative.
 
+Other dating:
+[`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md),
+[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
+[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
+[`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+
 ## Examples
 
 ``` r
@@ -132,8 +145,12 @@ for the PSY threshold-crossing alternative.
 y <- sim_ps1(n = 100, seed = 1)
 res <- dating_pdc(y, regimes = 3L, trim = 0.05)
 print(res)
-#>         origination collapse
-#> series1          38       59
+#> 
+#> ── dating_pdc (n = 100, regimes = 3, type = ols) ───────────────────────────────
+#> 
+#>    series  origination  collapse
+#>   series1           38        59
+#> 
 autoplot(res)
 
 

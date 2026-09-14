@@ -24,6 +24,12 @@ index(x) <- value
 
   An ordered vector of the same length as the `index` attribute of x.
 
+## Value
+
+The index of the object (a `Date` vector when the input data carried
+one, otherwise an integer sequence); the replacement form returns the
+modified object.
+
 ## Details
 
 If the user does not specify an index for the estimation a pseudo-index

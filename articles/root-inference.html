@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Root Inference: How Fast Is the Bubble Growing • exuber</title>
-<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Inter-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
@@ -139,7 +140,7 @@ takes the sub-sample directly, sliced by the episode’s own
 <code class="sourceCode R"><span><span class="va">ep</span> <span class="op">&lt;-</span> <span class="va">ds</span><span class="op">[[</span><span class="st">"series1"</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/rootstamp.html">rootstamp</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="va">ep</span><span class="op">$</span><span class="va">Start</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">ep</span><span class="op">$</span><span class="va">End</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="co"># normal-t interval (Guo, Sun &amp; Wang 2019), true rho = 1.04</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── rootstamp (n = 37, level = 95%, type = normal) ──────────────────────────────</span></span>
+<span><span class="co">#&gt; ── rootstamp (n = 37, sig_lvl = 95%, type = normal) ────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower</span></span>
 <span><span class="co">#&gt;   1.04  0.0007295    54.2      1.038      1.041          17.87     17.26</span></span>
@@ -147,7 +148,7 @@ takes the sub-sample directly, sliced by the episode’s own
 <span><span class="co">#&gt;      18.53</span></span>
 <span><span class="fu"><a href="../reference/rootstamp.html">rootstamp</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="va">ep</span><span class="op">$</span><span class="va">Start</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">:</span><span class="va">ep</span><span class="op">$</span><span class="va">End</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, type <span class="op">=</span> <span class="st">"cauchy"</span><span class="op">)</span> <span class="co"># fixed-root Cauchy interval (Phillips &amp; Magdalinos 2007)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── rootstamp (n = 37, level = 95%, type = cauchy) ──────────────────────────────</span></span>
+<span><span class="co">#&gt; ── rootstamp (n = 37, sig_lvl = 95%, type = cauchy) ────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    rho         se  t_stat  rho_lower  rho_upper  doubling_time  dt_lower</span></span>
 <span><span class="co">#&gt;   1.04  0.0007295    54.2     0.7955      1.284          17.87     2.776</span></span>
@@ -174,7 +175,7 @@ a manual loop – pass the original <code><a href="../reference/radf.html">radf(
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rootstamp.html">rootstamp</a></span><span class="op">(</span><span class="va">r</span>, <span class="va">ds</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── rootstamp (level = 95%, type = normal) ──────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── rootstamp (sig_lvl = 95%, type = normal) ────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; series1 :</span></span>
 <span><span class="co">#&gt;   Start End  rho rho_lower rho_upper doubling_time doubling_time_lower</span></span>

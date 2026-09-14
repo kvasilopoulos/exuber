@@ -52,7 +52,9 @@ there is a period of explosive behaviour and 0 otherwise.
 ## Examples
 
 ``` r
-
+# \donttest{
+# The default `cv` is fetched from the shared critical-value store
+# (network on first use); pass `cv = radf_mc_cv(nrow(sim_data))` to stay offline
 rsim_data <- radf(sim_data)
 diagnostics(rsim_data)
 #> Using precomputed critical values for `cv`.
@@ -90,4 +92,5 @@ diagnostics(rsim_data, sig_lvl = 90)
 #> div:      Cannot reject H0 
 #> blan:     Rejects H0 at the 1% significance level
 #> 
+# }
 ```

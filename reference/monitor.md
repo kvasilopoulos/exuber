@@ -14,8 +14,8 @@ monitor(
   r_star = 0.5,
   minw = NULL,
   nboot = 500L,
-  level = 0.95,
-  adflag = 0,
+  sig_lvl = 95,
+  lag = 0L,
   type = c("fixed", "aic", "bic"),
   seed = NULL,
   boundary = c("bootstrap", "kurozumi", "fluc"),
@@ -45,25 +45,28 @@ monitor(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nboot:
 
   Number of wild bootstrap replications for the training critical value.
   Ignored unless `boundary = "bootstrap"`.
 
-- level:
+- sig_lvl:
 
-  Nominal confidence level for the monitoring boundary (default `0.95`).
-  When `boundary` is `"kurozumi"` or `"fluc"`, must be one of `0.90`,
-  `0.95`, `0.99`.
+  Significance level for the monitoring boundary on the package-wide
+  0-100 scale, one of `90`, `95` (default), `99`.
 
-- adflag, type:
+- lag:
 
-  Passed to
-  [`radf_wb_ps_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
-  (lag length / selection for the wild bootstrap DGP). Ignored unless
-  `boundary = "bootstrap"`.
+  A non-negative integer. The lag length of the Augmented Dickey-Fuller
+  regression (default = 0L).
+
+- type:
+
+  Lag selection for the wild bootstrap DGP, passed to
+  [`radf_wb_ps_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md).
+  Ignored unless `boundary = "bootstrap"`.
 
 - seed:
 
@@ -118,22 +121,24 @@ case, the default). Setting `s0` to `0.4` or `0.8` instead switches to
 his `GSADF_{s0}(k)` generalization: the window start is allowed to range
 over `[1, floor(T* * s0)]` rather than being fixed at `1`, compared
 against his `k`-varying (not constant) boundary function and its own
-published scaling constant. `level` must be one of `0.90`, `0.95`, or
-`0.99` (the levels his table tabulates).
+published scaling constant. `sig_lvl` must be one of `90`, `95`, or `99`
+(the levels his table tabulates).
 
 `boundary = "fluc"` implements Homm & Breitung (2012)'s FLUC detector:
 their `DF_{t/n}` is likewise exactly
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
 `badf` sequence, compared against a published constant from their Table
-7 (no detrending case) rather than a simulated one. `level` must be one
-of `0.90`, `0.95`, `0.99`.
+7 (no detrending case) rather than a simulated one. `sig_lvl` must be
+one of `90`, `95`, `99`.
 
 ## Note
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own boundary/alarm summary (real-time monitoring output,
-not a per-series sup-statistic table) – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own boundary/alarm summary (real-time
+monitoring output, not a per-series sup-statistic table) – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
 
@@ -162,6 +167,11 @@ for the underlying wild bootstrap, and
 for the (non-monitoring, full-sample) origination/collapse dating that
 already exists.
 
+Other monitoring:
+[`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
+[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+
 ## Examples
 
 ``` r
@@ -172,7 +182,7 @@ y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7)
 mon <- monitor(y, r_star = 0.5, nboot = 200)
 print(mon)
 #> 
-#> ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────
+#> ── monitor (T* = 100 / 200, minw = 27, sig_lvl = 95%, boundary = bootstrap) ────
 #> 
 #>    series  boundary  alarm  alarm_date
 #>   series1     2.051    156         156

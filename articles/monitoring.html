@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Real-Time Monitoring • exuber</title>
-<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Inter-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.10/font.css" rel="stylesheet">
@@ -194,19 +195,19 @@ training window and no collapse:</p>
 <span><span class="co">#&gt;   series1    161         161</span></span>
 <span><span class="fu"><a href="../reference/monitor_quantile.html">monitor_quantile</a></span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span>, nrep <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── monitor_quantile (n = 200, minw = 27, tau = 0.5, level = 95%) ───────────────</span></span>
+<span><span class="co">#&gt; ── monitor_quantile (n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ─────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  delta  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1   0.64     1.867    161         161</span></span>
 <span><span class="fu"><a href="../reference/monitor.html">monitor</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = bootstrap) ──────</span></span>
+<span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, sig_lvl = 95%, boundary = bootstrap) ────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1      2.17    156         156</span></span>
 <span><span class="fu"><a href="../reference/monitor.html">monitor</a></span><span class="op">(</span><span class="va">y</span>, r_star <span class="op">=</span> <span class="fl">0.5</span>, boundary <span class="op">=</span> <span class="st">"kurozumi"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, level = 95%, boundary = kurozumi) ───────</span></span>
+<span><span class="co">#&gt; ── monitor (T* = 100 / 200, minw = 27, sig_lvl = 95%, boundary = kurozumi) ─────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1     1.038    159         159</span></span></code></pre></div>
@@ -217,13 +218,13 @@ a first crossing:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── lbi_test (n = 200, level = 95%) ─────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── lbi_test (n = 200, sig_lvl = 95%) ───────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   stat   crit  detected</span></span>
 <span><span class="co">#&gt;   series1  6.502  1.645      TRUE</span></span>
 <span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── quantile_test (n = 200, level = 95%) ────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── quantile_test (n = 200, sig_lvl = 95%) ──────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  tau  tstat    crit  delta  detected</span></span>
 <span><span class="co">#&gt;   series1  0.5  20.25  0.5041   0.64      TRUE</span></span></code></pre></div>

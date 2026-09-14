@@ -26,7 +26,7 @@ radf_tt_cv(n, minw = NULL, nrep = 2000L, seed = NULL)
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nrep:
 
@@ -41,6 +41,14 @@ radf_tt_cv(n, minw = NULL, nrep = 2000L, seed = NULL)
   change rng state, and return .Random.seed as the "seed" attribute.
   Results are reproducible across the parallel and non-parallel option
   when the same seed is used.
+
+## Value
+
+An object of class `radf_cv`/`tt_cv`/`mc_cv`: the same structure as
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+(`adf_cv`/`sadf_cv`/ `gsadf_cv` scalars per level plus the
+`badf_cv`/`bsadf_cv` sequences), usable wherever a `radf_cv` is
+accepted.
 
 ## Details
 
@@ -78,12 +86,29 @@ pipeline almost exactly (18\\
 have the same gap, not yet addressed the same way – see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
+## Status
+
+**\[experimental\]**
+
 ## References
 
 Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed Test
 for Bubbles under Non-stationary Volatility. Journal of Financial
 Econometrics.
 [doi:10.1093/jjfinec/nbae026](https://doi.org/10.1093/jjfinec/nbae026)
+
+## See also
+
+Other critical values:
+[`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md),
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+[`radf_recovery_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery_cv.md),
+[`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md),
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
+[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
 
 ## Examples
 

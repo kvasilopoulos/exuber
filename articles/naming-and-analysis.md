@@ -32,7 +32,7 @@ and which have their own, differently-shaped output instead.
 | `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive-ADF core | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md) |
 | `dating_` prefix | Point-estimation / model-selection dating, no formal hypothesis test at all | [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md), [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md), [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md), [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md) |
 | `monitor`/`monitor_` prefix | Real-time/sequential detection – grouped by *what it does*, not by internal mechanism. [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) is this family’s flagship, the same role [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) plays for the `radf_` family: it reuses `badf`/`bsadf` directly (genuinely ADF-family internals) but carries no `radf`/`sadf` token at all, specifically so it reads as “the real-time monitor,” not as a `radf_` variant – see below | [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md), [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md), [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md), [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) |
-| `root_` prefix | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md) (two S3 methods: default for a single sub-sample, `radf_obj` to run every [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) episode at once) |
+| `root` family | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence (`exuber_functions(family = "root")`; no shared prefix) | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md) (two S3 methods: default for a single sub-sample, `radf_obj` to run every [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) episode at once) |
 | stands alone | A point-estimation tool, not a test | [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md) |
 
 Naming prefixes are a convention, not a contract – they’re easy to
@@ -328,7 +328,7 @@ autoplot(res2, cv = cv2)
 
 ![](naming-and-analysis_files/figure-html/sbz-full-reject-1.png)
 
-### No support: everything else
+### Own `print()` and `autoplot()`: everything else
 
 The remaining ~15 functions
 ([`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md),
@@ -345,12 +345,12 @@ itself, ADF-family internals notwithstanding – see above),
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md),
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md))
 each return their own class with their own
-[`print()`](https://rdrr.io/r/base/print.html) method, because their
-output genuinely doesn’t fit the `radf_obj` shape – a dating table isn’t
-a per-series sup-statistic, a monitoring alarm isn’t a critical value
-grid. Trying to force them through
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/
+[`print()`](https://rdrr.io/r/base/print.html) and
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods, because their output genuinely doesn’t fit the `radf_obj` shape
+– a dating table isn’t a per-series sup-statistic, a monitoring alarm
+isn’t a critical value grid. Trying to force them through
+[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
 isn’t a documentation gap to close; the right call is their own
 presentation, shown directly:
 
@@ -363,8 +363,9 @@ the README’s workflow list, right after
 since that’s genuinely where it belongs in the *sequence of steps*
 (detect → date → measure growth rate) – but that’s a workflow position,
 not an S3-support tier. It’s still its own class with its own
-[`print()`](https://rdrr.io/r/base/print.html) method, same as
-everything else in this section; see
+[`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods, same as everything else in this section; see
 [`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md).
 
 ``` r
@@ -376,17 +377,20 @@ dating_hls(sim_data$psy1, trim = 0.05)
 #>    series  model  origination  collapse  recovery
 #>   series1      4           41        55        62
 
-ssu_test(sim_data$psy1, level = 0.95)
+ssu_test(sim_data$psy1, sig_lvl = 95)
 #> 
-#> ── ssu_test (n = 100, minw = 19, level = 95%, crit = 3.3) ──────────────────────
+#> ── ssu_test (n = 100, minw = 19, sig_lvl = 95%, crit = 3.3) ────────────────────
 #> 
 #>    series   sadf  detected
 #>   series1  4.251      TRUE
+autoplot(dating_hls(sim_data$psy1, trim = 0.05))
 ```
+
+![](naming-and-analysis_files/figure-html/standalone-1.png)
 
 ## Summary
 
 | Tier | Functions | [`summary()`](https://rdrr.io/r/base/summary.html) | [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) | [`tidy()`](https://generics.r-lib.org/reference/tidy.html) | [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html) |
 |----|----|----|----|----|----|
-| Full | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md) | yes | yes | yes | yes |
-| Standalone | everything else | own [`print()`](https://rdrr.io/r/base/print.html) | – | – | – |
+| Full | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md), [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md) | yes | yes | yes | yes |
+| Standalone | everything else | own [`print()`](https://rdrr.io/r/base/print.html) | – | – | own method |

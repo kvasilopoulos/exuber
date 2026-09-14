@@ -82,13 +82,12 @@ A numeric vector of length `n`.
 The two-bubble data generating process is given by (see also
 `sim_psy1`):
 
-\$\$X_t = X\_{t-1}1\\t \in N_0\\+ \delta_T X\_{t-1}1\\t \in B_1 \cup
-B_2\\ + \left(\sum\_{k=\tau\_{1f}+1}^t \epsilon_k +
-X\_{\tau\_{1f}}\right) 1\\t \in N_1\\ \$\$
-
-\$\$ + \left(\sum\_{l=\tau\_{2f}+1}^t \epsilon_l +
-X\_{\tau\_{2f}}\right) 1\\t \in N_2\\ + \epsilon_t 1\\t \in N_0 \cup B_1
-\cup B_2\\\$\$
+\$\$\begin{aligned} X_t = {} & X\_{t-1}1\\t \in N_0\\+ \delta_T
+X\_{t-1}1\\t \in B_1 \cup B_2\\ + \left(\sum\_{k=\tau\_{1f}+1}^t
+\epsilon_k + X\_{\tau\_{1f}}\right) 1\\t \in N_1\\ \\ & +
+\left(\sum\_{l=\tau\_{2f}+1}^t \epsilon_l + X\_{\tau\_{2f}}\right) 1\\t
+\in N_2\\ + \epsilon_t 1\\t \in N_0 \cup B_1 \cup B_2\\
+\end{aligned}\$\$
 
 where the autoregressive coefficient \\\delta_T\\ is:
 
@@ -118,6 +117,7 @@ For further details you can refer to Phillips et al., (2015) p. 1055.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple
 Bubbles: Historical Episodes of Exuberance and Collapse in the S&P 500.
 International Economic Review, 5 6(4), 1043-1078.
+[doi:10.1111/iere.12132](https://doi.org/10.1111/iere.12132)
 
 ## See also
 

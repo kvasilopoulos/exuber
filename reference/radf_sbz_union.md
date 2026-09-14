@@ -43,7 +43,7 @@ radf_sbz_union(
 - minw:
 
   A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt(T))T\\, where T denotes the sample size).
+  1.8/\sqrt{T})T\\, where T denotes the sample size).
 
 - nboot:
 
@@ -99,11 +99,14 @@ critical-value function to pair it with, unlike
 (`U`'s own value structurally requires the bootstrap, see Details).
 
 Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`/`autoplot`
-– prints its own statistic/critical-value summary (bundles the test
-statistic and its critical value in one object), but has its own
-`autoplot` method (a per-series comparison of `supDF`/`supBZ`/`U`
-against their critical values) – see
+[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
+it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods instead. Prints its own statistic/critical-value summary
+(bundles the test statistic and its critical value in one object); the
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+method is a per-series comparison of `supDF`/`supBZ`/`U` against their
+critical values – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit the shared
 pipeline.
@@ -126,6 +129,14 @@ for the underlying (supDF-only) wild bootstrap,
 for the supBZ-only route with full pipeline support, and
 [`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
 for a bootstrap-free heteroskedasticity-robust alternative.
+
+Other volatility-robust tests:
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+[`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
 
 ## Examples
 

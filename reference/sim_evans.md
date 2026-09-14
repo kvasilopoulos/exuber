@@ -83,9 +83,9 @@ When \\B_t \> \alpha\\ the bubble expands at the increased rate of
 \\(1+r)\pi^{-1}\\:
 
 \$\$B\_{t+1} = \[\delta + (1+r)\pi^{-1} \theta\_{t+1}(B_t -
-(1+r)^{-1}\delta B_t )\]u\_{t+1},\$\$
+(1+r)^{-1}\delta)\]u\_{t+1},\$\$
 
-where \\\theta\\ theta is a binary variable that takes the value 0 with
+where \\\theta\\ is a binary variable that takes the value 0 with
 probability \\1-\pi\\ and 1 with probability \\\pi\\. In the second
 phase, there is a (\\1-\pi\\) probability of the bubble process
 collapsing to `delta`. By modifying the values of `delta`, `alpha` and
