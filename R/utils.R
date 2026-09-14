@@ -63,9 +63,9 @@ retrieve_crit <- function(x) {
   nr <- NROW(index(x))
   lag <- get_lag(x) %||% 0
 
-  if (nr <= 5 || nr > 5000) {
+  if (nr <= 5 || nr > 4000 || lag > 4) {
     stop_glue(
-      "Precomputed critical values cover 6 <= n <= 5000 (n = {nr}); ",
+      "Precomputed critical values cover 6 <= n <= 4000 and lag <= 4 (n = {nr}, lag = {lag}); ",
       "pass `cv` explicitly, e.g. `cv = radf_mc_cv({nr}, lag = {lag})`."
     )
   }
