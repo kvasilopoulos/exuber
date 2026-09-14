@@ -130,12 +130,6 @@ index_radf_cv.sb_cv <- function(x, trunc, ...) {
 
 # mat ---------------------------------------------------------------------
 
-# TODO make it a method
-
-# mat <- function(x, ...) {
-#   UseMethod("mat")
-# }
-
 mat <- function(x, ...) {
   attr(x, "mat")
 }

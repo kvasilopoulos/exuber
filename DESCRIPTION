@@ -37,7 +37,7 @@ Depends:
 Imports:
     cli (>= 1.1.0),
     doFuture (>= 1.0.0),
-    dplyr (>= 1.0.0),
+    dplyr (>= 1.1.1),
     foreach (>= 1.4.4),
     future (>= 1.33.0),
     generics (>= 0.0.2),
