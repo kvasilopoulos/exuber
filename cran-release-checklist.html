@@ -105,11 +105,11 @@
 <code>devtools::check_win_devel()</code> + <code>check_win_release()</code>
 </td>
 <td>[ ]</td>
-<td>uploaded once for d17d275 (predates the parallel fix — expect the examples ERROR there); re-upload from f8088a2 once the local check is green</td>
+<td>uploaded from f8088a2 (an earlier d17d275 upload predates the parallel fix — ignore its examples ERROR); results pending by email to the maintainer</td>
 </tr><tr><td>1.10</td>
 <td>R-hub CRAN platforms (<code>.github/workflows/rhub.yaml</code>, manual dispatch)</td>
-<td>[ ]</td>
-<td>workflow’s last step referenced a non-existent <code>r-hub/actions/run-check@v2</code> — fixed to <code>@v1</code>; re-dispatched</td>
+<td>[x]</td>
+<td>run 34820330290 on 2ff80f1: linux / windows / macos R-devel all <code>Status: OK</code> (0 NOTEs). Workflow had a non-existent <code>run-check@v2</code> ref and a hand-added <code>R -e</code> step PowerShell can’t parse — both removed</td>
 </tr><tr><td>1.11</td>
 <td>Reverse dependencies: <code>revdepcheck::revdep_check()</code>
 </td>
@@ -122,8 +122,8 @@
 </tr><tr><td>1.13</td>
 <td>
 <code>git push</code>, CI green (R-CMD-check / test-coverage / pkgdown / html-5-check)</td>
-<td>[ ]</td>
-<td>html-5-check had failed on every run since it was added (no deps installed → <code>LinkingTo</code> NOTE, no V8 → math-rendering NOTE, job errors on NOTEs); fixed</td>
+<td>[x]</td>
+<td>all green on 2ff80f1 and 4330594 (R-CMD-check: macOS, Windows, Ubuntu devel/release/oldrel-1); html-5-check had failed on every run since it was added (no deps installed → <code>LinkingTo</code> NOTE, no V8 → math-rendering NOTE, job errors on NOTEs); fixed</td>
 </tr><tr><td>1.14</td>
 <td>Draft blog post</td>
 <td>[-]</td>
