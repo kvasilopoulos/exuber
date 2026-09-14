@@ -11,7 +11,7 @@ NEWS.md.
 
 * local Windows 11, R 4.6.1 (Rtools45) -- `devtools::check(cran = TRUE, remote = TRUE)`
 * GitHub Actions: macOS (release), Windows (release), Ubuntu (devel, release, oldrel-1)
-* win-builder (R-devel)
+* win-builder (R-devel, R-release)
 * R-hub: linux, windows, macos
 
 ## R CMD check results
