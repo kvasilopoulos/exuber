@@ -60,11 +60,6 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # Explicitly install rcmdcheck to ensure it's available
-      - name: Install rcmdcheck
-        run: |
-          R -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck', repos = 'https://cloud.r-project.org')"
-
       - uses: r-hub/actions/run-check@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
@@ -94,11 +89,6 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
-
-      # Explicitly install rcmdcheck to ensure it's available
-      - name: Install rcmdcheck
-        run: |
-          R -e "if (!requireNamespace('rcmdcheck', quietly = TRUE)) install.packages('rcmdcheck', repos = 'https://cloud.r-project.org')"
 
       - uses: r-hub/actions/run-check@v1
         with:
