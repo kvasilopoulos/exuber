@@ -111,7 +111,7 @@ reference:
       - radf_sbz
       - radf_sbz_cv
       - radf_sbz_union
-      - autoplot.radf_sbz_union
+      - autoplot.radf_sbz_union_obj
   - subtitle: radf_sign()
     contents:
       - radf_sign
@@ -190,7 +190,7 @@ reference:
   - subtitle: cobubble_test()
     contents:
       - cobubble_test
-      - autoplot.cobubble_test
+      - autoplot.cobubble_test_obj
   - subtitle: contagion_reg()
     contents:
       - contagion_reg
