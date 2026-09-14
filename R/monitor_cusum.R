@@ -256,13 +256,7 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
   x <- parse_data(data)
   n <- nrow(x)
 
-  T_star <- if (r_star < 1) round(r_star * n) else as.integer(r_star)
-  if (T_star < 3L) {
-    stop_glue("Training window ('r_star') is too short.")
-  }
-  if (T_star >= n) {
-    stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
-  }
+  T_star <- training_window(r_star, n)
   if (boundary == "finite") {
     b_alpha <- hb_cusum_finite_q(sig_lvl, T_star, n / T_star)
   }

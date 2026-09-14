@@ -345,13 +345,7 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   minw <- minw %||% psy_minw(data)
   assert_positive_int(minw, greater_than = 2)
 
-  T_star <- if (r_star < 1) round(r_star * n) else as.integer(r_star)
-  if (T_star <= minw + lag) {
-    stop_glue("Training window ('r_star') must exceed 'minw' (+ 'lag').")
-  }
-  if (T_star >= n) {
-    stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
-  }
+  T_star <- training_window(r_star, n, min_len = minw + lag + 1L)
 
   snames <- colnames(x)
   idx <- index(x)
