@@ -145,7 +145,7 @@ autoplot(est, cv, select_series = "psy2") +
 
 Arguments
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-doesn’t recognise are forwarded to
+doesn’t recognize are forwarded to
 [`ggplot2::facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html),
 so `scales = "free_y"`, `ncol`, `labeller`, etc. work directly – see
 [`?autoplot.radf_obj`](https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_obj.md)

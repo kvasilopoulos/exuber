@@ -1,6 +1,6 @@
 # Changelog
 
-## exuber (development version)
+## exuber 2.0.0
 
 New methodologies from the `docs/enhancements/` research programme, each
 independently validated against a published number (formula-exact check,
@@ -31,8 +31,8 @@ what was checked and how.
 #### Volatility-robust tests
 
 - [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)/[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)/[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
-  — Herwartz & Siedenburg’s WLS/kernel-volatility SBZ test, split
-  2026-08-22 into a statistic
+  — Herwartz & Siedenburg’s WLS/kernel-volatility SBZ test, split into a
+  statistic
   ([`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)),
   its bootstrap critical values
   ([`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
@@ -206,8 +206,17 @@ what was checked and how.
   [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
   speed up by the same factor. Results are numerically identical to
   ~1e-12.
+- Parallel runs (`options(exuber.parallel = TRUE)`, the default) reuse
+  one worker cluster per session instead of starting and stopping a
+  fresh
+  [`future::multisession`](https://future.futureverse.org/reference/multisession.html)
+  on every call – a few seconds of start-up overhead that used to
+  dominate every small
+  [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)/[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
+  job. The cluster is sized by `exuber.ncores` and stopped when the
+  namespace unloads.
 
-#### API consistency (2026-09-14 review)
+#### API consistency
 
 - One significance-level convention across the whole package: every
   function that took a `level` argument now takes `sig_lvl` on the 0-100
@@ -247,7 +256,7 @@ what was checked and how.
   gained their own [`print()`](https://rdrr.io/r/base/print.html)
   methods (the former fell through to `print.data.frame`, hiding its
   attributes; the latter printed as a plain `radf`).
-- `scale_exuber_manual(size_values = )` is deprecated in favour of
+- `scale_exuber_manual(size_values = )` is deprecated in favor of
   `linewidth_values` (ggplot2 \>= 3.4.0’s `linewidth` aesthetic replaces
   `size` for lines; the deprecation warning ggplot2 emitted from every
   [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
@@ -278,7 +287,7 @@ what was checked and how.
   function it plots/tidies
   ([`?autoplot.monitor_cusum_obj`](https://kvasilopoulos.github.io/exuber/reference/autoplot.monitor_cusum_obj.md),
   [`?augment.radf_obj`](https://kvasilopoulos.github.io/exuber/reference/augment.radf_obj.md),
-  …). The pkgdown reference index is reorganised into per-function
+  …). The pkgdown reference index is reorganized into per-function
   subsections so each function is listed next to the methods that
   consume its output.
 
@@ -328,7 +337,7 @@ what was checked and how.
   rejecting the null. Previously,
   [`diagnostics.radf_obj()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)
   (used internally to decide which series get dated/plotted at all)
-  hardcoded the 95% critical value for that decision regardless of
+  hard-coded the 95% critical value for that decision regardless of
   `sig_lvl`, so e.g. `datestamp(x, cv, sig_lvl = 90)` could throw
   `"Cannot reject H0 at the 5% significance level"` for a series that
   clearly rejects at the 10% level the caller asked for – `sig_lvl` only
