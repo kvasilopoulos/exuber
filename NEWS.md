@@ -228,6 +228,19 @@ what was checked and how.
 
 ### Bug fixes
 
+* **`radf_sb_cv()`/`radf_sb_distr()` panel critical values were wrong in
+  every release since 0.1.0.** The bootstrap loop overwrote the
+  per-series BSADF path instead of summing it, so the panel null
+  distribution was the *last* series' BSADF divided by the number of
+  series rather than the cross-sectional mean. The error is invisible for
+  ~5-series panels (the two quantities happen to coincide) but the test
+  was oversized for narrow panels (8% at nominal 5% for 2 series) and had
+  no power for wide ones (0% rejection under H0 *and* under the
+  alternative for 10 series). Fixed; empirical size is now 6% / 5% / 2.5%
+  for 2 / 5 / 10 series. A regression test pins the identity that a panel
+  of identical copies has the same bootstrap distribution as the single
+  series.
+
 * `datestamp()`/`autoplot()`/`autoplot2()`'s `sig_lvl` argument now
   actually controls whether a series counts as rejecting the null.
   Previously, `diagnostics.radf_obj()` (used internally to decide which
