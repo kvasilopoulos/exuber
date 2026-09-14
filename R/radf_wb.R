@@ -33,16 +33,6 @@ radf_wb_dgp_ps <- function(y, adflag = 0, type = "fixed", tb = NULL) {
   dyb <- vector("numeric",  nr)
   dyb[1:adflag] <- dy[1:adflag]
 
-  # TODO make it easier to simulate the dgp
-  # epstar <- sample(eps, replace = TRUE)
-  # w <- rnorm(nr)
-  # if(adflag == 0) {
-  #   dyb <- epstar * w
-  # }else{
-  #   x <- unroot_adf_null(as.matrix(y), lag = 1)[,-(1:2)]
-  #   dyb <- filter(x %*% beta[-1] + epstar, method = "rec")
-  # }
-
   if (adflag == 0) {
     for (i in (adflag + 1):(nr - 1)) {
       dyb[i] <- wn[i - adflag] * eps[rN[i - adflag]]
