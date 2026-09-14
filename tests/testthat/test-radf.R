@@ -58,3 +58,42 @@ test_that("radf() accepts a named numeric vector (e.g. a prcomp() score column)"
   y <- setNames(sim_data$psy1, seq_along(sim_data$psy1))
   expect_equal(radf(y)$gsadf, radf(unname(y))$gsadf)
 })
+
+# formula-exact check ------------------------------------------------------
+
+# Brute-force recursive ADF t-statistic (intercept, no trend) via lm(), the
+# same regression rls_gsadf() solves recursively: for every window [r1, r2]
+# regress dy on (1, y_{t-1}, dy_{t-1}, ..., dy_{t-lag}) and take beta's t-value.
+adf_t_lm <- function(y, r1, r2, lag) {
+  yw <- y[r1:r2]
+  dy <- diff(yw)
+  ylag <- yw[-length(yw)]
+  X <- cbind(1, ylag)
+  if (lag > 0) {
+    for (j in seq_len(lag)) X <- cbind(X, c(rep(NA, j), dy[seq_len(length(dy) - j)]))
+  }
+  keep <- (lag + 1):length(dy)
+  fit <- lm.fit(X[keep, , drop = FALSE], dy[keep])
+  s2 <- sum(fit$residuals^2) / (length(keep) - ncol(X))
+  se <- sqrt(s2 * chol2inv(chol(crossprod(X[keep, , drop = FALSE])))[2, 2])
+  unname(fit$coefficients[2] / se)
+}
+
+test_that("radf() statistics match a brute-force lm() recursion (lag 0 and 1)", {
+  set.seed(42)
+  y <- cumsum(rnorm(60))
+  minw <- 10
+  for (lag in 0:1) {
+    res <- radf(y, minw = minw, lag = lag)
+    ends <- (minw + lag + 1):60
+    badf <- vapply(ends, function(r2) adf_t_lm(y, 1, r2, lag), numeric(1))
+    bsadf <- vapply(ends, function(r2) {
+      max(vapply(1:(r2 - minw - lag), function(r1) adf_t_lm(y, r1, r2, lag), numeric(1)))
+    }, numeric(1))
+    expect_equal(unname(res$badf[, 1]), badf, tolerance = 1e-8)
+    expect_equal(unname(res$bsadf[, 1]), bsadf, tolerance = 1e-8)
+    expect_equal(unname(res$adf), adf_t_lm(y, 1, 60, lag), tolerance = 1e-8)
+    expect_equal(unname(res$sadf), max(badf), tolerance = 1e-8)
+    expect_equal(unname(res$gsadf), max(bsadf), tolerance = 1e-8)
+  }
+})

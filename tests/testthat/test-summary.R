@@ -116,15 +116,16 @@ withr::with_options(
   })
 )
 
-index(radf_dta) <- seq(from = as.Date("1991/10/01"), by = "month", length.out = 100)
+radf_dta_dated <- radf_dta
+index(radf_dta_dated) <- seq(from = as.Date("1991/10/01"), by = "month", length.out = 100)
 
 withr::with_options(
   c(warn = 2),
   test_that("no problem running with (date, mc)", {
-    expect_error(datestamp(radf_dta, mc), regexp = NA)
-    expect_error(datestamp(radf_dta, mc, option = "sadf"), regexp = NA)
-    expect_error(autoplot(radf_dta, mc), regexp = NA)
-    expect_error(autoplot(radf_dta, mc, option = "sadf"), regexp = NA)
+    expect_error(datestamp(radf_dta_dated, mc), regexp = NA)
+    expect_error(datestamp(radf_dta_dated, mc, option = "sadf"), regexp = NA)
+    expect_error(autoplot(radf_dta_dated, mc), regexp = NA)
+    expect_error(autoplot(radf_dta_dated, mc, option = "sadf"), regexp = NA)
   })
 )
 
@@ -141,9 +142,9 @@ withr::with_options(
 withr::with_options(
   c(warn = 2),
   test_that("no problem running summary (date, wb)", {
-    expect_error(datestamp(radf_dta, wb), regexp = NA)
-    expect_error(datestamp(radf_dta, wb, option = "sadf"), regexp = NA)
-    # expect_error(autoplot(radf_dta, wb), regexp = NA)
+    expect_error(datestamp(radf_dta_dated, wb), regexp = NA)
+    expect_error(datestamp(radf_dta_dated, wb, option = "sadf"), regexp = NA)
+    # expect_error(autoplot(radf_dta_dated, wb), regexp = NA)
   })
 )
 
