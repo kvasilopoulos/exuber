@@ -22,7 +22,6 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
     p <- progressor(steps = nrep)
     foreach(
       i = 1:nrep,
-      .combine = "cbind",
       .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot"))),
       .inorder = FALSE
     ) %dofuture% {
@@ -32,6 +31,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
       rls_gsadf(yxmat, min_win = minw, lag = lag)
     }
   })
+  results <- do.call(cbind, results) # bind once: .combine = "cbind" re-copied the matrix every iteration
 
   n_minw <- n - minw - lag
 

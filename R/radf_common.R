@@ -167,7 +167,6 @@ radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
     p <- progressor(steps = nrep)
     foreach(
       i = 1:nrep,
-      .combine = "cbind",
       .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("radf_common", "radf", "rls_gsadf", "unroot", "parse_data"))),
       .inorder = FALSE
     ) %dofuture% {
@@ -177,6 +176,7 @@ radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
       c(res$adf, res$sadf, res$gsadf, res$badf, res$bsadf)
     }
   })
+  results <- do.call(cbind, results)
 
   n_minw <- n - minw
   adf_crit <- quantile_narm(results[1, ], probs = pcnt, drop = FALSE)
