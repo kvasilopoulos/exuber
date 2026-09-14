@@ -22,11 +22,11 @@ Status column: `[x]` done and verified this release, `[ ]` pending,
 | 1.6 | `devtools::build_readme()` | \[x\] |  |
 | 1.7 | [`spelling::spell_check_package()`](https://docs.ropensci.org/spelling//reference/spell_check_package.html) | \[x\] | en-GB spellings fixed (`favour`, `recognise`, `reorganised`); identifiers added to `inst/WORDLIST` |
 | 1.8 | `devtools::check(remote = TRUE, manual = TRUE)` locally | \[x\] | see §4; `manual = FALSE` locally (no LaTeX here) — PDF manual built on win-builder/CI |
-| 1.9 | `devtools::check_win_devel()` | \[ \] |  |
-| 1.10 | R-hub CRAN platforms (`.github/workflows/rhub.yaml`, manual dispatch) | \[ \] |  |
+| 1.9 | `devtools::check_win_devel()` + `check_win_release()` | \[ \] | uploaded once for d17d275 (predates the parallel fix — expect the examples ERROR there); re-upload from f8088a2 once the local check is green |
+| 1.10 | R-hub CRAN platforms (`.github/workflows/rhub.yaml`, manual dispatch) | \[ \] | workflow’s last step referenced a non-existent `r-hub/actions/run-check@v2` — fixed to `@v1`; re-dispatched |
 | 1.11 | Reverse dependencies: `revdepcheck::revdep_check()` | \[-\] | no reverse dependencies on CRAN (`tools::package_dependencies(reverse = TRUE)`) |
 | 1.12 | Update `cran-comments.md` with *this* run’s environments and NOTEs | \[x\] | stale `doSNOW`/`exuberdata` notes removed |
-| 1.13 | `git push`, CI green (R-CMD-check / test-coverage / pkgdown / html-5-check) | \[ \] |  |
+| 1.13 | `git push`, CI green (R-CMD-check / test-coverage / pkgdown / html-5-check) | \[ \] | html-5-check had failed on every run since it was added (no deps installed → `LinkingTo` NOTE, no V8 → math-rendering NOTE, job errors on NOTEs); fixed |
 | 1.14 | Draft blog post | \[-\] | not part of this package’s release practice |
 
 ## 2. Submit
@@ -56,7 +56,7 @@ R 4.6.1, Windows 11, Rtools45.
 |----|----|----|----|
 | 4.1 | 0 ERRORs, 0 WARNINGs | \[x\] |  |
 | 4.2 | NOTEs explained in `cran-comments.md` | \[x\] |  |
-| 4.3 | Examples each “no more than a few seconds”; none flagged \> 5s | \[x\] |  |
+| 4.3 | Examples each “no more than a few seconds”; none flagged \> 5s | \[x\] | first run flagged `rootstamp` (6.5s) and `scale_exuber_manual` (5.6s) at ~1.5s CPU: every `*_cv()` call was starting and stopping two `multisession` workers (~4s). Fixed at the root: one reused cluster per session, and `exuber.parallel` defaults to [`interactive()`](https://rdrr.io/r/base/interactive.html) — a session-long cluster trips `R CMD check`’s “connections left open” in examples |
 | 4.4 | `--run-donttest` examples pass (CRAN incoming runs them) | \[x\] |  |
 | 4.5 | Tests pass with `NOT_CRAN=false` (what CRAN runs) and `NOT_CRAN=true` (CI) | \[x\] |  |
 | 4.6 | No stray object files in the source tarball (`src/vendor/**/*.o`) | \[x\] | `clean:` target added to `src/Makevars{,.win}` — `R CMD build` only sweeps top-level `src/*.o` |
@@ -74,8 +74,8 @@ R 4.6.1, Windows 11, Rtools45.
 | 5.4 | DOIs in `Description` as `<doi:...>`, references in Title Case, no “package” in Title | \[x\] |  |
 | 5.5 | Strong deps only from CRAN; Suggests used conditionally | \[x\] | [`requireNamespace()`](https://rdrr.io/r/base/ns-load.html) guards in place; `exuberdata`/`Additional_repositories` gone |
 | 5.6 | No Depends/Imports on archived packages | \[x\] | all Imports on CRAN as of 2026-09-14 |
-| 5.7 | Source tarball ≤ 10 MB; data + docs ≤ 5 MB | \[x\] | see §4 log for the tarball size |
-| 5.8 | ≤ 2 threads/cores by default in examples/tests | \[x\] | `exuber.parallel = FALSE` default; `test-seed.R` uses `ncores = 2` |
+| 5.7 | Source tarball ≤ 10 MB; data + docs ≤ 5 MB | \[x\] | `exuber_2.0.0.tar.gz` is 0.56 MB |
+| 5.8 | ≤ 2 threads/cores by default in examples/tests | \[x\] | `exuber.parallel` defaults to [`interactive()`](https://rdrr.io/r/base/interactive.html) → serial under check; `exuber.ncores` capped at 2 non-interactively and by `MC_CORES` |
 | 5.9 | Writes only to [`tempdir()`](https://rdrr.io/r/base/tempfile.html) or [`tools::R_user_dir()`](https://rdrr.io/r/tools/userdir.html); **`R_user_dir` use requires `R (>= 4.0)`** | \[x\] | crit cache at `R_user_dir("exuber", "cache")` (one ~2–20 KB `.bin.xz` per `(n, lag)` used); `Depends: R (>= 4.0)` raised from 3.2 |
 | 5.10 | Cache contents “actively managed”, size kept small | \[x\] | a corrupt file is refetched; [`crit_cache_dir()`](https://kvasilopoulos.github.io/exuber/reference/crit_cache_dir.md) documents the location |
 | 5.11 | Internet resources fail gracefully with an informative message, no check WARNING/ERROR | \[!\] | see §6 — the default-`cv` fetch is the one open CRAN risk |
@@ -95,7 +95,9 @@ first use. Examples, vignettes and tests exercise that path, so on a
 check machine without network access they would ERROR (an informative
 [`stop()`](https://rdrr.io/r/base/stop.html), but still an ERROR — the
 policy asks for a graceful *message*). The check in §4 records which
-`(n, lag)` tables were actually pulled.
+`(n, lag)` tables were actually pulled: exactly one, `lag0-n100.bin.xz`
+(1.3 KB). The test suite itself passes `cv` everywhere and fetches
+nothing.
 
 Options, cheapest first:
 
@@ -106,8 +108,7 @@ Options, cheapest first:
     [`fetch_crit_bucket()`](https://kvasilopoulos.github.io/exuber/reference/fetch_crit_bucket.md)
     look there before the network. Keeps the “no bundled `radf_crit`
     object” decision, makes every example, vignette and test
-    offline-safe. ~3 lines in `R/crit-bucket.R` plus the files (a few KB
-    each).
+    offline-safe. ~3 lines in `R/crit-bucket.R` plus one 1.3 KB file.
 3.  **Guard** every network-dependent example/test with
     `\donttest{}`/`skip_if_offline()` — largest diff, and `--as-cran`
     runs `\donttest` anyway, so it only helps tests.

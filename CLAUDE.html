@@ -97,6 +97,7 @@
 </div>
 <div class="section level2">
 <h2 id="release-process-cran">Release process (CRAN)<a class="anchor" aria-label="anchor" href="#release-process-cran"></a></h2>
+<p><code>cran-release-checklist.md</code> (dev-only, <code>.Rbuildignore</code>d) is the consolidated usethis / r-pkgs.org / CRAN-policy checklist with the per-item status of the last release pass — update it in place rather than re-deriving it. Two local quirks it records: <code>devtools::check()</code> on this Windows machine always leaves an empty <code>'NULL'</code> dir behind (a local-only “non-standard things in the check directory” NOTE), and a session-long worker cluster in examples trips <code>R CMD check</code>’s “connections left open”, which is why <code>exuber.parallel</code> defaults to <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code>.</p>
 <ol style="list-style-type: decimal"><li>Land NEWS.md entries under the <code># exuber (development version)</code> heading as features/fixes ship (already the ongoing convention, see the file).</li>
 <li>Bump version: <code>usethis::use_version()</code> (or hand-edit <code>DESCRIPTION</code>’s <code>Version:</code>), and retitle NEWS.md’s top heading to match, e.g. <code># exuber 1.2.0</code>.</li>
 <li>Refresh <code>cran-comments.md</code> — test environments and the R CMD check NOTEs section — with the current run’s actual output, not last release’s.</li>

@@ -101,13 +101,15 @@
 <td>[x]</td>
 <td>see §4; <code>manual = FALSE</code> locally (no LaTeX here) — PDF manual built on win-builder/CI</td>
 </tr><tr><td>1.9</td>
-<td><code>devtools::check_win_devel()</code></td>
+<td>
+<code>devtools::check_win_devel()</code> + <code>check_win_release()</code>
+</td>
 <td>[ ]</td>
-<td></td>
+<td>uploaded once for d17d275 (predates the parallel fix — expect the examples ERROR there); re-upload from f8088a2 once the local check is green</td>
 </tr><tr><td>1.10</td>
 <td>R-hub CRAN platforms (<code>.github/workflows/rhub.yaml</code>, manual dispatch)</td>
 <td>[ ]</td>
-<td></td>
+<td>workflow’s last step referenced a non-existent <code>r-hub/actions/run-check@v2</code> — fixed to <code>@v1</code>; re-dispatched</td>
 </tr><tr><td>1.11</td>
 <td>Reverse dependencies: <code>revdepcheck::revdep_check()</code>
 </td>
@@ -121,7 +123,7 @@
 <td>
 <code>git push</code>, CI green (R-CMD-check / test-coverage / pkgdown / html-5-check)</td>
 <td>[ ]</td>
-<td></td>
+<td>html-5-check had failed on every run since it was added (no deps installed → <code>LinkingTo</code> NOTE, no V8 → math-rendering NOTE, job errors on NOTEs); fixed</td>
 </tr><tr><td>1.14</td>
 <td>Draft blog post</td>
 <td>[-]</td>
@@ -197,7 +199,7 @@
 </tr><tr><td>4.3</td>
 <td>Examples each “no more than a few seconds”; none flagged &gt; 5s</td>
 <td>[x]</td>
-<td></td>
+<td>first run flagged <code>rootstamp</code> (6.5s) and <code>scale_exuber_manual</code> (5.6s) at ~1.5s CPU: every <code>*_cv()</code> call was starting and stopping two <code>multisession</code> workers (~4s). Fixed at the root: one reused cluster per session, and <code>exuber.parallel</code> defaults to <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> — a session-long cluster trips <code>R CMD check</code>’s “connections left open” in examples</td>
 </tr><tr><td>4.4</td>
 <td>
 <code>--run-donttest</code> examples pass (CRAN incoming runs them)</td>
@@ -267,12 +269,13 @@
 </tr><tr><td>5.7</td>
 <td>Source tarball ≤ 10 MB; data + docs ≤ 5 MB</td>
 <td>[x]</td>
-<td>see §4 log for the tarball size</td>
+<td>
+<code>exuber_2.0.0.tar.gz</code> is 0.56 MB</td>
 </tr><tr><td>5.8</td>
 <td>≤ 2 threads/cores by default in examples/tests</td>
 <td>[x]</td>
 <td>
-<code>exuber.parallel = FALSE</code> default; <code>test-seed.R</code> uses <code>ncores = 2</code>
+<code>exuber.parallel</code> defaults to <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> → serial under check; <code>exuber.ncores</code> capped at 2 non-interactively and by <code>MC_CORES</code>
 </td>
 </tr><tr><td>5.9</td>
 <td>Writes only to <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> or <code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir()</a></code>; <strong><code>R_user_dir</code> use requires <code>R (&gt;= 4.0)</code></strong>
@@ -321,12 +324,12 @@
 </tr></tbody></table></div>
 <div class="section level2">
 <h2 id="id_6-open-decision-examplestests-that-fetch-critical-values">6. Open decision: examples/tests that fetch critical values<a class="anchor" aria-label="anchor" href="#id_6-open-decision-examplestests-that-fetch-critical-values"></a></h2>
-<p><code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> on a <code>radf_obj</code> with no explicit <code>cv</code> fetch one table from the store on first use. Examples, vignettes and tests exercise that path, so on a check machine without network access they would ERROR (an informative <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>, but still an ERROR — the policy asks for a graceful <em>message</em>). The check in §4 records which <code>(n, lag)</code> tables were actually pulled.</p>
+<p><code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> on a <code>radf_obj</code> with no explicit <code>cv</code> fetch one table from the store on first use. Examples, vignettes and tests exercise that path, so on a check machine without network access they would ERROR (an informative <code><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop()</a></code>, but still an ERROR — the policy asks for a graceful <em>message</em>). The check in §4 records which <code>(n, lag)</code> tables were actually pulled: exactly one, <code>lag0-n100.bin.xz</code> (1.3 KB). The test suite itself passes <code>cv</code> everywhere and fetches nothing.</p>
 <p>Options, cheapest first:</p>
 <ol style="list-style-type: decimal"><li>
 <strong>Accept and disclose</strong> in <code>cran-comments.md</code> (the check farm has network; many API-client packages ship this way). Zero code change.</li>
 <li>
-<strong>Ship the handful of tables the checks need as <code>inst/extdata/crit/</code></strong> and have <code><a href="reference/fetch_crit_bucket.html">fetch_crit_bucket()</a></code> look there before the network. Keeps the “no bundled <code>radf_crit</code> object” decision, makes every example, vignette and test offline-safe. ~3 lines in <code>R/crit-bucket.R</code> plus the files (a few KB each).</li>
+<strong>Ship the handful of tables the checks need as <code>inst/extdata/crit/</code></strong> and have <code><a href="reference/fetch_crit_bucket.html">fetch_crit_bucket()</a></code> look there before the network. Keeps the “no bundled <code>radf_crit</code> object” decision, makes every example, vignette and test offline-safe. ~3 lines in <code>R/crit-bucket.R</code> plus one 1.3 KB file.</li>
 <li>
 <strong>Guard</strong> every network-dependent example/test with <code>\donttest{}</code>/<code>skip_if_offline()</code> — largest diff, and <code>--as-cran</code> runs <code>\donttest</code> anyway, so it only helps tests.</li>
 </ol></div>
