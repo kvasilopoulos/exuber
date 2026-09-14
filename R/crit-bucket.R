@@ -68,10 +68,14 @@ fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
     }
     unlink(cache_path) # corrupt/truncated download: refetch instead of "not simulated"
   }
+  url_ <- sprintf("%s/%d/%d", base_url, lag, n)
   # download.file() surfaces an HTTP 404 as a warning before its error, so
-  # the same handler serves both conditions.
+  # the same handler serves both conditions; the status is re-read from the
+  # headers because the warning's wording differs across R versions/methods.
   on_fail <- function(cnd) {
-    if (grepl("404", conditionMessage(cnd), fixed = TRUE)) return(NULL)
+    status <- tryCatch(attr(curlGetHeaders(url_, timeout = 30L), "status"),
+                       error = function(e) NA_integer_)
+    if (identical(status, 404L)) return(NULL)
     stop_glue(
       "Cannot reach the critical-value store ({conditionMessage(cnd)}). ",
       "Check your network connection and try again."
@@ -81,7 +85,6 @@ fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
     {
       dest <- tempfile(fileext = ".bin.xz")
       on.exit(unlink(dest), add = TRUE)
-      url_ <- sprintf("%s/%d/%d", base_url, lag, n)
       utils::download.file(url_, dest, mode = "wb", quiet = TRUE)
       cv <- parse_crit_bin(dest)
       file.copy(dest, cache_path, overwrite = TRUE)
