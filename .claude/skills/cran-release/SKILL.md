@@ -35,13 +35,13 @@ acceptance `usethis::use_github_release()`, `use_dev_version(push = TRUE)`,
 and the website/CHANGELOG follow-ups the repo checklist lists.
 
 **Monitoring by email.** win-builder, macbuilder and CRAN only report by
-mail, to the `cre` address in `DESCRIPTION` — `k.vasilopoulo@gmail.com`,
-which is the account behind the claude.ai Gmail connector. Use
-`mcp__claude_ai_Gmail__search_threads` (`query`, Gmail syntax), then
-`mcp__claude_ai_Gmail__get_thread` with `messageFormat: PLAIN_TEXT`. Before
-trusting a hit, check its `toRecipients` is the `cre` address (if the
-connector is ever re-pointed at another account, say so and ask the user
-to paste the mail). Sender/subject shapes as actually received:
+mail, to the `cre` address in `DESCRIPTION`; the claude.ai Gmail
+connector is on that account. Use `mcp__claude_ai_Gmail__search_threads`
+(`query`, Gmail syntax), then `mcp__claude_ai_Gmail__get_thread` with
+`messageFormat: PLAIN_TEXT`. Before trusting a hit, check its
+`toRecipients` is the `cre` address — if it isn't, the connector is on a
+different account: say so and ask the user to paste the mail.
+Sender/subject shapes as actually received:
 
 | Stage | From | Subject |
 |---|---|---|
