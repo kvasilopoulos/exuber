@@ -81,7 +81,8 @@ hlw_local_to_global <- function(local_tau, s) {
 #' threshold-crossing dating.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' dating table (model, origination, collapse, recovery) -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -102,6 +103,7 @@ hlw_local_to_global <- function(local_tau, s) {
 #' autoplot(res2)
 #' }
 #'
+#' @family dating
 #' @export
 dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
                       min_duration = NULL, nboot = 199L, seed = NULL) {

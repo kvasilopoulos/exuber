@@ -46,7 +46,8 @@ This is a residual-sum-of-squares model-selection dating
 procedure, not a hypothesis test -- it needs no critical values at all.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 dating table (model, origination, collapse, recovery) -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -78,4 +79,12 @@ collapse of bubbles. Journal of Time Series Analysis, 46(5), 867-883.
 \seealso{
 \code{\link{dating_hls}}, \code{\link{dating_pdc}} for related
 SSR-based dating approaches.
+
+Other dating:
+\code{\link[=dating_hls]{dating_hls()}},
+\code{\link[=dating_hlw]{dating_hlw()}},
+\code{\link[=dating_pdc]{dating_pdc()}},
+\code{\link[=radf_recovery]{radf_recovery()}},
+\code{\link[=rootstamp]{rootstamp()}}
 }
+\concept{dating}

@@ -84,6 +84,7 @@ kernel_purge <- function(y, kernel = c("gaussian", "uniform"), h = NULL) {
 #' autoplot(res, cv = cv)
 #' }
 #'
+#' @family volatility-robust tests
 #' @export
 radf_kp <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL) {
   kernel <- match.arg(kernel)

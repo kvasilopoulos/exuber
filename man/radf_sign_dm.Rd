@@ -20,6 +20,11 @@ not supported. When any series is padded this way, the panel statistic
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 }
+\value{
+An object of class \code{radf_sign_dm_obj}/\code{radf_obj}: the same
+\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
+\code{\link{radf}}; pair with \code{\link{radf_sign_dm_cv}}.
+}
 \description{
 \code{radf_sign_dm} computes Harvey, Leybourne & Zu (2020)'s second
 sign-based analogue of the recursive right-tailed unit root test,
@@ -89,4 +94,13 @@ deterministic level shifts. Oxford Bulletin of Economics and Statistics,
 \seealso{
 \code{\link{radf_sign_dm_cv}} for critical values, and
 \code{\link{radf_sign}} for the non-demeaned sign-based analogue.
+
+Other volatility-robust tests:
+\code{\link[=radf_kp]{radf_kp()}},
+\code{\link[=radf_sbz]{radf_sbz()}},
+\code{\link[=radf_sbz_union]{radf_sbz_union()}},
+\code{\link[=radf_sign]{radf_sign()}},
+\code{\link[=radf_tt]{radf_tt()}},
+\code{\link[=ssu_test]{ssu_test()}}
 }
+\concept{volatility-robust tests}

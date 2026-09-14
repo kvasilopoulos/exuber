@@ -104,6 +104,7 @@ non-stationary volatility. Journal of Empirical Finance, 38(Part B), 548-574.
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&P 500. International Economic Review, 56(4), 1043-1078.
+\doi{10.1111/iere.12132}
 
 Hafner, C. M. (2020). Testing for bubbles in
 cryptocurrencies with time-varying volatility. Journal of Financial
@@ -112,4 +113,16 @@ Econometrics, 18(2), 233-249.
 \seealso{
 \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 \code{\link{radf_sb_cv}} for sieve bootstrap critical values.
+
+Other critical values:
+\code{\link[=radf_common_cv]{radf_common_cv()}},
+\code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\code{\link[=radf_recovery_cv]{radf_recovery_cv()}},
+\code{\link[=radf_sb_cv]{radf_sb_cv()}},
+\code{\link[=radf_sbz_cv]{radf_sbz_cv()}},
+\code{\link[=radf_sign_cv]{radf_sign_cv()}},
+\code{\link[=radf_sign_dm_cv]{radf_sign_dm_cv()}},
+\code{\link[=radf_tt_cv]{radf_tt_cv()}},
+\code{\link[=radf_wb_ps_cv]{radf_wb_ps_cv()}}
 }
+\concept{critical values}

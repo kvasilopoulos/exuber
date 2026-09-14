@@ -27,6 +27,13 @@ not supported. When any series is padded this way, the panel statistic
 \code{T^(-2/5)}, the midpoint (on the log scale) of the paper's
 cross-validation search range \eqn{[T^{-0.5}, T^{-0.3}]}.}
 }
+\value{
+An object of class \code{radf_tt_obj}/\code{radf_obj}: the same
+\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
+\code{\link{radf}}, computed on the time-transformed series, so it
+plugs into \code{summary()}/\code{datestamp()}/\code{tidy()}/\code{autoplot()}
+paired with \code{\link{radf_tt_cv}}.
+}
 \description{
 \code{radf_tt} computes the STADF/GSTADF test statistics of Kurozumi,
 Skrobotov & Tsarev, a heteroskedasticity-robust alternative to
@@ -50,6 +57,11 @@ pipeline works -- \code{radf_tt_cv()} now computes the time-varying
 the three scalar critical values \code{summary()} uses. See
 \code{vignette("naming-and-analysis", package = "exuber")}.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \examples{
 \donttest{
 # Volatility triples half-way through the sample: the non-stationary-volatility
@@ -75,4 +87,13 @@ Econometrics. \doi{10.1093/jjfinec/nbae026}
 \code{\link{radf_tt_cv}} for the (pivotal, bootstrap-free)
 asymptotic critical values, and \code{\link{radf_wb_cv}} for the
 bootstrap-based alternative (Harvey, Leybourne, Sollis & Taylor).
+
+Other volatility-robust tests:
+\code{\link[=radf_kp]{radf_kp()}},
+\code{\link[=radf_sbz]{radf_sbz()}},
+\code{\link[=radf_sbz_union]{radf_sbz_union()}},
+\code{\link[=radf_sign]{radf_sign()}},
+\code{\link[=radf_sign_dm]{radf_sign_dm()}},
+\code{\link[=ssu_test]{ssu_test()}}
 }
+\concept{volatility-robust tests}

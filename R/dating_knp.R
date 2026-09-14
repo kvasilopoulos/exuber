@@ -99,7 +99,8 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' SSR-based dating approaches.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' dating table (model, origination, collapse, recovery) -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -120,6 +121,7 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #'   ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)
 #' }
 #'
+#' @family dating
 #' @export
 dating_knp <- function(data, trim = 0.05, omit = TRUE) {
   x <- parse_data(data)

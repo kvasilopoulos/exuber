@@ -11,6 +11,11 @@ calc_pvalue(x, distr = NULL)
 
 \item{distr}{A \code{radf_distr} object.}
 }
+\value{
+A \code{tibble} with one row per series (\code{id}) and one p-value column
+per statistic (\code{adf}, \code{sadf}, \code{gsadf}; the panel statistic only when
+\code{distr} is a sieve-bootstrap distribution).
+}
 \description{
 Calculate p-values from \code{distr} object
 }

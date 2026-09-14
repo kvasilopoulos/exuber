@@ -21,6 +21,10 @@ of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
 }
+\value{
+An object of class \code{radf_cv}/\code{sign_cv}/\code{mc_cv} with
+the same structure as \code{\link{radf_mc_cv}}.
+}
 \description{
 Simulates the asymptotic null distribution of \code{\link{radf_sign}}'s
 statistic. Per Theorem 2 of Harvey, Leybourne & Zu (2020), this
@@ -55,3 +59,16 @@ unit root tests for explosive financial bubbles in the presence of
 deterministically time-varying volatility. Econometric Theory, 36(1),
 122-169.
 }
+\seealso{
+Other critical values:
+\code{\link[=radf_common_cv]{radf_common_cv()}},
+\code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\code{\link[=radf_recovery_cv]{radf_recovery_cv()}},
+\code{\link[=radf_sb_cv]{radf_sb_cv()}},
+\code{\link[=radf_sbz_cv]{radf_sbz_cv()}},
+\code{\link[=radf_sign_dm_cv]{radf_sign_dm_cv()}},
+\code{\link[=radf_tt_cv]{radf_tt_cv()}},
+\code{\link[=radf_wb_cv]{radf_wb_cv()}},
+\code{\link[=radf_wb_ps_cv]{radf_wb_ps_cv()}}
+}
+\concept{critical values}
