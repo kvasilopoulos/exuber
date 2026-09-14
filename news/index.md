@@ -191,7 +191,7 @@ what was checked and how.
 #### Performance
 
 - [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-  is ~25x faster on typical sample sizes (exubercore v0.3.0): the
+  is ~25x faster on typical sample sizes (exubercore v0.3.1): the
   recursive grid re-formed the full residual vector for every window, an
   O(n^3) total; it now keeps running cross-products and uses the
   closed-form `SSR = y'y - b'X'y`, making it O(n^2). n = 400 drops from
@@ -204,8 +204,11 @@ what was checked and how.
   [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
   and every other loop over
   [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-  speed up by the same factor. Results are numerically identical to
-  ~1e-12.
+  speed up by the same factor. The regression is now parametrised as
+  `dy` on `(1, y_{t-1}, dy lags)` (same t-statistic, on `beta - 1`),
+  which is also more accurate than before at large `n` with large
+  levels: ~3e-11 against [`lm()`](https://rdrr.io/r/stats/lm.html) at n
+  = 2000 where the old recursion was ~2e-8.
 - Parallel runs (`options(exuber.parallel = TRUE)`) reuse one worker
   cluster per session instead of starting and stopping a fresh
   [`future::multisession`](https://future.futureverse.org/reference/multisession.html)
