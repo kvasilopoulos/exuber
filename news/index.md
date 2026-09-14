@@ -206,15 +206,18 @@ what was checked and how.
   [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
   speed up by the same factor. Results are numerically identical to
   ~1e-12.
-- Parallel runs (`options(exuber.parallel = TRUE)`, the default) reuse
-  one worker cluster per session instead of starting and stopping a
-  fresh
+- Parallel runs (`options(exuber.parallel = TRUE)`) reuse one worker
+  cluster per session instead of starting and stopping a fresh
   [`future::multisession`](https://future.futureverse.org/reference/multisession.html)
   on every call – a few seconds of start-up overhead that used to
   dominate every small
   [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)/[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
   job. The cluster is sized by `exuber.ncores` and stopped when the
-  namespace unloads.
+  namespace unloads. `exuber.parallel` now defaults to
+  [`interactive()`](https://rdrr.io/r/base/interactive.html): scripts,
+  knitr and `R CMD check` run serially unless they opt in, so a batch
+  job no longer pays worker start-up (nor leaves worker connections
+  open) for a handful of replications.
 
 #### API consistency
 

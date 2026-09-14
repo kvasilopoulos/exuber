@@ -76,7 +76,10 @@ Testing for and dating periods of explosive dynamics (exuberance) in time series
 
 
 <p><code>exuber.show_progress</code></p><ul><li><p>Should lengthy operations such as <code><a href="radf_mc_cv.html">radf_mc_cv()</a></code> show a progress bar? Default: TRUE</p></li>
-</ul><p><code>exuber.parallel</code></p><ul><li><p>Should lengthy operations use parallel computation? Default: TRUE.
+</ul><p><code>exuber.parallel</code></p><ul><li><p>Should lengthy operations use parallel computation? Default: TRUE in an
+interactive session, FALSE otherwise (scripts, knitr, R CMD check), since
+starting workers costs a few seconds; set it to TRUE in a script to opt in.
+The worker cluster is started once per session and reused.
 Honored by the <code>radf_*_cv()</code>/<code>radf_*_distr()</code> simulation engines
 (<code><a href="radf_mc_cv.html">radf_mc_cv()</a></code>, <code><a href="radf_wb_cv.html">radf_wb_cv()</a></code>, <code><a href="radf_sb_cv.html">radf_sb_cv()</a></code>,
 <code><a href="radf_recovery_cv.html">radf_recovery_cv()</a></code>, <code><a href="radf_common_cv.html">radf_common_cv()</a></code>); the standalone

@@ -22,7 +22,10 @@ processes. Details can be found in Vasilopoulos et al. (2022)
 
 `exuber.parallel`
 
-- Should lengthy operations use parallel computation? Default: TRUE.
+- Should lengthy operations use parallel computation? Default: TRUE in
+  an interactive session, FALSE otherwise (scripts, knitr, R CMD check),
+  since starting workers costs a few seconds; set it to TRUE in a script
+  to opt in. The worker cluster is started once per session and reused.
   Honored by the `radf_*_cv()`/`radf_*_distr()` simulation engines
   ([`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
   [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
