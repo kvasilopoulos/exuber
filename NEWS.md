@@ -135,6 +135,17 @@ what was checked and how.
   invariance, not a validation concern) — see
   `vignette("naming-and-analysis")`.
 
+### Performance
+
+* `radf()` is ~25x faster on typical sample sizes (exubercore v0.3.0): the
+  recursive grid re-formed the full residual vector for every window, an
+  O(n^3) total; it now keeps running cross-products and uses the
+  closed-form `SSR = y'y - b'X'y`, making it O(n^2). n = 400 drops from
+  ~140 ms to ~6 ms per path, so `radf_mc_cv()`, `radf_wb_cv()`,
+  `radf_sb_cv()`, `monitor()`, `dating_hlw()`, `radf_recovery()` and every
+  other loop over `radf()` speed up by the same factor. Results are
+  numerically identical to ~1e-12.
+
 ### API consistency (2026-09-14 review)
 
 * One significance-level convention across the whole package: every
