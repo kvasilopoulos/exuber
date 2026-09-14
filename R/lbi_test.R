@@ -1,6 +1,6 @@
 # Breitung & Diegel (2025, JTSA, "A Locally Best Invariant Sequential
 # Test for Explosive Behavior in the Presence of Nonstationary
-# Volatility"; "BD"). See docs/enhancements/monitoring.md for the full
+# Volatility"; "BD"). See docs/monitoring.md for the full
 # evaluation this implements -- their static (Section 3, known bubble
 # start date at the beginning of the sample) locally best invariant
 # (LBI) test only. Their actual headline contribution is a sequential/

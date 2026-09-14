@@ -1,7 +1,7 @@
 # Wu, Shi & Wu (2025, JTSA 46(5), "Quantile analysis for financial bubble
 # detection and surveillance", "WSW") -- the QPWY recursive monitoring
 # strategy of their Section 3.2 (their eq. 25, 28). See
-# docs/enhancements/alternative-paradigms.md, "Quantile-based detection",
+# docs/alternative-paradigms.md, "Quantile-based detection",
 # for the full evaluation this implements.
 #
 # QPWY is the single-recursion sibling of the paper's own QPSY (eq. 26):

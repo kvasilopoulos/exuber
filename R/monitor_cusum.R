@@ -1,6 +1,6 @@
 # CUSUM real-time monitoring. Homm & Breitung (2012, Journal of Financial
 # Econometrics, 10(1), 198-231; "HB"), Section 3, eq. 26-30. See
-# docs/enhancements/monitoring.md, "CUSUM/Page-CUSUM detector family", for
+# docs/monitoring.md, "CUSUM/Page-CUSUM detector family", for
 # the full evaluation this implements -- Family B: a structurally
 # different statistic from Family A's recursive-ADF training-max
 # (monitor()), a standardized running sum of first differences

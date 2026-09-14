@@ -1,7 +1,7 @@
 # Greenaway-McGrevy, R. & Phillips, P.C.B. (2016, New Zealand Economic
 # Papers 50(1), 88-113; Cowles Foundation Discussion Paper 2004 (2015),
 # "Hot Property in New Zealand"; "GMP"), Section 2.6 / Technical Appendix
-# 5.1.2 ("Contagion Regressions"). See docs/enhancements/multivariate.md,
+# 5.1.2 ("Contagion Regressions"). See docs/multivariate.md,
 # "Contagion regression", for the full evaluation this implements.
 #
 # Re-triaged (2026-08-10) after an earlier pass scoped this as "the most

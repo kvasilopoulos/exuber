@@ -1,5 +1,5 @@
 # Harvey, Leybourne & Whitehouse (2020, Journal of Empirical Finance,
-# "Date-stamping multiple bubble regimes"; "HLW"). See docs/enhancements/
+# "Date-stamping multiple bubble regimes"; "HLW"). See docs/
 # dating-and-root-inference.md, "SSR/BIC dating vs. PSY recursive
 # dating", for the full evaluation this implements.
 #
@@ -14,7 +14,7 @@
 # is by construction a unit-root point, not a genuine sample end.
 #
 # HLW's own eq. for the window boundaries (their sj/ej, confirmed
-# against docs/enhancements/dating-and-root-inference.md's already-
+# against docs/dating-and-root-inference.md's already-
 # image-verified reading of this paper) uses datestamp()'s Start/End
 # columns directly as observation positions (not fractions requiring
 # multiplication by T -- HLW's own text: "j1_hat*T and j2_hat*T

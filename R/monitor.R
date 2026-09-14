@@ -1,6 +1,6 @@
 # Real-time monitoring. Phillips & Shi (2020, in Handbook of Statistics
 # vol. 42, "Real time monitoring of asset markets: Bubbles and crises";
-# "PS"). See docs/enhancements/monitoring.md, "Cost/feasibility note", for
+# "PS"). See docs/monitoring.md, "Cost/feasibility note", for
 # the full evaluation this implements -- Family A/PSY-style monitoring:
 # fix a training window assumed free of exuberance, calibrate a critical
 # value on it, then walk the sample forward comparing the running

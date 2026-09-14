@@ -1,6 +1,6 @@
 # Kejriwal, Nguyen & Perron (2025, JTSA 46(5), "An Improved Procedure
 # for Retrospectively Dating the Emergence and Collapse of Bubbles";
-# "KNP"). See docs/enhancements/dating-and-root-inference.md, "SSR/BIC
+# "KNP"). See docs/dating-and-root-inference.md, "SSR/BIC
 # dating vs. PSY recursive dating", for the full evaluation this
 # implements.
 #
