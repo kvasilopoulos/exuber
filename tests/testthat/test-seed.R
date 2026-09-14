@@ -16,6 +16,7 @@ test_that("seed reproduces across serial and parallel execution", {
   x <- radf_mc_cv(20, nrep = 20, seed = 123)
   withr::local_options(list(exuber.parallel = FALSE))
   y <- radf_mc_cv(20, nrep = 20, seed = 123)
+  attr(x, "parallel") <- attr(y, "parallel") <- NULL
   expect_equal(x, y)
 })
 
