@@ -1,5 +1,5 @@
 # Phillips & Shi (2014, Econometric Theory), "Financial Bubble Implosion
-# and Reverse Regression" ("PS14"). See docs/enhancements/
+# and Reverse Regression" ("PS14"). See docs/
 # dating-and-root-inference.md, "Reverse-regression recovery dating", for
 # the full evaluation this implements.
 #
@@ -180,7 +180,7 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' enough to trigger a premature \code{f_c}), but this has not been ruled
 #' out against a subtler implementation issue. Treat \code{f_c} and the
 #' overall detection rate as exploratory pending further validation; see
-#' docs/enhancements/dating-and-root-inference.md for the full numbers.
+#' docs/dating-and-root-inference.md for the full numbers.
 #' The same short pointer is emitted as a message when this function is
 #' called (see \code{\link{suppressMessages}} to silence it) and stored as
 #' \code{attr(x, "caveat")} on the returned object.

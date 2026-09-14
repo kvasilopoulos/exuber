@@ -1,6 +1,6 @@
 # Sequential sample-splitting bubble dating. Pang, Du & Chong (2021,
 # journal; PDC) and its 4-regime extension by Kurozumi & Skrobotov (2023,
-# journal; KS). See docs/enhancements/dating-and-root-inference.md,
+# journal; KS). See docs/dating-and-root-inference.md,
 # "SSR/BIC dating vs. PSY recursive dating", section 3, for the full
 # evaluation this implements.
 #

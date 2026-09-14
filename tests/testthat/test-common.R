@@ -50,7 +50,7 @@ test_that("radf_common_cv returns a radf_cv/mc_cv-shaped object usable
 
 test_that("radf_common_cv's null quantiles depend on N (independent
   validation, 2026-08-09, found this dependence is real and grows with N --
-  see docs/enhancements/multivariate.md): a wider panel of independent
+  see docs/multivariate.md): a wider panel of independent
   random walks should give a HIGHER null gsadf quantile, not the same one,
   confirming radf_mc_cv() (which has no N argument) cannot be a substitute", {
   skip_on_cran()

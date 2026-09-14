@@ -2,7 +2,7 @@
 # detection and surveillance", "WSW") -- the "global test" of their
 # Section 3.1: a quantile-regression (QR) analogue of the DF t-ratio,
 # testing for a bubble via the tau-th conditional quantile of y_t on
-# y_{t-1} rather than the conditional mean. See docs/enhancements/
+# y_{t-1} rather than the conditional mean. See docs/
 # alternative-paradigms.md, "Quantile-based detection", for the full
 # evaluation this implements.
 #

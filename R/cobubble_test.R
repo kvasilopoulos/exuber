@@ -1,6 +1,6 @@
 # Co-explosive behaviour test. Evripidou, Harvey, Leybourne & Sollis (2022,
 # Oxford Bulletin of Economics and Statistics, 84(3), 624-650; "EHLS"). See
-# docs/enhancements/multivariate.md, "Co-bubble test", for the full
+# docs/multivariate.md, "Co-bubble test", for the full
 # evaluation this implements.
 #
 # Tests whether two series that each contain an explosive episode are

@@ -93,7 +93,7 @@ persistence requirement, so a transient dip below the boundary is
 enough to trigger a premature \code{f_c}), but this has not been ruled
 out against a subtler implementation issue. Treat \code{f_c} and the
 overall detection rate as exploratory pending further validation; see
-docs/enhancements/dating-and-root-inference.md for the full numbers.
+docs/dating-and-root-inference.md for the full numbers.
 The same short pointer is emitted as a message when this function is
 called (see \code{\link{suppressMessages}} to silence it) and stored as
 \code{attr(x, "caveat")} on the returned object.

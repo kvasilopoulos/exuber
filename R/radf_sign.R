@@ -1,5 +1,5 @@
 # Sign-based bubble test. Harvey, Leybourne & Zu (2020, Econometric
-# Theory, 36(1), 122-169; "HLZ"). See docs/enhancements/volatility-
+# Theory, 36(1), 122-169; "HLZ"). See docs/volatility-
 # robustness.md, "Sign-based sGSADF", for the full evaluation this
 # implements.
 #

@@ -1,6 +1,6 @@
 # Harvey, Leybourne & Sollis (2017, Journal of Empirical Finance,
 # "Improving the accuracy of asset price bubble start and end date
-# estimators"; "HLS"). See docs/enhancements/dating-and-root-inference.md,
+# estimators"; "HLS"). See docs/dating-and-root-inference.md,
 # "SSR/BIC dating vs. PSY recursive dating", section 1, for the full
 # evaluation this implements -- all four model/BIC formulas below were
 # re-verified there against rendered PDF pages, not just pdftotext.
