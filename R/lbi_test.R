@@ -42,12 +42,14 @@
 #' pinned down here and are not implemented.
 #'
 #' @note The critical value is closed-form: the standard normal
-#' (\code{qnorm}) quantile at \code{level} -- no bootstrap, no
+#' (\code{qnorm}) quantile at \code{sig_lvl} -- no bootstrap, no
 #' simulation, no table needed.
 #'
 #' @inheritParams radf
-#' @param level Nominal confidence level for the (one-sided, right-tailed
-#' -- positive bubbles only) test (default \code{0.95}).
+#' @param sig_lvl Significance level for the (one-sided, right-tailed --
+#' positive bubbles only) test, on the package-wide 0-100 scale (default
+#' \code{95}); any value in \code{[50, 100)} is accepted since the
+#' critical value is a closed-form normal quantile.
 #'
 #' @return An object of class \code{lbi_test_obj}: a list with the test
 #' statistic \code{stat}, the standard-normal critical value \code{crit},
@@ -61,7 +63,8 @@
 #' this complements.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' statistic/critical-value/detected summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -80,9 +83,10 @@
 #' }
 #'
 #' @importFrom stats qnorm
+#' @family alternative tests
 #' @export
-lbi_test <- function(data, level = 0.95) {
-  stopifnot(level > 0 && level < 1)
+lbi_test <- function(data, sig_lvl = 95) {
+  assert_sig_lvl(sig_lvl, choices = NULL)
   x <- parse_data(data)
   n <- nrow(x)
   snames <- colnames(x)
@@ -95,11 +99,11 @@ lbi_test <- function(data, level = 0.95) {
     sigma2_tilde <- mean(dy^2)
     stat[j] <- (y[n] - y[1]) / sqrt(sigma2_tilde * (n - 1))
   }
-  crit <- unname(stats::qnorm(level))
+  crit <- unname(stats::qnorm(sig_lvl / 100))
   detected <- setNames(stat > crit, snames)
 
   list(stat = stat, crit = crit, detected = detected) %>%
-    add_attr(series_names = snames, n = n, level = level) %>%
+    add_attr(series_names = snames, n = n, sig_lvl = sig_lvl) %>%
     add_class("lbi_test_obj")
 }
 
@@ -120,7 +124,7 @@ autoplot.lbi_test_obj <- function(object, ...) {
 #' @export
 print.lbi_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("lbi_test (n = {attr(x, 'n')}, level = {attr(x, 'level') * 100}%)"))
+  cat_rule(left = glue("lbi_test (n = {attr(x, 'n')}, sig_lvl = {attr(x, 'sig_lvl')}%)"))
   cat_line()
   print(
     data.frame(
@@ -173,15 +177,15 @@ print.lbi_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
 # paper's own point of comparison, not its contribution, and is not
 # implemented.
 bd_cusum_table <- data.frame(
-  level = c(0.90, 0.95, 0.975, 0.99, 0.995),
+  sig_lvl = c(90, 95, 97.5, 99, 99.5),
   b_alpha = c(1.64, 1.95, 2.24, 2.57, 2.80)
 )
 
-bd_cusum_q <- function(level) {
-  match_idx <- which(abs(level - bd_cusum_table$level) < 1e-8)
+bd_cusum_q <- function(sig_lvl) {
+  match_idx <- which(abs(sig_lvl - bd_cusum_table$sig_lvl) < 1e-8)
   if (length(match_idx) == 0L) {
     stop_glue(
-      "'level' must be one of {paste(bd_cusum_table$level, collapse = ', ')} ",
+      "'sig_lvl' must be one of {paste(bd_cusum_table$sig_lvl, collapse = ', ')} ",
       "(Breitung & Diegel (2025)'s Table 1 only tabulates these ",
       "significance levels)."
     )
@@ -232,10 +236,10 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' when a bubble is equally likely to start at any point in the
 #' monitoring window; the paper's own suggested value for a moderate power
 #' boost when a bubble partway through is more plausible is \code{2}.
-#' Critical values (\code{level}) are the same for every \code{c_bar}.
-#' @param level Nominal confidence level, one of \code{0.90}, \code{0.95},
-#' \code{0.975}, \code{0.99}, \code{0.995} (Breitung & Diegel's Table 1
-#' only tabulates these).
+#' Critical values (\code{sig_lvl}) are the same for every \code{c_bar}.
+#' @param sig_lvl Significance level on the package-wide 0-100 scale, one
+#' of \code{90}, \code{95}, \code{97.5}, \code{99}, \code{99.5} (Breitung &
+#' Diegel's Table 1 only tabulates these).
 #'
 #' @return An object of class \code{monitor_lbi_obj}: a list with the
 #' monitoring-region statistic path (\code{stat}), the constant
@@ -252,7 +256,8 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' detectors.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' boundary/alarm summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -272,10 +277,11 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' autoplot(monitor_lbi(y, r_star = 100, c_bar = 2))
 #' }
 #'
+#' @family monitoring
 #' @export
-monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
+monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, sig_lvl = 95) {
   stopifnot(c_bar >= 0)
-  b_alpha <- bd_cusum_q(level)
+  b_alpha <- bd_cusum_q(sig_lvl)
   x <- parse_data(data)
   n <- nrow(x)
 
@@ -316,7 +322,7 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, level = 0.95) {
     alarm = alarm, alarm_date = alarm_date
   ) %>%
     add_attr(
-      index = idx, series_names = snames, n = n, c_bar = c_bar, level = level
+      index = idx, series_names = snames, n = n, c_bar = c_bar, sig_lvl = sig_lvl
     ) %>%
     add_class("monitor_lbi_obj")
 }

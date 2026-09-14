@@ -135,6 +135,39 @@ what was checked and how.
   invariance, not a validation concern) — see
   `vignette("naming-and-analysis")`.
 
+### API consistency (2026-09-14 review)
+
+* One significance-level convention across the whole package: every
+  function that took a `level` argument now takes `sig_lvl` on the
+  0-100 scale already used by `datestamp()`/`autoplot()` (`sig_lvl = 95`
+  = a 5% test / 95% confidence). Affected (all unreleased, so no shims):
+  `lbi_test()`, `monitor_lbi()` (`0.95` -> `95`, `0.975` -> `97.5`, ...),
+  `ssu_test()`, `monitor()`, `monitor_cusum()`, `rootstamp()` (was a
+  `0.95`-style confidence level), `quantile_test()`/`monitor_quantile()`
+  (already 0-100, renamed only), and `cobubble_test()` (was a *size*,
+  `level = 0.05`; now `sig_lvl = 95`). A shared `assert_sig_lvl()` makes
+  `sig_lvl = 0.95` an immediate error everywhere rather than a silently
+  wrong quantile.
+* `monitor(adflag = )` -> `lag`, matching `radf()`; `monitor_cusum(N = )`
+  -> `h`, matching every other kernel-bandwidth argument;
+  `cobubble_test(lags = )` -> `lag_grid`, so `lag`/`lags` can no longer be
+  confused (mirrors `quantile_test()`'s `tau`/`tau_grid`).
+* `cobubble_test()` and `radf_sbz_union()` now return `cobubble_test_obj`/
+  `radf_sbz_union_obj`, the `_obj` suffix every other standalone class
+  already carried.
+* `dating_pdc()` and `radf_sbz()` gained their own `print()` methods (the
+  former fell through to `print.data.frame`, hiding its attributes; the
+  latter printed as a plain `radf`).
+* `scale_exuber_manual(size_values = )` is deprecated in favour of
+  `linewidth_values` (ggplot2 >= 3.4.0's `linewidth` aesthetic replaces
+  `size` for lines; the deprecation warning ggplot2 emitted from every
+  `autoplot()` is gone). `autoplot(include_negative = )`, deprecated since
+  1.0.0, is now actually forwarded to `nonrejected` instead of ignored.
+* `radf_tt()`/`radf_tt_cv()`/`monitor_quantile()` carry the same
+  experimental badge as the other new methods; the "does not plug into
+  `autoplot`" note on every standalone function was wrong (each has had
+  its own `autoplot()` method) and now says so.
+
 ### Other
 
 * `rootstamp()` — confidence interval and doubling time on the explosive
@@ -189,6 +222,10 @@ what was checked and how.
   bounds` on a *named* numeric vector, e.g. a `prcomp()` score column --
   which is exactly what `radf_common()` feeds it -- because the names
   leaked into the internal NA-edge bookkeeping.
+
+* The default-`cv` range check said the store covers `n <= 5000`; it
+  covers `n <= 4000` and `lag <= 4`, and now says so before trying the
+  network.
 
 * `sim_psy1()`'s `seed` argument now also covers a generator passed lazily
   to `e`/`coef_noise` (e.g. `sim_psy1(n, seed = 1, e = sim_vol_break(n - 1))`);

@@ -4,7 +4,7 @@
 \alias{lbi_test}
 \title{Locally Best Invariant Test for a Bubble (Breitung & Diegel 2025)}
 \usage{
-lbi_test(data, level = 0.95)
+lbi_test(data, sig_lvl = 95)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -17,8 +17,10 @@ not supported. When any series is padded this way, the panel statistic
 (\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
 \code{NA}, with a warning.}
 
-\item{level}{Nominal confidence level for the (one-sided, right-tailed
--- positive bubbles only) test (default \code{0.95}).}
+\item{sig_lvl}{Significance level for the (one-sided, right-tailed --
+positive bubbles only) test, on the package-wide 0-100 scale (default
+\code{95}); any value in \code{[50, 100)} is accepted since the
+critical value is a closed-form normal quantile.}
 }
 \value{
 An object of class \code{lbi_test_obj}: a list with the test
@@ -44,11 +46,12 @@ pinned down here and are not implemented.
 }
 \note{
 The critical value is closed-form: the standard normal
-(\code{qnorm}) quantile at \code{level} -- no bootstrap, no
+(\code{qnorm}) quantile at \code{sig_lvl} -- no bootstrap, no
 simulation, no table needed.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 statistic/critical-value/detected summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -77,4 +80,8 @@ nonstationary volatility. Journal of Time Series Analysis.
 \seealso{
 \code{\link{radf}} for the recursive ADF-family alternative
 this complements.
+
+Other alternative tests:
+\code{\link[=quantile_test]{quantile_test()}}
 }
+\concept{alternative tests}

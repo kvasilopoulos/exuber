@@ -76,9 +76,14 @@ every recurring episode the way \code{"gsadf"}/\code{"sadf"} do.
 }
 
 \examples{
-
 rsim_data <- radf(sim_data)
 
+# SV-ADF asymmetric-threshold dating (no critical values needed)
+datestamp(rsim_data, option = "svadf")
+
+\donttest{
+# The default `cv` is fetched from the shared critical-value store
+# (network on first use); pass `cv = radf_mc_cv(nrow(sim_data))` to stay offline
 ds_data <- datestamp(rsim_data)
 ds_data
 
@@ -86,14 +91,13 @@ ds_data
 datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 
 autoplot(ds_data)
-
-# SV-ADF asymmetric-threshold dating (no critical values needed)
-datestamp(rsim_data, option = "svadf")
+}
 }
 \references{
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 S&P 500. International Economic Review, 56(4), 1043-1078.
+\doi{10.1111/iere.12132}
 
 Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble?
 Robust date-stamping for periods of exuberance. arXiv:2604.12062.

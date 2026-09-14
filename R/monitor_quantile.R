@@ -116,7 +116,7 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' eq. 25 takes \code{tau} as a given parameter for the monitoring
 #' statistic, not re-selected at each recursion point).
 #' @param nrep Number of Monte Carlo replications for the boundary.
-#' @param level Significance level, one of \code{90}, \code{95}, \code{99}.
+#' @param sig_lvl Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
 #' @return An object of class \code{monitor_quantile_obj}: a list with the
@@ -133,10 +133,14 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' monitoring alternative.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' statistic/boundary/delta summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
+#'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' \donttest{
@@ -151,10 +155,11 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' autoplot(monitor_quantile(y, tau = 0.9, nrep = 100, seed = 1))
 #' }
 #'
+#' @family monitoring
 #' @export
-monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 95, seed = NULL) {
+monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl = 95, seed = NULL) {
   stopifnot(tau > 0 && tau < 1)
-  stopifnot(level %in% c(90, 95, 99))
+  assert_sig_lvl(sig_lvl)
   x <- parse_data(data)
   n <- nrow(x)
   minw <- minw %||% psy_minw(n)
@@ -192,7 +197,7 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 
     # maxima across replicates, giving one flat critical value.
     U <- sqrt(1 - delta_j^2) * z + delta_j * Q
     sup_U <- apply(U, 1, max)
-    boundary[j] <- quantile_narm(sup_U, probs = level / 100, names = FALSE)
+    boundary[j] <- quantile_narm(sup_U, probs = sig_lvl / 100, names = FALSE)
 
     breach <- which(stat_path[, j] > boundary[j])
     if (length(breach) > 0L) alarm[j] <- r_idx[breach[1L]]
@@ -208,7 +213,7 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, level = 
   ) %>%
     add_attr(
       index = idx, series_names = snames, n = n, minw = minw,
-      tau = tau, level = level, iter = nrep
+      tau = tau, sig_lvl = sig_lvl, iter = nrep
     ) %>%
     add_class("monitor_quantile_obj")
 }
@@ -236,7 +241,7 @@ print.monitor_quantile_obj <- function(x, digits = max(3L, getOption("digits") -
   cat_line()
   cat_rule(left = glue(
     "monitor_quantile (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
-    "tau = {attr(x, 'tau')}, level = {attr(x, 'level')}%)"
+    "tau = {attr(x, 'tau')}, sig_lvl = {attr(x, 'sig_lvl')}%)"
   ))
   cat_line()
   print(

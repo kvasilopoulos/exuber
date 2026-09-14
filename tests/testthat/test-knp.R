@@ -1,4 +1,4 @@
-context("radf_knp")
+context("dating_knp")
 
 test_that("knp_find_break(omit = FALSE) matches a brute-force nested lm() search", {
   set.seed(3)
@@ -49,7 +49,7 @@ test_that("knp_find_break(omit = TRUE) matches a brute-force search with
   expect_equal(fit$ssr, best$ssr, tolerance = 1e-6)
 })
 
-test_that("radf_knp runs end to end and returns a well-formed object", {
+test_that("dating_knp runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(150))
   out <- dating_knp(y, trim = 0.05)
@@ -61,7 +61,7 @@ test_that("radf_knp runs end to end and returns a well-formed object", {
   expect_output(print(out), "dating_knp")
 })
 
-test_that("radf_knp's omission correction reproduces Kejriwal, Nguyen &
+test_that("dating_knp's omission correction reproduces Kejriwal, Nguyen &
   Perron's own central finding: the naive (omit = FALSE) estimator's
   origination date is badly biased toward the true COLLAPSE date, while
   the omission-corrected estimator is materially more accurate for the

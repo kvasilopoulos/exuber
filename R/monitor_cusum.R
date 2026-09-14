@@ -48,13 +48,13 @@ hb_cusum_finite_table <- local({
 })
 
 # Same lookup-and-snap convention as monitor.R's hb_fluc_q().
-hb_cusum_finite_q <- function(level, n_train, k) {
-  beta <- 1 - level
-  beta_choices <- c(0.10, 0.05, 0.01)
-  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+hb_cusum_finite_q <- function(sig_lvl, n_train, k) {
+  choices <- c(90, 95, 99)
+  match_idx <- which(abs(sig_lvl - choices) < 1e-8)
+  beta <- c(0.10, 0.05, 0.01)[match_idx] # the tables index by test size
   if (length(match_idx) == 0L) {
     stop_glue(
-      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "'sig_lvl' must be one of {paste(choices, collapse = ', ')} ",
       "for boundary = 'finite' (Homm & Breitung (2012)'s Table 8 only ",
       "tabulates these significance levels)."
     )
@@ -180,15 +180,16 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' \code{boundary = "finite"}.
 #' @param boundary \code{"asymptotic"} (default) uses \code{b_alpha}
 #' directly. \code{"finite"} instead looks up HB's own finite-sample
-#' boundary constant (their Table 8) from \code{level} and the realized
-#' training length/monitoring-horizon ratio -- \code{level} must then be
-#' one of \code{0.90}, \code{0.95}, \code{0.99}.
-#' @param level Nominal confidence level when \code{boundary = "finite"}
-#' (default \code{0.95}); ignored when \code{boundary = "asymptotic"}.
+#' boundary constant (their Table 8) from \code{sig_lvl} and the realized
+#' training length/monitoring-horizon ratio -- \code{sig_lvl} must then be
+#' one of \code{90}, \code{95}, \code{99}.
+#' @param sig_lvl Significance level on the package-wide 0-100 scale when
+#' \code{boundary = "finite"} (default \code{95}); ignored when
+#' \code{boundary = "asymptotic"}.
 #' @param type \code{"standard"} (default) for Homm & Breitung (2012)'s
 #' original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
 #' Leybourne, Taylor & Zu (2023)'s volatility-robust "CUSUMV" variant.
-#' @param N Bandwidth/window length for the one-sided kernel spot-variance
+#' @param h Bandwidth/window length (AHLTZ's \code{N}) for the one-sided kernel spot-variance
 #' estimator when \code{type = "kernel"}. Default \code{20}, the authors'
 #' own empirically-recommended value (their Section 3: "setting H = 20
 #' delivered a procedure with the best trade-off" between false-alarm
@@ -218,7 +219,8 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' monitoring alternative.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' boundary/alarm summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -242,10 +244,11 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' autoplot(res_kernel)
 #' }
 #'
+#' @family monitoring
 #' @export
 monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
-                        boundary = c("asymptotic", "finite"), level = 0.95,
-                        type = c("standard", "kernel"), N = 20,
+                        boundary = c("asymptotic", "finite"), sig_lvl = 95,
+                        type = c("standard", "kernel"), h = 20,
                         kernel = c("gaussian", "uniform")) {
   type <- match.arg(type)
   kernel <- match.arg(kernel)
@@ -261,7 +264,7 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
     stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
   }
   if (boundary == "finite") {
-    b_alpha <- hb_cusum_finite_q(level, T_star, n / T_star)
+    b_alpha <- hb_cusum_finite_q(sig_lvl, T_star, n / T_star)
   }
 
   snames <- colnames(x)
@@ -273,7 +276,7 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
 
   for (j in seq_len(nc)) {
     path <- if (type == "kernel") {
-      cusum_stat_path_kernel(x[, j], T_star, b_alpha, N, kernel)
+      cusum_stat_path_kernel(x[, j], T_star, b_alpha, h, kernel)
     } else {
       cusum_stat_path(x[, j], T_star, b_alpha)
     }

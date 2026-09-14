@@ -4,7 +4,7 @@
 \alias{ssu_test}
 \title{Stochastic Unit Root Bubble Test (Kurozumi & Nishi 2025)}
 \usage{
-ssu_test(data, minw = NULL, level = 0.95)
+ssu_test(data, minw = NULL, sig_lvl = 95)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -20,8 +20,9 @@ not supported. When any series is padded this way, the panel statistic
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
-\item{level}{Nominal confidence level, one of \code{0.90}, \code{0.95},
-\code{0.99} (the levels Kurozumi & Nishi's Table I tabulates).}
+\item{sig_lvl}{Significance level on the package-wide 0-100 scale, one
+of \code{90}, \code{95}, \code{99} (the levels Kurozumi & Nishi's Table I
+tabulates).}
 }
 \value{
 An object of class \code{ssu_test_obj}: a list with the
@@ -58,7 +59,8 @@ The critical value is a published closed-table constant
 helper) -- no simulation needed.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 statistic/critical-value summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -74,7 +76,7 @@ picture of which functions do and don't fit that pipeline.
 # the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
 y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
   coef_noise = rnorm(149), coef_a = 4)
-res <- ssu_test(y, level = 0.95)
+res <- ssu_test(y, sig_lvl = 95)
 print(res)
 
 # Plot the recursive SSU statistic path against its critical value
@@ -90,4 +92,13 @@ Analysis, 46(5), 945-965.
 \seealso{
 \code{\link{radf}} for the deterministic-coefficient
 recursive ADF-family alternative this complements.
+
+Other volatility-robust tests:
+\code{\link[=radf_kp]{radf_kp()}},
+\code{\link[=radf_sbz]{radf_sbz()}},
+\code{\link[=radf_sbz_union]{radf_sbz_union()}},
+\code{\link[=radf_sign]{radf_sign()}},
+\code{\link[=radf_sign_dm]{radf_sign_dm()}},
+\code{\link[=radf_tt]{radf_tt()}}
 }
+\concept{volatility-robust tests}

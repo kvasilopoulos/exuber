@@ -58,18 +58,18 @@ kurozumi_table1 <- data.frame(
   q045_cs = c(2.1300, 2.3948, 2.9265, 2.1958, 2.4638, 3.0163, 2.2057, 2.4844, 3.0476)
 )
 
-# Look up q_0^df (SADF boundary constant) for a given confidence `level`
+# Look up q_0^df (SADF boundary constant) for a given `sig_lvl`
 # and monitoring-horizon ratio `s_bar`, snapping `s_bar` to the nearest of
-# Kurozumi's three tabulated values {1, 3, 5}. `level` must correspond
-# exactly to one of the table's three significance levels (0.10, 0.05,
-# 0.01) -- no interpolation across significance levels is attempted.
-kurozumi_sadf_q <- function(level, s_bar) {
-  beta <- 1 - level
-  beta_choices <- c(0.10, 0.05, 0.01)
-  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+# Kurozumi's three tabulated values {1, 3, 5}. `sig_lvl` must correspond
+# exactly to one of the table's three significance levels (90, 95, 99 on
+# the package's 0-100 scale) -- no interpolation across levels is attempted.
+kurozumi_sadf_q <- function(sig_lvl, s_bar) {
+  choices <- c(90, 95, 99)
+  match_idx <- which(abs(sig_lvl - choices) < 1e-8)
+  beta <- c(0.10, 0.05, 0.01)[match_idx] # the tables index by test size
   if (length(match_idx) == 0L) {
     stop_glue(
-      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "'sig_lvl' must be one of {paste(choices, collapse = ', ')} ",
       "for boundary = 'kurozumi' (Kurozumi (2020)'s Table 1 only tabulates ",
       "these significance levels)."
     )
@@ -84,13 +84,13 @@ kurozumi_sadf_q <- function(level, s_bar) {
 # Same lookup, for the GSADF_{s0} boundary constant (q04_df/q08_df
 # columns), s0 snapped to the nearest of Kurozumi's two tabulated cases
 # {0.4, 0.8}.
-kurozumi_gsadf_q <- function(level, s_bar, s0) {
-  beta <- 1 - level
-  beta_choices <- c(0.10, 0.05, 0.01)
-  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+kurozumi_gsadf_q <- function(sig_lvl, s_bar, s0) {
+  choices <- c(90, 95, 99)
+  match_idx <- which(abs(sig_lvl - choices) < 1e-8)
+  beta <- c(0.10, 0.05, 0.01)[match_idx] # the tables index by test size
   if (length(match_idx) == 0L) {
     stop_glue(
-      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "'sig_lvl' must be one of {paste(choices, collapse = ', ')} ",
       "for boundary = 'kurozumi' (Kurozumi (2020)'s Table 1 only tabulates ",
       "these significance levels)."
     )
@@ -194,18 +194,18 @@ hb_fluc_table <- local({
   tbl
 })
 
-# Look up b_{k,alpha} for a given confidence `level`, training length
+# Look up b_{k,alpha} for a given `sig_lvl`, training length
 # `n_train`, and monitoring-horizon ratio `k`, snapping `n_train` to the
-# nearest of {20, 50, 100} and `k` to the nearest of {2,...,10}. `level`
+# nearest of {20, 50, 100} and `k` to the nearest of {2,...,10}. `sig_lvl`
 # must correspond exactly to one of the table's three significance
 # levels.
-hb_fluc_q <- function(level, n_train, k) {
-  beta <- 1 - level
-  beta_choices <- c(0.10, 0.05, 0.01)
-  match_idx <- which(abs(beta - beta_choices) < 1e-8)
+hb_fluc_q <- function(sig_lvl, n_train, k) {
+  choices <- c(90, 95, 99)
+  match_idx <- which(abs(sig_lvl - choices) < 1e-8)
+  beta <- c(0.10, 0.05, 0.01)[match_idx] # the tables index by test size
   if (length(match_idx) == 0L) {
     stop_glue(
-      "'level' must be one of {paste(1 - beta_choices, collapse = ', ')} ",
+      "'sig_lvl' must be one of {paste(choices, collapse = ', ')} ",
       "for boundary = 'fluc' (Homm & Breitung (2012)'s Table 7 only ",
       "tabulates these significance levels)."
     )
@@ -246,14 +246,14 @@ hb_fluc_q <- function(level, n_train, k) {
 #' is allowed to range over \code{[1, floor(T* * s0)]} rather than being
 #' fixed at \code{1}, compared against his \code{k}-varying (not
 #' constant) boundary function and its own published scaling constant.
-#' \code{level} must be one of \code{0.90}, \code{0.95}, or \code{0.99}
+#' \code{sig_lvl} must be one of \code{90}, \code{95}, or \code{99}
 #' (the levels his table tabulates).
 #'
 #' \code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
 #' detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
 #' \code{badf} sequence, compared against a published constant from
 #' their Table 7 (no detrending case) rather than a simulated one.
-#' \code{level} must be one of \code{0.90}, \code{0.95}, \code{0.99}.
+#' \code{sig_lvl} must be one of \code{90}, \code{95}, \code{99}.
 #'
 #' @inheritParams radf
 #' @param r_star The end of the training window: a fraction in
@@ -261,12 +261,11 @@ hb_fluc_q <- function(level, n_train, k) {
 #' observation count if \code{>= 1}.
 #' @param nboot Number of wild bootstrap replications for the training
 #' critical value. Ignored unless \code{boundary = "bootstrap"}.
-#' @param level Nominal confidence level for the monitoring boundary
-#' (default \code{0.95}). When \code{boundary} is \code{"kurozumi"} or
-#' \code{"fluc"}, must be one of \code{0.90}, \code{0.95}, \code{0.99}.
-#' @param adflag,type Passed to \code{\link{radf_wb_ps_cv}} (lag length /
-#' selection for the wild bootstrap DGP). Ignored unless
-#' \code{boundary = "bootstrap"}.
+#' @param sig_lvl Significance level for the monitoring boundary on the
+#' package-wide 0-100 scale, one of \code{90}, \code{95} (default),
+#' \code{99}.
+#' @param type Lag selection for the wild bootstrap DGP, passed to
+#' \code{\link{radf_wb_ps_cv}}. Ignored unless \code{boundary = "bootstrap"}.
 #' @param seed Optional seed for the bootstrap draws. Ignored unless
 #' \code{boundary = "bootstrap"}.
 #' @param boundary \code{"bootstrap"} (default, Phillips & Shi 2020),
@@ -305,7 +304,8 @@ hb_fluc_q <- function(level, n_train, k) {
 #' origination/collapse dating that already exists.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' boundary/alarm summary (real-time monitoring output, not a
 #' per-series sup-statistic table) -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
@@ -331,9 +331,10 @@ hb_fluc_q <- function(level, n_train, k) {
 #' autoplot(monitor(y, r_star = 0.5, boundary = "fluc"))
 #' }
 #'
+#' @family monitoring
 #' @export
 monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
-                     level = 0.95, adflag = 0,
+                     sig_lvl = 95, lag = 0L,
                      type = c("fixed", "aic", "bic"), seed = NULL,
                      boundary = c("bootstrap", "kurozumi", "fluc"),
                      s0 = 0) {
@@ -345,8 +346,8 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   assert_positive_int(minw, greater_than = 2)
 
   T_star <- if (r_star < 1) round(r_star * n) else as.integer(r_star)
-  if (T_star <= minw + adflag) {
-    stop_glue("Training window ('r_star') must exceed 'minw' (+ 'adflag').")
+  if (T_star <= minw + lag) {
+    stop_glue("Training window ('r_star') must exceed 'minw' (+ 'lag').")
   }
   if (T_star >= n) {
     stop_glue("Training window ('r_star') must leave at least one monitoring observation.")
@@ -358,7 +359,7 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
 
   if (boundary == "kurozumi" && s0 > 0) {
     s_bar <- (n - T_star) / T_star
-    q <- kurozumi_gsadf_q(level, s_bar, s0)
+    q <- kurozumi_gsadf_q(sig_lvl, s_bar, s0)
     abc <- kurozumi_gsadf_abc[which.min(abs(kurozumi_gsadf_abc$s0 - s0)), ]
     k_seq <- seq_len(n - T_star)
     boundary_path <- q * (abc$a + abc$b * log(abc$c + k_seq / T_star))
@@ -383,34 +384,35 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
         alarm = alarm, alarm_date = alarm_date
       ) %>%
         add_attr(
-          index = idx, series_names = snames, minw = minw, lag = adflag,
-          n = n, level = level, iter = NA_integer_, boundary_type = "kurozumi",
+          index = idx, series_names = snames, minw = minw, lag = lag,
+          n = n, sig_lvl = sig_lvl, iter = NA_integer_, boundary_type = "kurozumi",
           s0 = s0, q = q, stat_offset = T_star
         ) %>%
         add_class("monitor_obj")
     )
   }
 
-  full <- radf(x, minw = minw, lag = adflag)
-  mon_from <- max(T_star - minw - adflag + 1L, 1L)
+  full <- radf(x, minw = minw, lag = lag)
+  mon_from <- max(T_star - minw - lag + 1L, 1L)
   mon_rows <- mon_from:nrow(full$bsadf)
 
   if (boundary == "kurozumi") {
     s_bar <- (n - T_star) / T_star
-    q <- kurozumi_sadf_q(level, s_bar)
+    q <- kurozumi_sadf_q(sig_lvl, s_bar)
     stat_path <- full$badf
     boundary_vec <- setNames(rep(q, nc), snames)
     iter <- NA_integer_
   } else if (boundary == "fluc") {
     k <- n / T_star
-    q <- hb_fluc_q(level, T_star, k)
+    q <- hb_fluc_q(sig_lvl, T_star, k)
     stat_path <- full$badf
     boundary_vec <- setNames(rep(q, nc), snames)
     iter <- NA_integer_
   } else {
-    lvl_lab <- paste0(level * 100, "%")
+    assert_sig_lvl(sig_lvl)
+    lvl_lab <- paste0(sig_lvl, "%")
     cv <- radf_wb_ps_cv(x[1:T_star, , drop = FALSE], minw = minw, nboot = nboot,
-                       adflag = adflag, type = type, tb = T_star, seed = seed)
+                       adflag = lag, type = type, tb = T_star, seed = seed)
     boundary_vec <- setNames(cv$gsadf_cv[, lvl_lab], snames)
     stat_path <- full$bsadf
     iter <- nboot
@@ -420,7 +422,7 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   for (j in seq_len(nc)) {
     breach <- which(stat_path[mon_rows, j] > boundary_vec[j])
     if (length(breach) > 0L) {
-      alarm[j] <- mon_rows[breach[1L]] + minw + adflag
+      alarm[j] <- mon_rows[breach[1L]] + minw + lag
     }
   }
   alarm_date <- vapply(alarm, function(i) {
@@ -432,9 +434,9 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
     alarm = alarm, alarm_date = alarm_date
   ) %>%
     add_attr(
-      index = idx, series_names = snames, minw = minw, lag = adflag,
-      n = n, level = level, iter = iter, boundary_type = boundary, s0 = 0,
-      stat_offset = minw + adflag
+      index = idx, series_names = snames, minw = minw, lag = lag,
+      n = n, sig_lvl = sig_lvl, iter = iter, boundary_type = boundary, s0 = 0,
+      stat_offset = minw + lag
     ) %>%
     add_class("monitor_obj")
 }
@@ -467,13 +469,13 @@ print.monitor_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...
   header <- if (s0 > 0) {
     glue(
       "monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
-      "level = {attr(x, 'level') * 100}%, boundary = kurozumi, s0 = {s0}, ",
+      "sig_lvl = {attr(x, 'sig_lvl')}%, boundary = kurozumi, s0 = {s0}, ",
       "q = {round(attr(x, 'q'), 4)})"
     )
   } else {
     glue(
       "monitor (T* = {x$T_star} / {attr(x, 'n')}, minw = {get_minw(x)}, ",
-      "level = {attr(x, 'level') * 100}%, boundary = {attr(x, 'boundary_type')})"
+      "sig_lvl = {attr(x, 'sig_lvl')}%, boundary = {attr(x, 'boundary_type')})"
     )
   }
   cat_rule(left = header)

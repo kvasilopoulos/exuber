@@ -55,7 +55,7 @@ y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
 ```
 
 ```{r ssu-vs-lbi}
-ssu_test(y, level = 0.95)
+ssu_test(y, sig_lvl = 95)
 lbi_test(y)
 ```
 

@@ -1,4 +1,4 @@
-context("radf_lbi")
+context("lbi_test")
 
 test_that("Breitung & Diegel's eq. 4 telescoping identity holds exactly
   (2*sum(Delta y_t * y_{t-1}) = y_T^2 - T*sigma_tilde^2, y_1 = 0 case)", {
@@ -13,7 +13,7 @@ test_that("Breitung & Diegel's eq. 4 telescoping identity holds exactly
   expect_equal(lhs, rhs, tolerance = 1e-8)
 })
 
-test_that("radf_lbi runs end to end and returns a well-formed object", {
+test_that("lbi_test runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
   out <- lbi_test(y)
@@ -24,7 +24,7 @@ test_that("radf_lbi runs end to end and returns a well-formed object", {
   expect_output(print(out), "lbi_test")
 })
 
-test_that("radf_lbi's statistic follows a standard normal distribution
+test_that("lbi_test's statistic follows a standard normal distribution
   under H0, matching Breitung & Diegel's own claimed null distribution
   (not just an approximately-sized test)", {
   skip_on_cran()
@@ -39,7 +39,7 @@ test_that("radf_lbi's statistic follows a standard normal distribution
   expect_gt(ks.test(stats, "pnorm")$p.value, 0.01)
 })
 
-test_that("radf_lbi detects a genuine explosive series with power
+test_that("lbi_test detects a genuine explosive series with power
   comparable to a standard SADF test on the same DGP", {
   skip_on_cran()
   run_lbi <- function(seed) {
@@ -65,31 +65,31 @@ test_that("bd_cusum_weights sums of squares equal 1 (exact at c_bar = 0,
 
 test_that("bd_cusum_q looks up Breitung & Diegel's Table 1 exactly and
   errors on an untabulated level", {
-  expect_equal(exuber:::bd_cusum_q(0.90), 1.64)
-  expect_equal(exuber:::bd_cusum_q(0.95), 1.95)
-  expect_equal(exuber:::bd_cusum_q(0.995), 2.80)
-  expect_error(exuber:::bd_cusum_q(0.80), "must be one of")
+  expect_equal(exuber:::bd_cusum_q(90), 1.64)
+  expect_equal(exuber:::bd_cusum_q(95), 1.95)
+  expect_equal(exuber:::bd_cusum_q(99.5), 2.80)
+  expect_error(exuber:::bd_cusum_q(80), "must be one of")
 })
 
-test_that("radf_lbi_monitor's mCUSUM (c_bar = 0) final-point statistic is
+test_that("monitor_lbi's mCUSUM (c_bar = 0) final-point statistic is
   formula-exact against a manual telescoped computation using
   training-window sigma_tilde", {
   set.seed(1)
   n <- 300
   T_star <- 150
   y <- cumsum(rnorm(n))
-  out <- monitor_lbi(y, r_star = T_star, c_bar = 0, level = 0.95)
+  out <- monitor_lbi(y, r_star = T_star, c_bar = 0, sig_lvl = 95)
   dy <- diff(y)
   sigma2_tilde <- mean(dy[seq_len(T_star - 1L)]^2)
   manual <- (y[n] - y[T_star]) / sqrt(sigma2_tilde * (n - T_star))
   expect_equal(unname(out$stat[nrow(out$stat), 1]), manual, tolerance = 1e-10)
 })
 
-test_that("radf_lbi_monitor runs end to end and returns a well-formed
+test_that("monitor_lbi runs end to end and returns a well-formed
   object; alarms never fire before T_star + 1", {
   set.seed(1)
   y <- cumsum(rnorm(200))
-  out <- monitor_lbi(y, r_star = 100, c_bar = 0, level = 0.95)
+  out <- monitor_lbi(y, r_star = 100, c_bar = 0, sig_lvl = 95)
 
   expect_s3_class(out, "monitor_lbi_obj")
   expect_equal(out$boundary, 1.95)
@@ -98,15 +98,15 @@ test_that("radf_lbi_monitor runs end to end and returns a well-formed
   expect_output(print(out), "monitor_lbi")
 })
 
-test_that("radf_lbi_monitor errors on an untabulated level and on too-short
+test_that("monitor_lbi errors on an untabulated level and on too-short
   training/monitoring windows", {
   y <- cumsum(rnorm(200))
-  expect_error(monitor_lbi(y, level = 0.80), "must be one of")
+  expect_error(monitor_lbi(y, sig_lvl = 80), "must be one of")
   expect_error(monitor_lbi(y, r_star = 2), "too short")
   expect_error(monitor_lbi(y, r_star = 200), "leave at least one")
 })
 
-test_that("radf_lbi_monitor's mCUSUM/wCUSUM false-alarm rate under H0 is
+test_that("monitor_lbi's mCUSUM/wCUSUM false-alarm rate under H0 is
   close to (and not above) the nominal level, matching Breitung & Diegel's
   own claimed asymptotic size", {
   skip_on_cran()
@@ -118,14 +118,14 @@ test_that("radf_lbi_monitor's mCUSUM/wCUSUM false-alarm rate under H0 is
     mean(vapply(seq_len(nrep), function(i) {
       set.seed(1000 + i)
       y <- cumsum(rnorm(n))
-      !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, level = 0.95)$alarm[["series1"]])
+      !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, sig_lvl = 95)$alarm[["series1"]])
     }, logical(1)))
   }
   expect_lt(fires(0), 0.10)
   expect_lt(fires(2), 0.10)
 })
 
-test_that("radf_lbi_monitor detects a genuine post-training bubble with
+test_that("monitor_lbi detects a genuine post-training bubble with
   power exceeding monitor_cusum(type = 'standard') on the same DGP, and
   wCUSUM (c_bar = 2) is at least as powerful as mCUSUM (c_bar = 0)", {
   skip_on_cran()

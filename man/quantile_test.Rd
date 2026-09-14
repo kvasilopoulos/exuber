@@ -9,7 +9,7 @@ quantile_test(
   tau = "optimal",
   tau_grid = seq(0.2, 0.8, by = 0.05),
   nrep = 1000L,
-  level = 95,
+  sig_lvl = 95,
   seed = NULL
 )
 }
@@ -33,7 +33,7 @@ practical range (excluding the extreme quantiles 0.1/0.9).}
 
 \item{nrep}{Number of Monte Carlo replications for the critical value.}
 
-\item{level}{Significance level, one of \code{90}, \code{95}, \code{99}.}
+\item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
 }
@@ -70,7 +70,8 @@ this package (see \code{\link{radf_mc_cv}}).
 }
 \note{
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 statistic/boundary/delta summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -101,4 +102,8 @@ Analysis, 46(5), 908-931.
 \seealso{
 \code{\link{radf}} for the mean-regression (ADF/SADF/GSADF)
 family this complements.
+
+Other alternative tests:
+\code{\link[=lbi_test]{lbi_test()}}
 }
+\concept{alternative tests}

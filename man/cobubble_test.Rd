@@ -8,9 +8,9 @@ cobubble_test(
   y,
   x,
   lag = NULL,
-  lags = -6:6,
+  lag_grid = -6:6,
   nboot = 499L,
-  level = 0.05,
+  sig_lvl = 95,
   seed = NULL
 )
 }
@@ -20,22 +20,24 @@ via \code{as.numeric()}. \code{x} is the (candidate) explosive-episode
 regressor; \code{y} is tested for co-explosivity with \code{x_{t-lag}}.}
 
 \item{lag}{The lead/lag \code{i} in \code{x_{t-lag}}. If \code{NULL}
-(default), it is estimated from \code{lags} by minimizing the residual
+(default), it is estimated from \code{lag_grid} by minimizing the residual
 variance (Section VI's \code{i_hat}).}
 
-\item{lags}{Candidate lag values searched when \code{lag = NULL}.
+\item{lag_grid}{Candidate lag values searched when \code{lag = NULL}.
 Default \code{-6:6}, as in the paper's own simulation design.}
 
 \item{nboot}{Number of wild bootstrap replications.}
 
-\item{level}{Nominal test size (upper-tail rejection region).}
+\item{sig_lvl}{Significance level, on the same 0-100 scale as
+\code{\link{datestamp}}'s \code{sig_lvl} (default \code{95}, i.e. a 5\\%
+upper-tail rejection region).}
 
 \item{seed}{Optional seed for the bootstrap draws.}
 }
 \value{
-An object of class \code{cobubble_test}: a list with the
+An object of class \code{cobubble_test_obj}: a list with the
 observed statistic \code{S}, the (given or estimated) \code{lag}, the
-bootstrap critical value \code{cv} at \code{level}, the bootstrap
+bootstrap critical value \code{cv} at \code{sig_lvl}, the bootstrap
 p-value \code{p_value}, and \code{reject} (\code{TRUE} if \code{S}
 exceeds \code{cv}, i.e. co-explosivity is rejected).
 }
@@ -64,7 +66,8 @@ internally on every call (Theorem 2) -- there is no separate/reusable
 cv function for this test.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 statistic/critical-value/p-value summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -98,3 +101,9 @@ Evripidou, A. C., Harvey, D. I., Leybourne, S. J., & Sollis,
 R. (2022). Testing for co-explosive behaviour in financial time series.
 Oxford Bulletin of Economics and Statistics, 84(3), 624-650.
 }
+\seealso{
+Other multivariate:
+\code{\link[=contagion_reg]{contagion_reg()}},
+\code{\link[=radf_common]{radf_common()}}
+}
+\concept{multivariate}

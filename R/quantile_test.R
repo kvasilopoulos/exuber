@@ -28,7 +28,7 @@
 # nothing new: it is the distribution of a plain intercept-only OLS
 # ADF t-statistic (no lag) computed on a simulated random walk, the same
 # quantity radf()'s own single-shot `adf` field already computes (see
-# radf_quantile_validate_q.R in the replication scripts, which confirms
+# radf_quantile_validation.R in the replication scripts, which confirms
 # this bit-for-bit against radf()$adf's own construction). `delta` itself
 # (the correlation between the innovation and its own quantile-check
 # score) is estimated directly from the data, so simulating `U(tau)`'s
@@ -51,7 +51,7 @@ quantile_adf_tstat <- function(y) {
   unname(stats::coef(summary(fit))["ylag", "t value"])
 }
 
-radf_quantile_ <- function(n, nrep, seed = NULL) {
+quantile_test_ <- function(n, nrep, seed = NULL) {
   set_rng(seed)
   vapply(seq_len(nrep), function(i) quantile_adf_tstat(cumsum(rnorm(n))), numeric(1))
 }
@@ -89,7 +89,7 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' \code{seq(0.2, 0.8, by = 0.05)}, matching the paper's own recommended
 #' practical range (excluding the extreme quantiles 0.1/0.9).
 #' @param nrep Number of Monte Carlo replications for the critical value.
-#' @param level Significance level, one of \code{90}, \code{95}, \code{99}.
+#' @param sig_lvl Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
 #' @return An object of class \code{quantile_test_obj}: a list with the
@@ -105,7 +105,8 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' family this complements.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' statistic/boundary/delta summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -126,10 +127,11 @@ radf_quantile_ <- function(n, nrep, seed = NULL) {
 #' }
 #'
 #' @importFrom stats coef dnorm lm quantile bw.nrd0 rnorm cor
+#' @family alternative tests
 #' @export
 quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0.05),
-                           nrep = 1000L, level = 95, seed = NULL) {
-  stopifnot(level %in% c(90, 95, 99))
+                           nrep = 1000L, sig_lvl = 95, seed = NULL) {
+  assert_sig_lvl(sig_lvl)
   x <- parse_data(data)
   n <- nrow(x)
   snames <- colnames(x)
@@ -138,7 +140,7 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
   tstat <- crit <- delta <- setNames(rep(NA_real_, nc), snames)
   tau_used <- setNames(rep(NA_real_, nc), snames)
   detected <- setNames(rep(NA, nc), snames)
-  Q <- radf_quantile_(n = n, nrep = nrep, seed = seed)
+  Q <- quantile_test_(n = n, nrep = nrep, seed = seed)
 
   for (j in seq_len(nc)) {
     y <- as.numeric(x[, j])
@@ -165,7 +167,7 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
 
     z <- stats::rnorm(nrep)
     U <- sqrt(1 - delta_j^2) * z + delta_j * Q
-    crit_j <- unname(quantile_narm(U, probs = level / 100, names = FALSE))
+    crit_j <- unname(quantile_narm(U, probs = sig_lvl / 100, names = FALSE))
 
     tstat[j] <- tstat_j; crit[j] <- crit_j; delta[j] <- delta_j
     tau_used[j] <- tau_j; detected[j] <- tstat_j > crit_j
@@ -176,7 +178,7 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
   ) %>%
     add_attr(
       index = attr(x, "index"), series_names = snames, n = n,
-      level = level, iter = nrep, seed = get_rng_state(seed)
+      sig_lvl = sig_lvl, iter = nrep, seed = get_rng_state(seed)
     ) %>%
     add_class("quantile_test_obj")
 }
@@ -198,7 +200,7 @@ autoplot.quantile_test_obj <- function(object, ...) {
 #' @export
 print.quantile_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue("quantile_test (n = {attr(x, 'n')}, level = {attr(x, 'level')}%)"))
+  cat_rule(left = glue("quantile_test (n = {attr(x, 'n')}, sig_lvl = {attr(x, 'sig_lvl')}%)"))
   cat_line()
   print(
     data.frame(

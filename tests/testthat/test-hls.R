@@ -1,4 +1,4 @@
-context("radf_hls")
+context("dating_hls")
 
 test_that("hls_segment_ssr matches a brute-force lm() SSR for fixed segments", {
   set.seed(1)
@@ -113,7 +113,7 @@ test_that("hls_model23's grid search matches a brute-force nested lm()
   }
 })
 
-test_that("radf_hls runs end to end and returns a well-formed object", {
+test_that("dating_hls runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
   out <- dating_hls(y, trim = 0.05)
@@ -125,7 +125,7 @@ test_that("radf_hls runs end to end and returns a well-formed object", {
   expect_output(print(out), "dating_hls")
 })
 
-test_that("radf_hls's selected model always has NA for the breakpoints it
+test_that("dating_hls's selected model always has NA for the breakpoints it
   doesn't have (model 1 has no collapse/recovery, model 2/3 have no
   recovery)", {
   set.seed(1)
@@ -141,7 +141,7 @@ test_that("radf_hls's selected model always has NA for the breakpoints it
   expect_false(is.na(out$origination[["series1"]]))
 })
 
-test_that("radf_hls recovers a genuine 4-regime bubble episode with
+test_that("dating_hls recovers a genuine 4-regime bubble episode with
   plausible (not wildly biased) breakpoint dates, and correctly favors
   Model 3/4 (a distinct collapse regime) over the more parsimonious
   Model 1/2 when the collapse is genuinely a different regime", {
@@ -173,7 +173,7 @@ test_that("radf_hls recovers a genuine 4-regime bubble episode with
   expect_true(mean(abs(bias)) < 15)
 })
 
-test_that("radf_hls does not spuriously prefer complex models on a
+test_that("dating_hls does not spuriously prefer complex models on a
   pure random-walk null with no bubble at all", {
   skip_on_cran()
   run_h0 <- function(seed) {

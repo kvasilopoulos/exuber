@@ -5,7 +5,7 @@
 \title{Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung &
 Diegel 2025)}
 \usage{
-monitor_lbi(data, r_star = 0.5, c_bar = 0, level = 0.95)
+monitor_lbi(data, r_star = 0.5, c_bar = 0, sig_lvl = 95)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -28,11 +28,11 @@ bubble-like) monitoring observations (their eq. 12), \code{>= 0}.
 when a bubble is equally likely to start at any point in the
 monitoring window; the paper's own suggested value for a moderate power
 boost when a bubble partway through is more plausible is \code{2}.
-Critical values (\code{level}) are the same for every \code{c_bar}.}
+Critical values (\code{sig_lvl}) are the same for every \code{c_bar}.}
 
-\item{level}{Nominal confidence level, one of \code{0.90}, \code{0.95},
-\code{0.975}, \code{0.99}, \code{0.995} (Breitung & Diegel's Table 1
-only tabulates these).}
+\item{sig_lvl}{Significance level on the package-wide 0-100 scale, one
+of \code{90}, \code{95}, \code{97.5}, \code{99}, \code{99.5} (Breitung &
+Diegel's Table 1 only tabulates these).}
 }
 \value{
 An object of class \code{monitor_lbi_obj}: a list with the
@@ -64,7 +64,8 @@ The critical value is a published constant boundary (Breitung &
 Diegel (2025)'s Table 1) -- a table lookup, no simulation.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 boundary/alarm summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -97,4 +98,10 @@ volatility. Journal of Time Series Analysis.
 bubble window) version. \code{\link{monitor_cusum}} and
 \code{\link{monitor}} for structurally different monitoring
 detectors.
+
+Other monitoring:
+\code{\link[=monitor]{monitor()}},
+\code{\link[=monitor_cusum]{monitor_cusum()}},
+\code{\link[=monitor_quantile]{monitor_quantile()}}
 }
+\concept{monitoring}

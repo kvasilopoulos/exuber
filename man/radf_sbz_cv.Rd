@@ -63,6 +63,15 @@ to generate critical values, including the time-varying
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 
+\examples{
+\donttest{
+y <- sim_psy1(150, seed = 1)
+res <- radf_sbz(y, minw = 20)
+cv <- radf_sbz_cv(y, minw = 20, nboot = 200, seed = 1)
+summary(res, cv = cv)
+datestamp(res, cv = cv)
+}
+}
 \references{
 Harvey, D. I., Leybourne, S. J., & Zu, Y. (2019). Testing
 explosive bubbles with time-varying volatility. Econometric Reviews,
@@ -74,4 +83,16 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 against the classic \code{supDF} statistic (not obtainable from this
 function and \code{\link{radf_wb_cv}} independently -- see that
 function's Details for why).
+
+Other critical values:
+\code{\link[=radf_common_cv]{radf_common_cv()}},
+\code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\code{\link[=radf_recovery_cv]{radf_recovery_cv()}},
+\code{\link[=radf_sb_cv]{radf_sb_cv()}},
+\code{\link[=radf_sign_cv]{radf_sign_cv()}},
+\code{\link[=radf_sign_dm_cv]{radf_sign_dm_cv()}},
+\code{\link[=radf_tt_cv]{radf_tt_cv()}},
+\code{\link[=radf_wb_cv]{radf_wb_cv()}},
+\code{\link[=radf_wb_ps_cv]{radf_wb_ps_cv()}}
 }
+\concept{critical values}

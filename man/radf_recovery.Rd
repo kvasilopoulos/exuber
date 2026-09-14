@@ -66,7 +66,8 @@ sample is exhausted, \code{f_c} is \code{NA} and \code{censored = TRUE}
 }
 \note{
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 origination/recovery date summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -118,4 +119,12 @@ No. 1967, Yale University. Published in Econometric Theory.
 \seealso{
 \code{\link{datestamp}} for the (forward, non-reversed)
 origination/collapse dating this complements.
+
+Other dating:
+\code{\link[=dating_hls]{dating_hls()}},
+\code{\link[=dating_hlw]{dating_hlw()}},
+\code{\link[=dating_knp]{dating_knp()}},
+\code{\link[=dating_pdc]{dating_pdc()}},
+\code{\link[=rootstamp]{rootstamp()}}
 }
+\concept{dating}

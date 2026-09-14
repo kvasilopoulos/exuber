@@ -1,4 +1,4 @@
-context("radf_cusum")
+context("monitor_cusum")
 
 test_that("cusum_stat_path() matches an independent brute-force loop
   recomputation of Homm & Breitung's eq. 26-29", {
@@ -23,7 +23,7 @@ test_that("cusum_stat_path() matches an independent brute-force loop
   expect_equal(res$boundary, bnd_brute, tolerance = 1e-10)
 })
 
-test_that("radf_cusum runs end to end and returns a well-formed object", {
+test_that("monitor_cusum runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(100))
   out <- monitor_cusum(y, r_star = 0.5)
@@ -64,7 +64,7 @@ test_that("empirical cumulative false-alarm rate under H0 stays well within
   expect_lt(rate, 0.15)
 })
 
-test_that("radf_cusum detects at least some genuine post-training bubbles,
+test_that("monitor_cusum detects at least some genuine post-training bubbles,
   with a positive alarm delay -- power is expected to be genuinely lower
   than the ADF-family monitor() for this kind of (mid-sample)
   bubble, consistent with the literature's own finding (Kurozumi 2020/
@@ -161,17 +161,17 @@ test_that("type = 'kernel' (CUSUMV) controls the false-alarm rate under
 
 test_that("hb_cusum_finite_q looks up Homm & Breitung (2012) Table 8(i)
   constants exactly", {
-  expect_equal(exuber:::hb_cusum_finite_q(0.95, 100, 2), 1.51)
-  expect_equal(exuber:::hb_cusum_finite_q(0.95, 100, 10), 3.36)
-  expect_equal(exuber:::hb_cusum_finite_q(0.90, 20, 2), 0.81)
-  expect_error(exuber:::hb_cusum_finite_q(0.93, 100, 2))
+  expect_equal(exuber:::hb_cusum_finite_q(95, 100, 2), 1.51)
+  expect_equal(exuber:::hb_cusum_finite_q(95, 100, 10), 3.36)
+  expect_equal(exuber:::hb_cusum_finite_q(90, 20, 2), 0.81)
+  expect_error(exuber:::hb_cusum_finite_q(93, 100, 2))
 })
 
-test_that("radf_cusum runs end to end with boundary = 'finite', using a
+test_that("monitor_cusum runs end to end with boundary = 'finite', using a
   different (smaller, table-derived) b_alpha than the asymptotic default", {
   set.seed(1)
   y <- cumsum(rnorm(150))
-  out <- monitor_cusum(y, r_star = 0.5, boundary = "finite", level = 0.95)
+  out <- monitor_cusum(y, r_star = 0.5, boundary = "finite", sig_lvl = 95)
 
   expect_s3_class(out, "monitor_cusum_obj")
   expect_equal(attr(out, "b_alpha"), 1.43) # n=150/T_star=75 snaps to n=50 (tie with 100), k=2
@@ -181,7 +181,7 @@ test_that("radf_cusum runs end to end with boundary = 'finite', using a
 
 test_that("boundary = 'finite' rejects levels outside its tabulated set", {
   y <- cumsum(rnorm(100))
-  expect_error(monitor_cusum(y, r_star = 0.5, boundary = "finite", level = 0.93))
+  expect_error(monitor_cusum(y, r_star = 0.5, boundary = "finite", sig_lvl = 93))
 })
 
 test_that("boundary = 'finite' also works with type = 'kernel' (CUSUMV),
