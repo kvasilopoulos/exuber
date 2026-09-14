@@ -1,4 +1,4 @@
-# exuber (development version)
+# exuber 2.0.0
 
 New methodologies from the `docs/enhancements/` research programme, each
 independently validated against a published number (formula-exact check,
@@ -26,7 +26,7 @@ what was checked and how.
 ### Volatility-robust tests
 
 * `radf_sbz()`/`radf_sbz_cv()`/`radf_sbz_union()` — Herwartz & Siedenburg's
-  WLS/kernel-volatility SBZ test, split 2026-08-22 into a statistic
+  WLS/kernel-volatility SBZ test, split into a statistic
   (`radf_sbz()`), its bootstrap critical values (`radf_sbz_cv()`, full
   `datestamp()`/`autoplot()` support), and the union-of-rejections test
   against classic `supDF` (`radf_sbz_union()`, renamed from the original
@@ -145,8 +145,14 @@ what was checked and how.
   `radf_sb_cv()`, `monitor()`, `dating_hlw()`, `radf_recovery()` and every
   other loop over `radf()` speed up by the same factor. Results are
   numerically identical to ~1e-12.
+* Parallel runs (`options(exuber.parallel = TRUE)`, the default) reuse one
+  worker cluster per session instead of starting and stopping a fresh
+  `future::multisession` on every call -- a few seconds of start-up
+  overhead that used to dominate every small `radf_mc_cv()`/`radf_wb_cv()`
+  job. The cluster is sized by `exuber.ncores` and stopped when the
+  namespace unloads.
 
-### API consistency (2026-09-14 review)
+### API consistency
 
 * One significance-level convention across the whole package: every
   function that took a `level` argument now takes `sig_lvl` on the
@@ -169,7 +175,7 @@ what was checked and how.
 * `dating_pdc()` and `radf_sbz()` gained their own `print()` methods (the
   former fell through to `print.data.frame`, hiding its attributes; the
   latter printed as a plain `radf`).
-* `scale_exuber_manual(size_values = )` is deprecated in favour of
+* `scale_exuber_manual(size_values = )` is deprecated in favor of
   `linewidth_values` (ggplot2 >= 3.4.0's `linewidth` aesthetic replaces
   `size` for lines; the deprecation warning ggplot2 emitted from every
   `autoplot()` is gone). `autoplot(include_negative = )`, deprecated since
@@ -190,7 +196,7 @@ what was checked and how.
 * Documentation: every `autoplot()` and `augment()` method now has its own
   help page instead of sharing one with the function it plots/tidies
   (`?autoplot.monitor_cusum_obj`, `?augment.radf_obj`, ...). The pkgdown
-  reference index is reorganised into per-function subsections so each
+  reference index is reorganized into per-function subsections so each
   function is listed next to the methods that consume its output.
 
 * `sim_vol_break()` -- i.i.d. Gaussian innovations whose standard deviation
@@ -219,7 +225,7 @@ what was checked and how.
 * `datestamp()`/`autoplot()`/`autoplot2()`'s `sig_lvl` argument now
   actually controls whether a series counts as rejecting the null.
   Previously, `diagnostics.radf_obj()` (used internally to decide which
-  series get dated/plotted at all) hardcoded the 95% critical value for
+  series get dated/plotted at all) hard-coded the 95% critical value for
   that decision regardless of `sig_lvl`, so e.g. `datestamp(x, cv,
   sig_lvl = 90)` could throw `"Cannot reject H0 at the 5% significance
   level"` for a series that clearly rejects at the 10% level the caller
