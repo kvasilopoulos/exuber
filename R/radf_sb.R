@@ -50,12 +50,12 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
     p <- progressor(steps = nboot)
     foreach(
       i = 1:nboot,
-      .combine = "cbind",
       .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot"))),
       .inorder = FALSE
     ) %dofuture% {
       boot_index <- sample(1:nres, replace = TRUE)
       p()
+      bsadf_boot <- 0
       for (j in 1:nc) {
         boot_res <- resmat[boot_index, j]
         dboot_res <- boot_res - mean(boot_res)
@@ -69,11 +69,13 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
         y_boot <- cumsum(c(y[1, j], dy_boot))
         yxmat_boot <- unroot(x = y_boot, lag)
         aux_boot <- rls_gsadf(yxmat_boot, minw, lag)
-        bsadf_boot <- aux_boot[-c(1:(pointer + 3))]
+        # panel BSADF is the cross-sectional mean of the series' BSADF paths
+        bsadf_boot <- bsadf_boot + aux_boot[-c(1:(pointer + 3))]
       }
       bsadf_boot / nc
     }
   })
+  edf_bsadf_panel <- do.call(cbind, edf_bsadf_panel)
 
   bsadf_crit <- unname(edf_bsadf_panel)
   gsadf_crit <- apply(edf_bsadf_panel, 2, max) %>% unname()
