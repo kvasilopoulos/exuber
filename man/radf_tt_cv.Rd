@@ -21,6 +21,12 @@ of the returned value. The default, NULL, will not change rng state, and
 return .Random.seed as the "seed" attribute. Results are reproducible
 across the parallel and non-parallel option when the same seed is used.}
 }
+\value{
+An object of class \code{radf_cv}/\code{tt_cv}/\code{mc_cv}: the
+same structure as \code{\link{radf_mc_cv}} (\code{adf_cv}/\code{sadf_cv}/
+\code{gsadf_cv} scalars per level plus the \code{badf_cv}/\code{bsadf_cv}
+sequences), usable wherever a \code{radf_cv} is accepted.
+}
 \description{
 This is the dedicated critical-value function for \code{\link{radf_tt}}.
 It simulates the asymptotic null distribution of the GLS-demeaned
@@ -60,6 +66,11 @@ established \code{radf()}/\code{radf_mc_cv()} pipeline almost exactly
 \code{radf_sign_dm_cv()} have the same gap, not yet addressed the same
 way -- see \code{vignette("naming-and-analysis")}.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \examples{
 \donttest{
 cv <- radf_tt_cv(n = 200, minw = 20)
@@ -79,3 +90,16 @@ Kurozumi, E., Skrobotov, A., & Tsarev, A. (2024). Time-Transformed
 Test for Bubbles under Non-stationary Volatility. Journal of Financial
 Econometrics. \doi{10.1093/jjfinec/nbae026}
 }
+\seealso{
+Other critical values:
+\code{\link[=radf_common_cv]{radf_common_cv()}},
+\code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\code{\link[=radf_recovery_cv]{radf_recovery_cv()}},
+\code{\link[=radf_sb_cv]{radf_sb_cv()}},
+\code{\link[=radf_sbz_cv]{radf_sbz_cv()}},
+\code{\link[=radf_sign_cv]{radf_sign_cv()}},
+\code{\link[=radf_sign_dm_cv]{radf_sign_dm_cv()}},
+\code{\link[=radf_wb_cv]{radf_wb_cv()}},
+\code{\link[=radf_wb_ps_cv]{radf_wb_ps_cv()}}
+}
+\concept{critical values}

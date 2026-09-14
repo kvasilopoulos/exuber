@@ -17,6 +17,11 @@ index(x) <- value
 
 \item{value}{An ordered vector of the same length as the \code{index} attribute of x.}
 }
+\value{
+The index of the object (a \code{Date} vector when the input data
+carried one, otherwise an integer sequence); the replacement form
+returns the modified object.
+}
 \description{
 Retrieve or replace the index of an object.
 }

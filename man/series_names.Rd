@@ -25,6 +25,10 @@ series_names(x) <- value
 
 \item{value}{n ordered vector of the same length as the "index" attribute of x.}
 }
+\value{
+A character vector of series names; the replacement form returns
+the modified object.
+}
 \description{
 Retrieve or replace the series names of an object.
 }

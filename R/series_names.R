@@ -16,6 +16,8 @@
 #' tidy(rfd)
 #' autoplot(rfd)
 #' }
+#' @return A character vector of series names; the replacement form returns
+#'   the modified object.
 #' @export
 #'
 series_names <- function(x, ...) {

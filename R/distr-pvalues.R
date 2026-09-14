@@ -7,6 +7,9 @@
 #'
 #' @param x A `radf_obj` object.
 #' @param distr A `radf_distr` object.
+#' @return A `tibble` with one row per series (`id`) and one p-value column
+#'   per statistic (`adf`, `sadf`, `gsadf`; the panel statistic only when
+#'   `distr` is a sieve-bootstrap distribution).
 #'
 #' @export
 #' @importFrom tidyr nest spread

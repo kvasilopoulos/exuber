@@ -13,6 +13,10 @@ ps_tb(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2)
 
 \item{size}{The size to be controlled.}
 }
+\value{
+A single integer, the training-window length in observations,
+suitable for \code{\link{monitor}}'s \code{r_star}.
+}
 \description{
 This function helps to find the number of observations in the window
 over which size is to be controlled.

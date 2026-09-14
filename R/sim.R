@@ -64,6 +64,7 @@
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
 #' Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
 #' 6(4), 1043-1078.
+#' \doi{10.1111/iere.12132}
 #'
 #' @seealso \code{\link{sim_psy2}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 #'
@@ -545,6 +546,7 @@ sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
 #' Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
 #' 6(4), 1043-1078.
+#' \doi{10.1111/iere.12132}
 #'
 #' @seealso \code{\link{sim_psy1}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}
 #'

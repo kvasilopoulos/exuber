@@ -7,6 +7,9 @@
 #' minimum duration of an episode of exuberance, respectively.
 #'
 #' @inheritParams radf_mc_cv
+#' @return \code{psy_minw}: a single integer, the minimum window length.
+#'   \code{psy_ds}: a single integer, the minimum episode duration in
+#'   observations.
 #' @export
 #' @importFrom rlang is_scalar_atomic
 #' @examples
@@ -34,6 +37,7 @@ psy_minw <- function(n) {
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
+#' \doi{10.1111/iere.12132}
 #'
 #' @export
 psy_ds <- function(n, rule = 1, delta = 1) {
@@ -75,6 +79,8 @@ psy_ds <- function(n, rule = 1, delta = 1) {
 #' monitor(sim_data, r_star = tb, boundary = "kurozumi")
 #' }
 #'
+#' @return A single integer, the training-window length in observations,
+#'   suitable for \code{\link{monitor}}'s \code{r_star}.
 #' @export
 ps_tb <- function(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2) {
   if (!is_n(n)) n <- NROW(n)

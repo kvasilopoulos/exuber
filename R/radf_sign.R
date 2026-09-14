@@ -136,6 +136,11 @@ sign_demean_transform <- function(y) {
 #' autoplot(res, cv = cv)
 #' }
 #'
+#' @return An object of class \code{radf_sign_obj}/\code{radf_obj}: the same
+#'   \code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
+#'   \code{\link{radf}}, computed on the sign-transformed series; pair with
+#'   \code{\link{radf_sign_cv}}.
+#' @family volatility-robust tests
 #' @export
 radf_sign <- function(data, minw = NULL) {
   x <- parse_data(data)
@@ -218,6 +223,9 @@ print.radf_sign_obj <- function(x, digits = max(3L, getOption("digits") - 3L), .
 #' tidy(cv)
 #' }
 #'
+#' @return An object of class \code{radf_cv}/\code{sign_cv}/\code{mc_cv} with
+#'   the same structure as \code{\link{radf_mc_cv}}.
+#' @family critical values
 #' @export
 radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   assert_n(n)
@@ -325,6 +333,10 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
 #' autoplot(res, cv = cv)
 #' }
 #'
+#' @return An object of class \code{radf_sign_dm_obj}/\code{radf_obj}: the same
+#'   \code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
+#'   \code{\link{radf}}; pair with \code{\link{radf_sign_dm_cv}}.
+#' @family volatility-robust tests
 #' @export
 radf_sign_dm <- function(data, minw = NULL) {
   x <- parse_data(data)
@@ -399,6 +411,9 @@ print.radf_sign_dm_obj <- function(x, digits = max(3L, getOption("digits") - 3L)
 #' tidy(cv)
 #' }
 #'
+#' @return An object of class \code{radf_cv}/\code{sign_dm_cv}/\code{mc_cv}
+#'   with the same structure as \code{\link{radf_mc_cv}}.
+#' @family critical values
 #' @export
 radf_sign_dm_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   assert_n(n)

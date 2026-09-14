@@ -13,6 +13,10 @@ augment_join(x, y, ...)
 
 \item{...}{Further arguments passed to methods.}
 }
+\value{
+A \code{tibble} joining the augmented statistics of \code{x} with the
+augmented critical values of \code{y}; see the methods for the exact columns.
+}
 \description{
 Augment and then join objects.
 }

@@ -67,7 +67,8 @@ coefficient, so there is no critical value at all for this function --
 don't look for one.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 coefficient-path summary (it performs no formal inference at all) --
 see \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -103,4 +104,9 @@ metropolitan centres. New Zealand Economic Papers, 50(1), 88-113.
 \seealso{
 \code{\link{cobubble_test}} for a different (symmetric,
 hypothesis-testing) bivariate bubble relationship.
+
+Other multivariate:
+\code{\link[=cobubble_test]{cobubble_test()}},
+\code{\link[=radf_common]{radf_common()}}
 }
+\concept{multivariate}

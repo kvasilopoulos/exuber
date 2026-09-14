@@ -215,7 +215,8 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' hypothesis-testing) bivariate bubble relationship.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' coefficient-path summary (it performs no formal inference at all) --
 #' see `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -241,6 +242,7 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' }
 #'
 #' @importFrom stats dnorm optimize
+#' @family multivariate
 #' @export
 contagion_reg <- function(y, core, S = NULL, d = 0L, h = NULL,
                             r_grid = seq(0, 1, length.out = 100)) {

@@ -30,6 +30,9 @@
 #' head(index(rsim))
 #' autoplot(rsim)
 #' }
+#' @return The index of the object (a \code{Date} vector when the input data
+#'   carried one, otherwise an integer sequence); the replacement form
+#'   returns the modified object.
 #' @export
 #' @name index-rd
 index <- function(x, ...) {

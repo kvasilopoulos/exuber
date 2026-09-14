@@ -235,7 +235,8 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #' original threshold-crossing rule.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' dating table (model, origination, collapse, recovery) -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -255,6 +256,7 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 #' autoplot(dating_hls(sim_data, trim = 0.05))
 #' }
 #'
+#' @family dating
 #' @export
 dating_hls <- function(data, trim = 0.05) {
   x <- parse_data(data)

@@ -62,4 +62,16 @@ Financial Econometrics, 21(4), 989-1063.
 }
 \seealso{
 \code{\link{radf_common}}, \code{\link{radf_mc_cv}}
+
+Other critical values:
+\code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\code{\link[=radf_recovery_cv]{radf_recovery_cv()}},
+\code{\link[=radf_sb_cv]{radf_sb_cv()}},
+\code{\link[=radf_sbz_cv]{radf_sbz_cv()}},
+\code{\link[=radf_sign_cv]{radf_sign_cv()}},
+\code{\link[=radf_sign_dm_cv]{radf_sign_dm_cv()}},
+\code{\link[=radf_tt_cv]{radf_tt_cv()}},
+\code{\link[=radf_wb_cv]{radf_wb_cv()}},
+\code{\link[=radf_wb_ps_cv]{radf_wb_ps_cv()}}
 }
+\concept{critical values}

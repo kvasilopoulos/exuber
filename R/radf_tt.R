@@ -114,6 +114,9 @@ gls_dfstat_grid <- function(y, minw) {
 #' Test for Bubbles under Non-stationary Volatility. Journal of Financial
 #' Econometrics. \doi{10.1093/jjfinec/nbae026}
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @examples
 #' \donttest{
 #' cv <- radf_tt_cv(n = 200, minw = 20)
@@ -127,6 +130,11 @@ gls_dfstat_grid <- function(y, minw) {
 #' autoplot(res, cv = cv)
 #' }
 #'
+#' @return An object of class \code{radf_cv}/\code{tt_cv}/\code{mc_cv}: the
+#'   same structure as \code{\link{radf_mc_cv}} (\code{adf_cv}/\code{sadf_cv}/
+#'   \code{gsadf_cv} scalars per level plus the \code{badf_cv}/\code{bsadf_cv}
+#'   sequences), usable wherever a \code{radf_cv} is accepted.
+#' @family critical values
 #' @export
 radf_tt_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   assert_n(n)
@@ -263,6 +271,9 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' the three scalar critical values \code{summary()} uses. See
 #' \code{vignette("naming-and-analysis", package = "exuber")}.
 #'
+#' @section Status:
+#' `r lifecycle::badge("experimental")`
+#'
 #' @examples
 #' \donttest{
 #' # Volatility triples half-way through the sample: the non-stationary-volatility
@@ -278,6 +289,12 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
 #' autoplot(res, cv = cv)
 #' }
 #'
+#' @return An object of class \code{radf_tt_obj}/\code{radf_obj}: the same
+#'   \code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
+#'   \code{\link{radf}}, computed on the time-transformed series, so it
+#'   plugs into \code{summary()}/\code{datestamp()}/\code{tidy()}/\code{autoplot()}
+#'   paired with \code{\link{radf_tt_cv}}.
+#' @family volatility-robust tests
 #' @export
 radf_tt <- function(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL) {
   kernel <- match.arg(kernel)

@@ -11,6 +11,9 @@ autoplot2(object, ...)
 
 \item{...}{other arguments passed to specific methods}
 }
+\value{
+A \code{\link[ggplot2]{ggplot}} object, produced by the method.
+}
 \description{
 \code{autoplot2()} uses ggplot2 to draw a particular plot for an object of a
 particular class in a single command. This defines the S3 generic that

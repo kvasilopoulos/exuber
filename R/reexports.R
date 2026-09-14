@@ -20,6 +20,7 @@ ggplot2::autoplot
 #' @param ... other arguments passed to specific methods
 #'
 #' @keywords internal
+#' @return A \code{\link[ggplot2]{ggplot}} object, produced by the method.
 #' @export
 #' @seealso `autoplot()`
 autoplot2 <- function(object, ...) {

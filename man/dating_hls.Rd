@@ -55,7 +55,8 @@ This is an SSR/BIC model-selection dating procedure, not a
 hypothesis test -- it needs no critical values at all.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 dating table (model, origination, collapse, recovery) -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
@@ -87,4 +88,12 @@ estimators. Journal of Empirical Finance, 40, 121-138.
 \code{\link{dating_pdc}} for the cheaper sequential-splitting
 alternative this complements, and \code{\link{datestamp}} for PSY's
 original threshold-crossing rule.
+
+Other dating:
+\code{\link[=dating_hlw]{dating_hlw()}},
+\code{\link[=dating_knp]{dating_knp()}},
+\code{\link[=dating_pdc]{dating_pdc()}},
+\code{\link[=radf_recovery]{radf_recovery()}},
+\code{\link[=rootstamp]{rootstamp()}}
 }
+\concept{dating}

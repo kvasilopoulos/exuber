@@ -116,11 +116,13 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
 #' @importFrom doFuture `%dofuture%`
 #' @importFrom progressr progressor
 #' @importFrom stats quantile lm
+#' @family critical values
 #' @export
 #'
 #' @references Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 #' E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 #' In search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
+#' \doi{10.1007/s11146-015-9531-2}
 #' @references Pedersen, T. Q., & Schütte, E. C. M. (2020). Testing for
 #' explosive bubbles in the presence of autocorrelated innovations. Journal
 #' of Empirical Finance, 58, 207-225.

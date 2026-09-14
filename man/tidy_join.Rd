@@ -13,6 +13,18 @@ tidy_join(x, y, ...)
 
 \item{...}{Further arguments passed to methods.}
 }
+\value{
+A \code{tibble} joining the tidied statistics of \code{x} with the
+tidied critical values of \code{y}; see the methods for the exact columns.
+}
 \description{
 Tidy or augment and then join objects.
+}
+\examples{
+\donttest{
+rsim <- radf(sim_data)
+mc <- radf_mc_cv(nrow(sim_data), nrep = 200)
+tidy_join(rsim, mc)
+augment_join(rsim, mc)
+}
 }
