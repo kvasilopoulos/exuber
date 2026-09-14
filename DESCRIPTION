@@ -54,6 +54,7 @@ Imports:
     tibble (>= 3.0.2),
     tidyr (>= 0.8.3)
 Suggests:
+    curl,
     magrittr (>= 1.5),
     pkgload,
     forcats (>= 0.5.0),
