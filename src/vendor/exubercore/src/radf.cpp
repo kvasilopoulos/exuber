@@ -32,30 +32,33 @@ arma::vec radf(const arma::mat& yxmat, int min_win, int lag) {
   // vector -- the same closed-form SSR radf_nested() uses, which turns the
   // whole grid from O(n^3) into O(n^2).
   if (lag == 0) {
-    const arma::vec y = yxmat.col(0);
     const arma::vec x = yxmat.col(1);
+    const arma::vec d = yxmat.col(0) - x;  // regress dy on (1, y_{t-1}): t on gamma = beta - 1
 
     for (int j = 0; j < total; ++j) {
-      double sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
+      double sx = 0, sd = 0, sxx = 0, sxd = 0, sdd = 0;
       for (int e = j; e < j + start - 1; ++e) {
-        sx += x(e); sy += y(e); sxx += x(e) * x(e); sxy += x(e) * y(e); syy += y(e) * y(e);
+        sx += x(e); sd += d(e); sxx += x(e) * x(e); sxd += x(e) * d(e); sdd += d(e) * d(e);
       }
       for (int i = j; i < total; ++i) {
         const int e = start + i - 1;  // last observation of window [j, e]
-        sx += x(e); sy += y(e); sxx += x(e) * x(e); sxy += x(e) * y(e); syy += y(e) * y(e);
+        sx += x(e); sd += d(e); sxx += x(e) * x(e); sxd += x(e) * d(e); sdd += d(e) * d(e);
         const int T = start + i - j;
         const double sxx_c = sxx - sx * sx / T;
-        const double sxy_c = sxy - sx * sy / T;
-        const double syy_c = syy - sy * sy / T;
-        const double beta = sxy_c / sxx_c;
-        const double ssr = syy_c - beta * sxy_c;
-        tstat(i, j) = (beta - 1) / std::sqrt(ssr / (T - 2) / sxx_c);
+        const double sxd_c = sxd - sx * sd / T;
+        const double sdd_c = sdd - sd * sd / T;
+        const double gamma = sxd_c / sxx_c;
+        const double ssr = sdd_c - gamma * sxd_c;
+        tstat(i, j) = gamma / std::sqrt(ssr / (T - 2) / sxx_c);
       }
     }
   } else {
     const int nc = yxmat.n_cols - 1;  // regressors (the first column is y)
     const arma::mat x = yxmat.cols(1, nc);
-    const arma::vec y = yxmat.col(0);
+    // Regress dy on (1, y_{t-1}, dy lags): same t-statistic as y on the same
+    // regressors (gamma = beta - 1), but SSR = dy'dy - b'X'dy is no longer
+    // a near-cancelling difference of two O(y^2) sums when y has large levels.
+    const arma::vec y = yxmat.col(0) - yxmat.col(2);
     std::vector<double> xtx(nc * nc), xty(nc), g(nc * nc), b(nc), gx(nc), xe(nc);
 
     for (int j = 0; j < total; ++j) {
@@ -103,7 +106,7 @@ arma::vec radf(const arma::mat& yxmat, int min_win, int lag) {
           b[a] = acc;
           ssr -= acc * xty[a];
         }
-        tstat(i, j) = (b[1] - 1) / std::sqrt(ssr / (T - nc) * g[1 * nc + 1]);
+        tstat(i, j) = b[1] / std::sqrt(ssr / (T - nc) * g[1 * nc + 1]);
       }
     }
   }
@@ -160,8 +163,9 @@ arma::vec radf_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min,
   arma::mat gm(M, R);  gm.fill(-arma::datum::inf);
 
   if (lag == 0) {
-    const arma::vec y = yxmat.col(0);
+    // Same dy-on-regressors parametrisation as radf(): t on gamma = beta - 1.
     const arma::vec x = yxmat.col(1);
+    const arma::vec y = yxmat.col(0) - x;
     for (int j = 0; j + mmin - 1 < R; ++j) {
       double sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
       for (int e = j; e < R; ++e) {
@@ -171,9 +175,9 @@ arma::vec radf_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min,
         const double sxx_c = sxx - sx * sx / T;
         const double sxy_c = sxy - sx * sy / T;
         const double syy_c = syy - sy * sy / T;
-        const double beta = sxy_c / sxx_c;
-        const double ssr = syy_c - beta * sxy_c;
-        const double t = (beta - 1) / std::sqrt(ssr / (T - 2) / sxx_c);
+        const double gamma = sxy_c / sxx_c;
+        const double ssr = syy_c - gamma * sxy_c;
+        const double t = gamma / std::sqrt(ssr / (T - 2) / sxx_c);
         if (j == 0) w0(e) = t;
         if (t > pmax(e)) pmax(e) = t;
       }
@@ -187,7 +191,7 @@ arma::vec radf_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min,
     // a handful of tiny matrix-vector products, and Armadillo temporaries
     // (heap allocations, BLAS calls) per window cost more than the flops.
     const arma::mat x = yxmat.cols(1, nc);
-    const arma::vec y = yxmat.col(0);
+    const arma::vec y = yxmat.col(0) - yxmat.col(2);  // dy, as in radf()
     std::vector<double> xtx(nc * nc), xty(nc), g(nc * nc), b(nc), gx(nc), xe(nc);
     for (int j = 0; j + mmin - 1 < R; ++j) {
       std::fill(xtx.begin(), xtx.end(), 0.0);
@@ -226,7 +230,7 @@ arma::vec radf_nested(const arma::mat& yxmat, const arma::ivec& minw, int n_min,
           b[a] = acc;
           ssr -= acc * xty[a];
         }
-        const double t = (b[1] - 1) / std::sqrt(ssr / (T - nc) * g[1 * nc + 1]);
+        const double t = b[1] / std::sqrt(ssr / (T - nc) * g[1 * nc + 1]);
         if (j == 0) w0(e) = t;
         if (t > pmax(e)) pmax(e) = t;
       }
