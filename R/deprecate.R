@@ -8,15 +8,6 @@ deprecate_arg_warn <- function(old, new = NULL) {
   }
 }
 
-deprecate_arg_stop <- function(old, new = NULL) {
-  if (old == "DEPRECATED" && is.null(new)) {
-    warning_glue("`{substitute(old)}` is deprecated.")
-  }
-  if (!is.null(old) && old != "DEPRECATED") {
-    stop_glue("`{substitute(old)}` is deprecated. Please use `{substitute(new)}` instead.")
-  }
-}
-
 # Deprecated --------------------------------------------------------------
 
 
