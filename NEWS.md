@@ -1,9 +1,9 @@
 # exuber 2.0.0
 
-New methodologies from the `docs/enhancements/` research programme, each
+New methodologies from the `docs/` research programme, each
 independently validated against a published number (formula-exact check,
 table lookup, or a direct Monte Carlo reproduction of the source paper's
-own theorem) — see `docs/enhancements/README.md` for the full record of
+own theorem) — see `docs/README.md` for the full record of
 what was checked and how.
 
 ### Critical values

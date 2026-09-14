@@ -1,6 +1,6 @@
 # Kurozumi, E. & Nishi, M. (2025, JTSA 46(5), 945-965, "Bubble testing
 # with stochastically varying explosive coefficient"; "KN"). See
-# docs/enhancements/volatility-robustness.md, "Stochastic explosive
+# docs/volatility-robustness.md, "Stochastic explosive
 # -coefficient test", for the full evaluation this implements.
 #
 # Only the SSU statistic (their eq. 7, sup-type, r1 fixed at 0) is

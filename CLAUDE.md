@@ -221,15 +221,17 @@ call it. Kept as a thin `.Deprecated()`-warning wrapper in
 target already shipped on CRAN before reaching for the clean-break
 precedent above; only unreleased names get that treatment.
 
-## Implementing items from docs/enhancements/
+## Implementing items from docs/
 
-`../docs/enhancements/` is a research backlog: papers evaluated for
-whether/how to add their method to this package, organized by
+`../docs/` is the workspace-wide methodology + replication record
+(shared with exubercore and pyexuber — `docs/README.md` is the map):
+papers evaluated for whether/how to add their method, organized by
 methodological family (`volatility-robustness.md`, `dating-and-root-inference.md`,
 `monitoring.md`, `multivariate.md`, `alternative-paradigms.md`,
 `open-research-directions.md`, `practitioner-guidance.md`), with a
-narrative summary in `SUMMARY.md` and a taxonomy/status table in
-`README.md`. Working through this backlog established the workflow
+narrative summary in `SUMMARY.md`, a taxonomy/status table in
+`README.md`, and `parity.md` recording which implementation ships each
+method. Working through this backlog established the workflow
 below — follow it for any new item, and re-apply it to items already
 marked "evaluated, not implemented" or "genuinely more expensive" before
 trusting that verdict, since it has repeatedly turned out wrong.
@@ -347,9 +349,9 @@ in `alternative-paradigms.md` precisely enough that a future attempt
 starts from the actual remaining gap instead of redoing the
 investigation.
 
-### Documentation update pattern (four files + a replication script)
+### Documentation update pattern (five files + a replication script)
 
-Every shipped item touches, in `docs/enhancements/`:
+Every shipped item touches, in `docs/`:
 
 1. The relevant taxonomy file's top status line, its taxonomy table row,
    and either a new `### Implementation` subsection or a rewrite of the
@@ -362,11 +364,13 @@ Every shipped item touches, in `docs/enhancements/`:
 3. `README.md`'s taxonomy table and per-item cross-check table (one row:
    item, file, cross-check description, "clean" or "bug found + fixed:
    ...").
-4. `docs/enhancements/replication/README.md`'s per-folder bullet list,
+4. `docs/replication/README.md`'s per-folder bullet list,
    pointing at a new replication script.
+5. `docs/parity.md` — a row for the new method (exuber column filled,
+   pyexuber `—`), so the Python side sees the gap.
 
 Plus a standalone, re-runnable replication script in
-`docs/enhancements/replication/<taxonomy-folder>/<function>_validation.R`
+`docs/replication/<taxonomy-folder>/<function>_validation.R`
 that reproduces every number quoted in the docs. **Run the archived
 script itself before finalizing the docs** — an ad hoc validation
 script's exact numbers can drift from the final, cleaned-up archived

@@ -105,7 +105,7 @@ reference:
   - title: Volatility-robust (other routes)
     desc: >
       Further tests robust to time-varying innovation variance; see
-      docs/enhancements/volatility-robustness.md
+      docs/volatility-robustness.md
   - subtitle: radf_sbz()
     contents:
       - radf_sbz
@@ -129,7 +129,7 @@ reference:
   - title: Dating procedures
     desc: >
       Standalone dating procedures with no critical value needed, and
-      recovery dating; see docs/enhancements/dating-and-root-inference.md.
+      recovery dating; see docs/dating-and-root-inference.md.
       rootstamp() itself lives under Analysis above -- it's the last step of
       the core workflow, not an alternative to datestamp()
   - subtitle: dating_pdc()
@@ -156,7 +156,7 @@ reference:
 
   - title: Real-time monitoring
     desc: >
-      Sequential/real-time bubble detection; see docs/enhancements/monitoring.md.
+      Sequential/real-time bubble detection; see docs/monitoring.md.
       Each monitor is listed with its static, full-sample counterpart where one
       exists.
   - subtitle: monitor()
@@ -182,7 +182,7 @@ reference:
 
   - title: Multivariate / panel bubble tests
     desc: >
-      Panel and cross-series tests; see docs/enhancements/multivariate.md
+      Panel and cross-series tests; see docs/multivariate.md
   - subtitle: radf_common()
     contents:
       - radf_common
@@ -210,7 +210,7 @@ reference:
       Data-generating processes for axes exuber's original sim_*()
       functions don't cover -- time-varying volatility, non-Gaussian
       innovations, long memory, and distinct multi-series/branching
-      mechanisms; see docs/enhancements/simulation-dgps.md
+      mechanisms; see docs/simulation-dgps.md
     contents:
       - sim_innov
       - sim_vol_break

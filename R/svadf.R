@@ -1,6 +1,6 @@
 # Sarkar, A. & Wells, M.T. (2026, arXiv:2604.12062, "Is There an AI
 # Bubble? Robust Date-Stamping for Periods of Exuberance"; "SW"). See
-# docs/enhancements/volatility-robustness.md, "SV-ADF", for the full
+# docs/volatility-robustness.md, "SV-ADF", for the full
 # evaluation this implements.
 #
 # A non-peer-reviewed preprint (flagged explicitly, a different bar than

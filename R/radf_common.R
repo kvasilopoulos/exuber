@@ -95,7 +95,7 @@ radf_common <- function(data, minw = NULL, r = 1) {
     add_attr(prcomp = pca)
 }
 
-# Independent validation (2026-08-09, see docs/enhancements/multivariate.md)
+# Independent validation (2026-08-09, see docs/multivariate.md)
 # found that Theorem 4.3's asymptotic null-distribution identity with plain
 # univariate GSADF does NOT hold at practical panel widths N -- and the gap
 # *grows* with N (more than doubling by N=100), because PCA on a panel of
