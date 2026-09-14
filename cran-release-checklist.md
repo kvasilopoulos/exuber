@@ -22,11 +22,11 @@ Status column: `[x]` done and verified this release, `[ ]` pending,
 | 1.6 | `devtools::build_readme()` | [x] | |
 | 1.7 | `spelling::spell_check_package()` | [x] | en-GB spellings fixed (`favour`, `recognise`, `reorganised`); identifiers added to `inst/WORDLIST` |
 | 1.8 | `devtools::check(remote = TRUE, manual = TRUE)` locally | [x] | see §4; `manual = FALSE` locally (no LaTeX here) — PDF manual built on win-builder/CI |
-| 1.9 | `devtools::check_win_devel()` + `check_win_release()` | [ ] | uploaded once for d17d275 (predates the parallel fix — expect the examples ERROR there); re-upload from f8088a2 once the local check is green |
-| 1.10 | R-hub CRAN platforms (`.github/workflows/rhub.yaml`, manual dispatch) | [ ] | workflow's last step referenced a non-existent `r-hub/actions/run-check@v2` — fixed to `@v1`; re-dispatched |
+| 1.9 | `devtools::check_win_devel()` + `check_win_release()` | [ ] | uploaded from f8088a2 (an earlier d17d275 upload predates the parallel fix — ignore its examples ERROR); results pending by email to the maintainer |
+| 1.10 | R-hub CRAN platforms (`.github/workflows/rhub.yaml`, manual dispatch) | [x] | run 34820330290 on 2ff80f1: linux / windows / macos R-devel all `Status: OK` (0 NOTEs). Workflow had a non-existent `run-check@v2` ref and a hand-added `R -e` step PowerShell can't parse — both removed |
 | 1.11 | Reverse dependencies: `revdepcheck::revdep_check()` | [-] | no reverse dependencies on CRAN (`tools::package_dependencies(reverse = TRUE)`) |
 | 1.12 | Update `cran-comments.md` with *this* run's environments and NOTEs | [x] | stale `doSNOW`/`exuberdata` notes removed |
-| 1.13 | `git push`, CI green (R-CMD-check / test-coverage / pkgdown / html-5-check) | [ ] | html-5-check had failed on every run since it was added (no deps installed → `LinkingTo` NOTE, no V8 → math-rendering NOTE, job errors on NOTEs); fixed |
+| 1.13 | `git push`, CI green (R-CMD-check / test-coverage / pkgdown / html-5-check) | [x] | all green on 2ff80f1 and 4330594 (R-CMD-check: macOS, Windows, Ubuntu devel/release/oldrel-1); html-5-check had failed on every run since it was added (no deps installed → `LinkingTo` NOTE, no V8 → math-rendering NOTE, job errors on NOTEs); fixed |
 | 1.14 | Draft blog post | [-] | not part of this package's release practice |
 
 ## 2. Submit
