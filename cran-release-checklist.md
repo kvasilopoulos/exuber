@@ -22,7 +22,7 @@ Status column: `[x]` done and verified this release, `[ ]` pending,
 | 1.6 | `devtools::build_readme()` | [x] | |
 | 1.7 | `spelling::spell_check_package()` | [x] | en-GB spellings fixed (`favour`, `recognise`, `reorganised`); identifiers added to `inst/WORDLIST` |
 | 1.8 | `devtools::check(remote = TRUE, manual = TRUE)` locally | [x] | see §4; `manual = FALSE` locally (no LaTeX here) — PDF manual built on win-builder/CI |
-| 1.9 | `devtools::check_win_devel()` + `check_win_release()` | [ ] | uploaded from f8088a2 (an earlier d17d275 upload predates the parallel fix — ignore its examples ERROR); results pending by email to the maintainer |
+| 1.9 | `devtools::check_win_devel()` + `check_win_release()` | [x] | f8088a2: R-devel (2026-09-13 r90534) `Status: OK`, R 4.6.1 `Status: OK`, 0 NOTEs (win-builder mails 2026-09-14 07:54/08:00 UTC, logs 403y43561UTg / p0cS6xhPvG61). The two earlier `1 ERROR` mails are the d17d275 upload (`rootstamp` example, pre parallel fix) — ignore |
 | 1.10 | R-hub CRAN platforms (`.github/workflows/rhub.yaml`, manual dispatch) | [x] | run 34820330290 on 2ff80f1: linux / windows / macos R-devel all `Status: OK` (0 NOTEs). Workflow had a non-existent `run-check@v2` ref and a hand-added `R -e` step PowerShell can't parse — both removed |
 | 1.11 | Reverse dependencies: `revdepcheck::revdep_check()` | [-] | no reverse dependencies on CRAN (`tools::package_dependencies(reverse = TRUE)`) |
 | 1.12 | Update `cran-comments.md` with *this* run's environments and NOTEs | [x] | stale `doSNOW`/`exuberdata` notes removed |
