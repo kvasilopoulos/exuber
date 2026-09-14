@@ -39,11 +39,12 @@ mail, to the `cre` address in `DESCRIPTION` — **`k.vasilopoulo@gmail.com`,
 the release mailbox**. Read it through the local MCP server
 `gmail-maintainer`: `mcp__gmail-maintainer__search_emails` (`query`,
 `maxResults`) → `mcp__gmail-maintainer__read_email` (`messageId`). If those
-tools are absent the server isn't registered or authorized: tell the user
-to run `claude mcp add --scope user gmail-maintainer -- npx -y
-@gongrzhe/server-gmail-autoauth-mcp` and `npx
-@gongrzhe/server-gmail-autoauth-mcp auth` (needs
-`~/.gmail-mcp/gcp-oauth.keys.json`), and ask them to paste the mail
+tools are absent the server isn't authorized yet: it is registered in
+user scope as `node .../@gongrzhe/server-gmail-autoauth-mcp/dist/index.js`
+(global npm install, plus `uuid` which the package forgets to declare) and
+needs `C:\Users\User\.gmail-mcp\gcp-oauth.keys.json` (Google Cloud
+Desktop-app OAuth client) followed by `gmail-mcp auth` in a browser session
+signed in as the maintainer. Tell the user, and ask them to paste the mail
 meanwhile. The claude.ai Gmail connector (`mcp__claude_ai_Gmail__*`) is
 `kostasvasilo91@gmail.com`, the personal account — not used for releases.
 
