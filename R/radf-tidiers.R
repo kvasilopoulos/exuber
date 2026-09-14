@@ -328,6 +328,15 @@ autoplot_radf_distr.sb_distr <- function(object, ...) {
 #' @param x An object of class `obj`.
 #' @param y An object of class `cv`.
 #' @param ... Further arguments passed to methods.
+#' @return A \code{tibble} joining the tidied statistics of \code{x} with the
+#'   tidied critical values of \code{y}; see the methods for the exact columns.
+#' @examples
+#' \donttest{
+#' rsim <- radf(sim_data)
+#' mc <- radf_mc_cv(nrow(sim_data), nrep = 200)
+#' tidy_join(rsim, mc)
+#' augment_join(rsim, mc)
+#' }
 #' @export
 tidy_join <- function(x, y, ...) {
   UseMethod("tidy_join")
@@ -649,6 +658,8 @@ extract_sb_stat <- function(x, stat = "bsadf_panel_cv") {
 #' Augment and then join objects.
 #'
 #' @inheritParams tidy_join
+#' @return A \code{tibble} joining the augmented statistics of \code{x} with the
+#'   augmented critical values of \code{y}; see the methods for the exact columns.
 #' @export
 augment_join <- function(x, y, ...) {
   UseMethod("augment_join")

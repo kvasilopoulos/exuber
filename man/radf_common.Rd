@@ -91,4 +91,9 @@ Financial Econometrics, 21(4), 989-1063.
 \code{\link{radf}} for the underlying (unmodified) test, and
 \code{\link{radf_common_cv}} for its (panel-width-specific) critical
 values.
+
+Other multivariate:
+\code{\link[=cobubble_test]{cobubble_test()}},
+\code{\link[=contagion_reg]{contagion_reg()}}
 }
+\concept{multivariate}

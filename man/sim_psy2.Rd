@@ -100,6 +100,7 @@ sim_psy2(n = 200, seed = 123) \%>\%
 Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for Multiple Bubbles:
 Historical Episodes of Exuberance and Collapse in the S&P 500. International Economic Review, 5
 6(4), 1043-1078.
+\doi{10.1111/iere.12132}
 }
 \seealso{
 \code{\link{sim_psy1}}, \code{\link{sim_blan}}, \code{\link{sim_evans}}

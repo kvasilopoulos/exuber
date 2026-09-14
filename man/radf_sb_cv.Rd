@@ -98,6 +98,7 @@ sb_bic <- radf_sb_cv(sim_data, type = "bic")
 Pavlidis, E., Yusupova, A., Paya, I., Peel, D., Martínez-García,
 E., Mack, A., & Grossman, V. (2016). Episodes of exuberance in housing markets:
 In search of the smoking gun. The Journal of Real Estate Finance and Economics, 53(4), 419-449.
+\doi{10.1007/s11146-015-9531-2}
 
 Pedersen, T. Q., & Schütte, E. C. M. (2020). Testing for
 explosive bubbles in the presence of autocorrelated innovations. Journal
@@ -106,4 +107,16 @@ of Empirical Finance, 58, 207-225.
 \seealso{
 \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 \code{\link{radf_wb_cv}} for wild Bootstrap critical values
+
+Other critical values:
+\code{\link[=radf_common_cv]{radf_common_cv()}},
+\code{\link[=radf_mc_cv]{radf_mc_cv()}},
+\code{\link[=radf_recovery_cv]{radf_recovery_cv()}},
+\code{\link[=radf_sbz_cv]{radf_sbz_cv()}},
+\code{\link[=radf_sign_cv]{radf_sign_cv()}},
+\code{\link[=radf_sign_dm_cv]{radf_sign_dm_cv()}},
+\code{\link[=radf_tt_cv]{radf_tt_cv()}},
+\code{\link[=radf_wb_cv]{radf_wb_cv()}},
+\code{\link[=radf_wb_ps_cv]{radf_wb_ps_cv()}}
 }
+\concept{critical values}

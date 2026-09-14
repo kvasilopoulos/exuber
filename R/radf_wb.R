@@ -208,6 +208,7 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
+#' \doi{10.1111/iere.12132}
 #'
 #' @seealso \code{\link{radf_wb_cv}} for the Harvey et al. (2016) wild
 #' bootstrap, \code{\link{radf_mc_cv}} for Monte Carlo critical values and
@@ -217,6 +218,7 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' @importFrom doFuture `%dofuture%`
 #' @importFrom progressr progressor
 #' @importFrom stats quantile rnorm
+#' @family critical values
 #' @export
 #'
 #' @examples
@@ -432,6 +434,7 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
+#' \doi{10.1111/iere.12132}
 #'
 #' @references Hafner, C. M. (2020). Testing for bubbles in
 #' cryptocurrencies with time-varying volatility. Journal of Financial
@@ -444,6 +447,7 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 #' @importFrom doFuture `%dofuture%`
 #' @importFrom progressr progressor
 #' @importFrom stats quantile rnorm
+#' @family critical values
 #' @export
 #'
 #' @examples

@@ -79,6 +79,7 @@
 #' datestamp(res, cv = cv)
 #' }
 #'
+#' @family multivariate
 #' @export
 radf_common <- function(data, minw = NULL, r = 1) {
   x <- parse_data(data)
@@ -148,6 +149,7 @@ radf_common <- function(data, minw = NULL, r = 1) {
 #' tidy(cv)
 #' }
 #'
+#' @family critical values
 #' @export
 radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
   assert_n(n)

@@ -89,6 +89,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' @importFrom stats quantile rnorm runif
 #' @importFrom lubridate is.Date
 #' @importFrom purrr detect_index
+#' @family critical values
 #' @export
 #'
 #' @examples
