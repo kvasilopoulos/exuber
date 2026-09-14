@@ -145,12 +145,15 @@ what was checked and how.
   `radf_sb_cv()`, `monitor()`, `dating_hlw()`, `radf_recovery()` and every
   other loop over `radf()` speed up by the same factor. Results are
   numerically identical to ~1e-12.
-* Parallel runs (`options(exuber.parallel = TRUE)`, the default) reuse one
-  worker cluster per session instead of starting and stopping a fresh
+* Parallel runs (`options(exuber.parallel = TRUE)`) reuse one worker
+  cluster per session instead of starting and stopping a fresh
   `future::multisession` on every call -- a few seconds of start-up
   overhead that used to dominate every small `radf_mc_cv()`/`radf_wb_cv()`
   job. The cluster is sized by `exuber.ncores` and stopped when the
-  namespace unloads.
+  namespace unloads. `exuber.parallel` now defaults to `interactive()`:
+  scripts, knitr and `R CMD check` run serially unless they opt in, so a
+  batch job no longer pays worker start-up (nor leaves worker connections
+  open) for a handful of replications.
 
 ### API consistency
 

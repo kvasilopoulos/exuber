@@ -12,7 +12,7 @@
 
   op.exuber <- list(
     exuber.show_progress = TRUE,
-    exuber.parallel = TRUE,
+    exuber.parallel = interactive(), # workers cost seconds to start; opt in from scripts
     exuber.ncores = ncores,
     exuber.global_seed = NA
   )
