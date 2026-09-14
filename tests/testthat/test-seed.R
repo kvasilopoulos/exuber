@@ -1,95 +1,35 @@
 context("seed")
-skip(TRUE)
-# avail_cores <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-# options(exuber.ncores = 2)
 
-test_that("seed gets the same results",{
+test_that("seed reproduces Monte Carlo and bootstrap critical values", {
   skip_on_cran()
-  options(exuber.parallel = TRUE)
-  expect_true(
-    all.equal(
-      mc_cv(10, nrep = 20, seed = 123),
-      mc_cv(10, nrep = 20, seed = 123)
-    )
-  )
-  options(exuber.parallel = FALSE)
+  expect_equal(radf_mc_cv(20, nrep = 20, seed = 123), radf_mc_cv(20, nrep = 20, seed = 123))
+  expect_equal(radf_wb_cv(dta, nboot = 20, seed = 123), radf_wb_cv(dta, nboot = 20, seed = 123))
 })
 
-test_that("seed gets the same results - wb",{
+test_that("seed reproduces across serial and parallel execution", {
   skip_on_cran()
-  options(exuber.parallel = TRUE)
-  expect_true(
-    all.equal(
-      wb_cv(dta, nboot = 20, seed = 123),
-      wb_cv(dta, nboot = 20, seed = 123)
-    )
-  )
-  options(exuber.parallel = FALSE)
+  # multisession workers load the *installed* package; under load_all() they
+  # cannot see the dev tree's internals, so this only runs in R CMD check/CI
+  skip_if(requireNamespace("pkgload", quietly = TRUE) && pkgload::is_dev_package("exuber"),
+          "parallel workers need an installed exuber")
+  withr::local_options(list(exuber.parallel = TRUE, exuber.ncores = 2))
+  x <- radf_mc_cv(20, nrep = 20, seed = 123)
+  withr::local_options(list(exuber.parallel = FALSE))
+  y <- radf_mc_cv(20, nrep = 20, seed = 123)
+  expect_equal(x, y)
 })
 
-# test_that("seed is the same with or without parallel", {
-#   skip_on_cran()
-#   options(exuber.parallel = TRUE)
-#   x <- mc_cv(10, nrep = 20, seed = 123)
-#   options(exuber.parallel = FALSE)
-#   y <- mc_cv(10, nrep = 20, seed = 123)
-#   expect_true(all.equal(x,y))
-# })
-
-test_that("local options", {
+test_that("exuber.global_seed: unset draws differ, set draws repeat, local seed wins", {
   skip_on_cran()
-  options(exuber.global_seed = NA)
-  expect_false(
-    isTRUE(
-      all.equal(
-        mc_cv(100, nrep = 20)$gsadf_cv,
-        mc_cv(100, nrep = 20)$gsadf_cv
-      )
-    )
-  )
-  expect_true(
-    isTRUE(
-      all.equal(
-        mc_cv(100, nrep = 20, seed = 124)$gsadf_cv,
-        mc_cv(100, nrep = 20, seed = 124)$gsadf_cv
-      )
-    )
-  )
-})
+  withr::local_options(list(exuber.global_seed = NA))
+  expect_false(isTRUE(all.equal(
+    radf_mc_cv(50, nrep = 20)$gsadf_cv, radf_mc_cv(50, nrep = 20)$gsadf_cv
+  )))
 
-test_that("global options works", {
-  skip_on_cran()
-  options(exuber.global_seed = 124)
-  expect_true(
-    isTRUE(
-      all.equal(
-        mc_cv(100, nrep = 20)$gsadf_cv,
-        mc_cv(100, nrep = 20)$gsadf_cv
-      )
-    )
-  )
-  options(exuber.global_seed = NA)
+  withr::local_options(list(exuber.global_seed = 124))
+  expect_equal(radf_mc_cv(50, nrep = 20)$gsadf_cv, radf_mc_cv(50, nrep = 20)$gsadf_cv)
+  expect_equal(radf_mc_cv(50, nrep = 20, seed = 123)$gsadf_cv, radf_mc_cv(50, nrep = 20, seed = 123)$gsadf_cv)
+  expect_false(isTRUE(all.equal(
+    radf_mc_cv(50, nrep = 20, seed = 123)$gsadf_cv, radf_mc_cv(50, nrep = 20, seed = 124)$gsadf_cv
+  )))
 })
-
-test_that("local options overwrite global", {
-  skip_on_cran()
-  options(exuber.global_seed = 124)
-  expect_true(
-    isTRUE(
-      all.equal(
-        mc_cv(100, nrep = 20, seed = 123)$gsadf_cv,
-        mc_cv(100, nrep = 20, seed = 123)$gsadf_cv
-      )
-    )
-  )
-  expect_false(
-    isTRUE(
-      all.equal(
-        mc_cv(100, nrep = 20, seed = 123)$gsadf_cv,
-        mc_cv(100, nrep = 20, seed = 124)$gsadf_cv
-      )
-    )
-  )
-  options(exuber.global_seed = NA)
-})
-

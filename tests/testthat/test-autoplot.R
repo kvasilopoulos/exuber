@@ -9,12 +9,12 @@ test_that("basic", {
   expect_equal(unique(p$data$index), index(radf_dta, trunc = TRUE))
 
   # Blanchard
-  blan <- radf_dta %>% autoplot(select_series = "blan")
+  blan <- radf_dta %>% autoplot(cv = mc, select_series = "blan")
   expect_equal(blan$labels$title, "blan")
   expect_equal(blan$layers %>% length(), 2)
 
   # Dividends
-  div <- radf_dta %>% autoplot(nonrejected = TRUE, select_series = "div")
+  div <- radf_dta %>% autoplot(cv = mc, nonrejected = TRUE, select_series = "div")
   expect_equal(div$labels$title, "div")
   expect_equal(div$layers %>% length(), 1) # no geom_rect
 })
@@ -43,8 +43,9 @@ test_that("panel", {
 
 test_that("dates", {
   dating <- seq(as.Date("1991/10/01"), by = "month", length.out = 100)
-  index(radf_dta) <- dating
-  p <- autoplot(radf_dta)
+  radf_dated <- radf_dta
+  index(radf_dated) <- dating
+  p <- autoplot(radf_dated, cv = mc)
   expect_true(p$data$index %>% is.Date())
   expect_equal(unique(p$data$index), dating[-c(1:19)])
 
