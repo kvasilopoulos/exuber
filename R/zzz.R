@@ -1,5 +1,6 @@
 
 .pkgenv <- new.env(parent = emptyenv())
+.pkgenv$crit <- list() # per-session cache of parsed critical-value tables
 
 .onLoad <- function(libname, pkgname) {
   op <- options()
