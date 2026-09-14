@@ -9,9 +9,11 @@ Two modes; default to **audit** if unclear.
 
 - **audit** – read the package, compare against `reference.md`, report gaps as
   a table (file:line, what, fix, severity). Don't edit unless asked.
-- **release** – if the repo has its own checklist (`cran-release-checklist.md`,
-  `CLAUDE.md` "Release process", `usethis::use_release_issue()` issue), run
-  that and update its status column in place. Fill gaps from this skill;
+- **release** – run `checklist.md` (next to this file: the consolidated
+  usethis / r-pkgs.org / CRAN-policy list with the per-item status of the
+  last pass) and update its status column in place. If the repo has its
+  own process too (`CLAUDE.md` "Release process",
+  `usethis::use_release_issue()` issue), follow that where it's stricter;
   never invent a parallel process.
 
 ## Who does what
@@ -39,7 +41,7 @@ mail, to the `cre` address in `DESCRIPTION`; the claude.ai Gmail
 connector is on that account. Use `mcp__claude_ai_Gmail__search_threads`
 (`query`, Gmail syntax), then `mcp__claude_ai_Gmail__get_thread` with
 `messageFormat: PLAIN_TEXT`. Before trusting a hit, check its
-`toRecipients` is the `cre` address — if it isn't, the connector is on a
+`to_recipients` is the `cre` address — if it isn't, the connector is on a
 different account: say so and ask the user to paste the mail.
 Sender/subject shapes as actually received:
 
