@@ -27,3 +27,8 @@
 ^tests_i386$
 ^tests_x64$
 ^CRAN-SUBMISSION$
+^\.claude$
+^CLAUDE\.md$
+^CITATION\.cff$
+^Rplots\.pdf$
+^cran-release-checklist\.md$

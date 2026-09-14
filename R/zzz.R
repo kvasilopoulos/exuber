@@ -29,7 +29,10 @@ if (getRversion() >= "2.15.1") {
       "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
       "value", "value_x", "value_y", "stat", "pval", "panel", "End","Duration",
       "ds_lgl", "rev_badf", "rev_bsadf", "rev_bsadf_panel", "tstat_crit", "data",
-      "Signal", "Ongoing", "Start", "reject")
+      "Signal", "Ongoing", "Start", "reject",
+      # autoplot()/tidy() column names used via NSE in the newer methods
+      "at", "label", "series", "xmin", "xmax", "mid", "r", "delta2",
+      "origination", "collapse", "recovery", "rho", "rho_lower", "rho_upper")
   )
 }
 
