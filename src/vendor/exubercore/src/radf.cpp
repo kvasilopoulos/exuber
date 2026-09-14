@@ -27,77 +27,83 @@ arma::vec radf(const arma::mat& yxmat, int min_win, int lag) {
   arma::mat tstat = zeros<mat>(total, total);
   tstat.fill(arma::datum::nan);
 
+  // Both branches keep running cross-products so each window costs O(1)
+  // (lag == 0) or O(nc^2) (lag > 0) instead of re-forming the residual
+  // vector -- the same closed-form SSR radf_nested() uses, which turns the
+  // whole grid from O(n^3) into O(n^2).
   if (lag == 0) {
-
-    arma::vec y = yxmat.col(0);
-    arma::vec x = yxmat.col(1);
-
-    arma::vec u;
-    double sx, sy, sxx, sxy;
-    int T;
-    double meanx, meany, den, beta, alpha, sbeta, suu;
+    const arma::vec y = yxmat.col(0);
+    const arma::vec x = yxmat.col(1);
 
     for (int j = 0; j < total; ++j) {
-      sx = sum(x.rows(j, j + start - 1));
-      sy = sum(y.rows(j, j + start - 1));
-      sxx = sum(x.rows(j, j + start - 1) % x.rows(j, j + start - 1));
-      sxy = sum(x.rows(j, j + start - 1) % y.rows(j, j + start - 1));
-      for (int i = j ; i < total; ++i) {
-        if (i == j) {
-        } else {
-          // Sum here to coerce from vec to double -- not needed n = 1
-          sx += sum(x.row(start + i - 1));
-          sy += sum(y.row(start + i - 1));
-          sxx += sum(x.row(start + i - 1) % x.row(start + i - 1));
-          sxy += sum(y.row(start + i - 1) % x.row(start + i - 1));
-        }
-        T = start + i - j;
-        meanx = sx/T;
-        meany = sy/T;
-        den = sxx/T-meanx*meanx;
-        beta = (sxy/T-meanx*meany)/den;
-        alpha = meany-beta*meanx;
-        u = y.rows(j, start + i - 1) - alpha - beta*x.rows(j, start + i - 1);
-        suu = as_scalar(trans(u) * u);
-        sbeta = sqrt(suu/(T-2)/den/T);
-        tstat(i, j) = (beta - 1)/ sbeta;
+      double sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
+      for (int e = j; e < j + start - 1; ++e) {
+        sx += x(e); sy += y(e); sxx += x(e) * x(e); sxy += x(e) * y(e); syy += y(e) * y(e);
+      }
+      for (int i = j; i < total; ++i) {
+        const int e = start + i - 1;  // last observation of window [j, e]
+        sx += x(e); sy += y(e); sxx += x(e) * x(e); sxy += x(e) * y(e); syy += y(e) * y(e);
+        const int T = start + i - j;
+        const double sxx_c = sxx - sx * sx / T;
+        const double sxy_c = sxy - sx * sy / T;
+        const double syy_c = syy - sy * sy / T;
+        const double beta = sxy_c / sxx_c;
+        const double ssr = syy_c - beta * sxy_c;
+        tstat(i, j) = (beta - 1) / std::sqrt(ssr / (T - 2) / sxx_c);
       }
     }
-  }else{
-    //removing minus one here ~ the dependent variable
-    int nc = yxmat.n_cols - 1;
-
-    arma::mat x = yxmat.cols(1, nc);
-    arma::mat y = yxmat.col(0);
-
-    arma::mat sx, sy, tsx, g, b, syn, res, sb;
-    double kaka, sqres, vares;
-    arma::colvec tsxn;
-    arma::rowvec sxn;
+  } else {
+    const int nc = yxmat.n_cols - 1;  // regressors (the first column is y)
+    const arma::mat x = yxmat.cols(1, nc);
+    const arma::vec y = yxmat.col(0);
+    std::vector<double> xtx(nc * nc), xty(nc), g(nc * nc), b(nc), gx(nc), xe(nc);
 
     for (int j = 0; j < total; ++j) {
-      sx = x.rows(j, start + j - 1);
-      sy = y.rows(j, start + j - 1);
-      tsx = sx.t();
-      g = inv(tsx * sx);
-      b = g * tsx * sy;
-      for (int i = j ; i < total; ++i) {
-        if (i == j) {
-        } else {
-          sx = x.rows(j, start + i - 1);
-          sy = y.rows(j, start + i - 1);
-          tsxn = trans(x.row(start + i - 1));
-          syn = y.row(start + i - 1);
-          sxn = trans(tsxn);
-          kaka = 1 / (1 + as_scalar(sxn * g * tsxn));
-          g -= kaka * ((g * tsxn) * (sxn * g));
-          b -= g * tsxn * as_scalar(sxn * b - syn);
+      std::fill(xtx.begin(), xtx.end(), 0.0);
+      std::fill(xty.begin(), xty.end(), 0.0);
+      double yty = 0;
+      for (int e = j; e < j + start - 1; ++e) {
+        const double ye = y(e);
+        for (int a = 0; a < nc; ++a) {
+          xty[a] += x(e, a) * ye;
+          for (int c = 0; c < nc; ++c) xtx[a * nc + c] += x(e, a) * x(e, c);
         }
-        res = sy - sx * b;
-        sqres = as_scalar(trans(res) * res);
-        vares = sqres/(start+i-j-nc);
-        sb = sqrt(vares * diagvec(g));
-        tstat(i, j) = (b(1) - 1)/ sb(1);
+        yty += ye * ye;
+      }
+      for (int i = j; i < total; ++i) {
+        const int e = start + i - 1;
+        for (int a = 0; a < nc; ++a) xe[a] = x(e, a);
+        const double ye = y(e);
+        for (int a = 0; a < nc; ++a) {
+          xty[a] += xe[a] * ye;
+          for (int c = 0; c < nc; ++c) xtx[a * nc + c] += xe[a] * xe[c];
+        }
+        yty += ye * ye;
+        const int T = start + i - j;
+        if (i == j) {
+          const arma::mat ginv = arma::inv_sympd(arma::mat(xtx.data(), nc, nc));
+          for (int a = 0; a < nc; ++a)
+            for (int c = 0; c < nc; ++c) g[a * nc + c] = ginv(a, c);
+        } else {
+          // Sherman-Morrison rank-1 update of (X'X)^-1 for the new row.
+          double denom = 1.0;
+          for (int a = 0; a < nc; ++a) {
+            double acc = 0;
+            for (int c = 0; c < nc; ++c) acc += g[a * nc + c] * xe[c];
+            gx[a] = acc;
+            denom += xe[a] * acc;
+          }
+          for (int a = 0; a < nc; ++a)
+            for (int c = 0; c < nc; ++c) g[a * nc + c] -= gx[a] * gx[c] / denom;
+        }
+        double ssr = yty;
+        for (int a = 0; a < nc; ++a) {
+          double acc = 0;
+          for (int c = 0; c < nc; ++c) acc += g[a * nc + c] * xty[c];
+          b[a] = acc;
+          ssr -= acc * xty[a];
+        }
+        tstat(i, j) = (b[1] - 1) / std::sqrt(ssr / (T - nc) * g[1 * nc + 1]);
       }
     }
   }
