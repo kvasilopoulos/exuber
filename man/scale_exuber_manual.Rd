@@ -8,7 +8,8 @@
 scale_exuber_manual(
   color_values = c("red", "blue"),
   linetype_values = c(2, 1),
-  size_values = c(0.8, 0.7)
+  linewidth_values = c(0.8, 0.7),
+  size_values = "DEPRECATED"
 )
 
 theme_exuber(
@@ -23,7 +24,9 @@ theme_exuber(
 
 \item{linetype_values}{a set of linetype values to map data values to.}
 
-\item{size_values}{a set of size values to map data values to.}
+\item{linewidth_values}{a set of linewidth values to map data values to.}
+
+\item{size_values}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} use \code{linewidth_values}.}
 
 \item{base_size}{base font size, given in pts.}
 
@@ -33,8 +36,18 @@ theme_exuber(
 
 \item{base_rect_size}{base size for rect elements}
 }
+\value{
+A list of three ggplot2 scales (\code{scale_exuber_manual}) or a
+ggplot2 theme object (\code{theme_exuber}), to be added to a plot with \code{+}.
+}
 \description{
-\code{scale_exuber_manual} allows specifying the color, size and linetype in
+\code{scale_exuber_manual} allows specifying the color, linewidth and linetype in
 \code{autoplot.radf_obj} mappings. \code{theme_exuber} is a complete theme which control
 all non-data display.
+}
+\examples{
+rsim <- radf(sim_psy1(100))
+autoplot(rsim, cv = radf_mc_cv(100, nrep = 100)) +
+  scale_exuber_manual(color_values = c("black", "black")) +
+  theme_exuber(base_size = 9)
 }
