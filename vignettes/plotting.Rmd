@@ -114,7 +114,7 @@ autoplot(est, cv, select_series = "psy2") +
   theme_classic()
 ```
 
-Arguments `autoplot()` doesn't recognise are forwarded to
+Arguments `autoplot()` doesn't recognize are forwarded to
 `ggplot2::facet_wrap()`, so `scales = "free_y"`, `ncol`, `labeller`, etc.
 work directly -- see `?autoplot.radf_obj` for a labeller example that
 renames the facets.
