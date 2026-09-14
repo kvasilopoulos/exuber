@@ -5,7 +5,8 @@ Consolidated from `usethis::use_release_issue()` (usethis 3.2.1,
 chapter (<https://r-pkgs.org/release.html>), the CRAN Repository Policy
 (<https://cran.r-project.org/web/packages/policies.html>), Writing R
 Extensions, and this repo's own `CLAUDE.md` "Release process (CRAN)".
-Dev-only file: listed in `.Rbuildignore`, not shipped.
+Lives inside the `cran-release` skill (`.claude/` is `.Rbuildignore`d);
+the skill's release mode runs it and updates the status column in place.
 
 Status column: `[x]` done and verified this release, `[ ]` pending,
 `[-]` not applicable, `[!]` needs a human decision.
