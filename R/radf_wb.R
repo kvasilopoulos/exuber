@@ -131,8 +131,7 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
     for (j in 1:nc) {
       results <- foreach(
         i = 1:nboot,
-        .combine = "cbind",
-        .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_ps"))),
+          .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_ps"))),
         .inorder = FALSE
       ) %dofuture% {
         p()
@@ -140,6 +139,7 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
         yxmat <- unroot(ystar)
         rls_gsadf(yxmat, min_win = minw)
       }
+      results <- do.call(cbind, results)
       adf_crit[, j] <- results[pointer + 1, ]
       sadf_crit[, j] <- results[pointer + 2, ]
       gsadf_crit[, j] <- results[pointer + 3, ]
@@ -351,8 +351,7 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
     for (j in 1:nc) {
       results <- foreach(
         i = 1:nboot,
-        .combine = "cbind",
-        .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_hlst"))),
+          .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_hlst"))),
         .inorder = FALSE
       ) %dofuture% {
         p()
@@ -360,6 +359,7 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
         yxmat <- unroot(ystar)
         rls_gsadf(yxmat, min_win = minw)
       }
+      results <- do.call(cbind, results)
 
       adf_crit[, j] <- results[pointer + 1, ]
       sadf_crit[, j] <- results[pointer + 2, ]
