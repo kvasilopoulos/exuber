@@ -114,7 +114,7 @@ library(ggplot2)
 # Change (overwrite) color, size or linetype
 autoplot(rsim_data) +
   scale_color_manual(values = c("black", "black")) +
-  scale_size_manual(values = c(0.9, 1)) +
+  scale_linewidth_manual(values = c(0.9, 1)) +
   scale_linetype_manual(values = c("solid", "solid"))
 
 # Change names through labeller (first way)

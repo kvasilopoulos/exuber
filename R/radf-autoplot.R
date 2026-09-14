@@ -56,7 +56,7 @@
 #' # Change (overwrite) color, size or linetype
 #' autoplot(rsim_data) +
 #'   scale_color_manual(values = c("black", "black")) +
-#'   scale_size_manual(values = c(0.9, 1)) +
+#'   scale_linewidth_manual(values = c(0.9, 1)) +
 #'   scale_linetype_manual(values = c("solid", "solid"))
 #'
 #' # Change names through labeller (first way)
@@ -89,13 +89,12 @@ autoplot.radf_obj <- function(
     include_negative = "DEPRECATED",
     ...) {
   deprecate_arg_warn(include_negative, nonrejected)
+  if (!identical(include_negative, "DEPRECATED")) nonrejected <- include_negative
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   snames <- series_names(object)
 
-  if (sig_lvl %ni% c(90, 95, 99)) {
-    stop_glue("sig_lvl must be one of 90, 95 or 99.")
-  }
+  assert_sig_lvl(sig_lvl)
 
   option <- match.arg(option)
   if (is_sb(cv)) {
@@ -135,7 +134,7 @@ autoplot.radf_obj <- function(
     filter(id %in% series, sig == sig_lvl, stat == filter_option) %>%
     pivot_longer(data = ., cols = c("tstat", "crit"), names_to = "tstat_crit")
   gg <- plot_data %>%
-    ggplot(aes(index, value, col = tstat_crit, size = tstat_crit, linetype = tstat_crit)) +
+    ggplot(aes(index, value, col = tstat_crit, linewidth = tstat_crit, linetype = tstat_crit)) +
     geom_line() +
     scale_exuber_manual() +
     theme_exuber()
@@ -180,7 +179,7 @@ autoplot2.radf_obj <- function(object, cv = NULL,
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   snames <- series_names(object)
-  stopifnot(sig_lvl %in% c(90, 95, 99))
+  assert_sig_lvl(sig_lvl)
 
   option <- match.arg(option)
   if (is_sb(cv)) {
@@ -473,22 +472,33 @@ autoplot_stat_bar <- function(stat, crit, detected = NULL, ylab = "statistic") {
 
 #' Exuber scale and theme functions
 #'
-#' `scale_exuber_manual` allows specifying the color, size and linetype in
+#' `scale_exuber_manual` allows specifying the color, linewidth and linetype in
 #' `autoplot.radf_obj` mappings. `theme_exuber` is a complete theme which control
 #' all non-data display.
 #'
 #' @param color_values a set of color values to map data values to.
 #' @param linetype_values a set of linetype values to map data values to.
-#' @param size_values a set of size values to map data values to.
+#' @param linewidth_values a set of linewidth values to map data values to.
+#' @param size_values `r lifecycle::badge("deprecated")` use `linewidth_values`.
 #'
-#' @importFrom ggplot2 scale_color_manual scale_size_manual scale_linetype_manual
+#' @return A list of three ggplot2 scales (`scale_exuber_manual`) or a
+#'   ggplot2 theme object (`theme_exuber`), to be added to a plot with `+`.
+#'
+#' @importFrom ggplot2 scale_color_manual scale_linewidth_manual scale_linetype_manual
 #' @export
+#' @examples
+#' rsim <- radf(sim_psy1(100))
+#' autoplot(rsim, cv = radf_mc_cv(100, nrep = 100)) +
+#'   scale_exuber_manual(color_values = c("black", "black")) +
+#'   theme_exuber(base_size = 9)
 scale_exuber_manual <- function(
     color_values = c("red", "blue"), linetype_values = c(2, 1),
-    size_values = c(0.8, 0.7)) {
+    linewidth_values = c(0.8, 0.7), size_values = "DEPRECATED") {
+  deprecate_arg_warn(size_values, linewidth_values)
+  if (!identical(size_values, "DEPRECATED")) linewidth_values <- size_values
   list(
     scale_color_manual(values = color_values),
-    scale_size_manual(values = size_values),
+    scale_linewidth_manual(values = linewidth_values),
     scale_linetype_manual(values = linetype_values)
   )
 }
@@ -580,7 +590,7 @@ autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
 }
 
 geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
-                            size = 3, col_negative = col, # "yellow2",
+                            linewidth = 3, col_negative = col, # "yellow2",
                             col_ongoing = NULL) {
   is_panel <- get_panel(object)
   idx <- index(object, trunc = trunc)
@@ -605,14 +615,14 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
   any_pos <- any(ds_data$Signal == "positive")
   x1 <- filter(ds_data, Signal == "positive") %>%
     geom_segment(
-      data = ., size = size, color = col,
+      data = ., linewidth = linewidth, color = col,
       aes(x = Start, xend = End, y = id, yend = id)
     )
 
   any_neg <- any(ds_data$Signal == "negative")
   x2 <- filter(ds_data, Signal == "negative") %>%
     geom_segment(
-      data = ., size = size, color = col_negative,
+      data = ., linewidth = linewidth, color = col_negative,
       aes(x = Start, xend = End, y = id, yend = id)
     )
 
@@ -620,7 +630,7 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
     any_ongoing <- any(ds_data$Ongoing)
     x3 <- filter(ds_data, Ongoing == TRUE) %>%
       geom_segment(
-        data = ., color = col_ongoing, size = size,
+        data = ., color = col_ongoing, linewidth = linewidth,
         aes(x = Start, xend = End, y = id, yend = id)
       )
   } else {
