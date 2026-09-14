@@ -35,13 +35,17 @@ acceptance `usethis::use_github_release()`, `use_dev_version(push = TRUE)`,
 and the website/CHANGELOG follow-ups the repo checklist lists.
 
 **Monitoring by email.** win-builder, macbuilder and CRAN only report by
-mail, to the `cre` address in `DESCRIPTION`. Two mailboxes are reachable;
-pick by the `cre` address, same Gmail query syntax in both:
-
-| Mailbox | Tools |
-|---|---|
-| `k.vasilopoulo@gmail.com` — the maintainer address, where CRAN/win-builder write | local MCP server `gmail-maintainer`: `mcp__gmail-maintainer__search_emails` (`query`, `maxResults`) → `mcp__gmail-maintainer__read_email` (`messageId`). Not registered / not authorized → tools absent; tell the user to run `claude mcp add --scope user gmail-maintainer -- npx -y @gongrzhe/server-gmail-autoauth-mcp` and `npx @gongrzhe/server-gmail-autoauth-mcp auth` (needs `~/.gmail-mcp/gcp-oauth.keys.json`), then ask them to paste the mail meanwhile |
-| `kostasvasilo91@gmail.com` — personal | claude.ai connector: `mcp__claude_ai_Gmail__search_threads` → `get_thread` with `messageFormat: PLAIN_TEXT` |
+mail, to the `cre` address in `DESCRIPTION` — **`k.vasilopoulo@gmail.com`,
+the release mailbox**. Read it through the local MCP server
+`gmail-maintainer`: `mcp__gmail-maintainer__search_emails` (`query`,
+`maxResults`) → `mcp__gmail-maintainer__read_email` (`messageId`). If those
+tools are absent the server isn't registered or authorized: tell the user
+to run `claude mcp add --scope user gmail-maintainer -- npx -y
+@gongrzhe/server-gmail-autoauth-mcp` and `npx
+@gongrzhe/server-gmail-autoauth-mcp auth` (needs
+`~/.gmail-mcp/gcp-oauth.keys.json`), and ask them to paste the mail
+meanwhile. The claude.ai Gmail connector (`mcp__claude_ai_Gmail__*`) is
+`kostasvasilo91@gmail.com`, the personal account — not used for releases.
 
 win-builder mails link to a results page — fetch its `00check.log` with
 WebFetch. Queries (`PKG` = package name):
