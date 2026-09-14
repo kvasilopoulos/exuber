@@ -14,6 +14,56 @@ Two modes; default to **audit** if unclear.
   that and update its status column in place. Fill gaps from this skill;
   never invent a parallel process.
 
+## Who does what
+
+Claude runs the release end to end **except three human gates**. Do
+everything else without asking; at a gate, hand over the exact artifact or
+command, mark the checklist row `[!]`, and wait.
+
+| Human gate | What Claude hands over |
+|---|---|
+| **1. DESCRIPTION check** — `Title:` and `Description:` wording (Title Case, quotes, references, acronyms) | proposed text as a diff; commit only after approval. Every other DESCRIPTION field (Version, deps, Authors@R roles, License) Claude edits directly |
+| **2. Release comments** — `cran-comments.md` (and a `## Resubmission` section if a reviewer replied) | a complete draft filled with *this* run's environments, NOTEs and revdep results; the human edits/approves before the tarball is built |
+| **3. Final submission** — `devtools::submit_cran()` (or the web form) and clicking the CRAN confirmation link; also any reply email to a CRAN reviewer | the built tarball path, the approved `cran-comments.md`, and — for a reviewer reply — a drafted email body. Never call `submit_cran()`, never send mail |
+
+Claude owns: `usethis::use_version()`, NEWS heading, `devtools::document()`,
+all checks (local `check(cran = TRUE, …)`, `check_win_devel()` /
+`check_win_release()` uploads, `gh workflow run rhub.yaml`, revdeps),
+fixing what they find in `R/`/`src/`/`tests/`, `urlchecker`, `spelling`,
+`.Rbuildignore`, `R CMD build`, watching results (below), and after
+acceptance `usethis::use_github_release()`, `use_dev_version(push = TRUE)`,
+and the website/CHANGELOG follow-ups the repo checklist lists.
+
+**Monitoring by email.** win-builder, macbuilder and CRAN only report by
+mail, to the `cre` address in `DESCRIPTION`. A Gmail connector is available
+(`mcp__claude_ai_Gmail__search_threads`, then `get_thread` with
+`messageFormat: PLAIN_TEXT`; win-builder mails link to a results page —
+fetch `00check.log` from it with WebFetch). Queries (`PKG` = package name):
+
+```
+# win-builder (~20-60 min after upload) and macbuilder
+PKG ("win-builder" OR winbuilder OR "has been built" OR "mac.r-project.org") newer_than:2d
+# CRAN pipeline: confirmation link → pretest result → reviewer comments → "on its way" → on CRAN
+PKG (from:r-project.org OR "CRAN submission" OR "CRAN package" OR pretest) newer_than:14d
+# post-publication check failures ("Dear maintainer, ... please correct before ...")
+PKG from:r-project.org (subject:"CRAN package" OR "check problems" OR "will be archived") newer_than:30d
+```
+
+Cadence: win-builder every 15 min until the mail lands (two mails if both
+devel and release were uploaded); CRAN pretest every 30 min for the first
+4 h, then every few hours; human review can take days — check daily and
+tell the user when a reviewer reply arrives (drafting the fix and the
+`## Resubmission` section is Claude's job, the reply itself is gate 3).
+Confirm the mailbox is the maintainer's: compare a hit's `toRecipients`
+with `Authors@R`'s `cre` email. If they differ (in this repo: connector is
+`kostasvasilo91@gmail.com`, `cre` is `k.vasilopoulo@gmail.com`), say so —
+the user must forward or connect the maintainer account; until then ask
+them to paste the mail. Never mark a check "passed" from memory of an
+upload — only from the mail or the results page.
+
+R-hub v2 results are GitHub Actions runs, not mail: `gh run list
+--workflow=rhub.yaml`, `gh run view <id> --log-failed`.
+
 ## Audit procedure
 
 1. Read `DESCRIPTION`, `NEWS.md`, `cran-comments.md`, `.Rbuildignore`,
@@ -54,31 +104,38 @@ tools::package_dependencies("PKG", reverse = TRUE)   # revdeps → revdepcheck::
 ## Submission procedure (usethis order)
 
 ```r
+# Claude
 usethis::use_version("major|minor|patch")   # bumps DESCRIPTION + NEWS heading
 devtools::build_readme()
 devtools::check(cran = TRUE, remote = TRUE, manual = TRUE)
-devtools::check_win_devel(); devtools::check_win_release()   # results by email
-rhub::rhub_check(platforms = c("linux", "windows", "macos"))  # GH Actions; add atlas/valgrind if compiled
+devtools::check_win_devel(); devtools::check_win_release()   # results by email → monitor
+# gh workflow run rhub.yaml (or rhub::rhub_check(platforms = c("linux","windows","macos")); add atlas/valgrind if compiled)
 # revdepcheck::revdep_check(num_workers = 4)  if revdeps exist
-# update cran-comments.md with THIS run's results
-devtools::submit_cran()      # builds tarball, uploads, writes CRAN-SUBMISSION
-# → click the confirmation link in the maintainer email; do nothing else while pending
+# draft cran-comments.md from THIS run's results            → gate 2
+# gate 1 (DESCRIPTION wording) must be approved before the next line
+devtools::build()                            # tarball in ../PKG_X.Y.Z.tar.gz
+# Human
+devtools::submit_cran()      # uploads, writes CRAN-SUBMISSION           → gate 3
+# → click the confirmation link in the maintainer email; nothing else while pending
 ```
 
-Manual alternative: `R CMD build .` then upload at
+Web-form alternative for the human: upload the tarball at
 <https://cran.r-project.org/submit.html> with `cran-comments.md` pasted as
 the optional comment.
 
-On a reviewer reply: fix in `R/` (never in `man/`), `devtools::document()`,
-bump patch, add `## Resubmission` to `cran-comments.md` quoting each point
-and the change, re-run the checks, resubmit. Reply to the email only if the
-reviewer asked a question; CC `cran-submissions@r-project.org`.
+On a reviewer reply (found by the email monitor): Claude fixes in `R/`
+(never in `man/`), `devtools::document()`, bumps patch, adds
+`## Resubmission` to `cran-comments.md` quoting each point and the change,
+re-runs the checks, rebuilds → gates 2 and 3 again. If the reviewer asked
+a question, Claude drafts the reply (CC `cran-submissions@r-project.org`);
+the human sends it.
 
-After "on CRAN" email: `usethis::use_github_release()` (reads
-`CRAN-SUBMISSION`), `usethis::use_dev_version(push = TRUE)`, then watch
-<https://cran.r-project.org/web/checks/check_results_PKG.html> for a week
-(new flavours appear over several days; an ERROR there → fix within the
-deadline CRAN emails or the package is archived).
+After the "on CRAN" mail: Claude runs `usethis::use_github_release()`
+(reads `CRAN-SUBMISSION`), `usethis::use_dev_version(push = TRUE)`, then
+watches <https://cran.r-project.org/web/checks/check_results_PKG.html>
+(WebFetch) daily for a week — new flavours appear over several days; an
+ERROR there, or a "please correct" mail, → fix within the stated deadline
+or the package is archived.
 
 ## Failure playbook
 
