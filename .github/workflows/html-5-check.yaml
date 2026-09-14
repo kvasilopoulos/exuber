@@ -29,8 +29,10 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
-          dependencies: "character()"
+          # hard deps so LinkingTo (Rcpp/RcppArmadillo) resolves; V8 so the
+          # math-rendering check runs instead of NOTE-ing that it was skipped
+          extra-packages: any::rcmdcheck, any::V8
+          dependencies: '"hard"'
 
       - name: Install pdflatex
         run: sudo apt-get install texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
