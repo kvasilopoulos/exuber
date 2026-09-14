@@ -188,6 +188,25 @@ what was checked and how.
   heteroskedasticity invariance, not a validation concern) — see
   [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
+#### Performance
+
+- [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  is ~25x faster on typical sample sizes (exubercore v0.3.0): the
+  recursive grid re-formed the full residual vector for every window, an
+  O(n^3) total; it now keeps running cross-products and uses the
+  closed-form `SSR = y'y - b'X'y`, making it O(n^2). n = 400 drops from
+  ~140 ms to ~6 ms per path, so
+  [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+  [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+  [`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md),
+  [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
+  [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
+  [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
+  and every other loop over
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  speed up by the same factor. Results are numerically identical to
+  ~1e-12.
+
 #### API consistency (2026-09-14 review)
 
 - One significance-level convention across the whole package: every
