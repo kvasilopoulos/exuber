@@ -1,4 +1,4 @@
-context("radf_pdc")
+context("dating_pdc")
 
 test_that("pdc_find_break() matches a brute-force lm()-based RSS scan exactly", {
   set.seed(123)

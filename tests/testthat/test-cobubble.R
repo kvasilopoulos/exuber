@@ -1,4 +1,4 @@
-context("radf_cobubble")
+context("cobubble_test")
 
 test_that("coexplosive_stat() matches an independent brute-force computation
   (separate lm() call, manual cumulative-sum loop instead of vectorized
@@ -105,7 +105,7 @@ test_that("coexplosive_select_lag() recovers a known true lag", {
   expect_equal(est_lag, true_lag)
 })
 
-test_that("radf_cobubble() runs end to end and returns a well-formed object", {
+test_that("cobubble_test() runs end to end and returns a well-formed object", {
   set.seed(42)
   Tn <- 120
   Te <- 70
@@ -115,7 +115,7 @@ test_that("radf_cobubble() runs end to end and returns a well-formed object", {
   y <- 1 + 0.8 * x + rnorm(Tn)
 
   out <- cobubble_test(y, x, nboot = 99L, seed = 1)
-  expect_s3_class(out, "cobubble_test")
+  expect_s3_class(out, "cobubble_test_obj")
   expect_true(is.numeric(out$S))
   expect_true(is.numeric(out$cv))
   expect_true(out$lag %in% (-6:6))

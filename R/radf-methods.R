@@ -120,7 +120,9 @@ diagnostics <- function(object, cv = NULL, ...) {
 #' \code{option}'s choice of test statistic.
 #' @export
 #' @examples
-#'
+#' \donttest{
+#' # The default `cv` is fetched from the shared critical-value store
+#' # (network on first use); pass `cv = radf_mc_cv(nrow(sim_data))` to stay offline
 #' rsim_data <- radf(sim_data)
 #' diagnostics(rsim_data)
 #'
@@ -128,6 +130,7 @@ diagnostics <- function(object, cv = NULL, ...) {
 #'
 #' # Gate on the 90% critical value instead of the 95% default
 #' diagnostics(rsim_data, sig_lvl = 90)
+#' }
 diagnostics.radf_obj <- function(object, cv = NULL,
                                  option = c("gsadf", "sadf"), sig_lvl = 95, ...) {
   # assert_class(object, "radf")
@@ -135,7 +138,7 @@ diagnostics.radf_obj <- function(object, cv = NULL,
   assert_class(cv, "radf_cv")
   assert_match(object, cv)
   option <- match.arg(option)
-  stopifnot(sig_lvl %in% c(90, 95, 99))
+  assert_sig_lvl(sig_lvl)
 
   if (option == "sadf" && is_sb(cv)) {
     stop_glue("argument 'option' cannot  be be set to 'sadf' when cv is of class 'sb_cv'")
@@ -296,6 +299,7 @@ print.dg_radf <- function(x, ...) {
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
 #' S&P 500. International Economic Review, 56(4), 1043-1078.
+#' \doi{10.1111/iere.12132}
 #' @references Sarkar, A., & Wells, M. T. (2026). Is there an AI bubble?
 #' Robust date-stamping for periods of exuberance. arXiv:2604.12062.
 #'
@@ -312,9 +316,14 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #' @export
 #'
 #' @examples
-#'
 #' rsim_data <- radf(sim_data)
 #'
+#' # SV-ADF asymmetric-threshold dating (no critical values needed)
+#' datestamp(rsim_data, option = "svadf")
+#'
+#' \donttest{
+#' # The default `cv` is fetched from the shared critical-value store
+#' # (network on first use); pass `cv = radf_mc_cv(nrow(sim_data))` to stay offline
 #' ds_data <- datestamp(rsim_data)
 #' ds_data
 #'
@@ -322,9 +331,7 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #' datestamp(rsim_data, min_duration = psy_ds(nrow(sim_data)))
 #'
 #' autoplot(ds_data)
-#'
-#' # SV-ADF asymmetric-threshold dating (no critical values needed)
-#' datestamp(rsim_data, option = "svadf")
+#' }
 datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 95,
                                option = c("gsadf", "sadf", "svadf"), nonrejected = FALSE, ...) {
   option <- match.arg(option)
@@ -337,7 +344,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
-  stopifnot(sig_lvl %in% c(90, 95, 99))
+  assert_sig_lvl(sig_lvl)
   assert_match(object, cv)
 
   is_panel <- is_sb(cv)
@@ -418,6 +425,7 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     panel = is_panel,
     min_duration = min_duration,
     option = option,
+    sig_lvl = sig_lvl,
     method = get_method(cv),
     valid_range = valid_range,
     class = c("ds_radf", "list")

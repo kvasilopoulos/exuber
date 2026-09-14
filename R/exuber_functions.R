@@ -1,5 +1,5 @@
 # Queryable function registry -- added 2026-08-18 in response to feedback
-# that naming conventions alone (radf_/_test/dating_/monitor_/root_, see
+# that naming conventions alone (radf_/_test/dating_/monitor_, see
 # vignette("naming-and-analysis")) are too easy to misremember or disagree
 # about (monitor() vs. radf_monitor() being exactly that argument).
 # This is the actual, checkable source of truth: update this table whenever
@@ -9,7 +9,9 @@
 # `family` is a comma-separated string, not a list-column, so a function
 # belonging to more than one family (monitor() is both "adf" and
 # "monitor") is one row, filtered with grepl() rather than needing a second
-# join table for what is, so far, exactly one multi-family case.
+# join table for what are, so far, two multi-family cases (radf_sbz_union()
+# is the other: radf_-prefixed and built on the recursive DF grid, but a
+# bundled statistic-plus-critical-value test).
 exuber_registry <- function() {
   tibble::tribble(
     ~name, ~family, ~description,
@@ -36,7 +38,7 @@ exuber_registry <- function() {
     "cobubble_test", "test", "KPSS-type co-explosive test between two series (Evripidou, Harvey, Leybourne & Sollis 2022).",
     "radf_sbz", "adf", "SBZ WLS/kernel-volatility-weighted recursive statistic (supBZ), heteroskedasticity-robust.",
     "radf_sbz_cv", "adf", "Wild bootstrap critical values for radf_sbz().",
-    "radf_sbz_union", "test", "SBZ union-of-rejections test (supDF and supBZ, paired bootstrap); bundles statistic and critical value because U's definition requires it.",
+    "radf_sbz_union", "adf,test", "SBZ union-of-rejections test (supDF and supBZ, paired bootstrap); bundles statistic and critical value because U's definition requires it.",
     "dating_hls", "dating", "SSR/BIC single-bubble dating (Harvey, Leybourne & Sollis 2017); no critical value needed.",
     "dating_hlw", "dating", "SSR/BIC multi-bubble dating, wraps dating_hls() per detected episode.",
     "dating_knp", "dating", "Bias-corrected SSR dating (Kejriwal, Nguyen & Perron 2025).",
@@ -52,7 +54,7 @@ exuber_registry <- function() {
 #' Look Up exuber's Test/Procedure Functions by Family
 #'
 #' Naming conventions (\code{radf_}/\code{_test}/\code{dating_}/
-#' \code{monitor_}/\code{root_}, see \code{vignette("naming-and-analysis")})
+#' \code{monitor_}, see \code{vignette("naming-and-analysis")})
 #' are a guide, not a contract -- easy to misremember, and occasionally
 #' traded off deliberately (\code{monitor()} is ADF-family internally
 #' but named for what it does). This is the actual, queryable source of

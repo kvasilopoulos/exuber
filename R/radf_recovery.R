@@ -120,6 +120,7 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' range(cv$bsadf_cv)
 #' }
 #'
+#' @family critical values
 #' @export
 radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
 
@@ -204,7 +205,8 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' origination/collapse dating this complements.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' origination/recovery date summary -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -220,13 +222,14 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #' autoplot(res)
 #' }
 #'
+#' @family dating
 #' @export
 radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
                            sig_lvl = 95, seed = NULL) {
   caveat <- "Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section."
   message_glue(caveat)
 
-  stopifnot(sig_lvl %in% c(90, 95, 99))
+  assert_sig_lvl(sig_lvl)
   x <- parse_data(data)
   n <- nrow(x)
   minw <- minw %||% psy_minw(n)

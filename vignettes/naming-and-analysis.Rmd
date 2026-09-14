@@ -41,7 +41,7 @@ output instead.
 | `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive-ADF core | `lbi_test()`, `ssu_test()`, `quantile_test()`, `cobubble_test()` |
 | `dating_` prefix | Point-estimation / model-selection dating, no formal hypothesis test at all | `dating_hls()`, `dating_hlw()`, `dating_knp()`, `dating_pdc()` |
 | `monitor`/`monitor_` prefix | Real-time/sequential detection -- grouped by *what it does*, not by internal mechanism. `monitor()` is this family's flagship, the same role `radf()` plays for the `radf_` family: it reuses `badf`/`bsadf` directly (genuinely ADF-family internals) but carries no `radf`/`sadf` token at all, specifically so it reads as "the real-time monitor," not as a `radf_` variant -- see below | `monitor()`, `monitor_cusum()`, `monitor_lbi()`, `monitor_quantile()` |
-| `root_` prefix | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence | `rootstamp()` (two S3 methods: default for a single sub-sample, `radf_obj` to run every `datestamp()` episode at once) |
+| `root` family | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence (`exuber_functions(family = "root")`; no shared prefix) | `rootstamp()` (two S3 methods: default for a single sub-sample, `radf_obj` to run every `datestamp()` episode at once) |
 | stands alone | A point-estimation tool, not a test | `contagion_reg()` |
 
 Naming prefixes are a convention, not a contract -- they're easy to
@@ -191,36 +191,37 @@ datestamp(res2, cv = cv2)
 autoplot(res2, cv = cv2)
 ```
 
-### No support: everything else
+### Own `print()` and `autoplot()`: everything else
 
 The remaining ~15 functions (`lbi_test()`, `ssu_test()`, `quantile_test()`,
 `cobubble_test()`, the `dating_*()` family, the `monitor()`/`monitor_*()`
 family (including `monitor()` itself, ADF-family internals notwithstanding --
 see above), `contagion_reg()`, `radf_recovery()`, `rootstamp()`,
-`radf_sbz_union()`) each return their own class with their own `print()` method,
-because their output genuinely doesn't fit the `radf_obj` shape -- a dating
-table isn't a per-series sup-statistic, a monitoring alarm isn't a critical
-value grid. Trying to force them through `summary()`/`datestamp()`/`tidy()`/
-`autoplot()` isn't a documentation gap to close; the right call is their own
-presentation, shown directly:
+`radf_sbz_union()`) each return their own class with their own `print()` and
+`autoplot()` methods, because their output genuinely doesn't fit the
+`radf_obj` shape -- a dating table isn't a per-series sup-statistic, a
+monitoring alarm isn't a critical value grid. Trying to force them through
+`summary()`/`datestamp()`/`tidy()` isn't a documentation gap to close; the
+right call is their own presentation, shown directly:
 
 `rootstamp()` is the one exception worth flagging: it's grouped under
 **Analysis** in the [reference index](../reference/index.html) and the
 README's workflow list, right after `datestamp()`, since that's genuinely
 where it belongs in the *sequence of steps* (detect → date → measure
 growth rate) -- but that's a workflow position, not an S3-support tier.
-It's still its own class with its own `print()` method, same as everything
-else in this section; see `vignette("root-inference")`.
+It's still its own class with its own `print()` and `autoplot()` methods,
+same as everything else in this section; see `vignette("root-inference")`.
 
 ```{r standalone}
 dating_hls(sim_data$psy1, trim = 0.05)
 
-ssu_test(sim_data$psy1, level = 0.95)
+ssu_test(sim_data$psy1, sig_lvl = 95)
+autoplot(dating_hls(sim_data$psy1, trim = 0.05))
 ```
 
 ## Summary
 
 | Tier | Functions | `summary()` | `datestamp()` | `tidy()` | `autoplot()` |
 |---|---|---|---|---|---|
-| Full | `radf()`, `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()` | yes | yes | yes | yes |
-| Standalone | everything else | own `print()` | -- | -- | -- |
+| Full | `radf()`, `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`, `radf_sbz()` | yes | yes | yes | yes |
+| Standalone | everything else | own `print()` | -- | -- | own method |

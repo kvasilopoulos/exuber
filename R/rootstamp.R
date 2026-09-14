@@ -59,7 +59,8 @@
 #' \code{\link{datestamp}} call to exclude episodes too short for reliable
 #' root inference, rather than expecting this method to second-guess what
 #' counts as "too short".
-#' @param level Confidence level (default 0.95).
+#' @param sig_lvl Confidence level of the interval on the package-wide 0-100
+#'   scale (default \code{95}); any value in \code{[50, 100)}.
 #' @param type \code{"normal"} (default) for Guo, Sun & Wang's normal-t
 #' interval, or \code{"cauchy"} for the Phillips-Magdalinos fixed-root
 #' Cauchy interval.
@@ -113,6 +114,7 @@
 #' # Plot the episode with the fitted explosive-root path overlaid
 #' autoplot(fit)
 #'
+#' @family dating
 #' @export
 rootstamp <- function(object, ...) {
   UseMethod("rootstamp")
@@ -120,9 +122,10 @@ rootstamp <- function(object, ...) {
 
 #' @rdname rootstamp
 #' @export
-rootstamp.default <- function(object, level = 0.95, type = c("normal", "cauchy"), ...) {
+rootstamp.default <- function(object, sig_lvl = 95, type = c("normal", "cauchy"), ...) {
   type <- match.arg(type)
-  alpha <- 1 - level
+  assert_sig_lvl(sig_lvl, choices = NULL)
+  alpha <- 1 - sig_lvl / 100
 
   y <- as.numeric(object)
   y_lag <- y[-length(y)]
@@ -155,7 +158,7 @@ rootstamp.default <- function(object, level = 0.95, type = c("normal", "cauchy")
     doubling_time = dt(rho),
     doubling_time_ci = c(dt(rho_ci[2]), dt(rho_ci[1]))
   ) %>%
-    add_attr(level = level, type = type, y = y) %>%
+    add_attr(sig_lvl = sig_lvl, type = type, y = y) %>%
     add_class("rootstamp_est")
 }
 
@@ -171,7 +174,7 @@ rootstamp.default <- function(object, level = 0.95, type = c("normal", "cauchy")
 #'
 #' # Plot the estimated rho (with its CI) for every episode
 #' autoplot(res_all)
-rootstamp.radf_obj <- function(object, ds, level = 0.95, type = c("normal", "cauchy"), ...) {
+rootstamp.radf_obj <- function(object, ds, sig_lvl = 95, type = c("normal", "cauchy"), ...) {
   type <- match.arg(type)
   x <- mat(object)
   idx <- index(object)
@@ -186,7 +189,7 @@ rootstamp.radf_obj <- function(object, ds, level = 0.95, type = c("normal", "cau
     rows <- purrr::pmap(list(episodes$Start, episodes$End), function(s, e) {
       from <- match(s, idx)
       to <- match(e, idx)
-      ci <- rootstamp.default(y[from:to], level = level, type = type)
+      ci <- rootstamp.default(y[from:to], sig_lvl = sig_lvl, type = type)
       data.frame(
         rho = ci$rho, rho_lower = ci$rho_ci[1], rho_upper = ci$rho_ci[2],
         doubling_time = ci$doubling_time,
@@ -201,7 +204,7 @@ rootstamp.radf_obj <- function(object, ds, level = 0.95, type = c("normal", "cau
   })
 
   res %>%
-    add_attr(level = level, type = type) %>%
+    add_attr(sig_lvl = sig_lvl, type = type) %>%
     add_class("rootstamp_episodes")
 }
 
@@ -209,7 +212,7 @@ rootstamp.radf_obj <- function(object, ds, level = 0.95, type = c("normal", "cau
 print.rootstamp_est <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cli::cat_line()
   cli::cat_rule(left = glue(
-    "rootstamp (n = {x$n}, level = {attr(x, 'level') * 100}%, type = {attr(x, 'type')})"
+    "rootstamp (n = {x$n}, sig_lvl = {attr(x, 'sig_lvl')}%, type = {attr(x, 'type')})"
   ))
   cli::cat_line()
   print(
@@ -263,7 +266,7 @@ print.rootstamp_episodes <- function(x, digits = max(3L, getOption("digits") - 3
   }
   cli::cat_line()
   cli::cat_rule(left = glue(
-    "rootstamp (level = {attr(x, 'level') * 100}%, type = {attr(x, 'type')})"
+    "rootstamp (sig_lvl = {attr(x, 'sig_lvl')}%, type = {attr(x, 'type')})"
   ))
   cli::cat_line()
   print.listof(x, digits = digits)

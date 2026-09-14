@@ -1,4 +1,4 @@
-context("radf_quantile")
+context("quantile_test")
 
 test_that("quantile_adf_tstat matches radf()'s own single-shot adf t-stat
   bit-for-bit -- the critical-value functional Q reuses this, not a new
@@ -10,7 +10,7 @@ test_that("quantile_adf_tstat matches radf()'s own single-shot adf t-stat
   expect_equal(unname(full$adf), q_manual, tolerance = 1e-8)
 })
 
-test_that("radf_quantile runs end to end and returns a well-formed object", {
+test_that("quantile_test runs end to end and returns a well-formed object", {
   set.seed(1)
   y <- cumsum(rnorm(150))
   out <- quantile_test(y, nrep = 100, seed = 1)
@@ -22,24 +22,24 @@ test_that("radf_quantile runs end to end and returns a well-formed object", {
   expect_output(print(out), "quantile_test")
 })
 
-test_that("radf_quantile runs with a fixed tau", {
+test_that("quantile_test runs with a fixed tau", {
   set.seed(1)
   y <- cumsum(rnorm(100))
   out <- quantile_test(y, tau = 0.5, nrep = 100, seed = 1)
   expect_equal(unname(out$tau[["series1"]]), 0.5)
 })
 
-test_that("radf_quantile rejects a tau outside (0, 1)", {
+test_that("quantile_test rejects a tau outside (0, 1)", {
   y <- cumsum(rnorm(100))
   expect_error(quantile_test(y, tau = 1.5, nrep = 100))
 })
 
-test_that("radf_quantile rejects a non-tabulated significance level", {
+test_that("quantile_test rejects a non-tabulated significance level", {
   y <- cumsum(rnorm(100))
-  expect_error(quantile_test(y, level = 93, nrep = 100))
+  expect_error(quantile_test(y, sig_lvl = 93, nrep = 100))
 })
 
-test_that("radf_quantile detects a genuine explosive series far more
+test_that("quantile_test detects a genuine explosive series far more
   often than a pure random walk", {
   skip_on_cran()
   run_explosive <- function(seed) {
@@ -59,7 +59,7 @@ test_that("radf_quantile detects a genuine explosive series far more
   expect_gt(rate_explosive, 0.5)
 })
 
-test_that("radf_quantile false-detection rate under pure H0 is in a
+test_that("quantile_test false-detection rate under pure H0 is in a
   plausible range around the nominal level (loose Monte Carlo bound)", {
   skip_on_cran()
   run_null <- function(seed) {

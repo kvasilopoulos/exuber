@@ -41,7 +41,7 @@ test_that("radf_sbz_union runs on sim_data and gives internally consistent outpu
   options(exuber.parallel = FALSE, exuber.show_progress = FALSE)
   set.seed(1)
   res <- radf_sbz_union(dta[, 1], minw = 20, nboot = 100, seed = 1)
-  expect_s3_class(res, "radf_sbz_union")
+  expect_s3_class(res, "radf_sbz_union_obj")
   expect_true(is.finite(res$supDF))
   expect_true(is.finite(res$supBZ))
   expect_true(is.finite(res$U))
@@ -53,7 +53,7 @@ test_that("radf_sbz_union runs on sim_data and gives internally consistent outpu
   expect_true(all(res$U_cv >= res$supDF_cv - 1e-8))
 })
 
-test_that("autoplot.radf_sbz_union runs without error", {
+test_that("autoplot.radf_sbz_union_obj runs without error", {
   skip_on_cran()
   options(exuber.parallel = FALSE, exuber.show_progress = FALSE)
   res <- radf_sbz_union(dta[, 1], minw = 20, nboot = 50, seed = 1)

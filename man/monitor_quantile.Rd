@@ -9,7 +9,7 @@ monitor_quantile(
   tau = 0.5,
   minw = NULL,
   nrep = 500L,
-  level = 95,
+  sig_lvl = 95,
   seed = NULL
 )
 }
@@ -34,7 +34,7 @@ statistic, not re-selected at each recursion point).}
 
 \item{nrep}{Number of Monte Carlo replications for the boundary.}
 
-\item{level}{Significance level, one of \code{90}, \code{95}, \code{99}.}
+\item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
 }
@@ -83,11 +83,17 @@ currently no reusable/exported cv counterpart for this function (a
 known, separately-tracked gap, not addressed here).
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}/\code{autoplot} -- prints its own
+\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
+\code{autoplot()} methods instead. Prints its own
 statistic/boundary/delta summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
 }
+\section{Status}{
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+}
+
 \examples{
 \donttest{
 # Heavy-tailed (t3) innovations, explosive from t = 150 to the sample end
@@ -111,4 +117,10 @@ Analysis, 46(5), 908-931.
 \code{\link{quantile_test}} for the static, full-sample
 version of this test. \code{\link{monitor}} for the OLS-based
 monitoring alternative.
+
+Other monitoring:
+\code{\link[=monitor]{monitor()}},
+\code{\link[=monitor_cusum]{monitor_cusum()}},
+\code{\link[=monitor_lbi]{monitor_lbi()}}
 }
+\concept{monitoring}

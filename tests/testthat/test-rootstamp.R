@@ -93,7 +93,7 @@ test_that("rootstamp.radf_obj runs end-to-end on a real datestamp() result
   mc <- radf_mc_cv(length(y), minw = 20, nrep = 300, seed = 4)
   ds <- datestamp(r, cv = mc, min_duration = 3)
 
-  skip_if(length(ds) == 0, "no episode detected on this draw")
+  expect_gt(length(ds), 0) # seeded draw; a DGP change that loses the episode should fail, not skip
 
   out <- rootstamp(r, ds)
   expect_type(out, "list")

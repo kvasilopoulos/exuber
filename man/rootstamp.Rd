@@ -8,9 +8,9 @@
 \usage{
 rootstamp(object, ...)
 
-\method{rootstamp}{default}(object, level = 0.95, type = c("normal", "cauchy"), ...)
+\method{rootstamp}{default}(object, sig_lvl = 95, type = c("normal", "cauchy"), ...)
 
-\method{rootstamp}{radf_obj}(object, ds, level = 0.95, type = c("normal", "cauchy"), ...)
+\method{rootstamp}{radf_obj}(object, ds, sig_lvl = 95, type = c("normal", "cauchy"), ...)
 }
 \arguments{
 \item{object}{For the default method, a numeric vector (the sub-sample to
@@ -19,7 +19,8 @@ method, the \code{radf_obj} that \code{ds} was computed on.}
 
 \item{...}{further arguments passed to methods.}
 
-\item{level}{Confidence level (default 0.95).}
+\item{sig_lvl}{Confidence level of the interval on the package-wide 0-100
+scale (default \code{95}); any value in \code{[50, 100)}.}
 
 \item{type}{\code{"normal"} (default) for Guo, Sun & Wang's normal-t
 interval, or \code{"cauchy"} for the Phillips-Magdalinos fixed-root
@@ -137,3 +138,12 @@ Phillips, P. C. B., & Magdalinos, T. (2007). Limit theory for
 moderate deviations from a unit root. Journal of Econometrics, 136(1),
 115-130.
 }
+\seealso{
+Other dating:
+\code{\link[=dating_hls]{dating_hls()}},
+\code{\link[=dating_hlw]{dating_hlw()}},
+\code{\link[=dating_knp]{dating_knp()}},
+\code{\link[=dating_pdc]{dating_pdc()}},
+\code{\link[=radf_recovery]{radf_recovery()}}
+}
+\concept{dating}

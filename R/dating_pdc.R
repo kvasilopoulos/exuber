@@ -126,10 +126,12 @@ pdc_regime_resid <- function(y, breaks) {
 #' \code{type = "wls"}. Default: leave-one-out cross-validation. Ignored
 #' when \code{type = "ols"}.
 #'
-#' @return A \code{data.frame} with one row per series and columns
+#' @return An object of class \code{dating_pdc_obj} (a \code{data.frame}
+#' with one row per series and columns
 #' \code{origination}, \code{collapse}, and (if \code{regimes = 4})
 #' \code{recovery}, giving the estimated break dates (or observation
-#' indices, if no date index is available).
+#' indices, if no date index is available); it has its own \code{print()}
+#' and \code{autoplot()} methods.
 #'
 #' @references Pang, T., Du, L., & Chong, T. T. L. (2021). Estimating
 #' multiple breaks in the bubble regime with SSR minimization. Journal of
@@ -146,7 +148,8 @@ pdc_regime_resid <- function(y, breaks) {
 #' alternative.
 #'
 #' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot` -- prints its own
+#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
+#' `autoplot()` methods instead. Prints its own
 #' dating table (model, origination, collapse, recovery) -- see
 #' `vignette("naming-and-analysis", package = "exuber")` for the full
 #' picture of which functions do and don't fit that pipeline.
@@ -172,6 +175,7 @@ pdc_regime_resid <- function(y, breaks) {
 #' autoplot(dating_pdc(y_vol, type = "wls"))
 #' }
 #'
+#' @family dating
 #' @export
 dating_pdc <- function(data, regimes = 3L, trim = 0.05,
                       type = c("ols", "wls"),
@@ -228,8 +232,23 @@ dating_pdc <- function(data, regimes = 3L, trim = 0.05,
   out <- do.call(rbind.data.frame, rows)
   rownames(out) <- snames
   out %>%
-    add_attr(index = idx, series_names = snames, mat = x) %>%
+    add_attr(index = idx, series_names = snames, n = nrow(x), regimes = regimes, type = type, mat = x) %>%
     add_class("dating_pdc_obj")
+}
+
+#' @export
+print.dating_pdc_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+  cat_line()
+  cat_rule(left = glue(
+    "dating_pdc (n = {attr(x, 'n')}, regimes = {attr(x, 'regimes')}, type = {attr(x, 'type')})"
+  ))
+  cat_line()
+  print(
+    cbind(series = rownames(x), as.data.frame(unclass(x))),
+    digits = digits, print.gap = 2L, row.names = FALSE
+  )
+  cat_line()
+  invisible(x)
 }
 
 #' Plot method for dating_pdc() output

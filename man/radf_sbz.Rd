@@ -89,4 +89,13 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 \code{\link{radf_sbz_cv}} for critical values, and
 \code{\link{radf_sbz_union}} for the paper's own headline bootstrap
 union-of-rejections test against the classic \code{supDF} statistic.
+
+Other volatility-robust tests:
+\code{\link[=radf_kp]{radf_kp()}},
+\code{\link[=radf_sbz_union]{radf_sbz_union()}},
+\code{\link[=radf_sign]{radf_sign()}},
+\code{\link[=radf_sign_dm]{radf_sign_dm()}},
+\code{\link[=radf_tt]{radf_tt()}},
+\code{\link[=ssu_test]{ssu_test()}}
 }
+\concept{volatility-robust tests}

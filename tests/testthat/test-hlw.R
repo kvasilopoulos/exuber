@@ -1,4 +1,4 @@
-context("radf_hlw")
+context("dating_hlw")
 
 test_that("hlw_local_to_global maps a window-local breakpoint to the
   correct global i-index and date position", {
@@ -7,7 +7,7 @@ test_that("hlw_local_to_global maps a window-local breakpoint to the
   expect_equal(g$position, 26L)
 })
 
-test_that("radf_hlw runs end to end and returns a well-formed object", {
+test_that("dating_hlw runs end to end and returns a well-formed object", {
   skip_on_cran()
   set.seed(11)
   n1 <- 60; n2 <- 25; n3 <- 25; n4 <- 40
@@ -28,7 +28,7 @@ test_that("radf_hlw runs end to end and returns a well-formed object", {
   expect_output(print(out), "dating_hlw")
 })
 
-test_that("radf_hlw's final window, on a single clean bubble episode,
+test_that("dating_hlw's final window, on a single clean bubble episode,
   matches standalone dating_hls() applied to the whole series", {
   skip_on_cran()
   set.seed(11)
@@ -52,7 +52,7 @@ test_that("radf_hlw's final window, on a single clean bubble episode,
   expect_equal(unname(hls_out$collapse[["series1"]]), last$collapse)
 })
 
-test_that("radf_hlw does not error and returns a zero-row result under a
+test_that("dating_hlw does not error and returns a zero-row result under a
   pure random-walk null with no bubble at all", {
   skip_on_cran()
   set.seed(2)
@@ -61,7 +61,7 @@ test_that("radf_hlw does not error and returns a zero-row result under a
   expect_equal(nrow(out[["series1"]]), 0L)
 })
 
-test_that("radf_hlw recovers two genuine, well-separated bubble episodes
+test_that("dating_hlw recovers two genuine, well-separated bubble episodes
   with accurate dates when it detects exactly two windows", {
   skip_on_cran()
   sim_two_bubbles <- function(seed, n1a = 50, n2a = 20, n3a = 30, n1b = 50, n2b = 20, n3b = 30) {
@@ -83,7 +83,7 @@ test_that("radf_hlw recovers two genuine, well-separated bubble episodes
   }
   res <- lapply(1:8, run_once)
   two_win <- Filter(function(r) nrow(r$df) == 2, res)
-  skip_if(length(two_win) == 0, "no 2-window replications in this small sample")
+  expect_gt(length(two_win), 0) # seeded; fail loudly rather than silently skip
 
   orig1_bias <- sapply(two_win, function(r) as.numeric(r$df$origination[1]) - r$true1[1])
   orig2_bias <- sapply(two_win, function(r) as.numeric(r$df$origination[2]) - r$true2[1])
