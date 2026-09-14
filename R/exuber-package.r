@@ -3,7 +3,10 @@
 #' - Should lengthy operations such as \code{radf_mc_cv()} show a progress bar? Default: TRUE
 #'
 #'\code{exuber.parallel}
-#' - Should lengthy operations use parallel computation? Default: TRUE.
+#' - Should lengthy operations use parallel computation? Default: TRUE in an
+#'   interactive session, FALSE otherwise (scripts, knitr, R CMD check), since
+#'   starting workers costs a few seconds; set it to TRUE in a script to opt in.
+#'   The worker cluster is started once per session and reused.
 #'   Honored by the \code{radf_*_cv()}/\code{radf_*_distr()} simulation engines
 #'   (\code{radf_mc_cv()}, \code{radf_wb_cv()}, \code{radf_sb_cv()},
 #'   \code{radf_recovery_cv()}, \code{radf_common_cv()}); the standalone
