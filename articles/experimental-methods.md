@@ -99,5 +99,4 @@ or one of the peer-reviewed alternatives in
 [`vignette("alternative-tests")`](https://kvasilopoulos.github.io/exuber/articles/alternative-tests.md)/[`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md)
 when that matters, and treat these two as a second opinion rather than
 the primary one until their own caveats are resolved (tracked in
-`docs/enhancements/dating-and-root-inference.md` and
-`volatility-robustness.md`).
+`docs/dating-and-root-inference.md` and `volatility-robustness.md`).

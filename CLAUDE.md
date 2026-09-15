@@ -84,15 +84,15 @@ config.
 
 ## Release process (CRAN)
 
-`cran-release-checklist.md` (dev-only, `.Rbuildignore`d) is the
-consolidated usethis / r-pkgs.org / CRAN-policy checklist with the
-per-item status of the last release pass — update it in place rather
-than re-deriving it. Two local quirks it records: `devtools::check()` on
-this Windows machine always leaves an empty `'NULL'` dir behind (a
-local-only “non-standard things in the check directory” NOTE), and a
-session-long worker cluster in examples trips `R CMD check`’s
-“connections left open”, which is why `exuber.parallel` defaults to
-[`interactive()`](https://rdrr.io/r/base/interactive.html).
+`.claude/skills/cran-release/checklist.md` is the consolidated usethis /
+r-pkgs.org / CRAN-policy checklist with the per-item status of the last
+release pass — the `cran-release` skill runs it; update it in place
+rather than re-deriving it. Two local quirks it records:
+`devtools::check()` on this Windows machine always leaves an empty
+`'NULL'` dir behind (a local-only “non-standard things in the check
+directory” NOTE), and a session-long worker cluster in examples trips
+`R CMD check`’s “connections left open”, which is why `exuber.parallel`
+defaults to [`interactive()`](https://rdrr.io/r/base/interactive.html).
 
 1.  Land NEWS.md entries under the `# exuber (development version)`
     heading as features/fixes ship (already the ongoing convention, see
@@ -263,15 +263,17 @@ already used for
 for the clean-break precedent above; only unreleased names get that
 treatment.
 
-## Implementing items from docs/enhancements/
+## Implementing items from docs/
 
-`../docs/enhancements/` is a research backlog: papers evaluated for
-whether/how to add their method to this package, organized by
+`../docs/` is the workspace-wide methodology + replication record
+(shared with exubercore and pyexuber — `docs/README.md` is the map):
+papers evaluated for whether/how to add their method, organized by
 methodological family (`volatility-robustness.md`,
 `dating-and-root-inference.md`, `monitoring.md`, `multivariate.md`,
 `alternative-paradigms.md`, `open-research-directions.md`,
-`practitioner-guidance.md`), with a narrative summary in `SUMMARY.md`
-and a taxonomy/status table in `README.md`. Working through this backlog
+`practitioner-guidance.md`), with a narrative summary in `SUMMARY.md`, a
+taxonomy/status table in `README.md`, and `parity.md` recording which
+implementation ships each method. Working through this backlog
 established the workflow below — follow it for any new item, and
 re-apply it to items already marked “evaluated, not implemented” or
 “genuinely more expensive” before trusting that verdict, since it has
@@ -409,9 +411,9 @@ in `alternative-paradigms.md` precisely enough that a future attempt
 starts from the actual remaining gap instead of redoing the
 investigation.
 
-### Documentation update pattern (four files + a replication script)
+### Documentation update pattern (five files + a replication script)
 
-Every shipped item touches, in `docs/enhancements/`:
+Every shipped item touches, in `docs/`:
 
 1.  The relevant taxonomy file’s top status line, its taxonomy table
     row, and either a new `### Implementation` subsection or a rewrite
@@ -424,18 +426,20 @@ Every shipped item touches, in `docs/enhancements/`:
 3.  `README.md`’s taxonomy table and per-item cross-check table (one
     row: item, file, cross-check description, “clean” or “bug found +
     fixed: …”).
-4.  `docs/enhancements/replication/README.md`’s per-folder bullet list,
-    pointing at a new replication script.
+4.  `docs/replication/README.md`’s per-folder bullet list, pointing at a
+    new replication script.
+5.  `docs/parity.md` — a row for the new method (exuber column filled,
+    pyexuber `—`), so the Python side sees the gap.
 
 Plus a standalone, re-runnable replication script in
-`docs/enhancements/replication/<taxonomy-folder>/<function>_validation.R`
-that reproduces every number quoted in the docs. **Run the archived
-script itself before finalizing the docs** — an ad hoc validation
-script’s exact numbers can drift from the final, cleaned-up archived
-version (different seeding order, different DGP parameters copied in by
-hand); the numbers written into the `.md` files must match what the
-archived script actually outputs when re-run, not what an earlier
-interactive exploration happened to produce.
+`docs/replication/<taxonomy-folder>/<function>_validation.R` that
+reproduces every number quoted in the docs. **Run the archived script
+itself before finalizing the docs** — an ad hoc validation script’s
+exact numbers can drift from the final, cleaned-up archived version
+(different seeding order, different DGP parameters copied in by hand);
+the numbers written into the `.md` files must match what the archived
+script actually outputs when re-run, not what an earlier interactive
+exploration happened to produce.
 
 ### Commit workflow
 

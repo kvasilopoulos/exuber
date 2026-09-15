@@ -110,10 +110,10 @@ persistence requirement, so a transient dip below the boundary is enough
 to trigger a premature `f_c`), but this has not been ruled out against a
 subtler implementation issue. Treat `f_c` and the overall detection rate
 as exploratory pending further validation; see
-docs/enhancements/dating-and-root-inference.md for the full numbers. The
-same short pointer is emitted as a message when this function is called
-(see [`suppressMessages`](https://rdrr.io/r/base/message.html) to
-silence it) and stored as `attr(x, "caveat")` on the returned object.
+docs/dating-and-root-inference.md for the full numbers. The same short
+pointer is emitted as a message when this function is called (see
+[`suppressMessages`](https://rdrr.io/r/base/message.html) to silence it)
+and stored as `attr(x, "caveat")` on the returned object.
 
 ## References
 
