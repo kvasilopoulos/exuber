@@ -98,9 +98,10 @@ elapsed time over repeated runs on a random walk of length `n`.
 library(ggplot2)
 
 bench_tbl <- readRDS("tools/benchmark-comparison.rds")
+# Slowest (top of legend) to fastest (bottom), ranked by each series' n = 1000 time.
 software_levels <- c(
-  "exuber 2.0.0", "exuber 0.4.1 (JSS paper)", "MATLAB (PSY)", "Stata",
-  "psymonitor", "MultipleBubbles", "EViews (rtadf)"
+  "EViews (rtadf)", "MultipleBubbles", "psymonitor", "Stata", "MATLAB (PSY)",
+  "exuber 0.4.1 (JSS paper)", "exuber 2.0.0"
 )
 bench_tbl$software <- factor(bench_tbl$software, levels = software_levels)
 
@@ -121,13 +122,36 @@ unchanged) rather than a re-run -- MultipleBubbles/psymonitor are
 and none of these archived numbers depend on the current `exuber`
 implementation. `exuber 0.4.1` is the version `DESCRIPTION` reported
 when `bench.Rds` was committed (2020-07-15, pre-1.0, before the JSS
-paper's own release). All three of `MultipleBubbles`, `psymonitor` and
-`exuber 0.4.1` spike together at `n = 200` -- they were timed in the
-same interleaved `microbenchmark()` call in that archived run, so a
-shared spike points to a one-off system hiccup during that run rather
-than a real effect. Only the `exuber 2.0.0` series was freshly
-simulated, with `tools/benchmark-comparison.R` (re-runnable, reproduces
-this chart).
+paper's own release).
+
+`MultipleBubbles`, `psymonitor` and `exuber 0.4.1` all spike together at
+`n = 200`: every one of their 100 replicates for that sample size is
+~150-320x slower than the neighboring points, with a tight spread within
+that block -- they were timed in one shared, interleaved
+`microbenchmark()` call, so a spike shared by three unrelated
+implementations points to a one-off slowdown on the machine during that
+run, not a real effect. The published paper's own Figure 1 doesn't show
+this spike, but not because the underlying run was clean: its plotting
+script (`performance-comparison.R`) calls `arrange(exuber)` *before*
+relabeling rows with `mutate(id = sample_size)`, so every row from
+`n = 300` up is silently relabeled one step down and the anomalous
+`n = 200` row lands on the `id = 1000` tick instead -- a sort-then-relabel
+bug that hides the spike inside what looks like a smooth trend. This
+chart keeps the true, unshuffled `n` for every point instead.
+
+`exuber 0.4.1` edges out `exuber 2.0.0` at `n <= 300`, which is the
+opposite of the trend at every larger `n`. Timing `radf()`'s pieces
+separately shows why: the current version's C++ core is already
+consistently faster (150 ms vs. 0.4.1's 585 ms total at `n = 1000`), but
+it now also pays a roughly constant ~2-5 ms fixed cost per call for
+input validation, index parsing and attribute/class setup that the
+much smaller 0.4.1-era function didn't have. That fixed cost is most of
+the runtime at `n = 100` (1.8 of 2.6 ms) but under 4% of it by
+`n = 1000`, so the leaner old version wins only while `n` is small
+enough that there's barely any real computation to dominate it.
+
+Only the `exuber 2.0.0` series was freshly simulated, with
+`tools/benchmark-comparison.R` (re-runnable, reproduces this chart).
 
 ### Installation
 
