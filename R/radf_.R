@@ -127,7 +127,7 @@ radf <- function(data, minw = NULL, lag = 0L) {
       "returning NA."
     )
   } else {
-    bsadf_panel <- apply(bsadf, 1, mean)
+    bsadf_panel <- rowMeans(bsadf)
     gsadf_panel <- max(bsadf_panel)
   }
 
