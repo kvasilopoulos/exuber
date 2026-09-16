@@ -221,6 +221,14 @@ checked and how.
   knitr and `R CMD check` run serially unless they opt in, so a batch
   job no longer pays worker start-up (nor leaves worker connections
   open) for a handful of replications.
+- [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s
+  panel statistic used `apply(bsadf, 1, mean)`, whose per-call dispatch
+  overhead scales with the number of rows rather than staying fixed –
+  65x slower than the equivalent `rowMeans(bsadf)` at n = 100, 289x
+  slower at n = 1000, and the single largest piece of
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s
+  runtime at every sample size tested. Replaced with `rowMeans(bsadf)`
+  (identical result, `tests/testthat` unchanged, 879 passing).
 
 #### API consistency
 
