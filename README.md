@@ -158,16 +158,17 @@ sort-then-relabel bug that hides the spike inside what looks like a
 smooth trend. This chart keeps the true, unshuffled `n` for every point
 instead.
 
-`exuber 0.4.1` edges out `exuber 2.0.0` at `n <= 300`, which is the
-opposite of the trend at every larger `n`. Timing `radf()`’s pieces
-separately shows why: the current version’s C++ core is already
-consistently faster (150 ms vs. 0.4.1’s 585 ms total at `n = 1000`), but
-it now also pays a roughly constant ~2-5 ms fixed cost per call for
-input validation, index parsing and attribute/class setup that the much
-smaller 0.4.1-era function didn’t have. That fixed cost is most of the
-runtime at `n = 100` (1.8 of 2.6 ms) but under 4% of it by `n = 1000`,
-so the leaner old version wins only while `n` is small enough that
-there’s barely any real computation to dominate it.
+An earlier pass of this chart showed `exuber 0.4.1` edging out
+`exuber 2.0.0` at `n <= 300`. Timing `radf()`’s pieces separately traced
+that to one line: the panel statistic was computed with
+`apply(bsadf, 1, mean)`, whose per-call dispatch overhead scales with
+the number of rows instead of staying fixed (65x slower than the
+equivalent `rowMeans(bsadf)` at `n = 100`, 289x slower at `n = 1000`) –
+the single largest piece of `radf()`’s own runtime at every sample size
+tested, not the input validation or index parsing around it. Fixed in
+`R/radf_.R` (`rowMeans()` gives the identical result; full `testthat`
+suite unchanged, 879 passing) – `exuber 2.0.0` now beats `0.4.1` at
+every `n` shown here, including `n = 100`.
 
 Only the `exuber 2.0.0` series was freshly simulated, with
 `tools/benchmark-comparison.R` (re-runnable, reproduces this chart).
