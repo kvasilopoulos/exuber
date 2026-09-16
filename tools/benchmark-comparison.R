@@ -5,14 +5,29 @@
 # as it was benchmarked in the paper.
 #
 # Every "exuber (JSS paper)" and competitor number is read straight from
-# the paper's own archived benchmark runs (exuber-paper/bench.Rds and
-# exuber-paper/other-software/, read-only -- that repo is the published
-# paper and is not modified by this script). bench.Rds was committed
-# 2020-07-15, when exuber's DESCRIPTION read Version: 0.4.1, hence the
-# "exuber 0.4.1 (JSS paper)" label. MultipleBubbles/psymonitor are
-# O(T^2) pure-R double loops that already take minutes per run at
-# n = 1000 on current hardware, and none of these archived numbers
-# depend on the current exuber implementation, so none are re-simulated.
+# the paper's own archived benchmark runs (exuber-paper/, read-only --
+# that repo is the published paper and is not modified by this script).
+# MultipleBubbles/psymonitor are O(T^2) pure-R double loops that already
+# take minutes per run at n = 1000 on current hardware, and none of
+# these archived numbers depend on the current exuber implementation, so
+# none are re-simulated.
+#
+# The R-package trio (MultipleBubbles/psymonitor/exuber) is read from
+# exuber-paper/performance-comparison.RData's `bench` object, NOT from
+# the sibling exuber-paper/bench.Rds. Both hold the exact same 10
+# microbenchmark blocks, but bench.Rds's list order does not match
+# ascending sample size -- its element 2 is actually the n = 1000 block,
+# with n = 200..900 shifted down one slot to fill positions 3..10 (cause
+# unknown; bench.Rds's own provenance isn't shown in
+# performance-comparison.R, it's just read as a pre-existing file).
+# performance-comparison.RData's `bench`, by contrast, is saved directly
+# inside the script's own loop (`bench[[i]] <- microbenchmark(...)` for
+# `i in seq_along(sample_size)`), so its order is unambiguous. Every
+# series is smooth and monotonic in that true order -- no anomaly at
+# n = 200 or anywhere else. (The paper's own plotting script arrives at
+# the same correct order a different way: arrange(exuber) before
+# relabeling with sample_size happens to recover it, since exuber's
+# timing is genuinely monotonic in n.)
 #
 # Only the "exuber 2.0.0" series is freshly simulated, against the
 # current package version. Output is a long-format table (one row per
@@ -37,8 +52,11 @@ sample_size <- seq(100, 1000, 100)
 paper_dir <- "../exuber-paper"
 
 # --- R packages, read verbatim from the paper's own microbenchmark run ----
+# (from performance-comparison.RData, not bench.Rds -- see header comment)
 
-paper_bench <- readRDS(file.path(paper_dir, "bench.Rds"))
+paper_bench_env <- new.env()
+load(file.path(paper_dir, "performance-comparison.RData"), envir = paper_bench_env)
+paper_bench <- paper_bench_env$bench
 stopifnot(length(paper_bench) == length(sample_size))
 
 r_pkg_medians <- do.call(rbind, lapply(seq_along(paper_bench), function(i) {

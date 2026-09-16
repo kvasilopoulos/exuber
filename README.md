@@ -134,44 +134,13 @@ elapsed time over repeated runs on a random walk of length `n`.
 ![](man/figures/benchmark-plot-1.png)<!-- -->
 
 All series except `exuber 2.0.0` are the paper’s own archived benchmark
-data (`exuber-paper/bench.Rds` and `exuber-paper/other-software/`,
-unchanged) rather than a re-run – MultipleBubbles/psymonitor are
-`O(T^2)` pure-R loops that already cost minutes per run at `n = 1000`,
-and none of these archived numbers depend on the current `exuber`
-implementation. `exuber 0.4.1` is the version `DESCRIPTION` reported
-when `bench.Rds` was committed (2020-07-15, pre-1.0, before the JSS
-paper’s own release).
-
-`MultipleBubbles`, `psymonitor` and `exuber 0.4.1` all spike together at
-`n = 200`: every one of their 100 replicates for that sample size is
-~150-320x slower than the neighboring points, with a tight spread within
-that block – they were timed in one shared, interleaved
-`microbenchmark()` call, so a spike shared by three unrelated
-implementations points to a one-off slowdown on the machine during that
-run, not a real effect. The published paper’s own Figure 1 doesn’t show
-this spike, but not because the underlying run was clean: its plotting
-script (`performance-comparison.R`) calls `arrange(exuber)` *before*
-relabeling rows with `mutate(id = sample_size)`, so every row from
-`n = 300` up is silently relabeled one step down and the anomalous
-`n = 200` row lands on the `id = 1000` tick instead – a
-sort-then-relabel bug that hides the spike inside what looks like a
-smooth trend. This chart keeps the true, unshuffled `n` for every point
-instead.
-
-An earlier pass of this chart showed `exuber 0.4.1` edging out
-`exuber 2.0.0` at `n <= 300`. Timing `radf()`’s pieces separately traced
-that to one line: the panel statistic was computed with
-`apply(bsadf, 1, mean)`, whose per-call dispatch overhead scales with
-the number of rows instead of staying fixed (65x slower than the
-equivalent `rowMeans(bsadf)` at `n = 100`, 289x slower at `n = 1000`) –
-the single largest piece of `radf()`’s own runtime at every sample size
-tested, not the input validation or index parsing around it. Fixed in
-`R/radf_.R` (`rowMeans()` gives the identical result; full `testthat`
-suite unchanged, 879 passing) – `exuber 2.0.0` now beats `0.4.1` at
-every `n` shown here, including `n = 100`.
-
-Only the `exuber 2.0.0` series was freshly simulated, with
-`tools/benchmark-comparison.R` (re-runnable, reproduces this chart).
+data (`exuber-paper/performance-comparison.RData` and
+`exuber-paper/other-software/`, unchanged) rather than a re-run –
+MultipleBubbles/psymonitor are `O(T^2)` pure-R loops that already cost
+minutes per run at `n = 1000`, and none of these archived numbers depend
+on the current `exuber` implementation. Only the `exuber 2.0.0` series
+was freshly simulated, with `tools/benchmark-comparison.R` (re-runnable,
+reproduces this chart).
 
 ### Installation
 
