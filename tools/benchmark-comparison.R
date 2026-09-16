@@ -97,15 +97,27 @@ stata <- read_other_software_ms(
 )
 
 # --- current column: exuber 2.0.0, freshly simulated -----------------------
+# At small n the call itself is only ~1-3ms, so a single microbenchmark
+# block is noisy relative to system scheduler jitter -- a run of
+# times = 50 was observed to swing between ~1.5ms and ~3.7ms at n = 100
+# across repeated attempts. Using times = 300 and taking the median of
+# medians across 5 independent blocks damps that down substantially
+# (each block already discards its own outliers via the median).
 
 exuber_medians <- do.call(rbind, lapply(sample_size, function(n) {
   set.seed(123)
   rw <- cumsum(rnorm(n))
-  t <- median(microbenchmark(
-    exuber::radf(rw, minw = minw, lag = 1),
-    unit = "ms", times = 50L
-  )$time) / 1e6
-  message(sprintf("n = %4d   exuber 2.0.0 = %7.2f ms", n, t))
+  block_medians <- replicate(5, {
+    median(microbenchmark(
+      exuber::radf(rw, minw = minw, lag = 1),
+      unit = "ms", times = 300L
+    )$time) / 1e6
+  })
+  t <- median(block_medians)
+  message(sprintf(
+    "n = %4d   exuber 2.0.0 = %7.3f ms  (5 blocks: %s)",
+    n, t, paste(sprintf("%.3f", block_medians), collapse = ", ")
+  ))
   data.frame(n = n, software = "exuber 2.0.0", time_ms = t)
 }))
 

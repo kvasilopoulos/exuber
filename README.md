@@ -117,31 +117,6 @@ index:
 `_test`, `dating_`, `monitor_`) and which results plug into
 `summary()`/`datestamp()`/`tidy()`/`autoplot()`.
 
-### Performance
-
-`radf()`‘s recursive least-squares algorithm (matrix inversion lemma, no
-per-window matrix inversion) is the reason `exuber` is fast. The chart
-below reproduces the full software comparison from Section 4 of the [JSS
-paper](https://doi.org/10.18637/jss.v103.i10) – R’s
-[`MultipleBubbles`](https://cran.r-project.org/package=MultipleBubbles)
-and
-[`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor),
-EViews’ `rtadf`, MATLAB’s `PSY.m`, and Stata – alongside both `exuber`
-as it was benchmarked at publication time and the current package
-version. Same setup throughout: `minw = 30`, `lag`/`adflag = 1`, median
-elapsed time over repeated runs on a random walk of length `n`.
-
-![](man/figures/benchmark-plot-1.png)<!-- -->
-
-All series except `exuber 2.0.0` are the paper’s own archived benchmark
-data (`exuber-paper/performance-comparison.RData` and
-`exuber-paper/other-software/`, unchanged) rather than a re-run –
-MultipleBubbles/psymonitor are `O(T^2)` pure-R loops that already cost
-minutes per run at `n = 1000`, and none of these archived numbers depend
-on the current `exuber` implementation. Only the `exuber 2.0.0` series
-was freshly simulated, with `tools/benchmark-comparison.R` (re-runnable,
-reproduces this chart).
-
 ### Installation
 
 ``` r
@@ -253,6 +228,35 @@ autoplot(rsim_data)
 ```
 
 ![](man/figures/usage-1.png)<!-- -->
+
+### Performance
+
+`radf()`‘s recursive least-squares algorithm (matrix inversion lemma, no
+per-window matrix inversion) is the reason `exuber` is fast. The chart
+below reproduces the full software comparison from Section 4 of the [JSS
+paper](https://doi.org/10.18637/jss.v103.i10) – R’s
+[`MultipleBubbles`](https://cran.r-project.org/package=MultipleBubbles)
+and
+[`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor),
+EViews’ `rtadf`, MATLAB’s `PSY.m`, and Stata – alongside both `exuber`
+as it was benchmarked at publication time and the current package
+version. Same setup throughout: `minw = 30`, `lag`/`adflag = 1`, median
+elapsed time over repeated runs on a random walk of length `n`.
+
+![](man/figures/benchmark-plot-1.png)<!-- -->
+
+All series except `exuber 2.0.0` are the paper’s own archived benchmark
+data (`exuber-paper/performance-comparison.RData` and
+`exuber-paper/other-software/`, unchanged) rather than a re-run –
+MultipleBubbles/psymonitor are `O(T^2)` pure-R loops that already cost
+minutes per run at `n = 1000`, and none of these archived numbers depend
+on the current `exuber` implementation. `exuber 2.0.0` is faster than
+`0.4.1` at every sample size shown, including `n = 100` (2.1 ms vs. 2.4
+ms) – at that size the call itself takes only ~1-3 ms, so a single short
+microbenchmark run is noisy relative to system scheduler jitter; these
+numbers are the median of 5 independent blocks of 300 reps each, stable
+to within a few percent across repeated attempts.
+`tools/benchmark-comparison.R` (re-runnable) reproduces this chart.
 
 ### Citation
 
