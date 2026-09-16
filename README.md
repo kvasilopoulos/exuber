@@ -117,6 +117,44 @@ index:
 `_test`, `dating_`, `monitor_`) and which results plug into
 `summary()`/`datestamp()`/`tidy()`/`autoplot()`.
 
+### Performance
+
+`radf()`’s recursive least-squares algorithm (matrix inversion lemma, no
+per-window matrix inversion) is the reason `exuber` is fast. The table
+below reproduces the R-package comparison from Section 4 of the [JSS
+paper](https://doi.org/10.18637/jss.v103.i10) – against
+[`MultipleBubbles`](https://cran.r-project.org/package=MultipleBubbles)
+(a pure-R GSADF implementation) and
+[`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor),
+both `O(T^2)` double loops with a per-window regression call – with the
+`exuber` column re-measured against the current package version instead
+of the one used at publication. Same setup throughout: `minw = 30`,
+`lag`/`adflag = 1`, median milliseconds over repeated runs on a random
+walk of length `n`.
+
+| n | MultipleBubbles (ms) | psymonitor (ms) | exuber 2.0.0 (ms) | speedup vs. MultipleBubbles | speedup vs. psymonitor |
+|---:|---:|---:|---:|---:|---:|
+| 100 | 460 | 258 | 3.7 | 126x | 71x |
+| 200 | 102,356 | 59,181 | 11.4 | 8,989x | 5,198x |
+| 300 | 2,640 | 1,497 | 39.6 | 67x | 38x |
+| 400 | 6,819 | 3,907 | 54.3 | 126x | 72x |
+| 500 | 13,131 | 7,540 | 64.0 | 205x | 118x |
+| 600 | 21,707 | 12,484 | 92.5 | 235x | 135x |
+| 700 | 32,728 | 18,892 | 117.2 | 279x | 161x |
+| 800 | 46,219 | 26,729 | 148.9 | 310x | 180x |
+| 900 | 62,255 | 36,027 | 204.5 | 304x | 176x |
+| 1000 | 81,140 | 46,966 | 252.4 | 322x | 186x |
+
+The `MultipleBubbles`/`psymonitor` columns are the paper’s own archived
+benchmark (`exuber-paper/bench.Rds`, unchanged) rather than a re-run –
+both packages are slow enough that repeating them at `n = 1000` costs
+minutes per run, and their numbers don’t depend on `exuber`’s
+implementation. The `n = 200` row’s spike is a one-off artifact already
+present in that archived run (it breaks the otherwise monotonic `O(T^2)`
+trend), not a real effect. Only the `exuber 2.0.0` column was freshly
+simulated, with `tools/benchmark-comparison.R` (re-runnable, reproduces
+this table).
+
 ### Installation
 
 ``` r
