@@ -84,40 +84,50 @@ The recursive ADF test is the core, but not the whole package. Each family below
 ### Performance
 
 `radf()`'s recursive least-squares algorithm (matrix inversion lemma, no
-per-window matrix inversion) is the reason `exuber` is fast. The table
-below reproduces the R-package comparison from Section 4 of the [JSS
-paper](https://doi.org/10.18637/jss.v103.i10) -- against
+per-window matrix inversion) is the reason `exuber` is fast. The chart
+below reproduces the full software comparison from Section 4 of the [JSS
+paper](https://doi.org/10.18637/jss.v103.i10) -- R's
 [`MultipleBubbles`](https://cran.r-project.org/package=MultipleBubbles)
-(a pure-R GSADF implementation) and
-[`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor), both
-`O(T^2)` double loops with a per-window regression call -- with the
-`exuber` column re-measured against the current package version instead
-of the one used at publication. Same setup throughout: `minw = 30`,
-`lag`/`adflag = 1`, median milliseconds over repeated runs on a random
-walk of length `n`.
+and [`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor),
+EViews' `rtadf`, MATLAB's `PSY.m`, and Stata -- alongside both `exuber`
+as it was benchmarked at publication time and the current package
+version. Same setup throughout: `minw = 30`, `lag`/`adflag = 1`, median
+elapsed time over repeated runs on a random walk of length `n`.
 
-| n | MultipleBubbles (ms) | psymonitor (ms) | exuber 2.0.0 (ms) | speedup vs. MultipleBubbles | speedup vs. psymonitor |
-|---:|---:|---:|---:|---:|---:|
-| 100 | 460 | 258 | 3.7 | 126x | 71x |
-| 200 | 102,356 | 59,181 | 11.4 | 8,989x | 5,198x |
-| 300 | 2,640 | 1,497 | 39.6 | 67x | 38x |
-| 400 | 6,819 | 3,907 | 54.3 | 126x | 72x |
-| 500 | 13,131 | 7,540 | 64.0 | 205x | 118x |
-| 600 | 21,707 | 12,484 | 92.5 | 235x | 135x |
-| 700 | 32,728 | 18,892 | 117.2 | 279x | 161x |
-| 800 | 46,219 | 26,729 | 148.9 | 310x | 180x |
-| 900 | 62,255 | 36,027 | 204.5 | 304x | 176x |
-| 1000 | 81,140 | 46,966 | 252.4 | 322x | 186x |
+```{r benchmark-plot, echo = FALSE, message = FALSE}
+library(ggplot2)
 
-The `MultipleBubbles`/`psymonitor` columns are the paper's own archived
-benchmark (`exuber-paper/bench.Rds`, unchanged) rather than a re-run --
-both packages are slow enough that repeating them at `n = 1000` costs
-minutes per run, and their numbers don't depend on `exuber`'s
-implementation. The `n = 200` row's spike is a one-off artifact already
-present in that archived run (it breaks the otherwise monotonic `O(T^2)`
-trend), not a real effect. Only the `exuber 2.0.0` column was freshly
+bench_tbl <- readRDS("tools/benchmark-comparison.rds")
+software_levels <- c(
+  "exuber 2.0.0", "exuber 0.4.1 (JSS paper)", "MATLAB (PSY)", "Stata",
+  "psymonitor", "MultipleBubbles", "EViews (rtadf)"
+)
+bench_tbl$software <- factor(bench_tbl$software, levels = software_levels)
+
+ggplot(bench_tbl, aes(n, time_ms, color = software, linetype = software)) +
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks = seq(100, 1000, 100)) +
+  scale_y_log10(labels = scales::label_comma()) +
+  labs(x = "Sample size", y = "Milliseconds (log scale)", color = NULL, linetype = NULL) +
+  theme_bw() +
+  theme(legend.position = "right")
+```
+
+All series except `exuber 2.0.0` are the paper's own archived benchmark
+data (`exuber-paper/bench.Rds` and `exuber-paper/other-software/`,
+unchanged) rather than a re-run -- MultipleBubbles/psymonitor are
+`O(T^2)` pure-R loops that already cost minutes per run at `n = 1000`,
+and none of these archived numbers depend on the current `exuber`
+implementation. `exuber 0.4.1` is the version `DESCRIPTION` reported
+when `bench.Rds` was committed (2020-07-15, pre-1.0, before the JSS
+paper's own release). All three of `MultipleBubbles`, `psymonitor` and
+`exuber 0.4.1` spike together at `n = 200` -- they were timed in the
+same interleaved `microbenchmark()` call in that archived run, so a
+shared spike points to a one-off system hiccup during that run rather
+than a real effect. Only the `exuber 2.0.0` series was freshly
 simulated, with `tools/benchmark-comparison.R` (re-runnable, reproduces
-this table).
+this chart).
 
 ### Installation
 
