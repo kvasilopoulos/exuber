@@ -58,6 +58,23 @@ test_that("the bootstrap panel BSADF is the cross-sectional mean of the series' 
   expect_equal(cv3$bsadf_panel_cv, cv1$bsadf_panel_cv)
 })
 
+test_that("bsadf_panel_cv has the full (nr - minw - lag) rows for lag > 0", {
+  # Regression test: initmat[j, lag:1] was one column short of the lag + 1
+  # values dy_boot needs prepended (R's index-0 drop rule made this
+  # accidentally correct only at lag = 0), silently truncating
+  # bsadf_panel_cv/gsadf_panel_cv for any lag >= 1 -- including whenever
+  # type = "aic"/"bic" selects a nonzero lag, the realistic common case.
+  set.seed(42)
+  y <- cumsum(rnorm(80))
+  minw <- psy_minw(80)
+  pointer <- 80 - minw
+
+  for (lag in 0:2) {
+    sb <- radf_sb_cv(y, minw = minw, lag = lag, nboot = 50, seed = 1)
+    expect_equal(nrow(sb$bsadf_panel_cv), pointer - lag)
+  }
+})
+
 test_that("the panel sieve-bootstrap test is correctly sized under H0", {
   skip_on_cran()
   set.seed(4); n <- 100; nc <- 5
