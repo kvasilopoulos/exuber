@@ -60,7 +60,7 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
         boot_res <- resmat[boot_index, j]
         dboot_res <- boot_res - mean(boot_res)
         dy_boot <- c(
-          initmat[j, lag:1],
+          initmat[j, (lag + 1):1],
           stats::filter(coefmat[j, 1] + dboot_res,
                         coefmat[j, -1], "rec",
                         init = initmat[j, ]
