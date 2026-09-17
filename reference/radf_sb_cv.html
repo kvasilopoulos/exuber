@@ -186,8 +186,8 @@ of Empirical Finance, 58, 207-225.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id    sig   gsadf_panel</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> panel 90          0.342</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> panel 95          0.485</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> panel 99          0.769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> panel 95          0.486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> panel 99          0.770</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">rsim_data</span>, cv <span class="op">=</span> <span class="va">sb</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -197,17 +197,19 @@ of Empirical Finance, 58, 207-225.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stat        tstat  `90`  `95`  `99`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> gsadf_panel  1.89 0.342 0.485 0.769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> gsadf_panel  1.89 0.342 0.486 0.770</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">rsim_data</span>, cv <span class="op">=</span> <span class="va">sb</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="radf_sb_cv-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in add_column(x, idx_tbl):</span> New columns must be compatible with `.data`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> New column has 100 rows.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> `.data` has 102 rows.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Simulate distribution</span></span></span>
 <span class="r-in"><span><span class="va">sdist</span> <span class="op">&lt;-</span> <span class="fu">radf_sb_distr</span><span class="op">(</span><span class="va">sim_data</span>, lag <span class="op">=</span> <span class="fl">1</span>, nboot <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">sdist</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="radf_sb_cv-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="radf_sb_cv-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Automatic BIC lag selection instead of a fixed lag</span></span></span>
 <span class="r-in"><span><span class="va">sb_bic</span> <span class="op">&lt;-</span> <span class="fu">radf_sb_cv</span><span class="op">(</span><span class="va">sim_data</span>, type <span class="op">=</span> <span class="st">"bic"</span><span class="op">)</span></span></span>

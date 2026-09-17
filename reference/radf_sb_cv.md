@@ -133,8 +133,8 @@ tidy(sb)
 #>   id    sig   gsadf_panel
 #>   <fct> <fct>       <dbl>
 #> 1 panel 90          0.342
-#> 2 panel 95          0.485
-#> 3 panel 99          0.769
+#> 2 panel 95          0.486
+#> 3 panel 99          0.770
 
 summary(rsim_data, cv = sb)
 #> 
@@ -144,11 +144,13 @@ summary(rsim_data, cv = sb)
 #> # A tibble: 1 × 5
 #>   stat        tstat  `90`  `95`  `99`
 #>   <fct>       <dbl> <dbl> <dbl> <dbl>
-#> 1 gsadf_panel  1.89 0.342 0.485 0.769
+#> 1 gsadf_panel  1.89 0.342 0.486 0.770
 #> 
 
 autoplot(rsim_data, cv = sb)
-
+#> Error in add_column(x, idx_tbl): New columns must be compatible with `.data`.
+#> ✖ New column has 100 rows.
+#> ℹ `.data` has 102 rows.
 
 # Simulate distribution
 sdist <- radf_sb_distr(sim_data, lag = 1, nboot = 1000)

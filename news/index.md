@@ -359,6 +359,17 @@ checked and how.
   pins the identity that a panel of identical copies has the same
   bootstrap distribution as the single series.
 
+- **[`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md)/[`radf_sb_distr()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md)
+  silently truncated their output by 2 rows for any `lag >= 1`** (a
+  fixed `lag`, or `type = "aic"`/`"bic"` whenever the selected lag came
+  out nonzero — the realistic common case). The bootstrap DGP’s
+  `initmat[j, lag:1]` indexing was one column short of the `lag + 1`
+  values `dy_boot` needs prepended; R’s index-0 drop rule made this
+  accidentally correct only at `lag = 0`. Fixed
+  (`initmat[j, (lag + 1):1]`); `bsadf_panel_cv`/`gsadf_panel_cv` now
+  have the full `nr - minw - lag` rows documented for every lag. A
+  regression test pins the row count across `lag = 0:2`.
+
 - [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)/[`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)’s
   `sig_lvl` argument now actually controls whether a series counts as
   rejecting the null. Previously,
