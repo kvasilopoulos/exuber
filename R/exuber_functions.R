@@ -46,7 +46,7 @@ exuber_registry <- function() {
     "dating_pdc", "dating", "Sequential sample-splitting regime dating.",
     "monitor_cusum", "monitor", "CUSUM/CUSUMV real-time monitoring, closed-form boundary, no bootstrap.",
     "monitor_lbi", "monitor", "Sequential extension of lbi_test(), constant-boundary mCUSUM/wCUSUM.",
-    "monitor_quantile", "monitor", "QPWY recursive quantile-regression monitoring, expanding window.",
+    "monitor_quantile", "monitor", "QPWY/QPSY recursive quantile-regression monitoring.",
     "rootstamp", "root", "Confidence interval + doubling time on the magnitude of the explosive root; default method fits a single sub-sample, radf_obj method runs every datestamp() episode.",
     "contagion_reg", "regression", "Bubble contagion regression (Greenaway-McGrevy & Phillips 2016); point estimation, no test."
   )
