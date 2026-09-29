@@ -17,7 +17,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/kvasilopoulos/exuber/blob/master/inst/CITATION)
+[`inst/CITATION`](https://github.com/kvasilopoulos/exuber/blob/main/inst/CITATION)
 
 Vasilopoulos K, Pavlidis E, Martínez-García E (2022). “exuber: Recursive
 Right-Tailed Unit Root Testing with R.” *Journal of Statistical
