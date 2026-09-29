@@ -93,3 +93,18 @@ test_that("dating_hlw recovers two genuine, well-separated bubble episodes
   ordered <- sapply(two_win, function(r) as.numeric(r$df$origination[1]) < as.numeric(r$df$origination[2]))
   expect_true(all(ordered))
 })
+
+test_that("hlw_join_runs() joins runs split by <= max_gap non-rejections (HLW's rule)", {
+  # End = first non-explosive observation, as in datestamp()
+  j <- hlw_join_runs(c(10L, 22L, 60L), c(20L, 30L, 70L), max_gap = 3L, min_len = 5)
+  expect_equal(j, list(start = c(10L, 60L), end = c(30L, 70L)))
+  # a gap of 4 is too wide
+  expect_equal(hlw_join_runs(c(10L, 24L), c(20L, 30L), 3L, 5)$start, c(10L, 24L))
+  # both sides must last at least min_len
+  expect_equal(hlw_join_runs(c(10L, 22L), c(20L, 25L), 3L, 5)$start, c(10L, 22L))
+  # chains of fragments collapse into one run
+  expect_equal(hlw_join_runs(c(1L, 12L, 23L), c(10L, 21L, 30L), 3L, 5),
+               list(start = 1L, end = 30L))
+  # join = 0 disables
+  expect_equal(hlw_join_runs(c(10L, 22L), c(20L, 30L), 0L, 5)$start, c(10L, 22L))
+})
