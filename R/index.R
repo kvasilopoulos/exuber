@@ -72,13 +72,7 @@ index.ds_radf <- index.radf_obj
 #' @export
 index.radf_cv <- function(x, trunc = FALSE, ...) {
   value <- attr(x, "index")
-  if (trunc) {
-    if (is_sb(x) && (get_lag(x) != 0)) {
-      value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
-    } else {
-      value <- value[-c(1:get_minw(x))]
-    }
-  }
+  if (trunc) value <- value[-c(1:get_trunc(x))]
   value
 }
 
@@ -100,13 +94,7 @@ index_radf_cv.wb_cv <- function(x, trunc, ...) {
 #' @export
 index_radf_cv.sb_cv <- function(x, trunc, ...) {
   value <- attr(x, "index")
-  if (trunc) {
-    if (get_lag(x) != 0) {
-      value <- value[-c(1:(get_minw(x) + get_lag(x) + 2))]
-    } else {
-      value <- value[-c(1:get_minw(x))]
-    }
-  }
+  if (trunc) value <- value[-c(1:get_trunc(x))]
   value
 }
 
