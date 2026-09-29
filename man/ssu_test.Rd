@@ -4,7 +4,14 @@
 \alias{ssu_test}
 \title{Stochastic Unit Root Bubble Test (Kurozumi & Nishi 2025)}
 \usage{
-ssu_test(data, minw = NULL, sig_lvl = 95)
+ssu_test(
+  data,
+  minw = NULL,
+  sig_lvl = 95,
+  type = c("ssu", "gssu"),
+  union = FALSE,
+  cv = NULL
+)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -17,23 +24,35 @@ not supported. When any series is padded this way, the panel statistic
 (\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
 \code{NA}, with a warning.}
 
-\item{minw}{A positive integer. The minimum window size (default =
-\eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
+\item{minw}{Minimum window; defaults to \code{\link{psy_minw}} for
+\code{"ssu"} and the paper's \code{floor(n * (-0.004 + 2.24/sqrt(n)))}
+for \code{"gssu"} (the values Table I is computed at).}
 
 \item{sig_lvl}{Significance level on the package-wide 0-100 scale, one
 of \code{90}, \code{95}, \code{99} (the levels Kurozumi & Nishi's Table I
 tabulates).}
+
+\item{type}{\code{"ssu"} or \code{"gssu"}.}
+
+\item{union}{Logical; also run the union-of-rejections procedure with
+SADF (\code{"ssu"}) or GSADF (\code{"gssu"}).}
+
+\item{cv}{Critical values for the SADF/GSADF side of the union, as from
+\code{\link{radf_mc_cv}} for \code{lag = 0}; defaults to the precomputed
+ones (fetched on first use).}
 }
 \value{
 An object of class \code{ssu_test_obj}: a list with the
 statistic path (\code{stat}, one value per candidate end point from
-\code{minw} to \code{n}), the constant \code{crit} from Table I, and
-\code{sadf} (the maximum, compared against \code{crit}) and
-\code{detected}.
+\code{minw} to \code{n}; for GSSU the sup over window starts at each
+end point), the constant \code{crit} from Table I, \code{sadf} (the
+maximum, compared against \code{crit}) and \code{detected}. With
+\code{union = TRUE} also \code{adf_stat} (SADF or GSADF),
+\code{union_stat}, \code{union_crit} and \code{union_detected}.
 }
 \description{
-\code{ssu_test} implements the SSU statistic of Kurozumi & Nishi
-(2025): a sup-type test for a bubble based on testing for a
+\code{ssu_test} implements the SSU and GSSU statistics of Kurozumi &
+Nishi (2025): sup-type tests for a bubble based on testing for a
 stochastic (rather than deterministic) unit root in the \emph{squared}
 first differences, \code{(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 +
 eta_t}, bias-corrected against its dependence on the correlation
@@ -47,16 +66,27 @@ stochastically over time, \code{1 + c1/T + a*u_t/sqrt(T)}, rather than
 the deterministic \code{1 + c/T^alpha} every recursive-ADF-family
 statistic in this package assumes.
 
-Only the single-recursion \code{SSU} statistic (sup over the end
-point, start fixed at the beginning of the sample) is implemented --
-not \code{GSSU} (the double-recursion generalization), the paper's
-separate CUSUM/CUSUM-SQ statistics, or the union-of-rejections
-procedure combining SSU/GSSU with SADF/GSADF.
+\code{type = "ssu"} is the single recursion (start fixed at the
+beginning of the sample, \code{SADF}'s shape); \code{type = "gssu"}
+also takes the supremum over window starts (\code{GSADF}'s shape), with
+the paper's own minimum window \code{r0 = -0.004 + 2.24/sqrt(n)}. The
+paper finds GSSU no more powerful than SSU.
+
+\code{union = TRUE} adds the paper's recommended union-of-rejections
+procedure: \code{UR = max(SADF / cv_sadf, SSU / cv_ssu)} (or
+\code{GUR} with GSADF/GSSU), compared with the published scaling
+constant \code{ur} (\code{gur}). Neither SADF nor SSU dominates: SSU wins
+when the explosive coefficient is genuinely stochastic, SADF when it is
+deterministic, and the union stays close to the better of the two. The
+SADF/GSADF side is \code{\link{radf}} with its default minimum window
+and \code{lag = 0}, against \code{cv} (default: the precomputed
+critical values).
 }
 \note{
-The critical value is a published closed-table constant
-(Kurozumi & Nishi (2025)'s Table I, via the internal \code{ssu_q()}
-helper) -- no simulation needed.
+The SSU/GSSU critical values and the union constants are
+published asymptotic values (Kurozumi & Nishi (2025)'s Table I) -- no
+simulation needed. The union constant is only valid at the level the
+statistic was built for.
 
 Returns its own class (not \code{radf_obj}), so it does not plug into
 \code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
@@ -79,6 +109,9 @@ y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
 res <- ssu_test(y, sig_lvl = 95)
 print(res)
 
+# The double-recursion version
+ssu_test(y, type = "gssu")
+
 # Plot the recursive SSU statistic path against its critical value
 autoplot(res)
 }
@@ -94,6 +127,7 @@ Analysis, 46(5), 945-965.
 recursive ADF-family alternative this complements.
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_kp]{radf_kp()}},
 \code{\link[=radf_sbz]{radf_sbz()}},
 \code{\link[=radf_sbz_union]{radf_sbz_union()}},

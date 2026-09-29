@@ -3,10 +3,13 @@
 # docs/volatility-robustness.md, "Stochastic explosive
 # -coefficient test", for the full evaluation this implements.
 #
-# Only the SSU statistic (their eq. 7, sup-type, r1 fixed at 0) is
-# implemented -- the minimum-viable subset this project's own earlier
-# triage identified ("SSU alone, without GSSU's double-recursion,
-# without CUSUM/CUSUM-SQ, without the union"). Re-triaged 2026-08-10:
+# SSU (their eq. 7, sup-type, r1 fixed at 0) shipped first (2026-08-10)
+# as the minimum-viable subset; GSSU (the double-sup over window starts)
+# and the UR/GUR union-of-rejections procedure followed 2026-09-29 --
+# every one of them has a published asymptotic critical value in Table I
+# (including the union scaling constants ur/gur), so none needs new
+# simulation. The paper's CUSUM/CUSUM-SQ statistics live in cusum_test.R.
+# Re-triaged 2026-08-10:
 # the original "not a contained addition" verdict undersold it on two
 # fronts, confirmed by re-reading rendered pages 5-6, 9 directly (not
 # the raw text extraction):
@@ -58,13 +61,13 @@ ssu_prefix_sums <- function(y) {
   )
 }
 
-# t^{omega,c}_{0, r2} (SSU's own r1 = 0, fixed) for every candidate r2 =
-# hi in `hi_idx` (i-index terms, matching hls_segment_ssr()'s (lo, hi]
-# convention with lo = 0 throughout, since SSU is a single-recursion sup
-# statistic like SADF/badf, not a double recursion like GSADF/bsadf).
-ssu_stat_path <- function(ps, hi_idx) {
-  S <- function(nm) ps[[nm]][hi_idx + 1L] # window (0, hi] sum, lo = 0
-  L <- hi_idx
+# t^{omega,c}_{r1, r2} for every window (lo, hi] of regression pairs
+# (matching hls_segment_ssr()'s convention), `lo`/`hi_idx` recycled
+# against each other: lo = 0 gives SSU's own single-recursion path, a
+# grid of (lo, hi) pairs gives GSSU's double recursion.
+ssu_stat_path <- function(ps, hi_idx, lo = 0L) {
+  S <- function(nm) ps[[nm]][hi_idx + 1L] - ps[[nm]][lo + 1L] # window (lo, hi] sum
+  L <- hi_idx - lo
 
   # Regression 6: Delta y_t = mu1 + delta*y_{t-1} + e_t.
   Sx1 <- S("x1")
@@ -120,10 +123,20 @@ ssu_stat_path <- function(ps, hi_idx) {
   (t_omega - correction) / sqrt(1 - psi_hat^2)
 }
 
+# GSSU's recursive path: for each end point hi, the sup over window
+# starts lo = 0, ..., hi - minw (bsadf's shape); its max is GSSU.
+gssu_stat_path <- function(ps, hi_idx, minw) {
+  vapply(hi_idx, function(hi) max(ssu_stat_path(ps, hi, 0:(hi - minw))), numeric(1))
+}
+
+# KN's recommended GSSU minimum window, r0 = -0.004 + 2.24/sqrt(T) (Table I
+# note: psy_minw()'s formula oversizes GSSU).
+gssu_minw <- function(n) floor(n * (-0.004 + 2.24 / sqrt(n)))
+
 #' Stochastic Unit Root Bubble Test (Kurozumi & Nishi 2025)
 #'
-#' \code{ssu_test} implements the SSU statistic of Kurozumi & Nishi
-#' (2025): a sup-type test for a bubble based on testing for a
+#' \code{ssu_test} implements the SSU and GSSU statistics of Kurozumi &
+#' Nishi (2025): sup-type tests for a bubble based on testing for a
 #' stochastic (rather than deterministic) unit root in the *squared*
 #' first differences, \code{(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 +
 #' eta_t}, bias-corrected against its dependence on the correlation
@@ -136,26 +149,48 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' the deterministic \code{1 + c/T^alpha} every recursive-ADF-family
 #' statistic in this package assumes.
 #'
-#' Only the single-recursion \code{SSU} statistic (sup over the end
-#' point, start fixed at the beginning of the sample) is implemented --
-#' not \code{GSSU} (the double-recursion generalization), the paper's
-#' separate CUSUM/CUSUM-SQ statistics, or the union-of-rejections
-#' procedure combining SSU/GSSU with SADF/GSADF.
+#' \code{type = "ssu"} is the single recursion (start fixed at the
+#' beginning of the sample, \code{SADF}'s shape); \code{type = "gssu"}
+#' also takes the supremum over window starts (\code{GSADF}'s shape), with
+#' the paper's own minimum window \code{r0 = -0.004 + 2.24/sqrt(n)}. The
+#' paper finds GSSU no more powerful than SSU.
 #'
-#' @note The critical value is a published closed-table constant
-#' (Kurozumi & Nishi (2025)'s Table I, via the internal \code{ssu_q()}
-#' helper) -- no simulation needed.
+#' \code{union = TRUE} adds the paper's recommended union-of-rejections
+#' procedure: \code{UR = max(SADF / cv_sadf, SSU / cv_ssu)} (or
+#' \code{GUR} with GSADF/GSSU), compared with the published scaling
+#' constant \code{ur} (\code{gur}). Neither SADF nor SSU dominates: SSU wins
+#' when the explosive coefficient is genuinely stochastic, SADF when it is
+#' deterministic, and the union stays close to the better of the two. The
+#' SADF/GSADF side is \code{\link{radf}} with its default minimum window
+#' and \code{lag = 0}, against \code{cv} (default: the precomputed
+#' critical values).
+#'
+#' @note The SSU/GSSU critical values and the union constants are
+#' published asymptotic values (Kurozumi & Nishi (2025)'s Table I) -- no
+#' simulation needed. The union constant is only valid at the level the
+#' statistic was built for.
 #'
 #' @inheritParams radf
+#' @param minw Minimum window; defaults to \code{\link{psy_minw}} for
+#' \code{"ssu"} and the paper's \code{floor(n * (-0.004 + 2.24/sqrt(n)))}
+#' for \code{"gssu"} (the values Table I is computed at).
 #' @param sig_lvl Significance level on the package-wide 0-100 scale, one
 #' of \code{90}, \code{95}, \code{99} (the levels Kurozumi & Nishi's Table I
 #' tabulates).
+#' @param type \code{"ssu"} or \code{"gssu"}.
+#' @param union Logical; also run the union-of-rejections procedure with
+#' SADF (\code{"ssu"}) or GSADF (\code{"gssu"}).
+#' @param cv Critical values for the SADF/GSADF side of the union, as from
+#' \code{\link{radf_mc_cv}} for \code{lag = 0}; defaults to the precomputed
+#' ones (fetched on first use).
 #'
 #' @return An object of class \code{ssu_test_obj}: a list with the
 #' statistic path (\code{stat}, one value per candidate end point from
-#' \code{minw} to \code{n}), the constant \code{crit} from Table I, and
-#' \code{sadf} (the maximum, compared against \code{crit}) and
-#' \code{detected}.
+#' \code{minw} to \code{n}; for GSSU the sup over window starts at each
+#' end point), the constant \code{crit} from Table I, \code{sadf} (the
+#' maximum, compared against \code{crit}) and \code{detected}. With
+#' \code{union = TRUE} also \code{adf_stat} (SADF or GSADF),
+#' \code{union_stat}, \code{union_crit} and \code{union_detected}.
 #'
 #' @references Kurozumi, E., & Nishi, M. (2025). Bubble testing with
 #' stochastically varying explosive coefficient. Journal of Time Series
@@ -183,19 +218,23 @@ ssu_stat_path <- function(ps, hi_idx) {
 #' res <- ssu_test(y, sig_lvl = 95)
 #' print(res)
 #'
+#' # The double-recursion version
+#' ssu_test(y, type = "gssu")
+#'
 #' # Plot the recursive SSU statistic path against its critical value
 #' autoplot(res)
 #' }
 #'
 #' @family volatility-robust tests
 #' @export
-ssu_test <- function(data, minw = NULL, sig_lvl = 95) {
+ssu_test <- function(data, minw = NULL, sig_lvl = 95, type = c("ssu", "gssu"), union = FALSE, cv = NULL) {
+  type <- match.arg(type)
   x <- parse_data(data)
   n <- nrow(x)
-  minw <- minw %||% psy_minw(n)
+  minw <- minw %||% if (type == "ssu") psy_minw(n) else gssu_minw(n)
   assert_positive_int(minw, greater_than = 2)
 
-  crit <- ssu_q(sig_lvl)
+  crit <- ssu_q(sig_lvl, type)
   snames <- colnames(x)
   idx <- index(x)
   nc <- ncol(x)
@@ -204,14 +243,29 @@ ssu_test <- function(data, minw = NULL, sig_lvl = 95) {
   stat_path <- matrix(NA_real_, length(hi_idx), nc, dimnames = list(NULL, snames))
   for (j in seq_len(nc)) {
     ps <- ssu_prefix_sums(as.numeric(x[, j]))
-    stat_path[, j] <- ssu_stat_path(ps, hi_idx)
+    stat_path[, j] <- if (type == "ssu") ssu_stat_path(ps, hi_idx) else gssu_stat_path(ps, hi_idx, minw)
   }
 
   sadf <- apply(stat_path, 2, max)
   detected <- setNames(sadf > crit, snames)
+  out <- list(stat = stat_path, sadf = sadf, crit = crit, detected = detected)
 
-  list(stat = stat_path, sadf = sadf, crit = crit, detected = detected) %>%
-    add_attr(index = idx, series_names = snames, n = n, minw = minw, sig_lvl = sig_lvl) %>%
+  if (union) {
+    r <- radf(x, lag = 0L)
+    cv <- cv %||% retrieve_crit(r)
+    lvl <- paste0(sig_lvl, "%")
+    adf_stat <- if (type == "ssu") r$sadf else r$gsadf
+    cv_adf <- if (type == "ssu") cv$sadf_cv[lvl] else cv$gsadf_cv[lvl]
+    union_stat <- setNames(pmax(adf_stat / cv_adf, sadf / crit), snames)
+    union_crit <- ssu_q(sig_lvl, if (type == "ssu") "ur" else "gur")
+    out <- c(out, list(
+      adf_stat = setNames(adf_stat, snames), union_stat = union_stat,
+      union_crit = union_crit, union_detected = union_stat > union_crit
+    ))
+  }
+
+  out %>%
+    add_attr(index = idx, series_names = snames, n = n, minw = minw, sig_lvl = sig_lvl, type = type) %>%
     add_class("ssu_test_obj")
 }
 
@@ -228,14 +282,32 @@ ssu_test <- function(data, minw = NULL, sig_lvl = 95) {
 autoplot.ssu_test_obj <- function(object, ...) {
   minw <- attr(object, "minw")
   pos <- minw:(minw + nrow(object$stat) - 1L)
-  autoplot_stat_boundary(pos, object$stat, object$crit, ylab = "SSU statistic")
+  autoplot_stat_boundary(pos, object$stat, object$crit,
+    ylab = paste(toupper(attr(object, "type") %||% "ssu"), "statistic")
+  )
 }
 
-# Kurozumi & Nishi (2025) Table I: SSU's own published asymptotic
-# critical value, one scalar per significance level (their own 10,000
-# -rep Monte Carlo, r0 = 0.01 + 1.8/sqrt(T) -- exactly psy_minw()'s own
-# formula).
-ssu_q <- function(sig_lvl) {
+# Kurozumi & Nishi (2025) Table I: published asymptotic critical values
+# (their own 10,000-rep Monte Carlo, Brownian motion from 1000 steps) --
+# SSU at r0 = 0.01 + 1.8/sqrt(T) (psy_minw()), GSSU at r0 = -0.004 +
+# 2.24/sqrt(T), and the union scaling constants ur (SADF+SSU) and gur
+# (GSADF+GSSU). Also the CUSUM-family columns used by cusum_test(): CS,
+# GCS, and the two-sided CSSQ/GCSSQ pairs (each tail at alpha/2, so the
+# "level alpha" row is the two-sided test at alpha).
+kn_table <- list(
+  ssu = c(2.90, 3.30, 4.20),
+  gssu = c(4.83, 5.37, 6.81),
+  ur = c(1.16, 1.13, 1.09),
+  gur = c(1.11, 1.10, 1.08),
+  cs = c(1.62, 1.93, 2.57),
+  gcs = c(1.90, 2.20, 2.78),
+  cssq_sup = c(1.19, 1.32, 1.59),
+  cssq_inf = c(-1.21, -1.34, -1.60),
+  gcssq_sup = c(1.60, 1.72, 1.98),
+  gcssq_inf = c(-1.62, -1.72, -1.97)
+)
+
+ssu_q <- function(sig_lvl, stat = "ssu") {
   choices <- c(90, 95, 99)
   match_idx <- which(abs(sig_lvl - choices) < 1e-8)
   if (length(match_idx) == 0L) {
@@ -245,23 +317,23 @@ ssu_q <- function(sig_lvl) {
       "significance levels)."
     )
   }
-  c(2.90, 3.30, 4.20)[match_idx]
+  kn_table[[stat]][match_idx]
 }
 
 #' @export
 print.ssu_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "ssu_test (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
+    "ssu_test ({toupper(attr(x, 'type') %||% 'ssu')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
     "sig_lvl = {attr(x, 'sig_lvl')}%, crit = {x$crit})"
   ))
   cat_line()
-  print(
-    data.frame(
-      series = names(x$sadf), sadf = x$sadf, detected = x$detected,
-      row.names = NULL
-    ),
-    digits = digits, print.gap = 2L, row.names = FALSE
-  )
+  df <- data.frame(series = names(x$sadf), sadf = x$sadf, detected = x$detected, row.names = NULL)
+  if (!is.null(x$union_stat)) {
+    df$union <- x$union_stat
+    df$union_detected <- x$union_detected
+  }
+  print(df, digits = digits, print.gap = 2L, row.names = FALSE)
+  if (!is.null(x$union_stat)) cat_line("union critical value: ", x$union_crit)
   cat_line()
 }

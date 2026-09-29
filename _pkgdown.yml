@@ -122,6 +122,10 @@ reference:
     contents:
       - ssu_test
       - autoplot.ssu_test_obj
+  - subtitle: cusum_test()
+    contents:
+      - cusum_test
+      - autoplot.cusum_test_obj
   - subtitle: radf_kp()
     contents:
       - radf_kp
