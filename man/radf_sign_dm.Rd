@@ -96,6 +96,7 @@ deterministic level shifts. Oxford Bulletin of Economics and Statistics,
 \code{\link{radf_sign}} for the non-demeaned sign-based analogue.
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_kp]{radf_kp()}},
 \code{\link[=radf_sbz]{radf_sbz()}},
 \code{\link[=radf_sbz_union]{radf_sbz_union()}},

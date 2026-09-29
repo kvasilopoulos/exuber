@@ -89,6 +89,7 @@ asymptotic critical values, and \code{\link{radf_wb_cv}} for the
 bootstrap-based alternative (Harvey, Leybourne, Sollis & Taylor).
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_kp]{radf_kp()}},
 \code{\link[=radf_sbz]{radf_sbz()}},
 \code{\link[=radf_sbz_union]{radf_sbz_union()}},

@@ -13,6 +13,7 @@ suppressMessages({
     lbi_test = lbi_test(y_smoke),
     monitor_lbi = monitor_lbi(y_smoke, r_star = 0.5),
     ssu_test = ssu_test(y_smoke, minw = 20),
+    cusum_test = cusum_test(y_smoke, type = "gcssq"),
     quantile_test = quantile_test(y_smoke, tau = 0.5, nrep = 10, seed = 1),
     monitor_quantile = monitor_quantile(y_smoke, minw = 20, nrep = 10, seed = 1),
     cobubble_test = cobubble_test(y_smoke, x_smoke, lag = 0, nboot = 10, seed = 1),
