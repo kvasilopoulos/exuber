@@ -59,26 +59,22 @@ own \code{QPSY} (double recursion, additionally optimizing over the
 window start): \code{QPWY_r(tau)} needs \code{O(T)} actual quantile
 -regression fits (no closed-form recursive update the way OLS has),
 tractable at the same cost order as \code{radf()}'s own \code{badf};
-\code{QPSY} needs \code{O(T^2)} such fits, a substantially larger
-undertaking left unimplemented.
+\code{QPSY} needs \code{O(T^2)} such fits.
 
-The critical value is simulated per call: \code{QPWY_r(tau)}'s
-limiting null distribution at each \code{r} is \code{sqrt(1 - delta^2)
-* z + delta * Q_{0,r}}, with \code{z ~ N(0, 1)}, \code{delta} a
-data-estimated correlation coefficient (as in
-\code{\link{quantile_test}}), and \code{Q_{0,r}} exactly \code{radf()}'s
-own \code{badf} sequence under a simulated null path -- reusing
-\code{radf()} directly for the simulation rather than new theory. A
-single \strong{flat} boundary is used (not one value per \code{r}):
-controlling the first-crossing false-alarm rate requires calibrating
-against each simulated path's own supremum, exactly how
-\code{\link{radf_mc_cv}}'s own \code{sadf_cv} is constructed, not a
-per-\code{r} marginal quantile (which would badly inflate the
-false-alarm rate).
+The critical value is simulated per call from the limiting null
+distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}},
+with \code{delta} a data-estimated correlation coefficient (as in
+\code{\link{quantile_test}}), \code{Q} the Dickey-Fuller t functional
+and \code{Z} its counterpart driven by an independent Brownian motion,
+both simulated for every window (no QR fits needed). A single
+\strong{flat} boundary is used (not one value per \code{r}): the
+quantile of each simulated path's own supremum, exactly how
+\code{\link{radf_mc_cv}}'s own \code{sadf_cv} is constructed, which
+controls the first-crossing false-alarm rate.
 }
 \note{
 The critical value (boundary) is simulated internally on every
-call (via an unexported helper, \code{qpwy_boundary_sim}) -- there is
+call (via an unexported helper, \code{quantile_boundary_sim}) -- there is
 currently no reusable/exported cv counterpart for this function (a
 known, separately-tracked gap, not addressed here).
 

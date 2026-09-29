@@ -18,18 +18,40 @@ test_that("qpwy_stat_path at the full sample matches a manual replicate
   expect_equal(unname(full_stat), manual, tolerance = 1e-8)
 })
 
-test_that("qpwy_boundary_sim's simulated Q paths have the same length as
-  radf()'s own badf sequence (Q_{0,r} is identified with badf[r]
-  exactly, per Corollary 2)", {
-  n <- 80
-  minw <- 20
-  Q <- exuber:::qpwy_boundary_sim(n, minw, 5, seed = 1)
-  set.seed(1)
-  # first replicate uses the same RNG stream as a direct radf() call
-  ysim1 <- cumsum(rnorm(n))
-  r1 <- radf(ysim1, minw = minw, lag = 0)
-  expect_equal(ncol(Q), length(r1$badf[, 1]))
-  expect_equal(nrow(Q), 5)
+test_that("quantile_boundary_sim matches a brute-force per-window
+  computation of Q and Z (sup of delta*Q + sqrt(1-delta^2)*Z)", {
+  n <- 30
+  minw <- 8
+  delta <- c(0.3, 0.9)
+  for (type in "qpwy") {
+    sim <- exuber:::quantile_boundary_sim(n, minw, 2, delta, seed = 11)
+    set.seed(11)
+    for (i in 1:2) {
+      e <- rnorm(n - 1)
+      v <- rnorm(n - 1)
+      x <- c(0, cumsum(e))[1:(n - 1)]
+      U <- NULL
+      for (hi in minw:(n - 1)) {
+        los <- if (type == "qpwy") 0 else 0:(hi - minw)
+        for (lo in los) {
+          k <- (lo + 1):hi
+          xb <- x[k] - mean(x[k])
+          q <- sum(xb * e[k]) / sqrt(sum(xb^2))
+          z <- sum(xb * v[k]) / sqrt(sum(xb^2))
+          U <- rbind(U, delta * q + sqrt(1 - delta^2) * z)
+        }
+      }
+      expect_equal(sim[i, ], apply(U, 2, max), tolerance = 1e-8)
+    }
+  }
+})
+
+test_that("the boundary treats Z as a process over windows, not one z
+  per replicate (the single-z boundary oversized the test)", {
+  # delta = 0 leaves only Z; with one shared z per path, sup_r Z would be
+  # exactly N(0,1), so its 95% quantile would be ~1.645
+  sim <- exuber:::quantile_boundary_sim(150, 20, 400, 0, seed = 3)
+  expect_gt(quantile(sim[, 1], 0.95), 2)
 })
 
 test_that("monitor_quantile runs end to end and returns a well-formed object", {
@@ -50,18 +72,9 @@ test_that("monitor_quantile's boundary is the quantile of simulated PATH
   false-alarm rate against a nominal 5%) before this was fixed", {
   set.seed(1)
   y <- cumsum(rnorm(80))
-  minw <- exuber:::psy_minw(80)
-  Q <- exuber:::qpwy_boundary_sim(80, minw, 100, seed = 7)
-  set.seed(9)
-  z <- rnorm(100)
-  delta_j <- 0.4
-  U <- sqrt(1 - delta_j^2) * z + delta_j * Q
-  sup_boundary <- unname(quantile(apply(U, 1, max), probs = 0.95, names = FALSE))
-  marginal_boundary <- unname(quantile(U[, ncol(U)], probs = 0.95, names = FALSE))
-  # the supremum-calibrated boundary must be at least as large as any
-  # single-column marginal quantile (the max of a path is >= any one of
-  # its own points, so its quantile stochastically dominates)
-  expect_gte(sup_boundary, marginal_boundary)
+  out <- monitor_quantile(y, tau = 0.5, nrep = 200, seed = 7)
+  sup_U <- exuber:::quantile_boundary_sim(80, attr(out, "minw"), 200, out$delta, seed = 7)
+  expect_equal(unname(out$boundary), unname(quantile(sup_U[, 1], 0.95)))
 })
 
 test_that("monitor_quantile rejects an out-of-range tau or level", {
