@@ -116,12 +116,13 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #' @section Caveats:
 #' The boundary is the asymptotic one. Near the median it is well sized in
 #' finite samples (false-alarm rate 3.5-4.0\% at a nominal 5\%, Gaussian and
-#' \eqn{t_3} innovations, \code{tau = 0.5}). Away from the median with
-#' heavy-tailed innovations the small early windows make both statistics
-#' oversized, QPSY badly so: with \eqn{t_3} innovations QPSY's false-alarm
-#' rate is 21\% at \code{tau = 0.8} and 44\% at \code{tau = 0.9}
-#' (\code{n = 100}); QPWY's is 7.5-8.5\% at \code{tau = 0.2}/\code{0.8} and
-#' 12.5\% at \code{tau = 0.9} (\code{n = 150}).
+#' \eqn{t_3} innovations, \code{tau = 0.5}). Away from the median the small
+#' early windows make both statistics oversized, QPSY badly so, even with
+#' Gaussian innovations: QPSY's false-alarm rate is 35\% at \code{tau = 0.9}
+#' (Gaussian) and, with \eqn{t_3} innovations, 21\% at \code{tau = 0.8} and
+#' 44\% at \code{tau = 0.9} (\code{n = 100}). QPWY's, with \eqn{t_3}
+#' innovations, is 7.5-8.5\% at \code{tau = 0.2}/\code{0.8} and 12.5\% at
+#' \code{tau = 0.9} (\code{n = 150}).
 #' Wu, Shi & Wu advise against extreme quantiles in small samples and use
 #' bootstrap critical values for monitoring; that bootstrap is not
 #' implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5
@@ -221,8 +222,8 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl 
   caveat <- NULL
   if (type == "qpsy" && abs(tau - 0.5) > 0.05) {
     caveat <- paste(
-      "QPSY's asymptotic boundary is oversized away from the median with heavy-tailed",
-      "data (21% at tau = 0.8, t3, n = 100, nominal 5%); see ?monitor_quantile, Caveats section."
+      "QPSY's asymptotic boundary is oversized away from the median in small samples",
+      "(21% at tau = 0.8 with t3 data, n = 100, nominal 5%); see ?monitor_quantile, Caveats section."
     )
     message_glue(caveat)
   }
