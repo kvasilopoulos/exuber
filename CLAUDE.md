@@ -332,8 +332,8 @@ Every implemented item needs, in order:
    turned out to be the single-`z` bug above. Simulating the limiting
    process directly (cheap) says which it is. Also check away from the
    easy case (non-central quantiles, heavy tails): QPSY is 4% at the
-   median but 21-44% at `tau = 0.8-0.9` with `t3` innovations, which it
-   now ships with as a caveat. A per-point marginal
+   median but 35% at `tau = 0.9` even with Gaussian innovations (21-44%
+   at `tau = 0.8-0.9` with `t3`), which it now ships with as a caveat. A per-point marginal
    quantile used as a boundary for a first-crossing/monitoring test will
    look plausible from the formula but can be badly miscalibrated in
    practice — `monitor_quantile()`'s boundary bug gave a `50%` false-alarm rate

@@ -91,8 +91,8 @@ what was checked and how.
 * `monitor_quantile()` — Wu, Shi & Wu (2025) recursive quantile
   monitoring: QPWY (expanding window) and QPSY (`type = "qpsy"`, supremum
   over window starts). Asymptotic boundary, well sized near the median;
-  oversized away from it with heavy tails, QPSY especially (a call-time
-  caveat says so).
+  oversized away from it in small samples, QPSY badly (a call-time caveat
+  says so).
 
 ### Naming
 
