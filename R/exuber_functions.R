@@ -42,7 +42,7 @@ exuber_registry <- function() {
     "radf_sbz_union", "adf,test", "SBZ union-of-rejections test (supDF and supBZ, paired bootstrap); bundles statistic and critical value because U's definition requires it.",
     "dating_hls", "dating", "SSR/BIC single-bubble dating (Harvey, Leybourne & Sollis 2017); no critical value needed.",
     "dating_hlw", "dating", "SSR/BIC multi-bubble dating, wraps dating_hls() per detected episode.",
-    "dating_knp", "dating", "Bias-corrected SSR dating (Kejriwal, Nguyen & Perron 2025).",
+    "dating_knp", "dating", "Bias-corrected SSR dating, one or several bubbles via dynamic programming (Kejriwal, Nguyen & Perron 2025).",
     "dating_pdc", "dating", "Sequential sample-splitting regime dating.",
     "monitor_cusum", "monitor", "CUSUM/CUSUMV real-time monitoring, closed-form boundary, no bootstrap.",
     "monitor_lbi", "monitor", "Sequential extension of lbi_test(), constant-boundary mCUSUM/wCUSUM.",

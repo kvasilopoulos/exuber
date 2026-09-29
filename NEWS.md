@@ -61,7 +61,9 @@ what was checked and how.
   dating.
 * `dating_hlw()` — Harvey, Leybourne & Whitehouse (2020) SSR/BIC
   multi-bubble two-step wrapper.
-* `dating_knp()` — Kejriwal, Nguyen & Perron (2025) bias-corrected dating.
+* `dating_knp()` — Kejriwal, Nguyen & Perron (2025) bias-corrected dating;
+  `breaks =` dates several bubbles at once with the paper's dynamic
+  programme (exact global minimiser, `O(breaks * n^2)`).
 
 ### Real-time monitoring
 
