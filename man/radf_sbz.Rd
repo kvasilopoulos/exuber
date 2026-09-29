@@ -91,6 +91,7 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 union-of-rejections test against the classic \code{supDF} statistic.
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_kp]{radf_kp()}},
 \code{\link[=radf_sbz_union]{radf_sbz_union()}},
 \code{\link[=radf_sign]{radf_sign()}},

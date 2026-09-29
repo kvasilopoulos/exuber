@@ -115,6 +115,7 @@ analogue (sharing the same level-shift robustness), and \code{\link{radf}}
 for the standard (non-invariant) test.
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_kp]{radf_kp()}},
 \code{\link[=radf_sbz]{radf_sbz()}},
 \code{\link[=radf_sbz_union]{radf_sbz_union()}},

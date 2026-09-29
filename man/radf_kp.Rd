@@ -88,6 +88,7 @@ values, \code{\link{radf_wb_cv}} for a bootstrap-based alternative, and
 \code{\link{radf_tt}} for another bootstrap-free alternative.
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_sbz]{radf_sbz()}},
 \code{\link[=radf_sbz_union]{radf_sbz_union()}},
 \code{\link[=radf_sign]{radf_sign()}},

@@ -115,6 +115,7 @@ supBZ-only route with full pipeline support, and \code{\link{radf_tt}}
 for a bootstrap-free heteroskedasticity-robust alternative.
 
 Other volatility-robust tests:
+\code{\link[=cusum_test]{cusum_test()}},
 \code{\link[=radf_kp]{radf_kp()}},
 \code{\link[=radf_sbz]{radf_sbz()}},
 \code{\link[=radf_sign]{radf_sign()}},

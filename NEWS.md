@@ -37,7 +37,11 @@ what was checked and how.
 * `radf_sign()`/`radf_sign_cv()` — Harvey, Leybourne & Zu (2020) sign-based
   sGSADF, invariant to volatility with no bootstrap needed.
 * `ssu_test()` — Kurozumi & Nishi (2025) stochastic explosive-coefficient
-  test (minimum-viable subset).
+  tests: SSU, and GSSU (`type = "gssu"`, the double recursion over window
+  starts); `union = TRUE` adds the paper's UR/GUR union of rejections with
+  SADF/GSADF. All critical values are the paper's published Table I.
+* `cusum_test()` — Kurozumi & Nishi (2025) retrospective CUSUM (`"cs"`,
+  `"gcs"`) and two-sided CUSUM-of-squares (`"cssq"`, `"gcssq"`) tests.
 * `datestamp(..., option = "svadf")` — Sarkar & Wells (2026) SV-ADF
   asymmetric-threshold dating, folded into `datestamp()` rather than
   shipped as a separate `radf_svadf()` entry point. **Caveat:** the
