@@ -60,7 +60,8 @@ what was checked and how.
 * `dating_hls()` — Harvey, Leybourne & Sollis (2017) SSR/BIC single-bubble
   dating.
 * `dating_hlw()` — Harvey, Leybourne & Whitehouse (2020) SSR/BIC
-  multi-bubble two-step wrapper.
+  multi-bubble two-step wrapper, with the paper's run-joining rule for
+  fragmented step-1 detections (`join = 3`; `0` disables).
 * `dating_knp()` — Kejriwal, Nguyen & Perron (2025) bias-corrected dating;
   `breaks =` dates several bubbles at once with the paper's dynamic
   programme (exact global minimiser, `O(breaks * n^2)`).
