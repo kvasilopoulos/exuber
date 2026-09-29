@@ -96,6 +96,7 @@ for the bootstrap-based alternative (Harvey, Leybourne, Sollis &
 Taylor).
 
 Other volatility-robust tests:
+[`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md),
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),

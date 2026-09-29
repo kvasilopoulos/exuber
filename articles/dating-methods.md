@@ -65,10 +65,10 @@ dating_hls(y, trim = 0.05)
 
 dating_knp(y, trim = 0.05)
 #> 
-#> ── dating_knp (n = 100, trim = 0.05, omit = TRUE) ──────────────────────────────
+#> ── dating_knp (n = 100, trim = 0.05, omit = TRUE, breaks = 2 ───────────────────
 #> 
-#>    series  origination  collapse   delta
-#>   series1           60        70  0.9178
+#>    series  bubble  origination  collapse   delta
+#>   series1       1           60        70  0.9178
 ```
 
 ``` r

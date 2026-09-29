@@ -52,8 +52,13 @@ checked and how.
   — Harvey, Leybourne & Zu (2020) sign-based sGSADF, invariant to
   volatility with no bootstrap needed.
 - [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
-  — Kurozumi & Nishi (2025) stochastic explosive-coefficient test
-  (minimum-viable subset).
+  — Kurozumi & Nishi (2025) stochastic explosive-coefficient tests: SSU,
+  and GSSU (`type = "gssu"`, the double recursion over window starts);
+  `union = TRUE` adds the paper’s UR/GUR union of rejections with
+  SADF/GSADF. All critical values are the paper’s published Table I.
+- [`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md)
+  — Kurozumi & Nishi (2025) retrospective CUSUM (`"cs"`, `"gcs"`) and
+  two-sided CUSUM-of-squares (`"cssq"`, `"gcssq"`) tests.
 - `datestamp(..., option = "svadf")` — Sarkar & Wells (2026) SV-ADF
   asymmetric-threshold dating, folded into
   [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
@@ -79,7 +84,9 @@ checked and how.
   — Harvey, Leybourne & Whitehouse (2020) SSR/BIC multi-bubble two-step
   wrapper.
 - [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md)
-  — Kejriwal, Nguyen & Perron (2025) bias-corrected dating.
+  — Kejriwal, Nguyen & Perron (2025) bias-corrected dating; `breaks =`
+  dates several bubbles at once with the paper’s dynamic programme
+  (exact global minimiser, `O(breaks * n^2)`).
 
 #### Real-time monitoring
 
@@ -110,7 +117,10 @@ checked and how.
 - [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
   — Wu, Shi & Wu (2025) quantile-based global test.
 - [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
-  — Wu, Shi & Wu (2025) QPWY recursive quantile monitoring.
+  — Wu, Shi & Wu (2025) recursive quantile monitoring: QPWY (expanding
+  window) and QPSY (`type = "qpsy"`, supremum over window starts).
+  Asymptotic boundary, well sized near the median; oversized away from
+  it in small samples, QPSY badly (a call-time caveat says so).
 
 #### Naming
 

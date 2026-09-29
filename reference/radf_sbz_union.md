@@ -131,6 +131,7 @@ for the supBZ-only route with full pipeline support, and
 for a bootstrap-free heteroskedasticity-robust alternative.
 
 Other volatility-robust tests:
+[`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md),
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
 [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),

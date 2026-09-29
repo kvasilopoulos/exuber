@@ -111,7 +111,7 @@ the full naming scheme and which functions plug into
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">exuber_functions</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 33 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 34 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    name          family description                                             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> radf          adf    The recursive ADF/SADF/GSADF/BSADF statistic (Phillips,…</span>
@@ -124,7 +124,7 @@ the full naming scheme and which functions plug into
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> radf_sign     adf    Sign-based sPWY/sPSY test, exactly invariant to heteros…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> radf_sign_cv  adf    Critical values for radf_sign().                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> radf_sign_dm  adf    Recursively demeaned sign-based test, robust to determi…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 23 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 24 more rows</span></span>
 <span class="r-in"><span><span class="fu">exuber_functions</span><span class="op">(</span>family <span class="op">=</span> <span class="st">"monitor"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name             family      description                                      </span>
@@ -132,16 +132,17 @@ the full naming scheme and which functions plug into
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> monitor          adf,monitor Real-time monitoring (Family A); reuses radf()'s…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY/QPSY recursive quantile-regression monitori…</span>
 <span class="r-in"><span><span class="fu">exuber_functions</span><span class="op">(</span>family <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   name           family   description                                           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> lbi_test       test     Locally best invariant test for a bubble spanning the…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ssu_test       test     Stochastic explosive-coefficient test on squared firs…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> quantile_test  test     Quantile-regression global test, an alternative to th…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> cobubble_test  test     KPSS-type co-explosive test between two series (Evrip…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> radf_sbz_union adf,test SBZ union-of-rejections test (supDF and supBZ, paired…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> ssu_test       test     Stochastic explosive-coefficient tests SSU/GSSU on sq…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> cusum_test     test     Retrospective CUSUM and CUSUM-of-squares bubble tests…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> quantile_test  test     Quantile-regression global test, an alternative to th…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> cobubble_test  test     KPSS-type co-explosive test between two series (Evrip…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> radf_sbz_union adf,test SBZ union-of-rejections test (supDF and supBZ, paired…</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

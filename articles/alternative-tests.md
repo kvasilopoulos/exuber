@@ -63,10 +63,10 @@ y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
 
 ssu_test(y, sig_lvl = 95)
 #> 
-#> ── ssu_test (n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ────────────────────
+#> ── ssu_test (SSU, n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ───────────────
 #> 
 #>    series   sadf  detected
-#>   series1  14.53      TRUE
+#>   series1  15.02      TRUE
 lbi_test(y)
 #> 
 #> ── lbi_test (n = 150, sig_lvl = 95%) ───────────────────────────────────────────

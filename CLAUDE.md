@@ -316,10 +316,13 @@ equations, one of these turned out to be true instead:
   (Kurozumi’s `SADF(k)` ≡ `radf()$badf`; SV-ADF’s feasible statistic ≡
   `radf()$badf`;
   [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)’s
-  `Q` ≡ `radf()$adf`’s own distribution;
+  `Q` ≡ `radf()$adf`’s own distribution). Check the *whole* limit,
+  though:
   [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
-  boundary-simulation `Q_{0,r}` ≡ `radf()$badf` under a simulated null
-  path).
+  boundary first reused `radf()$badf` for the `Q` part and treated the
+  other component of the limit as one `z ~ N(0,1)` per path. For a path
+  functional that component is a process over windows too, and the
+  single `z` oversized the test (see “Validate” below).
 
 When re-triaging, render the actual PDF pages with PyMuPDF
 (`fitz.Matrix(2.5-2.8, 2.5-2.8)`) and read them as images rather than
@@ -351,15 +354,16 @@ above (a union-of-rejections, a double recursion, a second/third
 statistic family), ship the well-scoped minimum-viable subset and
 document exactly what’s deliberately left out and why — this project’s
 own precedent
-([`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
-without `GSSU`/`CUSUM`/`CUSUM-SQ`/the union;
-[`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md)/[`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md)
-without the multi-bubble DP algorithm;
-[`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)/[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
-without `QPSY`;
+([`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md)
+without the fragmentation-joining heuristic;
 [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
 without the automatic delay search) is to scope down explicitly, not to
-either rush the whole thing or skip the item entirely.
+either rush the whole thing or skip the item entirely. But re-triage the
+follow-ups too: GSSU/CUSUM/the union, KNP’s multi-bubble DP and QPSY
+were all scoped out this way and all turned out cheap on a second read
+(2026-09-29): published critical values for every statistic including
+the union constants, `O(1)`-per- window prefix sums, and a boundary
+simulation that needs no QR fits.
 
 ### Validate before shipping — and actually be willing not to ship
 
@@ -379,10 +383,18 @@ Every implemented item needs, in order:
     constant used, plus a clean error path for an unsupported
     level/parameter.
 3.  **Monte Carlo size**: empirical false-alarm rate under `H0` close to
-    (or conservative relative to) the nominal level. A per-point
-    marginal quantile used as a boundary for a first-crossing/monitoring
-    test will look plausible from the formula but can be badly
-    miscalibrated in practice —
+    (or conservative relative to) the nominal level. A rate a couple of
+    points over nominal is not automatically Monte Carlo noise:
+    [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
+    6.7% at a nominal 5% was recorded as noise and turned out to be the
+    single-`z` bug above. Simulating the limiting process directly
+    (cheap) says which it is. Also check away from the easy case
+    (non-central quantiles, heavy tails): QPSY is 4% at the median but
+    35% at `tau = 0.9` even with Gaussian innovations (21-44% at
+    `tau = 0.8-0.9` with `t3`), which it now ships with as a caveat. A
+    per-point marginal quantile used as a boundary for a
+    first-crossing/monitoring test will look plausible from the formula
+    but can be badly miscalibrated in practice —
     [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
     boundary bug gave a `50%` false-alarm rate against a nominal `5%`
     until fixed to calibrate against each simulated path’s own supremum

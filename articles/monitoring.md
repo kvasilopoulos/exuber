@@ -69,10 +69,10 @@ monitor_cusum(y, r_star = 0.5)
 #>   series1    161         161
 monitor_quantile(y, tau = 0.5, nrep = 200, seed = 1)
 #> 
-#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ─────────────
+#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ───────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
-#>   series1   0.64     1.867    161         161
+#>   series1   0.64     1.909    161         161
 monitor(y, r_star = 0.5, nboot = 200, seed = 1)
 #> 
 #> ── monitor (T* = 100 / 200, minw = 27, sig_lvl = 95%, boundary = bootstrap) ────

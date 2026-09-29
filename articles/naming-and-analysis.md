@@ -54,7 +54,7 @@ exuber_functions(family = "monitor")
 #> 1 monitor          adf,monitor Real-time monitoring (Family A); reuses radf()'s…
 #> 2 monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…
 #> 3 monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…
-#> 4 monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…
+#> 4 monitor_quantile monitor     QPWY/QPSY recursive quantile-regression monitori…
 ```
 
 Two names that look related but aren’t: the `dating_*()` family above
@@ -379,10 +379,10 @@ dating_hls(sim_data$psy1, trim = 0.05)
 
 ssu_test(sim_data$psy1, sig_lvl = 95)
 #> 
-#> ── ssu_test (n = 100, minw = 19, sig_lvl = 95%, crit = 3.3) ────────────────────
+#> ── ssu_test (SSU, n = 100, minw = 19, sig_lvl = 95%, crit = 3.3) ───────────────
 #> 
 #>    series   sadf  detected
-#>   series1  4.251      TRUE
+#>   series1  4.356      TRUE
 autoplot(dating_hls(sim_data$psy1, trim = 0.05))
 ```
 

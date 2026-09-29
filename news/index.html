@@ -73,7 +73,9 @@
 <li>
 <code><a href="../reference/radf_sign.html">radf_sign()</a></code>/<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> — Harvey, Leybourne &amp; Zu (2020) sign-based sGSADF, invariant to volatility with no bootstrap needed.</li>
 <li>
-<code><a href="../reference/ssu_test.html">ssu_test()</a></code> — Kurozumi &amp; Nishi (2025) stochastic explosive-coefficient test (minimum-viable subset).</li>
+<code><a href="../reference/ssu_test.html">ssu_test()</a></code> — Kurozumi &amp; Nishi (2025) stochastic explosive-coefficient tests: SSU, and GSSU (<code>type = "gssu"</code>, the double recursion over window starts); <code>union = TRUE</code> adds the paper’s UR/GUR union of rejections with SADF/GSADF. All critical values are the paper’s published Table I.</li>
+<li>
+<code><a href="../reference/cusum_test.html">cusum_test()</a></code> — Kurozumi &amp; Nishi (2025) retrospective CUSUM (<code>"cs"</code>, <code>"gcs"</code>) and two-sided CUSUM-of-squares (<code>"cssq"</code>, <code>"gcssq"</code>) tests.</li>
 <li>
 <code>datestamp(..., option = "svadf")</code> — Sarkar &amp; Wells (2026) SV-ADF asymmetric-threshold dating, folded into <code><a href="../reference/datestamp.html">datestamp()</a></code> rather than shipped as a separate <code>radf_svadf()</code> entry point. <strong>Caveat:</strong> the source is a non-peer-reviewed preprint, flagged at call time and in <code><a href="../reference/datestamp.html">?datestamp</a></code>, Caveats section.</li>
 </ul></div>
@@ -88,7 +90,7 @@
 <li>
 <code><a href="../reference/dating_hlw.html">dating_hlw()</a></code> — Harvey, Leybourne &amp; Whitehouse (2020) SSR/BIC multi-bubble two-step wrapper.</li>
 <li>
-<code><a href="../reference/dating_knp.html">dating_knp()</a></code> — Kejriwal, Nguyen &amp; Perron (2025) bias-corrected dating.</li>
+<code><a href="../reference/dating_knp.html">dating_knp()</a></code> — Kejriwal, Nguyen &amp; Perron (2025) bias-corrected dating; <code>breaks =</code> dates several bubbles at once with the paper’s dynamic programme (exact global minimiser, <code>O(breaks * n^2)</code>).</li>
 </ul></div>
 <div class="section level4">
 <h4 id="real-time-monitoring-2-0-0">Real-time monitoring<a class="anchor" aria-label="anchor" href="#real-time-monitoring-2-0-0"></a></h4>
@@ -113,7 +115,7 @@
 <ul><li>
 <code><a href="../reference/quantile_test.html">quantile_test()</a></code> — Wu, Shi &amp; Wu (2025) quantile-based global test.</li>
 <li>
-<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> — Wu, Shi &amp; Wu (2025) QPWY recursive quantile monitoring.</li>
+<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> — Wu, Shi &amp; Wu (2025) recursive quantile monitoring: QPWY (expanding window) and QPSY (<code>type = "qpsy"</code>, supremum over window starts). Asymptotic boundary, well sized near the median; oversized away from it in small samples, QPSY badly (a call-time caveat says so).</li>
 </ul></div>
 <div class="section level4">
 <h4 id="naming-2-0-0">Naming<a class="anchor" aria-label="anchor" href="#naming-2-0-0"></a></h4>

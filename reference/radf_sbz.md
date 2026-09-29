@@ -93,6 +93,7 @@ for the paper's own headline bootstrap union-of-rejections test against
 the classic `supDF` statistic.
 
 Other volatility-robust tests:
+[`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md),
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
 [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),

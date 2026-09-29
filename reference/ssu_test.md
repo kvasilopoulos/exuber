@@ -1,16 +1,23 @@
 # Stochastic Unit Root Bubble Test (Kurozumi & Nishi 2025)
 
-`ssu_test` implements the SSU statistic of Kurozumi & Nishi (2025): a
-sup-type test for a bubble based on testing for a stochastic (rather
-than deterministic) unit root in the *squared* first differences,
-`(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 + eta_t`, bias-corrected against
-its dependence on the correlation between this regression's and the
-plain ADF regression's innovations.
+`ssu_test` implements the SSU and GSSU statistics of Kurozumi & Nishi
+(2025): sup-type tests for a bubble based on testing for a stochastic
+(rather than deterministic) unit root in the *squared* first
+differences, `(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 + eta_t`,
+bias-corrected against its dependence on the correlation between this
+regression's and the plain ADF regression's innovations.
 
 ## Usage
 
 ``` r
-ssu_test(data, minw = NULL, sig_lvl = 95)
+ssu_test(
+  data,
+  minw = NULL,
+  sig_lvl = 95,
+  type = c("ssu", "gssu"),
+  union = FALSE,
+  cv = NULL
+)
 ```
 
 ## Arguments
@@ -29,20 +36,40 @@ ssu_test(data, minw = NULL, sig_lvl = 95)
 
 - minw:
 
-  A positive integer. The minimum window size (default = \\(0.01 +
-  1.8/\sqrt{T})T\\, where T denotes the sample size).
+  Minimum window; defaults to
+  [`psy_minw`](https://kvasilopoulos.github.io/exuber/reference/psy_minw.md)
+  for `"ssu"` and the paper's `floor(n * (-0.004 + 2.24/sqrt(n)))` for
+  `"gssu"` (the values Table I is computed at).
 
 - sig_lvl:
 
   Significance level on the package-wide 0-100 scale, one of `90`, `95`,
   `99` (the levels Kurozumi & Nishi's Table I tabulates).
 
+- type:
+
+  `"ssu"` or `"gssu"`.
+
+- union:
+
+  Logical; also run the union-of-rejections procedure with SADF
+  (`"ssu"`) or GSADF (`"gssu"`).
+
+- cv:
+
+  Critical values for the SADF/GSADF side of the union, as from
+  [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+  for `lag = 0`; defaults to the precomputed ones (fetched on first
+  use).
+
 ## Value
 
 An object of class `ssu_test_obj`: a list with the statistic path
-(`stat`, one value per candidate end point from `minw` to `n`), the
-constant `crit` from Table I, and `sadf` (the maximum, compared against
-`crit`) and `detected`.
+(`stat`, one value per candidate end point from `minw` to `n`; for GSSU
+the sup over window starts at each end point), the constant `crit` from
+Table I, `sadf` (the maximum, compared against `crit`) and `detected`.
+With `union = TRUE` also `adf_stat` (SADF or GSADF), `union_stat`,
+`union_crit` and `union_detected`.
 
 ## Details
 
@@ -53,17 +80,28 @@ stochastically over time, `1 + c1/T + a*u_t/sqrt(T)`, rather than the
 deterministic `1 + c/T^alpha` every recursive-ADF-family statistic in
 this package assumes.
 
-Only the single-recursion `SSU` statistic (sup over the end point, start
-fixed at the beginning of the sample) is implemented – not `GSSU` (the
-double-recursion generalization), the paper's separate CUSUM/CUSUM-SQ
-statistics, or the union-of-rejections procedure combining SSU/GSSU with
-SADF/GSADF.
+`type = "ssu"` is the single recursion (start fixed at the beginning of
+the sample, `SADF`'s shape); `type = "gssu"` also takes the supremum
+over window starts (`GSADF`'s shape), with the paper's own minimum
+window `r0 = -0.004 + 2.24/sqrt(n)`. The paper finds GSSU no more
+powerful than SSU.
+
+`union = TRUE` adds the paper's recommended union-of-rejections
+procedure: `UR = max(SADF / cv_sadf, SSU / cv_ssu)` (or `GUR` with
+GSADF/GSSU), compared with the published scaling constant `ur` (`gur`).
+Neither SADF nor SSU dominates: SSU wins when the explosive coefficient
+is genuinely stochastic, SADF when it is deterministic, and the union
+stays close to the better of the two. The SADF/GSADF side is
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) with
+its default minimum window and `lag = 0`, against `cv` (default: the
+precomputed critical values).
 
 ## Note
 
-The critical value is a published closed-table constant (Kurozumi &
-Nishi (2025)'s Table I, via the internal `ssu_q()` helper) – no
-simulation needed.
+The SSU/GSSU critical values and the union constants are published
+asymptotic values (Kurozumi & Nishi (2025)'s Table I) – no simulation
+needed. The union constant is only valid at the level the statistic was
+built for.
 
 Returns its own class (not `radf_obj`), so it does not plug into
 [`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
@@ -90,6 +128,7 @@ the deterministic-coefficient recursive ADF-family alternative this
 complements.
 
 Other volatility-robust tests:
+[`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md),
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
@@ -108,10 +147,19 @@ y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
 res <- ssu_test(y, sig_lvl = 95)
 print(res)
 #> 
-#> ── ssu_test (n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ────────────────────
+#> ── ssu_test (SSU, n = 150, minw = 23, sig_lvl = 95%, crit = 3.3) ───────────────
 #> 
 #>    series   sadf  detected
-#>   series1  14.53      TRUE
+#>   series1  15.02      TRUE
+#> 
+
+# The double-recursion version
+ssu_test(y, type = "gssu")
+#> 
+#> ── ssu_test (GSSU, n = 150, minw = 26, sig_lvl = 95%, crit = 5.37) ─────────────
+#> 
+#>    series   sadf  detected
+#>   series1  15.02      TRUE
 #> 
 
 # Plot the recursive SSU statistic path against its critical value

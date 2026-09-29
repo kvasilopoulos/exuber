@@ -205,7 +205,7 @@ as actual, queryable data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> monitor          adf,monitor Real-time monitoring (Family A); reuses radf()'s…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY recursive quantile-regression monitoring, e…</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY/QPSY recursive quantile-regression monitori…</span></span></code></pre></div>
 <p>Two names that look related but aren’t: the <code>dating_*()</code>
 family above are standalone SSR/BIC procedures called directly on raw
 data – they take no critical value at all. <code><a href="../reference/datestamp.html">datestamp()</a></code> (see
@@ -480,10 +480,10 @@ everything else in this section; see
 <span></span>
 <span><span class="fu"><a href="../reference/ssu_test.html">ssu_test</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, sig_lvl <span class="op">=</span> <span class="fl">95</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── ssu_test (n = 100, minw = 19, sig_lvl = 95%, crit = 3.3) ────────────────────</span></span>
+<span><span class="co">#&gt; ── ssu_test (SSU, n = 100, minw = 19, sig_lvl = 95%, crit = 3.3) ───────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   sadf  detected</span></span>
-<span><span class="co">#&gt;   series1  4.251      TRUE</span></span>
+<span><span class="co">#&gt;   series1  4.356      TRUE</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="fu"><a href="../reference/dating_hls.html">dating_hls</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/standalone-1.png" class="r-plt" alt="" width="700"></p>
 </div>

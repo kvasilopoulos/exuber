@@ -1,14 +1,15 @@
-# QPWY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
+# QPWY/QPSY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
 
-`monitor_quantile` implements the QPWY real-time monitoring strategy of
-Wu, Shi & Wu (2025): a quantile-regression (QR) analogue of PWY's own
-recursive ADF t-statistic, testing at a chosen conditional quantile
-`tau` over an expanding window `[1, r]` (start fixed at the beginning of
-the sample, exactly
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s own
-`badf` convention) rather than
+`monitor_quantile` implements the QPWY and QPSY real-time monitoring
+strategies of Wu, Shi & Wu (2025): quantile-regression (QR) analogues of
+PWY's and PSY's recursive ADF t-statistics, testing at a chosen
+conditional quantile `tau` rather than
 [`quantile_test`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)'s
-single full-sample test.
+single full-sample test. `type = "qpwy"` uses the expanding window
+`[1, r]`
+([`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
+own `badf` shape); `type = "qpsy"` takes the supremum over every window
+start as well (`bsadf`'s shape).
 
 ## Usage
 
@@ -19,7 +20,8 @@ monitor_quantile(
   minw = NULL,
   nrep = 500L,
   sig_lvl = 95,
-  seed = NULL
+  seed = NULL,
+  type = c("qpwy", "qpsy")
 )
 ```
 
@@ -62,6 +64,11 @@ monitor_quantile(
 
   Optional seed for the Monte Carlo draws.
 
+- type:
+
+  `"qpwy"` (expanding window) or `"qpsy"` (supremum over window starts
+  too).
+
 ## Value
 
 An object of class `monitor_quantile_obj`: a list with the statistic
@@ -70,36 +77,26 @@ path `stat`, the (flat) `boundary`, the estimated `delta`, and
 
 ## Details
 
-Only `QPWY` (single recursion) is implemented, not the paper's own
-`QPSY` (double recursion, additionally optimizing over the window
-start): `QPWY_r(tau)` needs `O(T)` actual quantile -regression fits (no
-closed-form recursive update the way OLS has), tractable at the same
-cost order as
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-own `badf`; `QPSY` needs `O(T^2)` such fits, a substantially larger
-undertaking left unimplemented.
+The point statistic needs genuine QR fits (no closed-form recursive
+update the way OLS has): `O(T)` of them for QPWY, `O(T^2)` for QPSY, so
+QPSY takes seconds per series at `n = 200` and grows quadratically.
 
-The critical value is simulated per call: `QPWY_r(tau)`'s limiting null
-distribution at each `r` is `sqrt(1 - delta^2) * z + delta * Q_{0,r}`,
-with `z ~ N(0, 1)`, `delta` a data-estimated correlation coefficient (as
-in
+The critical value is simulated per call from the limiting null
+distribution `delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}`, with
+`delta` a data-estimated correlation coefficient (as in
 [`quantile_test`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)),
-and `Q_{0,r}` exactly
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-own `badf` sequence under a simulated null path – reusing
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-directly for the simulation rather than new theory. A single **flat**
-boundary is used (not one value per `r`): controlling the first-crossing
-false-alarm rate requires calibrating against each simulated path's own
-supremum, exactly how
+`Q` the Dickey-Fuller t functional and `Z` its counterpart driven by an
+independent Brownian motion, both simulated for every window (no QR fits
+needed). A single **flat** boundary is used (not one value per `r`): the
+quantile of each simulated path's own supremum, exactly how
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)'s
-own `sadf_cv` is constructed, not a per-`r` marginal quantile (which
-would badly inflate the false-alarm rate).
+own `sadf_cv` is constructed, which controls the first-crossing
+false-alarm rate.
 
 ## Note
 
 The critical value (boundary) is simulated internally on every call (via
-an unexported helper, `qpwy_boundary_sim`) – there is currently no
+an unexported helper, `quantile_boundary_sim`) – there is currently no
 reusable/exported cv counterpart for this function (a known,
 separately-tracked gap, not addressed here).
 
@@ -110,6 +107,21 @@ it has its own [`print()`](https://rdrr.io/r/base/print.html) and
 methods instead. Prints its own statistic/boundary/delta summary – see
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the full picture of which functions do and don't fit that pipeline.
+
+## Caveats
+
+The boundary is the asymptotic one. Near the median it is well sized in
+finite samples (false-alarm rate 3.5-4.0\\ \\t_3\\ innovations,
+`tau = 0.5`). Away from the median the small early windows make both
+statistics oversized, QPSY badly so, even with Gaussian innovations:
+QPSY's false-alarm rate is 35\\ (Gaussian) and, with \\t_3\\
+innovations, 21\\ 44\\ innovations, is 7.5-8.5\\ `tau = 0.9`
+(`n = 150`). Wu, Shi & Wu advise against extreme quantiles in small
+samples and use bootstrap critical values for monitoring; that bootstrap
+is not implemented here. For `type = "qpsy"` with `tau` away from 0.5 a
+short pointer is emitted as a message (see
+[`suppressMessages`](https://rdrr.io/r/base/message.html)) and stored as
+`attr(x, "caveat")`. Numbers: docs/alternative-paradigms.md.
 
 ## Status
 
@@ -143,20 +155,30 @@ y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
 res <- monitor_quantile(y, tau = 0.5, nrep = 100, seed = 1)
 print(res)
 #> 
-#> ── monitor_quantile (n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ─────────────
+#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ───────
 #> 
 #>    series  delta  boundary  alarm  alarm_date
-#>   series1  0.623      1.53    164         164
+#>   series1  0.623     1.934    165         165
 #> 
 autoplot(res)
 #> Warning: Removed 1 row containing missing values or values outside the scale range
 #> (`geom_segment()`).
 
 
-# Upper-quantile monitoring is typically more powerful for right-tailed bubbles
-autoplot(monitor_quantile(y, tau = 0.9, nrep = 100, seed = 1))
+# Upper-quantile monitoring is typically more powerful for right-tailed
+# bubbles, but see the Caveats section on extreme quantiles
+autoplot(monitor_quantile(y, tau = 0.8, nrep = 100, seed = 1))
 #> Warning: Removed 1 row containing missing values or values outside the scale range
 #> (`geom_segment()`).
 
+
+# QPSY: supremum over window starts too (O(n^2) QR fits, slower)
+monitor_quantile(y[101:200], tau = 0.5, nrep = 100, seed = 1, type = "qpsy")
+#> 
+#> ── monitor_quantile (QPSY, n = 100, minw = 19, tau = 0.5, sig_lvl = 95%) ───────
+#> 
+#>    series  delta  boundary  alarm  alarm_date
+#>   series1  0.754     2.172     53          53
+#> 
 # }
 ```

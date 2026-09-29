@@ -1,19 +1,18 @@
-# Bias-Corrected Single-Bubble Dating (Kejriwal, Nguyen & Perron 2025)
+# Bias-Corrected Bubble Dating (Kejriwal, Nguyen & Perron 2025)
 
-`dating_knp` dates a single bubble episode (origination, collapse) by
-minimising a residual-omission-corrected sum of squared residuals over a
-three-regime model (unit root, explosive, unit root resuming from a
-shifted level after an instantaneous collapse). Plain OLS over this
-model is provably inconsistent – the origination-date estimate converges
-to the true *collapse* date, not the origination date – which
-`omit = TRUE` (the default) fixes by dropping the single squared
-residual at the candidate collapse date from the objective before
-minimising.
+`dating_knp` dates bubble episodes (origination, collapse) by minimising
+a residual-omission-corrected sum of squared residuals over a model of
+alternating regimes: unit root, explosive, unit root resuming from a
+shifted level after an instantaneous collapse, and so on. Plain OLS over
+this model is provably inconsistent – the origination-date estimate
+converges to the true *collapse* date, not the origination date – which
+`omit = TRUE` (the default) fixes by dropping the squared residual at
+each candidate collapse date from the objective before minimising.
 
 ## Usage
 
 ``` r
-dating_knp(data, trim = 0.05, omit = TRUE)
+dating_knp(data, trim = 0.05, omit = TRUE, breaks = 2L)
 ```
 
 ## Arguments
@@ -42,10 +41,28 @@ dating_knp(data, trim = 0.05, omit = TRUE)
   estimator (their Theorem 1) – kept mainly to demonstrate the
   correction's effect, not for practical dating.
 
+- breaks:
+
+  Number of break dates (the paper's `m`): two per bubble; an odd number
+  lets the last bubble run to the end of the sample (its collapse is
+  then `NA`).
+
 ## Value
 
 An object of class `dating_knp_obj`: a list with `origination`,
-`collapse` (dates) and `delta` (the fitted explosive AR coefficient).
+`collapse` (dates) and `delta` (the fitted explosive AR coefficient) –
+named vectors (one value per series) for a single bubble, matrices (one
+row per bubble, one column per series) for more.
+
+## Details
+
+`breaks = 2` (the default) is the single-bubble model. More breaks use
+Kejriwal, Nguyen & Perron's dynamic-programming algorithm, which returns
+the exact global minimiser of the objective in `O(breaks * n^2)`. The
+number of breaks is taken as given, as in the paper: e.g. two per
+episode
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+finds.
 
 ## Note
 
@@ -91,10 +108,10 @@ Other dating:
 res <- dating_knp(sim_data$psy1, trim = 0.05)
 print(res)
 #> 
-#> ── dating_knp (n = 100, trim = 0.05, omit = TRUE) ──────────────────────────────
+#> ── dating_knp (n = 100, trim = 0.05, omit = TRUE, breaks = 2 ───────────────────
 #> 
-#>    series  origination  collapse  delta
-#>   series1           41        55  0.964
+#>    series  bubble  origination  collapse  delta
+#>   series1       1           41        55  0.964
 #> 
 autoplot(res)
 
@@ -105,5 +122,15 @@ res_plain <- dating_knp(sim_data$psy1, trim = 0.05, omit = FALSE)
 autoplot(res) +
   ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)
 
+
+# Two bubbles
+dating_knp(sim_data$psy2, breaks = 4)
+#> 
+#> ── dating_knp (n = 100, trim = 0.05, omit = TRUE, breaks = 4 ───────────────────
+#> 
+#>    series  bubble  origination  collapse  delta
+#>   series1       1           18        40  1.074
+#>   series1       2           59        70  1.066
+#> 
 # }
 ```
