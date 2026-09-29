@@ -346,6 +346,16 @@ checked and how.
 
 #### Bug fixes
 
+- [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html),
+  [`augment()`](https://generics.r-lib.org/reference/augment.html) and
+  [`augment_join()`](https://kvasilopoulos.github.io/exuber/reference/augment_join.md)
+  no longer fail for a sieve-bootstrap `cv` with `lag > 0`: the
+  truncation offset kept a `+ 2` that compensated for the old
+  [`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md)
+  off-by-one (also fixed in this release), so it now over-padded by two
+  rows.
+
 - **[`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md)/[`radf_sb_distr()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md)
   panel critical values were wrong in every release since 0.1.0.** The
   bootstrap loop overwrote the per-series BSADF path instead of summing

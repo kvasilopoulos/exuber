@@ -148,9 +148,7 @@ summary(rsim_data, cv = sb)
 #> 
 
 autoplot(rsim_data, cv = sb)
-#> Error in add_column(x, idx_tbl): New columns must be compatible with `.data`.
-#> ✖ New column has 100 rows.
-#> ℹ `.data` has 102 rows.
+
 
 # Simulate distribution
 sdist <- radf_sb_distr(sim_data, lag = 1, nboot = 1000)
