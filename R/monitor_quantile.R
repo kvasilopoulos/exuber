@@ -1,76 +1,79 @@
 # Wu, Shi & Wu (2025, JTSA 46(5), "Quantile analysis for financial bubble
-# detection and surveillance", "WSW") -- the QPWY recursive monitoring
-# strategy of their Section 3.2 (their eq. 25, 28). See
-# docs/alternative-paradigms.md, "Quantile-based detection",
-# for the full evaluation this implements.
+# detection and surveillance", "WSW") -- the QPWY recursive
+# monitoring strategy of their Section 3.2 (eq. 25, 28). See
+# docs/alternative-paradigms.md, "Quantile-based detection", for the full
+# evaluation this implements.
 #
-# QPWY is the single-recursion sibling of the paper's own QPSY (eq. 26):
 # QPWY_r(tau) := t_T^{0,r}(tau), the quantile-regression t-ratio on the
-# EXPANDING window [1, r] (start fixed at the beginning, exactly
-# radf()'s own badf convention) -- QPSY additionally sup's over every
-# window START r1 too (a genuine O(T^2) double recursion of QR fits, no
-# closed form the way radf()'s own rls_gsadf() has for OLS), left
-# unimplemented, matching this file's own earlier "not implemented"
-# scoping for the double-recursion case specifically (not QPWY, which
-# was originally bundled with QPSY under the same verdict without
-# separating their very different cost profiles).
+# EXPANDING window [1, r] (radf()'s own badf shape). The point statistic
+# needs O(T) genuine QR fits (no closed-form recursive update the way OLS
+# has). The paper's QPSY (sup over window starts too, O(T^2) fits) is not
+# implemented.
 #
-# Re-triaged 2026-08-11, re-reading rendered pages 10-11 (their
-# Corollary 1-2): QPWY's point statistic genuinely needs O(T) actual QR
-# fits (quantreg::rq() has no closed-form recursive update the way OLS
-# does -- this part of the original "no closed form" assessment holds),
-# but the CRITICAL VALUE machinery turns out to reuse what
-# quantile_test.R already validated, not new simulation theory: their
-# Corollary 1 decomposes the limiting distribution of t_T^{r1,r2}(tau)
-# as U'^{r1,r2}(tau) = sqrt(1-delta(tau)^2)*z + delta(tau)*Q_{r1,r2},
-# EXACTLY quantile_test()'s own global-test decomposition, and their
-# Corollary 2 confirms QPWY_r(tau) => U'^{0,r}(tau) -- i.e. Q_{0,r} is
-# precisely radf()'s own badf[r] under a simulated null path (an
-# expanding-window ADF t-statistic distribution), not a new functional.
-# One radf() call per simulated null replicate therefore gives the WHOLE
-# Q_{0,r} boundary path at once (qpwy_boundary_sim() below), reusing
-# quantile_test.R's own quantile_check_density() for delta(tau) and the
-# same "z ~ N(0,1) combined with Q" construction -- only the point
-# statistic (qpwy_stat_path()) is genuinely new code, an O(T) loop
-# mirroring quantile_test()'s own per-window t-ratio construction.
+# Critical values come from Theorem 1 / Corollary 1-2: under the null,
+# t_T^{r1,r2}(tau) => int W~ dB_psi / sqrt(int W~^2), with B_psi a
+# Brownian motion correlated delta(tau) with W. Writing B_psi = delta*W +
+# sqrt(1-delta^2)*V (V independent of W) gives
+#   U_{r1,r2} = delta*Q_{r1,r2} + sqrt(1-delta^2)*Z_{r1,r2},
+#   Q = int W~ dW / sqrt(int W~^2),  Z = int W~ dV / sqrt(int W~^2).
+# Z_{r1,r2} is N(0,1) for any ONE window (the "z" of Corollary 1, all
+# quantile_test() needs) but varies across windows. A monitoring boundary
+# is a functional of the whole path, so Z must be simulated as a process
+# -- the original QPWY boundary drew one z per replicate and reused it for
+# every r, which understates sup_r U and oversizes the test (7% at
+# delta = 0.8, 12% at 0.5, 22% at 0.2 for a nominal 5%, n = 200; found
+# 2026-09-29, see docs/alternative-paradigms.md). quantile_boundary_sim()
+# simulates discretized Q and Z for every window via prefix sums, O(1) per
+# window, no QR fits and no radf() call.
 
-# QPWY_r(tau) for every window-end r in `r_idx` -- window fixed at [1, r]
-# (start = 1, matching radf()'s own badf convention), mirroring
-# quantile_test()'s own per-window QR t-ratio construction (eq. 18)
-# exactly, just repeated over a growing window instead of the full
-# sample.
-qpwy_stat_path <- function(y, tau, r_idx) {
-  vapply(r_idx, function(r) {
-    yy <- y[1:r]
-    m <- length(yy)
-    ylag <- yy[1:(m - 1L)]
-    yresp <- yy[2:m]
-    dy <- yresp - ylag
-
-    qr_fit <- quantreg::rq(yresp ~ ylag, tau = tau)
-    alpha_hat <- unname(stats::coef(qr_fit)["ylag"])
-
-    f_hat <- quantile_check_density(dy, tau)$f_hat
-    yPzy <- sum((ylag - mean(ylag))^2)
-    (f_hat / sqrt(tau * (1 - tau))) * sqrt(yPzy) * (alpha_hat - 1)
-  }, numeric(1))
+# QR t-ratio on one window `yy` (WSW's QUr statistic, eq. 18 / Section
+# 3.2): density estimated from the window's own first differences.
+quantile_window_stat <- function(yy, tau) {
+  m <- length(yy)
+  ylag <- yy[-m]
+  yresp <- yy[-1L]
+  alpha_hat <- quantreg::rq.fit(cbind(1, ylag), yresp, tau = tau, method = "br")$coefficients[2L]
+  f_hat <- quantile_check_density(yresp - ylag, tau)$f_hat
+  yPzy <- sum((ylag - mean(ylag))^2)
+  unname((f_hat / sqrt(tau * (1 - tau))) * sqrt(yPzy) * (alpha_hat - 1))
 }
 
-# Simulated null Q_{0,r} paths: one radf() call per replicate gives the
-# WHOLE expanding-window badf sequence at once (Corollary 2's own
-# identification of Q_{0,r} with the ADF-family recursive t-statistic
-# distribution) -- an nrep x (n - minw) matrix, matching badf's own
-# length exactly (badf[k] <-> window end t = minw + k, i.e. the first
-# valid recursive point is t = minw + 1, not t = minw itself).
-qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
+# QPWY_r(tau) for every window-end r in `r_idx` -- window fixed at [1, r].
+qpwy_stat_path <- function(y, tau, r_idx) {
+  vapply(r_idx, function(r) quantile_window_stat(y[1:r], tau), numeric(1))
+}
+
+# Simulated null path suprema, one column per entry of `delta`: for each
+# replicate, sup over the monitoring path of U = delta*Q + sqrt(1-delta^2)*Z
+# (see header). Windows are over the n - 1 regression pairs
+# (y_{t-1}, Delta y_t); window (lo, hi] of pairs <-> y[(lo + 1):(hi + 1)],
+# so QPWY's window [1, r] is (0, r - 1]. `lo` is kept general for a
+# double-recursion boundary.
+quantile_boundary_sim <- function(n, minw, nrep, delta, seed = NULL) {
   set_rng(seed)
-  Q <- matrix(NA_real_, nrep, n - minw)
+  np <- n - 1L
+  hi <- minw:np
+  lo <- 0L
+  valid <- outer(lo, hi, function(l, h) h - l >= minw)
+  mk <- function(v) c(0, cumsum(v))
+  win <- function(cs) outer(lo, hi, function(l, h) cs[h + 1L] - cs[l + 1L])
+  L <- outer(lo, hi, function(l, h) h - l)
+  L[!valid] <- NA
+  out <- matrix(NA_real_, nrep, length(delta))
   for (i in seq_len(nrep)) {
-    ysim <- cumsum(stats::rnorm(n))
-    r <- radf(ysim, minw = minw, lag = 0L)
-    Q[i, ] <- r$badf[, 1]
+    e <- stats::rnorm(np)
+    v <- stats::rnorm(np)
+    x <- c(0, cumsum(e))[1:np] # y_{t-1}
+    Sx <- win(mk(x))
+    sxx <- win(mk(x^2)) - Sx^2 / L
+    Q <- (win(mk(x * e)) - Sx * win(mk(e)) / L) / sqrt(sxx)
+    Z <- (win(mk(x * v)) - Sx * win(mk(v)) / L) / sqrt(sxx)
+    for (j in seq_along(delta)) {
+      U <- delta[j] * Q + sqrt(1 - delta[j]^2) * Z
+      out[i, j] <- max(U[valid])
+    }
   }
-  Q
+  out
 }
 
 #' QPWY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
@@ -88,25 +91,21 @@ qpwy_boundary_sim <- function(n, minw, nrep, seed = NULL) {
 #' window start): \code{QPWY_r(tau)} needs \code{O(T)} actual quantile
 #' -regression fits (no closed-form recursive update the way OLS has),
 #' tractable at the same cost order as \code{radf()}'s own \code{badf};
-#' \code{QPSY} needs \code{O(T^2)} such fits, a substantially larger
-#' undertaking left unimplemented.
+#' \code{QPSY} needs \code{O(T^2)} such fits.
 #'
-#' The critical value is simulated per call: \code{QPWY_r(tau)}'s
-#' limiting null distribution at each \code{r} is \code{sqrt(1 - delta^2)
-#' * z + delta * Q_{0,r}}, with \code{z ~ N(0, 1)}, \code{delta} a
-#' data-estimated correlation coefficient (as in
-#' \code{\link{quantile_test}}), and \code{Q_{0,r}} exactly \code{radf()}'s
-#' own \code{badf} sequence under a simulated null path -- reusing
-#' \code{radf()} directly for the simulation rather than new theory. A
-#' single \strong{flat} boundary is used (not one value per \code{r}):
-#' controlling the first-crossing false-alarm rate requires calibrating
-#' against each simulated path's own supremum, exactly how
-#' \code{\link{radf_mc_cv}}'s own \code{sadf_cv} is constructed, not a
-#' per-\code{r} marginal quantile (which would badly inflate the
-#' false-alarm rate).
+#' The critical value is simulated per call from the limiting null
+#' distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}},
+#' with \code{delta} a data-estimated correlation coefficient (as in
+#' \code{\link{quantile_test}}), \code{Q} the Dickey-Fuller t functional
+#' and \code{Z} its counterpart driven by an independent Brownian motion,
+#' both simulated for every window (no QR fits needed). A single
+#' \strong{flat} boundary is used (not one value per \code{r}): the
+#' quantile of each simulated path's own supremum, exactly how
+#' \code{\link{radf_mc_cv}}'s own \code{sadf_cv} is constructed, which
+#' controls the first-crossing false-alarm rate.
 #'
 #' @note The critical value (boundary) is simulated internally on every
-#' call (via an unexported helper, \code{qpwy_boundary_sim}) -- there is
+#' call (via an unexported helper, \code{quantile_boundary_sim}) -- there is
 #' currently no reusable/exported cv counterpart for this function (a
 #' known, separately-tracked gap, not addressed here).
 #'
@@ -170,35 +169,21 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl 
   nc <- ncol(x)
   r_idx <- (minw + 1L):n
 
-  Q <- qpwy_boundary_sim(n, minw, nrep, seed = seed)
-  z <- stats::rnorm(nrep)
-
   stat_path <- matrix(NA_real_, length(r_idx), nc, dimnames = list(NULL, snames))
-  delta <- boundary <- setNames(rep(NA_real_, nc), snames)
+  delta <- setNames(rep(NA_real_, nc), snames)
   alarm <- setNames(rep(NA_integer_, nc), snames)
 
   for (j in seq_len(nc)) {
     y <- as.numeric(x[, j])
     stat_path[, j] <- qpwy_stat_path(y, tau, r_idx)
-
     dy_full <- diff(y)
     psi <- tau - as.numeric(dy_full < quantile_narm(dy_full, probs = tau, names = FALSE))
-    delta_j <- max(min(stats::cor(dy_full, psi), 1), -1)
-    delta[j] <- delta_j
+    delta[j] <- max(min(stats::cor(dy_full, psi), 1), -1)
+  }
 
-    # A first-crossing/monitoring test needs a boundary controlling the
-    # SUPREMUM probability P(sup_r [stat_path(r)] > boundary), not the
-    # per-r marginal quantile -- using a per-r marginal quantile as a
-    # r-varying boundary badly inflates the false-alarm rate (an initial
-    # version gave ~50% against a nominal 5%, caught by Monte Carlo
-    # validation, not assumed correct from the formula alone). Mirrors
-    # radf_mc_cv()'s own sadf_cv construction exactly: take each
-    # simulated path's own supremum first, then the quantile of those
-    # maxima across replicates, giving one flat critical value.
-    U <- sqrt(1 - delta_j^2) * z + delta_j * Q
-    sup_U <- apply(U, 1, max)
-    boundary[j] <- quantile_narm(sup_U, probs = sig_lvl / 100, names = FALSE)
-
+  sup_U <- quantile_boundary_sim(n, minw, nrep, delta, seed = seed)
+  boundary <- setNames(apply(sup_U, 2, quantile_narm, probs = sig_lvl / 100, names = FALSE), snames)
+  for (j in seq_len(nc)) {
     breach <- which(stat_path[, j] > boundary[j])
     if (length(breach) > 0L) alarm[j] <- r_idx[breach[1L]]
   }
