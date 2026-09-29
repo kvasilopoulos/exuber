@@ -266,8 +266,11 @@ equations, one of these turned out to be true instead:
   computed** — check this explicitly before writing any estimation code
   (Kurozumi's `SADF(k)` ≡ `radf()$badf`; SV-ADF's feasible statistic ≡
   `radf()$badf`; `quantile_test()`'s `Q` ≡ `radf()$adf`'s own
-  distribution; `monitor_quantile()`'s boundary-simulation `Q_{0,r}` ≡
-  `radf()$badf` under a simulated null path).
+  distribution). Check the *whole* limit, though: `monitor_quantile()`'s
+  boundary first reused `radf()$badf` for the `Q` part and treated the
+  other component of the limit as one `z ~ N(0,1)` per path. For a path
+  functional that component is a process over windows too, and the single
+  `z` oversized the test (see "Validate" below).
 
 When re-triaging, render the actual PDF pages with PyMuPDF
 (`fitz.Matrix(2.5-2.8, 2.5-2.8)`) and read them as images rather than
@@ -298,11 +301,14 @@ When a paper's own recommended/headline procedure is bigger than the
 above (a union-of-rejections, a double recursion, a second/third
 statistic family), ship the well-scoped minimum-viable subset and
 document exactly what's deliberately left out and why — this project's
-own precedent (`ssu_test()` without `GSSU`/`CUSUM`/`CUSUM-SQ`/the union;
-`dating_hls()`/`dating_knp()` without the multi-bubble DP algorithm;
-`quantile_test()`/`monitor_quantile()` without `QPSY`; `contagion_reg()`
-without the automatic delay search) is to scope down explicitly, not to
-either rush the whole thing or skip the item entirely.
+own precedent (`dating_hlw()` without the fragmentation-joining
+heuristic; `contagion_reg()` without the automatic delay search) is to
+scope down explicitly, not to either rush the whole thing or skip the
+item entirely. But re-triage the follow-ups too: GSSU/CUSUM/the union,
+KNP's multi-bubble DP and QPSY were all scoped out this way and all
+turned out cheap on a second read (2026-09-29): published critical
+values for every statistic including the union constants, `O(1)`-per-
+window prefix sums, and a boundary simulation that needs no QR fits.
 
 ### Validate before shipping — and actually be willing not to ship
 
@@ -320,7 +326,14 @@ Every implemented item needs, in order:
    constant used, plus a clean error path for an unsupported
    level/parameter.
 3. **Monte Carlo size**: empirical false-alarm rate under `H0` close to
-   (or conservative relative to) the nominal level. A per-point marginal
+   (or conservative relative to) the nominal level. A rate a couple of
+   points over nominal is not automatically Monte Carlo noise:
+   `monitor_quantile()`'s 6.7% at a nominal 5% was recorded as noise and
+   turned out to be the single-`z` bug above. Simulating the limiting
+   process directly (cheap) says which it is. Also check away from the
+   easy case (non-central quantiles, heavy tails): QPSY is 4% at the
+   median but 21-44% at `tau = 0.8-0.9` with `t3` innovations, which it
+   now ships with as a caveat. A per-point marginal
    quantile used as a boundary for a first-crossing/monitoring test will
    look plausible from the formula but can be badly miscalibrated in
    practice — `monitor_quantile()`'s boundary bug gave a `50%` false-alarm rate
