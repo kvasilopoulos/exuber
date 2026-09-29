@@ -90,7 +90,8 @@ ssu_stat_path <- function(ps, hi_idx) {
   Sx2x2_c <- Sx2x2 - Sx2^2 / L
   t_omega <- omega_hat / sqrt(sigma2_eta / Sx2x2_c)
 
-  # Cross-moment sigma_hat_{eps*eta} := (1/(L-1)) * sum(eps_hat*eta_hat),
+  # Cross-moment sigma_hat_{eps*eta} := (1/(L-2)) * sum(eps_hat*eta_hat)
+  # (the same 1/(floor(T r2) - floor(T r1) - 1) as both variances, page 6),
   # eps_hat_t = d1_t - mu1_hat - delta_hat*x1_t,
   # eta_hat_t = d2_t - mu2_hat - omega_hat*x2_t -- expanded into a
   # bilinear combination of window sums (verified against a brute-force
@@ -102,7 +103,7 @@ ssu_stat_path <- function(ps, hi_idx) {
   sum_eh <- Sd1d2 - mu2_hat * Sd1 - omega_hat * Sd1x2 - mu1_hat * Sd2 +
     L * mu1_hat * mu2_hat + mu1_hat * omega_hat * Sx2 -
     delta_hat * Sx1d2 + delta_hat * mu2_hat * Sx1 + delta_hat * omega_hat * Sx1x2
-  sigma2_epseta <- sum_eh / (L - 1)
+  sigma2_epseta <- sum_eh / (L - 2)
 
   sigma_eps <- sqrt(sigma2_eps)
   sigma_eta <- sqrt(sigma2_eta)
