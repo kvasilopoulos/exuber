@@ -85,3 +85,15 @@ test_that("the panel sieve-bootstrap test is correctly sized under H0", {
   expect_lt(mean(rej), 0.12) # nominal 5%; the buggy version gave 0% for nc = 10 and 8% for nc = 2
   expect_gt(mean(rej), 0.005)
 })
+
+test_that("sieve-bootstrap cv with lag > 0 lines up with radf() (no stale +2 offset)", {
+  r <- radf(sim_data, lag = 1)
+  sb <- radf_sb_cv(sim_data, lag = 1, nboot = 20, seed = 9)
+  n <- nrow(sim_data)
+  expect_equal(NROW(sb$bsadf_panel_cv), n - attr(sb, "minw") - 1)
+  expect_length(index(sb, trunc = TRUE), NROW(sb$bsadf_panel_cv))
+  expect_equal(nrow(augment(sb)), 3 * NROW(sb$bsadf_panel_cv))
+  expect_error(augment_join(r, sb), NA)
+  expect_error(datestamp(r, sb), NA)
+  expect_s3_class(autoplot(r, sb), "ggplot")
+})

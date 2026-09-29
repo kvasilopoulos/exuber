@@ -234,6 +234,11 @@ what was checked and how.
 
 ### Bug fixes
 
+* `datestamp()`, `autoplot()`, `augment()` and `augment_join()` no longer
+  fail for a sieve-bootstrap `cv` with `lag > 0`: the truncation offset kept
+  a `+ 2` that compensated for the old `radf_sb_cv()` off-by-one (also fixed
+  in this release), so it now over-padded by two rows.
+
 * **`radf_sb_cv()`/`radf_sb_distr()` panel critical values were wrong in
   every release since 0.1.0.** The bootstrap loop overwrote the
   per-series BSADF path instead of summing it, so the panel null
