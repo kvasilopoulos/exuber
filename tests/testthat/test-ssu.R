@@ -22,7 +22,7 @@ test_that("ssu_stat_path (t^{omega,c}) matches a brute-force computation
     L <- length(win)
     sigma2_eps <- sum(eps_hat^2) / (L - 2)
     sigma2_eta <- sum(eta_hat^2) / (L - 2)
-    sigma2_epseta <- sum(eps_hat * eta_hat) / (L - 1)
+    sigma2_epseta <- sum(eps_hat * eta_hat) / (L - 2)
     sigma_eps <- sqrt(sigma2_eps)
     sigma_eta <- sqrt(sigma2_eta)
     psi_hat <- sigma2_epseta / (sigma_eps * sigma_eta)
