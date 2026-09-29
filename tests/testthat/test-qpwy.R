@@ -23,8 +23,8 @@ test_that("quantile_boundary_sim matches a brute-force per-window
   n <- 30
   minw <- 8
   delta <- c(0.3, 0.9)
-  for (type in "qpwy") {
-    sim <- exuber:::quantile_boundary_sim(n, minw, 2, delta, seed = 11)
+  for (type in c("qpwy", "qpsy")) {
+    sim <- exuber:::quantile_boundary_sim(n, minw, 2, delta, type = type, seed = 11)
     set.seed(11)
     for (i in 1:2) {
       e <- rnorm(n - 1)
@@ -52,6 +52,49 @@ test_that("the boundary treats Z as a process over windows, not one z
   # exactly N(0,1), so its 95% quantile would be ~1.645
   sim <- exuber:::quantile_boundary_sim(150, 20, 400, 0, seed = 3)
   expect_gt(quantile(sim[, 1], 0.95), 2)
+})
+
+test_that("the QPSY grid contains the QPWY path, so its suprema dominate", {
+  wy <- exuber:::quantile_boundary_sim(60, 12, 20, c(0.2, 0.8), type = "qpwy", seed = 5)
+  sy <- exuber:::quantile_boundary_sim(60, 12, 20, c(0.2, 0.8), type = "qpsy", seed = 5)
+  expect_true(all(sy >= wy - 1e-12))
+})
+
+test_that("qpsy_stat_path is the sup over window starts of quantreg::rq()
+  per-window t-ratios", {
+  set.seed(4)
+  y <- cumsum(rnorm(40))
+  minw <- 10
+  r_idx <- (minw + 1):40
+  path <- exuber:::qpsy_stat_path(y, 0.7, r_idx, minw)
+  brute <- vapply(r_idx, function(r) {
+    max(vapply(1:(r - minw), function(r1) {
+      yy <- y[r1:r]
+      m <- length(yy)
+      ylag <- yy[1:(m - 1)]
+      yresp <- yy[2:m]
+      a <- unname(coef(quantreg::rq(yresp ~ ylag, tau = 0.7))["ylag"])
+      f <- exuber:::quantile_check_density(yresp - ylag, 0.7)$f_hat
+      (f / sqrt(0.7 * 0.3)) * sqrt(sum((ylag - mean(ylag))^2)) * (a - 1)
+    }, numeric(1)))
+  }, numeric(1))
+  expect_equal(path, brute, tolerance = 1e-8)
+  expect_equal(path[1], exuber:::qpwy_stat_path(y, 0.7, minw + 1), tolerance = 1e-12)
+})
+
+test_that("monitor_quantile(type = 'qpsy') runs end to end", {
+  set.seed(1)
+  y <- cumsum(rnorm(50))
+  out <- monitor_quantile(y, tau = 0.5, nrep = 30, seed = 1, type = "qpsy")
+  expect_s3_class(out, "monitor_quantile_obj")
+  expect_equal(attr(out, "type"), "qpsy")
+  expect_output(print(out), "QPSY")
+  expect_null(attr(out, "caveat"))
+  expect_message(
+    off <- monitor_quantile(y, tau = 0.8, nrep = 30, seed = 1, type = "qpsy"),
+    "oversized"
+  )
+  expect_output(print(off), "oversized")
 })
 
 test_that("monitor_quantile runs end to end and returns a well-formed object", {

@@ -2,7 +2,7 @@
 % Please edit documentation in R/monitor_quantile.R
 \name{monitor_quantile}
 \alias{monitor_quantile}
-\title{QPWY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)}
+\title{QPWY/QPSY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)}
 \usage{
 monitor_quantile(
   data,
@@ -10,7 +10,8 @@ monitor_quantile(
   minw = NULL,
   nrep = 500L,
   sig_lvl = 95,
-  seed = NULL
+  seed = NULL,
+  type = c("qpwy", "qpsy")
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ statistic, not re-selected at each recursion point).}
 \item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
+
+\item{type}{\code{"qpwy"} (expanding window) or \code{"qpsy"}
+(supremum over window starts too).}
 }
 \value{
 An object of class \code{monitor_quantile_obj}: a list with the
@@ -45,21 +49,20 @@ statistic path \code{stat}, the (flat) \code{boundary}, the estimated
 \code{NA} if none).
 }
 \description{
-\code{monitor_quantile} implements the QPWY real-time monitoring strategy of
-Wu, Shi & Wu (2025): a quantile-regression (QR) analogue of PWY's own
-recursive ADF t-statistic, testing at a chosen conditional quantile
-\code{tau} over an expanding window \code{[1, r]} (start fixed at the
-beginning of the sample, exactly \code{\link{radf}}'s own \code{badf}
-convention) rather than \code{\link{quantile_test}}'s single
-full-sample test.
+\code{monitor_quantile} implements the QPWY and QPSY real-time monitoring
+strategies of Wu, Shi & Wu (2025): quantile-regression (QR) analogues of
+PWY's and PSY's recursive ADF t-statistics, testing at a chosen
+conditional quantile \code{tau} rather than \code{\link{quantile_test}}'s
+single full-sample test. \code{type = "qpwy"} uses the expanding window
+\code{[1, r]} (\code{\link{radf}}'s own \code{badf} shape);
+\code{type = "qpsy"} takes the supremum over every window start as well
+(\code{bsadf}'s shape).
 }
 \details{
-Only \code{QPWY} (single recursion) is implemented, not the paper's
-own \code{QPSY} (double recursion, additionally optimizing over the
-window start): \code{QPWY_r(tau)} needs \code{O(T)} actual quantile
--regression fits (no closed-form recursive update the way OLS has),
-tractable at the same cost order as \code{radf()}'s own \code{badf};
-\code{QPSY} needs \code{O(T^2)} such fits.
+The point statistic needs genuine QR fits (no closed-form recursive
+update the way OLS has): \code{O(T)} of them for QPWY, \code{O(T^2)}
+for QPSY, so QPSY takes seconds per series at \code{n = 200} and
+grows quadratically.
 
 The critical value is simulated per call from the limiting null
 distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}},
@@ -85,6 +88,24 @@ statistic/boundary/delta summary -- see
 \code{vignette("naming-and-analysis", package = "exuber")} for the full
 picture of which functions do and don't fit that pipeline.
 }
+\section{Caveats}{
+
+The boundary is the asymptotic one. Near the median it is well sized in
+finite samples (false-alarm rate 3.5-4.0\\% at a nominal 5\\%, Gaussian and
+\eqn{t_3} innovations, \code{tau = 0.5}). Away from the median with
+heavy-tailed innovations the small early windows make both statistics
+oversized, QPSY badly so: with \eqn{t_3} innovations QPSY's false-alarm
+rate is 21\\% at \code{tau = 0.8} and 44\\% at \code{tau = 0.9}
+(\code{n = 100}); QPWY's is 7.5-8.5\\% at \code{tau = 0.2}/\code{0.8} and
+12.5\\% at \code{tau = 0.9} (\code{n = 150}).
+Wu, Shi & Wu advise against extreme quantiles in small samples and use
+bootstrap critical values for monitoring; that bootstrap is not
+implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5
+a short pointer is emitted as a message (see
+\code{\link{suppressMessages}}) and stored as \code{attr(x, "caveat")}.
+Numbers: docs/alternative-paradigms.md.
+}
+
 \section{Status}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -99,8 +120,12 @@ res <- monitor_quantile(y, tau = 0.5, nrep = 100, seed = 1)
 print(res)
 autoplot(res)
 
-# Upper-quantile monitoring is typically more powerful for right-tailed bubbles
-autoplot(monitor_quantile(y, tau = 0.9, nrep = 100, seed = 1))
+# Upper-quantile monitoring is typically more powerful for right-tailed
+# bubbles, but see the Caveats section on extreme quantiles
+autoplot(monitor_quantile(y, tau = 0.8, nrep = 100, seed = 1))
+
+# QPSY: supremum over window starts too (O(n^2) QR fits, slower)
+monitor_quantile(y[101:200], tau = 0.5, nrep = 100, seed = 1, type = "qpsy")
 }
 
 }

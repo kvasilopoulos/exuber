@@ -1,14 +1,15 @@
 # Wu, Shi & Wu (2025, JTSA 46(5), "Quantile analysis for financial bubble
-# detection and surveillance", "WSW") -- the QPWY recursive
-# monitoring strategy of their Section 3.2 (eq. 25, 28). See
+# detection and surveillance", "WSW") -- the QPWY and QPSY recursive
+# monitoring strategies of their Section 3.2 (eq. 25-26, 28-29). See
 # docs/alternative-paradigms.md, "Quantile-based detection", for the full
 # evaluation this implements.
 #
 # QPWY_r(tau) := t_T^{0,r}(tau), the quantile-regression t-ratio on the
-# EXPANDING window [1, r] (radf()'s own badf shape). The point statistic
-# needs O(T) genuine QR fits (no closed-form recursive update the way OLS
-# has). The paper's QPSY (sup over window starts too, O(T^2) fits) is not
-# implemented.
+# EXPANDING window [1, r] (radf()'s own badf shape); QPSY_r(tau, r0) :=
+# sup_{r1} t_T^{r1,r}(tau), additionally sup'ing over every window start
+# (radf()'s own bsadf shape). The point statistic needs genuine QR fits
+# (no closed-form recursive update the way OLS has): O(T) for QPWY,
+# O(T^2) for QPSY.
 #
 # Critical values come from Theorem 1 / Corollary 1-2: under the null,
 # t_T^{r1,r2}(tau) => int W~ dB_psi / sqrt(int W~^2), with B_psi a
@@ -24,7 +25,7 @@
 # delta = 0.8, 12% at 0.5, 22% at 0.2 for a nominal 5%, n = 200; found
 # 2026-09-29, see docs/alternative-paradigms.md). quantile_boundary_sim()
 # simulates discretized Q and Z for every window via prefix sums, O(1) per
-# window, no QR fits and no radf() call.
+# window, so the QPSY boundary costs no QR fits at all.
 
 # QR t-ratio on one window `yy` (WSW's QUr statistic, eq. 18 / Section
 # 3.2): density estimated from the window's own first differences.
@@ -43,17 +44,26 @@ qpwy_stat_path <- function(y, tau, r_idx) {
   vapply(r_idx, function(r) quantile_window_stat(y[1:r], tau), numeric(1))
 }
 
+# QPSY_r(tau, r0) for every window-end r in `r_idx` -- sup over window
+# starts r1 = 1, ..., r - minw (every window keeps >= minw regression
+# observations, the same floor QPWY's first window has).
+qpsy_stat_path <- function(y, tau, r_idx, minw) {
+  vapply(r_idx, function(r) {
+    max(vapply(1:(r - minw), function(r1) quantile_window_stat(y[r1:r], tau), numeric(1)))
+  }, numeric(1))
+}
+
 # Simulated null path suprema, one column per entry of `delta`: for each
 # replicate, sup over the monitoring path of U = delta*Q + sqrt(1-delta^2)*Z
 # (see header). Windows are over the n - 1 regression pairs
 # (y_{t-1}, Delta y_t); window (lo, hi] of pairs <-> y[(lo + 1):(hi + 1)],
-# so QPWY's window [1, r] is (0, r - 1]. `lo` is kept general for a
-# double-recursion boundary.
-quantile_boundary_sim <- function(n, minw, nrep, delta, seed = NULL) {
+# so QPWY's window [1, r] is (0, r - 1] and QPSY's [r1, r] is
+# (r1 - 1, r - 1].
+quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NULL) {
   set_rng(seed)
   np <- n - 1L
   hi <- minw:np
-  lo <- 0L
+  lo <- if (type == "qpwy") 0L else 0:(np - minw)
   valid <- outer(lo, hi, function(l, h) h - l >= minw)
   mk <- function(v) c(0, cumsum(v))
   win <- function(cs) outer(lo, hi, function(l, h) cs[h + 1L] - cs[l + 1L])
@@ -76,22 +86,21 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, seed = NULL) {
   out
 }
 
-#' QPWY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
+#' QPWY/QPSY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
 #'
-#' \code{monitor_quantile} implements the QPWY real-time monitoring strategy of
-#' Wu, Shi & Wu (2025): a quantile-regression (QR) analogue of PWY's own
-#' recursive ADF t-statistic, testing at a chosen conditional quantile
-#' \code{tau} over an expanding window \code{[1, r]} (start fixed at the
-#' beginning of the sample, exactly \code{\link{radf}}'s own \code{badf}
-#' convention) rather than \code{\link{quantile_test}}'s single
-#' full-sample test.
+#' \code{monitor_quantile} implements the QPWY and QPSY real-time monitoring
+#' strategies of Wu, Shi & Wu (2025): quantile-regression (QR) analogues of
+#' PWY's and PSY's recursive ADF t-statistics, testing at a chosen
+#' conditional quantile \code{tau} rather than \code{\link{quantile_test}}'s
+#' single full-sample test. \code{type = "qpwy"} uses the expanding window
+#' \code{[1, r]} (\code{\link{radf}}'s own \code{badf} shape);
+#' \code{type = "qpsy"} takes the supremum over every window start as well
+#' (\code{bsadf}'s shape).
 #'
-#' Only \code{QPWY} (single recursion) is implemented, not the paper's
-#' own \code{QPSY} (double recursion, additionally optimizing over the
-#' window start): \code{QPWY_r(tau)} needs \code{O(T)} actual quantile
-#' -regression fits (no closed-form recursive update the way OLS has),
-#' tractable at the same cost order as \code{radf()}'s own \code{badf};
-#' \code{QPSY} needs \code{O(T^2)} such fits.
+#' The point statistic needs genuine QR fits (no closed-form recursive
+#' update the way OLS has): \code{O(T)} of them for QPWY, \code{O(T^2)}
+#' for QPSY, so QPSY takes seconds per series at \code{n = 200} and
+#' grows quadratically.
 #'
 #' The critical value is simulated per call from the limiting null
 #' distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}},
@@ -104,12 +113,30 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, seed = NULL) {
 #' \code{\link{radf_mc_cv}}'s own \code{sadf_cv} is constructed, which
 #' controls the first-crossing false-alarm rate.
 #'
+#' @section Caveats:
+#' The boundary is the asymptotic one. Near the median it is well sized in
+#' finite samples (false-alarm rate 3.5-4.0\% at a nominal 5\%, Gaussian and
+#' \eqn{t_3} innovations, \code{tau = 0.5}). Away from the median with
+#' heavy-tailed innovations the small early windows make both statistics
+#' oversized, QPSY badly so: with \eqn{t_3} innovations QPSY's false-alarm
+#' rate is 21\% at \code{tau = 0.8} and 44\% at \code{tau = 0.9}
+#' (\code{n = 100}); QPWY's is 7.5-8.5\% at \code{tau = 0.2}/\code{0.8} and
+#' 12.5\% at \code{tau = 0.9} (\code{n = 150}).
+#' Wu, Shi & Wu advise against extreme quantiles in small samples and use
+#' bootstrap critical values for monitoring; that bootstrap is not
+#' implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5
+#' a short pointer is emitted as a message (see
+#' \code{\link{suppressMessages}}) and stored as \code{attr(x, "caveat")}.
+#' Numbers: docs/alternative-paradigms.md.
+#'
 #' @note The critical value (boundary) is simulated internally on every
 #' call (via an unexported helper, \code{quantile_boundary_sim}) -- there is
 #' currently no reusable/exported cv counterpart for this function (a
 #' known, separately-tracked gap, not addressed here).
 #'
 #' @inheritParams radf
+#' @param type \code{"qpwy"} (expanding window) or \code{"qpsy"}
+#' (supremum over window starts too).
 #' @param tau Quantile to test at, in \code{(0, 1)} (fixed, unlike
 #' \code{\link{quantile_test}}'s \code{"optimal"} grid search -- WSW's own
 #' eq. 25 takes \code{tau} as a given parameter for the monitoring
@@ -150,13 +177,19 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, seed = NULL) {
 #' print(res)
 #' autoplot(res)
 #'
-#' # Upper-quantile monitoring is typically more powerful for right-tailed bubbles
-#' autoplot(monitor_quantile(y, tau = 0.9, nrep = 100, seed = 1))
+#' # Upper-quantile monitoring is typically more powerful for right-tailed
+#' # bubbles, but see the Caveats section on extreme quantiles
+#' autoplot(monitor_quantile(y, tau = 0.8, nrep = 100, seed = 1))
+#'
+#' # QPSY: supremum over window starts too (O(n^2) QR fits, slower)
+#' monitor_quantile(y[101:200], tau = 0.5, nrep = 100, seed = 1, type = "qpsy")
 #' }
 #'
 #' @family monitoring
 #' @export
-monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl = 95, seed = NULL) {
+monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl = 95, seed = NULL,
+                             type = c("qpwy", "qpsy")) {
+  type <- match.arg(type)
   stopifnot(tau > 0 && tau < 1)
   assert_sig_lvl(sig_lvl)
   x <- parse_data(data)
@@ -175,13 +208,26 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl 
 
   for (j in seq_len(nc)) {
     y <- as.numeric(x[, j])
-    stat_path[, j] <- qpwy_stat_path(y, tau, r_idx)
+    stat_path[, j] <- if (type == "qpwy") {
+      qpwy_stat_path(y, tau, r_idx)
+    } else {
+      qpsy_stat_path(y, tau, r_idx, minw)
+    }
     dy_full <- diff(y)
     psi <- tau - as.numeric(dy_full < quantile_narm(dy_full, probs = tau, names = FALSE))
     delta[j] <- max(min(stats::cor(dy_full, psi), 1), -1)
   }
 
-  sup_U <- quantile_boundary_sim(n, minw, nrep, delta, seed = seed)
+  caveat <- NULL
+  if (type == "qpsy" && abs(tau - 0.5) > 0.05) {
+    caveat <- paste(
+      "QPSY's asymptotic boundary is oversized away from the median with heavy-tailed",
+      "data (21% at tau = 0.8, t3, n = 100, nominal 5%); see ?monitor_quantile, Caveats section."
+    )
+    message_glue(caveat)
+  }
+
+  sup_U <- quantile_boundary_sim(n, minw, nrep, delta, type = type, seed = seed)
   boundary <- setNames(apply(sup_U, 2, quantile_narm, probs = sig_lvl / 100, names = FALSE), snames)
   for (j in seq_len(nc)) {
     breach <- which(stat_path[, j] > boundary[j])
@@ -198,7 +244,7 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl 
   ) %>%
     add_attr(
       index = idx, series_names = snames, n = n, minw = minw,
-      tau = tau, sig_lvl = sig_lvl, iter = nrep
+      tau = tau, sig_lvl = sig_lvl, iter = nrep, type = type, caveat = caveat
     ) %>%
     add_class("monitor_quantile_obj")
 }
@@ -218,14 +264,14 @@ autoplot.monitor_quantile_obj <- function(object, ...) {
   pos <- (minw + 1L):(minw + nrow(object$stat))
   snames <- colnames(object$stat)
   vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
-  autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines, ylab = "QPWY statistic")
+  autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines, ylab = paste(toupper(attr(object, "type") %||% "qpwy"), "statistic"))
 }
 
 #' @export
 print.monitor_quantile_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
   cat_rule(left = glue(
-    "monitor_quantile (n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
+    "monitor_quantile ({toupper(attr(x, 'type') %||% 'qpwy')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
     "tau = {attr(x, 'tau')}, sig_lvl = {attr(x, 'sig_lvl')}%)"
   ))
   cat_line()
@@ -239,4 +285,5 @@ print.monitor_quantile_obj <- function(x, digits = max(3L, getOption("digits") -
     digits = digits, print.gap = 2L, row.names = FALSE
   )
   cat_line()
+  cat_caveat(x)
 }
