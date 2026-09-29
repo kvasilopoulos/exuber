@@ -11,7 +11,8 @@ dating_hlw(
   trim = 0.1,
   min_duration = NULL,
   nboot = 199L,
-  seed = NULL
+  seed = NULL,
+  join = 3L
 )
 }
 \arguments{
@@ -42,6 +43,11 @@ PSY episode to be counted. Default \code{\link{psy_ds}} (HLW's own
 
 \item{nboot, seed}{Passed to \code{\link{radf_wb_cv}} when \code{cv}
 is not supplied.}
+
+\item{join}{HLW's run-joining rule for fragmented step-1 detections: two
+explosive runs separated by at most \code{join} non-rejections, each at
+least \eqn{\ln(T)} long, are treated as one episode. Default 3, the
+paper's value; \code{0} disables joining.}
 }
 \value{
 An object of class \code{dating_hlw_obj}: a list, one element

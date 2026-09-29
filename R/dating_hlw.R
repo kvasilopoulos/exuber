@@ -34,6 +34,30 @@ hlw_local_to_global <- function(local_tau, s) {
   list(i_index = s + local_tau - 1L, position = s + local_tau)
 }
 
+# HLW's run-joining rule for step-1 fragmentation: if up to `max_gap`
+# non-rejections separate two explosive runs that each last at least
+# `min_len` (their ln(T)), treat them as one episode. `start`/`end` follow
+# datestamp()'s convention (End = first non-explosive observation), so the
+# gap is start[k] - end[k - 1] and a run's length is end - start.
+hlw_join_runs <- function(start, end, max_gap, min_len) {
+  if (length(start) < 2L || max_gap <= 0L) return(list(start = start, end = end))
+  out_s <- out_e <- integer(0)
+  s <- start[1L]
+  e <- end[1L]
+  for (k in 2:length(start)) {
+    long_enough <- (e - s) >= min_len && (end[k] - start[k]) >= min_len
+    if ((start[k] - e) <= max_gap && long_enough) {
+      e <- end[k]
+    } else {
+      out_s <- c(out_s, s)
+      out_e <- c(out_e, e)
+      s <- start[k]
+      e <- end[k]
+    }
+  }
+  list(start = c(out_s, s), end = c(out_e, e))
+}
+
 #' Multi-Bubble SSR/BIC Dating (Harvey, Leybourne & Whitehouse 2020)
 #'
 #' \code{dating_hlw} extends \code{\link{dating_hls}} to series with more
@@ -66,6 +90,10 @@ hlw_local_to_global <- function(local_tau, s) {
 #' \eqn{\ln(T)} rule).
 #' @param nboot,seed Passed to \code{\link{radf_wb_cv}} when \code{cv}
 #' is not supplied.
+#' @param join HLW's run-joining rule for fragmented step-1 detections: two
+#' explosive runs separated by at most \code{join} non-rejections, each at
+#' least \eqn{\ln(T)} long, are treated as one episode. Default 3, the
+#' paper's value; \code{0} disables joining.
 #'
 #' @return An object of class \code{dating_hlw_obj}: a list, one element
 #' per series, each a data frame with one row per detected episode
@@ -106,7 +134,8 @@ hlw_local_to_global <- function(local_tau, s) {
 #' @family dating
 #' @export
 dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
-                      min_duration = NULL, nboot = 199L, seed = NULL) {
+                      min_duration = NULL, nboot = 199L, seed = NULL,
+                      join = 3L) {
   x <- parse_data(data)
   n <- nrow(x)
   snames <- colnames(x)
@@ -140,6 +169,10 @@ dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
 
     tau1_psy <- match(regimes$Start, idx)
     tau2_psy <- match(regimes$End, idx)
+    tau2_psy[is.na(tau2_psy)] <- n  # an episode still running at the sample end
+    runs <- hlw_join_runs(tau1_psy, tau2_psy, join, log(n))
+    tau1_psy <- runs$start
+    tau2_psy <- runs$end
     nhat <- length(tau1_psy)
 
     e <- integer(nhat)
