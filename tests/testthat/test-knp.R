@@ -96,3 +96,78 @@ test_that("dating_knp's omission correction reproduces Kejriwal, Nguyen &
   # date's bias relative to the naive estimator (Theorem 2)
   expect_true(bias_om_T1 < bias_naive_T1 / 2)
 })
+
+# Brute-force KNP objective over every admissible partition (regimes
+# alternate unit root / explosive, each >= k_min pairs; a unit-root regime
+# after a collapse drops its first residual when omit = TRUE).
+knp_brute <- function(y, breaks, trim, omit) {
+  n1 <- length(y) - 1L
+  x <- y[1:n1]
+  z <- diff(y)
+  k_min <- max(2L, ceiling(trim * n1))
+  seg <- function(j, lo, hi) {
+    k <- (lo + 1):hi
+    if (j %% 2 == 0) return(sum(resid(lm(z[k] ~ x[k]))^2))
+    sum(z[k]^2) - if (omit && j > 1) z[lo + 1]^2 else 0
+  }
+  best <- list(ssr = Inf)
+  rec <- function(taus) {
+    j <- length(taus)
+    if (j == breaks) {
+      ends <- c(0, taus, n1)
+      ssr <- sum(vapply(seq_len(breaks + 1), function(r) seg(r, ends[r], ends[r + 1]), 0))
+      if (ssr < best$ssr) best <<- list(tau = taus, ssr = ssr)
+      return(invisible())
+    }
+    from <- (if (j == 0) 0 else taus[j]) + k_min
+    to <- n1 - (breaks - j) * k_min
+    if (from <= to) for (t in from:to) rec(c(taus, t))
+  }
+  rec(integer(0))
+  best
+}
+
+test_that("knp_dp(breaks = 2) reproduces the single-bubble exhaustive search", {
+  for (omit in c(TRUE, FALSE)) {
+    set.seed(11)
+    y <- cumsum(rnorm(80))
+    dp <- exuber:::knp_dp(y, 2, trim = 0.05, omit = omit)
+    fb <- exuber:::knp_find_break(y, trim = 0.05, omit = omit)
+    expect_equal(dp$tau, c(fb$tau1, fb$tau2))
+    expect_equal(dp$ssr, fb$ssr, tolerance = 1e-10)
+  }
+})
+
+test_that("knp_dp matches a brute-force search over every partition for
+  3 and 4 breaks", {
+  set.seed(12)
+  y <- cumsum(rnorm(28))
+  for (breaks in 3:4) {
+    for (omit in c(TRUE, FALSE)) {
+      dp <- exuber:::knp_dp(y, breaks, trim = 0.1, omit = omit)
+      b <- knp_brute(y, breaks, trim = 0.1, omit = omit)
+      expect_equal(dp$tau, b$tau, info = paste(breaks, omit))
+      expect_equal(dp$ssr, b$ssr, tolerance = 1e-8, info = paste(breaks, omit))
+    }
+  }
+})
+
+test_that("dating_knp(breaks = 4) dates two well-separated bubbles", {
+  set.seed(13)
+  e <- rnorm(200)
+  y <- numeric(200)
+  y[1] <- 10
+  for (t in 2:200) {
+    rho <- if ((t > 40 && t <= 70) || (t > 120 && t <= 150)) 1.06 else 1
+    y[t] <- rho * y[t - 1] + e[t]
+    if (t == 71 || t == 151) y[t] <- 10 + e[t] # instantaneous collapse
+  }
+  out <- dating_knp(y, breaks = 4)
+  expect_true(is.matrix(out$origination))
+  expect_equal(dim(out$origination), c(2L, 1L))
+  expect_lt(max(abs(as.numeric(out$origination) - c(41, 121))), 10)
+  expect_lt(max(abs(as.numeric(out$collapse) - c(70, 150))), 3)
+  expect_output(print(out), "breaks = 4")
+  ongoing <- dating_knp(y[1:140], breaks = 3)
+  expect_true(is.na(ongoing$collapse[2, 1]))
+})

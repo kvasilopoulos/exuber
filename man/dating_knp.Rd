@@ -2,9 +2,9 @@
 % Please edit documentation in R/dating_knp.R
 \name{dating_knp}
 \alias{dating_knp}
-\title{Bias-Corrected Single-Bubble Dating (Kejriwal, Nguyen & Perron 2025)}
+\title{Bias-Corrected Bubble Dating (Kejriwal, Nguyen & Perron 2025)}
 \usage{
-dating_knp(data, trim = 0.05, omit = TRUE)
+dating_knp(data, trim = 0.05, omit = TRUE, breaks = 2L)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
@@ -24,22 +24,35 @@ each regime (default 0.05).}
 correction (default \code{TRUE}). \code{FALSE} gives the plain,
 provably inconsistent OLS estimator (their Theorem 1) -- kept mainly
 to demonstrate the correction's effect, not for practical dating.}
+
+\item{breaks}{Number of break dates (the paper's \code{m}): two per
+bubble; an odd number lets the last bubble run to the end of the sample
+(its collapse is then \code{NA}).}
 }
 \value{
 An object of class \code{dating_knp_obj}: a list with
 \code{origination}, \code{collapse} (dates) and \code{delta} (the
-fitted explosive AR coefficient).
+fitted explosive AR coefficient) -- named vectors (one value per series)
+for a single bubble, matrices (one row per bubble, one column per
+series) for more.
 }
 \description{
-\code{dating_knp} dates a single bubble episode (origination, collapse)
-by minimising a residual-omission-corrected sum of squared residuals
-over a three-regime model (unit root, explosive, unit root resuming
-from a shifted level after an instantaneous collapse). Plain OLS over
-this model is provably inconsistent -- the origination-date estimate
-converges to the true \emph{collapse} date, not the origination date
--- which \code{omit = TRUE} (the default) fixes by dropping the
-single squared residual at the candidate collapse date from the
-objective before minimising.
+\code{dating_knp} dates bubble episodes (origination, collapse) by
+minimising a residual-omission-corrected sum of squared residuals over
+a model of alternating regimes: unit root, explosive, unit root
+resuming from a shifted level after an instantaneous collapse, and so
+on. Plain OLS over this model is provably inconsistent -- the
+origination-date estimate converges to the true \emph{collapse} date,
+not the origination date -- which \code{omit = TRUE} (the default)
+fixes by dropping the squared residual at each candidate collapse date
+from the objective before minimising.
+}
+\details{
+\code{breaks = 2} (the default) is the single-bubble model. More
+breaks use Kejriwal, Nguyen & Perron's dynamic-programming algorithm,
+which returns the exact global minimiser of the objective in
+\code{O(breaks * n^2)}. The number of breaks is taken as given, as in
+the paper: e.g. two per episode \code{\link{datestamp}} finds.
 }
 \note{
 This is a residual-sum-of-squares model-selection dating
@@ -68,6 +81,9 @@ autoplot(res)
 res_plain <- dating_knp(sim_data$psy1, trim = 0.05, omit = FALSE)
 autoplot(res) +
   ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)
+
+# Two bubbles
+dating_knp(sim_data$psy2, breaks = 4)
 }
 
 }
