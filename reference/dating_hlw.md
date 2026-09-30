@@ -21,7 +21,8 @@ dating_hlw(
   trim = 0.1,
   min_duration = NULL,
   nboot = 199L,
-  seed = NULL
+  seed = NULL,
+  join = 3L
 )
 ```
 
@@ -73,6 +74,13 @@ dating_hlw(
   Passed to
   [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
   when `cv` is not supplied.
+
+- join:
+
+  HLW's run-joining rule for fragmented step-1 detections: two explosive
+  runs separated by at most `join` non-rejections, each at least
+  \\\ln(T)\\ long, are treated as one episode. Default 3, the paper's
+  value; `0` disables joining.
 
 ## Value
 

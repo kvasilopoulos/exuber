@@ -85,7 +85,8 @@ and 4 for every window but the last).</p>
 <span>  trim <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  min_duration <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nboot <span class="op">=</span> <span class="fl">199L</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  join <span class="op">=</span> <span class="fl">3L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -131,6 +132,13 @@ PSY episode to be counted. Default <code><a href="psy_minw.html">psy_ds</a></cod
 <dt id="arg-nboot-seed">nboot, seed<a class="anchor" aria-label="anchor" href="#arg-nboot-seed"></a></dt>
 <dd><p>Passed to <code><a href="radf_wb_cv.html">radf_wb_cv</a></code> when <code>cv</code>
 is not supplied.</p></dd>
+
+
+<dt id="arg-join">join<a class="anchor" aria-label="anchor" href="#arg-join"></a></dt>
+<dd><p>HLW's run-joining rule for fragmented step-1 detections: two
+explosive runs separated by at most <code>join</code> non-rejections, each at
+least \(\ln(T)\) long, are treated as one episode. Default 3, the
+paper's value; <code>0</code> disables joining.</p></dd>
 
 </dl></div>
     <div class="section level2">
