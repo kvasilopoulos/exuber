@@ -57,7 +57,7 @@ Footnote 4 of Kurozumi, Skrobotov & Tsarev gives published asymptotic critical v
 
 ## Dating and plotting a detected bubble
 
-`radf_tt()` returns the same `radf_obj` class as `radf()`. Since 2026-08-18, `radf_tt_cv()` also computes the full time-varying boundary that dating and plotting need, and not only the summary-level critical values. The usual pipeline therefore works unchanged:
+`radf_tt()` returns the same `radf_obj` class as `radf()`. `radf_tt_cv()` also computes the full time-varying boundary that dating and plotting need, and not only the summary-level critical values. The usual pipeline therefore works unchanged:
 
 ```{r radf-tt-datestamp}
 res <- radf_tt(y, minw = 20)
