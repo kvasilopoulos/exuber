@@ -1,7 +1,7 @@
 # Plot method for monitor_quantile() output
 
-Plots the quantile monitoring statistic against its boundary, one panel
-per series, with a vertical marker at the alarm date.
+Plots the quantile monitoring statistic against its boundary, with one
+panel for each series and a vertical marker at the alarm date.
 
 ## Usage
 

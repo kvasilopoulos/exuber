@@ -1,11 +1,11 @@
 # Simulation of a latent common-factor bubble across multiple series
 
-Simulation of Chen, Phillips & Shi (2023)'s common-bubble DGP:
+Simulates the common-bubble process of Chen, Phillips & Shi (2023):
 `n_series` observed series driven by one latent PSY-style bubble factor
-plus idiosyncratic noise, \\X_t = \Lambda f_t + e_t\\, loadings
-\\\Lambda \sim U\[0,2\]\\. Unlike every other `sim_*` function, this
-returns a multi-column `data.frame` (one column per series, exuber's
-standard panel input shape) rather than a single numeric vector.
+plus idiosyncratic noise, \\X_t = \Lambda f_t + e_t\\, with loadings
+\\\Lambda \sim U\[0,2\]\\. Unlike every other `sim_*` function, it
+returns a `data.frame` with one column for each series, the standard
+panel input shape of exuber, and not a single numeric vector.
 
 ## Usage
 
@@ -66,12 +66,12 @@ sim_common(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 

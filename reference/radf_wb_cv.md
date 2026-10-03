@@ -1,9 +1,9 @@
 # Wild Bootstrap Critical Values
 
-`radf_wb_cv` performs the Harvey et al. (2016) wild bootstrap
-re-sampling scheme, which is asymptotically robust to non-stationary
-volatility, to generate critical values for the recursive unit root
-tests. `radf_wb_distr` computes the distribution.
+`radf_wb_cv` generates critical values for the recursive unit root tests
+with the wild bootstrap of Harvey et al. (2016), which is asymptotically
+robust to non-stationary volatility. `radf_wb_distr` computes the
+distribution.
 
 ## Usage
 
@@ -32,14 +32,14 @@ radf_wb_distr(
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -56,34 +56,34 @@ radf_wb_distr(
 
 - dist_skew:
 
-  Logical. If TRUE, use Hafner (2020)'s fixed right-skewed multiplier
-  distribution instead of the (default) standard normal or
-  (`dist_rad = TRUE`) Rademacher one – appropriate when the series'
-  return distribution is itself notably right-skewed (e.g.
-  cryptocurrency returns, the paper's own application). At most one of
-  `dist_rad` and `dist_skew` may be `TRUE`.
+  Logical. If TRUE, use the fixed right-skewed multiplier distribution
+  of Hafner (2020) instead of the default standard normal or
+  (`dist_rad = TRUE`) Rademacher one. It is appropriate when the return
+  distribution of the series is itself clearly right-skewed, as for the
+  cryptocurrency returns in the application of that paper. At most one
+  of `dist_rad` and `dist_skew` may be `TRUE`.
 
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
-For `radf_wb_cv` a list that contains the critical values for the ADF,
-BADF, BSADF and GSADF tests. For `radf_wb_distr` a list that contains
-the ADF, SADF and GSADF distributions.
+For `radf_wb_cv`, a list with the critical values for the ADF, BADF,
+BSADF and GSADF tests. For `radf_wb_distr`, a list with the ADF, SADF
+and GSADF distributions.
 
 ## Details
 
-This approach involves applying a wild bootstrap re-sampling scheme to
-construct the bootstrap analogue of the Phillips et al. (2015) test
-which is asymptotically robust to non-stationary volatility.
+The function applies a wild bootstrap re-sampling scheme to construct
+the bootstrap analogue of the test of Phillips et al. (2015). The
+bootstrap test is asymptotically robust to non-stationary volatility.
 
 ## References
 
@@ -122,8 +122,9 @@ Other critical values:
 
 ``` r
 # \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case the wild bootstrap is built for (plain radf_mc_cv() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that the wild bootstrap is built for, and plain
+# radf_mc_cv() over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 # Default minimum window
 wb <- radf_wb_cv(y)

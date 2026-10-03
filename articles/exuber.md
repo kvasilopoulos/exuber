@@ -1,15 +1,14 @@
 # Intro to exuber
 
-For our analysis we are going to use the
+This vignette uses the
 [`datasets::EuStockMarkets`](https://rdrr.io/r/datasets/EuStockMarkets.html)
-dataset, which contains the daily closing prices of four major European
-stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE
-(see
+data, which contain the daily closing prices of four major European
+stock indices: the German DAX, the Swiss SMI, the French CAC and the UK
+FTSE (see
 [`?EuStockMarkets`](https://rdrr.io/r/datasets/EuStockMarkets.html)).
-The data are sampled in business time, i.e., weekends and holidays are
-omitted. In this particular exercise we want to focus on weekly
-observations. To do so we aggregate to a weekly frequency and reduce the
-number of observations from 1860 to 372.
+The data are sampled in business time, so weekends and holidays are
+omitted. We want weekly observations, so we aggregate to a weekly
+frequency, which reduces the sample from 1860 to 372 observations.
 
 ``` r
 
@@ -18,8 +17,8 @@ stocks <- aggregate(EuStockMarkets, nfrequency = 52, mean)
 
 ## Estimation
 
-We estimate the above series using the recursive Augmented Dickey-Fuller
-test with 1 lag.
+We estimate the recursive augmented Dickey-Fuller test on these series
+with one lag.
 
 ``` r
 
@@ -28,15 +27,24 @@ est_stocks <- radf(stocks, lag = 1)
 
 ## Analysis
 
-The summary will print the test statistic and the critical values for
-10%, 5% and 1% significance level. When `cv` is omitted,
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-fetch precomputed Monte Carlo critical values for this `(n, lag)` from a
-shared store (lags 0-4, samples up to 4000; needs network access the
-first time, cached on disk after). Here we simulate them locally with
+[`summary()`](https://rdrr.io/r/base/summary.html) prints the test
+statistics together with the critical values at the 10%, 5% and 1%
+significance levels. A critical value is the threshold a statistic must
+exceed before we reject the null hypothesis of a unit root in favor of
+explosive behavior. When `cv` is omitted,
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+fetch precomputed Monte Carlo critical values for the relevant
+`(n, lag)` from a shared store. The store covers lags 0 to 4 and samples
+of up to 4000 observations. The first fetch needs network access, and
+later calls read from the disk cache. Here we simulate the critical
+values locally with
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-instead, and pass the result via `cv` to every downstream call – the
-offline route, and the one to use for other lags or larger samples.
+and pass the result through `cv` to every downstream call. This offline
+route is also the one to use for other lags or larger samples.
 
 ``` r
 
@@ -82,11 +90,10 @@ summary(est_stocks, cv = cv_stocks)
 #> 3 gsadf 2.67   2.13   2.38   3.00
 ```
 
-It seems that all stocks exhibit exuberant behaviour but we can also
-verify it using
-[`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md).
-This function is particularly useful when we deal a large number of
-series.
+All four stocks appear to show exuberant behavior, and
+[`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)
+confirms this by reporting which series reject the null. It is most
+useful when there are many series.
 
 ``` r
 
@@ -100,11 +107,9 @@ diagnostics(est_stocks, cv = cv_stocks)
 #> FTSE:     Rejects H0 at the 5% significance level
 ```
 
-If we need to know the exact period of exuberance we can do so with the
-function
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md).
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-works in a similar manner with
+To find out when the exuberance occurred, we use
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+which takes the same arguments as
 [`summary()`](https://rdrr.io/r/base/summary.html) and
 [`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md).
 
@@ -142,8 +147,8 @@ dstamp_stocks
 #> 3 1998-02-10 1998-04-14 1998-06-24       19 positive   FALSE
 ```
 
-We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No
-exuberance.
+We can also extract the datestamp as a dummy variable, where 1 marks
+exuberance and 0 marks its absence.
 
 ``` r
 
@@ -159,24 +164,25 @@ tail(dummy)
 ```
 
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-is not the only way to get dates out of the package, and the other two
-answer different questions rather than being alternate ways to get the
-same answer: the `dating_*()` family
+is not the only way to obtain dates, but the other two approaches answer
+different questions rather than the same one. The `dating_*()` family
 ([`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md))
-fits an explicit regime model to date a bubble you already believe is
-there, instead of testing whether one exists; the
-[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)/`monitor_*()`
-family
+fits an explicit regime model to date a bubble that you already believe
+is there, and it does not test whether one exists. The
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+and `monitor_*()` family
 ([`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md))
-does real-time detection, watching new observations one at a time rather
-than dating a finished sample. See
+detects bubbles in real time by watching new observations one at a time,
+instead of dating a finished sample.
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for how every function in the package relates to this one.
+shows how every function in the package relates to
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md).
 
 ## Plotting
 
-The `autoplot` function returns a faceted ggplot2 object for all the
-series that reject the null hypothesis at 5% significance level.
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+returns a faceted ggplot2 object for all the series that reject the null
+hypothesis at the 5% significance level.
 
 ``` r
 
@@ -185,10 +191,9 @@ autoplot(est_stocks, cv = cv_stocks)
 
 ![](exuber_files/figure-html/plot-radf-1.png)
 
-Finally, we can plot just the periods the periods of exuberance.
-Plotting datestamp object is particularly useful when we have a lot of
-series, and we are interested to identify explosive patterns in all of
-them.
+Finally, we can plot only the periods of exuberance. Plotting the
+datestamp object is useful when there are many series and we want to see
+the explosive episodes in all of them.
 
 ``` r
 

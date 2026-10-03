@@ -1,11 +1,11 @@
 # Time-Transformed Test for Explosive Bubbles under Non-stationary Volatility
 
-`radf_tt` computes the STADF/GSTADF test statistics of Kurozumi,
+`radf_tt` computes the STADF and GSTADF test statistics of Kurozumi,
 Skrobotov & Tsarev, a heteroskedasticity-robust alternative to
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) that
-requires no bootstrap: the series is time-deformed using a nonparametric
-estimate of its variance profile, after which the usual (asymptotic,
-homoskedastic) recursive sup-ADF critical values apply.
+needs no bootstrap. It time-deforms the series with a nonparametric
+estimate of its variance profile, after which the usual asymptotic
+recursive sup-ADF critical values for homoskedastic errors apply.
 
 ## Usage
 
@@ -18,14 +18,14 @@ radf_tt(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL)
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -35,44 +35,48 @@ radf_tt(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL)
 - kernel:
 
   Kernel used in the local variance-profile regression, `"uniform"`
-  (default, as in the paper's simulations) or `"gaussian"`.
+  (default, as in the simulations of the paper) or `"gaussian"`.
 
 - h:
 
-  Bandwidth for the variance-profile kernel regression. Default
-  `T^(-2/5)`, the midpoint (on the log scale) of the paper's
-  cross-validation search range \\\[T^{-0.5}, T^{-0.3}\]\\.
+  Bandwidth for the variance-profile kernel regression. The default is
+  `T^(-2/5)`, the midpoint on the log scale of the cross-validation
+  search range \\\[T^{-0.5}, T^{-0.3}\]\\ of the paper.
 
 ## Value
 
 An object of class `radf_tt_obj`/`radf_obj`: the same
-`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as
+`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as for
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
-computed on the time-transformed series, so it plugs into
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-paired with
+computed on the time-transformed series. It works with
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+when paired with
 [`radf_tt_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md).
 
 ## Details
 
-For critical values, use
+We recommend
 [`radf_tt_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-as the primary recommendation: it is pivotal (asymptotically free of the
-volatility process), so it does not need to be recomputed per dataset,
-unlike a bootstrap.
+for the critical values. They are pivotal (asymptotically free of the
+volatility process), so they do not have to be recomputed for each
+dataset, unlike a bootstrap. The wild bootstrap of Harvey, Leybourne,
+Sollis & Taylor in
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
-(Harvey, Leybourne, Sollis & Taylor's wild bootstrap) is a
-bootstrap-based alternative, worth considering if
-non-pivotality/finite-sample bootstrap robustness is a specific concern.
+is a bootstrap-based alternative. Consider it if non-pivotality or the
+finite-sample robustness of the bootstrap is a specific concern.
 
 ## Note
 
-Carries the `radf_obj` class and, as of 2026-08-18, its full
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
-pipeline works –
+The result carries the `radf_obj` class. Since 2026-08-18 the full
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+`tidy` and `autoplot` pipeline works, because
 [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-now computes the time-varying `badf_cv`/`bsadf_cv` boundary those last
-two need, not just the three scalar critical values
+now computes the time-varying `badf_cv` and `bsadf_cv` boundary that the
+last two need, and not only the three scalar critical values that
 [`summary()`](https://rdrr.io/r/base/summary.html) uses. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
@@ -90,7 +94,7 @@ Econometrics.
 ## See also
 
 [`radf_tt_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-for the (pivotal, bootstrap-free) asymptotic critical values, and
+for the pivotal asymptotic critical values that need no bootstrap, and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
 for the bootstrap-based alternative (Harvey, Leybourne, Sollis &
 Taylor).
@@ -108,8 +112,9 @@ Other volatility-robust tests:
 
 ``` r
 # \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_tt(y, minw = 20)
 print(res)

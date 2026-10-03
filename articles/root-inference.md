@@ -7,36 +7,40 @@ library(exuber)
 
 ## A different question from “is there a bubble”
 
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-(and the
-`dating_*()`/`_test()`/[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)/`monitor_*()`
-families) all answer some version of “is there a bubble, and when did it
-happen.” None of them say anything about its *magnitude*: once an
-explosive episode is dated, how fast is the underlying autoregressive
-root actually growing?
-[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
-(Phillips & Magdalinos 2007; Guo, Sun & Wang 2019) answers exactly that,
-as a follow-up step *after* detection and dating, not a replacement for
-either.
-
-It fits a no-intercept AR(1), `y_t = rho * y_{t-1} + e_t`, over a given
-sub-sample and reports `rho`’s estimate together with a confidence
-interval and an implied **doubling time** (`log(2) / log(rho)`: how many
-periods until the bubble doubles in size at the estimated growth rate).
-Two methods, for two different starting points – a plain numeric
-sub-sample (fit once, one CI), or a `radf_obj` plus its
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-result (fit every episode at once, no manual loop). Neither method’s
-return value carries the `radf_obj` class itself, so
+and the `dating_*()`, `_test()`,
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+and `monitor_*()` families all answer some version of the question of
+whether there is a bubble and when it happened. None of them says
+anything about its magnitude. Once an explosive episode is dated, how
+fast is the underlying autoregressive root growing?
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
-doesn’t plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-– see
-[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+(Phillips & Magdalinos 2007; Guo, Sun & Wang 2019) answers that
+question. It is a follow-up step after detection and dating, and it
+replaces neither.
+
+The function fits a no-intercept AR(1), `y_t = rho * y_{t-1} + e_t`,
+over a given sub-sample. It reports the estimate of `rho` with a
+confidence interval and the implied doubling time, `log(2) / log(rho)`,
+which is the number of periods the bubble needs to double in size at the
+estimated growth rate. There are two methods for two starting points.
+The default method takes a numeric sub-sample and fits it once, with one
+confidence interval. The `radf_obj` method takes a `radf_obj` together
+with its
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+result and fits every episode at once, with no manual loop. Neither
+method returns the `radf_obj` class, so
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+does not work with [`summary()`](https://rdrr.io/r/base/summary.html),
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) or
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+(see
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)).
 
 ## Detect, date, then estimate the root
 
-A unit-root run-up followed by a genuine explosive regime with
+The series has a unit-root run-up followed by an explosive regime with
 `rho = 1.04`:
 
 ``` r
@@ -44,7 +48,7 @@ A unit-root run-up followed by a genuine explosive regime with
 y <- sim_psy1(n = 100, te = 60, tf = 100, c = 0.04, alpha = 0, sigma = 1, seed = 2026)
 ```
 
-Detect and date it first, the ordinary way:
+We first detect and date the episode in the usual way:
 
 ``` r
 
@@ -60,9 +64,9 @@ ds
 #> 1    63  100 100       38 positive    TRUE
 ```
 
-Then estimate the root over the detected episode – the default method
-takes the sub-sample directly, sliced by the episode’s own
-`Start`/`End`:
+Then we estimate the root over the detected episode. The default method
+takes the sub-sample directly, which we slice with the `Start` and `End`
+of the episode:
 
 ``` r
 
@@ -85,21 +89,21 @@ rootstamp(y[ep$Start[1]:ep$End[1]], type = "cauchy") # fixed-root Cauchy interva
 #>      -3.03
 ```
 
-`rho` recovers something close to the true 1.04, alongside `rho_ci` and
-the implied `doubling_time`/`doubling_time_ci`. The two interval types
-answer slightly different questions. `type = "normal"` (the default) is
-the safer choice under drift/weak dependence and gives a noticeably
-tighter interval here; `type = "cauchy"` assumes a genuinely *fixed*,
-non-drifting root and, because a Cauchy distribution has much fatter
-tails than a normal, produces a visibly wider interval even at the same
-nominal level.
+The estimate of `rho` is close to the true value of 1.04. The output
+also reports `rho_ci` and the implied `doubling_time` and
+`doubling_time_ci`. The two interval types answer slightly different
+questions. `type = "normal"`, the default, is the safer choice under
+drift or weak dependence, and it gives a noticeably tighter interval
+here. `type = "cauchy"` assumes a fixed root that does not drift. A
+Cauchy distribution has much fatter tails than a normal one, so this
+interval is visibly wider even at the same nominal level.
 
 ## Every episode at once
 
-For a
+When a
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-result with more than one episode, the `radf_obj` method runs the
-default method on each one without a manual loop – pass the original
+result contains more than one episode, the `radf_obj` method runs the
+default method on each of them without a manual loop. Pass the original
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
 result and the
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
@@ -118,7 +122,8 @@ rootstamp(r, ds)
 #> 1               18.53
 ```
 
-Root inference on a very short episode is close to meaningless (too few
-points to estimate an AR(1) coefficient precisely) – filter with
-`datestamp(..., min_duration = ...)` before piping in, rather than
-expecting this method to second-guess what counts as “too short.”
+Root inference on a very short episode is close to meaningless, because
+there are too few points to estimate an AR(1) coefficient precisely.
+Filter the episodes with `datestamp(..., min_duration = ...)` before
+passing them in. The method does not decide for you what counts as too
+short.

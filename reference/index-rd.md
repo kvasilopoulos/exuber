@@ -27,15 +27,15 @@ index(x) <- value
 ## Value
 
 The index of the object (a `Date` vector when the input data carried
-one, otherwise an integer sequence); the replacement form returns the
+one, otherwise an integer sequence). The replacement form returns the
 modified object.
 
 ## Details
 
-If the user does not specify an index for the estimation a pseudo-index
-is generated which is a sequential numeric series. After the estimation,
-the user can use `index()` to retrieve or `index<-()` to replace the
-index. The index can be either numeric or Date.
+If you do not specify an index for the estimation, the function
+generates a pseudo-index, a sequential numeric series. After the
+estimation you can use `index()` to retrieve the index or `index<-()` to
+replace it. The index can be numeric or Date.
 
 ## Examples
 

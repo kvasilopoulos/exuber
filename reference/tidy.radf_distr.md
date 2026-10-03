@@ -1,6 +1,6 @@
 # Tidy a `radf_distr` object
 
-Summarizes information about `radf_distr` object.
+Summarizes the information in a `radf_distr` object.
 
 ## Usage
 

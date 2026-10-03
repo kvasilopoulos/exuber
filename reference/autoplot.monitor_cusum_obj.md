@@ -1,8 +1,8 @@
 # Plot method for monitor_cusum() output
 
-Plots the CUSUM detector path against its boundary, one panel per
-series, with vertical markers at the end of the training sample and at
-the alarm date.
+Plots the CUSUM detector path against its boundary, with one panel for
+each series and vertical markers at the end of the training sample and
+at the alarm date.
 
 ## Usage
 

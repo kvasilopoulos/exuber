@@ -87,13 +87,13 @@
 
 
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
-<dd><p>n ordered vector of the same length as the "index" attribute of x.</p></dd>
+<dd><p>An ordered vector of the same length as the "index" attribute of x.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A character vector of series names; the replacement form returns
-the modified object.</p>
+    <p>A character vector of series names. The replacement form returns the
+modified object.</p>
     </div>
 
     <div class="section level2">
@@ -103,7 +103,7 @@ the modified object.</p>
 <span class="r-in"><span><span class="fu">series_names</span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "psy1"  "psy2"  "evans" "div"   "blan" </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Rename the series -- propagates through tidy()/autoplot()'s facet labels</span></span></span>
+<span class="r-in"><span><span class="co"># Rename the series, which carries through to the facet labels of tidy() and autoplot()</span></span></span>
 <span class="r-in"><span><span class="fu">series_names</span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bubble A"</span>, <span class="st">"Bubble B"</span>, <span class="st">"Bubble C"</span>, <span class="st">"Bubble D"</span>, <span class="st">"Bubble E"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">series_names</span><span class="op">(</span><span class="va">rfd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Bubble A" "Bubble B" "Bubble C" "Bubble D" "Bubble E"</span>

@@ -90,20 +90,20 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kvasilopoulos.github.io/exuber/">exuber</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="monitoring-vs--testing">Monitoring vs. testing<a class="anchor" aria-label="anchor" href="#monitoring-vs--testing"></a>
+<h2 id="monitoring-and-testing">Monitoring and testing<a class="anchor" aria-label="anchor" href="#monitoring-and-testing"></a>
 </h2>
-<p><code><a href="../reference/radf.html">radf()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code> and the
+<p><code><a href="../reference/radf.html">radf()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code> and the
 <code>dating_*()</code> family (see
-<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>) all work on a <em>finished</em>
-sample: they answer “was there a bubble, and when” after every
-observation is already in hand. The <code>monitor_*()</code> family
-answers a different, real-time question: fix a training window
-<code>[1, T*]</code> believed free of exuberance, calibrate a boundary
-on it, then watch each new observation <code>T*+1, T*+2, ...</code> and
-raise an alarm the first time the boundary is breached. All four
-functions share this <code>r_star</code>/alarm/<code>alarm_date</code>
-shape; they differ in what statistic they monitor and how the boundary
-is calibrated.</p>
+<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>) all work on a finished sample.
+They answer the question of whether there was a bubble, and when, after
+every observation is already in hand. The <code>monitor_*()</code>
+family answers a real-time question instead. We fix a training window
+<code>[1, T*]</code> that we believe is free of exuberance and calibrate
+a boundary on it. We then watch each new observation
+<code>T*+1, T*+2, ...</code> and raise an alarm the first time the
+boundary is crossed. All four functions share this <code>r_star</code>,
+alarm and <code>alarm_date</code> structure. They differ in the
+statistic they monitor and in how they calibrate the boundary.</p>
 <table class="table">
 <colgroup>
 <col width="25%">
@@ -128,16 +128,17 @@ recursion</td>
 quantile), <code>"kurozumi"</code> (closed-form, Kurozumi 2020), or
 <code>"fluc"</code> (closed-form, Homm &amp; Breitung 2012)</td>
 <td>
-<code><a href="../reference/radf.html">radf()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code> – not a
-<code>_test()</code>, but the same recursive-ADF core</td>
+<code><a href="../reference/radf.html">radf()</a></code> and <code><a href="../reference/datestamp.html">datestamp()</a></code>. It is not a
+<code>_test()</code> function, but it uses the same recursive ADF
+core</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code></td>
 <td>A CUSUM of the training-window-standardized series</td>
 <td>Homm &amp; Breitung (2012)’s asymptotic (or finite-sample)
 constant</td>
-<td>none – Homm &amp; Breitung’s CUSUM boundary is inherently a
-training/monitoring construction, with no full-sample form</td>
+<td>None. The CUSUM boundary of Homm &amp; Breitung is a training and
+monitoring construction by design and has no full-sample form</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code></td>
@@ -159,25 +160,27 @@ statistic</td>
 </tr>
 </tbody>
 </table>
-<p><code><a href="../reference/monitor.html">monitor()</a></code> reuses <code>badf</code>/<code>bsadf</code>
-directly (the same recursive-ADF core as the <code>radf_*()</code>
-family) but is named for what it <em>does</em>, not that internal detail
-– see <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for why. Two of its
-three siblings (<code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>,
-<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>) are the sequential extension of an
-existing static test of the same name minus the <code>monitor_</code>
-prefix; <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> has no such counterpart, since its
-source paper (Homm &amp; Breitung 2012) proposed CUSUM as a monitoring
-detector only.</p>
+<p><code><a href="../reference/monitor.html">monitor()</a></code> reuses <code>badf</code> and
+<code>bsadf</code> directly, which is the same recursive ADF core as in
+the <code>radf_*()</code> family. It is named after what it does and not
+after that internal detail (see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the reasoning). Two of
+its three siblings, <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> and
+<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>, are the sequential extension of an
+existing static test with the same name minus the <code>monitor_</code>
+prefix. <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> has no such counterpart, because
+its source paper (Homm &amp; Breitung 2012) proposed the CUSUM only as a
+monitoring detector.</p>
 </div>
 <div class="section level2">
-<h2 id="the-same-bubble-five-monitors">The same bubble, five monitors<a class="anchor" aria-label="anchor" href="#the-same-bubble-five-monitors"></a>
+<h2 id="one-bubble-five-monitors">One bubble, five monitors<a class="anchor" aria-label="anchor" href="#one-bubble-five-monitors"></a>
 </h2>
-<p>A training window of pure random walk (<code>T* = 100</code>),
-followed by more random walk, then a genuine explosive regime
-(<code>rho = 1.04</code>) from <code>t = 150</code> to the end of the
-sample – <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> with the bubble pushed past the
-training window and no collapse:</p>
+<p>The series starts with a training window of pure random walk
+(<code>T* = 100</code>) and continues as a random walk until
+<code>t = 150</code>. From then until the end of the sample it follows
+an explosive regime (<code>rho = 1.04</code>). We generate it with
+<code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>, placing the bubble after the training window
+and leaving out the collapse:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, te <span class="op">=</span> <span class="fl">150</span>, tf <span class="op">=</span> <span class="fl">200</span>, c <span class="op">=</span> <span class="fl">0.04</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -212,9 +215,9 @@ training window and no collapse:</p>
 <span><span class="co">#&gt;    series  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1     1.038    159         159</span></span></code></pre></div>
 <p><code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> and <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> each
-have a static, full-sample sibling that asks the retrospective version
-of the same question – run on the whole series rather than watching for
-a first crossing:</p>
+have a static, full-sample counterpart that asks the retrospective
+version of the same question. It runs on the whole series and does not
+wait for a first crossing:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/lbi_test.html">lbi_test</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -228,31 +231,35 @@ a first crossing:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  tau  tstat    crit  delta  detected</span></span>
 <span><span class="co">#&gt;   series1  0.5  20.25  0.5041   0.64      TRUE</span></span></code></pre></div>
-<p>Every monitor here alarms within about 15 points of the true bubble
-start (150), none before it – that “never before <code>T*</code> (or the
-true start)” property is exactly what each function’s own test suite
-checks under the null. Alarm <em>timing</em> differs by design:
-<code><a href="../reference/monitor.html">monitor()</a></code>’s ADF-family statistics tend to detect mid-sample
-bubbles fastest (the literature’s own finding, e.g. Kurozumi 2020/2021),
-while CUSUM-type detectors (<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>,
-<code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>) are typically slower but computationally
-simpler and don’t need a bootstrap.</p>
+<p>Every monitor alarms within about 15 observations of the true bubble
+start (150), and none alarms before it. Each function’s own test suite
+checks the absence of alarms before <code>T*</code> (or the true start)
+under the null. The timing of the alarm differs by design. The
+ADF-family statistics in <code><a href="../reference/monitor.html">monitor()</a></code> tend to detect bubbles
+in the middle of the sample fastest, as the literature finds (for
+example Kurozumi 2020, 2021). The CUSUM-type detectors
+(<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> and <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>) are
+typically slower, but they are computationally simpler and need no
+bootstrap.</p>
 </div>
 <div class="section level2">
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
 </h2>
 <ul>
-<li>Fastest detection, willing to pay for a wild bootstrap per call:
-<code>monitor(boundary = "bootstrap")</code> (the default).</li>
-<li>Same statistic, no bootstrap, an off-the-shelf published constant
-instead: <code>monitor(boundary = "kurozumi")</code> or
-<code>boundary = "fluc"</code>.</li>
-<li>A simpler CUSUM-based alternative with its own closed-form boundary:
-<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>, or <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code> for Breitung
-&amp; Diegel’s locally-best-invariant version (<code>c_bar &gt; 0</code>
-trades a little size for power against slow-building bubbles).</li>
-<li>Monitoring a specific quantile of the distribution rather than the
-mean behavior: <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>.</li>
+<li>If you want the fastest detection and can afford a wild bootstrap on
+each call, use <code>monitor(boundary = "bootstrap")</code>, which is
+the default.</li>
+<li>If you want the same statistic without a bootstrap, using a
+published constant instead, use
+<code>monitor(boundary = "kurozumi")</code> or
+<code>monitor(boundary = "fluc")</code>.</li>
+<li>If you want a simpler CUSUM-based alternative with its own
+closed-form boundary, use <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>. For the locally
+best invariant version of Breitung &amp; Diegel, use
+<code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>, where <code>c_bar &gt; 0</code> gives up a
+little size in exchange for power against slowly building bubbles.</li>
+<li>If you want to monitor a specific quantile of the distribution
+instead of the mean, use <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

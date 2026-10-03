@@ -1,7 +1,7 @@
 # Simulation of a single-bubble process
 
-The following function generates a time series which switches from a
-martingale to a mildly explosive process and then back to a martingale.
+Generates a time series that switches from a martingale to a mildly
+explosive process and then back to a martingale.
 
 ## Usage
 
@@ -56,46 +56,49 @@ sim_psy1(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 - e:
 
-  An optional numeric vector of length `n - 1` of innovations to use in
-  place of `rnorm(n - 1, sd = sigma)`. Lets the plain PSY equation above
-  be driven by a non-Gaussian/heteroskedastic/dependent shock sequence
-  instead of i.i.d. Gaussian noise – see
+  An optional numeric vector of length `n - 1` with innovations to use
+  in place of `rnorm(n - 1, sd = sigma)`. It lets the plain PSY equation
+  above be driven by a shock sequence that is non-Gaussian,
+  heteroskedastic or dependent instead of i.i.d. Gaussian noise. The
+  generators
   [`sim_innov`](https://kvasilopoulos.github.io/exuber/reference/sim_innov.md)
-  (heavy-tailed/skewed),
+  (heavy-tailed or skewed),
   [`sim_vol_break`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
   (permanent volatility break),
   [`sim_vol_garch`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md)
   (GARCH/TGARCH),
-  [`sim_vol_cir`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)/[`sim_vol_sv`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md)
+  [`sim_vol_cir`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)
+  and
+  [`sim_vol_sv`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md)
   (stochastic volatility) and
   [`sim_fi`](https://kvasilopoulos.github.io/exuber/reference/sim_fi.md)
-  (long-memory) for ready-made generators. Default `NULL` reproduces the
-  plain i.i.d. Gaussian DGP exactly.
+  (long memory) produce suitable sequences. The default `NULL`
+  reproduces the plain i.i.d. Gaussian process exactly.
 
 - shifts:
 
-  An optional data frame/list with integer element/column `date` (in
-  `2:n`) and numeric element/column `size`, adding a one-period
-  deterministic level shift of magnitude `size` at each `date` – Harvey,
-  Leybourne, Tatlow & Zu (2025)'s level-shift DGP. Default `NULL` adds
-  no shifts.
+  An optional data frame or list with an integer element or column
+  `date` (in `2:n`) and a numeric element or column `size`. It adds a
+  one-period deterministic level shift of magnitude `size` at each
+  `date`, which is the level-shift process of Harvey, Leybourne, Tatlow
+  & Zu (2025). The default `NULL` adds no shifts.
 
 - coef_noise:
 
-  An optional numeric vector of length `n - 1`, mean-zero/unit-variance,
-  perturbing the explosive-regime coefficient as
+  An optional numeric vector of length `n - 1` with zero mean and unit
+  variance. It perturbs the coefficient of the explosive regime as
   `delta + coef_a * coef_noise[t] / sqrt(n)` instead of the fixed
-  `delta` – Kurozumi & Nishi (2025)'s stochastically varying explosive
-  coefficient. Default `NULL` keeps `delta` fixed.
+  `delta`, which gives the stochastically varying explosive coefficient
+  of Kurozumi & Nishi (2025). The default `NULL` keeps `delta` fixed.
 
 - coef_a:
 

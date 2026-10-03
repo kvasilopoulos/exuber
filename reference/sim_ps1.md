@@ -1,13 +1,12 @@
 # Simulation of a single-bubble process with multiple forms of collapse regime
 
-The new generating process considered here differs from the `sim_psy1`
-model in three respects - Phillips and Shi (2018):
-
-*First, it includes an asymptotically negligible drift in the martingale
-path during normal periods. Second, the collapse process is modeled
-directly as a transient mildly integrated process that covers an
-explicit period of market collapse. Third, a market recovery date is
-introduced to capture the return to normal market behavior.*
+The process differs from the `sim_psy1` model in three respects
+(Phillips and Shi 2018). First, it includes an asymptotically negligible
+drift in the martingale path during normal periods. Second, the collapse
+is modeled directly as a transient mildly integrated process that covers
+an explicit period of market collapse. Third, it introduces a market
+recovery date to capture the return to normal market behavior. Three
+forms of collapse are available:
 
 - `sudden:` with `beta = 0.1` and `tr = tf + 0.01*n`
 
@@ -15,8 +14,8 @@ introduced to capture the return to normal market behavior.*
 
 - `smooth:` with `beta = 0.9` and `tr = tf + 0.2*n`
 
-In order to provide the duration of the collapse period `tr` as
-`tr = tf + 0.2n`, you have to provide `tf` as well.
+To set the duration of the collapse period through `tr = tf + 0.2n`, you
+must also provide `tf`.
 
 ## Usage
 
@@ -97,30 +96,33 @@ sim_ps1(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 - e:
 
-  An optional numeric vector of length `n - 1` of innovations to use in
-  place of `rnorm(n - 1, sd = sigma)`. Lets the plain PSY equation above
-  be driven by a non-Gaussian/heteroskedastic/dependent shock sequence
-  instead of i.i.d. Gaussian noise – see
+  An optional numeric vector of length `n - 1` with innovations to use
+  in place of `rnorm(n - 1, sd = sigma)`. It lets the plain PSY equation
+  above be driven by a shock sequence that is non-Gaussian,
+  heteroskedastic or dependent instead of i.i.d. Gaussian noise. The
+  generators
   [`sim_innov`](https://kvasilopoulos.github.io/exuber/reference/sim_innov.md)
-  (heavy-tailed/skewed),
+  (heavy-tailed or skewed),
   [`sim_vol_break`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
   (permanent volatility break),
   [`sim_vol_garch`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md)
   (GARCH/TGARCH),
-  [`sim_vol_cir`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)/[`sim_vol_sv`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md)
+  [`sim_vol_cir`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)
+  and
+  [`sim_vol_sv`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md)
   (stochastic volatility) and
   [`sim_fi`](https://kvasilopoulos.github.io/exuber/reference/sim_fi.md)
-  (long-memory) for ready-made generators. Default `NULL` reproduces the
-  plain i.i.d. Gaussian DGP exactly.
+  (long memory) produce suitable sequences. The default `NULL`
+  reproduces the plain i.i.d. Gaussian process exactly.
 
 ## Value
 

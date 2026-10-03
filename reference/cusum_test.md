@@ -2,10 +2,10 @@
 
 `cusum_test` implements the retrospective CUSUM (`"cs"`), generalized
 CUSUM (`"gcs"`), CUSUM-of-squares (`"cssq"`) and generalized
-CUSUM-of-squares (`"gcssq"`) tests of Kurozumi & Nishi (2025), Brown et
-al.'s (1975) parameter-constancy statistics applied to the first
-differences. The generalized versions take the supremum over every
-window start as well as every end point.
+CUSUM-of-squares (`"gcssq"`) tests of Kurozumi & Nishi (2025). These are
+the parameter-constancy statistics of Brown et al. (1975), applied to
+the first differences. The generalized versions take the supremum over
+every window start as well as every end point.
 
 ## Usage
 
@@ -18,48 +18,48 @@ cusum_test(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"))
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - sig_lvl:
 
-  Significance level on the package-wide 0-100 scale, one of `90`, `95`,
-  `99`.
+  Significance level on the 0 to 100 scale used throughout the package,
+  one of `90`, `95` or `99`.
 
 - type:
 
-  One of `"cs"`, `"gcs"`, `"cssq"`, `"gcssq"`.
+  One of `"cs"`, `"gcs"`, `"cssq"` or `"gcssq"`.
 
 ## Value
 
 An object of class `cusum_test_obj`: a list with the statistic path
-`stat` (one value per end point; for the generalized versions the sup
-over window starts), `stat_inf` (the inf path, CSSQ/GCSSQ only), the
-statistic `sup` (and `inf`), the critical value(s) `crit`, and
-`detected`.
+`stat` (one value for each end point, and for the generalized versions
+the sup over window starts), `stat_inf` (the inf path, for CSSQ and
+GCSSQ only), the statistic `sup` (and `inf`), the critical values `crit`
+and `detected`.
 
 ## Details
 
-CS/GCS reject when the cumulated increments get too large (right tail).
-CSSQ/GCSSQ are two-sided: they reject when the cumulated squared
-increments drift too far above *or* below their full-sample average,
-each tail at half the level. The paper finds the CUSUM-type tests lose
-almost all power once the explosive coefficient is genuinely stochastic,
-while the CUSUM-SQ type keeps it – see
+CS and GCS reject when the cumulated increments become too large (right
+tail). CSSQ and GCSSQ are two-sided. They reject when the cumulated
+squared increments drift too far above *or* below their full-sample
+average, with half the level in each tail. The paper finds that the
+CUSUM-type tests lose almost all their power once the explosive
+coefficient is stochastic, while the CUSUM-SQ type keeps it. See
 [`ssu_test`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
-for the paper's more powerful statistics.
+for the more powerful statistics of the paper.
 
 ## Note
 
-All critical values are published asymptotic values (Kurozumi & Nishi
-(2025)'s Table I); no minimum window is needed (the paper finds the
-statistics insensitive to it).
+All critical values are published asymptotic values (Table I of Kurozumi
+& Nishi 2025). No minimum window is needed, because the paper finds the
+statistics insensitive to it.
 
 ## Status
 
@@ -77,7 +77,8 @@ Royal Statistical Society B, 37(2), 149-192.
 
 ## See also
 
-[`ssu_test`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md);
+[`ssu_test`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
+and
 [`monitor_cusum`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
 for real-time CUSUM monitoring.
 

@@ -1,13 +1,13 @@
 # Wild Bootstrap Critical Values (Phillips & Shi 2020)
 
-`radf_wb_ps_cv` performs the Phillips & Shi (2020) wild bootstrap
-re-sampling scheme – fit a null AR model, resample its residuals – which
-is asymptotically robust to non-stationary volatility, to generate
-critical values for the recursive unit root tests. `radf_wb_ps_distr`
-computes the distribution. Unlike
-[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)'s
-Harvey et al. (2016) non-parametric multiplier bootstrap, this one
-supports a training-window boundary (`tb`), which is what
+`radf_wb_ps_cv` generates critical values for the recursive unit root
+tests with the wild bootstrap of Phillips & Shi (2020). The scheme fits
+a null AR model and resamples its residuals, and it is asymptotically
+robust to non-stationary volatility. `radf_wb_ps_distr` computes the
+distribution. In contrast to the non-parametric multiplier bootstrap of
+Harvey et al. (2016) in
+[`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
+this version supports a training-window boundary (`tb`), which is what
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 uses it for.
 
@@ -40,14 +40,14 @@ radf_wb_ps_distr(
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -75,18 +75,18 @@ radf_wb_ps_distr(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
-For `radf_wb_ps_cv` a list that contains the critical values for the
-ADF, BADF, BSADF and GSADF tests. For `radf_wb_ps_distr` a list that
-contains the ADF, SADF and GSADF distributions.
+For `radf_wb_ps_cv`, a list with the critical values for the ADF, BADF,
+BSADF and GSADF tests. For `radf_wb_ps_distr`, a list with the ADF, SADF
+and GSADF distributions.
 
 ## References
 

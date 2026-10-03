@@ -94,10 +94,10 @@
 <h2 id="what-the-sim_-family-is-for">What the <code>sim_*()</code> family is for<a class="anchor" aria-label="anchor" href="#what-the-sim_-family-is-for"></a>
 </h2>
 <p>Every test in the package is calibrated and validated on simulated
-data, and the same data-generating processes are exported so you can do
-the same: check size under a null you choose, check power against a
-bubble you choose, or just see what a given test does to a series whose
-true break dates you know. There are three kinds:</p>
+data. The same data generating processes are exported, so you can check
+the size of a test under a null you choose, check its power against a
+bubble you choose, or see what a test does to a series whose true break
+dates you know. There are three kinds:</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -141,37 +141,38 @@ true break dates you know. There are three kinds:</p>
 </tr>
 </tbody>
 </table>
-<p>Plus <code>sim_data</code>/<code>sim_data_wdate</code>, a bundled
-<code>data.frame</code> of five of the classic series (with and without
-a date column) used throughout the examples.</p>
+<p>The package also bundles <code>sim_data</code> and
+<code>sim_data_wdate</code>, two <code>data.frame</code>s with five of
+the classic series, without and with a date column, which the examples
+use throughout.</p>
 <p>Every function takes a <code>seed</code> argument, so a series is
-reproducible without a surrounding <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>, and the
-bubble processes take the break dates (<code>te</code>, <code>tf</code>,
-…) as arguments, so the truth you are testing against is explicit.</p>
-<p>The bubble processes split into two families.
-<code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>/<code><a href="../reference/sim_psy2.html">sim_psy2()</a></code>/ <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code>
-are the <em>regime</em> DGPs of Phillips, Shi &amp; Yu (2015) and
-Phillips &amp; Shi (2018): a unit root, then an explosive AR(1) between
-fixed dates, then a collapse and a return to a unit root – the design
-every paper in this literature uses for size and power.
+reproducible without a surrounding <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>. The bubble
+processes take the break dates (<code>te</code>, <code>tf</code> and so
+on) as arguments, so the truth you test against is explicit.</p>
+<p>The bubble processes fall into two families. <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>,
+<code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> and <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code> are the regime
+processes of Phillips, Shi &amp; Yu (2015) and Phillips &amp; Shi
+(2018). They have a unit root, then an explosive AR(1) between fixed
+dates, then a collapse and a return to a unit root. Papers in this
+literature use this design to study size and power.
 <code><a href="../reference/sim_blan.html">sim_blan()</a></code>, <code><a href="../reference/sim_evans.html">sim_evans()</a></code>,
 <code><a href="../reference/sim_tree.html">sim_tree()</a></code>, <code><a href="../reference/sim_mar.html">sim_mar()</a></code> and
-<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code> are <em>rational bubble</em> models: the
-explosive behaviour and its collapse are stochastic, driven by a
-probability of bursting each period rather than by fixed dates.
-<code><a href="../reference/sim_evans.html">sim_evans()</a></code>’s periodically collapsing bubble is the one
-PSY’s GSADF test was designed to catch, and the one the earlier tests it
-replaced could not.</p>
+<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code> are rational bubble models. The explosive
+behavior and the collapse are stochastic, driven by a probability that
+the bubble bursts in each period and not by fixed dates. The
+periodically collapsing bubble of <code><a href="../reference/sim_evans.html">sim_evans()</a></code> is the one
+that the GSADF test of PSY was designed to detect and that the earlier
+tests it replaced could not.</p>
 </div>
 <div class="section level2">
 <h2 id="the-psy-experiment">The PSY experiment<a class="anchor" aria-label="anchor" href="#the-psy-experiment"></a>
 </h2>
 <p>PSY validate the GSADF test on a price built from Lucas-model
-fundamentals plus an Evans (1991) bubble. <code><a href="../reference/sim_div.html">sim_div()</a></code> gives
-the fundamental price from a random walk with drift in dividends (West
-1988’s S&amp;P 500 parameterisation by default),
-<code><a href="../reference/sim_evans.html">sim_evans()</a></code> gives the bubble term, and a scaling factor
-<code>kappa</code> sets how much of the price the bubble accounts
+fundamentals plus an Evans (1991) bubble. <code><a href="../reference/sim_div.html">sim_div()</a></code>
+produces the fundamental price from a random walk with drift in
+dividends, using by default the S&amp;P 500 parameterization of West
+(1988). <code><a href="../reference/sim_evans.html">sim_evans()</a></code> produces the bubble term, and a scaling
+factor <code>kappa</code> sets how much of the price the bubble accounts
 for:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">200</span></span>
@@ -186,8 +187,7 @@ for:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="cn">NULL</span>, x <span class="op">=</span> <span class="cn">NULL</span>, color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulation_files/figure-html/psy-plot-1.png" class="r-plt" alt="" width="768"></p>
-<p>The point of the exercise is that <code><a href="../reference/radf.html">radf()</a></code> finds the
-episodes:</p>
+<p><code><a href="../reference/radf.html">radf()</a></code> should find the episodes:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="va">n</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>, <span class="va">cv</span><span class="op">)</span></span>
@@ -206,9 +206,9 @@ episodes:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sim_psy2.html">sim_psy2</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulation_files/figure-html/autoplot-sim-1.png" class="r-plt" alt="" width="768"></p>
-<p>Several at once go into a <code>data.frame</code> – which is also
-exactly what <code><a href="../reference/radf.html">radf()</a></code> takes, so the same object serves
-both:</p>
+<p>Several series can be collected in a <code>data.frame</code>, which
+is also what <code><a href="../reference/radf.html">radf()</a></code> takes, so the same object serves both
+purposes:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  psy1 <span class="op">=</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span><span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
@@ -229,34 +229,36 @@ both:</p>
 <div class="section level2">
 <h2 id="swapping-the-innovations">Swapping the innovations<a class="anchor" aria-label="anchor" href="#swapping-the-innovations"></a>
 </h2>
-<p>By default the regime DGPs are driven by i.i.d. Gaussian shocks.
-Every bubble process accepts a vector of innovations through
-<code>e</code> instead, and the innovation generators exist to fill it:
-heavy-tailed or skewed marginals (<code><a href="../reference/sim_innov.html">sim_innov()</a></code>), conditional
-heteroskedasticity (<code><a href="../reference/sim_vol_garch.html">sim_vol_garch()</a></code>), a one-off variance
-break (<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>), stochastic volatility
-(<code><a href="../reference/sim_vol_cir.html">sim_vol_cir()</a></code>, <code><a href="../reference/sim_vol_sv.html">sim_vol_sv()</a></code>) or long memory
-(<code><a href="../reference/sim_fi.html">sim_fi()</a></code>). The bubble dates stay where you put them; only
-the noise changes – which is how the volatility-robust tests in
-<code><a href="../articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code> are compared against
-plain <code><a href="../reference/radf.html">radf()</a></code> on an equal footing:</p>
+<p>By default the regime processes are driven by i.i.d. Gaussian shocks.
+Every bubble process also accepts a vector of innovations through
+<code>e</code>, and the innovation generators exist to supply it. They
+produce heavy-tailed or skewed marginals (<code><a href="../reference/sim_innov.html">sim_innov()</a></code>),
+conditional heteroskedasticity (<code><a href="../reference/sim_vol_garch.html">sim_vol_garch()</a></code>), a one-off
+variance break (<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>), stochastic volatility
+(<code><a href="../reference/sim_vol_cir.html">sim_vol_cir()</a></code> and <code><a href="../reference/sim_vol_sv.html">sim_vol_sv()</a></code>) or long
+memory (<code><a href="../reference/sim_fi.html">sim_fi()</a></code>). The bubble dates stay where you put them
+and only the noise changes. This is how
+<code><a href="../articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code> compares the
+volatility-robust tests with plain <code><a href="../reference/radf.html">radf()</a></code> on an equal
+footing:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Same bubble, same seed, volatility tripling half-way through the sample</span></span>
 <span><span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simulation_files/figure-html/innovations-1.png" class="r-plt" alt="" width="768"></p>
-<p>The innovation vector is one shorter than <code>n</code> because the
-first observation is the starting value, not a shock.</p>
+<p>The innovation vector is one element shorter than <code>n</code>
+because the first observation is the starting value and not a shock.</p>
 </div>
 <div class="section level2">
 <h2 id="multi-series-processes">Multi-series processes<a class="anchor" aria-label="anchor" href="#multi-series-processes"></a>
 </h2>
 <p><code><a href="../reference/sim_common.html">sim_common()</a></code> draws <code>n_series</code> series that
-share one latent bubble plus idiosyncratic noise, the design behind the
-panel test <code><a href="../reference/radf_common.html">radf_common()</a></code>; <code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code>
-draws a pair where <code>y</code> is a linear function of a (possibly
-lagged) explosive <code>x</code>, the design behind
-<code><a href="../reference/cobubble_test.html">cobubble_test()</a></code> and <code><a href="../reference/contagion_reg.html">contagion_reg()</a></code> (see
+share one latent bubble plus idiosyncratic noise, which is the design
+behind the panel test <code><a href="../reference/radf_common.html">radf_common()</a></code>.
+<code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code> draws a pair in which <code>y</code> is a
+linear function of a possibly lagged explosive <code>x</code>. This is
+the design behind <code><a href="../reference/cobubble_test.html">cobubble_test()</a></code> and
+<code><a href="../reference/contagion_reg.html">contagion_reg()</a></code> (see
 <code><a href="../articles/co-explosivity.html">vignette("co-explosivity")</a></code>):</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/sim_common.html">sim_common</a></span><span class="op">(</span>n_series <span class="op">=</span> <span class="fl">3</span>, n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
@@ -280,24 +282,23 @@ lagged) explosive <code>x</code>, the design behind
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
 </h2>
 <ul>
-<li>Size or power of a test against a bubble with <strong>known
-dates</strong>: <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> (one episode),
-<code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> (two), <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code> (one, with a
-distinct collapse regime – the design the <code>dating_*()</code>
-estimators assume).</li>
-<li>A <strong>rational</strong>, stochastically collapsing bubble:
-<code><a href="../reference/sim_evans.html">sim_evans()</a></code> on its own or on top of <code><a href="../reference/sim_div.html">sim_div()</a></code>
-fundamentals, as in PSY; <code><a href="../reference/sim_blan.html">sim_blan()</a></code> for the Blanchard
-version; <code><a href="../reference/sim_tree.html">sim_tree()</a></code>, <code><a href="../reference/sim_mar.html">sim_mar()</a></code>,
-<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code> for the newer ones.</li>
-<li>A <strong>null that looks like a bubble</strong> but isn’t:
+<li>To study the size or power of a test against a bubble with known
+dates, use <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> (one episode),
+<code><a href="../reference/sim_psy2.html">sim_psy2()</a></code> (two episodes) or <code><a href="../reference/sim_ps1.html">sim_ps1()</a></code> (one
+episode with a distinct collapse regime, the design that the
+<code>dating_*()</code> estimators assume).</li>
+<li>For a rational bubble that collapses stochastically, use
+<code><a href="../reference/sim_evans.html">sim_evans()</a></code> alone or on top of <code><a href="../reference/sim_div.html">sim_div()</a></code>
+fundamentals, as in PSY. <code><a href="../reference/sim_blan.html">sim_blan()</a></code> gives the Blanchard
+version, and <code><a href="../reference/sim_tree.html">sim_tree()</a></code>, <code><a href="../reference/sim_mar.html">sim_mar()</a></code> and
+<code><a href="../reference/sim_msbubble.html">sim_msbubble()</a></code> give the newer ones.</li>
+<li>For a null that looks like a bubble but is not one, use
 <code><a href="../reference/sim_falsebubble.html">sim_falsebubble()</a></code>.</li>
-<li>Non-Gaussian or <strong>heteroskedastic</strong> shocks under any of
-the above: build the shocks with an innovation generator and pass them
+<li>For non-Gaussian or heteroskedastic shocks under any of these
+processes, build the shocks with an innovation generator and pass them
 as <code>e</code>.</li>
-<li>
-<strong>Several series</strong>: <code><a href="../reference/sim_common.html">sim_common()</a></code> for a
-shared bubble, <code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code> for a linked pair, or a
+<li>For several series, use <code><a href="../reference/sim_common.html">sim_common()</a></code> for a shared
+bubble, <code><a href="../reference/sim_coexplosive.html">sim_coexplosive()</a></code> for a linked pair, or a
 <code>data.frame</code> of independent draws.</li>
 </ul>
 </div>

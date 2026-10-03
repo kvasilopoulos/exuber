@@ -1,7 +1,7 @@
 # Plot method for radf_sbz_union() output
 
-Plots, for each series, the supDF, supBZ and union statistics against
-their bootstrap critical values at the chosen significance level.
+Plots the supDF, supBZ and union statistics of each series against their
+bootstrap critical values at the chosen significance level.
 
 ## Usage
 
@@ -18,8 +18,8 @@ autoplot(object, sig_lvl = 95, ...)
 
 - sig_lvl:
 
-  Significance level to plot the critical value at, one of `90`, `95`
-  (default), `99`.
+  Significance level at which to plot the critical value, one of `90`,
+  `95` (default) or `99`.
 
 - ...:
 

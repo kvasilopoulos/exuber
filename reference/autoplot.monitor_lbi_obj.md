@@ -1,7 +1,7 @@
 # Plot method for monitor_lbi() output
 
-Plots the LBI CUSUM detector path against its boundary, one panel per
-series, with a vertical marker at the alarm date.
+Plots the LBI CUSUM detector path against its boundary, with one panel
+for each series and a vertical marker at the alarm date.
 
 ## Usage
 

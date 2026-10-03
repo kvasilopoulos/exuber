@@ -1,12 +1,12 @@
 # Kernel-Purged Heteroskedasticity-Robust PSY Test
 
-`radf_kp` implements the bootstrap-free heteroskedasticity-robust PSY
-test of Harvey, Leybourne, Taylor & Zu (2024): it "purges" unconditional
-heteroskedasticity by cumulating the series' first differences after
-dividing each by a kernel spot-volatility estimate (eq. 4-5), then runs
-the ordinary (with-intercept)
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) on
-the purged series.
+`radf_kp` implements the heteroskedasticity-robust PSY test of Harvey,
+Leybourne, Taylor & Zu (2024), which needs no bootstrap. It "purges"
+unconditional heteroskedasticity by dividing each first difference of
+the series by a kernel spot-volatility estimate (eq. 4-5) and cumulating
+the result. It then runs the ordinary
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md), with
+an intercept, on the purged series.
 
 ## Usage
 
@@ -19,14 +19,14 @@ radf_kp(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL)
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -40,46 +40,47 @@ radf_kp(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL)
 
 - h:
 
-  Bandwidth for the spot-volatility estimator. Default
-  `0.1 * T^(-0.25)`, the paper's own setting (Table I, Section 6).
+  Bandwidth for the spot-volatility estimator. The default is
+  `0.1 * T^(-0.25)`, the setting of the paper (Table I, Section 6).
 
 ## Value
 
-A `radf_obj`, identical in structure to
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-output (so
+A `radf_obj` with the same structure as the output of
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+computed on the volatility-purged series, so
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) etc. all
-apply directly), computed on the volatility-purged series.
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) and the other
+methods apply directly.
 
 ## Details
 
-Because the purged statistic's null limiting distribution is proven
-(Theorem 1 / Remark 3.2) to be identical to the standard homoskedastic
-GSADF null,
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-– exuber's existing, already-fast Monte Carlo critical values – applies
-directly to the result; no new bootstrap or simulation machinery is
-needed, unlike
+The paper proves (Theorem 1 and Remark 3.2) that the null limiting
+distribution of the purged statistic is identical to the standard
+homoskedastic GSADF null.
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+the existing and already fast Monte Carlo critical values of exuber,
+therefore apply directly to the result. Unlike
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
-or
-[`radf_sbz_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md).
+and
+[`radf_sbz_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md),
+no new bootstrap or simulation code is needed.
 
 Only the with-intercept variant (\\PSY\_\sigma\\ in the paper) is
-implemented. The paper also proposes a without-intercept variant and a
-union-of-rejections test combining both; these are not implemented here
-(see the package's enhancement notes for the cost/benefit reasoning).
+implemented. The paper also proposes a variant without an intercept and
+a union-of-rejections test that combines both. They are not implemented
+here (see the package's enhancement notes for the cost and benefit
+considerations).
 
 ## Note
 
-Returns
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s own
-output unmodified, so the full
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
-pipeline works exactly as it does for plain
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) –
-see
-[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+The function returns the unmodified output of
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md), so
+the full [`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+`tidy` and `autoplot` pipeline works exactly as it does for plain
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+(see
+[`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)).
 
 ## Status
 
@@ -95,11 +96,11 @@ Time Series Analysis.
 ## See also
 
 [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-for this test's (unmodified) critical values,
+for the critical values of this test, which are unmodified,
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
 for a bootstrap-based alternative, and
 [`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
-for another bootstrap-free alternative.
+for another alternative that needs no bootstrap.
 
 Other volatility-robust tests:
 [`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md),
@@ -114,8 +115,9 @@ Other volatility-robust tests:
 
 ``` r
 # \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_kp(y, minw = 20)
 print(res)
@@ -129,7 +131,7 @@ print(res)
 #>         2.633
 #> 
 
-# radf_mc_cv() applies unmodified -- see Details
+# radf_mc_cv() applies unmodified (see Details)
 cv <- radf_mc_cv(n = attr(res, "n"), minw = 20)
 summary(res, cv = cv)
 #> 

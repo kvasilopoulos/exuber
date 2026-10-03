@@ -7,43 +7,45 @@ library(exuber)
 
 ## Why this exists
 
-`exuber` started as one test
-([`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
-the recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi & Yu 2015)
-and grew, through a long research programme, into roughly 25 functions
-covering a dozen papers’ worth of related-but-distinct methodology:
-alternative tests, dating procedures, monitoring schemes, root
-inference. Every one of them used to be named `radf_<something>()`,
-which was accurate for some and misleading for others – a `radf_` prefix
-reads as “this is a recursive-ADF statistic,” but several of these
-functions are not that at all. This vignette documents the naming scheme
-that replaced it, and – more usefully – which functions can actually be
-plugged into the shared
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+`exuber` started as a single test,
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+the recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi & Yu
+(2015). Through a long research programme it grew to roughly 25
+functions that cover a dozen papers: alternative tests, dating
+procedures, monitoring schemes and root inference. Every one of them
+used to be named `radf_<something>()`. That was accurate for some and
+misleading for others, because a `radf_` prefix suggests a recursive ADF
+statistic and several of these functions are not one. This vignette
+documents the naming scheme that replaced the old one. It also explains
+which functions plug into the
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 pipeline built for
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
-and which have their own, differently-shaped output instead.
+and which have differently shaped output of their own.
 
 ## The naming scheme
 
 | Pattern | Means | Examples |
 |----|----|----|
-| `radf_` prefix | Genuinely built on the recursive-ADF core: calls [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) directly, or reuses its `badf`/`bsadf` recursion | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md), and the `_cv`/`_mc`/`_sb`/`_wb` critical-value engines |
-| `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive-ADF core | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md) |
-| `dating_` prefix | Point-estimation / model-selection dating, no formal hypothesis test at all | [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md), [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md), [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md), [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md) |
-| `monitor`/`monitor_` prefix | Real-time/sequential detection – grouped by *what it does*, not by internal mechanism. [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) is this family’s flagship, the same role [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) plays for the `radf_` family: it reuses `badf`/`bsadf` directly (genuinely ADF-family internals) but carries no `radf`/`sadf` token at all, specifically so it reads as “the real-time monitor,” not as a `radf_` variant – see below | [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md), [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md), [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md), [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) |
-| `root` family | Confidence-interval inference on the *magnitude* of the explosive root, not a test for its presence (`exuber_functions(family = "root")`; no shared prefix) | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md) (two S3 methods: default for a single sub-sample, `radf_obj` to run every [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) episode at once) |
+| `radf_` prefix | Built on the recursive ADF core: calls [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) directly or reuses its `badf`/`bsadf` recursion | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md), [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md), [`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md), [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md), and the `_cv`/`_mc`/`_sb`/`_wb` critical-value engines |
+| `_test` suffix | A standalone hypothesis test with its own null distribution, not built on the recursive ADF core | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md) |
+| `dating_` prefix | Dating by point estimation and model selection, with no formal hypothesis test | [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md), [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md), [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md), [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md) |
+| `monitor`/`monitor_` prefix | Real-time (sequential) detection, grouped by what the function does and not by its internal mechanism. [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) is the flagship of this family, as [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) is for the `radf_` family. It reuses `badf` and `bsadf` directly but carries no `radf` or `sadf` token, so that it reads as the real-time monitor and not as a `radf_` variant (see below) | [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md), [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md), [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md), [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) |
+| `root` family | Confidence-interval inference on the magnitude of the explosive root, not a test for its presence (`exuber_functions(family = "root")`; there is no shared prefix) | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md), which has two S3 methods: the default for a single sub-sample and the `radf_obj` method, which runs every [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) episode at once |
 | stands alone | A point-estimation tool, not a test | [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md) |
 
-Naming prefixes are a convention, not a contract – they’re easy to
-misremember and, as
+The prefixes are a convention and not a contract. They are easy to
+misremember and they sometimes pull against each other.
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-shows, sometimes trade off against each other (grouped with its fellow
-monitors under a name that deliberately doesn’t advertise its ADF-family
-internals, so it can’t be mistaken for a `radf_*()` variant). For
-anything programmatic, don’t parse function names: call
+is grouped with the other monitors under a name that deliberately does
+not advertise its ADF-family internals, so that nobody mistakes it for a
+`radf_*()` variant. For programmatic use, do not parse function names.
+Call
 [`exuber_functions()`](https://kvasilopoulos.github.io/exuber/reference/exuber_functions.md),
-which returns the same categorization as actual, queryable data.
+which returns the same categorization as queryable data.
 
 ``` r
 
@@ -57,49 +59,50 @@ exuber_functions(family = "monitor")
 #> 4 monitor_quantile monitor     QPWY/QPSY recursive quantile-regression monitori…
 ```
 
-Two names that look related but aren’t: the `dating_*()` family above
-are standalone SSR/BIC procedures called directly on raw data – they
-take no critical value at all.
+Two names look related but are not. The `dating_*()` functions above are
+standalone SSR/BIC procedures that run directly on raw data and take no
+critical value.
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-(see below) is a different thing entirely: the generic that applies
-PSY’s own threshold-crossing rule to any `radf_obj` + `radf_cv` pair.
+(see below) is a different thing: it is the generic that applies the
+threshold-crossing rule of Phillips, Shi and Yu to any `radf_obj` and
+`radf_cv` pair.
 
-One exception to
-“[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-always needs a `radf_cv`”: `datestamp(object, option = "svadf")` runs
-Sarkar & Wells (2026)’s asymmetric-threshold dating directly off
-`object$badf`, no critical value at all – see
-[`vignette("experimental-methods")`](https://kvasilopoulos.github.io/exuber/articles/experimental-methods.md).
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+normally needs a `radf_cv`, with one exception.
+`datestamp(object, option = "svadf")` runs the asymmetric-threshold
+dating of Sarkar & Wells (2026) directly on `object$badf` and needs no
+critical value (see
+[`vignette("experimental-methods")`](https://kvasilopoulos.github.io/exuber/articles/experimental-methods.md)).
 
 ## What actually plugs into `summary()`/`datestamp()`/`tidy()`/`autoplot()`
 
 These four generics are built around one shape: a `radf_obj` (from
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md))
-paired with a `radf_cv` that carries a **time-varying** boundary
-(`badf_cv`/`bsadf_cv`, one critical value per recursion point) as well
-as the three scalar sup-statistic critical values
-(`adf_cv`/`sadf_cv`/`gsadf_cv`). Only functions whose result actually
-carries the `radf_obj` class – and whose paired `_cv()` actually
-computes that time-varying boundary – get the full pipeline. Three
-tiers, in practice:
+paired with a `radf_cv` that carries a time-varying boundary (`badf_cv`
+and `bsadf_cv`, one critical value per recursion point) as well as the
+three scalar sup-statistic critical values (`adf_cv`, `sadf_cv` and
+`gsadf_cv`). Only functions whose result has the `radf_obj` class, and
+whose paired `_cv()` function computes that time-varying boundary, get
+the full pipeline. In practice there are three tiers.
 
 ### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`, `radf_sbz()`
 
-[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)/[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
-literally return
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s
-own output (purged of volatility, or computed on a PCA factor,
-respectively, then
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
+and
+[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
+return the output of
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-unmodified), so every generic works exactly as it does for plain
+itself, computed on a series purged of volatility or on a PCA factor
+respectively, so every generic works exactly as it does for plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md).
-The running series for this whole section is the one these tests are
-built for –
-[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+The running example for this section is the series these tests were
+designed for: the
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
 bubble with a permanent volatility break
 ([`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md),
-innovation standard deviation tripling half-way through), see
-[`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md):
+where the innovation standard deviation triples half-way through the
+sample). See
+[`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md).
 
 ``` r
 
@@ -142,48 +145,57 @@ autoplot(res, cv = cv)
 
 ![](naming-and-analysis_files/figure-html/kp-full-1.png)
 
-The other three are different: they carry the `radf_obj` class but build
-their statistic on `gls_dfstat_grid()` (a no-intercept, GLS-demeaned
-recursive-DF grid, fed the raw series for
-[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
-its cumulated sign for
-[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
-a recursively demeaned cumulated sign for
-[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md))
-rather than calling
+The other three are different. They carry the `radf_obj` class but build
+their statistic on `gls_dfstat_grid()` and do not call
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-directly. Until 2026-08-18 all three had a real gap: their `_cv()`
-functions only ever computed the three scalar critical values
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
-need, discarding the `badf`/`bsadf` path `gls_dfstat_grid()` already
-computes per replicate, so
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-(which need a *time-varying* boundary) always errored. Fixed for all
-three the same way, once the pattern was confirmed in
+directly. This function is a no-intercept, GLS-demeaned recursive
+Dickey-Fuller grid. It is fed the raw series for
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
+the cumulated sign of the series for
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+and a recursively demeaned cumulated sign for
+[`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md).
+
+Until 2026-08-18 the `_cv()` functions of all three had a gap. They
+computed only the three scalar critical values that
+[`summary()`](https://rdrr.io/r/base/summary.html) and
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) need and
+discarded the `badf` and `bsadf` paths that `gls_dfstat_grid()` already
+produces for each replicate. As a result
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html),
+which need a time-varying boundary, always failed. We fixed all three in
+the same way. We first established the fix in
 [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-first and then checked to hold for the other two as well: unlike
-[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)’s
-own `bsadf_cv` (a
-[`cummax()`](https://rdrr.io/r/base/cumsum.html)-across-replicates
-shortcut around the base C++ engine’s output shape),
-`gls_dfstat_grid()`’s `bsadf` is already the genuine
-sup-over-all-window-starts statistic at each point, so no shortcut
-derivation was needed – just the per-time-point quantile across
-replicates, the construction
+and then checked that it holds for the other two. The `bsadf` that
+`gls_dfstat_grid()` returns is already the sup over all window starts at
+each point. This differs from the `bsadf_cv` of
+[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+which uses a [`cummax()`](https://rdrr.io/r/base/cumsum.html) across
+replicates because of the output shape of the base C++ engine. No
+shortcut was needed here, and the boundary is the per-time-point
+quantile across replicates, the same construction
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-uses for its own `bsadf_cv`. Validated per function: `badf_cv`’s last
-row is bit-identical to `adf_cv` (`adf` is literally `badf`’s last
-point, per replicate – a hard identity, not an approximate check, and
-true regardless of which series feeds `gls_dfstat_grid()`); empirical
-false-alarm rate under `H0` is at or below nominal (`radf_tt` 3.3%,
-`radf_sign` 5.5%, `radf_sign_dm` 3.5%, all at nominal 5%, n=100,
-minw=20); and detection power on an identical synthetic bubble is in the
-same range as the established
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-baseline (16%) rather than suspiciously higher or lower (`radf_tt` 18%,
-`radf_sign` 20%, `radf_sign_dm` 8% – the sign-based tests trading power
-for their heteroskedasticity invariance is itself the paper’s own
-documented finding, not a validation red flag).
+uses for its own `bsadf_cv`.
+
+We validated each function in three ways.
+
+- The last row of `badf_cv` is bit-identical to `adf_cv`, because `adf`
+  is the last point of `badf` in every replicate. This is an exact
+  identity, and it holds whichever series feeds `gls_dfstat_grid()`.
+- The empirical false-alarm rate under `H0` is at or below the nominal
+  5% (`radf_tt` 3.3%, `radf_sign` 5.5%, `radf_sign_dm` 3.5%, with n =
+  100 and minw = 20).
+- The detection power on an identical synthetic bubble is in the same
+  range as the 16% of the established
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  and
+  [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+  baseline, and it is neither suspiciously higher nor lower (`radf_tt`
+  18%, `radf_sign` 20%, `radf_sign_dm` 8%). The sign-based tests give up
+  power in exchange for invariance to heteroskedasticity, which is a
+  documented finding of the source paper and not a validation problem.
 
 ``` r
 
@@ -255,27 +267,31 @@ autoplot(res, cv = cv)
 ![](naming-and-analysis_files/figure-html/sign-full-1.png)
 
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
-is a fourth, separate case: it builds its statistic (`supBZ`) on
-`wls_dfstat_grid()`, a WLS/kernel-volatility-weighted no-intercept
-recursive-DF grid, not `gls_dfstat_grid()` – but the same fix applies
-for the same reason, since `wls_dfstat_grid()` already returns the full
-`badf`/`bsadf` path per replicate.
-[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)’s
-wild bootstrap is therefore built the same way as
-[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)/[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)’s
-Monte Carlo simulation: per-time-point quantile across replicates, no
-[`cummax()`](https://rdrr.io/r/base/cumsum.html) shortcut needed.
-Validated the same way: `badf_cv`’s last row is bit-identical to
-`adf_cv`; empirical false-alarm rate under `H0` is 5.0% at nominal 5%
-(n=100, minw=20, 200 replications); and it does reject on a sufficiently
-strong deterministic explosive path, though its kernel-volatility
-weighting trades away enough power on
-[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
-default, milder bubble that it doesn’t reject on the series above at
-nboot=100-200 – the same power/robustness trade-off already documented
-for
-[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)’s
-`supBZ` leg below, not a new finding specific to the split.
+is a fourth, separate case. It builds its statistic (`supBZ`) on
+`wls_dfstat_grid()`, a no-intercept recursive Dickey-Fuller grid
+weighted by WLS and kernel volatility, and not on `gls_dfstat_grid()`.
+The same fix applies for the same reason, since `wls_dfstat_grid()`
+already returns the full `badf` and `bsadf` path for each replicate. The
+wild bootstrap in
+[`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
+is therefore built as the Monte Carlo simulation in
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+and
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+is, with a per-time-point quantile across replicates and no
+[`cummax()`](https://rdrr.io/r/base/cumsum.html) shortcut. We validated
+it in the same way. The last row of `badf_cv` is bit-identical to
+`adf_cv`, and the empirical false-alarm rate under `H0` is 5.0% at a
+nominal 5% (n = 100, minw = 20, 200 replications). The test also rejects
+on a sufficiently strong deterministic explosive path. Its
+kernel-volatility weighting costs enough power, however, that it does
+not reject the series above at nboot = 100 to 200, where the bubble is
+the milder default of
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md).
+The same trade between power and robustness is documented for the
+`supBZ` leg of
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+below, so it is not new to this split.
 
 ``` r
 
@@ -300,12 +316,14 @@ tidy(res, cv = cv)
 #> 1 series1 -1.39  1.67  1.91
 ```
 
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-need at least one rejection to have anything to show (they error
-otherwise, same as for any other `radf_obj`/`radf_cv` pair) – the series
-above doesn’t clear `supBZ`’s bar, so here’s the same volatility break
-under a stronger, uncollapsed explosive regime (`rho = 1.03` from
-`t = 120` to the sample end), which does:
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+need at least one rejection to have anything to show, and they raise an
+error otherwise, as for any other `radf_obj` and `radf_cv` pair. The
+series above does not clear the `supBZ` threshold, so we repeat the
+volatility break with a stronger explosive regime that does not collapse
+(`rho = 1.03` from `t = 120` to the end of the sample):
 
 ``` r
 
@@ -330,42 +348,44 @@ autoplot(res2, cv = cv2)
 
 ### Own `print()` and `autoplot()`: everything else
 
-The remaining ~15 functions
-([`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md),
+The remaining 15 or so functions return their own class, with their own
+[`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+methods. They are
+[`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md),
 [`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
 [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md),
 [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md),
 the `dating_*()` family, the
-[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)/`monitor_*()`
-family (including
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-itself, ADF-family internals notwithstanding – see above),
+and `monitor_*()` family (including
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+itself, despite its ADF-family internals),
 [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md),
 [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
-[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md),
-[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md))
-each return their own class with their own
-[`print()`](https://rdrr.io/r/base/print.html) and
-[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-methods, because their output genuinely doesn’t fit the `radf_obj` shape
-– a dating table isn’t a per-series sup-statistic, a monitoring alarm
-isn’t a critical value grid. Trying to force them through
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
-isn’t a documentation gap to close; the right call is their own
-presentation, shown directly:
+[`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
+and
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md).
+Their output does not fit the `radf_obj` shape: a dating table is not a
+per-series sup-statistic, and a monitoring alarm is not a critical value
+grid. Forcing them through
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+and [`tidy()`](https://generics.r-lib.org/reference/tidy.html) would not
+close a documentation gap, so each is presented by its own methods,
+shown below.
 
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
-is the one exception worth flagging: it’s grouped under **Analysis** in
-the [reference
+needs one remark. The [reference
 index](https://kvasilopoulos.github.io/exuber/reference/index.md) and
-the README’s workflow list, right after
+the workflow list in the README place it under Analysis, right after
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
-since that’s genuinely where it belongs in the *sequence of steps*
-(detect → date → measure growth rate) – but that’s a workflow position,
-not an S3-support tier. It’s still its own class with its own
+because that is its position in the sequence of steps (detect, date,
+measure the growth rate). That is a position in the workflow and not an
+S3-support tier. It has its own class with its own
 [`print()`](https://rdrr.io/r/base/print.html) and
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-methods, same as everything else in this section; see
+methods, like everything else in this section. See
 [`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md).
 
 ``` r

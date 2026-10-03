@@ -1,7 +1,7 @@
-# Helper function to find `tb` from the Phillips and Shi (2020)
+# Helper function to find `tb` from Phillips and Shi (2020)
 
-This function helps to find the number of observations in the window
-over which size is to be controlled.
+This function finds the number of observations in the window over which
+size is to be controlled.
 
 ## Usage
 
@@ -25,10 +25,9 @@ ps_tb(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2)
 
 ## Value
 
-A single integer, the training-window length in observations, suitable
-for
-[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)'s
-`r_star`.
+A single integer, the length of the training window in observations,
+suitable for the `r_star` argument of
+[`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md).
 
 ## References
 
@@ -42,13 +41,13 @@ possibly integrated systems: Revisiting the money-income relationship.
 ## Examples
 
 ``` r
-# Training window controlling size over a 2-year span of monthly data
+# Training window that controls size over a 2-year span of monthly data
 tb <- ps_tb(100, freq = "monthly", size = 2)
 tb
 #> [1] 42
 
 # \donttest{
-# Use it directly as monitor()'s training window
+# Use it directly as the training window of monitor()
 monitor(sim_data, r_star = tb, boundary = "kurozumi")
 #> 
 #> ── monitor (T* = 42 / 100, minw = 19, sig_lvl = 95%, boundary = kurozumi) ──────

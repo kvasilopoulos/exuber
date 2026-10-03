@@ -1,7 +1,7 @@
 # Plot method for ssu_test() output
 
-Plots the recursive SSU statistic path against its critical value, one
-panel per series.
+Plots the recursive SSU statistic path against its critical value, with
+one panel for each series.
 
 ## Usage
 

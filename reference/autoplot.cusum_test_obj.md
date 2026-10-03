@@ -1,8 +1,9 @@
 # Plot method for cusum_test() output
 
-Plots the CUSUM-type statistic path against its critical value(s), one
-panel per series; the two-sided CUSUM-of-squares tests show the sup path
-against the upper and the inf path against the lower critical value.
+Plots the CUSUM-type statistic path against its critical values, with
+one panel for each series. For the two-sided CUSUM-of-squares tests, the
+sup path is shown against the upper critical value and the inf path
+against the lower one.
 
 ## Usage
 

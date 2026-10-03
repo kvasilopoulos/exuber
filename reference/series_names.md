@@ -31,11 +31,11 @@ series_names(x) <- value
 
 - value:
 
-  n ordered vector of the same length as the "index" attribute of x.
+  An ordered vector of the same length as the "index" attribute of x.
 
 ## Value
 
-A character vector of series names; the replacement form returns the
+A character vector of series names. The replacement form returns the
 modified object.
 
 ## Examples
@@ -46,7 +46,7 @@ rfd <- radf(sim_data)
 series_names(rfd)
 #> [1] "psy1"  "psy2"  "evans" "div"   "blan" 
 
-# Rename the series -- propagates through tidy()/autoplot()'s facet labels
+# Rename the series, which carries through to the facet labels of tidy() and autoplot()
 series_names(rfd) <- c("Bubble A", "Bubble B", "Bubble C", "Bubble D", "Bubble E")
 series_names(rfd)
 #> [1] "Bubble A" "Bubble B" "Bubble C" "Bubble D" "Bubble E"

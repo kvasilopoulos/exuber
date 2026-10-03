@@ -1,13 +1,13 @@
 # Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung & Diegel 2025)
 
-`monitor_lbi` implements the sequential (constant-boundary) extension of
-[`lbi_test`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md)'s
-locally best invariant statistic, for monitoring a series in real time
-when the bubble's start date is unknown: after a training window
-`[1, T*]` assumed free of exuberance, the (optionally exponentially
-weighted) partial sum of post-training first differences is compared
-against a constant boundary, flagging the first monitoring date it is
-breached.
+`monitor_lbi` implements the sequential, constant-boundary extension of
+the locally best invariant statistic of
+[`lbi_test`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md).
+It monitors a series in real time when the start date of the bubble is
+unknown. After a training window `[1, T*]` that is assumed free of
+exuberance, it compares the (optionally exponentially weighted) partial
+sum of the post-training first differences with a constant boundary and
+flags the first monitoring date at which the boundary is breached.
 
 ## Usage
 
@@ -20,67 +20,72 @@ monitor_lbi(data, r_star = 0.5, c_bar = 0, sig_lvl = 95)
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - r_star:
 
   The end of the training window: a fraction in `(0, 1)` of the sample
-  (default `0.5`), or an integer observation count if `>= 1`.
+  (default `0.5`), or an integer number of observations if `>= 1`.
 
 - c_bar:
 
-  Exponential up-weighting parameter for later (more bubble-like)
-  monitoring observations (their eq. 12), `>= 0`. `0` (default) is the
-  flat-weight "mCUSUM" variant, appropriate when a bubble is equally
-  likely to start at any point in the monitoring window; the paper's own
-  suggested value for a moderate power boost when a bubble partway
-  through is more plausible is `2`. Critical values (`sig_lvl`) are the
-  same for every `c_bar`.
+  Exponential up-weighting parameter for later monitoring observations,
+  which are more likely to be bubble-like (their eq. 12), `>= 0`. The
+  default `0` is the flat-weight "mCUSUM" variant, which is appropriate
+  when a bubble is equally likely to start at any point in the
+  monitoring window. For a moderate gain in power when a bubble that
+  starts partway through the window is more plausible, the paper
+  suggests `2`. The critical values (`sig_lvl`) are the same for every
+  `c_bar`.
 
 - sig_lvl:
 
-  Significance level on the package-wide 0-100 scale, one of `90`, `95`,
-  `97.5`, `99`, `99.5` (Breitung & Diegel's Table 1 only tabulates
-  these).
+  Significance level on the 0 to 100 scale used throughout the package,
+  one of `90`, `95`, `97.5`, `99` or `99.5`. Table 1 of Breitung &
+  Diegel tabulates only these.
 
 ## Value
 
-An object of class `monitor_lbi_obj`: a list with the monitoring-region
-statistic path (`stat`), the constant `boundary`, the training window
-length `T_star`, and `alarm`/`alarm_date` (the first breach, `NA` if
-none).
+An object of class `monitor_lbi_obj`: a list with the statistic path in
+the monitoring region (`stat`), the constant `boundary`, the length of
+the training window `T_star`, and `alarm` and `alarm_date` (the first
+breach, `NA` if there is none).
 
 ## Details
 
-Their eq. 15 shows this partial sum, normalized by the fixed monitoring
-horizon length (not `sqrt(t)`, unlike
-[`monitor_cusum`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)'s
-Chu-Stinchcombe-White-style boundary), converges to a standard Brownian
-motion on `[0, 1]` under the null – so a single constant boundary
-controls size uniformly across the whole monitoring window. The paper
-shows this constant-boundary detector ("mCUSUM" at `c_bar = 0`, "wCUSUM"
-at `c_bar > 0`) is more powerful than the classical
-time-varying-boundary CUSUM test it is compared against.
+Their eq. 15 shows that this partial sum, normalized by the fixed length
+of the monitoring horizon, converges to a standard Brownian motion on
+`[0, 1]` under the null. The normalization is not `sqrt(t)`, which
+differs from the Chu-Stinchcombe-White-style boundary of
+[`monitor_cusum`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md).
+A single constant boundary therefore controls size uniformly across the
+whole monitoring window. The paper shows that this constant-boundary
+detector ("mCUSUM" at `c_bar = 0`, "wCUSUM" at `c_bar > 0`) is more
+powerful than the classical CUSUM test with a time-varying boundary, to
+which it is compared.
 
 ## Note
 
-The critical value is a published constant boundary (Breitung & Diegel
-(2025)'s Table 1) – a table lookup, no simulation.
+The critical value is the published constant boundary in Table 1 of
+Breitung & Diegel (2025), so it is a table lookup and needs no
+simulation.
 
-Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
-it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+The function returns its own class and not `radf_obj`, so it does not
+work with [`summary()`](https://rdrr.io/r/base/summary.html),
+`\link{datestamp}` and `tidy`. It has its own
+[`print()`](https://rdrr.io/r/base/print.html) and
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-methods instead. Prints its own boundary/alarm summary – see
+methods instead. [`print()`](https://rdrr.io/r/base/print.html) shows
+the boundary and the alarm. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the full picture of which functions do and don't fit that pipeline.
+for which functions fit the shared pipeline and which do not.
 
 ## Status
 
@@ -95,11 +100,12 @@ Journal of Time Series Analysis.
 ## See also
 
 [`lbi_test`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md)
-for the static (known, full-sample bubble window) version.
+for the static version, which assumes a known bubble window that spans
+the full sample.
 [`monitor_cusum`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
 and
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-for structurally different monitoring detectors.
+are monitoring detectors with a structurally different construction.
 
 Other monitoring:
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),

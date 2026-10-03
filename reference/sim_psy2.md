@@ -1,6 +1,6 @@
 # Simulation of a two-bubble process
 
-The following data generating process is similar to
+This data generating process is similar to
 [`sim_psy1`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md),
 with the difference that there are two episodes of mildly explosive
 dynamics.
@@ -66,12 +66,12 @@ sim_psy2(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
@@ -103,8 +103,8 @@ of the first bubble; \\\tau\_{2e} = \[T r\_{2e}\]\\ and \\\tau\_{2f} =
 \[T r\_{2f}\]\\ are the origination and termination dates of the second
 bubble. After the collapse of the first bubble, \\X_t\\ resumes a
 martingale path until time \\\tau\_{2e}-1\\, and a second episode of
-exuberance begins at \\\tau\_{2e}\\. Exuberance lasts lasts until
-\\\tau\_{2f}\\ at which point the process collapses to a value of
+exuberance begins at \\\tau\_{2e}\\. Exuberance lasts until
+\\\tau\_{2f}\\, at which point the process collapses to a value of
 \\X\_{\tau\_{2f}}\\. The process then continues on a martingale path
 until the end of the sample period \\\tau\\. The duration of the first
 bubble is assumed to be longer than that of the second bubble, i.e.

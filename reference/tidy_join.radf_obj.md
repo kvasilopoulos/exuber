@@ -1,8 +1,8 @@
 # Tidy into a joint model
 
 Tidy or augment and then join objects of class `radf_obj` and `radf_cv`.
-The object of reference is the `radf_cv`. For example, if panel critical
-values are provided the function will return the panel test statistic.
+The `radf_cv` is the object of reference. For example, if you provide
+panel critical values, the function returns the panel test statistic.
 
 ## Usage
 

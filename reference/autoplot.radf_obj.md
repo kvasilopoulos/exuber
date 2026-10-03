@@ -1,8 +1,8 @@
 # Plotting `radf` models
 
-`autoplot.radf_obj` takes `radf_obj` and `radf_cv` and returns a faceted
-ggplot object. `shade` is used as an input to `shape_opt`. `shade`
-modifies the geom_rect layer that demarcates the exuberance periods.
+`autoplot.radf_obj` takes a `radf_obj` and a `radf_cv` and returns a
+faceted ggplot object. `shade` is used as an input to `shade_opt`. It
+modifies the geom_rect layer that marks the exuberance periods.
 
 ## Usage
 
@@ -61,11 +61,11 @@ shade(
 
 - option:
 
-  Whether to apply the "gsadf" or "sadf" methodology (default =
+  Whether to apply the "gsadf" or the "sadf" methodology (default =
   "gsadf"). Unlike
   [`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
-  `"svadf"` is not supported here – it has no critical-value band to
-  shade.
+  this function does not support `"svadf"`, because that option has no
+  critical-value band to shade.
 
 - min_duration:
 
@@ -74,13 +74,12 @@ shade(
 
 - select_series:
 
-  A vector of column names or numbers specifying the series to be used
-  in plotting. Note that the order of the series does not alter the
-  order used in plotting.
+  A vector of column names or numbers that specifies the series to plot.
+  The order of the series does not change the order used in the plot.
 
 - nonrejected:
 
-  If TRUE, plot all variables regardless of rejecting the NULL at the 5
+  If TRUE, plot all series, whether or not they reject the null at the 5
   percent significance level.
 
 - shade_opt:
@@ -106,22 +105,20 @@ shade(
 
 - fill:
 
-  The shade color that indicates the exuberance periods with positive
-  signal
+  The shade color for the exuberance periods with a positive signal.
 
 - fill_negative:
 
-  The shade color that indicates the exuberance periods with positive
-  signal
+  The shade color for the exuberance periods with a negative signal,
+  that is, from series that do not reject the null hypothesis.
 
 - fill_ongoing:
 
-  The shade color that indicates the exuberance periods that are ongoing
-  the null hypothesis.
+  The shade color for the exuberance periods that are ongoing.
 
 - opacity:
 
-  The opacity of the shade color aka alpha.
+  The opacity of the shade color (alpha).
 
 ## Value
 

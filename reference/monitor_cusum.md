@@ -1,12 +1,12 @@
 # CUSUM Real-Time Monitoring for Explosive Bubbles
 
-`monitor_cusum` implements Homm & Breitung (2012)'s CUSUM real-time
-monitoring procedure: fix a training window `[1, T*]` assumed free of
-exuberance, then compare the standardized cumulative sum of
-post-training first differences, `S_t = (y_t - y_{T*}) / sigma_hat_t`,
-against a closed-form boundary `c_t * sqrt(t)`,
-`c_t = sqrt(b_alpha + log(t / T*))`, flagging the first date it is
-breached.
+`monitor_cusum` implements the CUSUM real-time monitoring procedure of
+Homm & Breitung (2012). You fix a training window `[1, T*]` that is
+assumed free of exuberance. The function then compares the standardized
+cumulative sum of the post-training first differences,
+`S_t = (y_t - y_{T*}) / sigma_hat_t`, with the closed-form boundary
+`c_t * sqrt(t)`, where `c_t = sqrt(b_alpha + log(t / T*))`, and flags
+the first date at which the boundary is breached.
 
 ## Usage
 
@@ -28,100 +28,104 @@ monitor_cusum(
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - r_star:
 
   The end of the training window: a fraction in `(0, 1)` of the sample
-  (default `0.5`), or an integer observation count if `>= 1`.
+  (default `0.5`), or an integer number of observations if `>= 1`.
 
 - b_alpha:
 
-  The boundary constant (HB's eq. 29). Default `4.6`, HB's own one-sided
-  asymptotic calibration for a 5\\ (their Section 3); this is an
-  asymptotic upper bound on the false- alarm probability (Chu,
-  Stinchcombe & White 1996), not an exact size, so it is typically
-  conservative in finite samples. Ignored when `boundary = "finite"`.
+  The boundary constant (eq. 29 of HB). The default `4.6` is the
+  one-sided asymptotic calibration of HB for a 5\\ Section 3). It is an
+  asymptotic upper bound on the false-alarm probability (Chu,
+  Stinchcombe & White 1996) and not an exact size, so it is typically
+  conservative in finite samples. It is ignored when
+  `boundary = "finite"`.
 
 - boundary:
 
   `"asymptotic"` (default) uses `b_alpha` directly. `"finite"` instead
-  looks up HB's own finite-sample boundary constant (their Table 8) from
-  `sig_lvl` and the realized training length/monitoring-horizon ratio –
-  `sig_lvl` must then be one of `90`, `95`, `99`.
+  looks up the finite-sample boundary constant of HB (their Table 8)
+  from `sig_lvl` and the realized ratio of training length to monitoring
+  horizon. `sig_lvl` must then be one of `90`, `95` or `99`.
 
 - sig_lvl:
 
-  Significance level on the package-wide 0-100 scale when
-  `boundary = "finite"` (default `95`); ignored when
+  Significance level on the 0 to 100 scale used throughout the package
+  when `boundary = "finite"` (default `95`). It is ignored when
   `boundary = "asymptotic"`.
 
 - type:
 
-  `"standard"` (default) for Homm & Breitung (2012)'s original CUSUM
-  statistic, or `"kernel"` for Astill, Harvey, Leybourne, Taylor & Zu
-  (2023)'s volatility-robust "CUSUMV" variant.
+  `"standard"` (default) for the original CUSUM statistic of Homm &
+  Breitung (2012), or `"kernel"` for the volatility-robust "CUSUMV"
+  variant of Astill, Harvey, Leybourne, Taylor & Zu (2023).
 
 - h:
 
-  Bandwidth/window length (AHLTZ's `N`) for the one-sided kernel
-  spot-variance estimator when `type = "kernel"`. Default `20`, the
-  authors' own empirically-recommended value (their Section 3: "setting
-  H = 20 delivered a procedure with the best trade-off" between
-  false-alarm robustness and power). Ignored when `type = "standard"`.
+  Bandwidth (window length, `N` in AHLTZ) of the one-sided kernel
+  spot-variance estimator when `type = "kernel"`. The default `20` is
+  the value that the authors recommend from their experiments (their
+  Section 3: "setting H = 20 delivered a procedure with the best
+  trade-off" between robustness of the false-alarm rate and power). It
+  is ignored when `type = "standard"`.
 
 - kernel:
 
   Kernel for the spot-variance estimator when `type = "kernel"`,
-  `"gaussian"` (default) or `"uniform"`. Ignored when
+  `"gaussian"` (default) or `"uniform"`. It is ignored when
   `type = "standard"`.
 
 ## Value
 
-An object of class `monitor_cusum_obj`: a list with the
-monitoring-region statistic path (`S`) and `boundary`, the training
-window length `T_star`, and `alarm`/`alarm_date` (the first breach, `NA`
-if none).
+An object of class `monitor_cusum_obj`: a list with the statistic path
+in the monitoring region (`S`) and `boundary`, the length of the
+training window `T_star`, and `alarm` and `alarm_date` (the first
+breach, `NA` if there is none).
 
 ## Note
 
-The boundary is closed-form throughout: a fixed asymptotic constant
-(`boundary = "asymptotic"`, `b_alpha = 4.6`) or a published
-finite-sample table lookup (`boundary = "finite"`, Homm & Breitung
-(2012)'s Table 8) – no simulation, no separate cv function.
+The boundary is closed-form throughout. It is either a fixed asymptotic
+constant (`boundary = "asymptotic"`, `b_alpha = 4.6`) or a lookup in the
+published finite-sample table (`boundary = "finite"`, Table 8 of Homm &
+Breitung 2012). No simulation and no separate cv function is needed.
 
-Unlike
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-(Family A, a recursive ADF-family statistic requiring a wild bootstrap
-to calibrate its boundary), this is a structurally different statistic –
-a standardized running sum, not a recursive regression – with an
-asymptotic closed-form boundary (Chu, Stinchcombe & White 1996's
-inequality, HB's eq. 28): no bootstrap, no simulation, no dependence on
-the data beyond the running variance estimate itself.
+(Family A) uses a recursive ADF-family statistic whose boundary needs a
+wild bootstrap for calibration. This function uses a structurally
+different statistic, a standardized running sum and not a recursive
+regression. Its boundary is an asymptotic closed form (the inequality of
+Chu, Stinchcombe & White 1996, eq. 28 of HB), so it needs no bootstrap
+and no simulation and does not depend on the data beyond the running
+variance estimate itself.
 
-`type = "kernel"` instead uses Astill, Harvey, Leybourne, Taylor & Zu
-(2023)'s volatility-robust modification ("CUSUMV"): each first
-difference is standardized by its own one-sided kernel spot-variance
-estimate (their eq. 6-7) instead of a single running variance, before
-cumulating. Their Corollary 1 establishes the *same* boundary function
-delivers a controlled asymptotic false-alarm rate even under
-time-varying volatility, unlike the standard CUSUM statistic, which
-requires homoskedasticity for its own size-control result to hold.
+`type = "kernel"` instead uses the volatility-robust modification
+("CUSUMV") of Astill, Harvey, Leybourne, Taylor & Zu (2023). Before
+cumulating, it standardizes each first difference by its own one-sided
+kernel spot-variance estimate (their eq. 6-7) and not by a single
+running variance. Their Corollary 1 establishes that the *same* boundary
+function gives a controlled asymptotic false-alarm rate even under
+time-varying volatility. The standard CUSUM statistic does not have this
+property, because its size-control result requires homoskedasticity.
 
-Returns its own class (not `radf_obj`), so it does not plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/`\link{datestamp}`/`tidy`;
-it has its own [`print()`](https://rdrr.io/r/base/print.html) and
+The function returns its own class and not `radf_obj`, so it does not
+work with [`summary()`](https://rdrr.io/r/base/summary.html),
+`\link{datestamp}` and `tidy`. It has its own
+[`print()`](https://rdrr.io/r/base/print.html) and
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-methods instead. Prints its own boundary/alarm summary – see
+methods instead. [`print()`](https://rdrr.io/r/base/print.html) shows
+the boundary and the alarm. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the full picture of which functions do and don't fit that pipeline.
+for which functions fit the shared pipeline and which do not.
 
 ## Status
 
@@ -144,7 +148,7 @@ Econometrics, 21(1), 187-227.
 ## See also
 
 [`monitor`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-for the recursive-ADF (Family A) monitoring alternative.
+for the monitoring alternative based on the recursive ADF (Family A).
 
 Other monitoring:
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
@@ -171,7 +175,7 @@ autoplot(res)
 
 
 # Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023):
-# same bubble, but volatility triples at t = 120, after the training window
+# the same bubble, but volatility triples at t = 120, after the training window
 y_vol <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
   e = sim_vol_break(199, tau = 0.6))
 res_kernel <- monitor_cusum(y_vol, r_star = 0.5, type = "kernel")

@@ -1,6 +1,6 @@
 # Tidy a `radf_obj` object
 
-Summarizes information about `radf_obj` object.
+Summarizes the information in a `radf_obj` object.
 
 ## Usage
 

@@ -7,34 +7,34 @@ library(exuber)
 
 ## Two different questions about two series
 
-Both functions here look at a *pair* of series that each contain (or
-might contain) an explosive episode, but they ask different questions
-and answer them differently:
+Both functions look at a pair of series that each contain, or might
+contain, an explosive episode. They ask different questions.
 
 - [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)
-  (Evripidou, Harvey, Leybourne & Sollis 2022) is a formal **hypothesis
-  test**: are `y` and `x`‘s explosive episodes the *same* episode,
-  i.e. is `y_t - alpha - beta * x_{t-i}` stationary for some lag/lead
-  `i`? This is a KPSS-type test – the null hypothesis is co-explosivity
-  (stationary residual), so *rejecting* means the two series’ bubbles
-  are not the same underlying process.
+  (Evripidou, Harvey, Leybourne & Sollis 2022) is a formal hypothesis
+  test of whether the explosive episodes of `y` and `x` are the same
+  episode, that is, whether `y_t - alpha - beta * x_{t-i}` is stationary
+  for some lag or lead `i`. It is a KPSS-type test whose null hypothesis
+  is co-explosivity (a stationary residual). Rejecting the null
+  therefore means that the bubbles in the two series do not come from
+  the same underlying process.
 - [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
-  (Greenaway-McGrevy & Phillips 2016) performs no formal inference at
-  all. It estimates a **time-varying** contagion coefficient
-  `delta_2(r)`: at each point `r` in the sample, how strongly a
-  “peripheral” series `y`‘s (fixed-window) AR(1) coefficient co-moves
-  with a “core” series’ own coefficient, via a Nadaraya-Watson kernel
-  regression.
+  (Greenaway-McGrevy & Phillips 2016) does no formal inference. It
+  estimates a time-varying contagion coefficient `delta_2(r)` with a
+  Nadaraya-Watson kernel regression. At each point `r` in the sample,
+  the coefficient measures how strongly the fixed-window AR(1)
+  coefficient of a “peripheral” series `y` moves with the coefficient of
+  a “core” series.
 
-Neither carries the `radf_obj` class – see
-[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
+Neither function returns the `radf_obj` class (see
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)).
 
 ## `cobubble_test()`: are these the same bubble?
 
 [`sim_coexplosive()`](https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.md)
-is Evripidou et al.’s own DGP: `y` is a linear function of an explosive
-`x` (plus noise), so the pair *is* co-explosive and a correct test
-should not reject:
+implements the data generating process of Evripidou et al.: `y` is a
+linear function of an explosive `x` plus noise. The pair is
+co-explosive, so a correct test should not reject:
 
 ``` r
 
@@ -48,8 +48,8 @@ res
 #> Co-explosivity not rejected at the 5% level.
 ```
 
-For contrast, `sim_data$psy1` and `sim_data$psy2` are independently
-simulated explosive episodes, sharing no bubble process by construction:
+For contrast, `sim_data$psy1` and `sim_data$psy2` are simulated
+independently, so by construction they share no bubble process:
 
 ``` r
 
@@ -61,14 +61,14 @@ cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199, seed = 1)
 #> Co-explosivity rejected at the 5% level.
 ```
 
-Here `S` comfortably exceeds its (wild-bootstrap,
-heteroskedasticity-robust) critical value and co-explosivity is rejected
-– correctly.
+Here `S` clearly exceeds its wild-bootstrap critical value, which is
+robust to heteroskedasticity, and co-explosivity is rejected, as it
+should be.
 
 ## `contagion_reg()`: how strongly do they co-move, and when?
 
-On the co-explosive pair, `y`’s AR(1) coefficient tracks `x`’s almost
-one-for-one throughout the sample:
+For the co-explosive pair, the AR(1) coefficient of `y` follows that of
+`x` almost one for one throughout the sample:
 
 ``` r
 
@@ -80,8 +80,8 @@ cr
 #> delta_2(r) range: [0.948, 0.965]
 ```
 
-`cr$delta2` is the full estimated path over `cr$r_grid`, not just the
-range [`print()`](https://rdrr.io/r/base/print.html) shows:
+`cr$delta2` holds the whole estimated path over `cr$r_grid`, while
+[`print()`](https://rdrr.io/r/base/print.html) shows only its range:
 
 ``` r
 
@@ -93,7 +93,7 @@ plot(cr$r_grid, cr$delta2, type = "l",
 ![](co-explosivity_files/figure-html/contagion-plot-1.png)
 
 For contrast, the two independent `sim_data` series give a coefficient
-path sitting far below one:
+path that stays far below one:
 
 ``` r
 
@@ -106,10 +106,11 @@ range(cr$delta2)
 
 ## Which to reach for
 
-- Want a yes/no answer, with a critical value, to “do these two series
-  share the same explosive episode”:
+- If you want a yes or no answer, with a critical value, to the question
+  of whether two series share the same explosive episode, use
   [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md).
-- Want to see *how* the strength of comovement between two series’ AR
-  coefficients evolves over the sample (e.g. to visualize contagion
-  building up before a joint collapse), with no formal test attached:
+- If you want to see how the comovement between the AR coefficients of
+  two series changes over the sample, for example to watch contagion
+  build up before a joint collapse, and you do not need a formal test,
+  use
   [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md).

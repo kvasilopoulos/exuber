@@ -10,39 +10,39 @@ library(ggplot2)
 
 Every result object in the package has an
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-method, so the plotting call is the same whatever you ran –
-`autoplot(x)` – and what it draws depends on what `x` is. All of them
-return a plain `ggplot` object, so anything ggplot2 can do (themes,
-scales, extra layers, `facet_*()` arguments) applies on top.
+method. The call is always `autoplot(x)`, and what it draws depends on
+the class of `x`. Each method returns an ordinary `ggplot` object, so
+anything ggplot2 offers, such as themes, scales, extra layers and
+`facet_*()` arguments, can be added on top.
 
 | What you have | What [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html) draws |
 |----|----|
-| [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) result (`radf_obj`) | Test statistic vs. critical-value sequence, one facet per series that rejects the null, with the explosive episodes shaded |
-| [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) result (`ds_radf`) | Just the episodes, one horizontal segment per series – the view for many series at once |
+| [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) result (`radf_obj`) | Test statistic against the critical-value sequence, with one facet per series that rejects the null and the explosive episodes shaded |
+| [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) result (`ds_radf`) | Only the episodes, as one horizontal segment per series. This is the view for many series at once |
 | `radf_*_distr()` result (`radf_distr`) | The simulated null distribution of the ADF/SADF/GSADF statistics |
 | Any `sim_*()` series | The series itself |
-| [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md), `monitor_*()` | Monitored statistic vs. its boundary, with training-end and alarm markers |
+| [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md), `monitor_*()` | Monitored statistic against its boundary, with markers for the end of training and for the alarm |
 | `dating_*()`, [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md) | The series with vertical markers at the estimated break dates |
 | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md) | Estimated root and its confidence interval per episode |
-| [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md) | Statistic vs. critical value per series |
+| [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md) | Statistic against critical value for each series |
 
-The rest of this vignette is about the first three – the
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-workflow – and about building your own plot from the tidied tables when
-the defaults don’t fit. The other methods take no options beyond the
-object and are shown in their own vignettes
+The rest of this vignette covers the first three rows, which belong to
+the [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+workflow, and shows how to build your own plot from the tidied tables
+when the defaults do not fit. The other methods take no options beyond
+the object. They appear in their own vignettes
 ([`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md),
-[`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md),
+[`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md)
+and
 [`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md)).
 
 ## The `radf()` plot
 
-Four simulated series, one from each of the package’s classic bubble
-DGPs (see
+We simulate four series, one from each of the classic bubble data
+generating processes in the package (see
 [`vignette("simulation")`](https://kvasilopoulos.github.io/exuber/articles/simulation.md)),
-estimated with one lag. With a lag the critical values depend on
-`(n, lag)`, so we simulate them once and pass them to every call – the
-same pattern as
+and estimate them with one lag. The critical values depend on
+`(n, lag)`, so we simulate them once and pass them to every call, as in
 [`vignette("exuber")`](https://kvasilopoulos.github.io/exuber/articles/exuber.md):
 
 ``` r
@@ -64,10 +64,10 @@ autoplot(est, cv)
 
 ![](plotting_files/figure-html/autoplot-basic-1.png)
 
-Only series that reject the null at 5% are drawn. The options that
-change *what* is plotted are arguments of
+Only series that reject the null at the 5% level are drawn. The
+arguments of
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-itself:
+itself control what is plotted:
 
 ``` r
 
@@ -88,9 +88,9 @@ autoplot(est, cv, select_series = c("psy1", "evans"), option = "sadf")
 
 The shading of the explosive episodes is a
 [`geom_rect()`](https://ggplot2.tidyverse.org/reference/geom_tile.html)
-layer controlled through `shade_opt` and the
+layer. The `shade_opt` argument and the
 [`shade()`](https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_obj.md)
-helper; `shade_opt = NULL` removes it:
+helper control it, and `shade_opt = NULL` removes it:
 
 ``` r
 
@@ -101,10 +101,11 @@ autoplot(est, cv, select_series = "psy2",
 ![](plotting_files/figure-html/autoplot-shade-1.png)
 
 [`autoplot2()`](https://kvasilopoulos.github.io/exuber/reference/autoplot2.md)
-draws the *series* instead of the statistic, with the same shading,
-which is often the more readable view for a non-technical audience;
-[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)’s
-own method reduces each series to its episodes:
+draws the series itself instead of the statistic, with the same shading.
+This is often easier to read for a non-technical audience. The method
+for
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+objects reduces each series to its episodes:
 
 ``` r
 
@@ -123,15 +124,16 @@ datestamp(est, cv) %>%
 
 ### Changing the appearance
 
-Everything else – colors, line types, theme – is ggplot2 territory.
+Colors, line types and themes are handled by ggplot2.
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 maps the statistic and the critical value to `color`, `size` and
-`linetype`, so the ggplot2 `scale_*_manual()` functions override them;
+`linetype`, so the ggplot2 `scale_*_manual()` functions can override
+them.
 [`scale_exuber_manual()`](https://kvasilopoulos.github.io/exuber/reference/scale_exuber_manual.md)
-sets all three at once, and
+sets all three at once.
 [`theme_exuber()`](https://kvasilopoulos.github.io/exuber/reference/scale_exuber_manual.md)
-is the package’s default theme, exported so you can apply it to your own
-plots too:
+is the default theme of the package, and it is exported so that you can
+apply it to your own plots too:
 
 ``` r
 
@@ -143,23 +145,24 @@ autoplot(est, cv, select_series = "psy2") +
 
 ![](plotting_files/figure-html/autoplot-theme-1.png)
 
-Arguments
+Arguments that
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-doesn’t recognize are forwarded to
+does not recognize are passed on to
 [`ggplot2::facet_wrap()`](https://ggplot2.tidyverse.org/reference/facet_wrap.html),
-so `scales = "free_y"`, `ncol`, `labeller`, etc. work directly – see
+so `scales = "free_y"`, `ncol` and `labeller` work directly.
 [`?autoplot.radf_obj`](https://kvasilopoulos.github.io/exuber/reference/autoplot.radf_obj.md)
-for a labeller example that renames the facets.
+has a labeller example that renames the facets.
 
 ## Building your own plot
 
-When the default layout isn’t what you need, skip
+When the default layout does not suit you, skip
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-and start from the same table it is built on.
+and start from the table it is built on.
 [`augment_join()`](https://kvasilopoulos.github.io/exuber/reference/augment_join.md)
 joins the full statistic sequences of a `radf_obj` with the
-critical-value sequences of a `radf_cv`, one row per observation,
-series, statistic and significance level – ggplot2-ready as is:
+critical-value sequences of a `radf_cv`. It returns one row per
+observation, series, statistic and significance level, which ggplot2 can
+use as it is:
 
 ``` r
 
@@ -194,19 +197,22 @@ joined %>%
 ![](plotting_files/figure-html/custom-facet-1.png)
 
 [`tidy_join()`](https://kvasilopoulos.github.io/exuber/reference/tidy_join.md)
-is the scalar counterpart (one row per series and statistic, the table
-[`summary()`](https://rdrr.io/r/base/summary.html) prints), and
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`augment()`](https://generics.r-lib.org/reference/augment.html)
-on either object alone give the un-joined halves – see
+is the scalar counterpart, with one row per series and statistic, which
+is the table that [`summary()`](https://rdrr.io/r/base/summary.html)
+prints. Calling
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) or
+[`augment()`](https://generics.r-lib.org/reference/augment.html) on
+either object alone returns the two halves before they are joined.
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the full pipeline.
+describes the full pipeline.
 
 ## Distributions
 
-The `radf_*_distr()` twins of the critical-value functions return the
-whole simulated null distribution rather than its quantiles, and have
-their own
-[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html):
+The `radf_*_distr()` functions are the counterparts of the
+critical-value functions. They return the whole simulated null
+distribution instead of its quantiles, and they have their own
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+method:
 
 ``` r
 
@@ -216,10 +222,9 @@ autoplot(distr)
 
 ![](plotting_files/figure-html/distr-1.png)
 
-As with everything else,
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) gives the
-underlying table, so an empirical CDF or any other summary is a few
-ggplot2 lines away:
+As elsewhere, [`tidy()`](https://generics.r-lib.org/reference/tidy.html)
+returns the underlying table, so an empirical CDF or any other summary
+takes only a few lines of ggplot2:
 
 ``` r
 
@@ -237,16 +242,17 @@ distr %>%
 
 ## Which to reach for
 
-- A quick look at which series are explosive and when:
-  `autoplot(est, cv)`; add `nonrejected = TRUE` to see the ones that
-  aren’t.
-- The series itself with the episodes shaded, for a non-technical
-  reader: `autoplot2(est, cv)`.
-- Many series, only the episodes: `autoplot(datestamp(est, cv))`.
-- Cosmetic changes: keep
+- For a quick look at which series are explosive and when, use
+  `autoplot(est, cv)`. Add `nonrejected = TRUE` to include the series
+  that do not reject.
+- To show the series itself with the episodes shaded, for a
+  non-technical reader, use `autoplot2(est, cv)`.
+- To show only the episodes of many series, use
+  `autoplot(datestamp(est, cv))`.
+- For cosmetic changes, keep
   [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-  and add ggplot2 layers, scales or a theme;
+  and add ggplot2 layers, scales or a theme. Use
   [`scale_exuber_manual()`](https://kvasilopoulos.github.io/exuber/reference/scale_exuber_manual.md)
-  for the statistic/critical-value styling.
-- A different layout altogether: `augment_join(est, cv)` and build it
-  yourself.
+  to style the statistic and the critical value.
+- For a different layout altogether, build your own plot from
+  `augment_join(est, cv)`.

@@ -3,19 +3,19 @@
 Generates i.i.d. Gaussian shocks whose standard deviation shifts
 permanently from `sigma` to `sigma * ratio` at observation `tau * n`,
 for use as `sim_psy1(..., e = sim_vol_break(...))`. This is the
-*non-stationary* volatility DGP (Cavaliere & Taylor 2007's single break)
-under which
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-standard critical values lose size control, and the one the
-volatility-robust tests
+*non-stationary* volatility process (the single break of Cavaliere &
+Taylor 2007) under which the standard critical values of
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) lose
+size control. The volatility-robust tests
 ([`radf_tt`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
 [`radf_kp`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
 [`radf_sbz`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md),
-[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
+[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
+and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md))
-are designed for – unlike stationary conditional heteroskedasticity
-([`sim_vol_garch`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md)),
-whose variance profile is asymptotically flat.
+are designed for it. Stationary conditional heteroskedasticity
+([`sim_vol_garch`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md))
+is different, because its variance profile is asymptotically flat.
 
 ## Usage
 
@@ -36,10 +36,10 @@ sim_vol_break(n, tau = 0.5, ratio = 3, sigma = 6.79, seed = NULL)
 
 - ratio:
 
-  Positive post-/pre-break standard deviation ratio; `ratio > 1` is an
-  upward break (the case where
+  Positive ratio of the post-break to the pre-break standard deviation.
+  `ratio > 1` is an upward break, the case in which
   [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-  over-rejects most), `ratio < 1` a downward one.
+  over-rejects the most, and `ratio < 1` is a downward one.
 
 - sigma:
 
@@ -49,12 +49,12 @@ sim_vol_break(n, tau = 0.5, ratio = 3, sigma = 6.79, seed = NULL)
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 

@@ -92,20 +92,20 @@
 <div class="section level2">
 <h2 id="why-this-exists">Why this exists<a class="anchor" aria-label="anchor" href="#why-this-exists"></a>
 </h2>
-<p><code>exuber</code> started as one test (<code><a href="../reference/radf.html">radf()</a></code>, the
-recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi &amp; Yu 2015)
-and grew, through a long research programme, into roughly 25 functions
-covering a dozen papers’ worth of related-but-distinct methodology:
-alternative tests, dating procedures, monitoring schemes, root
-inference. Every one of them used to be named
-<code>radf_&lt;something&gt;()</code>, which was accurate for some and
-misleading for others – a <code>radf_</code> prefix reads as “this is a
-recursive-ADF statistic,” but several of these functions are not that at
-all. This vignette documents the naming scheme that replaced it, and –
-more usefully – which functions can actually be plugged into the shared
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-pipeline built for <code><a href="../reference/radf.html">radf()</a></code>, and which have their own,
-differently-shaped output instead.</p>
+<p><code>exuber</code> started as a single test, <code><a href="../reference/radf.html">radf()</a></code>,
+the recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi &amp; Yu
+(2015). Through a long research programme it grew to roughly 25
+functions that cover a dozen papers: alternative tests, dating
+procedures, monitoring schemes and root inference. Every one of them
+used to be named <code>radf_&lt;something&gt;()</code>. That was
+accurate for some and misleading for others, because a
+<code>radf_</code> prefix suggests a recursive ADF statistic and several
+of these functions are not one. This vignette documents the naming
+scheme that replaced the old one. It also explains which functions plug
+into the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code>,
+<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> pipeline built for
+<code><a href="../reference/radf.html">radf()</a></code>, and which have differently shaped output of their
+own.</p>
 </div>
 <div class="section level2">
 <h2 id="the-naming-scheme">The naming scheme<a class="anchor" aria-label="anchor" href="#the-naming-scheme"></a>
@@ -125,9 +125,8 @@ differently-shaped output instead.</p>
 <tr class="odd">
 <td>
 <code>radf_</code> prefix</td>
-<td>Genuinely built on the recursive-ADF core: calls <code><a href="../reference/radf.html">radf()</a></code>
-directly, or reuses its <code>badf</code>/<code>bsadf</code>
-recursion</td>
+<td>Built on the recursive ADF core: calls <code><a href="../reference/radf.html">radf()</a></code> directly
+or reuses its <code>badf</code>/<code>bsadf</code> recursion</td>
 <td>
 <code><a href="../reference/radf.html">radf()</a></code>, <code><a href="../reference/radf_tt.html">radf_tt()</a></code>,
 <code><a href="../reference/radf_sign.html">radf_sign()</a></code>, <code><a href="../reference/radf_common.html">radf_common()</a></code>,
@@ -139,7 +138,7 @@ critical-value engines</td>
 <td>
 <code>_test</code> suffix</td>
 <td>A standalone hypothesis test with its own null distribution, not
-built on the recursive-ADF core</td>
+built on the recursive ADF core</td>
 <td>
 <code><a href="../reference/lbi_test.html">lbi_test()</a></code>, <code><a href="../reference/ssu_test.html">ssu_test()</a></code>,
 <code><a href="../reference/quantile_test.html">quantile_test()</a></code>, <code><a href="../reference/cobubble_test.html">cobubble_test()</a></code>
@@ -148,8 +147,8 @@ built on the recursive-ADF core</td>
 <tr class="odd">
 <td>
 <code>dating_</code> prefix</td>
-<td>Point-estimation / model-selection dating, no formal hypothesis test
-at all</td>
+<td>Dating by point estimation and model selection, with no formal
+hypothesis test</td>
 <td>
 <code><a href="../reference/dating_hls.html">dating_hls()</a></code>, <code><a href="../reference/dating_hlw.html">dating_hlw()</a></code>,
 <code><a href="../reference/dating_knp.html">dating_knp()</a></code>, <code><a href="../reference/dating_pdc.html">dating_pdc()</a></code>
@@ -158,14 +157,13 @@ at all</td>
 <tr class="even">
 <td>
 <code>monitor</code>/<code>monitor_</code> prefix</td>
-<td>Real-time/sequential detection – grouped by <em>what it does</em>,
-not by internal mechanism. <code><a href="../reference/monitor.html">monitor()</a></code> is this family’s
-flagship, the same role <code><a href="../reference/radf.html">radf()</a></code> plays for the
-<code>radf_</code> family: it reuses
-<code>badf</code>/<code>bsadf</code> directly (genuinely ADF-family
-internals) but carries no <code>radf</code>/<code>sadf</code> token at
-all, specifically so it reads as “the real-time monitor,” not as a
-<code>radf_</code> variant – see below</td>
+<td>Real-time (sequential) detection, grouped by what the function does
+and not by its internal mechanism. <code><a href="../reference/monitor.html">monitor()</a></code> is the
+flagship of this family, as <code><a href="../reference/radf.html">radf()</a></code> is for the
+<code>radf_</code> family. It reuses <code>badf</code> and
+<code>bsadf</code> directly but carries no <code>radf</code> or
+<code>sadf</code> token, so that it reads as the real-time monitor and
+not as a <code>radf_</code> variant (see below)</td>
 <td>
 <code><a href="../reference/monitor.html">monitor()</a></code>, <code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code>,
 <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>, <code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code>
@@ -174,13 +172,14 @@ all, specifically so it reads as “the real-time monitor,” not as a
 <tr class="odd">
 <td>
 <code>root</code> family</td>
-<td>Confidence-interval inference on the <em>magnitude</em> of the
-explosive root, not a test for its presence
-(<code>exuber_functions(family = "root")</code>; no shared prefix)</td>
+<td>Confidence-interval inference on the magnitude of the explosive
+root, not a test for its presence
+(<code>exuber_functions(family = "root")</code>; there is no shared
+prefix)</td>
 <td>
-<code><a href="../reference/rootstamp.html">rootstamp()</a></code> (two S3 methods: default for a single
-sub-sample, <code>radf_obj</code> to run every <code><a href="../reference/datestamp.html">datestamp()</a></code>
-episode at once)</td>
+<code><a href="../reference/rootstamp.html">rootstamp()</a></code>, which has two S3 methods: the default for
+a single sub-sample and the <code>radf_obj</code> method, which runs
+every <code><a href="../reference/datestamp.html">datestamp()</a></code> episode at once</td>
 </tr>
 <tr class="even">
 <td>stands alone</td>
@@ -189,14 +188,13 @@ episode at once)</td>
 </tr>
 </tbody>
 </table>
-<p>Naming prefixes are a convention, not a contract – they’re easy to
-misremember and, as <code><a href="../reference/monitor.html">monitor()</a></code> shows, sometimes trade off
-against each other (grouped with its fellow monitors under a name that
-deliberately doesn’t advertise its ADF-family internals, so it can’t be
-mistaken for a <code>radf_*()</code> variant). For anything
-programmatic, don’t parse function names: call
-<code><a href="../reference/exuber_functions.html">exuber_functions()</a></code>, which returns the same categorization
-as actual, queryable data.</p>
+<p>The prefixes are a convention and not a contract. They are easy to
+misremember and they sometimes pull against each other.
+<code><a href="../reference/monitor.html">monitor()</a></code> is grouped with the other monitors under a name
+that deliberately does not advertise its ADF-family internals, so that
+nobody mistakes it for a <code>radf_*()</code> variant. For programmatic
+use, do not parse function names. Call <code><a href="../reference/exuber_functions.html">exuber_functions()</a></code>,
+which returns the same categorization as queryable data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/exuber_functions.html">exuber_functions</a></span><span class="op">(</span>family <span class="op">=</span> <span class="st">"monitor"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
@@ -206,17 +204,17 @@ as actual, queryable data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> monitor_cusum    monitor     CUSUM/CUSUMV real-time monitoring, closed-form b…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> monitor_lbi      monitor     Sequential extension of lbi_test(), constant-bou…</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> monitor_quantile monitor     QPWY/QPSY recursive quantile-regression monitori…</span></span></code></pre></div>
-<p>Two names that look related but aren’t: the <code>dating_*()</code>
-family above are standalone SSR/BIC procedures called directly on raw
-data – they take no critical value at all. <code><a href="../reference/datestamp.html">datestamp()</a></code> (see
-below) is a different thing entirely: the generic that applies PSY’s own
-threshold-crossing rule to any <code>radf_obj</code> +
-<code>radf_cv</code> pair.</p>
-<p>One exception to “<code><a href="../reference/datestamp.html">datestamp()</a></code> always needs a
-<code>radf_cv</code>”: <code>datestamp(object, option = "svadf")</code>
-runs Sarkar &amp; Wells (2026)’s asymmetric-threshold dating directly
-off <code>object$badf</code>, no critical value at all – see
-<code><a href="../articles/experimental-methods.html">vignette("experimental-methods")</a></code>.</p>
+<p>Two names look related but are not. The <code>dating_*()</code>
+functions above are standalone SSR/BIC procedures that run directly on
+raw data and take no critical value. <code><a href="../reference/datestamp.html">datestamp()</a></code> (see
+below) is a different thing: it is the generic that applies the
+threshold-crossing rule of Phillips, Shi and Yu to any
+<code>radf_obj</code> and <code>radf_cv</code> pair.</p>
+<p><code><a href="../reference/datestamp.html">datestamp()</a></code> normally needs a <code>radf_cv</code>, with
+one exception. <code>datestamp(object, option = "svadf")</code> runs the
+asymmetric-threshold dating of Sarkar &amp; Wells (2026) directly on
+<code>object$badf</code> and needs no critical value (see
+<code><a href="../articles/experimental-methods.html">vignette("experimental-methods")</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="what-actually-plugs-into-summarydatestamptidyautoplot">What actually plugs into
@@ -224,28 +222,28 @@ off <code>object$badf</code>, no critical value at all – see
 </h2>
 <p>These four generics are built around one shape: a
 <code>radf_obj</code> (from <code><a href="../reference/radf.html">radf()</a></code>) paired with a
-<code>radf_cv</code> that carries a <strong>time-varying</strong>
-boundary (<code>badf_cv</code>/<code>bsadf_cv</code>, one critical value
-per recursion point) as well as the three scalar sup-statistic critical
-values (<code>adf_cv</code>/<code>sadf_cv</code>/<code>gsadf_cv</code>).
-Only functions whose result actually carries the <code>radf_obj</code>
-class – and whose paired <code>_cv()</code> actually computes that
-time-varying boundary – get the full pipeline. Three tiers, in
-practice:</p>
+<code>radf_cv</code> that carries a time-varying boundary
+(<code>badf_cv</code> and <code>bsadf_cv</code>, one critical value per
+recursion point) as well as the three scalar sup-statistic critical
+values (<code>adf_cv</code>, <code>sadf_cv</code> and
+<code>gsadf_cv</code>). Only functions whose result has the
+<code>radf_obj</code> class, and whose paired <code>_cv()</code>
+function computes that time-varying boundary, get the full pipeline. In
+practice there are three tiers.</p>
 <div class="section level3">
 <h3 id="full-support-radf_common-radf_kp-radf_tt-radf_sign-radf_sign_dm-radf_sbz">Full support: <code>radf_common()</code>, <code>radf_kp()</code>,
 <code>radf_tt()</code>, <code>radf_sign()</code>,
 <code>radf_sign_dm()</code>, <code>radf_sbz()</code><a class="anchor" aria-label="anchor" href="#full-support-radf_common-radf_kp-radf_tt-radf_sign-radf_sign_dm-radf_sbz"></a>
 </h3>
-<p><code><a href="../reference/radf_kp.html">radf_kp()</a></code>/<code><a href="../reference/radf_common.html">radf_common()</a></code> literally return
-<code><a href="../reference/radf.html">radf()</a></code>’s own output (purged of volatility, or computed on a
-PCA factor, respectively, then <code><a href="../reference/radf.html">radf()</a></code> unmodified), so every
-generic works exactly as it does for plain <code><a href="../reference/radf.html">radf()</a></code>. The
-running series for this whole section is the one these tests are built
-for – <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s bubble with a permanent volatility break
-(<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>, innovation standard deviation tripling
-half-way through), see
-<code><a href="../articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code>:</p>
+<p><code><a href="../reference/radf_kp.html">radf_kp()</a></code> and <code><a href="../reference/radf_common.html">radf_common()</a></code> return the
+output of <code><a href="../reference/radf.html">radf()</a></code> itself, computed on a series purged of
+volatility or on a PCA factor respectively, so every generic works
+exactly as it does for plain <code><a href="../reference/radf.html">radf()</a></code>. The running example
+for this section is the series these tests were designed for: the
+<code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> bubble with a permanent volatility break
+(<code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code>, where the innovation standard deviation
+triples half-way through the sample). See
+<code><a href="../articles/volatility-robust-radf.html">vignette("volatility-robust-radf")</a></code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -280,43 +278,46 @@ half-way through), see
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">1.72</span>  1.50  2.63</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/kp-full-1.png" class="r-plt" alt="" width="700"></p>
-<p>The other three are different: they carry the <code>radf_obj</code>
-class but build their statistic on <code>gls_dfstat_grid()</code> (a
-no-intercept, GLS-demeaned recursive-DF grid, fed the raw series for
-<code><a href="../reference/radf_tt.html">radf_tt()</a></code>, its cumulated sign for <code><a href="../reference/radf_sign.html">radf_sign()</a></code>,
-a recursively demeaned cumulated sign for <code><a href="../reference/radf_sign_dm.html">radf_sign_dm()</a></code>)
-rather than calling <code><a href="../reference/radf.html">radf()</a></code> directly. Until 2026-08-18 all
-three had a real gap: their <code>_cv()</code> functions only ever
-computed the three scalar critical values
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> need, discarding the
-<code>badf</code>/<code>bsadf</code> path <code>gls_dfstat_grid()</code>
-already computes per replicate, so
-<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> (which need a
-<em>time-varying</em> boundary) always errored. Fixed for all three the
-same way, once the pattern was confirmed in <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code>
-first and then checked to hold for the other two as well: unlike
-<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code>’s own <code>bsadf_cv</code> (a
-<code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code>-across-replicates shortcut around the base C++
-engine’s output shape), <code>gls_dfstat_grid()</code>’s
-<code>bsadf</code> is already the genuine sup-over-all-window-starts
-statistic at each point, so no shortcut derivation was needed – just the
-per-time-point quantile across replicates, the construction
-<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> uses for its own <code>bsadf_cv</code>.
-Validated per function: <code>badf_cv</code>’s last row is bit-identical
-to <code>adf_cv</code> (<code>adf</code> is literally
-<code>badf</code>’s last point, per replicate – a hard identity, not an
-approximate check, and true regardless of which series feeds
-<code>gls_dfstat_grid()</code>); empirical false-alarm rate under
-<code>H0</code> is at or below nominal (<code>radf_tt</code> 3.3%,
-<code>radf_sign</code> 5.5%, <code>radf_sign_dm</code> 3.5%, all at
-nominal 5%, n=100, minw=20); and detection power on an identical
-synthetic bubble is in the same range as the established
-<code><a href="../reference/radf.html">radf()</a></code>/<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> baseline (16%) rather than
-suspiciously higher or lower (<code>radf_tt</code> 18%,
-<code>radf_sign</code> 20%, <code>radf_sign_dm</code> 8% – the
-sign-based tests trading power for their heteroskedasticity invariance
-is itself the paper’s own documented finding, not a validation red
-flag).</p>
+<p>The other three are different. They carry the <code>radf_obj</code>
+class but build their statistic on <code>gls_dfstat_grid()</code> and do
+not call <code><a href="../reference/radf.html">radf()</a></code> directly. This function is a no-intercept,
+GLS-demeaned recursive Dickey-Fuller grid. It is fed the raw series for
+<code><a href="../reference/radf_tt.html">radf_tt()</a></code>, the cumulated sign of the series for
+<code><a href="../reference/radf_sign.html">radf_sign()</a></code>, and a recursively demeaned cumulated sign for
+<code><a href="../reference/radf_sign_dm.html">radf_sign_dm()</a></code>.</p>
+<p>Until 2026-08-18 the <code>_cv()</code> functions of all three had a
+gap. They computed only the three scalar critical values that
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> need and discarded the
+<code>badf</code> and <code>bsadf</code> paths that
+<code>gls_dfstat_grid()</code> already produces for each replicate. As a
+result <code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>, which need
+a time-varying boundary, always failed. We fixed all three in the same
+way. We first established the fix in <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and then
+checked that it holds for the other two. The <code>bsadf</code> that
+<code>gls_dfstat_grid()</code> returns is already the sup over all
+window starts at each point. This differs from the <code>bsadf_cv</code>
+of <code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code>, which uses a <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code> across
+replicates because of the output shape of the base C++ engine. No
+shortcut was needed here, and the boundary is the per-time-point
+quantile across replicates, the same construction
+<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> uses for its own <code>bsadf_cv</code>.</p>
+<p>We validated each function in three ways.</p>
+<ul>
+<li>The last row of <code>badf_cv</code> is bit-identical to
+<code>adf_cv</code>, because <code>adf</code> is the last point of
+<code>badf</code> in every replicate. This is an exact identity, and it
+holds whichever series feeds <code>gls_dfstat_grid()</code>.</li>
+<li>The empirical false-alarm rate under <code>H0</code> is at or below
+the nominal 5% (<code>radf_tt</code> 3.3%, <code>radf_sign</code> 5.5%,
+<code>radf_sign_dm</code> 3.5%, with n = 100 and minw = 20).</li>
+<li>The detection power on an identical synthetic bubble is in the same
+range as the 16% of the established <code><a href="../reference/radf.html">radf()</a></code> and
+<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> baseline, and it is neither suspiciously
+higher nor lower (<code>radf_tt</code> 18%, <code>radf_sign</code> 20%,
+<code>radf_sign_dm</code> 8%). The sign-based tests give up power in
+exchange for invariance to heteroskedasticity, which is a documented
+finding of the source paper and not a validation problem.</li>
+</ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -378,25 +379,26 @@ flag).</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">0.293</span>  4.47  8.88</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="naming-and-analysis_files/figure-html/sign-full-1.png" class="r-plt" alt="" width="700"></p>
-<p><code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is a fourth, separate case: it builds its
+<p><code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is a fourth, separate case. It builds its
 statistic (<code>supBZ</code>) on <code>wls_dfstat_grid()</code>, a
-WLS/kernel-volatility-weighted no-intercept recursive-DF grid, not
-<code>gls_dfstat_grid()</code> – but the same fix applies for the same
-reason, since <code>wls_dfstat_grid()</code> already returns the full
-<code>badf</code>/<code>bsadf</code> path per replicate.
-<code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>’s wild bootstrap is therefore built the same
-way as <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code>/<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code>’s Monte
-Carlo simulation: per-time-point quantile across replicates, no
-<code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code> shortcut needed. Validated the same way:
-<code>badf_cv</code>’s last row is bit-identical to <code>adf_cv</code>;
-empirical false-alarm rate under <code>H0</code> is 5.0% at nominal 5%
-(n=100, minw=20, 200 replications); and it does reject on a sufficiently
-strong deterministic explosive path, though its kernel-volatility
-weighting trades away enough power on <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s default,
-milder bubble that it doesn’t reject on the series above at
-nboot=100-200 – the same power/robustness trade-off already documented
-for <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>’s <code>supBZ</code> leg below, not a
-new finding specific to the split.</p>
+no-intercept recursive Dickey-Fuller grid weighted by WLS and kernel
+volatility, and not on <code>gls_dfstat_grid()</code>. The same fix
+applies for the same reason, since <code>wls_dfstat_grid()</code>
+already returns the full <code>badf</code> and <code>bsadf</code> path
+for each replicate. The wild bootstrap in <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> is
+therefore built as the Monte Carlo simulation in
+<code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and <code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> is, with a
+per-time-point quantile across replicates and no <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code>
+shortcut. We validated it in the same way. The last row of
+<code>badf_cv</code> is bit-identical to <code>adf_cv</code>, and the
+empirical false-alarm rate under <code>H0</code> is 5.0% at a nominal 5%
+(n = 100, minw = 20, 200 replications). The test also rejects on a
+sufficiently strong deterministic explosive path. Its kernel-volatility
+weighting costs enough power, however, that it does not reject the
+series above at nboot = 100 to 200, where the bubble is the milder
+default of <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>. The same trade between power and
+robustness is documented for the <code>supBZ</code> leg of
+<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> below, so it is not new to this split.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -417,13 +419,14 @@ new finding specific to the split.</p>
 <span><span class="co">#&gt;   id        adf  sadf gsadf</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> series1 -<span style="color: #BB0000;">1.39</span>  1.67  1.91</span></span></code></pre></div>
-<p><code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> need at least one
-rejection to have anything to show (they error otherwise, same as for
-any other <code>radf_obj</code>/<code>radf_cv</code> pair) – the series
-above doesn’t clear <code>supBZ</code>’s bar, so here’s the same
-volatility break under a stronger, uncollapsed explosive regime
-(<code>rho = 1.03</code> from <code>t = 120</code> to the sample end),
-which does:</p>
+<p><code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> need at least
+one rejection to have anything to show, and they raise an error
+otherwise, as for any other <code>radf_obj</code> and
+<code>radf_cv</code> pair. The series above does not clear the
+<code>supBZ</code> threshold, so we repeat the volatility break with a
+stronger explosive regime that does not collapse
+(<code>rho = 1.03</code> from <code>t = 120</code> to the end of the
+sample):</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y_strong</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, te <span class="op">=</span> <span class="fl">120</span>, tf <span class="op">=</span> <span class="fl">200</span>, c <span class="op">=</span> <span class="fl">0.03</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                     e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span>
@@ -446,29 +449,27 @@ which does:</p>
 <h3 id="own-print-and-autoplot-everything-else">Own <code>print()</code> and <code>autoplot()</code>: everything
 else<a class="anchor" aria-label="anchor" href="#own-print-and-autoplot-everything-else"></a>
 </h3>
-<p>The remaining ~15 functions (<code><a href="../reference/lbi_test.html">lbi_test()</a></code>,
-<code><a href="../reference/ssu_test.html">ssu_test()</a></code>, <code><a href="../reference/quantile_test.html">quantile_test()</a></code>,
-<code><a href="../reference/cobubble_test.html">cobubble_test()</a></code>, the <code>dating_*()</code> family, the
-<code><a href="../reference/monitor.html">monitor()</a></code>/<code>monitor_*()</code> family (including
-<code><a href="../reference/monitor.html">monitor()</a></code> itself, ADF-family internals notwithstanding –
-see above), <code><a href="../reference/contagion_reg.html">contagion_reg()</a></code>, <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>,
-<code><a href="../reference/rootstamp.html">rootstamp()</a></code>, <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>) each return
-their own class with their own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and
-<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> methods, because their output genuinely doesn’t
-fit the <code>radf_obj</code> shape – a dating table isn’t a per-series
-sup-statistic, a monitoring alarm isn’t a critical value grid. Trying to
-force them through
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>
-isn’t a documentation gap to close; the right call is their own
-presentation, shown directly:</p>
-<p><code><a href="../reference/rootstamp.html">rootstamp()</a></code> is the one exception worth flagging: it’s
-grouped under <strong>Analysis</strong> in the <a href="../reference/index.html">reference index</a> and the README’s
-workflow list, right after <code><a href="../reference/datestamp.html">datestamp()</a></code>, since that’s
-genuinely where it belongs in the <em>sequence of steps</em> (detect →
-date → measure growth rate) – but that’s a workflow position, not an
-S3-support tier. It’s still its own class with its own
-<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> methods, same as
-everything else in this section; see
+<p>The remaining 15 or so functions return their own class, with their
+own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> methods. They are
+<code><a href="../reference/lbi_test.html">lbi_test()</a></code>, <code><a href="../reference/ssu_test.html">ssu_test()</a></code>,
+<code><a href="../reference/quantile_test.html">quantile_test()</a></code>, <code><a href="../reference/cobubble_test.html">cobubble_test()</a></code>, the
+<code>dating_*()</code> family, the <code><a href="../reference/monitor.html">monitor()</a></code> and
+<code>monitor_*()</code> family (including <code><a href="../reference/monitor.html">monitor()</a></code>
+itself, despite its ADF-family internals), <code><a href="../reference/contagion_reg.html">contagion_reg()</a></code>,
+<code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>, <code><a href="../reference/rootstamp.html">rootstamp()</a></code> and
+<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>. Their output does not fit the
+<code>radf_obj</code> shape: a dating table is not a per-series
+sup-statistic, and a monitoring alarm is not a critical value grid.
+Forcing them through <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code>
+and <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> would not close a documentation gap, so each is
+presented by its own methods, shown below.</p>
+<p><code><a href="../reference/rootstamp.html">rootstamp()</a></code> needs one remark. The <a href="../reference/index.html">reference index</a> and the workflow list
+in the README place it under Analysis, right after
+<code><a href="../reference/datestamp.html">datestamp()</a></code>, because that is its position in the sequence
+of steps (detect, date, measure the growth rate). That is a position in
+the workflow and not an S3-support tier. It has its own class with its
+own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> methods, like
+everything else in this section. See
 <code><a href="../articles/root-inference.html">vignette("root-inference")</a></code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dating_hls.html">dating_hls</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">$</span><span class="va">psy1</span>, trim <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>

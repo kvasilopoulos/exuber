@@ -1,8 +1,8 @@
 # Exuber scale and theme functions
 
-`scale_exuber_manual` allows specifying the color, linewidth and
-linetype in `autoplot.radf_obj` mappings. `theme_exuber` is a complete
-theme which control all non-data display.
+`scale_exuber_manual` sets the color, linewidth and linetype in the
+mappings of `autoplot.radf_obj`. `theme_exuber` is a complete theme that
+controls all non-data display.
 
 ## Usage
 
@@ -59,7 +59,7 @@ theme_exuber(
 ## Value
 
 A list of three ggplot2 scales (`scale_exuber_manual`) or a ggplot2
-theme object (`theme_exuber`), to be added to a plot with `+`.
+theme object (`theme_exuber`), which you add to a plot with `+`.
 
 ## Examples
 

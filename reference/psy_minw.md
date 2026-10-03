@@ -1,6 +1,6 @@
 # Helper functions in accordance to PSY(2015)
 
-`psy_minw` and `psy_ds` use the rules-of- thumb proposed by Phillips et
+`psy_minw` and `psy_ds` use the rules of thumb proposed by Phillips et
 al. (2015) to compute the minimum window size and the minimum duration
 of an episode of exuberance, respectively.
 

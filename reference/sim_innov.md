@@ -1,10 +1,12 @@
 # Simulate innovations with heavy-tailed/skewed marginal distributions
 
-Generates a shock sequence with the same PSY-style mean equation in mind
-([`sim_psy1`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md),
+Generates a shock sequence for use with the PSY-style mean equations
+([`sim_psy1`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
+and
 [`sim_psy2`](https://kvasilopoulos.github.io/exuber/reference/sim_psy2.md))
-but a non-Gaussian marginal, standardized to mean 0 and variance
-`sigma^2` so it drops straight into `sim_psy1(..., e = sim_innov(...))`.
+but with a non-Gaussian marginal distribution. The sequence is
+standardized to mean 0 and variance `sigma^2`, so it fits directly into
+`sim_psy1(..., e = sim_innov(...))`.
 
 ## Usage
 
@@ -45,12 +47,12 @@ sim_innov(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
@@ -59,13 +61,15 @@ A numeric vector of length `n`.
 ## Details
 
 `dist = "t"` rescales a Student-t(`df`) draw to variance 1 before
-scaling by `sigma` (exact, closed form: `Var(t_df) = df / (df - 2)`).
-`dist = "skew_t"` combines two independent standardized Student-t draws
-Azzalini-style, `delta * abs(T0) + sqrt(1 - delta^2) * T1` with
-`delta = xi / sqrt(1 + xi^2)`, then standardizes using the closed-form
-mean/variance of that combination (via `E|T0|`, itself closed-form
-through the Beta function). `xi > 0` skews right, `xi < 0` skews left,
-`xi = 0` reduces to the symmetric `t` case.
+scaling by `sigma`. This is exact and closed form, because
+`Var(t_df) = df / (df - 2)`. `dist = "skew_t"` combines two independent
+standardized Student-t draws in the manner of Azzalini,
+`delta * abs(T0) + sqrt(1 - delta^2) * T1` with
+`delta = xi / sqrt(1 + xi^2)`, and then standardizes the result with the
+closed-form mean and variance of that combination (`E|T0|` is itself
+closed form through the Beta function). `xi > 0` skews the distribution
+to the right, `xi < 0` skews it to the left, and `xi = 0` gives the
+symmetric `t` case.
 
 ## References
 
@@ -85,7 +89,7 @@ sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1) %>%
   autoplot()
 
 
-# Feed skew-t innovations into sim_psy1() instead of i.i.d. Gaussian
+# Feed skew-t innovations into sim_psy1() in place of i.i.d. Gaussian ones
 sim_psy1(n = 200, seed = 123, e = sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)) %>%
   autoplot()
 ```

@@ -1,7 +1,7 @@
 # Simulate CIR-type stochastic-volatility innovations
 
 Generates shocks driven by a Cox-Ingersoll-Ross (square-root) stochastic
-variance process, Euler-Maruyama discretized, for use as
+variance process, discretized with the Euler-Maruyama scheme, for use as
 `sim_psy1(..., e = sim_vol_cir(...))`.
 
 ## Usage
@@ -25,8 +25,8 @@ sim_vol_cir(
 
 - kappa, theta, xi:
 
-  Positive CIR parameters (mean-reversion speed, long-run variance,
-  vol-of-vol).
+  Positive CIR parameters (speed of mean reversion, long-run variance
+  and volatility of volatility).
 
 - sigma0_sq:
 
@@ -35,12 +35,12 @@ sim_vol_cir(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
@@ -51,11 +51,11 @@ A numeric vector of length `n`.
 \$\$d\sigma^2(r) = \kappa(\theta - \sigma^2(r))dr +
 \xi\sigma(r)dB(r)\$\$
 
-discretized over `n` steps of `r` in \\\[0, 1\]\\, with variance
-reflected at zero if a step would take it negative. Default parameters
-(\\\kappa=0.03\\, \\\theta=0.25\\, \\\xi=0.1\\) match Harvey, Leybourne
-& Zu (2019)'s robustness design, "representative of Bollerslev and Zhou
-(2002)".
+discretized over `n` steps of `r` in \\\[0, 1\]\\. The variance is
+reflected at zero if a step would take it negative. The default
+parameters (\\\kappa=0.03\\, \\\theta=0.25\\, \\\xi=0.1\\) match the
+robustness design of Harvey, Leybourne & Zu (2019), which is
+"representative of Bollerslev and Zhou (2002)".
 
 ## References
 

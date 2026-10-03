@@ -1,7 +1,7 @@
 # Plot method for cobubble_test() output
 
 Plots the two input series over the sample, with the test statistic and
-lag in the title.
+the lag in the title.
 
 ## Usage
 

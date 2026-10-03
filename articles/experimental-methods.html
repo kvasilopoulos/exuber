@@ -90,30 +90,32 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kvasilopoulos.github.io/exuber/">exuber</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="why-experimental-is-a-real-load-bearing-label-here">Why “experimental” is a real, load-bearing label here<a class="anchor" aria-label="anchor" href="#why-experimental-is-a-real-load-bearing-label-here"></a>
+<h2 id="what-experimental-means-here">What “experimental” means here<a class="anchor" aria-label="anchor" href="#what-experimental-means-here"></a>
 </h2>
-<p>Most of exuber’s methods implement a peer-reviewed paper’s own
-procedure and pass the package’s standard validation pass (formula-exact
-check against a brute-force reimplementation, published-table lookup,
-Monte Carlo size, power against a genuine alternative).
+<p>Most methods in exuber implement the procedure of a peer-reviewed
+paper and pass the package’s standard validation. That validation
+consists of a formula-exact check against a brute-force
+reimplementation, a lookup against published tables, a Monte Carlo check
+of size, and a check of power against a true alternative.
 <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code> and
-<code>datestamp(option = "svadf")</code> both run that same pass and
-both come back genuinely useful – but each has one specific, disclosed
-gap that keeps it below that bar. They print and emit a caveat message
-at call time for exactly that reason; treat their output as directional,
-not as calibrated as the rest of the package.</p>
+<code>datestamp(option = "svadf")</code> went through the same
+validation and both give useful results, but each has one disclosed gap
+that keeps it below the standard. For that reason they print and emit a
+caveat message when called. Treat their output as a guide to where
+episodes lie, and do not assume it is as well calibrated as the rest of
+the package.</p>
 </div>
 <div class="section level2">
 <h2 id="radf_recovery-dating-a-collapse-and-a-recovery">
-<code>radf_recovery()</code>: dating a collapse <em>and</em> a
-recovery<a class="anchor" aria-label="anchor" href="#radf_recovery-dating-a-collapse-and-a-recovery"></a>
+<code>radf_recovery()</code>: dating a collapse and a recovery<a class="anchor" aria-label="anchor" href="#radf_recovery-dating-a-collapse-and-a-recovery"></a>
 </h2>
-<p>Phillips &amp; Shi (2014)’s reverse-regression idea: reverse the
-series in time, run the same BSADF recursion <code><a href="../reference/radf.html">radf()</a></code> already
-computes, and map the crossing dates back. A collapse-then-recovery
-episode, reversed, turns the collapse into an explosive regime and the
-recovery into its unwind – so the existing forward machinery, run
-backwards, dates both.</p>
+<p>This function uses the reverse-regression idea of Phillips &amp; Shi
+(2014). We reverse the series in time, run the BSADF recursion that
+<code><a href="../reference/radf.html">radf()</a></code> already computes, and map the crossing dates back to
+the original time axis. In the reversed series a collapse followed by a
+recovery turns the collapse into an explosive regime and the recovery
+into the end of that regime, so the forward machinery run backwards
+dates both.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># sim_ps1(): unit root -&gt; explosive (40-60) -&gt; collapse (61-70) -&gt; recovery (71+)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_ps1.html">sim_ps1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -126,28 +128,30 @@ backwards, dates both.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  f_c  f_r  detected  censored</span></span>
 <span><span class="co">#&gt;   series1   57   67      TRUE     FALSE</span></span></code></pre></div>
-<p><code>f_c</code> (crisis onset, 57) lands just ahead of the true
-collapse start (61) and <code>f_r</code> (recovery, 67) after it, inside
-the collapse regime and ahead of the true recovery date (70) – in the
-right order by construction, since the down-crossing search only ever
-starts at the up-crossing. The disclosed gap: <code>f_c</code> and the
-overall false-detection rate are exploratory pending further validation
-(see <code><a href="../reference/radf_recovery.html">?radf_recovery</a></code>, Caveats section) – the date-ordering
-property is solid, the false-alarm calibration is not yet.</p>
+<p>The estimate <code>f_c</code> (crisis onset, 57) falls just before
+the true collapse start (61). The estimate <code>f_r</code> (recovery,
+67) falls after it, inside the collapse regime and before the true
+recovery date (70). The two dates come out in the right order by
+construction, because the down-crossing search only starts at the
+up-crossing. The disclosed gap is that <code>f_c</code> and the overall
+false-detection rate are exploratory until they are validated further
+(see the Caveats section of <code><a href="../reference/radf_recovery.html">?radf_recovery</a></code>). The ordering
+of the dates is reliable, but the calibration of false alarms is not
+yet.</p>
 </div>
 <div class="section level2">
-<h2 id="datestampoption-svadf-a-non-peer-reviewed-preprint">
-<code>datestamp(option = "svadf")</code>: a non-peer-reviewed
-preprint<a class="anchor" aria-label="anchor" href="#datestampoption-svadf-a-non-peer-reviewed-preprint"></a>
+<h2 id="datestampoption-svadf-a-preprint">
+<code>datestamp(option = "svadf")</code>: a preprint<a class="anchor" aria-label="anchor" href="#datestampoption-svadf-a-preprint"></a>
 </h2>
-<p>Sarkar &amp; Wells (2026, arXiv, not yet peer reviewed) – flagged
-explicitly because that is a different evidentiary bar than every other
-paper this package implements. Its statistic turns out to be exactly
-<code><a href="../reference/radf.html">radf()</a></code>’s own <code>badf</code> sequence compared against
-two closed-form, sample-size-only thresholds from the paper’s own
-applied methodology (no new estimation machinery needed), which is why
-it was cheap to add – as a <code><a href="../reference/datestamp.html">datestamp()</a></code> option rather than a
-separate entry point, despite the preprint caveat.</p>
+<p>This option implements Sarkar &amp; Wells (2026), an arXiv preprint
+that has not been peer reviewed. Every other paper implemented in the
+package has been, so the evidence behind this method is weaker. Its
+statistic is the <code>badf</code> sequence that <code><a href="../reference/radf.html">radf()</a></code>
+already computes, compared against two closed-form thresholds that
+depend only on the sample size and come from the applied methodology of
+the paper. No new estimation code was needed, so we added it as an
+option of <code><a href="../reference/datestamp.html">datestamp()</a></code> and not as a separate function, even
+though it is a preprint.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span>, lag <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, option <span class="op">=</span> <span class="st">"svadf"</span>, min_duration <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -163,25 +167,25 @@ separate entry point, despite the preprint caveat.</p>
 <span><span class="co">#&gt; psy2 :</span></span>
 <span><span class="co">#&gt;   Start Peak End Duration   Signal Ongoing</span></span>
 <span><span class="co">#&gt; 1    23   23  24        1 positive   FALSE</span></span></code></pre></div>
-<p><code>psy1</code> and <code>psy2</code> get clean
-origination/collapse dates; <code>evans</code>, <code>div</code> and
-<code>blan</code> don’t cross the threshold on this panel at all – again
-a realistic, not cherry-picked, mixed result.</p>
+<p><code>psy1</code> and <code>psy2</code> receive clear origination and
+collapse dates, while <code>evans</code>, <code>div</code> and
+<code>blan</code> never cross the threshold in this panel. We report
+this mixed result as it came out.</p>
 </div>
 <div class="section level2">
 <h2 id="using-them-responsibly">Using them responsibly<a class="anchor" aria-label="anchor" href="#using-them-responsibly"></a>
 </h2>
-<p>Both are worth using – <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code>’s date
-<em>ordering</em> result and <code>datestamp(option = "svadf")</code>’s
-point statistic are both solid – but neither should be the sole basis
-for a claim about false-alarm rates or exact calibration. Prefer
-<code><a href="../reference/radf.html">radf()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code> or one of the peer-reviewed
-alternatives in
-<code><a href="../articles/alternative-tests.html">vignette("alternative-tests")</a></code>/<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>
-when that matters, and treat these two as a second opinion rather than
-the primary one until their own caveats are resolved (tracked in
-<code>docs/dating-and-root-inference.md</code> and
-<code>volatility-robustness.md</code>).</p>
+<p>Both methods are worth using. The date ordering from
+<code><a href="../reference/radf_recovery.html">radf_recovery()</a></code> and the point statistic from
+<code>datestamp(option = "svadf")</code> are reliable. Neither should be
+the only basis for a claim about false-alarm rates or exact calibration,
+though. When that matters, prefer <code><a href="../reference/radf.html">radf()</a></code> and
+<code><a href="../reference/datestamp.html">datestamp()</a></code>, or one of the peer-reviewed alternatives in
+<code><a href="../articles/alternative-tests.html">vignette("alternative-tests")</a></code> and
+<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>. Treat these two methods as a
+second opinion until their caveats are resolved. The caveats are tracked
+in <code>docs/dating-and-root-inference.md</code> and
+<code>volatility-robustness.md</code>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

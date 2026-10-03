@@ -1,15 +1,14 @@
 # Wild Bootstrap Critical Values for the SBZ Statistic
 
-`radf_sbz_cv` performs the HLST (2016) wild bootstrap – the same
+`radf_sbz_cv` performs the HLST (2016) wild bootstrap. It is the same
 algorithm as
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
-applied to
-[`radf_sbz`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)'s
-WLS/kernel-volatility statistic instead of the classic `supDF` one – to
-generate critical values, including the time-varying
-`badf_cv`/`bsadf_cv` boundary
-[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/
-`autoplot` need, not just the three scalar critical values
+applied to the WLS/kernel-volatility statistic of
+[`radf_sbz`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
+instead of the classic `supDF` statistic. It generates critical values
+that include the time-varying `badf_cv` and `bsadf_cv` boundary that
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+and `autoplot` need, and not only the three scalar critical values that
 [`summary()`](https://rdrr.io/r/base/summary.html) uses.
 
 ## Usage
@@ -30,14 +29,14 @@ radf_sbz_cv(
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -55,24 +54,24 @@ radf_sbz_cv(
 
 - h:
 
-  Bandwidth for the spot-volatility estimator. Default: leave-one-out
-  cross-validation over the paper's own search range.
+  Bandwidth for the spot-volatility estimator. The default is
+  leave-one-out cross-validation over the search range of the paper.
 
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
-An object of class `radf_cv`/`sbz_cv`/`wb_cv`: a list with critical
-values `adf_cv`, `sadf_cv`, `gsadf_cv` (one row per series) and
-`badf_cv`, `bsadf_cv` (one array per series, one row per recursion
+An object of class `radf_cv`/`sbz_cv`/`wb_cv`: a list with the critical
+values `adf_cv`, `sadf_cv` and `gsadf_cv` (one row per series) and
+`badf_cv` and `bsadf_cv` (one array per series, one row per recursion
 point).
 
 ## Status
@@ -88,12 +87,14 @@ bubbles with time-varying volatility. Econometric Reviews, 38(10),
 ## See also
 
 [`radf_sbz`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
-for the statistic this pairs with, and
+for the statistic that this function pairs with, and
 [`radf_sbz_union`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
 for the bundled union-of-rejections test against the classic `supDF`
-statistic (not obtainable from this function and
+statistic. You cannot obtain that test from this function and
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
-independently – see that function's Details for why).
+separately (see the Details of
+[`radf_sbz_union`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+for why).
 
 Other critical values:
 [`radf_common_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_common_cv.md),

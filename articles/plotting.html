@@ -94,11 +94,11 @@
 <h2 id="one-autoplot-per-object">One <code>autoplot()</code> per object<a class="anchor" aria-label="anchor" href="#one-autoplot-per-object"></a>
 </h2>
 <p>Every result object in the package has an <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-method, so the plotting call is the same whatever you ran –
-<code>autoplot(x)</code> – and what it draws depends on what
-<code>x</code> is. All of them return a plain <code>ggplot</code>
-object, so anything ggplot2 can do (themes, scales, extra layers,
-<code>facet_*()</code> arguments) applies on top.</p>
+method. The call is always <code>autoplot(x)</code>, and what it draws
+depends on the class of <code>x</code>. Each method returns an ordinary
+<code>ggplot</code> object, so anything ggplot2 offers, such as themes,
+scales, extra layers and <code>facet_*()</code> arguments, can be added
+on top.</p>
 <table class="table">
 <colgroup>
 <col width="50%">
@@ -112,14 +112,14 @@ object, so anything ggplot2 can do (themes, scales, extra layers,
 <tr class="odd">
 <td>
 <code><a href="../reference/radf.html">radf()</a></code> result (<code>radf_obj</code>)</td>
-<td>Test statistic vs. critical-value sequence, one facet per series
-that rejects the null, with the explosive episodes shaded</td>
+<td>Test statistic against the critical-value sequence, with one facet
+per series that rejects the null and the explosive episodes shaded</td>
 </tr>
 <tr class="even">
 <td>
 <code><a href="../reference/datestamp.html">datestamp()</a></code> result (<code>ds_radf</code>)</td>
-<td>Just the episodes, one horizontal segment per series – the view for
-many series at once</td>
+<td>Only the episodes, as one horizontal segment per series. This is the
+view for many series at once</td>
 </tr>
 <tr class="odd">
 <td>
@@ -135,8 +135,8 @@ statistics</td>
 <td>
 <code><a href="../reference/monitor.html">monitor()</a></code>, <code>monitor_*()</code>
 </td>
-<td>Monitored statistic vs. its boundary, with training-end and alarm
-markers</td>
+<td>Monitored statistic against its boundary, with markers for the end
+of training and for the alarm</td>
 </tr>
 <tr class="even">
 <td>
@@ -153,25 +153,26 @@ markers</td>
 <code><a href="../reference/lbi_test.html">lbi_test()</a></code>, <code><a href="../reference/quantile_test.html">quantile_test()</a></code>,
 <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code>
 </td>
-<td>Statistic vs. critical value per series</td>
+<td>Statistic against critical value for each series</td>
 </tr>
 </tbody>
 </table>
-<p>The rest of this vignette is about the first three – the
-<code><a href="../reference/radf.html">radf()</a></code> workflow – and about building your own plot from the
-tidied tables when the defaults don’t fit. The other methods take no
-options beyond the object and are shown in their own vignettes
-(<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>,
-<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>,
+<p>The rest of this vignette covers the first three rows, which belong
+to the <code><a href="../reference/radf.html">radf()</a></code> workflow, and shows how to build your own
+plot from the tidied tables when the defaults do not fit. The other
+methods take no options beyond the object. They appear in their own
+vignettes (<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>,
+<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code> and
 <code><a href="../articles/root-inference.html">vignette("root-inference")</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="the-radf-plot">The <code>radf()</code> plot<a class="anchor" aria-label="anchor" href="#the-radf-plot"></a>
 </h2>
-<p>Four simulated series, one from each of the package’s classic bubble
-DGPs (see <code><a href="../articles/simulation.html">vignette("simulation")</a></code>), estimated with one lag.
-With a lag the critical values depend on <code>(n, lag)</code>, so we
-simulate them once and pass them to every call – the same pattern as
+<p>We simulate four series, one from each of the classic bubble data
+generating processes in the package (see
+<code><a href="../articles/simulation.html">vignette("simulation")</a></code>), and estimate them with one lag.
+The critical values depend on <code>(n, lag)</code>, so we simulate them
+once and pass them to every call, as in
 <code><a href="../articles/exuber.html">vignette("exuber")</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sims</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -185,9 +186,8 @@ simulate them once and pass them to every call – the same pattern as
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-basic-1.png" class="r-plt" alt="" width="768"></p>
-<p>Only series that reject the null at 5% are drawn. The options that
-change <em>what</em> is plotted are arguments of <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-itself:</p>
+<p>Only series that reject the null at the 5% level are drawn. The
+arguments of <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> itself control what is plotted:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Every series, whether or not it rejects</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span>, nonrejected <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -198,16 +198,15 @@ itself:</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span>, select_series <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"psy1"</span>, <span class="st">"evans"</span><span class="op">)</span>, option <span class="op">=</span> <span class="st">"sadf"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-options-2.png" class="r-plt" alt="" width="768"></p>
 <p>The shading of the explosive episodes is a <code><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect()</a></code>
-layer controlled through <code>shade_opt</code> and the
-<code><a href="../reference/autoplot.radf_obj.html">shade()</a></code> helper; <code>shade_opt = NULL</code> removes
-it:</p>
+layer. The <code>shade_opt</code> argument and the <code><a href="../reference/autoplot.radf_obj.html">shade()</a></code>
+helper control it, and <code>shade_opt = NULL</code> removes it:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span>, select_series <span class="op">=</span> <span class="st">"psy2"</span>,</span>
 <span>         shade_opt <span class="op">=</span> <span class="fu"><a href="../reference/autoplot.radf_obj.html">shade</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"pink"</span>, opacity <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-shade-1.png" class="r-plt" alt="" width="768"></p>
-<p><code><a href="../reference/autoplot2.html">autoplot2()</a></code> draws the <em>series</em> instead of the
-statistic, with the same shading, which is often the more readable view
-for a non-technical audience; <code><a href="../reference/datestamp.html">datestamp()</a></code>’s own method
+<p><code><a href="../reference/autoplot2.html">autoplot2()</a></code> draws the series itself instead of the
+statistic, with the same shading. This is often easier to read for a
+non-technical audience. The method for <code><a href="../reference/datestamp.html">datestamp()</a></code> objects
 reduces each series to its episodes:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/autoplot2.html">autoplot2</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span>, select_series <span class="op">=</span> <span class="st">"psy2"</span><span class="op">)</span></span></code></pre></div>
@@ -219,35 +218,35 @@ reduces each series to its episodes:</p>
 <div class="section level3">
 <h3 id="changing-the-appearance">Changing the appearance<a class="anchor" aria-label="anchor" href="#changing-the-appearance"></a>
 </h3>
-<p>Everything else – colors, line types, theme – is ggplot2 territory.
+<p>Colors, line types and themes are handled by ggplot2.
 <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> maps the statistic and the critical value to
 <code>color</code>, <code>size</code> and <code>linetype</code>, so the
-ggplot2 <code>scale_*_manual()</code> functions override them;
-<code><a href="../reference/scale_exuber_manual.html">scale_exuber_manual()</a></code> sets all three at once, and
-<code><a href="../reference/scale_exuber_manual.html">theme_exuber()</a></code> is the package’s default theme, exported so
-you can apply it to your own plots too:</p>
+ggplot2 <code>scale_*_manual()</code> functions can override them.
+<code><a href="../reference/scale_exuber_manual.html">scale_exuber_manual()</a></code> sets all three at once.
+<code><a href="../reference/scale_exuber_manual.html">theme_exuber()</a></code> is the default theme of the package, and it
+is exported so that you can apply it to your own plots too:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span>, select_series <span class="op">=</span> <span class="st">"psy2"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">scale_exuber_manual</a></span><span class="op">(</span>color_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey40"</span>, <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>                      linetype_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/autoplot-theme-1.png" class="r-plt" alt="" width="768"></p>
-<p>Arguments <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> doesn’t recognize are forwarded to
-<code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code>, so <code>scales = "free_y"</code>,
-<code>ncol</code>, <code>labeller</code>, etc. work directly – see
-<code><a href="../reference/autoplot.radf_obj.html">?autoplot.radf_obj</a></code> for a labeller example that renames the
-facets.</p>
+<p>Arguments that <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> does not recognize are passed
+on to <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">ggplot2::facet_wrap()</a></code>, so
+<code>scales = "free_y"</code>, <code>ncol</code> and
+<code>labeller</code> work directly. <code><a href="../reference/autoplot.radf_obj.html">?autoplot.radf_obj</a></code> has
+a labeller example that renames the facets.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="building-your-own-plot">Building your own plot<a class="anchor" aria-label="anchor" href="#building-your-own-plot"></a>
 </h2>
-<p>When the default layout isn’t what you need, skip
-<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and start from the same table it is built on.
+<p>When the default layout does not suit you, skip
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and start from the table it is built on.
 <code><a href="../reference/augment_join.html">augment_join()</a></code> joins the full statistic sequences of a
 <code>radf_obj</code> with the critical-value sequences of a
-<code>radf_cv</code>, one row per observation, series, statistic and
-significance level – ggplot2-ready as is:</p>
+<code>radf_cv</code>. It returns one row per observation, series,
+statistic and significance level, which ggplot2 can use as it is:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">joined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/augment_join.html">augment_join</a></span><span class="op">(</span><span class="va">est</span>, <span class="va">cv</span><span class="op">)</span></span>
 <span><span class="va">joined</span></span>
@@ -273,25 +272,27 @@ significance level – ggplot2-ready as is:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="va">sig</span> <span class="op">+</span> <span class="va">stat</span> <span class="op">~</span> <span class="va">id</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="../reference/scale_exuber_manual.html">theme_exuber</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/custom-facet-1.png" class="r-plt" alt="" width="768"></p>
-<p><code><a href="../reference/tidy_join.html">tidy_join()</a></code> is the scalar counterpart (one row per
-series and statistic, the table <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> prints), and
-<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/<code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> on either object alone give
-the un-joined halves – see <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code>
-for the full pipeline.</p>
+<p><code><a href="../reference/tidy_join.html">tidy_join()</a></code> is the scalar counterpart, with one row per
+series and statistic, which is the table that <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>
+prints. Calling <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> or <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> on either
+object alone returns the two halves before they are joined.
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> describes the full
+pipeline.</p>
 </div>
 <div class="section level2">
 <h2 id="distributions">Distributions<a class="anchor" aria-label="anchor" href="#distributions"></a>
 </h2>
-<p>The <code>radf_*_distr()</code> twins of the critical-value functions
-return the whole simulated null distribution rather than its quantiles,
-and have their own <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>:</p>
+<p>The <code>radf_*_distr()</code> functions are the counterparts of the
+critical-value functions. They return the whole simulated null
+distribution instead of its quantiles, and they have their own
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> method:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">distr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_distr</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, nrep <span class="op">=</span> <span class="fl">1000</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">distr</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/distr-1.png" class="r-plt" alt="" width="768"></p>
-<p>As with everything else, <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> gives the underlying
-table, so an empirical CDF or any other summary is a few ggplot2 lines
-away:</p>
+<p>As elsewhere, <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> returns the underlying table, so an
+empirical CDF or any other summary takes only a few lines of
+ggplot2:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">distr</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -307,18 +308,18 @@ away:</p>
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
 </h2>
 <ul>
-<li>A quick look at which series are explosive and when:
-<code>autoplot(est, cv)</code>; add <code>nonrejected = TRUE</code> to
-see the ones that aren’t.</li>
-<li>The series itself with the episodes shaded, for a non-technical
-reader: <code>autoplot2(est, cv)</code>.</li>
-<li>Many series, only the episodes:
+<li>For a quick look at which series are explosive and when, use
+<code>autoplot(est, cv)</code>. Add <code>nonrejected = TRUE</code> to
+include the series that do not reject.</li>
+<li>To show the series itself with the episodes shaded, for a
+non-technical reader, use <code>autoplot2(est, cv)</code>.</li>
+<li>To show only the episodes of many series, use
 <code>autoplot(datestamp(est, cv))</code>.</li>
-<li>Cosmetic changes: keep <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and add ggplot2
-layers, scales or a theme; <code><a href="../reference/scale_exuber_manual.html">scale_exuber_manual()</a></code> for the
-statistic/critical-value styling.</li>
-<li>A different layout altogether: <code>augment_join(est, cv)</code>
-and build it yourself.</li>
+<li>For cosmetic changes, keep <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and add ggplot2
+layers, scales or a theme. Use <code><a href="../reference/scale_exuber_manual.html">scale_exuber_manual()</a></code> to
+style the statistic and the critical value.</li>
+<li>For a different layout altogether, build your own plot from
+<code>augment_join(est, cv)</code>.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

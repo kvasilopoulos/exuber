@@ -2,18 +2,18 @@
 
 `radf_common_cv` simulates critical values for
 [`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
-under its own null (no common explosive factor): an `N`-column panel of
-*independent* random walks, extracted to one principal component and
-tested exactly as
+under its own null of no common explosive factor. The null is a panel of
+`N` *independent* random walks, from which one principal component is
+extracted and tested exactly as in
+[`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md).
+Independent validation showed that
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+whose critical values do not depend on the panel width, is badly
+undersized as a stand-in for this null once `N` grows past a handful of
+series. The null distribution here does depend on `N`, so `N` must match
+the panel on which
 [`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
-does. Unlike
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-– which has no dependence on panel width and was shown by independent
-validation to be badly undersized as a stand-in for `radf_common`'s own
-null once `N` grows past a handful of series – this null distribution
-does depend on `N`, so `N` must match the panel
-[`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
-was actually run on.
+was run.
 
 ## Usage
 
@@ -29,10 +29,10 @@ radf_common_cv(n, N, minw = NULL, nrep = 1000L, seed = NULL)
 
 - N:
 
-  A positive integer, at least 2. The panel width (number of series)
-  that
+  A positive integer, at least 2. The panel width (number of series) on
+  which
   [`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
-  will be run on – the critical value depends on this, unlike
+  will be run. The critical value depends on it, unlike that of
   [`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md).
 
 - minw:
@@ -47,21 +47,21 @@ radf_common_cv(n, N, minw = NULL, nrep = 1000L, seed = NULL)
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
-A list with `adf_cv`, `sadf_cv`, `gsadf_cv`, `badf_cv`, `bsadf_cv` – the
-same shape as
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)'s
-return value, so it can be used as a drop-in `cv` argument for
-[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
-on a
+A list with `adf_cv`, `sadf_cv`, `gsadf_cv`, `badf_cv` and `bsadf_cv`.
+It has the same shape as the return value of
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+so you can use it as the `cv` argument of
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+`tidy` and `autoplot` on a
 [`radf_common`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md)
 result.
 

@@ -1,7 +1,7 @@
 # Plot method for dating_pdc() output
 
 Plots each series with vertical markers at the estimated origination,
-collapse and (where estimated) recovery dates.
+collapse and, where estimated, recovery dates.
 
 ## Usage
 

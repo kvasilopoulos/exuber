@@ -1,7 +1,7 @@
 # Plot method for quantile_test() output
 
-Bar chart of the quantile-DF statistic per series against its critical
-value; series that exceed it are flagged as detected.
+Bar chart of the quantile-DF statistic for each series against its
+critical value. Series that exceed it are flagged as detected.
 
 ## Usage
 

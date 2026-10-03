@@ -9,47 +9,50 @@ library(exuber)
 
 Plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-assumes constant innovation variance. Real series rarely have that, and
-under time-varying volatility its standard critical values no longer
-control size. exuber has several fixes for this, each taking a
-structurally different approach. Four of the five below
+assumes a constant innovation variance. Real series rarely have one, and
+when volatility varies over time the standard critical values no longer
+control the size of the test. exuber offers several fixes, and each
+takes a structurally different approach. Four of the five covered below
 ([`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
 [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md),
-[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
+[`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
+and
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md))
-keep the `radf_obj` class and now have full
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-support, the same as plain
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-(see
+keep the `radf_obj` class and support
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html) in
+the same way as plain
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md).
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for exactly how each one plugs into the pipeline and how that was
-validated);
+shows how each plugs into the pipeline and how we validated it.
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
-doesn’t – it bundles
-[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)’s
-statistic and the classic `supDF` into one union-of-rejections call with
-its own class, not a `radf_obj`, so none of those four generics apply to
-it, only its own
-[`print()`](https://rdrr.io/r/base/print.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html).
-[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)’s
-time-deformation approach has its own dedicated vignette,
-[`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md);
-this one covers the rest.
+is the exception. It bundles the statistic of
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
+and the classic `supDF` into one union-of-rejections call and has its
+own class, not `radf_obj`, so only its own
+[`print()`](https://rdrr.io/r/base/print.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+apply. The time-deformation approach of
+[`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
+has its own vignette,
+[`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md),
+and this one covers the rest.
 
-All of them target *non-stationary* volatility – a permanent shift or
-trend in the unconditional innovation variance, not stationary
-GARCH-type conditional heteroskedasticity (whose variance profile is
-asymptotically flat, leaving plain
+All of these functions target non-stationary volatility, meaning a
+permanent shift or trend in the unconditional innovation variance. They
+do not target stationary GARCH-type conditional heteroskedasticity,
+whose variance profile is asymptotically flat and leaves plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-size-correct). So the running example is
-[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
+with the correct size. The running example is therefore the
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
 bubble driven by
 [`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)
 innovations, whose standard deviation triples half-way through the
-sample – the case where plain
+sample. This is the case in which plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-over-rejects most:
+over-rejects the most:
 
 ``` r
 
@@ -58,17 +61,19 @@ y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 
 | Function | Paper | Approach |
 |----|----|----|
-| [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md) / [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md) | Harvey, Leybourne & Zu (2020) | Transform to the *cumulated sign* of first differences – exactly invariant to any heteroskedasticity pattern, no bootstrap needed. `_dm` demeans first for level-shift robustness (Harvey, Leybourne, Tatlow & Zu 2025). |
-| [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md) | Harvey, Leybourne, Taylor & Zu (2024) | *Purge* volatility: divide each first difference by a kernel spot-volatility estimate, cumulate, then run ordinary PSY on the purged series – null distribution is identical to the standard homoskedastic one. |
-| [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md) / [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md) | Harvey, Leybourne & Zu (2019) | A WLS-weighted recursive-DF statistic (`supBZ`), *weighting* rather than purging or transforming: same kernel spot-volatility estimator as [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), used as regression weights instead. |
-| [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md) | Harvey, Leybourne & Zu (2019) | `supDF` (classic) and `supBZ` ([`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)’s), unioned via a jointly-sized wild bootstrap – catches whichever of the two has power on a given series. |
+| [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md) / [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md) | Harvey, Leybourne & Zu (2020) | Transforms the series to the cumulated sign of its first differences, which is exactly invariant to any heteroskedasticity pattern and needs no bootstrap. The `_dm` version demeans first, which makes it robust to level shifts (Harvey, Leybourne, Tatlow & Zu 2025). |
+| [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md) | Harvey, Leybourne, Taylor & Zu (2024) | Purges volatility. It divides each first difference by a kernel spot-volatility estimate, cumulates the result and runs the ordinary PSY test on the purged series, whose null distribution is identical to the standard homoskedastic one. |
+| [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md) / [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md) | Harvey, Leybourne & Zu (2019) | A WLS-weighted recursive Dickey-Fuller statistic (`supBZ`). It weights the observations and does not purge or transform the series. It uses the same kernel spot-volatility estimator as [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md), but as regression weights. |
+| [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md) | Harvey, Leybourne & Zu (2019) | Combines `supDF` (the classic statistic) and `supBZ` (the statistic of [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)) as a union of rejections, using a wild bootstrap sized jointly for both. It catches whichever of the two has power on a given series. |
 
 ## Sign-based: `radf_sign()`
 
-As of 2026-08-18, this also gets full pipeline support –
+Since 2026-08-18
+[`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
+also has full pipeline support.
 [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
-computes the time-varying `badf_cv`/`bsadf_cv` boundary now, not just
-the scalar critical values
+now computes the time-varying `badf_cv` and `bsadf_cv` boundary and not
+only the scalar critical values that
 [`summary()`](https://rdrr.io/r/base/summary.html) needs (see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the validation):
@@ -101,14 +106,13 @@ datestamp(res, cv = cv)
 
 ## Kernel-purged: `radf_kp()`
 
-Because
 [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md)
 purges volatility and then calls
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-unmodified, it gets full pipeline support too, the simplest way of all
-(no new critical-value machinery at all –
+unmodified, so it has full pipeline support in the simplest possible
+way. It needs no new critical-value code, and
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-applies unmodified):
+applies as it is:
 
 ``` r
 
@@ -129,15 +133,18 @@ summary(res_kp, cv = cv_kp)
 
 ## WLS + kernel volatility: `radf_sbz()`
 
-As of 2026-08-22,
+Since 2026-08-22
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
-is split from the union test into its own statistic function, with
+is a statistic function of its own, separate from the union test.
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
-computing the time-varying `badf_cv`/`bsadf_cv` boundary the same way
-[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)/[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
-do (see
+computes the time-varying `badf_cv` and `bsadf_cv` boundary in the same
+way as
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+and
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+(see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the validation), so it gets full pipeline support:
+for the validation), so it has full pipeline support:
 
 ``` r
 
@@ -156,15 +163,15 @@ summary(res_sbz, cv = cv_sbz)
 #> 3 gsadf  1.91 3.37   5.06  6.21
 ```
 
-The kernel-volatility weighting that makes `supBZ`
-heteroskedasticity-robust also trades away some power relative to the
-other tests:
-[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)’s
-default, mild bubble (30 periods at `rho = 1 + 200^-0.6`, then a
-collapse) doesn’t clear `supBZ`’s 95% critical value here, even though
-every other test above rejects on the same series. A stronger,
-uncollapsed episode – `rho = 1.03` from `t = 120` to the sample end, on
-the same volatility break – does:
+The kernel-volatility weighting that makes `supBZ` robust to
+heteroskedasticity costs some power relative to the other tests. The
+default bubble of
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
+is mild (30 periods at `rho = 1 + 200^-0.6`, then a collapse). It does
+not clear the 95% critical value of `supBZ` here, although every other
+test above rejects on the same series. A stronger bubble that does not
+collapse (`rho = 1.03` from `t = 120` to the end of the sample, on the
+same volatility break) does clear it:
 
 ``` r
 
@@ -195,10 +202,9 @@ datestamp(res_sbz2, cv = cv_sbz2)
 #> 4   172  200 200       29 positive    TRUE
 ```
 
-That’s the same trade-off
-[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
-below exists to hedge against by unioning `supBZ` with the classic
-`supDF`.
+This is the same trade-off that
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+below, hedges against by combining `supBZ` with the classic `supDF`.
 
 ## Union-of-rejections: `radf_sbz_union()`
 
@@ -212,55 +218,60 @@ radf_sbz_union(y, nboot = 200, seed = 1)
 #>   series1  9.329   1.67  9.329        0    0.085  0.005
 ```
 
-`supDF` is the classic PWY statistic, `supBZ` the WLS-weighted version
-(the same one
+`supDF` is the classic PWY statistic, and `supBZ` is the WLS-weighted
+version that
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
-now returns on its own), and `U` their union – each with its own
-bootstrap p-value, so a series can be flagged by one without the other,
-as here: `supDF` rejects, `supBZ` doesn’t, and the union `U` follows
-`supDF`. `U`’s value is *defined* using a bootstrap-derived
-`supDF`/`supBZ` scaling ratio, and its size guarantee requires
-`supDF`/`supBZ` bootstrap draws paired from the same resampled series
-per replicate – both reasons
+also returns on its own. `U` is their union. Each statistic has its own
+bootstrap p-value, so one can flag a series without the other. Here
+`supDF` rejects, `supBZ` does not, and the union `U` follows `supDF`.
+The value of `U` is defined with a bootstrap-derived scaling ratio
+between `supDF` and `supBZ`, and its size guarantee requires that the
+`supDF` and `supBZ` bootstrap draws come from the same resampled series
+in each replicate. For both reasons
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
-can’t be reconstructed from separately calling
+cannot be reconstructed by calling
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
 and plain
-[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
-and why it stays a single bundled call with its own class rather than a
-`radf_obj`.
+[`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
+separately. It stays a single bundled call with its own class and is not
+a `radf_obj`.
 
 ## Which to reach for
 
-- Want exact invariance to *any* heteroskedasticity pattern with no
-  bootstrap at all:
-  [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
-  (or
+- If you want exact invariance to any heteroskedasticity pattern with no
+  bootstrap, use
+  [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md).
+  Use
   [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md)
-  if a level shift, not just volatility, is a concern). Also full
-  pipeline support.
-- Want to stay closest to plain
-  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
-  no new critical-value machinery at all:
+  if a level shift, and not only volatility, is a concern. Both have
+  full pipeline support.
+- If you want to stay closest to plain
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  with no new critical-value code, use
   [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md).
-- Want the WLS efficiency gain with full
-  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-  support:
-  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md) +
+- If you want the efficiency gain from WLS together with full
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+  and
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  support, use
+  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
+  with
   [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md).
-- Want to hedge between the classic and WLS-weighted statistics on the
-  same series, and don’t need
-  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html):
-  [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
-  – the one function in this group with no pipeline support, since `U`
-  bundles both statistics and their (scalar-only) joint critical value
-  in one call rather than returning a `radf_obj`.
-- Volatility is the whole story and a bootstrap-free, time-deformation
-  approach is preferred:
-  [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
-  see
-  [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md).
-- Volatility is genuinely unknown/complex and a bootstrap is acceptable:
-  plain
+- If you want to hedge between the classic and the WLS-weighted
+  statistics on the same series and do not need
+  [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+  or
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html),
+  use
+  [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md).
+  It is the only function in this group without pipeline support,
+  because `U` bundles both statistics and their scalar joint critical
+  value in one call and does not return a `radf_obj`.
+- If volatility is the main concern and you prefer a time-deformation
+  approach without a bootstrap, use
+  [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
+  (see
+  [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md)).
+- If the volatility is unknown or complex and a bootstrap is acceptable,
   [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
   remains the general-purpose choice.

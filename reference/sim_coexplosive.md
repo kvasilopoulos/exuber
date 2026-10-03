@@ -1,12 +1,13 @@
 # Simulation of a bivariate co-explosive pair
 
-Simulation of Evripidou, Harvey, Leybourne & Sollis (2022)'s
-co-explosive DGP: an explosive series `x` (from
+Simulates the co-explosive process of Evripidou, Harvey, Leybourne &
+Sollis (2022): an explosive series `x` (from
 [`sim_psy1`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md))
-and a second series `y` linked to a lead/lagged copy of it (and
-optionally a third, independent explosive series `z`), \\y_t = \mu_y +
-\phi_x x\_{t-i} + \phi_z z_t + \epsilon\_{y,t}\\. `i > 0` means `x`'s
-explosive episode leads `y`'s; `i < 0` means it lags.
+and a second series `y` that is linked to a lead or lagged copy of it,
+and optionally to a third, independent explosive series `z`, \\y_t =
+\mu_y + \phi_x x\_{t-i} + \phi_z z_t + \epsilon\_{y,t}\\. `i > 0` means
+that the explosive episode of `x` leads that of `y`, and `i < 0` means
+that it lags.
 
 ## Usage
 
@@ -53,12 +54,12 @@ sim_coexplosive(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 

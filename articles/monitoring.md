@@ -5,48 +5,53 @@
 library(exuber)
 ```
 
-## Monitoring vs. testing
+## Monitoring and testing
 
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 and the `dating_*()` family (see
 [`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md))
-all work on a *finished* sample: they answer “was there a bubble, and
-when” after every observation is already in hand. The `monitor_*()`
-family answers a different, real-time question: fix a training window
-`[1, T*]` believed free of exuberance, calibrate a boundary on it, then
-watch each new observation `T*+1, T*+2, ...` and raise an alarm the
-first time the boundary is breached. All four functions share this
-`r_star`/alarm/`alarm_date` shape; they differ in what statistic they
-monitor and how the boundary is calibrated.
+all work on a finished sample. They answer the question of whether there
+was a bubble, and when, after every observation is already in hand. The
+`monitor_*()` family answers a real-time question instead. We fix a
+training window `[1, T*]` that we believe is free of exuberance and
+calibrate a boundary on it. We then watch each new observation
+`T*+1, T*+2, ...` and raise an alarm the first time the boundary is
+crossed. All four functions share this `r_star`, alarm and `alarm_date`
+structure. They differ in the statistic they monitor and in how they
+calibrate the boundary.
 
 | Function | Statistic monitored | Boundary | Static, full-sample counterpart |
 |----|----|----|----|
-| [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md) – not a `_test()`, but the same recursive-ADF core |
-| [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md) | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)’s asymptotic (or finite-sample) constant | none – Homm & Breitung’s CUSUM boundary is inherently a training/monitoring construction, with no full-sample form |
+| [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) and [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md). It is not a `_test()` function, but it uses the same recursive ADF core |
+| [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md) | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)’s asymptotic (or finite-sample) constant | None. The CUSUM boundary of Homm & Breitung is a training and monitoring construction by design and has no full-sample form |
 | [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md) | Breitung & Diegel (2025)’s locally-best-invariant CUSUM (`mCUSUM`/`wCUSUM`, via `c_bar`) | Their Table 1 constant | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), the static version of the same statistic |
 | [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) | A recursive quantile regression at `tau` | A simulated first-crossing boundary (Wu, Shi & Wu 2025) | [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), the static version of the same statistic |
 
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-reuses `badf`/`bsadf` directly (the same recursive-ADF core as the
-`radf_*()` family) but is named for what it *does*, not that internal
-detail – see
+reuses `badf` and `bsadf` directly, which is the same recursive ADF core
+as in the `radf_*()` family. It is named after what it does and not
+after that internal detail (see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for why. Two of its three siblings
-([`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
-[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md))
-are the sequential extension of an existing static test of the same name
-minus the `monitor_` prefix;
+for the reasoning). Two of its three siblings,
+[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
+and
+[`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md),
+are the sequential extension of an existing static test with the same
+name minus the `monitor_` prefix.
 [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
-has no such counterpart, since its source paper (Homm & Breitung 2012)
-proposed CUSUM as a monitoring detector only.
+has no such counterpart, because its source paper (Homm & Breitung 2012)
+proposed the CUSUM only as a monitoring detector.
 
-## The same bubble, five monitors
+## One bubble, five monitors
 
-A training window of pure random walk (`T* = 100`), followed by more
-random walk, then a genuine explosive regime (`rho = 1.04`) from
-`t = 150` to the end of the sample –
-[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
-with the bubble pushed past the training window and no collapse:
+The series starts with a training window of pure random walk
+(`T* = 100`) and continues as a random walk until `t = 150`. From then
+until the end of the sample it follows an explosive regime
+(`rho = 1.04`). We generate it with
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md),
+placing the bubble after the training window and leaving out the
+collapse:
 
 ``` r
 
@@ -90,9 +95,9 @@ monitor(y, r_star = 0.5, boundary = "kurozumi")
 [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
 and
 [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
-each have a static, full-sample sibling that asks the retrospective
-version of the same question – run on the whole series rather than
-watching for a first crossing:
+each have a static, full-sample counterpart that asks the retrospective
+version of the same question. It runs on the whole series and does not
+wait for a first crossing:
 
 ``` r
 
@@ -110,31 +115,36 @@ quantile_test(y, tau = 0.5)
 #>   series1  0.5  20.25  0.5041   0.64      TRUE
 ```
 
-Every monitor here alarms within about 15 points of the true bubble
-start (150), none before it – that “never before `T*` (or the true
-start)” property is exactly what each function’s own test suite checks
-under the null. Alarm *timing* differs by design:
-[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)’s
-ADF-family statistics tend to detect mid-sample bubbles fastest (the
-literature’s own finding, e.g. Kurozumi 2020/2021), while CUSUM-type
+Every monitor alarms within about 15 observations of the true bubble
+start (150), and none alarms before it. Each function’s own test suite
+checks the absence of alarms before `T*` (or the true start) under the
+null. The timing of the alarm differs by design. The ADF-family
+statistics in
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+tend to detect bubbles in the middle of the sample fastest, as the
+literature finds (for example Kurozumi 2020, 2021). The CUSUM-type
 detectors
-([`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+([`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)
+and
 [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md))
-are typically slower but computationally simpler and don’t need a
+are typically slower, but they are computationally simpler and need no
 bootstrap.
 
 ## Which to reach for
 
-- Fastest detection, willing to pay for a wild bootstrap per call:
-  `monitor(boundary = "bootstrap")` (the default).
-- Same statistic, no bootstrap, an off-the-shelf published constant
-  instead: `monitor(boundary = "kurozumi")` or `boundary = "fluc"`.
-- A simpler CUSUM-based alternative with its own closed-form boundary:
-  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
-  or
-  [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
-  for Breitung & Diegel’s locally-best-invariant version (`c_bar > 0`
-  trades a little size for power against slow-building bubbles).
-- Monitoring a specific quantile of the distribution rather than the
-  mean behavior:
+- If you want the fastest detection and can afford a wild bootstrap on
+  each call, use `monitor(boundary = "bootstrap")`, which is the
+  default.
+- If you want the same statistic without a bootstrap, using a published
+  constant instead, use `monitor(boundary = "kurozumi")` or
+  `monitor(boundary = "fluc")`.
+- If you want a simpler CUSUM-based alternative with its own closed-form
+  boundary, use
+  [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md).
+  For the locally best invariant version of Breitung & Diegel, use
+  [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
+  where `c_bar > 0` gives up a little size in exchange for power against
+  slowly building bubbles.
+- If you want to monitor a specific quantile of the distribution instead
+  of the mean, use
   [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md).

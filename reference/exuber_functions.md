@@ -1,13 +1,14 @@
 # Look Up exuber's Test/Procedure Functions by Family
 
-Naming conventions (`radf_`/`_test`/`dating_`/ `monitor_`, see
+The naming conventions (`radf_`, `_test`, `dating_` and `monitor_`, see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md))
-are a guide, not a contract – easy to misremember, and occasionally
-traded off deliberately
-([`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-is ADF-family internally but named for what it does). This is the
-actual, queryable source of truth: which of the package's
-test/dating/monitoring/root-inference functions belong to which family.
+are a guide and not a contract. They are easy to misremember, and they
+are occasionally traded off deliberately:
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+uses the ADF family internally but is named after what it does. This
+function is the queryable source of truth for which of the package's
+test, dating, monitoring and root-inference functions belong to which
+family.
 
 ## Usage
 
@@ -19,26 +20,27 @@ exuber_functions(family = NULL)
 
 - family:
 
-  One of `"adf"` (built on the recursive-ADF core), `"test"` (a
-  standalone hypothesis test), `"dating"`
-  (point-estimation/model-selection, no formal test), `"monitor"`
-  (real-time/sequential), `"root"` (confidence-interval inference on the
-  explosive root), `"regression"` (point estimation, no test), or `NULL`
-  (default) for every function. A function can belong to more than one
-  family
-  ([`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-  is both `"adf"` and `"monitor"`).
+  One of `"adf"` (built on the recursive ADF core), `"test"` (a
+  standalone hypothesis test), `"dating"` (point estimation or model
+  selection, with no formal test), `"monitor"` (real-time or
+  sequential), `"root"` (confidence-interval inference on the explosive
+  root), `"regression"` (point estimation, no test) or `NULL` (default)
+  for every function. A function can belong to more than one family:
+  [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
+  is both `"adf"` and `"monitor"`.
 
 ## Value
 
-A tibble with columns `name`, `family`, and `description`, one row per
-function.
+A tibble with the columns `name`, `family` and `description`, and one
+row for each function.
 
 ## See also
 
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the full naming scheme and which functions plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`.
+for the full naming scheme and for which functions work with
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+`tidy` and `autoplot`.
 
 ## Examples
 

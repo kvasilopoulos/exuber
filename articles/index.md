@@ -2,8 +2,8 @@
 
 ### Core workflow
 
-Beyond “Get started”: the naming conventions, plotting, and simulated
-data used throughout the other articles
+Beyond “Get started”: the naming conventions, plotting, and the
+simulated data used throughout the other articles.
 
 - [Naming Conventions and the Analysis/Tidying/Plotting
   Pipeline](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md):
@@ -11,10 +11,11 @@ data used throughout the other articles
   exuber](https://kvasilopoulos.github.io/exuber/articles/plotting.md):
 - [Simulation](https://kvasilopoulos.github.io/exuber/articles/simulation.md):
 
-### Robustness – alternatives to radf() itself
+### Robust alternatives to radf() itself
 
-Still answering “is there a bubble,” under assumptions plain radf()
-doesn’t cover (time-varying volatility, alternative test statistics)
+These articles still ask whether there is a bubble, under assumptions
+that plain radf() does not cover (time-varying volatility and
+alternative test statistics).
 
 - [Time-Transformed Test
   (STADF/GSTADF)](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md):
@@ -26,7 +27,7 @@ doesn’t cover (time-varying volatility, alternative test statistics)
 ### Dating, monitoring & root inference
 
 Beyond plain datestamp(): alternative dating procedures, real-time
-monitoring, and how fast a detected bubble is actually growing
+monitoring, and how fast a detected bubble is growing.
 
 - [Dating Methods: Alternatives to
   datestamp()](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md):
@@ -37,8 +38,8 @@ monitoring, and how fast a detected bubble is actually growing
 
 ### Multivariate & experimental
 
-Cross-series relationships, and methods still below this package’s usual
-validation bar (see each article’s own caveats)
+Relationships across series, and methods that fall short of the usual
+validation standard of this package (see the caveats in each article).
 
 - [Bivariate Bubble Relationships: cobubble_test() and
   contagion_reg()](https://kvasilopoulos.github.io/exuber/articles/co-explosivity.md):

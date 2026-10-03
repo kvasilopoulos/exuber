@@ -1,14 +1,14 @@
 # Recursively Demeaned Sign-Based Bubble Test (s-bar-PWY / s-bar-PSY)
 
-`radf_sign_dm` computes Harvey, Leybourne & Zu (2020)'s second
-sign-based analogue of the recursive right-tailed unit root test,
-denoted \\\bar{s}PWY\\/\\\bar{s}PSY\\ in the paper: the same
-construction as
+`radf_sign_dm` computes the second sign-based analogue of the recursive
+right-tailed unit root test of Harvey, Leybourne & Zu (2020), which the
+paper denotes \\\bar{s}PWY\\/\\\bar{s}PSY\\. The construction is the
+same as in
 [`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
-but built on a recursively (expanding-window) demeaned cumulated-sign
-series,
+but it is built on a recursively (expanding-window) demeaned
+cumulated-sign series,
 `Ctilde_t = sum_{i=2}^{t} (sign(diff(y)_i) - mean(sign(diff(y)_{2:i})))`,
-rather than the raw cumulated sign `radf_sign` uses.
+and not on the raw cumulated sign that `radf_sign` uses.
 
 ## Usage
 
@@ -21,14 +21,14 @@ radf_sign_dm(data, minw = NULL)
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -37,45 +37,46 @@ radf_sign_dm(data, minw = NULL)
 
 ## Value
 
-An object of class `radf_sign_dm_obj`/`radf_obj`: the same
-`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md); pair
-with
+An object of class `radf_sign_dm_obj`/`radf_obj`. It is the same
+`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as for
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md), and
+it pairs with
 [`radf_sign_dm_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md).
 
 ## Details
 
-Harvey, Leybourne, Tatlow & Zu (2025) show this statistic shares
-[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)'s
-asymptotic level-shift robustness (see that function's
-`Level-shift robustness` section) without requiring Assumption 2 of the
-underlying HLZ (2020) theory (that the innovations' median is zero) – a
-strictly weaker requirement than
+Harvey, Leybourne, Tatlow & Zu (2025) show that this statistic shares
+the asymptotic level-shift robustness of
 [`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
-needs for its own invariance result. Their finite -sample simulations
-also find the recursive demeaning tends to further reduce size
-distortion under level shifts relative to `radf_sign`, though both are
-asymptotically level-shift robust under the same condition.
+(see the `Level-shift robustness` section of that function). It does not
+need Assumption 2 of the underlying HLZ (2020) theory, that the median
+of the innovations is zero, which is a strictly weaker requirement than
+the one
+[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
+needs for its own invariance result. Their finite-sample simulations
+also find that the recursive demeaning tends to reduce the size
+distortion under level shifts further than `radf_sign` does, although
+both are asymptotically robust to level shifts under the same condition.
 
 ## Note
 
-Needs
-[`radf_sign_dm_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)
-for critical values (not
-[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
-which is calibrated to the non-demeaned
+The test needs the critical values from
+[`radf_sign_dm_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md),
+and
+[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+does not apply, because it is calibrated to the non-demeaned
 [`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
-statistic instead) – pivotal like `radf_sign`, so no per-dataset
-bootstrap is needed.
+statistic. The statistic is pivotal like `radf_sign`, so no bootstrap is
+needed for each dataset.
 
-Carries the `radf_obj` class and, as of 2026-08-18, its full
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
-pipeline works, the same fix as
-[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
-–
+The result carries the `radf_obj` class. Since 2026-08-18 the full
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+`tidy` and `autoplot` pipeline works, with the same fix as for
+[`radf_sign`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md):
 [`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)
-now computes `badf_cv`/`bsadf_cv` too, not just the three scalar
-critical values. See
+now also computes `badf_cv` and `bsadf_cv`, and not only the three
+scalar critical values. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
 ## Status
@@ -114,8 +115,9 @@ Other volatility-robust tests:
 
 ``` r
 # \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_sign_dm(y, minw = 20)
 print(res)

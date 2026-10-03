@@ -8,11 +8,11 @@ library(ggplot2)
 
 ## What the `sim_*()` family is for
 
-Every test in the package is calibrated and validated on simulated data,
-and the same data-generating processes are exported so you can do the
-same: check size under a null you choose, check power against a bubble
-you choose, or just see what a given test does to a series whose true
-break dates you know. There are three kinds:
+Every test in the package is calibrated and validated on simulated data.
+The same data generating processes are exported, so you can check the
+size of a test under a null you choose, check its power against a bubble
+you choose, or see what a test does to a series whose true break dates
+you know. There are three kinds:
 
 | Kind | Functions | Returns |
 |----|----|----|
@@ -20,46 +20,48 @@ break dates you know. There are three kinds:
 | Innovation generators | [`sim_innov()`](https://kvasilopoulos.github.io/exuber/reference/sim_innov.md), [`sim_vol_garch()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md), [`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md), [`sim_vol_cir()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md), [`sim_vol_sv()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md), [`sim_fi()`](https://kvasilopoulos.github.io/exuber/reference/sim_fi.md) | One series of shocks, to feed into a bubble process through its `e` argument |
 | Multi-series processes | [`sim_common()`](https://kvasilopoulos.github.io/exuber/reference/sim_common.md), [`sim_coexplosive()`](https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.md) | A `data.frame`, one column per series |
 
-Plus `sim_data`/`sim_data_wdate`, a bundled `data.frame` of five of the
-classic series (with and without a date column) used throughout the
-examples.
+The package also bundles `sim_data` and `sim_data_wdate`, two
+`data.frame`s with five of the classic series, without and with a date
+column, which the examples use throughout.
 
 Every function takes a `seed` argument, so a series is reproducible
 without a surrounding
-[`set.seed()`](https://rdrr.io/r/base/Random.html), and the bubble
-processes take the break dates (`te`, `tf`, …) as arguments, so the
-truth you are testing against is explicit.
+[`set.seed()`](https://rdrr.io/r/base/Random.html). The bubble processes
+take the break dates (`te`, `tf` and so on) as arguments, so the truth
+you test against is explicit.
 
-The bubble processes split into two families.
-[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)/[`sim_psy2()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy2.md)/
+The bubble processes fall into two families.
+[`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md),
+[`sim_psy2()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy2.md)
+and
 [`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md)
-are the *regime* DGPs of Phillips, Shi & Yu (2015) and Phillips & Shi
-(2018): a unit root, then an explosive AR(1) between fixed dates, then a
-collapse and a return to a unit root – the design every paper in this
-literature uses for size and power.
+are the regime processes of Phillips, Shi & Yu (2015) and Phillips & Shi
+(2018). They have a unit root, then an explosive AR(1) between fixed
+dates, then a collapse and a return to a unit root. Papers in this
+literature use this design to study size and power.
 [`sim_blan()`](https://kvasilopoulos.github.io/exuber/reference/sim_blan.md),
 [`sim_evans()`](https://kvasilopoulos.github.io/exuber/reference/sim_evans.md),
 [`sim_tree()`](https://kvasilopoulos.github.io/exuber/reference/sim_tree.md),
 [`sim_mar()`](https://kvasilopoulos.github.io/exuber/reference/sim_mar.md)
 and
 [`sim_msbubble()`](https://kvasilopoulos.github.io/exuber/reference/sim_msbubble.md)
-are *rational bubble* models: the explosive behaviour and its collapse
-are stochastic, driven by a probability of bursting each period rather
-than by fixed dates.
-[`sim_evans()`](https://kvasilopoulos.github.io/exuber/reference/sim_evans.md)’s
-periodically collapsing bubble is the one PSY’s GSADF test was designed
-to catch, and the one the earlier tests it replaced could not.
+are rational bubble models. The explosive behavior and the collapse are
+stochastic, driven by a probability that the bubble bursts in each
+period and not by fixed dates. The periodically collapsing bubble of
+[`sim_evans()`](https://kvasilopoulos.github.io/exuber/reference/sim_evans.md)
+is the one that the GSADF test of PSY was designed to detect and that
+the earlier tests it replaced could not.
 
 ## The PSY experiment
 
 PSY validate the GSADF test on a price built from Lucas-model
 fundamentals plus an Evans (1991) bubble.
 [`sim_div()`](https://kvasilopoulos.github.io/exuber/reference/sim_div.md)
-gives the fundamental price from a random walk with drift in dividends
-(West 1988’s S&P 500 parameterisation by default),
+produces the fundamental price from a random walk with drift in
+dividends, using by default the S&P 500 parameterization of West (1988).
 [`sim_evans()`](https://kvasilopoulos.github.io/exuber/reference/sim_evans.md)
-gives the bubble term, and a scaling factor `kappa` sets how much of the
-price the bubble accounts for:
+produces the bubble term, and a scaling factor `kappa` sets how much of
+the price the bubble accounts for:
 
 ``` r
 
@@ -81,9 +83,8 @@ data.frame(index = seq_len(n), fundamental = pf, price = p) %>%
 
 ![](simulation_files/figure-html/psy-plot-1.png)
 
-The point of the exercise is that
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-finds the episodes:
+should find the episodes:
 
 ``` r
 
@@ -111,9 +112,9 @@ sim_psy2(100, seed = 1) %>%
 
 ![](simulation_files/figure-html/autoplot-sim-1.png)
 
-Several at once go into a `data.frame` – which is also exactly what
+Several series can be collected in a `data.frame`, which is also what
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-takes, so the same object serves both:
+takes, so the same object serves both purposes:
 
 ``` r
 
@@ -140,24 +141,25 @@ sims %>%
 
 ## Swapping the innovations
 
-By default the regime DGPs are driven by i.i.d. Gaussian shocks. Every
-bubble process accepts a vector of innovations through `e` instead, and
-the innovation generators exist to fill it: heavy-tailed or skewed
-marginals
+By default the regime processes are driven by i.i.d. Gaussian shocks.
+Every bubble process also accepts a vector of innovations through `e`,
+and the innovation generators exist to supply it. They produce
+heavy-tailed or skewed marginals
 ([`sim_innov()`](https://kvasilopoulos.github.io/exuber/reference/sim_innov.md)),
 conditional heteroskedasticity
 ([`sim_vol_garch()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_garch.md)),
 a one-off variance break
 ([`sim_vol_break()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_break.md)),
 stochastic volatility
-([`sim_vol_cir()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md),
+([`sim_vol_cir()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_cir.md)
+and
 [`sim_vol_sv()`](https://kvasilopoulos.github.io/exuber/reference/sim_vol_sv.md))
 or long memory
 ([`sim_fi()`](https://kvasilopoulos.github.io/exuber/reference/sim_fi.md)).
-The bubble dates stay where you put them; only the noise changes – which
-is how the volatility-robust tests in
+The bubble dates stay where you put them and only the noise changes.
+This is how
 [`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md)
-are compared against plain
+compares the volatility-robust tests with plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) on
 an equal footing:
 
@@ -170,18 +172,18 @@ sim_psy1(n = 200, seed = 1, e = sim_vol_break(199, seed = 1)) %>%
 
 ![](simulation_files/figure-html/innovations-1.png)
 
-The innovation vector is one shorter than `n` because the first
-observation is the starting value, not a shock.
+The innovation vector is one element shorter than `n` because the first
+observation is the starting value and not a shock.
 
 ## Multi-series processes
 
 [`sim_common()`](https://kvasilopoulos.github.io/exuber/reference/sim_common.md)
 draws `n_series` series that share one latent bubble plus idiosyncratic
-noise, the design behind the panel test
-[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md);
+noise, which is the design behind the panel test
+[`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md).
 [`sim_coexplosive()`](https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.md)
-draws a pair where `y` is a linear function of a (possibly lagged)
-explosive `x`, the design behind
+draws a pair in which `y` is a linear function of a possibly lagged
+explosive `x`. This is the design behind
 [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md)
 and
 [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
@@ -210,30 +212,33 @@ head(sim_coexplosive(n = 100, lag = 2, seed = 1))
 
 ## Which to reach for
 
-- Size or power of a test against a bubble with **known dates**:
+- To study the size or power of a test against a bubble with known
+  dates, use
   [`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md)
   (one episode),
   [`sim_psy2()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy2.md)
-  (two),
+  (two episodes) or
   [`sim_ps1()`](https://kvasilopoulos.github.io/exuber/reference/sim_ps1.md)
-  (one, with a distinct collapse regime – the design the `dating_*()`
-  estimators assume).
-- A **rational**, stochastically collapsing bubble:
+  (one episode with a distinct collapse regime, the design that the
+  `dating_*()` estimators assume).
+- For a rational bubble that collapses stochastically, use
   [`sim_evans()`](https://kvasilopoulos.github.io/exuber/reference/sim_evans.md)
-  on its own or on top of
+  alone or on top of
   [`sim_div()`](https://kvasilopoulos.github.io/exuber/reference/sim_div.md)
-  fundamentals, as in PSY;
+  fundamentals, as in PSY.
   [`sim_blan()`](https://kvasilopoulos.github.io/exuber/reference/sim_blan.md)
-  for the Blanchard version;
+  gives the Blanchard version, and
   [`sim_tree()`](https://kvasilopoulos.github.io/exuber/reference/sim_tree.md),
-  [`sim_mar()`](https://kvasilopoulos.github.io/exuber/reference/sim_mar.md),
+  [`sim_mar()`](https://kvasilopoulos.github.io/exuber/reference/sim_mar.md)
+  and
   [`sim_msbubble()`](https://kvasilopoulos.github.io/exuber/reference/sim_msbubble.md)
-  for the newer ones.
-- A **null that looks like a bubble** but isn’t:
+  give the newer ones.
+- For a null that looks like a bubble but is not one, use
   [`sim_falsebubble()`](https://kvasilopoulos.github.io/exuber/reference/sim_falsebubble.md).
-- Non-Gaussian or **heteroskedastic** shocks under any of the above:
-  build the shocks with an innovation generator and pass them as `e`.
-- **Several series**:
+- For non-Gaussian or heteroskedastic shocks under any of these
+  processes, build the shocks with an innovation generator and pass them
+  as `e`.
+- For several series, use
   [`sim_common()`](https://kvasilopoulos.github.io/exuber/reference/sim_common.md)
   for a shared bubble,
   [`sim_coexplosive()`](https://kvasilopoulos.github.io/exuber/reference/sim_coexplosive.md)

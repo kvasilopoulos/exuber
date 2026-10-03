@@ -1,7 +1,7 @@
 # Date-stamping periods of mildly explosive behavior
 
-Computes the origination, termination and duration of episodes during
-which the time series display explosive dynamics.
+Computes the origination, termination and duration of the episodes in
+which a time series shows explosive dynamics.
 
 ## Usage
 
@@ -37,32 +37,33 @@ datestamp(
 
 - ...:
 
-  further arguments passed to methods.
+  Further arguments passed to methods.
 
 - sig_lvl:
 
-  logical. Significance level, one of 90, 95 or 99. Ignored when
+  Significance level, one of 90, 95 or 99. It is ignored when
   `option = "svadf"`.
 
 - option:
 
-  one of `"gsadf"`/`"sadf"` (PWY/PSY dating against `cv`'s critical
-  values) or `"svadf"` (Sarkar & Wells 2026's SV-ADF
-  asymmetric-threshold dating –
-  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-  own `badf` compared against two closed-form, sample-size-only
-  thresholds, `log(t)/10` for origination and `log(t)/2` for collapse;
-  no `cv` needed). See Caveats.
+  One of `"gsadf"` or `"sadf"`, which date episodes (PWY/PSY) against
+  the critical values in `cv`, or `"svadf"`, the SV-ADF
+  asymmetric-threshold dating of Sarkar & Wells (2026). The `"svadf"`
+  option compares the `badf` sequence of
+  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+  with two closed-form thresholds that depend only on the sample size,
+  `log(t)/10` for origination and `log(t)/2` for collapse, so it needs
+  no `cv`. See Caveats.
 
 - nonrejected:
 
-  logical. Whether to apply datestamping technique to the series that
-  were not able to reject the Null hypothesis. Ignored when
+  logical. Whether to apply the datestamping technique to the series
+  that do not reject the null hypothesis. It is ignored when
   `option = "svadf"`.
 
 ## Value
 
-Return a table with the following columns:
+A table with the following columns:
 
 - Start:
 
@@ -76,23 +77,24 @@ Return a table with the following columns:
 
 - Ongoing:
 
-Returns a list containing the estimated origination and termination
-dates of episodes of explosive behaviour and the corresponding duration.
+A list with the estimated origination and termination dates of the
+episodes of explosive behavior and their duration.
 
 ## Details
 
-Datestamp also stores a vector whose elements take the value of 1 when
-there is a period of explosive behaviour and 0 otherwise. This output
-can serve as a dummy variable for the occurrence of exuberance.
+`datestamp` also stores a vector that takes the value 1 when there is a
+period of explosive behavior and 0 otherwise. You can use it as a dummy
+variable for the occurrence of exuberance.
 
 ## Caveats
 
-`option = "svadf"`: **\[experimental\]** `Sarkar & Wells (2026)` is a
-non-peer-reviewed preprint, a different bar than every other source this
-package implements. The same note is emitted as a message when called
-with this option. Detects at most one origination/collapse pair per
-series (the paper's own procedure), not every recurring episode the way
-`"gsadf"`/`"sadf"` do.
+`option = "svadf"`: **\[experimental\]** Sarkar & Wells (2026) is a
+preprint that has not been peer reviewed, which is a weaker standard of
+evidence than for every other source this package implements. The
+function emits the same note as a message when you call it with this
+option. It detects at most one origination and collapse pair per series,
+as the procedure of the paper does, and it does not find every recurring
+episode as `"gsadf"` and `"sadf"` do.
 
 ## References
 

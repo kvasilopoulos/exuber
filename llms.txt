@@ -4,135 +4,137 @@ Testing for and dating periods of explosive dynamics (exuberance) in
 time series using the univariate and panel recursive unit root tests
 proposed by [Phillips et al. (2015)](https://doi.org/10.1111/iere.12132)
 and [Pavlidis et al. (2016)](https://doi.org/10.1007/s11146-015-9531-2).
-The recursive least-squares algorithm utilizes the matrix inversion
-lemma to avoid matrix inversion which results in significant speed
-improvements. Simulation of a variety of periodically-collapsing bubble
-processes.
+The recursive least-squares algorithm uses the matrix inversion lemma,
+so no matrix has to be inverted at each step, which makes the tests much
+faster to compute. The package also simulates a variety of periodically
+collapsing bubble processes.
 
 ### Overview
 
-Testing for explosive dynamics is comprised of two distinct parts :
+Testing for explosive dynamics has two parts:
 
-- Estimation
-- Critical Values
+- Estimation of the test statistics
+- Critical values to compare them with
 
-**Some Context:** Conventional testing techniques compute critical
-values,and p-values from a standard distribution, where the user does
-not need to specify critical values explicitly. However, the recent
-literature in explosive dynamics require the use of non-standard
-distributions, which require the use of techniques that sample empirical
-distributions in order to calculate the critical values.
+Conventional tests take their critical values and p-values from a
+standard distribution, so the user never has to supply them. The test
+statistics used for explosive dynamics follow non-standard
+distributions, so the critical values have to be obtained by simulating
+the empirical distribution.
 
 #### Estimation
 
-The cornerstone function of the package is:
+The central function of the package is:
 
 - [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md):
-  Recursive Augmented Dickey-Fuller Test.
+  the recursive augmented Dickey-Fuller test.
 
-This function offers a vectorized estimation (i.e. single and/or
-multiple time-series) for individual and panel estimation. The
-estimation can parse data from multiple classes and handle dates as
-index.
+It accepts a single series or several, and it can estimate each series
+individually or as a panel. It reads data from several classes and uses
+dates as the index when they are available.
 
 #### Critical Values
 
-There are several options for generating critical values:
+There are several ways to generate critical values:
 
 - [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md):
   Monte Carlo
 - [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md),
   [`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md):
-  Wild Bootstrap (Harvey et al. 2016; Phillips & Shi 2020)
+  wild bootstrap (Harvey et al. 2016; Phillips & Shi 2020)
 - [`radf_sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sb_cv.md):
-  Sieve Bootstrap (Panel)
+  sieve bootstrap (panel)
 
 When `cv` is omitted, `exuber` uses precomputed Monte Carlo critical
-values: a shared store covering `lag = 0` to `4` and every sample size
-up to 4000, fetched once per `(n, lag)` and cached on disk.
+values. They come from a shared store that covers `lag = 0` to `4` and
+every sample size up to 4000. Each `(n, lag)` combination is fetched
+once and cached on disk.
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-and the bootstrap functions are the offline route, and the only route
+and the bootstrap functions work offline, and they are the only option
 for other lags or larger samples.
 
 ### Analysis
 
-For the analysis you should include both the output from estimation
-(`object`) and critical values (`cv`). The below methods break the
-process into small simple steps:
+The analysis needs both the output of the estimation (`object`) and the
+critical values (`cv`). The following methods break it into small steps:
 
 - [`summary()`](https://rdrr.io/r/base/summary.html) summarizes the
   model.
 - [`diagnostics()`](https://kvasilopoulos.github.io/exuber/reference/diagnostics.md)
-  shows which series reject the null hypothesis .
+  shows which series reject the null hypothesis.
 - [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-  computes the origination, termination and duration of episodes (if
-  any).
+  computes the origination, termination and duration of episodes, if
+  there are any.
 - [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
   estimates how fast a detected episode is growing (the explosive root
-  and its doubling time), run over every
+  and its doubling time) and runs over every
   [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
   episode at once.
 
-These combined provide a comprehensive analysis on the exuberant
-behavior of the model. See
+Together they give a full account of the exuberant behavior of the
+model. See
 [`vignette("exuber")`](https://kvasilopoulos.github.io/exuber/articles/exuber.md)
-for this workflow end to end and
+for this workflow from start to finish and
 [`vignette("plotting")`](https://kvasilopoulos.github.io/exuber/articles/plotting.md)
-for the
+for the matching
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-methods that go with it.
+methods.
 
 ### Beyond `radf()`
 
-The recursive ADF test is the core, but not the whole package. Each
-family below has its own vignette and its own section of the reference
-index:
+The recursive ADF test is the core of the package, but not all of it.
+Each family below has its own vignette and its own section of the
+reference index:
 
-- **Volatility-robust tests**
+- Volatility-robust tests
   ([`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md),
   [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md),
   [`radf_kp()`](https://kvasilopoulos.github.io/exuber/reference/radf_kp.md),
-  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)):
-  the same question as
+  [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md))
+  ask the same question as
   [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-  under time-varying innovation variance –
-  [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md),
+  when the innovation variance changes over time. See
+  [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md)
+  and
   [`vignette("volatility-robust-radf")`](https://kvasilopoulos.github.io/exuber/articles/volatility-robust-radf.md).
-- **Dating procedures**
+- Dating procedures
   ([`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md),
   [`dating_knp()`](https://kvasilopoulos.github.io/exuber/reference/dating_knp.md),
   [`dating_pdc()`](https://kvasilopoulos.github.io/exuber/reference/dating_pdc.md),
   [`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md),
-  [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)):
-  regime-model estimates of when a bubble you already believe in starts
-  and ends, no critical value needed –
+  [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md))
+  use regime models to estimate when a bubble that you already believe
+  in starts and ends. They need no critical value. See
   [`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md).
-- **Real-time monitoring**
+- Real-time monitoring
   ([`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md),
   [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
   [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md),
-  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)):
-  calibrate on a training window, then raise an alarm as new
-  observations arrive –
+  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md))
+  is calibrated on a training window and raises an alarm as new
+  observations arrive. See
   [`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md).
-- **Root inference**
-  ([`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)):
-  how fast a detected episode is growing –
+- Root inference
+  ([`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md))
+  measures how fast a detected episode is growing. See
   [`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md).
-- **Multivariate**
+- Multivariate tools
   ([`radf_common()`](https://kvasilopoulos.github.io/exuber/reference/radf_common.md),
   [`cobubble_test()`](https://kvasilopoulos.github.io/exuber/reference/cobubble_test.md),
-  [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)):
-  shared and transmitted bubbles across series –
+  [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md))
+  look for shared and transmitted bubbles across series. See
   [`vignette("co-explosivity")`](https://kvasilopoulos.github.io/exuber/articles/co-explosivity.md).
-- **Simulation** (`sim_*()`): the bubble processes and innovation
-  generators every test above is validated on –
+- Simulation (`sim_*()`) provides the bubble processes and innovation
+  generators on which every test above is validated. See
   [`vignette("simulation")`](https://kvasilopoulos.github.io/exuber/articles/simulation.md).
 
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 explains the naming scheme (`radf_`, `_test`, `dating_`, `monitor_`) and
-which results plug into
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)/[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html).
+which results work with
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) and
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html).
 
 ### Installation
 
@@ -251,32 +253,34 @@ autoplot(rsim_data)
 
 ### Performance
 
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)‘s
-recursive least-squares algorithm (matrix inversion lemma, no per-window
-matrix inversion) is the reason `exuber` is fast. The chart below
-reproduces the full software comparison from Section 4 of the [JSS
-paper](https://doi.org/10.18637/jss.v103.i10) – R’s
+The speed of `exuber` comes from the recursive least-squares algorithm
+in [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
+which uses the matrix inversion lemma and never inverts a matrix for
+each window. The chart below reproduces the full software comparison
+from Section 4 of the [JSS
+paper](https://doi.org/10.18637/jss.v103.i10). It covers R’s
 [`MultipleBubbles`](https://cran.r-project.org/package=MultipleBubbles)
 and
 [`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor),
-EViews’ `rtadf`, MATLAB’s `PSY.m`, and Stata – alongside both `exuber`
-as it was benchmarked at publication time and the current package
-version. Same setup throughout: `minw = 30`, `lag`/`adflag = 1`, median
-elapsed time over repeated runs on a random walk of length `n`.
+EViews’ `rtadf`, MATLAB’s `PSY.m` and Stata, together with `exuber` as
+it was benchmarked when the paper appeared and the current version. The
+setup is the same throughout: `minw = 30`, `lag`/`adflag = 1`, and the
+median elapsed time over repeated runs on a random walk of length `n`.
 
 ![](reference/figures/benchmark-plot-1.png)
 
-All series except `exuber 2.0.0` are the paper’s own archived benchmark
-data rather than a re-run – MultipleBubbles/psymonitor are `O(T^2)`
-pure-R loops that already cost minutes per run at `n = 1000`, and none
-of these archived numbers depend on the current `exuber` implementation.
-`exuber 2.0.0` is faster than `0.4.1` at every sample size shown.
+All series except `exuber 2.0.0` are the archived benchmark data from
+the paper, not a new run. `MultipleBubbles` and `psymonitor` are
+`O(T^2)` loops written in pure R that already take minutes per run at
+`n = 1000`, and the archived numbers do not depend on the current
+`exuber` implementation. `exuber 2.0.0` is faster than `0.4.1` at every
+sample size shown.
 
 ### Citation
 
-`exuber` is the product of ongoing research – if it’s useful in your own
-work, please support it by citing the accompanying paper in the *Journal
-of Statistical Software*:
+`exuber` is the product of ongoing research. If it is useful in your own
+work, please cite the accompanying paper in the *Journal of Statistical
+Software*:
 
 > Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022). exuber:
 > Recursive Right-Tailed Unit Root Testing with R. *Journal of
@@ -319,8 +323,8 @@ contributing to this project, you agree to abide by its terms.
 
 ### Core workflow
 
-Beyond “Get started”: the naming conventions, plotting, and simulated
-data used throughout the other articles
+Beyond “Get started”: the naming conventions, plotting, and the
+simulated data used throughout the other articles.
 
 - [Naming Conventions and the Analysis/Tidying/Plotting
   Pipeline](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md):
@@ -328,10 +332,11 @@ data used throughout the other articles
   exuber](https://kvasilopoulos.github.io/exuber/articles/plotting.md):
 - [Simulation](https://kvasilopoulos.github.io/exuber/articles/simulation.md):
 
-### Robustness – alternatives to radf() itself
+### Robust alternatives to radf() itself
 
-Still answering “is there a bubble,” under assumptions plain radf()
-doesn’t cover (time-varying volatility, alternative test statistics)
+These articles still ask whether there is a bubble, under assumptions
+that plain radf() does not cover (time-varying volatility and
+alternative test statistics).
 
 - [Time-Transformed Test
   (STADF/GSTADF)](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md):
@@ -343,7 +348,7 @@ doesn’t cover (time-varying volatility, alternative test statistics)
 ### Dating, monitoring & root inference
 
 Beyond plain datestamp(): alternative dating procedures, real-time
-monitoring, and how fast a detected bubble is actually growing
+monitoring, and how fast a detected bubble is growing.
 
 - [Dating Methods: Alternatives to
   datestamp()](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md):
@@ -354,8 +359,8 @@ monitoring, and how fast a detected bubble is actually growing
 
 ### Multivariate & experimental
 
-Cross-series relationships, and methods still below this package’s usual
-validation bar (see each article’s own caveats)
+Relationships across series, and methods that fall short of the usual
+validation standard of this package (see the caveats in each article).
 
 - [Bivariate Bubble Relationships: cobubble_test() and
   contagion_reg()](https://kvasilopoulos.github.io/exuber/articles/co-explosivity.md):

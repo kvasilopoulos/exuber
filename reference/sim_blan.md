@@ -1,8 +1,8 @@
 # Simulation of a Blanchard (1979) / Rotermann-Wilfling (2018) bubble process
 
-Simulation of a Blanchard (1979) rational bubble process, or (with
-`type = "rotermann_wilfling"`) Rotermann & Wilfling (2018)'s
-lognormal-mixture extension of it.
+Simulates the rational bubble process of Blanchard (1979) or, with
+`type = "rotermann_wilfling"`, the lognormal-mixture extension of
+Rotermann & Wilfling (2018).
 
 ## Usage
 
@@ -48,9 +48,9 @@ sim_blan(
 
 - type:
 
-  `"blanchard"` (default) or `"rotermann_wilfling"`. `r` is only used by
-  `"blanchard"`; `delta`/`rw_sigma` only by `"rotermann_wilfling"` (see
-  Details).
+  `"blanchard"` (default) or `"rotermann_wilfling"`. `r` is used only by
+  `"blanchard"`, and `delta` and `rw_sigma` only by
+  `"rotermann_wilfling"` (see Details).
 
 - delta:
 
@@ -66,12 +66,12 @@ sim_blan(
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
@@ -90,15 +90,16 @@ With probability \\\pi\\: \$\$B\_{t+1} =
 
 where `r` is a positive constant and \\\epsilon \sim iid(0, \sigma^2)\\.
 
-Rotermann & Wilfling (2018)'s bubble (`type = "rotermann_wilfling"`)
-replaces the "collapse to white noise" regime with a *partial,
-stochastically evolving* deflation, giving periodically recurring,
-gradually-deflating trajectories instead of an abrupt one-period
-collapse: \$\$B_t = \frac{B\_{t-1}u_t}{\delta}\$\$ with probability
-\\\pi\\, or \$\$B_t = \frac{1-\pi\delta}{1-\pi}B\_{t-1}u_t\$\$ with
-probability \\1-\pi\\, where \\u_t \sim iid\\LN(-rw\\sigma^2/2,\\
-rw\\sigma^2)\\ (so \\E\[u_t\] = 1\\). \\\delta \in (0, 1)\\ ensures the
-bubble never collapses to exactly zero and can re-inflate.
+The bubble of Rotermann & Wilfling (2018)
+(`type = "rotermann_wilfling"`) replaces the "collapse to white noise"
+regime with a partial, stochastically evolving deflation. The
+trajectories recur periodically and deflate gradually instead of
+collapsing abruptly in one period: \$\$B_t =
+\frac{B\_{t-1}u_t}{\delta}\$\$ with probability \\\pi\\, or \$\$B_t =
+\frac{1-\pi\delta}{1-\pi}B\_{t-1}u_t\$\$ with probability \\1-\pi\\,
+where \\u_t \sim iid\\LN(-rw\\sigma^2/2,\\ rw\\sigma^2)\\ (so \\E\[u_t\]
+= 1\\). \\\delta \in (0, 1)\\ ensures that the bubble never collapses to
+exactly zero and can inflate again.
 
 ## References
 

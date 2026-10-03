@@ -1,16 +1,15 @@
 # Monte Carlo Critical Values for Reverse-Regression Recovery Dating
 
-Computes critical values for the reverse-regression BSADF statistic used
-by
-[`radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md),
-calibrated to its own (Phillips & Shi 2014's Theorem 1) null limiting
-distribution rather than the standard forward
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-boundary – reversing the simulated null path before running the
-recursive computation, since reversal induces an endogeneity with no
-forward-regression analogue (see
-[`radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)'s
-Details).
+Computes critical values for the reverse-regression BSADF statistic that
+[`radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
+uses. They are calibrated to the null limiting distribution of that
+statistic (Theorem 1 of Phillips & Shi 2014) and not to the standard
+forward boundary of
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md).
+The simulated null path is reversed before the recursive computation,
+because reversal induces an endogeneity that has no analogue in the
+forward regression (see the Details of
+[`radf_recovery`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)).
 
 ## Usage
 
@@ -36,12 +35,12 @@ radf_recovery_cv(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 - lag:
 
@@ -50,23 +49,26 @@ radf_recovery_cv(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 
 ## Value
 
-A list of class `radf_cv` with a single element, `bsadf_cv`: a matrix of
-critical values (columns `90%`, `95%`, `99%`), one row per reverse-time
-position, aligned the same way
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)'s
-own `bsadf_cv` aligns to `radf()$bsadf`.
+A list of class `radf_cv` with a single element, `bsadf_cv`. It is a
+matrix of critical values (columns `90%`, `95%`, `99%`) with one row for
+each reverse-time position, aligned in the same way as the `bsadf_cv` of
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+is aligned to `radf()$bsadf`.
 
 ## Note
 
-[`print()`](https://rdrr.io/r/base/print.html)/[`tidy()`](https://generics.r-lib.org/reference/tidy.html)
-are not yet implemented for this object's own class (`recovery_cv` has
-no `tidy_radf_cv` method, unlike
-[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)/[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-which fall back to `mc_cv`'s – that fallback does not apply here since
-this object only carries `bsadf_cv`, not the `adf_cv`/
-`sadf_cv`/`gsadf_cv` fields that method expects). Inspect `cv$bsadf_cv`
-directly instead of calling `print(cv)`/ `tidy(cv)`, which currently
-error.
+[`print()`](https://rdrr.io/r/base/print.html) and
+[`tidy()`](https://generics.r-lib.org/reference/tidy.html) are not yet
+implemented for the class of this object. `recovery_cv` has no
+`tidy_radf_cv` method. The objects from
+[`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+and
+[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
+fall back to the method of `mc_cv`, but that fallback does not apply
+here, because this object carries only `bsadf_cv` and not the `adf_cv`,
+`sadf_cv` and `gsadf_cv` fields that the method expects. Inspect
+`cv$bsadf_cv` directly. Calling `print(cv)` or `tidy(cv)` currently
+gives an error.
 
 ## Status
 

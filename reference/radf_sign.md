@@ -1,17 +1,19 @@
 # Sign-Based Bubble Test (sPWY / sPSY)
 
-`radf_sign` computes Harvey, Leybourne & Zu (2020)'s sign-based variant
-of the recursive right-tailed unit root test: instead of applying the
-(double-)supremum ADF test directly to the series, it is applied to the
-cumulated sign of its first differences, `C_t = sum(sign(diff(y)))`.
-Because [`sign()`](https://rdrr.io/r/base/sign.html) strips out all
-magnitude information, `C_t`'s recursive DF statistic is *exactly*
-invariant to the pattern of (even time-varying) volatility in the
-innovations – unlike
-[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md), no
-wild bootstrap is needed to control size under heteroskedasticity;
-[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)'s
-critical values are pivotal, computed once rather than per dataset.
+`radf_sign` computes the sign-based variant of the recursive
+right-tailed unit root test of Harvey, Leybourne & Zu (2020). Instead of
+applying the (double-)supremum ADF test to the series itself, it applies
+it to the cumulated sign of the first differences,
+`C_t = sum(sign(diff(y)))`. The
+[`sign()`](https://rdrr.io/r/base/sign.html) function removes all
+information about magnitudes, so the recursive DF statistic of `C_t` is
+*exactly* invariant to the pattern of volatility in the innovations,
+even when volatility changes over time. Unlike
+[`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md), the
+test needs no wild bootstrap to control its size under
+heteroskedasticity. The critical values in
+[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
+are pivotal, so they are computed once and not for each dataset.
 
 ## Usage
 
@@ -24,14 +26,14 @@ radf_sign(data, minw = NULL)
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -40,54 +42,56 @@ radf_sign(data, minw = NULL)
 
 ## Value
 
-An object of class `radf_sign_obj`/`radf_obj`: the same
-`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as
+An object of class `radf_sign_obj`/`radf_obj`. It is the same
+`adf`/`badf`/`sadf`/`bsadf`/`gsadf` list as for
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
-computed on the sign-transformed series; pair with
+computed on the sign-transformed series, and it pairs with
 [`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md).
 
 ## Details
 
-The cost of this invariance is power: the paper finds the sign-based
-test outperforms the standard PSY test for many time-varying-volatility
-and bubble specifications, but not all – the standard test can still win
-for some. The paper's own recommended practical strategy is a
-bootstrap-based union-of-rejections combining both tests, which is
-**not** implemented here (see the package's enhancement notes for the
-cost/benefit reasoning); this function provides the standalone
-sign-based test only. `sadf` is the single-supremum (`r1 = 0` fixed)
-sPWY statistic; `gsadf` is the double-supremum sPSY statistic.
+The price of this invariance is power. The paper finds that the
+sign-based test outperforms the standard PSY test for many
+specifications of time-varying volatility and bubbles, but not for all
+of them, and the standard test can still win in some. The strategy that
+the paper recommends in practice is a bootstrap-based union of
+rejections that combines both tests. We have not implemented it (see the
+package's enhancement notes for the cost and benefit considerations),
+and this function provides the standalone sign-based test only. `sadf`
+is the single-supremum sPWY statistic (`r1 = 0` fixed), and `gsadf` is
+the double-supremum sPSY statistic.
 
 ## Note
 
-Needs
-[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
-for critical values, not
+The test needs the critical values from
+[`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md),
+and neither
 [`radf_wb_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
-or any other bootstrap – the statistic is pivotal (exactly invariant to
-heteroskedasticity), so its critical values are simulated once, not per
-dataset.
+nor any other bootstrap applies. The statistic is pivotal (exactly
+invariant to heteroskedasticity), so its critical values are simulated
+once and not for each dataset.
 
-Carries the `radf_obj` class and, as of 2026-08-18, its full
-[`summary()`](https://rdrr.io/r/base/summary.html)/[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)/`tidy`/`autoplot`
-pipeline works –
+The result carries the `radf_obj` class. Since 2026-08-18 the full
+[`summary()`](https://rdrr.io/r/base/summary.html),
+[`datestamp`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
+`tidy` and `autoplot` pipeline works, because
 [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
-now computes the time-varying `badf_cv`/`bsadf_cv` boundary those last
-two need, not just the three scalar critical values
+now computes the time-varying `badf_cv` and `bsadf_cv` boundary that the
+last two need, and not only the three scalar critical values that
 [`summary()`](https://rdrr.io/r/base/summary.html) uses. See
 [`vignette("naming-and-analysis", package = "exuber")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md).
 
 ## Level-shift robustness
 
-Harvey, Leybourne, Tatlow & Zu (2025) show this test also retains its
-standard (no-level-shift) null distribution in the presence of
-deterministic level shifts, provided the number of shifts grows strictly
-slower than `sqrt(T)` – regardless of how large the shifts are. This is
-a materially weaker requirement than the standard PSY test needs for its
-own size control, which restricts the number **and** the magnitude of
-shifts jointly; in their simulations the standard test is never
-correctly sized once the number of shifts grows at rate `sqrt(T)`, while
-this test stays close to nominal size.
+Harvey, Leybourne, Tatlow & Zu (2025) show that this test keeps its
+standard null distribution, the one without level shifts, in the
+presence of deterministic level shifts, provided that the number of
+shifts grows strictly more slowly than `sqrt(T)`. The size of the shifts
+does not matter. This is a materially weaker requirement than the one
+the standard PSY test needs for size control, which restricts the number
+**and** the magnitude of the shifts jointly. In their simulations the
+standard test is never correctly sized once the number of shifts grows
+at rate `sqrt(T)`, while this test stays close to its nominal size.
 
 ## Status
 
@@ -110,10 +114,10 @@ level shifts. Oxford Bulletin of Economics and Statistics, 87(5),
 [`radf_sign_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
 for critical values,
 [`radf_sign_dm`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md)
-for the recursively demeaned sign-based analogue (sharing the same
-level-shift robustness), and
+for the recursively demeaned sign-based analogue, which has the same
+level-shift robustness, and
 [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md) for
-the standard (non-invariant) test.
+the standard test, which is not invariant.
 
 Other volatility-robust tests:
 [`cusum_test()`](https://kvasilopoulos.github.io/exuber/reference/cusum_test.md),
@@ -128,8 +132,9 @@ Other volatility-robust tests:
 
 ``` r
 # \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_sign(y, minw = 20)
 print(res)

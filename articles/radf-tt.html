@@ -92,36 +92,37 @@
 <div class="section level2">
 <h2 id="why-another-test">Why another test<a class="anchor" aria-label="anchor" href="#why-another-test"></a>
 </h2>
-<p><code><a href="../reference/radf.html">radf()</a></code> (the classic PSY GSADF test) assumes the
-innovation variance is constant. Real financial series usually don’t
-have constant volatility, and Harvey, Leybourne, Sollis &amp; Taylor
-(2016) show that when volatility is time-varying, <code><a href="../reference/radf.html">radf()</a></code>’s
-standard critical values no longer control size –
-<code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code> already addresses this in exuber via a wild
+<p><code><a href="../reference/radf.html">radf()</a></code>, the classic PSY GSADF test, assumes that the
+innovation variance is constant. Real financial series usually do not
+have constant volatility. Harvey, Leybourne, Sollis &amp; Taylor (2016)
+show that when volatility changes over time, the standard critical
+values of <code><a href="../reference/radf.html">radf()</a></code> no longer control the size of the test.
+<code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code> addresses this in exuber with a wild
 bootstrap.</p>
-<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> implements a different, bootstrap-free fix
-from Kurozumi, Skrobotov &amp; Tsarev (2024, <em>Journal of Financial
-Econometrics</em>): instead of resampling, it <em>time-deforms</em> the
+<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> implements a different fix that needs no
+bootstrap, from Kurozumi, Skrobotov &amp; Tsarev (2024, <em>Journal of
+Financial Econometrics</em>). Instead of resampling, it time-deforms the
 series using a nonparametric estimate of its variance profile, so that
-the deformed series behaves like a constant-volatility random walk under
-the null. The resulting statistic’s null distribution is then the same
-(pivotal) distribution as under homoskedasticity, so ordinary asymptotic
-critical values apply – no bootstrap, and no per-dataset resimulation
-needed.</p>
+under the null the deformed series behaves like a random walk with
+constant volatility. The null distribution of the resulting statistic is
+then the same pivotal distribution as under homoskedasticity. Ordinary
+asymptotic critical values therefore apply, with no bootstrap and no
+resimulation for each dataset.</p>
 </div>
 <div class="section level2">
 <h2 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
-<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> targets <em>non-stationary</em> volatility – a
-permanent shift or trend in the unconditional innovation variance, the
-setting of Kurozumi, Skrobotov &amp; Tsarev’s own simulations.
-(Stationary conditional heteroskedasticity such as GARCH is not the
-target: its variance profile is asymptotically flat, so the
-time-deformation is close to the identity and plain <code><a href="../reference/radf.html">radf()</a></code>
-is already size-correct there.) <code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code> generates
-exactly such innovations, and <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s <code>e</code>
-argument injects them into the PSY bubble DGP – here the innovation
-standard deviation triples half-way through the sample:</p>
+<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> targets non-stationary volatility, meaning a
+permanent shift or trend in the unconditional innovation variance, which
+is the setting of the simulations in Kurozumi, Skrobotov &amp; Tsarev.
+It does not target stationary conditional heteroskedasticity such as
+GARCH. In that case the variance profile is asymptotically flat, the
+time deformation is close to the identity, and plain <code><a href="../reference/radf.html">radf()</a></code>
+already has the correct size. <code><a href="../reference/sim_vol_break.html">sim_vol_break()</a></code> generates
+innovations with a permanent volatility shift, and the <code>e</code>
+argument of <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> passes them into the PSY bubble
+process. Here the innovation standard deviation triples half-way through
+the sample:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_vol_break.html">sim_vol_break</a></span><span class="op">(</span><span class="fl">199</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
@@ -131,11 +132,11 @@ standard deviation triples half-way through the sample:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series      adf   sadf  gsadf</span></span>
 <span><span class="co">#&gt;   series1  -0.9972  3.275  4.165</span></span></code></pre></div>
-<p><code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> gives the matching (pivotal) asymptotic
-critical values; because the null distribution doesn’t depend on the
-volatility path, one call with a large <code>n</code> approximates the
-whole family, unlike <code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code>’s per-dataset
-bootstrap:</p>
+<p><code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> returns the matching pivotal asymptotic
+critical values. The null distribution does not depend on the volatility
+path, so one call with a large <code>n</code> approximates the whole
+family of cases. <code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code>, in contrast, runs a separate
+bootstrap for each dataset:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span>, minw <span class="op">=</span> <span class="fl">30</span>, nrep <span class="op">=</span> <span class="fl">1000</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">cv</span><span class="op">$</span><span class="va">gsadf_cv</span></span>
@@ -143,47 +144,48 @@ bootstrap:</p>
 <span><span class="co">#&gt; 3.248911 3.584415 4.246916</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="whats-actually-estimated">What’s actually estimated<a class="anchor" aria-label="anchor" href="#whats-actually-estimated"></a>
+<h2 id="what-is-estimated">What is estimated<a class="anchor" aria-label="anchor" href="#what-is-estimated"></a>
 </h2>
-<p>Under the hood, <code><a href="../reference/radf_tt.html">radf_tt()</a></code>:</p>
+<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> works in three steps.</p>
 <ol style="list-style-type: decimal">
-<li>estimates the time-varying AR(1) coefficient with a local kernel
-regression, and from its (truncated) residuals builds a monotone
-<em>variance profile</em> <code>eta_hat(s)</code>, <code>s</code> in
-<code>[0, 1]</code>;</li>
-<li>inverts it and uses the inverse to resample/time-deform the
-series;</li>
-<li>runs a (GLS-demeaned, no-intercept) recursive sup-ADF statistic on
-the deformed series – the same statistic family as <code><a href="../reference/radf.html">radf()</a></code>,
-but built to need no fitted intercept, matching the paper’s
-derivation.</li>
+<li>It estimates the time-varying AR(1) coefficient with a local kernel
+regression. From the truncated residuals it builds a monotone variance
+profile <code>eta_hat(s)</code>, with <code>s</code> in
+<code>[0, 1]</code>.</li>
+<li>It inverts the profile and uses the inverse to resample and
+time-deform the series.</li>
+<li>It computes a recursive sup-ADF statistic (GLS-demeaned, with no
+intercept) on the deformed series. This belongs to the same family of
+statistics as <code><a href="../reference/radf.html">radf()</a></code>, but it needs no fitted intercept,
+which matches the derivation in the paper.</li>
 </ol>
-<p><code>kernel</code> (<code>"uniform"</code>, the paper’s own choice,
-or <code>"gaussian"</code>) and <code>h</code> (bandwidth; default a
-fixed plug-in, not the paper’s full cross-validation search – see the
-package’s enhancement notes for the cost/benefit reasoning) can both be
-adjusted.</p>
+<p>You can adjust <code>kernel</code> (<code>"uniform"</code>, the
+choice of the paper, or <code>"gaussian"</code>) and <code>h</code>, the
+bandwidth. The default for <code>h</code> is a fixed plug-in value and
+not the full cross-validation search of the paper. The package’s
+enhancement notes explain why we weighed cost against benefit this
+way.</p>
 </div>
 <div class="section level2">
 <h2 id="verifying-against-the-paper">Verifying against the paper<a class="anchor" aria-label="anchor" href="#verifying-against-the-paper"></a>
 </h2>
-<p>Kurozumi, Skrobotov &amp; Tsarev’s footnote 4 gives an exact
-published asymptotic critical value triple for
-<code>minw/n = 0.1</code>: <code>(2.319, 2.626, 3.223)</code> at the
-(10%, 5%, 1%) levels – for the <strong>STADF</strong> statistic (the
-single-sup, <code>r1 = 0</code> case). exuber’s test suite
-(<code>tests/testthat/test-tt.R</code>) reproduces this via
-<code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code>’s own Monte Carlo and checks it lands within
-Monte Carlo/finite-sample tolerance of the published numbers.</p>
+<p>Footnote 4 of Kurozumi, Skrobotov &amp; Tsarev gives published
+asymptotic critical values for <code>minw/n = 0.1</code>:
+<code>(2.319, 2.626, 3.223)</code> at the 10%, 5% and 1% levels. They
+apply to the STADF statistic, the single-sup case with
+<code>r1 = 0</code>. The test suite of exuber
+(<code>tests/testthat/test-tt.R</code>) reproduces them with the Monte
+Carlo in <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and checks that they fall within the
+Monte Carlo and finite-sample tolerance of the published numbers.</p>
 </div>
 <div class="section level2">
 <h2 id="dating-and-plotting-a-detected-bubble">Dating and plotting a detected bubble<a class="anchor" aria-label="anchor" href="#dating-and-plotting-a-detected-bubble"></a>
 </h2>
-<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> keeps the same <code>radf_obj</code> class
-<code><a href="../reference/radf.html">radf()</a></code> itself uses, and (as of 2026-08-18)
-<code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> computes the full time-varying boundary needed
-to date and plot episodes, not just the summary-level critical values –
-so the usual pipeline works unchanged:</p>
+<p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> returns the same <code>radf_obj</code> class
+as <code><a href="../reference/radf.html">radf()</a></code>. Since 2026-08-18, <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> also
+computes the full time-varying boundary that dating and plotting need,
+and not only the summary-level critical values. The usual pipeline
+therefore works unchanged:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -198,8 +200,8 @@ so the usual pipeline works unchanged:</p>
 <span><span class="co">#&gt; 2   148  148 150        2 positive   FALSE</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">res</span>, cv <span class="op">=</span> <span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="radf-tt_files/figure-html/radf-tt-datestamp-1.png" class="r-plt" alt="" width="700"></p>
-<p>See <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for which other
-exuber functions do and don’t plug into this pipeline, and why.</p>
+<p><code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> explains which other
+exuber functions work with this pipeline and which do not.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

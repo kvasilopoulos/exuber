@@ -1,7 +1,8 @@
 # Recursive Augmented Dickey-Fuller Test
 
-`radf` returns the recursive univariate and panel Augmented
-Dickey-Fuller test statistics.
+`radf` computes the recursive univariate and panel augmented
+Dickey-Fuller test statistics (ADF, SADF, GSADF and their backward
+sequences).
 
 ## Usage
 
@@ -14,14 +15,14 @@ radf(data, minw = NULL, lag = 0L)
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -93,10 +94,9 @@ And attributes:
 
 ## Details
 
-The `radf()` function is vectorized, i.e., it can handle multiple series
-at once, to improve efficiency. This property also enables the
-computation of panel statistics internally as a by-product of the
-univariate estimations with minimal additional cost incurred.
+`radf()` is vectorized: it handles several series at once. The panel
+statistics are computed as a by-product of the univariate estimations,
+at almost no additional cost.
 
 ## References
 

@@ -41,7 +41,7 @@ tidy(ds_data)
 #> 7 blan     34    36    37        3 positive FALSE  
 #> 8 blan     84    86    87        3 positive FALSE  
 
-# Feeds straight into ggplot2 if autoplot()'s default layout isn't wanted
+# Pass the table to ggplot2 if the default layout of autoplot() does not suit you
 library(ggplot2)
 tidy(ds_data) %>%
   ggplot(aes(y = id)) +

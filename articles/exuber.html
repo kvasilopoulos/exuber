@@ -87,36 +87,40 @@
 
     
     
-<p>For our analysis we are going to use the
-<code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html" class="external-link">datasets::EuStockMarkets</a></code> dataset, which contains the daily
-closing prices of four major European stock indices: Germany DAX,
-Switzerland SMI, France CAC, and UK FTSE (see
-<code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html" class="external-link">?EuStockMarkets</a></code>). The data are sampled in business time,
-i.e., weekends and holidays are omitted. In this particular exercise we
-want to focus on weekly observations. To do so we aggregate to a weekly
-frequency and reduce the number of observations from 1860 to 372.</p>
+<p>This vignette uses the <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html" class="external-link">datasets::EuStockMarkets</a></code> data,
+which contain the daily closing prices of four major European stock
+indices: the German DAX, the Swiss SMI, the French CAC and the UK FTSE
+(see <code><a href="https://rdrr.io/r/datasets/EuStockMarkets.html" class="external-link">?EuStockMarkets</a></code>). The data are sampled in business
+time, so weekends and holidays are omitted. We want weekly observations,
+so we aggregate to a weekly frequency, which reduces the sample from
+1860 to 372 observations.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">EuStockMarkets</span>, nfrequency <span class="op">=</span> <span class="fl">52</span>, <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="estimation">Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
 </h2>
-<p>We estimate the above series using the recursive Augmented
-Dickey-Fuller test with 1 lag.</p>
+<p>We estimate the recursive augmented Dickey-Fuller test on these
+series with one lag.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">est_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">stocks</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
 </h2>
-<p>The summary will print the test statistic and the critical values for
-10%, 5% and 1% significance level. When <code>cv</code> is omitted,
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/diagnostics.html">diagnostics()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-fetch precomputed Monte Carlo critical values for this
-<code>(n, lag)</code> from a shared store (lags 0-4, samples up to 4000;
-needs network access the first time, cached on disk after). Here we
-simulate them locally with <code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> instead, and pass
-the result via <code>cv</code> to every downstream call – the offline
-route, and the one to use for other lags or larger samples.</p>
+<p><code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> prints the test statistics together with the
+critical values at the 10%, 5% and 1% significance levels. A critical
+value is the threshold a statistic must exceed before we reject the null
+hypothesis of a unit root in favor of explosive behavior. When
+<code>cv</code> is omitted, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>,
+<code><a href="../reference/diagnostics.html">diagnostics()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code> and
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> fetch precomputed Monte Carlo critical values
+for the relevant <code>(n, lag)</code> from a shared store. The store
+covers lags 0 to 4 and samples of up to 4000 observations. The first
+fetch needs network access, and later calls read from the disk cache.
+Here we simulate the critical values locally with
+<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> and pass the result through <code>cv</code> to
+every downstream call. This offline route is also the one to use for
+other lags or larger samples.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cv_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_mc_cv.html">radf_mc_cv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -155,9 +159,9 @@ route, and the one to use for other lags or larger samples.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> adf   0.194 -<span style="color: #BB0000;">0.440</span> -<span style="color: #BB0000;">0.042</span><span style="color: #BB0000; text-decoration: underline;">9</span> 0.537</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> sadf  2.56   1.23   1.54   2.06 </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> gsadf 2.67   2.13   2.38   3.00</span></span></code></pre></div>
-<p>It seems that all stocks exhibit exuberant behaviour but we can also
-verify it using <code><a href="../reference/diagnostics.html">diagnostics()</a></code>. This function is
-particularly useful when we deal a large number of series.</p>
+<p>All four stocks appear to show exuberant behavior, and
+<code><a href="../reference/diagnostics.html">diagnostics()</a></code> confirms this by reporting which series
+reject the null. It is most useful when there are many series.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/diagnostics.html">diagnostics</a></span><span class="op">(</span><span class="va">est_stocks</span>, cv <span class="op">=</span> <span class="va">cv_stocks</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -167,10 +171,9 @@ particularly useful when we deal a large number of series.</p>
 <span><span class="co">#&gt; SMI:      Rejects H0 at the <span style="color: #BB0000;">1%</span> significance level</span></span>
 <span><span class="co">#&gt; CAC:      Rejects H0 at the <span style="color: #BB0000;">5%</span> significance level</span></span>
 <span><span class="co">#&gt; FTSE:     Rejects H0 at the <span style="color: #BB0000;">5%</span> significance level</span></span></code></pre></div>
-<p>If we need to know the exact period of exuberance we can do so with
-the function <code><a href="../reference/datestamp.html">datestamp()</a></code>. <code><a href="../reference/datestamp.html">datestamp()</a></code> works in
-a similar manner with <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and
-<code><a href="../reference/diagnostics.html">diagnostics()</a></code>.</p>
+<p>To find out when the exuberance occurred, we use
+<code><a href="../reference/datestamp.html">datestamp()</a></code>, which takes the same arguments as
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Minimum duration of an explosive period</span></span>
 <span><span class="va">rot</span> <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span> <span class="co"># log(n) ~ rule of thumb</span></span>
@@ -202,8 +205,8 @@ a similar manner with <code><a href="https://rdrr.io/r/base/summary.html" class=
 <span><span class="co">#&gt; 1 1997-07-08 1997-08-12 1997-09-02        8 positive   FALSE</span></span>
 <span><span class="co">#&gt; 2 1997-09-23 1997-10-07 1997-11-04        6 positive   FALSE</span></span>
 <span><span class="co">#&gt; 3 1998-02-10 1998-04-14 1998-06-24       19 positive   FALSE</span></span></code></pre></div>
-<p>We can extract the datestamp as a dummy variable 1 = Exuberance, 0 =
-No exuberance.</p>
+<p>We can also extract the datestamp as a dummy variable, where 1 marks
+exuberance and 0 marks its absence.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dummy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">dstamp_stocks</span>, <span class="st">"dummy"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">dummy</span><span class="op">)</span></span>
@@ -214,30 +217,29 @@ No exuberance.</p>
 <span><span class="co">#&gt; 370   1   1   1    0</span></span>
 <span><span class="co">#&gt; 371   1   1   0    0</span></span>
 <span><span class="co">#&gt; 372   0   1   0    0</span></span></code></pre></div>
-<p><code><a href="../reference/datestamp.html">datestamp()</a></code> is not the only way to get dates out of the
-package, and the other two answer different questions rather than being
-alternate ways to get the same answer: the <code>dating_*()</code>
-family (<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>) fits an explicit regime
-model to date a bubble you already believe is there, instead of testing
-whether one exists; the <code><a href="../reference/monitor.html">monitor()</a></code>/<code>monitor_*()</code>
-family (<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>) does real-time detection,
-watching new observations one at a time rather than dating a finished
-sample. See <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for how every
-function in the package relates to this one.</p>
+<p><code><a href="../reference/datestamp.html">datestamp()</a></code> is not the only way to obtain dates, but the
+other two approaches answer different questions rather than the same
+one. The <code>dating_*()</code> family
+(<code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>) fits an explicit regime model
+to date a bubble that you already believe is there, and it does not test
+whether one exists. The <code><a href="../reference/monitor.html">monitor()</a></code> and
+<code>monitor_*()</code> family (<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>)
+detects bubbles in real time by watching new observations one at a time,
+instead of dating a finished sample.
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> shows how every function in
+the package relates to <code><a href="../reference/datestamp.html">datestamp()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="plotting">Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
 </h2>
-<p>The <code>autoplot</code> function returns a faceted ggplot2 object
-for all the series that reject the null hypothesis at 5% significance
-level.</p>
+<p><code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> returns a faceted ggplot2 object for all the
+series that reject the null hypothesis at the 5% significance level.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">est_stocks</span>, cv <span class="op">=</span> <span class="va">cv_stocks</span><span class="op">)</span></span></code></pre></div>
 <p><img src="exuber_files/figure-html/plot-radf-1.png" class="r-plt" alt="" width="864"></p>
-<p>Finally, we can plot just the periods the periods of exuberance.
-Plotting datestamp object is particularly useful when we have a lot of
-series, and we are interested to identify explosive patterns in all of
-them.</p>
+<p>Finally, we can plot only the periods of exuberance. Plotting the
+datestamp object is useful when there are many series and we want to see
+the explosive episodes in all of them.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span>, cv <span class="op">=</span> <span class="va">cv_stocks</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>

@@ -1,32 +1,35 @@
 # exuber
 
-R package (Rcpp/RcppArmadillo) for recursive unit root / explosive time
-series testing. Standard `devtools`-based package layout: `R/`, `src/`,
-`tests/testthat/`, `man/` (generated, don’t hand-edit), `vignettes/`.
+R package (Rcpp/RcppArmadillo) for recursive unit root and explosive
+time series testing. It has the standard `devtools`-based layout: `R/`,
+`src/`, `tests/testthat/`, `man/` (generated, so do not edit it by hand)
+and `vignettes/`.
 
 ## R on this machine
 
-R is managed by `rig` (multiple versions installed, current default via
-`rig list`). `/c/Program Files/R/bin` only contains `.bat` shims, not
-`R.exe`/`Rscript.exe` directly.
+R is managed by `rig`, which keeps several versions installed.
+`rig list` shows the current default. The directory
+`/c/Program Files/R/bin` contains only `.bat` shims and no `R.exe` or
+`Rscript.exe`.
 
-- **PowerShell**: `Rscript -e "..."` and `R` just work (PATHEXT resolves
-  `.bat`).
-- **Bash tool**: plain `R`/`Rscript` now resolve too, via wrapper
-  scripts at `~/.local/bin/R` and `~/.local/bin/Rscript` (first on
-  PATH). Calling the `.bat` shims directly from Bash mangles complex
-  quoted args (parens in an `-e` script trigger cmd.exe’s batch-argument
-  reparsing and fail with “system cannot find the file specified”) — the
-  wrappers instead read the current version target out of
-  `bin/R.bat`/`bin/Rscript.bat` and `exec` the real `.exe` directly, so
-  they still track whatever `rig default` is set to.
+- In PowerShell, `Rscript -e "..."` and `R` work as they are, because
+  PATHEXT resolves the `.bat` shims.
+- In the Bash tool, plain `R` and `Rscript` also work, through wrapper
+  scripts at `~/.local/bin/R` and `~/.local/bin/Rscript`, which come
+  first on PATH. Calling the `.bat` shims directly from Bash mangles
+  complex quoted arguments. Parentheses in an `-e` script make cmd.exe
+  reparse the batch arguments, and the call then fails with “system
+  cannot find the file specified”. The wrappers avoid this. They read
+  the current version target from `bin/R.bat` and `bin/Rscript.bat` and
+  `exec` the real `.exe` directly, so they follow whatever `rig default`
+  is set to.
 
-Compiler toolchain is Rtools45 (`C:\rtools45`), already on PATH — needed
-to build the `src/` Rcpp code.
+The compiler toolchain is Rtools45 (`C:\rtools45`), which is already on
+PATH. It is needed to build the Rcpp code in `src/`.
 
 ## Common tasks
 
-Run from the package root (PowerShell):
+Run these from the package root in PowerShell:
 
 ``` powershell
 Rscript -e "devtools::load_all()"          # iterate without installing
@@ -34,424 +37,468 @@ Rscript -e "devtools::document()"          # regenerate NAMESPACE/man from roxyg
 Rscript -e "devtools::test()"              # testthat suite
 Rscript -e "devtools::check()"             # full R CMD check (quality gate)
 Rscript -e "styler::style_pkg()"           # reformat
-Rscript -e "lintr::lint_package()"         # static checks (no .lintr config yet — uses lintr defaults)
+Rscript -e "lintr::lint_package()"         # static checks (no .lintr config yet, so lintr defaults apply)
 Rscript -e "covr::package_coverage()"      # coverage, mirrors test-coverage.yaml
 ```
 
-`Makefile` wraps some of these (`make check`, `make build_site`, etc.)
-but still invokes `Rscript`, so run it from PowerShell too — `make`
-alone won’t resolve R correctly from a plain cmd/bash shell without the
-shim rule above.
+The `Makefile` wraps some of these (`make check`, `make build_site` and
+so on), but it still calls `Rscript`, so run it from PowerShell as well.
+From a plain cmd or bash shell, `make` cannot resolve R correctly
+without the shim rule above.
 
-After changing any roxygen `#'` comment or `@export`, run
-`devtools::document()` before `check()` — NAMESPACE and `man/*.Rd` are
-generated, not hand-maintained.
+After you change a roxygen `#'` comment or an `@export`, run
+`devtools::document()` before `check()`. NAMESPACE and `man/*.Rd` are
+generated and are not maintained by hand.
 
-`DESCRIPTION` carries `Config/roxygen2/version: 8.1.0` (committed
-2026-09), matching the roxygen2 installed here, so `document()` no
-longer rewrites `DESCRIPTION`. Still diff `NAMESPACE`/`man/*.Rd` after
-running it and revert anything not tied to a roxygen-comment change you
-made. **Never `git checkout -- DESCRIPTION` blindly** — it also reverts
-any intentional edit (a version bump, a dependency floor) you made in
-the same pass.
+`DESCRIPTION` carries `Config/roxygen2/version: 8.1.0`, committed in
+2026-09, which matches the roxygen2 installed here. `document()`
+therefore no longer rewrites `DESCRIPTION`. Still diff `NAMESPACE` and
+`man/*.Rd` after you run it, and revert any change that does not come
+from a roxygen-comment edit you made. Never run
+`git checkout -- DESCRIPTION` blindly, because it also reverts
+intentional edits made in the same pass, such as a version bump or a
+dependency floor.
 
-**Concurrency:** `devtools::load_all()`, `run_examples()`, `covr` and
-`pkgdown` all compile in place in `src/`. Two of them running at once in
-the same tree corrupt `src/*.o`/`exuber.dll` (symptoms: linker “symbol
-not defined”, or a segfault on load). Run one R process against the tree
-at a time; if it happens, `rm src/*.o src/*.dll` and `load_all()` again.
+**Concurrency.** `devtools::load_all()`, `run_examples()`, `covr` and
+`pkgdown` all compile in place in `src/`. If two of them run at the same
+time in the same tree, they corrupt `src/*.o` and `exuber.dll`. The
+symptoms are a linker error “symbol not defined” or a segfault on load.
+Run one R process against the tree at a time. If it does happen, run
+`rm src/*.o src/*.dll` and call `load_all()` again.
 [`pkgdown::check_pkgdown()`](https://pkgdown.r-lib.org/reference/check_pkgdown.html)
 from `Rscript` needs
-`Sys.setenv(RSTUDIO_PANDOC = "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools")`,
-and `build_reference_index()` writes an untracked `pkgdown/favicon/`
-into the repo — delete it.
+`Sys.setenv(RSTUDIO_PANDOC = "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools")`.
+`build_reference_index()` writes an untracked `pkgdown/favicon/` into
+the repository, and you should delete it.
 
-`exuberdata` (a separate drat-hosted data package) is no longer used by
-any vignette, example or test; nothing here depends on it.
+`exuberdata` is a separate drat-hosted data package. No vignette,
+example or test uses it any longer, and nothing here depends on it.
 
-## CI / quality gates (already wired, don’t duplicate)
+## CI and quality gates (already wired, do not duplicate)
 
-- `.github/workflows/R-CMD-check.yaml` — R CMD check on
-  mac/windows/ubuntu (release/devel/oldrel)
-- `.github/workflows/test-coverage.yaml` — covr → Codecov
-- `.github/workflows/pkgdown.yaml` — docs site build/deploy
-- `.github/workflows/rhub.yaml` — manual R-hub CRAN-platform checks
-- `.github/workflows/html-5-check.yaml` — Rd/HTML5 validation
+- `.github/workflows/R-CMD-check.yaml` runs R CMD check on macOS,
+  Windows and Ubuntu (release, devel and oldrel).
+- `.github/workflows/test-coverage.yaml` runs covr and uploads to
+  Codecov.
+- `.github/workflows/pkgdown.yaml` builds and deploys the documentation
+  site.
+- `.github/workflows/rhub.yaml` runs the R-hub CRAN-platform checks
+  manually.
+- `.github/workflows/html-5-check.yaml` validates the Rd and HTML5
+  output.
 
-These are the CRAN-facing gates; match them locally with
-`devtools::check()` before pushing rather than inventing new lint/CI
-config.
+These are the gates that CRAN cares about. Match them locally with
+`devtools::check()` before you push, and do not invent new lint or CI
+configuration.
 
 ## Release process (CRAN)
 
-`.claude/skills/cran-release/checklist.md` is the consolidated usethis /
-r-pkgs.org / CRAN-policy checklist with the per-item status of the last
-release pass — the `cran-release` skill runs it; update it in place
-rather than re-deriving it. Two local quirks it records:
-`devtools::check()` on this Windows machine always leaves an empty
-`'NULL'` dir behind (a local-only “non-standard things in the check
-directory” NOTE), and a session-long worker cluster in examples trips
-`R CMD check`’s “connections left open”, which is why `exuber.parallel`
-defaults to [`interactive()`](https://rdrr.io/r/base/interactive.html).
+`.claude/skills/cran-release/checklist.md` is the consolidated usethis,
+r-pkgs.org and CRAN-policy checklist, with the status of each item from
+the last release pass. The `cran-release` skill runs it. Update the
+checklist in place and do not derive it again. It records two local
+quirks. First, `devtools::check()` on this Windows machine always leaves
+an empty `'NULL'` directory behind, which gives a local-only NOTE about
+non-standard things in the check directory. Second, a worker cluster
+that lives for the whole session in examples triggers the “connections
+left open” note of `R CMD check`. This is why `exuber.parallel` defaults
+to [`interactive()`](https://rdrr.io/r/base/interactive.html).
 
-1.  Land NEWS.md entries under the `# exuber (development version)`
-    heading as features/fixes ship (already the ongoing convention, see
-    the file).
-2.  Bump version: `usethis::use_version()` (or hand-edit `DESCRIPTION`’s
-    `Version:`), and retitle NEWS.md’s top heading to match, e.g.
-    `# exuber 1.2.0`.
-3.  Refresh `cran-comments.md` — test environments and the R CMD check
-    NOTEs section — with the current run’s actual output, not last
-    release’s.
-4.  Run the CRAN-facing gates before submitting — these are the same
-    ones listed above, not new checks invented for release day:
+1.  Add NEWS.md entries under the `# exuber (development version)`
+    heading as features and fixes ship. This is already the convention,
+    as the file shows.
+2.  Bump the version with `usethis::use_version()` or by editing the
+    `Version:` field of `DESCRIPTION` by hand, and retitle the top
+    heading of NEWS.md to match, for example `# exuber 1.2.0`.
+3.  Refresh `cran-comments.md`, in particular the test environments and
+    the R CMD check NOTEs, with the output of the current run and not
+    that of the last release.
+4.  Run the CRAN-facing gates before you submit. They are the same ones
+    listed above and not new checks for release day:
     `devtools::check(cran = TRUE)` locally,
-    `devtools::check_win_devel()` (win-builder), and trigger
-    `.github/workflows/rhub.yaml` manually for R-hub CRAN-platform
-    checks.
-5.  Submit via `devtools::release()` (walks the standard checklist) or
-    upload directly at <https://cran.r-project.org/submit.html> with
-    `cran-comments.md` as the covering note.
-6.  After acceptance: tag the release commit, cut a GitHub release,
-    retitle NEWS.md’s top heading back to
+    `devtools::check_win_devel()` (win-builder), and a manual trigger of
+    `.github/workflows/rhub.yaml` for the R-hub CRAN-platform checks.
+5.  Submit with `devtools::release()`, which walks through the standard
+    checklist, or upload directly at
+    <https://cran.r-project.org/submit.html> with `cran-comments.md` as
+    the covering note.
+6.  After acceptance, tag the release commit, cut a GitHub release, and
+    retitle the top heading of NEWS.md back to
     `# exuber (development version)` for the next cycle.
 
 ## Deprecation policy
 
-Depends on whether the old name ever shipped in a CRAN release — check
-that first, not habit:
+The policy depends on whether the old name ever shipped in a CRAN
+release. Check that first and do not rely on habit.
 
-- **Never shipped on CRAN** (unreleased dev version, or renamed in the
-  same PR before merge): clean break, no shim. This is most renames —
-  see “Naming” below (2026-08-13/2026-08-18 entries).
-- **Already shipped on CRAN**: keep a thin `.Deprecated(new = "...")`
-  wrapper in `R/deprecate.R` (documented under `?exuber-deprecated`)
-  that calls through to the new name. Precedent:
-  [`col_names()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/
-  [`wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md),
+- If the name never shipped on CRAN (an unreleased development version,
+  or a rename in the same PR before the merge), make a clean break with
+  no shim. Most renames fall in this group (see “Naming” below, entries
+  of 2026-08-13 and 2026-08-18).
+- If the name already shipped on CRAN, keep a thin
+  `.Deprecated(new = "...")` wrapper in `R/deprecate.R`, documented
+  under `?exuber-deprecated`, that calls through to the new name. The
+  precedents are
+  [`col_names()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md),
+  [`mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md),
+  [`wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
   and
-  [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
-  (2026-08-22, see “Naming” below — the first rename of a CRAN-released
-  name in this project’s history).
+  [`sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md),
+  and
+  [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+  and
+  [`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+  (2026-08-22, see “Naming” below, the first rename of a name released
+  on CRAN in this project).
 
-Either way, a rename or removal updates, in one commit: the function,
-[`exuber_functions()`](https://kvasilopoulos.github.io/exuber/reference/exuber_functions.md)’s
-registry, `_pkgdown.yml`, `NEWS.md`, this file, and the
-naming-and-analysis vignette.
+In both cases a rename or a removal updates the following in one commit:
+the function, the registry in
+[`exuber_functions()`](https://kvasilopoulos.github.io/exuber/reference/exuber_functions.md),
+`_pkgdown.yml`, `NEWS.md`, this file and the naming-and-analysis
+vignette.
 
-## Naming: not everything is `radf_*` anymore
+## Naming: not everything is `radf_*` any more
 
-**2026-08-13**: 12 exported functions that were never actually
-recursive-ADF-based (dating/model-selection procedures, monitoring
-boundaries, quantile-regression tests, a KPSS-type co-explosive test, a
-point-estimation regression) were renamed off the `radf_` prefix, clean
-break, no [`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html)
-shims: `radf_cobubble`→`cobubble_test`,
-`radf_contagion`→`contagion_reg`, `radf_cusum`→`monitor_cusum`,
-`radf_hls`→`dating_hls`, `radf_hlw`→`dating_hlw`,
-`radf_knp`→`dating_knp`, `radf_lbi`→`lbi_test`,
-`radf_lbi_monitor`→`monitor_lbi`, `radf_pdc`→`dating_pdc`,
-`radf_qpwy`→`monitor_quantile`, `radf_quantile`→`quantile_test`,
-`radf_ssu`→`ssu_test`. New-name convention: `_test` suffix = a
-hypothesis test with a null/critical value; `dating_` prefix =
-point-estimation/model-selection dating with no formal test; `monitor_`
-prefix = real-time/sequential monitoring. Everything that genuinely
-reuses
-[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s
-recursive-DF core (or its `badf`/`bsadf` output) correctly kept the
-`radf_` prefix and was left alone. Source filenames were renamed to
-match (`git mv`), e.g.
+**2026-08-13.** We renamed 12 exported functions that were never based
+on the recursive ADF. They are dating and model-selection procedures,
+monitoring boundaries, quantile-regression tests, a KPSS-type
+co-explosivity test and a point-estimation regression. They lost the
+`radf_` prefix in a clean break, with no
+[`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html) shims:
+`radf_cobubble` became `cobubble_test`, `radf_contagion` became
+`contagion_reg`, `radf_cusum` became `monitor_cusum`, `radf_hls` became
+`dating_hls`, `radf_hlw` became `dating_hlw`, `radf_knp` became
+`dating_knp`, `radf_lbi` became `lbi_test`, `radf_lbi_monitor` became
+`monitor_lbi`, `radf_pdc` became `dating_pdc`, `radf_qpwy` became
+`monitor_quantile`, `radf_quantile` became `quantile_test` and
+`radf_ssu` became `ssu_test`. The convention for the new names is as
+follows. A `_test` suffix marks a hypothesis test with a null
+distribution or critical value. A `dating_` prefix marks dating by point
+estimation or model selection, with no formal test. A `monitor_` prefix
+marks real-time or sequential monitoring. Everything that reuses the
+recursive-DF core of
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md), or
+its `badf` and `bsadf` output, correctly kept the `radf_` prefix and was
+left alone. We renamed the source files to match with `git mv`, so
 [`dating_hls()`](https://kvasilopoulos.github.io/exuber/reference/dating_hls.md)
-now lives in `R/dating_hls.R`, not `R/radf_hls.R`.
+now lives in `R/dating_hls.R` and no longer in `R/radf_hls.R`.
 
-**2026-08-18**: `radf_monitor()` → `monitor_radf()` →
-[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-— the one exception to “ADF-family keeps `radf_`” above, deliberately:
-grouped with its fellow monitors
-([`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md)/[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)/
+**2026-08-18.** `radf_monitor()` became `monitor_radf()` and then
+[`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md).
+This is the one deliberate exception to the rule that ADF-family
+functions keep `radf_`. The function is grouped with its fellow monitors
+([`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md),
+[`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md)
+and
 [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md))
-as their flagship (the same role
+as their flagship, the role that
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-plays for the `radf_` family), at the cost of no longer flagging its
-ADF-family internals in its own name. Went a step further than the
-initial `monitor_radf()` landing name once that was flagged as still
-reading as a `radf_*()` variant despite the reordered prefix —
+plays for the `radf_` family. The price is that its name no longer shows
+its ADF-family internals. We went one step beyond the first landing name
+`monitor_radf()`, because that name still read like a `radf_*()` variant
+despite the reordered prefix.
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
-carries no `radf`/`sadf` token at all, so it can’t be misread as
-belonging to that family. Naming conventions are inherently fuzzy and
-easy to get wrong from either direction (purity of internal mechanism
-vs. discoverability of behavior; here, even discoverability itself
-needed a second pass) — don’t lean on them for anything programmatic.
-`exuber_functions(family = ...)` (`R/exuber_functions.R`) is the actual
-queryable registry (`adf`/`test`/`dating`/`monitor`/`root`/
-`regression`); update it when adding or renaming an exported function,
-the same way `_pkgdown.yml`/`NEWS.md`/this file/the
-`naming-and-analysis` vignette need updating.
+carries no `radf` or `sadf` token at all, so nobody can mistake it for a
+member of that family. Naming conventions are fuzzy and easy to get
+wrong from either direction: purity of the internal mechanism competes
+with the discoverability of the behavior, and in this case even
+discoverability needed a second pass. Do not rely on them for anything
+programmatic. `exuber_functions(family = ...)` in `R/exuber_functions.R`
+is the queryable registry, with the families `adf`, `test`, `dating`,
+`monitor`, `root` and `regression`. Update it whenever you add or rename
+an exported function, as you must also update `_pkgdown.yml`, `NEWS.md`,
+this file and the `naming-and-analysis` vignette.
 
-**2026-08-18**: `radf_svadf()` removed, not renamed — folded into
+**2026-08-18.** We removed `radf_svadf()` and did not rename it. It is
+now the option `option = "svadf"` of
+[`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md).
+It was already a dating procedure and not a test, because it compares
+against the thresholds `log(t)/10` and `log(t)/2` and needs no critical
+value, so a `dating_` name would have fit the convention above. It had
+been a separate function only because we had rejected an extension of
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-as `option = "svadf"` instead. It was already dating, not a test
-(`log(t)/10`/`log(t)/2` threshold comparison, no critical value), so a
-`dating_` name would have fit the convention above — but its whole
-reason for being its own function was a rejected extension of
+earlier. The header comment of `R/svadf.R` gave the reason: the S3
+dispatch of
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-(see `R/svadf.R`’s header comment, previously: “datestamp()’s own S3
-dispatch assumes one shared critical value throughout”). Revisited and
-done anyway:
-[`datestamp.radf_obj()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)’s
-`option` argument now dispatches to a `datestamp_svadf()` helper that
-bypasses the `cv`/`sig_lvl` path entirely and reuses the same
-`stamp()`/`add_peak()`/`stamp_to_index()`/ `add_ongoing()` machinery the
-`"gsadf"`/`"sadf"` options use, so the return shape (a `ds_radf` list,
-`Start`/`Peak`/`End`/`Duration`/`Signal`/ `Ongoing` per series) is
-identical across all three options. Not a `radf_` / `_test` / `dating_`
-naming call at all in the end — one option value on an existing generic,
-no new exported name to place in the table above.
+assumes one shared critical value throughout. We revisited that decision
+and went ahead. The `option` argument of
+[`datestamp.radf_obj()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
+now dispatches to a `datestamp_svadf()` helper. The helper bypasses the
+`cv` and `sig_lvl` path entirely and reuses the machinery of the
+`"gsadf"` and `"sadf"` options (`stamp()`, `add_peak()`,
+`stamp_to_index()` and `add_ongoing()`). The return shape is therefore
+the same for all three options: a `ds_radf` list with `Start`, `Peak`,
+`End`, `Duration`, `Signal` and `Ongoing` for each series. In the end
+this was not a question about the `radf_`, `_test` or `dating_` naming
+scheme. It is one option value on an existing generic, so there is no
+new exported name to place in the table above.
 
-**2026-08-22** (also):
+**2026-08-22.**
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
-split — the bundled supDF+supBZ+U union test became
-[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
+was split. The bundled union test of supDF, supBZ and U became
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
 and
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)
 now returns plain bootstrap critical values for
-[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md);
-and `explosive_root()`/`root_ci()`/`root_ci_datestamp()` were folded
-into
+[`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md).
+Also, `explosive_root()`, `root_ci()` and `root_ci_datestamp()` were
+folded into
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
-(default + `radf_obj` methods). All unreleased, clean breaks. There is
-no `root_` prefix convention —
+(the default and `radf_obj` methods). All of these names were
+unreleased, so the changes are clean breaks. There is no `root_` prefix
+convention, and
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
-is the sole member of the registry’s `root` family.
+is the only member of the `root` family in the registry.
 
-**2026-09-14**: argument-name unification, clean break (all unreleased):
-every `level` argument became `sig_lvl` on the 0-100 scale
-(`lbi_test`/`monitor_lbi`/`ssu_test`/`monitor`/`monitor_cusum`/
-`rootstamp`/`quantile_test`/`monitor_quantile`/`cobubble_test`),
-validated by `assert_sig_lvl()` in `R/utils-defensive.R` — use it for
-any new function taking a level; `monitor(adflag=)` → `lag`,
-`monitor_cusum(N=)` → `h`, `cobubble_test(lags=)` → `lag_grid`; classes
-`cobubble_test` → `cobubble_test_obj`, `radf_sbz_union` →
-`radf_sbz_union_obj`. New standalone classes need `_obj`, a
-[`print()`](https://rdrr.io/r/base/print.html) and an
+**2026-09-14.** We unified argument names in a clean break, since all
+the names were unreleased. Every `level` argument became `sig_lvl` on
+the 0 to 100 scale (`lbi_test`, `monitor_lbi`, `ssu_test`, `monitor`,
+`monitor_cusum`, `rootstamp`, `quantile_test`, `monitor_quantile` and
+`cobubble_test`). `assert_sig_lvl()` in `R/utils-defensive.R` validates
+it, and any new function that takes a level should use it.
+`monitor(adflag=)` became `lag`, `monitor_cusum(N=)` became `h` and
+`cobubble_test(lags=)` became `lag_grid`. The classes `cobubble_test`
+and `radf_sbz_union` became `cobubble_test_obj` and
+`radf_sbz_union_obj`. New standalone classes need the `_obj` suffix, a
+[`print()`](https://rdrr.io/r/base/print.html) method and an
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-method (`tests/testthat/test-methods-smoke.R` enumerates them).
+method. `tests/testthat/test-methods-smoke.R` enumerates them.
 
-**2026-08-22**:
-[`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
-renamed to
-[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)/[`radf_wb_ps_distr()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
-— the `2` suffix was purely sequential (second wild bootstrap added to
-the file), not descriptive; `_ps` (Phillips & Shi 2020) matches this
-file’s own internal DGP naming (`radf_wb_dgp_ps`/`radf_wb_ps`
-vs. `radf_wb_dgp_hlst`/`radf_wb_hlst`, already split into
-`# DGP_PS`/`# DGP_HLST` sections in `R/radf_wb.R`) and the package-wide
-`radf_<method>_<qualifier>_cv` pattern
-([`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md)).
-**First rename in this project’s history to keep a deprecated alias
-instead of a clean break** — every prior rename above was justified by
-“never shipped in a CRAN release” (this unreleased dev version, or a
-same-PR rename before merge);
+**2026-08-22.**
 [`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
-shipped in 1.0.0 (the JSS-paper release), so real user code may already
-call it. Kept as a thin
-[`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html)-warning
-wrapper in `R/deprecate.R` (`?exuber-deprecated`), same mechanism
-already used for
-[`col_names()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)/[`sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
-— check whether a rename target already shipped on CRAN before reaching
-for the clean-break precedent above; only unreleased names get that
-treatment.
+and
+[`radf_wb_distr2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+became
+[`radf_wb_ps_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md)
+and
+[`radf_wb_ps_distr()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_ps_cv.md).
+The `2` suffix only recorded that this was the second wild bootstrap
+added to the file, and it described nothing. The `_ps` suffix (Phillips
+& Shi 2020) matches the internal naming of the DGPs in this file
+(`radf_wb_dgp_ps` and `radf_wb_ps`, against `radf_wb_dgp_hlst` and
+`radf_wb_hlst`, already split into `# DGP_PS` and `# DGP_HLST` sections
+in `R/radf_wb.R`) and the package-wide pattern
+`radf_<method>_<qualifier>_cv`, as in
+[`radf_sign_dm_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm_cv.md).
+This is the first rename in the history of the project that keeps a
+deprecated alias and does not make a clean break. Every earlier rename
+above was justified by the fact that the name had never shipped in a
+CRAN release, either because it came from this unreleased development
+version or because it was renamed in the same PR before the merge.
+[`radf_wb_cv2()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+shipped in 1.0.0, the release of the JSS paper, so user code may already
+call it. We kept it as a thin wrapper that warns through
+[`.Deprecated()`](https://rdrr.io/r/base/Deprecated.html) in
+`R/deprecate.R` (`?exuber-deprecated`), which is the mechanism already
+used for
+[`col_names()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md),
+[`mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md),
+[`wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md)
+and
+[`sb_cv()`](https://kvasilopoulos.github.io/exuber/reference/exuber-deprecated.md).
+Check whether a rename target already shipped on CRAN before you reach
+for the clean-break precedent above, because only unreleased names get
+that treatment.
 
 ## Implementing items from docs/
 
-`../docs/` is the workspace-wide methodology + replication record
-(shared with exubercore and pyexuber — `docs/README.md` is the map):
-papers evaluated for whether/how to add their method, organized by
-methodological family (`volatility-robustness.md`,
-`dating-and-root-inference.md`, `monitoring.md`, `multivariate.md`,
-`alternative-paradigms.md`, `open-research-directions.md`,
-`practitioner-guidance.md`), with a narrative summary in `SUMMARY.md`, a
-taxonomy/status table in `README.md`, and `parity.md` recording which
-implementation ships each method. Working through this backlog
-established the workflow below — follow it for any new item, and
-re-apply it to items already marked “evaluated, not implemented” or
-“genuinely more expensive” before trusting that verdict, since it has
-repeatedly turned out wrong.
+`../docs/` is the methodology and replication record for the whole
+workspace, shared with exubercore and pyexuber. `docs/README.md` is the
+map. The record evaluates papers for whether and how to add their
+method. It is organized by methodological family
+(`volatility-robustness.md`, `dating-and-root-inference.md`,
+`monitoring.md`, `multivariate.md`, `alternative-paradigms.md`,
+`open-research-directions.md` and `practitioner-guidance.md`). It also
+has a narrative summary in `SUMMARY.md`, a taxonomy and status table in
+`README.md`, and `parity.md`, which records which implementation ships
+each method. Working through this backlog established the workflow
+below. Follow it for every new item. Apply it again to items that are
+marked “evaluated, not implemented” or “more expensive”, and do not
+trust those verdicts until you have, because the verdicts have
+repeatedly turned out to be wrong.
 
-### Before implementing: re-triage, don’t trust the existing cost note
+### Before implementing: triage again and do not trust the existing cost note
 
-A cost/feasibility note written from an abstract-level read is
-frequently too pessimistic. Every time an existing “needs new
-simulation” or “needs new machinery” verdict was re-checked by actually
-rendering the primary source’s own pages and reading the exact
-equations, one of these turned out to be true instead:
+A cost note written after reading only an abstract is often too
+pessimistic. Each time we checked an existing verdict of “needs new
+simulation” or “needs new machinery” by rendering the pages of the
+primary source and reading the exact equations, one of the following
+turned out to be true.
 
-- The critical value is a **published table or closed-form formula** the
-  paper already computed (Kurozumi 2020’s `SADF`/`GSADF_{s0}`
-  boundaries, HB’s FLUC/CUSUM tables, Breitung & Diegel’s Table 1,
-  Kurozumi & Nishi’s Table I, Sarkar & Wells’s `log(n)`-based
-  thresholds) — no new Monte Carlo simulation needed on this package’s
-  end at all.
-- The “new regression/statistic” reduces to the **same closed-form
-  window pattern** already used elsewhere (`hls_prefix_sums()`/
-  `hls_segment_ssr()`/`hls_segment_coef()` in `R/dating_hls.R` — a
-  generic `(x, z)`-pair-over-a-segment OLS closed form via
-  [`cumsum()`](https://rdrr.io/r/base/cumsum.html) differences) — just a
-  different `(x, z)` choice
-  ([`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md),
+- The critical value is a published table or a closed-form formula that
+  the paper already computed. Examples are the `SADF` and `GSADF_{s0}`
+  boundaries of Kurozumi (2020), the FLUC and CUSUM tables of Homm &
+  Breitung, Table 1 of Breitung & Diegel, Table I of Kurozumi & Nishi
+  and the `log(n)`-based thresholds of Sarkar & Wells. No new Monte
+  Carlo simulation is needed on our side.
+- The new regression or statistic reduces to the same closed-form window
+  pattern that the package already uses elsewhere. The functions
+  `hls_prefix_sums()`, `hls_segment_ssr()` and `hls_segment_coef()` in
+  `R/dating_hls.R` implement a generic closed-form OLS for an `(x, z)`
+  pair over a segment, using differences of
+  [`cumsum()`](https://rdrr.io/r/base/cumsum.html). The new method then
+  needs only a different `(x, z)` choice
+  ([`ssu_test()`](https://kvasilopoulos.github.io/exuber/reference/ssu_test.md)
+  and
   [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md))
   or a different input transform fed into the same machinery
   ([`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
   feeding `gls_dfstat_grid()`).
-- A “genuinely bigger” item bundled several sub-cases together under one
-  verdict without separating them — the cheap one is worth shipping even
-  if the expensive one stays out of scope
-  (`monitor(boundary = "kurozumi", s0 = ...)`’s `SADF` vs. `GSADF_{s0}`
-  cases;
+- An item described as bigger bundled several sub-cases under one
+  verdict without separating them. The cheap sub-case is worth shipping
+  even if the expensive one stays out of scope. Examples are the `SADF`
+  and `GSADF_{s0}` cases of `monitor(boundary = "kurozumi", s0 = ...)`,
+  and
   [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
-  vs. `QPSY`’s `O(T^2)` double recursion).
-- A statistic that looks new is **exactly an existing one already
-  computed** — check this explicitly before writing any estimation code
-  (Kurozumi’s `SADF(k)` ≡ `radf()$badf`; SV-ADF’s feasible statistic ≡
-  `radf()$badf`;
-  [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)’s
-  `Q` ≡ `radf()$adf`’s own distribution). Check the *whole* limit,
-  though:
-  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
-  boundary first reused `radf()$badf` for the `Q` part and treated the
-  other component of the limit as one `z ~ N(0,1)` per path. For a path
-  functional that component is a process over windows too, and the
-  single `z` oversized the test (see “Validate” below).
+  against the `O(T^2)` double recursion of `QPSY`.
+- A statistic that looks new is exactly an existing one that the package
+  already computes. Check this explicitly before you write any
+  estimation code. The `SADF(k)` of Kurozumi equals `radf()$badf`, the
+  feasible statistic of SV-ADF equals `radf()$badf`, and the `Q` of
+  [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)
+  has the distribution of `radf()$adf`. Check the whole limit, though.
+  The boundary of
+  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  first reused `radf()$badf` for the `Q` part and treated the other
+  component of the limit as one `z ~ N(0,1)` for each path. For a path
+  functional that component is also a process over windows, and the
+  single `z` made the test oversized (see “Validate” below).
 
-When re-triaging, render the actual PDF pages with PyMuPDF
-(`fitz.Matrix(2.5-2.8, 2.5-2.8)`) and read them as images rather than
-trusting `pdftotext -layout`’s raw text — extraction reliably scrambles
-subscripts, summation/fraction notation, and Greek letters, and has
-caused real transcription errors when trusted directly (garbled eq. 18
-in Wu/Shi/Wu, KNP’s eq. 4-6, HLW’s window formulas, Breitung & Diegel’s
-`σ̃`, Kurozumi & Nishi’s Table I, among others). `pdftotext -layout` is
-fine for bulk navigation and grepping for keywords/equation numbers;
-switch to rendered images before transcribing any formula that will
-ship.
+When you triage again, render the PDF pages with PyMuPDF
+(`fitz.Matrix(2.5-2.8, 2.5-2.8)`) and read them as images. Do not rely
+on the raw text of `pdftotext -layout`. The extraction scrambles
+subscripts, summation and fraction notation and Greek letters, and
+trusting it has caused real transcription errors: the garbled eq. 18 in
+Wu, Shi & Wu, eq. 4-6 in KNP, the window formulas in HLW, the `σ̃` in
+Breitung & Diegel and Table I in Kurozumi & Nishi, among others.
+`pdftotext -layout` is fine for bulk navigation and for searching for
+keywords and equation numbers. Switch to rendered images before you
+transcribe any formula that will ship.
 
-### What’s actually a well-scoped item
+### What makes an item well scoped
 
-Prefer the item (or sub-case of an item) that is:
+Prefer an item, or a sub-case of an item, that meets three conditions.
 
-1.  A single recursion (`O(T)`), not a double recursion (`O(T^2)`) —
-    `badf`-shaped, not `bsadf`-shaped, unless the double-recursion case
-    also reduces to a bounded closed-form band (as `GSADF_{s0}` did,
-    since its window-start range is capped at a *fixed* fraction of the
-    training length rather than growing with the current point).
-2.  Reusing an existing statistic or an existing closed-form pattern,
-    not inventing new estimation machinery from scratch.
-3.  Paired with a published critical value/table/formula, not requiring
-    a new Monte Carlo calibration exercise.
+1.  It is a single recursion (`O(T)`) and not a double recursion
+    (`O(T^2)`). That means it has the shape of `badf` and not of
+    `bsadf`, unless the double-recursion case also reduces to a bounded
+    closed-form band. `GSADF_{s0}` did, because its range of window
+    starts is capped at a fixed fraction of the training length and does
+    not grow with the current point.
+2.  It reuses an existing statistic or an existing closed-form pattern
+    and does not invent new estimation machinery from scratch.
+3.  It comes with a published critical value, table or formula, so that
+    no new Monte Carlo calibration is required.
 
-When a paper’s own recommended/headline procedure is bigger than the
-above (a union-of-rejections, a double recursion, a second/third
-statistic family), ship the well-scoped minimum-viable subset and
-document exactly what’s deliberately left out and why — this project’s
-own precedent
-([`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md)
-without the fragmentation-joining heuristic;
+When the main procedure of a paper is larger than this (a union of
+rejections, a double recursion, a second or third family of statistics),
+ship the minimal subset that is well scoped and document exactly what
+you leave out and why. The project’s own precedent is to scope down
+explicitly, as with
+[`dating_hlw()`](https://kvasilopoulos.github.io/exuber/reference/dating_hlw.md)
+without the fragmentation-joining heuristic and
 [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md)
-without the automatic delay search) is to scope down explicitly, not to
-either rush the whole thing or skip the item entirely. But re-triage the
-follow-ups too: GSSU/CUSUM/the union, KNP’s multi-bubble DP and QPSY
-were all scoped out this way and all turned out cheap on a second read
-(2026-09-29): published critical values for every statistic including
-the union constants, `O(1)`-per- window prefix sums, and a boundary
-simulation that needs no QR fits.
+without the automatic delay search. It does not rush the whole procedure
+and it does not skip the item. Triage the follow-ups again as well.
+GSSU, CUSUM and the union, the multi-bubble dynamic programme of KNP and
+QPSY were all scoped out in this way, and all of them turned out to be
+cheap on a second reading (2026-09-29). The reasons were published
+critical values for every statistic including the union constants,
+`O(1)` prefix sums for each window, and a boundary simulation that needs
+no QR fits.
 
-### Validate before shipping — and actually be willing not to ship
+### Validate before shipping, and be willing not to ship
 
-Every implemented item needs, in order:
+Every implemented item needs the following, in this order.
 
-1.  **Formula-exact check**: an independent brute-force reimplementation
-    ([`lm()`](https://rdrr.io/r/stats/lm.html), nested loops, manual
-    residual computation) that the closed-form/vectorized version must
-    match to numerical precision (`< 1e-8` typically achievable). This
-    has caught real bugs on its own, not just confirmed correctness — a
-    window-width off-by-one in
+1.  **Formula-exact check.** Compare the closed-form or vectorized
+    version with an independent brute-force reimplementation
+    ([`lm()`](https://rdrr.io/r/stats/lm.html), nested loops, a manual
+    residual computation). They must agree to numerical precision,
+    typically below `1e-8`. This check has found real bugs and has not
+    only confirmed correct code. It found a window-width off-by-one in
     [`contagion_reg()`](https://kvasilopoulos.github.io/exuber/reference/contagion_reg.md),
-    a matrix-orientation bug (`K %*% v` vs. `crossprod(K, v)`) in the
-    same file’s LOOCV helper, a wrong AR order in an abandoned
-    `radf_qar()`’s bootstrap DGP.
-2.  **Table/formula lookup check**: exact match against every published
-    constant used, plus a clean error path for an unsupported
-    level/parameter.
-3.  **Monte Carlo size**: empirical false-alarm rate under `H0` close to
-    (or conservative relative to) the nominal level. A rate a couple of
-    points over nominal is not automatically Monte Carlo noise:
-    [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
-    6.7% at a nominal 5% was recorded as noise and turned out to be the
-    single-`z` bug above. Simulating the limiting process directly
-    (cheap) says which it is. Also check away from the easy case
-    (non-central quantiles, heavy tails): QPSY is 4% at the median but
-    35% at `tau = 0.9` even with Gaussian innovations (21-44% at
-    `tau = 0.8-0.9` with `t3`), which it now ships with as a caveat. A
-    per-point marginal quantile used as a boundary for a
-    first-crossing/monitoring test will look plausible from the formula
-    but can be badly miscalibrated in practice —
-    [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
-    boundary bug gave a `50%` false-alarm rate against a nominal `5%`
-    until fixed to calibrate against each simulated path’s own supremum
-    (matching how
-    [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)’s
-    own `sadf_cv` is built: quantile of simulated path *maxima*, not a
-    per-point quantile).
-4.  **Power/detection check** against a genuine alternative, ideally
-    compared to an existing statistic on the identical DGP so a power
-    gap (if any) can be reported honestly rather than hidden.
-5.  Where possible, **reproduce the paper’s own published Monte Carlo
-    table** directly (`radf_qar()` attempted this against Pavlidis
-    2025’s Table 2) — the strongest available check, since it validates
-    the whole pipeline, not just one piece.
+    a matrix-orientation bug (`K %*% v` against `crossprod(K, v)`) in
+    the LOOCV helper of the same file, and a wrong AR order in the
+    bootstrap process of an abandoned `radf_qar()`.
+2.  **Table and formula lookup check.** Match every published constant
+    that the code uses exactly, and give a clean error for an
+    unsupported level or parameter.
+3.  **Monte Carlo size.** The empirical false-alarm rate under `H0`
+    should be close to the nominal level or conservative relative to it.
+    A rate that is a couple of points above nominal is not automatically
+    Monte Carlo noise. For
+    [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+    we recorded 6.7% at a nominal 5% as noise, and it turned out to be
+    the single-`z` bug described above. Simulating the limiting process
+    directly is cheap and tells you which case you are in. Also check
+    away from the easy case, with non-central quantiles and heavy tails.
+    QPSY has a false-alarm rate of 4% at the median but 35% at
+    `tau = 0.9` even with Gaussian innovations (21% to 44% at
+    `tau = 0.8` to `0.9` with `t3` innovations), and it now ships with a
+    caveat that says so. A marginal quantile for each point, used as the
+    boundary of a first-crossing or monitoring test, can look plausible
+    from the formula and still be badly miscalibrated in practice. The
+    boundary bug in
+    [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+    gave a false-alarm rate of 50% against a nominal 5% until we
+    calibrated it against the supremum of each simulated path. That
+    matches how the `sadf_cv` of
+    [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+    is built: it is the quantile of the simulated path maxima and not a
+    quantile for each point.
+4.  **Power check** against a true alternative, ideally compared with an
+    existing statistic on the identical process, so that a power gap, if
+    there is one, can be reported honestly and not hidden.
+5.  Where possible, **reproduce the published Monte Carlo table of the
+    paper** (`radf_qar()` attempted this against Table 2 of Pavlidis
+    2025). This is the strongest check available, because it validates
+    the whole pipeline and not only one piece.
 
-If an item fails its own validation and the root cause can’t be pinned
-down and fixed with confidence, **do not ship it** — remove the
-half-validated code rather than commit something that doesn’t hold up.
-`radf_qar()` (Pavlidis 2025’s quantile-AR `Un`/`QKS` tests) is the
-precedent: implemented, one real bug found and fixed, but a decoupled
-oracle-vs-bootstrap diagnostic then found a genuine, unresolved
-bootstrap-calibration problem at low/mid quantiles that persisted even
-at `nboot = 1999` (ruling out simple Monte Carlo noise) — the code was
-deleted rather than committed, and the diagnostic trail was written up
-in `alternative-paradigms.md` precisely enough that a future attempt
-starts from the actual remaining gap instead of redoing the
+If an item fails its own validation and you cannot find and fix the root
+cause with confidence, do not ship it. Remove the half-validated code
+instead of committing something that does not hold up. `radf_qar()` (the
+quantile-AR `Un` and `QKS` tests of Pavlidis 2025) is the precedent. It
+was implemented, and one real bug was found and fixed. A separate
+diagnostic of oracle against bootstrap then found an unresolved
+bootstrap-calibration problem at low and middle quantiles, which
+persisted even at `nboot = 1999`, so simple Monte Carlo noise was ruled
+out. We deleted the code and did not commit it. We wrote up the
+diagnostic trail in `alternative-paradigms.md` in enough detail that a
+future attempt starts from the remaining gap and does not repeat the
 investigation.
 
-### Documentation update pattern (five files + a replication script)
+### Documentation update pattern (five files and a replication script)
 
-Every shipped item touches, in `docs/`:
+Every shipped item touches the following in `docs/`.
 
-1.  The relevant taxonomy file’s top status line, its taxonomy table
-    row, and either a new `### Implementation` subsection or a rewrite
-    of the item’s own “not implemented”/cost-feasibility section —
-    including what was found wrong in the original assessment when
-    re-triaging, not just the final verdict.
-2.  `SUMMARY.md`’s relevant “Bundle N” section — a narrative bullet with
-    what was done, the key structural finding, concrete validation
-    numbers, and what’s still not implemented and why.
-3.  `README.md`’s taxonomy table and per-item cross-check table (one
-    row: item, file, cross-check description, “clean” or “bug found +
-    fixed: …”).
-4.  `docs/replication/README.md`’s per-folder bullet list, pointing at a
-    new replication script.
-5.  `docs/parity.md` — a row for the new method (exuber column filled,
-    pyexuber `—`), so the Python side sees the gap.
+1.  The relevant taxonomy file: the status line at the top, the row in
+    the taxonomy table, and either a new `### Implementation` subsection
+    or a rewrite of the item’s own “not implemented” or
+    cost-and-feasibility section. The update records what turned out to
+    be wrong in the original assessment when you triaged again, and not
+    only the final verdict.
+2.  The relevant “Bundle N” section of `SUMMARY.md`: a narrative bullet
+    with what was done, the main structural finding, concrete validation
+    numbers, and what is still not implemented and why.
+3.  The taxonomy table of `README.md` and its table of cross-checks for
+    each item (one row with the item, the file, a description of the
+    cross-check, and “clean” or “bug found and fixed: …”).
+4.  The bullet list for each folder in `docs/replication/README.md`,
+    pointing at a new replication script.
+5.  `docs/parity.md`: a row for the new method, with the exuber column
+    filled in and a dash for pyexuber, so that the Python side sees the
+    gap.
 
-Plus a standalone, re-runnable replication script in
-`docs/replication/<taxonomy-folder>/<function>_validation.R` that
-reproduces every number quoted in the docs. **Run the archived script
-itself before finalizing the docs** — an ad hoc validation script’s
-exact numbers can drift from the final, cleaned-up archived version
-(different seeding order, different DGP parameters copied in by hand);
-the numbers written into the `.md` files must match what the archived
-script actually outputs when re-run, not what an earlier interactive
-exploration happened to produce.
+Add a standalone replication script that can be rerun, in
+`docs/replication/<taxonomy-folder>/<function>_validation.R`, which
+reproduces every number quoted in the docs. Run the archived script
+itself before you finalize the docs. The numbers from an ad hoc
+validation script can drift from those of the final cleaned-up version,
+for example through a different seeding order or process parameters
+copied in by hand. The numbers in the `.md` files must match what the
+archived script prints when you run it again, and not what an earlier
+interactive exploration produced.
 
 ### Commit workflow
 
@@ -459,66 +506,110 @@ exploration happened to produce.
 Rscript -e "devtools::document()"        # regenerate NAMESPACE/man
 ```
 
-then, from Bash/PowerShell in this directory:
+Then, from Bash or PowerShell in this directory:
 
     git status --short                       # confirm only intended files changed
     git add <intended files only>            # never `git add -A`; leave unrelated untracked
                                               # in-progress work alone
 
-Write the commit message to a scratch file first (avoids shell-quoting
-issues with apostrophes in prose), then `git commit -F <file>`. No
-`Co-Authored-By`/AI-attribution trailers, per the user’s global
-preference. One semantic commit per shipped item — don’t batch multiple
-items into one commit even when they were implemented in the same pass.
+Write the commit message to a scratch file first, which avoids
+shell-quoting problems with apostrophes in prose, and then run
+`git commit -F <file>`. By the standing preference of the user, commits
+carry no `Co-Authored-By` or AI-attribution trailers unless the user
+asks for them. Make one semantic commit for each shipped item and do not
+batch several items into one commit, even when you implemented them in
+the same pass.
 
-**Roxygen placement**: a new non-exported helper function must be
-defined *before* its neighboring `#'`-prefixed roxygen block, not
-between that block and the function it documents — inserting a helper in
-between causes roxygen to misattach the whole doc block to the helper
-instead of the intended exported function.
+**Roxygen placement.** Define a new non-exported helper function before
+the neighboring `#'` roxygen block, and not between that block and the
+function it documents. If you insert a helper in between, roxygen
+attaches the whole documentation block to the helper and not to the
+exported function.
 
-### Reusable low-level patterns worth knowing before writing new code
+### Reusable low-level patterns
 
-- `hls_prefix_sums(y)` / `hls_segment_ssr(ps, lo, hi, fit)` /
-  `hls_segment_coef(ps, lo, hi)` in `R/dating_hls.R`: the generic
-  closed-form OLS-over-a-segment machinery. `ps$cx`/`cz` etc. are
-  `c(0, cumsum(...))` vectors; a segment `(lo, hi]` sum is
-  `ps$cx[hi+1] - ps$cx[lo+1]`. Reuse this pattern (or literally these
-  functions) before writing a new per-window OLS loop by hand.
-- `gls_dfstat_grid(y, minw)` in `R/radf_tt.R`: the full `(r1, r2)` grid
-  of no-intercept recursive-DF t-statistics, vectorized via
-  [`outer()`](https://rdrr.io/r/base/outer.html) over prefix sums — the
-  template for anything needing the *entire* double-recursive grid
-  rather than a single-recursion path.
-- `psy_minw(n)` / `psy_ds(n)`: `floor((0.01 + 1.8/sqrt(n)) * n)` and
-  `round(delta * log(n))` respectively — reuse these existing
-  `log(n)`-based conventions instead of inventing new minimum-window or
-  minimum-duration rules; they have repeatedly turned out to be exactly
-  what a paper’s own recommended formula reduces to (SSU’s own
-  `r0 = 0.01 + 1.8/sqrt(T)`, SV-ADF’s own minimum-duration consolidation
-  requirement).
-- `stamp(x)` in `R/radf-methods.R`: converts a vector of TRUE/breach
-  indices into contiguous `Start`/`End`/`Duration` runs — reuse for any
-  new first-crossing or minimum-duration dating logic instead of writing
-  run-length detection by hand.
-- [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)’s
-  own pattern for a monitoring/first-crossing boundary: simulate full
-  null paths, take **each path’s own supremum**, then the quantile of
-  those maxima across replicates — not a per-point marginal quantile at
-  each recursion step. Get this wrong and a monitoring test looks fine
-  on a formula/structural check but is badly miscalibrated in practice
-  (see
-  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)’s
-  validation history above).
-- `cat_caveat(x)` / `get_caveat(x)` in `R/utils-attrs.R`: for a function
-  whose source or validation status isn’t a clean “clean” (a
-  non-peer-reviewed preprint, a known-unresolved validation gap), set
-  `add_attr(..., caveat = <string>)`, emit the same string via
-  `message_glue(caveat)` at call time, and call `cat_caveat(x)` in the
-  `print.*_obj` method — one string kept in sync in three places rather
-  than three independent copies. See `datestamp_svadf()` in
-  `R/radf-methods.R` (a caveat on one `option` of a shared generic, not
-  its own class — the `caveat` attr is simply absent for the other
-  options, and `cat_caveat()`/`print.ds_radf()` no-op on that) /
+- `hls_prefix_sums(y)`, `hls_segment_ssr(ps, lo, hi, fit)` and
+  `hls_segment_coef(ps, lo, hi)` in `R/dating_hls.R` hold the generic
+  closed-form OLS over a segment. `ps$cx`, `cz` and so on are
+  `c(0, cumsum(...))` vectors, and a segment `(lo, hi]` has the sum
+  `ps$cx[hi+1] - ps$cx[lo+1]`. Reuse this pattern, or these functions
+  themselves, before you write a new loop over windows by hand.
+- `gls_dfstat_grid(y, minw)` in `R/radf_tt.R` computes the full
+  `(r1, r2)` grid of no-intercept recursive-DF t-statistics, vectorized
+  with [`outer()`](https://rdrr.io/r/base/outer.html) over prefix sums.
+  It is the template for anything that needs the entire double-recursive
+  grid and not a single-recursion path.
+- `psy_minw(n)` and `psy_ds(n)` compute
+  `floor((0.01 + 1.8/sqrt(n)) * n)` and `round(delta * log(n))`. Reuse
+  these `log(n)`-based conventions and do not invent new rules for the
+  minimum window or the minimum duration. They have repeatedly turned
+  out to be exactly what the recommended formula of a paper reduces to,
+  for example `r0 = 0.01 + 1.8/sqrt(T)` in SSU and the minimum duration
+  requirement for consolidation in SV-ADF.
+- `stamp(x)` in `R/radf-methods.R` converts a vector of TRUE or breach
+  indices into contiguous `Start`, `End` and `Duration` runs. Reuse it
+  for any new first-crossing or minimum-duration dating logic and do not
+  write run-length detection by hand.
+- [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
+  shows the pattern for the boundary of a monitoring or first-crossing
+  test. Simulate full null paths, take the supremum of each path, and
+  then take the quantile of those maxima across replicates. Do not use a
+  marginal quantile for each point at each recursion step. If you get
+  this wrong, a test looks fine in a formula or structural check and is
+  badly miscalibrated in practice (see the validation history of
+  [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md)
+  above).
+- `cat_caveat(x)` and `get_caveat(x)` in `R/utils-attrs.R` serve
+  functions whose source or validation status is not clean, for example
+  a preprint that has not been peer reviewed or a known validation gap
+  that is unresolved. Set `add_attr(..., caveat = <string>)`, emit the
+  same string with `message_glue(caveat)` when the function is called,
+  and call `cat_caveat(x)` in the `print.*_obj` method. One string is
+  then kept in sync in three places and there are not three independent
+  copies. For the established pattern, see `datestamp_svadf()` in
+  `R/radf-methods.R` (a caveat on one `option` of a shared generic and
+  not on its own class, so the `caveat` attribute is absent for the
+  other options and `cat_caveat()` and `print.ds_radf()` do nothing for
+  them) and
   [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
-  (its own class) for the established pattern.
+  (its own class).
+
+## Writing style (all user-facing text)
+
+Applies to READMEs, vignettes, the website, `docs/`, NEWS/CHANGELOG,
+roxygen and docstrings, and any prose a reader sees. Code comments and
+CLAUDE.md files follow it too.
+
+**Voice.** An applied economist writing for colleagues who also want
+ordinary readers to be able to run the test. Precise, sober, a little
+plain-spoken. Define a term at first use (what “explosive” means, what a
+critical value is for) and give the idea in words before the formula.
+
+**Rewrite, do not substitute.** Swapping an em dash for a comma, colon
+or hyphen keeps the machine-written rhythm and is not acceptable. If a
+sentence needed a dash, it was carrying two thoughts: split it into two
+sentences, or fold the aside into the grammar (a relative clause, a
+parenthesis only for a true aside, or a separate sentence). No U+2014
+and no spaced hyphen standing in for one. En dashes stay for numeric
+ranges and joint names (Phillips–Shi–Yu).
+
+**Patterns to remove at the sentence level.** - Fragments stacked for
+effect, and “X, not Y” or “not just X, but Y” framings. State the claim
+directly. - Triplets used for rhythm, and sentences that announce what
+they are about to say (“Importantly,”, “It is worth noting that”, “In
+essence”). - Telegraphic notes (dropped articles, arrows, semicolon
+chains, “confirmed, zero new code”). Write full sentences with a subject
+and a verb. - Status-report voice: “genuinely”, “confirmed”, “now done”,
+“picked clean”, “the most topical candidate”. Say what is true and give
+the date if it matters. - Marketing and filler words: seamlessly, robust
+(unless a statistical sense is stated), leverage, delve, comprehensive,
+powerful, crucial, landscape, journey, “under the hood”, “a rich set
+of”. - Hedge stacks, and bold used as emphasis inside running prose. -
+Self-reference to the writing process (“this resolves the question this
+file flagged”, “an earlier pass”). Keep history in dated notes, not in
+the body of explanations.
+
+**Do keep.** Formulas, numbers, citations, function names and every
+fact. This is a change of language, not of content. Vary sentence
+length. Prefer “we” or the imperative to the passive, and say what a
+function does and when to use it before how it works.

@@ -1,6 +1,6 @@
 # Summarizing `radf` models
 
-`summary` method for radf models that consist of `radf_obj` and
+`summary` method for radf models, which consist of a `radf_obj` and a
 `radf_cv`.
 
 ## Usage
@@ -31,8 +31,8 @@ summary(object, cv = NULL, ...)
 
 ## Value
 
-Returns a list of summary statistics, which include the estimated ADF,
-SADF, and GSADF test statistics and the corresponding critical values
+A list of summary statistics, which includes the estimated ADF, SADF and
+GSADF test statistics and the corresponding critical values.
 
 ## Examples
 

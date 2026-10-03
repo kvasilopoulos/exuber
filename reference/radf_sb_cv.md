@@ -1,8 +1,8 @@
 # Panel Sieve Bootstrap Critical Values
 
 `radf_sb_cv` computes critical values for the panel recursive unit root
-test using the sieve bootstrap procedure outlined in Pavlidis et al.
-(2016). `radf_sb_distr` computes the distribution.
+test with the sieve bootstrap procedure of Pavlidis et al. (2016).
+`radf_sb_distr` computes the distribution.
 
 ## Usage
 
@@ -33,14 +33,14 @@ radf_sb_distr(
 - data:
 
   A univariate or multivariate numeric time series object, a numeric
-  vector or matrix, or a data.frame. A column may have leading and/or
-  trailing `NA` values (an uneven/unbalanced panel where series enter or
-  exit the sample at different times) – those periods are filled with
-  `NA` in `badf`/`bsadf` and excluded from that series' `adf`/`sadf`/
-  `gsadf`. Interior `NA` values (a gap in the middle of a series) are
-  not supported. When any series is padded this way, the panel statistic
-  (`bsadf_panel`/`gsadf_panel`) is not available and is returned as
-  `NA`, with a warning.
+  vector or matrix, or a data.frame. A column may have leading or
+  trailing `NA` values, which describes an unbalanced panel in which
+  series enter or exit the sample at different times. Those periods are
+  filled with `NA` in `badf` and `bsadf` and excluded from the `adf`,
+  `sadf` and `gsadf` of that series. Interior `NA` values (a gap in the
+  middle of a series) are not supported. When any series is padded in
+  this way, the panel statistics (`bsadf_panel` and `gsadf_panel`) are
+  not available, and the function returns `NA` for them with a warning.
 
 - minw:
 
@@ -58,35 +58,35 @@ radf_sb_distr(
 
 - type:
 
-  Lag-order selection: `"fixed"` (default) uses `lag` as given, matching
-  [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md)'s
-  own single-`lag` behaviour. `"aic"`/`"bic"` instead select the lag
-  automatically per series via `lag_select()` (internal; taking the max
-  across the panel, since the rest of this function assumes one common
-  lag order) – Pedersen & Schütte (2020)'s fix for the size distortion a
+  Lag-order selection. `"fixed"` (default) uses `lag` as given, as in
+  the single-`lag` behavior of
+  [`radf`](https://kvasilopoulos.github.io/exuber/reference/radf.md).
+  `"aic"` and `"bic"` select the lag automatically for each series with
+  `lag_select()` (internal), and the function takes the maximum across
+  the panel because the rest of it assumes one common lag order. This is
+  the fix of Pedersen & Schütte (2020) for the size distortion that a
   fixed lag causes under autocorrelated innovations.
 
 - max_lag:
 
-  Maximum lag order to search over when `type` is `"aic"`/`"bic"`.
-  Ignored when `type = "fixed"`.
+  Maximum lag order to search over when `type` is `"aic"` or `"bic"`. It
+  is ignored when `type = "fixed"`.
 
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
-For `radf_sb_cv` A list A list that contains the critical values for the
-panel BSADF and panel GSADF test statistics. For `radf_wb_dist` a
-numeric vector that contains the distribution of the panel GSADF
-statistic.
+For `radf_sb_cv`, a list with the critical values for the panel BSADF
+and panel GSADF test statistics. For `radf_sb_distr`, a numeric vector
+with the distribution of the panel GSADF statistic.
 
 ## References
 
@@ -125,7 +125,7 @@ Other critical values:
 
 rsim_data <- radf(sim_data, lag = 1)
 
-# Critical vales should have the same lag length with \code{radf()}
+# Critical values should have the same lag length as \code{radf()}
 sb <- radf_sb_cv(sim_data, lag = 1)
 
 tidy(sb)

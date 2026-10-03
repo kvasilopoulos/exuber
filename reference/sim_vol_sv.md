@@ -30,12 +30,12 @@ sim_vol_sv(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0, seed = NULL)
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
@@ -46,7 +46,7 @@ A numeric vector of length `n`.
 \$\$\log\sigma_t^2 = \phi\log\sigma\_{t-1}^2 + \eta_t,\quad \eta_t \sim
 iid\\ N(0, \tau^2)\$\$
 
-with `phi` close to (but below) 1 for the "double local-to-unity"
+with `phi` close to, but below, 1 for the "double local-to-unity"
 near-integrated-variance case studied in the source.
 
 ## References

@@ -1,6 +1,6 @@
 # Plotting a `ds_radf` object
 
-Takes a `ds_radf` object and returns a ggplot2 object, with a
+Takes a `ds_radf` object and returns a ggplot2 object with a
 [geom_segment](https://ggplot2.tidyverse.org/reference/geom_segment.html)
 layer.
 

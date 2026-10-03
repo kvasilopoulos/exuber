@@ -88,11 +88,12 @@ log-variance, for use as <code>sim_psy1(..., e = sim_vol_sv(...))</code>.</p>
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
 <dd><p>An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-<code>set.seed</code> before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.</p></dd>
+should be initialized. It is either NULL or an integer, which is passed to
+<code>set.seed</code> before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,7 +104,7 @@ across the parallel and non-parallel option when the same seed is used.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>$$\log\sigma_t^2 = \phi\log\sigma_{t-1}^2 + \eta_t,\quad
 \eta_t \sim iid\, N(0, \tau^2)$$</p>
-<p>with <code>phi</code> close to (but below) 1 for the "double local-to-unity"
+<p>with <code>phi</code> close to, but below, 1 for the "double local-to-unity"
 near-integrated-variance case studied in the source.</p>
     </div>
     <div class="section level2">

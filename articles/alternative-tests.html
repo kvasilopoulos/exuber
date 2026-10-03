@@ -92,15 +92,15 @@
 <div class="section level2">
 <h2 id="why-not-just-use-radf">Why not just use <code>radf()</code><a class="anchor" aria-label="anchor" href="#why-not-just-use-radf"></a>
 </h2>
-<p><code><a href="../reference/radf.html">radf()</a></code>’s GSADF statistic tests one specific alternative:
-a fixed explosive AR(1) root. <code><a href="../reference/lbi_test.html">lbi_test()</a></code>,
-<code><a href="../reference/ssu_test.html">ssu_test()</a></code> and <code><a href="../reference/quantile_test.html">quantile_test()</a></code> are standalone
-hypothesis tests – not built on <code><a href="../reference/radf.html">radf()</a></code>’s recursive core,
-and not fit into the
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>/<code><a href="../reference/datestamp.html">datestamp()</a></code>/<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code>/<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-pipeline (see <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code>) – each
-targeting a <em>different</em> alternative where GSADF-style tests can
-lose power:</p>
+<p>The GSADF statistic in <code><a href="../reference/radf.html">radf()</a></code> tests against one specific
+alternative, an explosive AR(1) root that stays fixed.
+<code><a href="../reference/lbi_test.html">lbi_test()</a></code>, <code><a href="../reference/ssu_test.html">ssu_test()</a></code> and
+<code><a href="../reference/quantile_test.html">quantile_test()</a></code> are standalone hypothesis tests. They do
+not use the recursive core of <code><a href="../reference/radf.html">radf()</a></code> and they do not feed
+into the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code>,
+<code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> pipeline (see
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code>). Each targets a different
+alternative, one where GSADF-style tests can lose power.</p>
 <table class="table">
 <colgroup>
 <col width="33%">
@@ -116,27 +116,28 @@ lose power:</p>
 <tr class="odd">
 <td><code><a href="../reference/lbi_test.html">lbi_test()</a></code></td>
 <td>Breitung &amp; Diegel (2025)</td>
-<td>A fixed explosive root, tested with the locally-best-invariant
-statistic for that specific alternative (so it can out-power GSADF
-exactly there).</td>
+<td>A fixed explosive root, tested with the locally best invariant
+statistic for that alternative, so it can have more power than GSADF in
+exactly that case.</td>
 </tr>
 <tr class="even">
 <td><code><a href="../reference/ssu_test.html">ssu_test()</a></code></td>
 <td>Kurozumi &amp; Nishi (2025)</td>
-<td>A <strong>stochastically varying</strong> explosive coefficient –
-the root itself has a random component, not a fixed value.</td>
+<td>A stochastically varying explosive coefficient: the root has a
+random component and is not a fixed value.</td>
 </tr>
 <tr class="odd">
 <td><code><a href="../reference/quantile_test.html">quantile_test()</a></code></td>
 <td>Wu, Shi &amp; Wu (2025)</td>
 <td>Explosiveness in the <code>tau</code>-th conditional quantile of
-<code>y_t</code> on <code>y_{t-1}</code>, not the conditional mean.</td>
+<code>y_t</code> given <code>y_{t-1}</code>, instead of in the
+conditional mean.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level2">
-<h2 id="same-alternative-lbi_test-detects">Same alternative, <code>lbi_test()</code> detects<a class="anchor" aria-label="anchor" href="#same-alternative-lbi_test-detects"></a>
+<h2 id="a-fixed-root-which-lbi_test-detects">A fixed root, which <code>lbi_test()</code> detects<a class="anchor" aria-label="anchor" href="#a-fixed-root-which-lbi_test-detects"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">60</span>, te <span class="op">=</span> <span class="fl">1</span>, tf <span class="op">=</span> <span class="fl">60</span>, c <span class="op">=</span> <span class="fl">0.03</span>, alpha <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># fixed rho = 1.03 throughout</span></span>
@@ -148,15 +149,14 @@ the root itself has a random component, not a fixed value.</td>
 <span><span class="co">#&gt;   series1  6.12  1.645      TRUE</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="a-different-alternative-where-lbi_test-misses-and-ssu_test-doesnt">A different alternative: where <code>lbi_test()</code> misses and
-<code>ssu_test()</code> doesn’t<a class="anchor" aria-label="anchor" href="#a-different-alternative-where-lbi_test-misses-and-ssu_test-doesnt"></a>
+<h2 id="a-varying-root-which-ssu_test-detects-and-lbi_test-misses">A varying root, which <code>ssu_test()</code> detects and
+<code>lbi_test()</code> misses<a class="anchor" aria-label="anchor" href="#a-varying-root-which-ssu_test-detects-and-lbi_test-misses"></a>
 </h2>
-<p><code><a href="../reference/ssu_test.html">ssu_test()</a></code> is designed for a root that itself varies
-stochastically over time, not a fixed one:</p>
-<p><code><a href="../reference/sim_psy1.html">sim_psy1()</a></code>’s <code>coef_noise</code>/<code>coef_a</code>
-arguments generate exactly that alternative,
-<code>rho_t = 1 + c/n + coef_a * u_t / sqrt(n)</code>, a random root
-rather than a fixed one:</p>
+<p><code><a href="../reference/ssu_test.html">ssu_test()</a></code> is designed for a root that varies
+stochastically over time. The <code>coef_noise</code> and
+<code>coef_a</code> arguments of <code><a href="../reference/sim_psy1.html">sim_psy1()</a></code> generate this
+alternative, with <code>rho_t = 1 + c/n + coef_a * u_t / sqrt(n)</code>,
+so the root is random and not fixed:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">150</span>, te <span class="op">=</span> <span class="fl">75</span>, tf <span class="op">=</span> <span class="fl">150</span>, c <span class="op">=</span> <span class="fl">3</span>, alpha <span class="op">=</span> <span class="fl">1</span>, seed <span class="op">=</span> <span class="fl">2001</span>,</span>
 <span>              coef_noise <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">149</span><span class="op">)</span>, coef_a <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
@@ -173,20 +173,20 @@ rather than a fixed one:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series    stat   crit  detected</span></span>
 <span><span class="co">#&gt;   series1  0.3121  1.645     FALSE</span></span></code></pre></div>
-<p><code><a href="../reference/ssu_test.html">ssu_test()</a></code> detects it; <code><a href="../reference/lbi_test.html">lbi_test()</a></code>, built
-for a fixed root, does not on this same draw. This isn’t a defect in
-<code><a href="../reference/lbi_test.html">lbi_test()</a></code> – it’s the whole reason two tests exist: each is
-the (locally) most powerful test for its own alternative, and neither
-dominates the other everywhere.</p>
+<p>On this draw <code><a href="../reference/ssu_test.html">ssu_test()</a></code> detects the bubble and
+<code><a href="../reference/lbi_test.html">lbi_test()</a></code>, which is built for a fixed root, does not. This
+is not a defect of <code><a href="../reference/lbi_test.html">lbi_test()</a></code>. Each test is the (locally)
+most powerful one against its own alternative, and neither dominates the
+other everywhere, which is why both exist.</p>
 </div>
 <div class="section level2">
-<h2 id="testing-the-quantile-not-the-mean">Testing the quantile, not the mean<a class="anchor" aria-label="anchor" href="#testing-the-quantile-not-the-mean"></a>
+<h2 id="testing-a-quantile-instead-of-the-mean">Testing a quantile instead of the mean<a class="anchor" aria-label="anchor" href="#testing-a-quantile-instead-of-the-mean"></a>
 </h2>
-<p><code><a href="../reference/quantile_test.html">quantile_test()</a></code> picks (or is given) a quantile
-<code>tau</code> and tests for explosiveness there instead of in the
-conditional mean – the setting where that pays off is heavy-tailed
-innovations, where the conditional-mean regression is least reliable, so
-the DGP here drives the PSY bubble with <code>t(3)</code> shocks:</p>
+<p><code><a href="../reference/quantile_test.html">quantile_test()</a></code> picks a quantile <code>tau</code> (or
+takes one from you) and tests for explosiveness there instead of in the
+conditional mean. This pays off with heavy-tailed innovations, where the
+conditional-mean regression is least reliable, so the example below
+drives the PSY bubble with <code>t(3)</code> shocks:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">y_t3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_psy1.html">sim_psy1</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span>, e <span class="op">=</span> <span class="fu"><a href="../reference/sim_innov.html">sim_innov</a></span><span class="op">(</span><span class="fl">99</span>, dist <span class="op">=</span> <span class="st">"t"</span>, df <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/quantile_test.html">quantile_test</a></span><span class="op">(</span><span class="va">y_t3</span>, nrep <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -195,26 +195,24 @@ the DGP here drives the PSY bubble with <code>t(3)</code> shocks:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series   tau  tstat    crit  delta  detected</span></span>
 <span><span class="co">#&gt;   series1  0.25  4.684  0.6824  0.379      TRUE</span></span></code></pre></div>
-<p><code>tau = "optimal"</code> (the default) searches
+<p>By default (<code>tau = "optimal"</code>) the function searches
 <code>tau_grid</code> and reports the quantile with the strongest
-signal, shown here fixed at a specific value for a faster, reproducible
-example.</p>
+signal. The example above fixes the quantile at a specific value so that
+it runs faster and can be reproduced.</p>
 </div>
 <div class="section level2">
 <h2 id="which-to-reach-for">Which to reach for<a class="anchor" aria-label="anchor" href="#which-to-reach-for"></a>
 </h2>
 <ul>
-<li>A genuinely fixed explosive root, and want a test with power
-advantages over standard GSADF for exactly that case:
-<code><a href="../reference/lbi_test.html">lbi_test()</a></code>.</li>
-<li>Suspect the explosive root itself is noisy/time-varying rather than
-constant: <code><a href="../reference/ssu_test.html">ssu_test()</a></code>.</li>
-<li>Suspect explosiveness shows up more in the tails (or a specific
-quantile) of the distribution than in the mean:
+<li>If you believe the explosive root is fixed and want more power than
+GSADF in that case, use <code><a href="../reference/lbi_test.html">lbi_test()</a></code>.</li>
+<li>If you suspect the explosive root is noisy or varies over time, use
+<code><a href="../reference/ssu_test.html">ssu_test()</a></code>.</li>
+<li>If you suspect explosiveness shows up in the tails of the
+distribution, or at a specific quantile, more than in the mean, use
 <code><a href="../reference/quantile_test.html">quantile_test()</a></code>.</li>
-<li>Not sure which alternative applies, or want the most widely used
-benchmark: <code><a href="../reference/radf.html">radf()</a></code>’s GSADF remains the default first test to
-run.</li>
+<li>If you are unsure which alternative applies, or want the most widely
+used benchmark, start with the GSADF test in <code><a href="../reference/radf.html">radf()</a></code>.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

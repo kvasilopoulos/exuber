@@ -1,7 +1,7 @@
 # Simulate fractionally-integrated (long-memory) innovations
 
-Generates \\u_t = \Delta^{-d}\epsilon_t\\, \\\epsilon_t\\ i.i.d. \\(0,
-\sigma^2)\\, via a truncated \\MA(\infty)\\ expansion of the
+Generates \\u_t = \Delta^{-d}\epsilon_t\\, with \\\epsilon_t\\ i.i.d.
+\\(0, \sigma^2)\\, through a truncated \\MA(\infty)\\ expansion of the
 fractional-differencing operator, for use as
 `sim_psy1(..., e = sim_fi(...))`.
 
@@ -19,8 +19,8 @@ sim_fi(n, d = 0.2, sigma = 1, seed = NULL)
 
 - d:
 
-  Long-memory (fractional differencing) parameter, in (0, 0.5) for
-  \\u_t\\ itself to be stationary.
+  Long-memory (fractional differencing) parameter, in (0, 0.5) so that
+  \\u_t\\ itself is stationary.
 
 - sigma:
 
@@ -30,12 +30,12 @@ sim_fi(n, d = 0.2, sigma = 1, seed = NULL)
 - seed:
 
   An object specifying if and how the random number generator (rng)
-  should be initialized. Either NULL or an integer will be used in a
-  call to `set.seed` before simulation. If set, the value is saved as
-  "seed" attribute of the returned value. The default, NULL, will not
-  change rng state, and return .Random.seed as the "seed" attribute.
-  Results are reproducible across the parallel and non-parallel option
-  when the same seed is used.
+  should be initialized. It is either NULL or an integer, which is
+  passed to `set.seed` before the simulation. If you set it, the value
+  is saved as the "seed" attribute of the returned value. The default,
+  NULL, leaves the state of the rng unchanged and returns .Random.seed
+  as the "seed" attribute. Results are reproducible across the parallel
+  and the non-parallel option when you use the same seed.
 
 ## Value
 
@@ -46,8 +46,9 @@ A numeric vector of length `n`.
 \$\$\Delta^{-d} = \sum\_{j=0}^\infty \psi_j L^j,\quad \psi_0 = 1,\quad
 \psi_j = \psi\_{j-1}\frac{j-1+d}{j}\$\$
 
-truncated at `max(200, n)` lags with a matching burn-in (dropped before
-returning) to limit truncation bias in the early observations.
+The expansion is truncated at `max(200, n)` lags with a matching
+burn-in, which is dropped before the function returns, to limit the
+truncation bias in the early observations.
 
 ## References
 
