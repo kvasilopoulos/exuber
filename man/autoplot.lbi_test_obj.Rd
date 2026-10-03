@@ -15,7 +15,7 @@
 A \link[ggplot2]{ggplot}
 }
 \description{
-Bar chart of the LBI statistic per series against its critical value; series that exceed it are flagged as detected.
+Bar chart of the LBI statistic for each series against its critical value. Series that exceed it are flagged as detected.
 }
 \seealso{
 \code{\link{lbi_test}}

@@ -8,58 +8,54 @@ dating_hls(data, trim = 0.05)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
-\item{trim}{Minimum fraction of the (differenced) sample required in
-every regime (default 0.05, following Harvey, Leybourne & Sollis's own
-empirical-application choice; their simulations use 0.1).}
+\item{trim}{Minimum fraction of the (differenced) sample required in every regime
+(default 0.05, following the choice of Harvey, Leybourne & Sollis in their
+empirical application. Their simulations use 0.1).}
 }
 \value{
-An object of class \code{dating_hls_obj}: a list with the
-selected model (\code{model}, one of \code{1:4}), its breakpoint date(s)
-(\code{origination}, \code{collapse}, \code{recovery} -- \code{NA} for
-breakpoints the selected model doesn't have), and the BIC value of
-every candidate model (\code{bic}, for inspecting how close the
-selection was).
+An object of class \code{dating_hls_obj}: a list with the selected model
+(\code{model}, one of \code{1:4}), its breakpoint date or dates
+(\code{origination}, \code{collapse} and \code{recovery}, with \code{NA} for the
+breakpoints that the selected model does not have), and the BIC value of every
+candidate model (\code{bic}, which shows how close the selection was).
 }
 \description{
-\code{dating_hls} dates a single bubble episode by fitting four
-candidate regime-dummy regressions of \code{Delta y_t} on
-\code{y_{t-1}} (unit-root-to-end, unit-root-bubble-unit-root,
-unit-root-bubble-collapse, and unit-root-bubble-collapse-unit-root),
-each by residual-sum-of-squares minimisation over candidate break
-fractions, and selects among them by BIC.
+\code{dating_hls} dates a single bubble episode by fitting four candidate
+regime-dummy regressions of \code{Delta y_t} on \code{y_{t-1}}
+(unit-root-to-end, unit-root-bubble-unit-root, unit-root-bubble-collapse and
+unit-root-bubble-collapse-unit-root). It fits each by minimizing the residual
+sum of squares over candidate break fractions and selects among them by BIC.
 }
 \details{
-Unlike \code{\link{datestamp}} (threshold-crossing on the recursive
-BSADF statistic) or \code{\link{dating_pdc}} (a fixed 3/4-regime
-structure with sequentially, not jointly, estimated breaks), this
-jointly searches breakpoints within each of four candidate regime
-structures and lets BIC pick the structure itself -- so it can
-distinguish "bubble that collapses to a new stationary regime"
-(Model 3) from "bubble that fully reverts to a unit root" (Model 4)
-from "bubble ongoing at the sample end" (Model 1), which
-\code{dating_pdc}'s fixed regime count cannot. The cost is a genuine
-joint grid search rather than \code{dating_pdc}'s sequential one-break-
-at-a-time scan.
+\code{\link{datestamp}} uses threshold crossing on the recursive BSADF
+statistic, and \code{\link{dating_pdc}} uses a fixed structure of three or four
+regimes with breaks that are estimated sequentially and not jointly. This
+function searches for the breakpoints jointly within each of four candidate
+regime structures and lets the BIC pick the structure itself. It can therefore
+distinguish a bubble that collapses to a new stationary regime (Model 3) from a
+bubble that fully reverts to a unit root (Model 4) and from a bubble that is
+still ongoing at the end of the sample (Model 1), which the fixed regime count of
+\code{dating_pdc} cannot. The cost is a joint grid search, in place of the
+sequential scan of \code{dating_pdc} that finds one break at a time.
 }
 \note{
-This is an SSR/BIC model-selection dating procedure, not a
-hypothesis test -- it needs no critical values at all.
+This is an SSR/BIC model-selection dating procedure and not a hypothesis
+test, so it needs no critical values.
 
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own
-dating table (model, origination, collapse, recovery) -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead. \code{print()} shows the dating table (model, origination, collapse, recovery). See
+\code{vignette("naming-and-analysis", package = "exuber")} for which functions fit
+the shared pipeline and which do not.
 }
 \section{Status}{
 
@@ -74,7 +70,7 @@ print(res)
 # Plot the series with the selected model's breakpoint(s) overlaid
 autoplot(res)
 
-# A whole panel at once, faceted one subplot per series
+# A whole panel at once, with one subplot for each series
 autoplot(dating_hls(sim_data, trim = 0.05))
 }
 
@@ -86,8 +82,8 @@ estimators. Journal of Empirical Finance, 40, 121-138.
 }
 \seealso{
 \code{\link{dating_pdc}} for the cheaper sequential-splitting
-alternative this complements, and \code{\link{datestamp}} for PSY's
-original threshold-crossing rule.
+alternative that this function complements, and \code{\link{datestamp}} for the
+original threshold-crossing rule of PSY.
 
 Other dating:
 \code{\link[=dating_hlw]{dating_hlw()}},

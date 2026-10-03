@@ -18,26 +18,13 @@ knitr::opts_chunk$set(
 library(exuber)
 ```
 
-## Why "experimental" is a real, load-bearing label here
+## What "experimental" means here
 
-Most of exuber's methods implement a peer-reviewed paper's own procedure and
-pass the package's standard validation pass (formula-exact check against a
-brute-force reimplementation, published-table lookup, Monte Carlo size,
-power against a genuine alternative). `radf_recovery()` and
-`datestamp(option = "svadf")` both run that same pass and both come back
-genuinely useful -- but each has
-one specific, disclosed gap that keeps it below that bar. They print
-`r lifecycle::badge("experimental")` and emit a caveat message at call time
-for exactly that reason; treat their output as directional, not as
-calibrated as the rest of the package.
+Most methods in exuber implement the procedure of a peer-reviewed paper and pass the package's standard validation. That validation consists of a formula-exact check against a brute-force reimplementation, a lookup against published tables, a Monte Carlo check of size, and a check of power against a true alternative. `radf_recovery()` and `datestamp(option = "svadf")` went through the same validation and both give useful results, but each has one disclosed gap that keeps it below the standard. For that reason they print `r lifecycle::badge("experimental")` and emit a caveat message when called. Treat their output as a guide to where episodes lie, and do not assume it is as well calibrated as the rest of the package.
 
-## `radf_recovery()`: dating a collapse *and* a recovery
+## `radf_recovery()`: dating a collapse and a recovery
 
-Phillips & Shi (2014)'s reverse-regression idea: reverse the series in time,
-run the same BSADF recursion `radf()` already computes, and map the
-crossing dates back. A collapse-then-recovery episode, reversed, turns the
-collapse into an explosive regime and the recovery into its unwind -- so the
-existing forward machinery, run backwards, dates both.
+This function uses the reverse-regression idea of Phillips & Shi (2014). We reverse the series in time, run the BSADF recursion that `radf()` already computes, and map the crossing dates back to the original time axis. In the reversed series a collapse followed by a recovery turns the collapse into an explosive regime and the recovery into the end of that regime, so the forward machinery run backwards dates both.
 
 ```{r recovery}
 # sim_ps1(): unit root -> explosive (40-60) -> collapse (61-70) -> recovery (71+)
@@ -46,42 +33,19 @@ res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 res
 ```
 
-`f_c` (crisis onset, 57) lands just ahead of the true collapse start (61)
-and `f_r` (recovery, 67) after it, inside the collapse regime and ahead of
-the true recovery date (70) -- in the right order by construction, since
-the down-crossing search only ever starts at the up-crossing. The disclosed gap:
-`f_c` and the overall false-detection rate are exploratory pending further
-validation (see `?radf_recovery`, Caveats section) -- the date-ordering
-property is solid, the false-alarm calibration is not yet.
+The estimate `f_c` (crisis onset, 57) falls just before the true collapse start (61). The estimate `f_r` (recovery, 67) falls after it, inside the collapse regime and before the true recovery date (70). The two dates come out in the right order by construction, because the down-crossing search only starts at the up-crossing. The disclosed gap is that `f_c` and the overall false-detection rate are exploratory until they are validated further (see the Caveats section of `?radf_recovery`). The ordering of the dates is reliable, but the calibration of false alarms is not yet.
 
-## `datestamp(option = "svadf")`: a non-peer-reviewed preprint
+## `datestamp(option = "svadf")`: a preprint
 
-Sarkar & Wells (2026, arXiv, not yet peer reviewed) -- flagged explicitly
-because that is a different evidentiary bar than every other paper this
-package implements. Its statistic turns out to be exactly `radf()`'s own
-`badf` sequence compared against two closed-form, sample-size-only
-thresholds from the paper's own applied methodology (no new estimation
-machinery needed), which is why it was cheap to add -- as a `datestamp()`
-option rather than a separate entry point, despite the preprint caveat.
+This option implements Sarkar & Wells (2026), an arXiv preprint that has not been peer reviewed. Every other paper implemented in the package has been, so the evidence behind this method is weaker. Its statistic is the `badf` sequence that `radf()` already computes, compared against two closed-form thresholds that depend only on the sample size and come from the applied methodology of the paper. No new estimation code was needed, so we added it as an option of `datestamp()` and not as a separate function, even though it is a preprint.
 
 ```{r svadf}
 res <- radf(sim_data, lag = 0)
 datestamp(res, option = "svadf", min_duration = psy_ds(nrow(sim_data)))
 ```
 
-`psy1` and `psy2` get clean origination/collapse dates; `evans`, `div` and
-`blan` don't cross the threshold on this panel at all -- again a realistic,
-not cherry-picked, mixed result.
+`psy1` and `psy2` receive clear origination and collapse dates, while `evans`, `div` and `blan` never cross the threshold in this panel. We report this mixed result as it came out.
 
 ## Using them responsibly
 
-Both are worth using -- `radf_recovery()`'s date *ordering* result and
-`datestamp(option = "svadf")`'s point statistic are both solid -- but
-neither should be the sole basis for a claim about false-alarm rates or
-exact calibration.
-Prefer `radf()`/`datestamp()` or one of the peer-reviewed alternatives in
-`vignette("alternative-tests")`/`vignette("dating-methods")` when that
-matters, and treat these two as a second opinion rather than the primary
-one until their own caveats are resolved (tracked in
-`docs/dating-and-root-inference.md` and
-`volatility-robustness.md`).
+Both methods are worth using. The date ordering from `radf_recovery()` and the point statistic from `datestamp(option = "svadf")` are reliable. Neither should be the only basis for a claim about false-alarm rates or exact calibration, though. When that matters, prefer `radf()` and `datestamp()`, or one of the peer-reviewed alternatives in `vignette("alternative-tests")` and `vignette("dating-methods")`. Treat these two methods as a second opinion until their caveats are resolved. The caveats are tracked in `docs/dating-and-root-inference.md` and `volatility-robustness.md`.

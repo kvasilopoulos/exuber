@@ -1,6 +1,6 @@
 #' Simulation of a single-bubble process
 #'
-#' The following function generates a time series which switches from a martingale to a mildly explosive
+#' Generates a time series that switches from a martingale to a mildly explosive
 #' process and then back to a martingale.
 #'
 #' @param n A positive integer specifying the length of the simulated output series.
@@ -36,25 +36,25 @@
 #'
 #' For further details see Phillips et al. (2015) p. 1054.
 #'
-#' @param e An optional numeric vector of length \code{n - 1} of innovations
-#' to use in place of \code{rnorm(n - 1, sd = sigma)}. Lets the plain PSY
-#' equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
-#' sequence instead of i.i.d. Gaussian noise -- see \code{\link{sim_innov}}
-#' (heavy-tailed/skewed), \code{\link{sim_vol_break}} (permanent
-#' volatility break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
-#' \code{\link{sim_vol_cir}}/\code{\link{sim_vol_sv}} (stochastic volatility)
-#' and \code{\link{sim_fi}} (long-memory) for ready-made generators. Default
-#' \code{NULL} reproduces the plain i.i.d. Gaussian DGP exactly.
-#' @param shifts An optional data frame/list with integer element/column
-#' \code{date} (in \code{2:n}) and numeric element/column \code{size}, adding
+#' @param e An optional numeric vector of length \code{n - 1} with innovations to
+#' use in place of \code{rnorm(n - 1, sd = sigma)}. It lets the plain PSY equation
+#' above be driven by a shock sequence that is non-Gaussian, heteroskedastic or
+#' dependent instead of i.i.d. Gaussian noise. The generators \code{\link{sim_innov}}
+#' (heavy-tailed or skewed), \code{\link{sim_vol_break}} (permanent volatility
+#' break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
+#' \code{\link{sim_vol_cir}} and \code{\link{sim_vol_sv}} (stochastic volatility)
+#' and \code{\link{sim_fi}} (long memory) produce suitable sequences. The default
+#' \code{NULL} reproduces the plain i.i.d. Gaussian process exactly.
+#' @param shifts An optional data frame or list with an integer element or column
+#' \code{date} (in \code{2:n}) and a numeric element or column \code{size}. It adds
 #' a one-period deterministic level shift of magnitude \code{size} at each
-#' \code{date} -- Harvey, Leybourne, Tatlow & Zu (2025)'s level-shift DGP.
-#' Default \code{NULL} adds no shifts.
-#' @param coef_noise An optional numeric vector of length \code{n - 1},
-#' mean-zero/unit-variance, perturbing the explosive-regime coefficient as
+#' \code{date}, which is the level-shift process of Harvey, Leybourne, Tatlow & Zu
+#' (2025). The default \code{NULL} adds no shifts.
+#' @param coef_noise An optional numeric vector of length \code{n - 1} with zero
+#' mean and unit variance. It perturbs the coefficient of the explosive regime as
 #' \code{delta + coef_a * coef_noise[t] / sqrt(n)} instead of the fixed
-#' \code{delta} -- Kurozumi & Nishi (2025)'s stochastically varying explosive
-#' coefficient. Default \code{NULL} keeps \code{delta} fixed.
+#' \code{delta}, which gives the stochastically varying explosive coefficient of
+#' Kurozumi & Nishi (2025). The default \code{NULL} keeps \code{delta} fixed.
 #' @param coef_a A positive scalar scaling \code{coef_noise}. Ignored if
 #' \code{coef_noise} is \code{NULL}.
 #'
@@ -144,20 +144,21 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 
 #' Simulate innovations with heavy-tailed/skewed marginal distributions
 #'
-#' Generates a shock sequence with the same PSY-style mean equation in mind
-#' (\code{\link{sim_psy1}}, \code{\link{sim_psy2}}) but a non-Gaussian
-#' marginal, standardized to mean 0 and variance \code{sigma^2} so it drops
-#' straight into \code{sim_psy1(..., e = sim_innov(...))}.
+#' Generates a shock sequence for use with the PSY-style mean equations
+#' (\code{\link{sim_psy1}} and \code{\link{sim_psy2}}) but with a non-Gaussian
+#' marginal distribution. The sequence is standardized to mean 0 and variance
+#' \code{sigma^2}, so it fits directly into \code{sim_psy1(..., e = sim_innov(...))}.
 #'
-#' \code{dist = "t"} rescales a Student-t(\code{df}) draw to variance 1
-#' before scaling by \code{sigma} (exact, closed form: \code{Var(t_df) =
-#' df / (df - 2)}). \code{dist = "skew_t"} combines two independent
-#' standardized Student-t draws Azzalini-style,
+#' \code{dist = "t"} rescales a Student-t(\code{df}) draw to variance 1 before
+#' scaling by \code{sigma}. This is exact and closed form, because
+#' \code{Var(t_df) = df / (df - 2)}. \code{dist = "skew_t"} combines two independent
+#' standardized Student-t draws in the manner of Azzalini,
 #' \code{delta * abs(T0) + sqrt(1 - delta^2) * T1} with
-#' \code{delta = xi / sqrt(1 + xi^2)}, then standardizes using the closed-form
-#' mean/variance of that combination (via \code{E|T0|}, itself closed-form
-#' through the Beta function). \code{xi > 0} skews right, \code{xi < 0} skews
-#' left, \code{xi = 0} reduces to the symmetric \code{t} case.
+#' \code{delta = xi / sqrt(1 + xi^2)}, and then standardizes the result with the
+#' closed-form mean and variance of that combination (\code{E|T0|} is itself closed
+#' form through the Beta function). \code{xi > 0} skews the distribution to the
+#' right, \code{xi < 0} skews it to the left, and \code{xi = 0} gives the symmetric
+#' \code{t} case.
 #'
 #' @inheritParams sim_psy1
 #' @param n Number of innovations to generate.
@@ -179,7 +180,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1) %>%
 #'   autoplot()
 #'
-#' # Feed skew-t innovations into sim_psy1() instead of i.i.d. Gaussian
+#' # Feed skew-t innovations into sim_psy1() in place of i.i.d. Gaussian ones
 #' sim_psy1(n = 200, seed = 123, e = sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)) %>%
 #'   autoplot()
 sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
@@ -212,8 +213,8 @@ sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
 
 #' Simulate GARCH(1,1)/TGARCH(1,1) innovations
 #'
-#' Generates shocks \code{z_t = sqrt(h_t) * eps_t} under a GARCH(1,1)
-#' recursion, with an optional threshold (leverage) term, for use as
+#' Generates shocks \code{z_t = sqrt(h_t) * eps_t} from a GARCH(1,1) recursion with
+#' an optional threshold (leverage) term, for use as
 #' \code{sim_psy1(..., e = sim_vol_garch(...))}.
 #'
 #' \deqn{z_t = \sqrt{h_t}\,\epsilon_t,\quad
@@ -223,17 +224,17 @@ sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
 #' gamma*z[t-1]^2 * 1(z[t-1] < 0)}
 #'
 #' with \eqn{\epsilon_t \sim NIID(0,1)}{eps[t] ~ NIID(0,1)} and
-#' \eqn{h_0 = z_0 = 0}. \code{gamma = 0} (the default) is plain GARCH(1,1);
-#' \code{gamma > 0} adds the TGARCH leverage effect (larger response to
-#' negative shocks).
+#' \eqn{h_0 = z_0 = 0}. \code{gamma = 0} (the default) gives plain GARCH(1,1), and
+#' \code{gamma > 0} adds the TGARCH leverage effect, a larger response to negative
+#' shocks.
 #'
 #' @param n Number of innovations to generate.
-#' @param omega,alpha,beta Positive GARCH(1,1) parameters. Default
-#' (\code{omega = 0.1, alpha = 0.1, beta = 0.8}) matches Whitehouse, Harvey &
+#' @param omega,alpha,beta Positive GARCH(1,1) parameters. The defaults
+#' (\code{omega = 0.1, alpha = 0.1, beta = 0.8}) match Whitehouse, Harvey &
 #' Leybourne (2025) and Harvey, Leybourne, Taylor & Zu (2024).
-#' @param gamma Non-negative TGARCH leverage parameter. Monschang & Wilfling
-#' (2021)'s NASDAQ calibration is \code{omega = 0.4387, alpha = 0, beta =
-#' 0.9319, gamma = 0.1306}.
+#' @param gamma Non-negative TGARCH leverage parameter. The NASDAQ calibration of
+#' Monschang & Wilfling (2021) is \code{omega = 0.4387, alpha = 0, beta = 0.9319,
+#' gamma = 0.1306}.
 #' @inheritParams sim_innov
 #'
 #' @return A numeric vector of length \code{n}.
@@ -279,24 +280,23 @@ sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0,
 
 #' Simulate innovations with a permanent volatility break
 #'
-#' Generates i.i.d. Gaussian shocks whose standard deviation shifts
-#' permanently from \code{sigma} to \code{sigma * ratio} at observation
-#' \code{tau * n}, for use as \code{sim_psy1(..., e = sim_vol_break(...))}.
-#' This is the \emph{non-stationary} volatility DGP (Cavaliere & Taylor
-#' 2007's single break) under which \code{\link{radf}}'s standard critical
-#' values lose size control, and the one the volatility-robust tests
-#' (\code{\link{radf_tt}}, \code{\link{radf_kp}}, \code{\link{radf_sbz}},
-#' \code{\link{radf_sign}}, \code{\link{radf_wb_cv}}) are designed for --
-#' unlike stationary conditional heteroskedasticity
-#' (\code{\link{sim_vol_garch}}), whose variance profile is asymptotically
-#' flat.
+#' Generates i.i.d. Gaussian shocks whose standard deviation shifts permanently
+#' from \code{sigma} to \code{sigma * ratio} at observation \code{tau * n}, for use
+#' as \code{sim_psy1(..., e = sim_vol_break(...))}. This is the \emph{non-stationary}
+#' volatility process (the single break of Cavaliere & Taylor 2007) under which the
+#' standard critical values of \code{\link{radf}} lose size control. The
+#' volatility-robust tests (\code{\link{radf_tt}}, \code{\link{radf_kp}},
+#' \code{\link{radf_sbz}}, \code{\link{radf_sign}} and \code{\link{radf_wb_cv}}) are
+#' designed for it. Stationary conditional heteroskedasticity
+#' (\code{\link{sim_vol_garch}}) is different, because its variance profile is
+#' asymptotically flat.
 #'
 #' @param n Number of innovations to generate.
 #' @param tau Break fraction in (0, 1): the shift happens after observation
 #' \code{floor(tau * n)}.
-#' @param ratio Positive post-/pre-break standard deviation ratio;
-#' \code{ratio > 1} is an upward break (the case where \code{radf()}
-#' over-rejects most), \code{ratio < 1} a downward one.
+#' @param ratio Positive ratio of the post-break to the pre-break standard
+#' deviation. \code{ratio > 1} is an upward break, the case in which
+#' \code{radf()} over-rejects the most, and \code{ratio < 1} is a downward one.
 #' @inheritParams sim_innov
 #'
 #' @return A numeric vector of length \code{n}.
@@ -333,21 +333,21 @@ sim_vol_break <- function(n, tau = 0.5, ratio = 3, sigma = 6.79, seed = NULL) {
 #' Simulate CIR-type stochastic-volatility innovations
 #'
 #' Generates shocks driven by a Cox-Ingersoll-Ross (square-root) stochastic
-#' variance process, Euler-Maruyama discretized, for use as
+#' variance process, discretized with the Euler-Maruyama scheme, for use as
 #' \code{sim_psy1(..., e = sim_vol_cir(...))}.
 #'
 #' \deqn{d\sigma^2(r) = \kappa(\theta - \sigma^2(r))dr + \xi\sigma(r)dB(r)}{
 #' d sigma^2(r) = kappa*(theta - sigma^2(r))dr + xi*sigma(r)*dB(r)}
 #'
-#' discretized over \code{n} steps of \code{r} in \eqn{[0, 1]}, with variance
-#' reflected at zero if a step would take it negative. Default parameters
+#' discretized over \code{n} steps of \code{r} in \eqn{[0, 1]}. The variance is
+#' reflected at zero if a step would take it negative. The default parameters
 #' (\eqn{\kappa=0.03}{kappa=0.03}, \eqn{\theta=0.25}{theta=0.25},
-#' \eqn{\xi=0.1}{xi=0.1}) match Harvey, Leybourne & Zu (2019)'s robustness
-#' design, "representative of Bollerslev and Zhou (2002)".
+#' \eqn{\xi=0.1}{xi=0.1}) match the robustness design of Harvey, Leybourne & Zu
+#' (2019), which is "representative of Bollerslev and Zhou (2002)".
 #'
 #' @param n Number of innovations to generate.
-#' @param kappa,theta,xi Positive CIR parameters (mean-reversion speed,
-#' long-run variance, vol-of-vol).
+#' @param kappa,theta,xi Positive CIR parameters (speed of mean reversion,
+#' long-run variance and volatility of volatility).
 #' @param sigma0_sq Non-negative starting variance. Defaults to \code{theta}.
 #' @inheritParams sim_innov
 #'
@@ -395,7 +395,7 @@ sim_vol_cir <- function(n, kappa = 0.03, theta = 0.25, xi = 0.1,
 #' \eta_t \sim iid\, N(0, \tau^2)}{log(sigma[t]^2) = phi*log(sigma[t-1]^2) +
 #' eta[t], eta[t] ~ iid N(0, tau^2)}
 #'
-#' with \code{phi} close to (but below) 1 for the "double local-to-unity"
+#' with \code{phi} close to, but below, 1 for the "double local-to-unity"
 #' near-integrated-variance case studied in the source.
 #'
 #' @param n Number of innovations to generate.
@@ -437,8 +437,8 @@ sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0,
 
 #' Simulate fractionally-integrated (long-memory) innovations
 #'
-#' Generates \eqn{u_t = \Delta^{-d}\epsilon_t}{u[t] = Delta^(-d) eps[t]},
-#' \eqn{\epsilon_t}{eps[t]} i.i.d. \eqn{(0, \sigma^2)}{(0, sigma^2)}, via a
+#' Generates \eqn{u_t = \Delta^{-d}\epsilon_t}{u[t] = Delta^(-d) eps[t]}, with
+#' \eqn{\epsilon_t}{eps[t]} i.i.d. \eqn{(0, \sigma^2)}{(0, sigma^2)}, through a
 #' truncated \eqn{MA(\infty)}{MA(Inf)} expansion of the fractional-differencing
 #' operator, for use as \code{sim_psy1(..., e = sim_fi(...))}.
 #'
@@ -446,12 +446,13 @@ sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0,
 #' \psi_j = \psi_{j-1}\frac{j-1+d}{j}}{Delta^(-d) = sum_j psi[j] L^j, psi[0]
 #' = 1, psi[j] = psi[j-1] * (j-1+d)/j}
 #'
-#' truncated at \code{max(200, n)} lags with a matching burn-in (dropped
-#' before returning) to limit truncation bias in the early observations.
+#' The expansion is truncated at \code{max(200, n)} lags with a matching burn-in,
+#' which is dropped before the function returns, to limit the truncation bias in the
+#' early observations.
 #'
 #' @param n Number of innovations to generate.
-#' @param d Long-memory (fractional differencing) parameter, in (0, 0.5) for
-#' \eqn{u_t}{u[t]} itself to be stationary.
+#' @param d Long-memory (fractional differencing) parameter, in (0, 0.5) so that
+#' \eqn{u_t}{u[t]} itself is stationary.
 #' @inheritParams sim_innov
 #'
 #' @return A numeric vector of length \code{n}.
@@ -491,8 +492,8 @@ sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
 
 #' Simulation of a two-bubble process
 #'
-#' The following data generating process is similar to  \code{\link{sim_psy1}}, with the difference that
-#' there are two episodes of mildly explosive dynamics.
+#' This data generating process is similar to \code{\link{sim_psy1}}, with the
+#' difference that there are two episodes of mildly explosive dynamics.
 #'
 #' @inheritParams sim_psy1
 #' @param te1 A scalar in (0, n) specifying the observation in which the first bubble originates.
@@ -533,7 +534,7 @@ sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
 #' are the origination and termination dates of the second bubble.
 #' After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 #' \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
-#' Exuberance lasts lasts until \eqn{\tau_{2f}}{t2f} at which point the process collapses to a value of
+#' Exuberance lasts until \eqn{\tau_{2f}}{t2f}, at which point the process collapses to a value of
 #' \eqn{X_{\tau_{2f}}}{X[t2f]}. The process then continues on a martingale path until the end of the
 #' sample period \eqn{\tau}{t}. The duration of the first bubble is assumed to be longer than
 #' that of the second bubble, i.e. \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.
@@ -601,20 +602,18 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #'
 #' @description
 #'
-#' The new generating process considered here differs from the `sim_psy1` model in
-#' three respects - Phillips and Shi (2018):
+#' The process differs from the `sim_psy1` model in three respects (Phillips and
+#' Shi 2018). First, it includes an asymptotically negligible drift in the martingale
+#' path during normal periods. Second, the collapse is modeled directly as a
+#' transient mildly integrated process that covers an explicit period of market
+#' collapse. Third, it introduces a market recovery date to capture the return to
+#' normal market behavior. Three forms of collapse are available:
+#' * `sudden:` with `beta = 0.1` and `tr = tf + 0.01*n`
+#' * `disturbing:` with `beta = 0.5` and `tr = tf + 0.1*n`
+#' * `smooth:` with `beta = 0.9` and `tr = tf + 0.2*n`
 #'
-#' \emph{First, it includes an asymptotically negligible drift in the martingale
-#' path during normal periods. Second, the collapse process is modeled directly as
-#' a transient mildly integrated process that covers an explicit period of market collapse.
-#' Third, a market recovery date is introduced to capture the return to normal market behavior.
-#' }
-#' * `sudden:` with `beta = 0.1` and `tr =  tf + 0.01*n`
-#' * `disturbing:` with `beta = 0.5` and `tr =  tf + 0.1*n`
-#' * `smooth:` with `beta = 0.9` and `tr =  tf + 0.2*n`
-#'
-#' In order to provide the duration of the collapse period `tr` as `tr = tf + 0.2n`,
-#' you have to provide `tf` as well.
+#' To set the duration of the collapse period through `tr = tf + 0.2n`, you must
+#' also provide `tf`.
 #'
 #'
 #' @inheritParams sim_psy1
@@ -743,15 +742,15 @@ sim_ps2 <- function(n,
 
 #' Simulation of a Blanchard (1979) / Rotermann-Wilfling (2018) bubble process
 #'
-#' Simulation of a Blanchard (1979) rational bubble process, or (with
-#' \code{type = "rotermann_wilfling"}) Rotermann & Wilfling (2018)'s
-#' lognormal-mixture extension of it.
+#' Simulates the rational bubble process of Blanchard (1979) or, with
+#' \code{type = "rotermann_wilfling"}, the lognormal-mixture extension of Rotermann
+#' & Wilfling (2018).
 #'
 #' @inheritParams sim_psy1
 #' @param pi A positive value in (0, 1) which governs the probability of the bubble continuing to grow.
 #' @param r A positive scalar that determines the growth rate of the bubble process.
 #' @param b0 The initial value of the bubble.
-#' @param type \code{"blanchard"} (default) or \code{"rotermann_wilfling"}. \code{r} is only used by \code{"blanchard"}; \code{delta}/\code{rw_sigma} only by \code{"rotermann_wilfling"} (see Details).
+#' @param type \code{"blanchard"} (default) or \code{"rotermann_wilfling"}. \code{r} is used only by \code{"blanchard"}, and \code{delta} and \code{rw_sigma} only by \code{"rotermann_wilfling"} (see Details).
 #' @param delta A scalar in (0, 1), the Rotermann-Wilfling deflation
 #' parameter. Only used for \code{type = "rotermann_wilfling"}.
 #' @param rw_sigma A positive scalar, the standard deviation (on the log
@@ -775,16 +774,16 @@ sim_ps2 <- function(n,
 #'
 #' where \code{r} is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
 #'
-#' Rotermann & Wilfling (2018)'s bubble (\code{type = "rotermann_wilfling"})
-#' replaces the "collapse to white noise" regime with a *partial,
-#' stochastically evolving* deflation, giving periodically recurring,
-#' gradually-deflating trajectories instead of an abrupt one-period collapse:
+#' The bubble of Rotermann & Wilfling (2018) (\code{type = "rotermann_wilfling"})
+#' replaces the "collapse to white noise" regime with a partial, stochastically
+#' evolving deflation. The trajectories recur periodically and deflate gradually
+#' instead of collapsing abruptly in one period:
 #' \deqn{B_t = \frac{B_{t-1}u_t}{\delta}}{B[t] = B[t-1]*u[t]/delta} with probability \eqn{\pi}, or
 #' \deqn{B_t = \frac{1-\pi\delta}{1-\pi}B_{t-1}u_t}{B[t] = (1-\pi*\delta)/(1-\pi) * B[t-1] * u[t]}
 #' with probability \eqn{1-\pi}, where
 #' \eqn{u_t \sim iid\,LN(-rw\_sigma^2/2,\ rw\_sigma^2)}{u[t] ~ iid LN(-rw_sigma^2/2, rw_sigma^2)}
-#' (so \eqn{E[u_t] = 1}). \eqn{\delta \in (0, 1)} ensures the bubble never
-#' collapses to exactly zero and can re-inflate.
+#' (so \eqn{E[u_t] = 1}). \eqn{\delta \in (0, 1)} ensures that the bubble never
+#' collapses to exactly zero and can inflate again.
 #'
 #' @references Blanchard, O. J. (1979). Speculative bubbles, crashes and rational expectations.
 #' Economics letters, 3(4), 387-389.
@@ -1012,12 +1011,12 @@ sim_div <- function(n, mu, sigma, r = 0.05,
 
 #' Simulation of a stochastic branching-tree bubble
 #'
-#' Simulation of Gourieroux & Jasiak (2025)'s stochastic-tree bubble process:
+#' Simulates the stochastic-tree bubble process of Gourieroux & Jasiak (2025). It is
 #' a positive stationary submartingale generated by a binomial tree with
-#' *stochastic* branching intensity (a random-coefficient autoregression, as
-#' opposed to Cox-Ross-Rubinstein's deterministic branches). Blanchard &
-#' Watson (1982)'s bubble (\code{\link{sim_blan}}) is the special case of
-#' *constant* intensity.
+#' \emph{stochastic} branching intensity, which makes it a random-coefficient
+#' autoregression, in contrast to the deterministic branches of Cox-Ross-Rubinstein.
+#' The bubble of Blanchard & Watson (1982) (\code{\link{sim_blan}}) is the special
+#' case of \emph{constant} intensity.
 #'
 #' The stochastic intensity is \eqn{p_t = \Phi(X_t)}{p[t] = Phi(X[t])}, with
 #' \eqn{X_t}{X[t]} a latent stationary Gaussian AR(1):
@@ -1030,17 +1029,16 @@ sim_div <- function(n, mu, sigma, r = 0.05,
 #' \epsilon_t=\frac{\eta}{1-a}\left(1-\xi_{1t}\right)+\frac{\eta}{a}\frac{1-Z_t}{1-p_t}}{
 #' Y[t] = xi1[t]*Y[t-1] + eps[t], xi1[t] = (1/a)*(Z[t]/p[t]),
 #' eps[t] = eta/(1-a)*(1-xi1[t]) + eta/a*(1-Z[t])/(1-p[t])}
-#' \eqn{a>1} controls the growth rate in a branch's active phase, \eqn{\eta>0}
-#' sets the price floor \eqn{\eta/(1-a)}{eta/(1-a)} (Corollary 1 in the
-#' source: \eqn{Y_t \ge \eta/(1-a)}{Y[t] >= eta/(1-a)}), \eqn{\rho} controls
-#' persistence of the bubble-growth phase, and \eqn{\sigma} controls the
-#' frequency of bubbles. The process has no finite mean (the source's
-#' Proposition 3) -- occasional very large values are a feature of the model,
-#' not a bug.
+#' \eqn{a>1} controls the growth rate in the active phase of a branch,
+#' \eqn{\eta>0} sets the price floor \eqn{\eta/(1-a)}{eta/(1-a)} (Corollary 1 in the
+#' source: \eqn{Y_t \ge \eta/(1-a)}{Y[t] >= eta/(1-a)}), \eqn{\rho} controls the
+#' persistence of the bubble-growth phase, and \eqn{\sigma} controls the frequency
+#' of bubbles. The process has no finite mean (Proposition 3 of the source), so
+#' occasional very large values are a feature of the model and not a bug.
 #'
-#' Default parameters (\eqn{\mu=-1,\eta=1,a=0.95,\sigma=4,\rho=0.7}{mu=-1,
-#' eta=1, a=0.95, sigma=4, rho=0.7}) reproduce the source's own illustrative
-#' example (Section 2.3, Figure 2).
+#' The default parameters (\eqn{\mu=-1,\eta=1,a=0.95,\sigma=4,\rho=0.7}{mu=-1,
+#' eta=1, a=0.95, sigma=4, rho=0.7}) reproduce the illustrative example of the
+#' source (Section 2.3, Figure 2).
 #'
 #' @param n A positive integer specifying the length of the simulated output series.
 #' @param a A scalar in (0, 1) (note: \eqn{1/a > 1} is the growth rate).
@@ -1095,30 +1093,29 @@ sim_tree <- function(n, a = 0.95, eta = 1, mu = -1, rho = 0.7, sigma = 4,
 
 #' Simulation of a mixed causal-noncausal AR(1,1) bubble
 #'
-#' Simulation of Blasques, Koopman, Mingoli & Telg (2025)'s mixed
-#' causal-noncausal autoregressive (MAR) bubble process, in which
-#' transient, self-terminating local bubbles arise autonomously from the
-#' *noncausal* (forward-looking) component -- no scripted origination/
-#' collapse dates, unlike \code{\link{sim_psy1}}.
+#' Simulates the mixed causal-noncausal autoregressive (MAR) bubble process of
+#' Blasques, Koopman, Mingoli & Telg (2025). Transient, self-terminating local
+#' bubbles arise on their own from the \emph{noncausal} (forward-looking) component.
+#' Unlike \code{\link{sim_psy1}}, no origination or collapse dates are scripted.
 #'
 #' \deqn{(1-\phi_1 L)(1-\psi_1 L^{-1})y_t = \epsilon_t}{(1 - phi1*L)(1 -
 #' psi1*L^-1) y[t] = eps[t]}
 #'
-#' Simulated by the standard two-sided-filtering method for MAR processes
-#' (Lanne & Saikkonen 2011; Gourieroux & Zakoian 2017): the noncausal
-#' component is generated by running \eqn{u_t=\psi_1 u_{t+1}+\epsilon_t}{u[t]
-#' = psi1*u[t+1] + eps[t]} *backward* from a zero boundary \code{burn}
-#' observations past the end of the sample, then the causal component by
-#' running \eqn{y_t=\phi_1 y_{t-1}+u_t}{y[t] = phi1*y[t-1] + u[t]} *forward*
-#' from a zero boundary \code{burn} observations before the start; both
-#' burn-in windows are then dropped.
+#' The function uses the standard two-sided filtering method for MAR processes
+#' (Lanne & Saikkonen 2011; Gourieroux & Zakoian 2017). It generates the noncausal
+#' component by running \eqn{u_t=\psi_1 u_{t+1}+\epsilon_t}{u[t]
+#' = psi1*u[t+1] + eps[t]} \emph{backward} from a zero boundary \code{burn}
+#' observations past the end of the sample. It then generates the causal component
+#' by running \eqn{y_t=\phi_1 y_{t-1}+u_t}{y[t] = phi1*y[t-1] + u[t]} \emph{forward}
+#' from a zero boundary \code{burn} observations before the start. Both burn-in
+#' windows are then dropped.
 #'
 #' @param n A positive integer specifying the length of the simulated output series.
 #' @param phi1 Causal AR coefficient, in (0, 1).
 #' @param psi1 Noncausal AR coefficient, in (0, 1).
 #' @param dist Innovation distribution: \code{"cauchy"} or \code{"t"} (with \code{df} degrees of freedom).
 #' @param df Degrees of freedom if \code{dist = "t"}.
-#' @param burn Non-negative burn-in length applied at *both* ends (see Details).
+#' @param burn Non-negative burn-in length applied at \emph{both} ends (see Details).
 #' @inheritParams sim_psy1
 #'
 #' @return A numeric vector of length \code{n}.
@@ -1160,13 +1157,13 @@ sim_mar <- function(n, phi1 = 0.7, psi1 = 0.7, dist = c("cauchy", "t"),
 
 #' Simulation of a latent common-factor bubble across multiple series
 #'
-#' Simulation of Chen, Phillips & Shi (2023)'s common-bubble DGP: \code{n_series}
-#' observed series driven by one latent PSY-style bubble factor plus
+#' Simulates the common-bubble process of Chen, Phillips & Shi (2023):
+#' \code{n_series} observed series driven by one latent PSY-style bubble factor plus
 #' idiosyncratic noise, \eqn{X_t = \Lambda f_t + e_t}{X[t] = Lambda*f[t] +
-#' e[t]}, loadings \eqn{\Lambda \sim U[0,2]}{Lambda ~ U[0,2]}. Unlike every
-#' other \code{sim_*} function, this returns a multi-column
-#' \code{data.frame} (one column per series, exuber's standard panel input
-#' shape) rather than a single numeric vector.
+#' e[t]}, with loadings \eqn{\Lambda \sim U[0,2]}{Lambda ~ U[0,2]}. Unlike every
+#' other \code{sim_*} function, it returns a \code{data.frame} with one column for
+#' each series, the standard panel input shape of exuber, and not a single numeric
+#' vector.
 #'
 #' @param n_series A positive integer, the number of observed series.
 #' @inheritParams sim_psy1
@@ -1212,13 +1209,14 @@ sim_common <- function(n_series, n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 
 #' Simulation of a bivariate co-explosive pair
 #'
-#' Simulation of Evripidou, Harvey, Leybourne & Sollis (2022)'s co-explosive
-#' DGP: an explosive series \code{x} (from \code{\link{sim_psy1}}) and a
-#' second series \code{y} linked to a lead/lagged copy of it (and optionally
-#' a third, independent explosive series \code{z}),
+#' Simulates the co-explosive process of Evripidou, Harvey, Leybourne & Sollis
+#' (2022): an explosive series \code{x} (from \code{\link{sim_psy1}}) and a second
+#' series \code{y} that is linked to a lead or lagged copy of it, and optionally to
+#' a third, independent explosive series \code{z},
 #' \eqn{y_t = \mu_y + \phi_x x_{t-i} + \phi_z z_t + \epsilon_{y,t}}{y[t] =
-#' mu_y + phi_x*x[t-i] + phi_z*z[t] + eps_y[t]}. \code{i > 0} means
-#' \code{x}'s explosive episode leads \code{y}'s; \code{i < 0} means it lags.
+#' mu_y + phi_x*x[t-i] + phi_z*z[t] + eps_y[t]}. \code{i > 0} means that the
+#' explosive episode of \code{x} leads that of \code{y}, and \code{i < 0} means that
+#' it lags.
 #'
 #' @inheritParams sim_psy1
 #' @param lag Integer lead (\code{> 0}) or lag (\code{< 0}) of \code{x} relative to \code{y}; 0 = contemporaneous.
@@ -1345,27 +1343,27 @@ sim_msbubble <- function(n, p11 = 0.98, p22 = 0.90, lambda1 = 0.98,
 
 #' Simulation of a deterministic technology-adoption "false bubble" null
 #'
-#' Simulation of Chen, Chen, Huang, Li & Zhang (2026)'s false-bubble DGP: a
-#' hump-shaped, *deterministic* technology-adoption shock embedded in
-#' dividend growth, engineered so a Campbell-Shiller present-value
-#' fundamental alone -- with **no bubble component at all** -- displays a
-#' locally explosive-looking price path. Useful as a null (no-bubble) stress
-#' test distinct from a plain random walk.
+#' Simulates the false-bubble process of Chen, Chen, Huang, Li & Zhang (2026): a
+#' hump-shaped, \emph{deterministic} technology-adoption shock embedded in dividend
+#' growth. It is engineered so that a Campbell-Shiller present-value fundamental
+#' alone, with no bubble component at all, displays a price path that looks locally
+#' explosive. It is useful as a null (no-bubble) stress test that differs from a
+#' plain random walk.
 #'
 #' Dividends follow a random walk with drift plus the technology hump:
 #' \eqn{d_t = d_{t-1}+\mu+\tau_t+\eta_t}{d[t] = d[t-1] + mu + tau[t] +
-#' eta[t]}. The hump \eqn{\tau_t}{tau[t]} rises linearly from \code{t1} to
-#' \code{t1 + kappa} then falls linearly to \code{t2} (\code{shape =
-#' "triangular"}, the source's own worked example, eq. 4), or follows a
-#' Gaussian bump centered at \code{t1 + kappa} (\code{shape = "gaussian"}).
-#' Because \eqn{\tau_t}{tau[t]} is deterministic (known in advance), its
-#' contribution to the price is an exact forward-looking discounted sum,
+#' eta[t]}. The hump \eqn{\tau_t}{tau[t]} either rises linearly from \code{t1} to
+#' \code{t1 + kappa} and then falls linearly to \code{t2} (\code{shape =
+#' "triangular"}, the worked example of the source, eq. 4), or follows a Gaussian
+#' bump centered at \code{t1 + kappa} (\code{shape = "gaussian"}). Because
+#' \eqn{\tau_t}{tau[t]} is deterministic and known in advance, its contribution to
+#' the price is an exact forward-looking discounted sum,
 #' \eqn{T_t=\sum_{s>t}\beta^{s-t}\tau_s}{T[t] = sum_{s>t} beta^(s-t)*tau[s]}
-#' with \eqn{\beta=1/(1+r)}{beta = 1/(1+r)}, added to the same fundamental
-#' pricing formula \code{\link{sim_div}} uses. This is a simplified,
-#' single-shock reproduction of the source's mechanism (deterministic hump
-#' -> hump-shaped fundamental price, no bubble), not its full DOLS/
-#' multiple-functional-form robustness machinery.
+#' with \eqn{\beta=1/(1+r)}{beta = 1/(1+r)}, which is added to the fundamental
+#' pricing formula that \code{\link{sim_div}} uses. This is a simplified
+#' single-shock reproduction of the mechanism in the source (a deterministic hump
+#' gives a hump-shaped fundamental price and no bubble). It does not include the
+#' full DOLS and multiple-functional-form robustness machinery of the source.
 #'
 #' @param n A positive integer specifying the length of the simulated output series.
 #' @param t1 Adoption (ramp-up start) date, in \code{1:n}.

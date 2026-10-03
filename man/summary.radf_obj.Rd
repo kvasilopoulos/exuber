@@ -15,11 +15,11 @@
 \item{...}{Further arguments passed to methods. Not used.}
 }
 \value{
-Returns a list of summary statistics, which include the estimated ADF,
-SADF, and GSADF test statistics and the corresponding critical values
+A list of summary statistics, which includes the estimated ADF, SADF and
+GSADF test statistics and the corresponding critical values.
 }
 \description{
-\code{summary} method for radf models that consist of \code{radf_obj} and \code{radf_cv}.
+\code{summary} method for radf models, which consist of a \code{radf_obj} and a \code{radf_cv}.
 }
 \examples{
 \donttest{

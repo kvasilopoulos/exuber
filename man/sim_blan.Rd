@@ -27,7 +27,7 @@ sim_blan(
 
 \item{b0}{The initial value of the bubble.}
 
-\item{type}{\code{"blanchard"} (default) or \code{"rotermann_wilfling"}. \code{r} is only used by \code{"blanchard"}; \code{delta}/\code{rw_sigma} only by \code{"rotermann_wilfling"} (see Details).}
+\item{type}{\code{"blanchard"} (default) or \code{"rotermann_wilfling"}. \code{r} is used only by \code{"blanchard"}, and \code{delta} and \code{rw_sigma} only by \code{"rotermann_wilfling"} (see Details).}
 
 \item{delta}{A scalar in (0, 1), the Rotermann-Wilfling deflation
 parameter. Only used for \code{type = "rotermann_wilfling"}.}
@@ -37,19 +37,20 @@ scale) of the Rotermann-Wilfling multiplicative lognormal shock. Only
 used for \code{type = "rotermann_wilfling"}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-Simulation of a Blanchard (1979) rational bubble process, or (with
-\code{type = "rotermann_wilfling"}) Rotermann & Wilfling (2018)'s
-lognormal-mixture extension of it.
+Simulates the rational bubble process of Blanchard (1979) or, with
+\code{type = "rotermann_wilfling"}, the lognormal-mixture extension of Rotermann
+& Wilfling (2018).
 }
 \details{
 Blanchard's bubble process (\code{type = "blanchard"}) has two regimes,
@@ -64,16 +65,16 @@ With probability \eqn{1 - \pi}:
 
 where \code{r} is a positive constant and \eqn{\epsilon \sim iid(0, \sigma^2)}{\epsilon - iid(0, \sigma^2)}.
 
-Rotermann & Wilfling (2018)'s bubble (\code{type = "rotermann_wilfling"})
-replaces the "collapse to white noise" regime with a \emph{partial,
-stochastically evolving} deflation, giving periodically recurring,
-gradually-deflating trajectories instead of an abrupt one-period collapse:
+The bubble of Rotermann & Wilfling (2018) (\code{type = "rotermann_wilfling"})
+replaces the "collapse to white noise" regime with a partial, stochastically
+evolving deflation. The trajectories recur periodically and deflate gradually
+instead of collapsing abruptly in one period:
 \deqn{B_t = \frac{B_{t-1}u_t}{\delta}}{B[t] = B[t-1]*u[t]/delta} with probability \eqn{\pi}, or
 \deqn{B_t = \frac{1-\pi\delta}{1-\pi}B_{t-1}u_t}{B[t] = (1-\pi*\delta)/(1-\pi) * B[t-1] * u[t]}
 with probability \eqn{1-\pi}, where
 \eqn{u_t \sim iid\,LN(-rw\_sigma^2/2,\ rw\_sigma^2)}{u[t] ~ iid LN(-rw_sigma^2/2, rw_sigma^2)}
-(so \eqn{E[u_t] = 1}). \eqn{\delta \in (0, 1)} ensures the bubble never
-collapses to exactly zero and can re-inflate.
+(so \eqn{E[u_t] = 1}). \eqn{\delta \in (0, 1)} ensures that the bubble never
+collapses to exactly zero and can inflate again.
 }
 \examples{
 sim_blan(n = 100, seed = 123) \%>\%

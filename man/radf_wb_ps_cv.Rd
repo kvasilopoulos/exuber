@@ -27,14 +27,14 @@ radf_wb_ps_distr(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
@@ -50,26 +50,26 @@ selection according to the criterion.}
 \item{tb}{A positive integer. The simulated sample size.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
-For \code{radf_wb_ps_cv} a list that contains the critical values for the ADF,
-BADF, BSADF and GSADF tests. For \code{radf_wb_ps_distr} a list that
-contains the ADF, SADF and GSADF distributions.
+For \code{radf_wb_ps_cv}, a list with the critical values for the ADF,
+BADF, BSADF and GSADF tests. For \code{radf_wb_ps_distr}, a list with the ADF,
+SADF and GSADF distributions.
 }
 \description{
-\code{radf_wb_ps_cv} performs the Phillips & Shi (2020) wild bootstrap
-re-sampling scheme -- fit a null AR model, resample its residuals --
-which is asymptotically robust to non-stationary volatility, to
-generate critical values for the recursive unit root tests.
-\code{radf_wb_ps_distr} computes the distribution. Unlike
-\code{\link{radf_wb_cv}}'s Harvey et al. (2016) non-parametric multiplier
-bootstrap, this one supports a training-window boundary (\code{tb}),
-which is what \code{\link{monitor}} uses it for.
+\code{radf_wb_ps_cv} generates critical values for the recursive unit root
+tests with the wild bootstrap of Phillips & Shi (2020). The scheme fits a null
+AR model and resamples its residuals, and it is asymptotically robust to
+non-stationary volatility. \code{radf_wb_ps_distr} computes the distribution.
+In contrast to the non-parametric multiplier bootstrap of Harvey et al. (2016)
+in \code{\link{radf_wb_cv}}, this version supports a training-window boundary
+(\code{tb}), which is what \code{\link{monitor}} uses it for.
 }
 \examples{
 \donttest{

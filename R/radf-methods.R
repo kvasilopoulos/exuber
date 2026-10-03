@@ -2,15 +2,15 @@
 
 #' Summarizing `radf` models
 #'
-#' \code{summary} method for radf models that consist of `radf_obj` and `radf_cv`.
+#' \code{summary} method for radf models, which consist of a `radf_obj` and a `radf_cv`.
 #'
 #' @param object An object of class `radf_obj`. The output of \code{\link{radf}}.
 #' @param cv An object of class `radf_cv`. The output of \code{\link{radf_mc_cv}},
 #'   \code{\link{radf_wb_cv}} or \code{\link{radf_sb_cv}}.
 #' @param ... Further arguments passed to methods. Not used.
 #'
-#' @return Returns a list of summary statistics, which include the estimated ADF,
-#' SADF, and GSADF test statistics and the corresponding critical values
+#' @return A list of summary statistics, which includes the estimated ADF, SADF and
+#' GSADF test statistics and the corresponding critical values.
 #'
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr filter select
@@ -93,19 +93,19 @@ print.sm_radf <- function(x, ...) {
 
 #' Diagnostics on hypothesis testing
 #'
-#' Provides information on whether the null hypothesis of a unit root is rejected
-#' against the alternative of explosive behaviour for each series in a dataset.
+#' Reports whether the null hypothesis of a unit root is rejected against the
+#' alternative of explosive behavior, for each series in a dataset.
 #'
 #' @param object  An object of class `obj`.
 #' @param cv An object of class `cv`.
 #' @param ... Further arguments passed to methods.
 #'
-#' @return Returns a list with the series that reject (positive) and the series
-#' that do not reject (negative) the null hypothesis, and at what significance level.
+#' @return A list with the series that reject the null hypothesis (positive) and the
+#' series that do not (negative), together with the significance level.
 #'
 #' @details
-#' Diagnostics also stores a vector whose elements take the value of 1 when
-#' there is a period of explosive behaviour and 0 otherwise.
+#' \code{diagnostics} also stores a vector that takes the value 1 when there is a
+#' period of explosive behavior and 0 otherwise.
 #'
 #' @export
 diagnostics <- function(object, cv = NULL, ...) {
@@ -115,9 +115,9 @@ diagnostics <- function(object, cv = NULL, ...) {
 #' @rdname diagnostics
 #' @importFrom dplyr case_when
 #' @param option Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").
-#' @param sig_lvl Significance level, one of 90, 95 or 99, that decides
-#' whether a series counts as "positive" (rejects the null). Independent of
-#' \code{option}'s choice of test statistic.
+#' @param sig_lvl Significance level, one of 90, 95 or 99, that decides whether a
+#' series counts as "positive" (rejects the null). It does not depend on the test
+#' statistic chosen with \code{option}.
 #' @export
 #' @examples
 #' \donttest{
@@ -251,26 +251,27 @@ print.dg_radf <- function(x, ...) {
 
 #' Date-stamping periods of mildly explosive behavior
 #'
-#' Computes the origination, termination and duration of
-#' episodes during which the time series display explosive dynamics.
+#' Computes the origination, termination and duration of the episodes in which a
+#' time series shows explosive dynamics.
 #'
 #' @inheritParams diagnostics
 #' @param min_duration The minimum duration of an explosive period for it to be
 #' reported (default = 0).
-#' @param nonrejected logical. Whether to apply datestamping technique to the series
-#' that were not able to reject the Null hypothesis. Ignored when
+#' @param nonrejected logical. Whether to apply the datestamping technique to the
+#' series that do not reject the null hypothesis. It is ignored when
 #' \code{option = "svadf"}.
-#' @param sig_lvl logical. Significance level, one of 90, 95 or 99. Ignored
-#' when \code{option = "svadf"}.
-#' @param option one of \code{"gsadf"}/\code{"sadf"} (PWY/PSY dating against
-#' \code{cv}'s critical values) or \code{"svadf"} (Sarkar & Wells 2026's
-#' SV-ADF asymmetric-threshold dating -- \code{radf()}'s own \code{badf}
-#' compared against two closed-form, sample-size-only thresholds,
-#' \code{log(t)/10} for origination and \code{log(t)/2} for collapse; no
-#' \code{cv} needed). See Caveats.
-#' @param ... further arguments passed to methods.
+#' @param sig_lvl Significance level, one of 90, 95 or 99. It is ignored when
+#' \code{option = "svadf"}.
+#' @param option One of \code{"gsadf"} or \code{"sadf"}, which date episodes
+#' (PWY/PSY) against the critical values in \code{cv}, or \code{"svadf"}, the SV-ADF
+#' asymmetric-threshold dating of Sarkar & Wells (2026). The \code{"svadf"} option
+#' compares the \code{badf} sequence of \code{radf()} with two closed-form
+#' thresholds that depend only on the sample size, \code{log(t)/10} for
+#' origination and \code{log(t)/2} for collapse, so it needs no \code{cv}. See
+#' Caveats.
+#' @param ... Further arguments passed to methods.
 #'
-#' @return Return a table with the following columns:
+#' @return A table with the following columns:
 #'
 #' \itemize{
 #'  \item Start:
@@ -281,20 +282,21 @@ print.dg_radf <- function(x, ...) {
 #'  \item Ongoing:
 #' }
 #'
-#' @return Returns a list containing the estimated origination and termination
-#' dates of  episodes of explosive behaviour and the corresponding duration.
+#' @return A list with the estimated origination and termination dates of the
+#' episodes of explosive behavior and their duration.
 #' @details
-#' Datestamp also stores a vector whose elements take the value of 1 when there is
-#' a period of explosive behaviour and 0 otherwise. This output can serve as a
-#' dummy variable for the occurrence of exuberance.
+#' \code{datestamp} also stores a vector that takes the value 1 when there is a
+#' period of explosive behavior and 0 otherwise. You can use it as a dummy
+#' variable for the occurrence of exuberance.
 #'
 #' @section Caveats:
 #' \code{option = "svadf"}: `r lifecycle::badge("experimental")`
-#' \code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a different
-#' bar than every other source this package implements. The same note is
-#' emitted as a message when called with this option. Detects at most one
-#' origination/collapse pair per series (the paper's own procedure), not
-#' every recurring episode the way \code{"gsadf"}/\code{"sadf"} do.
+#' Sarkar & Wells (2026) is a preprint that has not been peer reviewed, which is a
+#' weaker standard of evidence than for every other source this package
+#' implements. The function emits the same note as a message when you call it with
+#' this option. It detects at most one origination and collapse pair per series, as
+#' the procedure of the paper does, and it does not find every recurring episode as
+#' \code{"gsadf"} and \code{"sadf"} do.
 #'
 #' @references Phillips, P. C. B., Shi, S., & Yu, J. (2015). Testing for
 #' Multiple Bubbles: Historical Episodes of Exuberance and Collapse in the
@@ -676,7 +678,7 @@ print.ds_radf <- function(x, ...) {
 #' # One row per detected explosive episode, across all series
 #' tidy(ds_data)
 #'
-#' # Feeds straight into ggplot2 if autoplot()'s default layout isn't wanted
+#' # Pass the table to ggplot2 if the default layout of autoplot() does not suit you
 #' library(ggplot2)
 #' tidy(ds_data) %>%
 #'   ggplot(aes(y = id)) +

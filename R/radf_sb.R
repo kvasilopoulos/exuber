@@ -97,21 +97,21 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
 
 #' Panel Sieve Bootstrap Critical Values
 #'
-#' \code{radf_sb_cv} computes critical values for the panel recursive unit root test using
-#' the sieve bootstrap procedure outlined in Pavlidis et al. (2016). \code{radf_sb_distr}
-#' computes the distribution.
+#' \code{radf_sb_cv} computes critical values for the panel recursive unit root
+#' test with the sieve bootstrap procedure of Pavlidis et al. (2016).
+#' \code{radf_sb_distr} computes the distribution.
 #'
 #' @inheritParams radf
 #' @inheritParams radf_wb_cv
-#' @param type Lag-order selection: \code{"fixed"} (default) uses \code{lag}
-#' as given, matching \code{\link{radf}}'s own single-`lag` behaviour.
-#' \code{"aic"}/\code{"bic"} instead select the lag automatically per series
-#' via \code{lag_select()} (internal; taking the max across the panel, since the
-#' rest of this function assumes one common lag order) -- Pedersen &
-#' Schütte (2020)'s fix for the size distortion a fixed lag causes under
+#' @param type Lag-order selection. \code{"fixed"} (default) uses \code{lag} as
+#' given, as in the single-`lag` behavior of \code{\link{radf}}. \code{"aic"} and
+#' \code{"bic"} select the lag automatically for each series with
+#' \code{lag_select()} (internal), and the function takes the maximum across the
+#' panel because the rest of it assumes one common lag order. This is the fix of
+#' Pedersen & Schütte (2020) for the size distortion that a fixed lag causes under
 #' autocorrelated innovations.
 #' @param max_lag Maximum lag order to search over when \code{type} is
-#' \code{"aic"}/\code{"bic"}. Ignored when \code{type = "fixed"}.
+#' \code{"aic"} or \code{"bic"}. It is ignored when \code{type = "fixed"}.
 #'
 #' @importFrom foreach foreach
 #' @importFrom doFuture `%dofuture%`
@@ -131,16 +131,16 @@ radf_sb_ <-  function(data, minw, lag, nboot, type = "fixed", max_lag = 8L, seed
 #' @seealso \code{\link{radf_mc_cv}} for Monte Carlo critical values and
 #' \code{\link{radf_wb_cv}} for wild Bootstrap critical values
 #'
-#' @return  For \code{radf_sb_cv} A list A list that contains the critical values
-#' for the panel BSADF and panel GSADF test statistics. For \code{radf_wb_dist} a numeric vector
-#' that contains the distribution of the panel GSADF statistic.
+#' @return For \code{radf_sb_cv}, a list with the critical values for the panel
+#' BSADF and panel GSADF test statistics. For \code{radf_sb_distr}, a numeric vector
+#' with the distribution of the panel GSADF statistic.
 #'
 #' @examples
 #' \donttest{
 #'
 #' rsim_data <- radf(sim_data, lag = 1)
 #'
-#' # Critical vales should have the same lag length with \code{radf()}
+#' # Critical values should have the same lag length as \code{radf()}
 #' sb <- radf_sb_cv(sim_data, lag = 1)
 #'
 #' tidy(sb)

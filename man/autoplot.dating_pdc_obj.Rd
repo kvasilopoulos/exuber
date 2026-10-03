@@ -15,7 +15,7 @@
 A \link[ggplot2]{ggplot}
 }
 \description{
-Plots each series with vertical markers at the estimated origination, collapse and (where estimated) recovery dates.
+Plots each series with vertical markers at the estimated origination, collapse and, where estimated, recovery dates.
 }
 \seealso{
 \code{\link{dating_pdc}}

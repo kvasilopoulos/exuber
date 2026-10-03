@@ -48,17 +48,17 @@ shade(
 
 \item{sig_lvl}{Significance level. It could be one of 90, 95 or 99.}
 
-\item{option}{Whether to apply the "gsadf" or "sadf" methodology (default
-= "gsadf"). Unlike \code{\link{datestamp}}, \code{"svadf"} is not
-supported here -- it has no critical-value band to shade.}
+\item{option}{Whether to apply the "gsadf" or the "sadf" methodology (default
+= "gsadf"). Unlike \code{\link{datestamp}}, this function does not support
+\code{"svadf"}, because that option has no critical-value band to shade.}
 
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported (default = 0).}
 
-\item{select_series}{A vector of column names or numbers specifying the series to be used in plotting.
-Note that the order of the series does not alter the order used in plotting.}
+\item{select_series}{A vector of column names or numbers that specifies the series to plot.
+The order of the series does not change the order used in the plot.}
 
-\item{nonrejected}{If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.}
+\item{nonrejected}{If TRUE, plot all series, whether or not they reject the null at the 5 percent significance level.}
 
 \item{shade_opt}{Shading options, typically set using \code{shade} function.}
 
@@ -68,22 +68,23 @@ Note that the order of the series does not alter the order used in plotting.}
 
 \item{...}{Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.}
 
-\item{fill}{The shade color that indicates the exuberance periods with positive signal}
+\item{fill}{The shade color for the exuberance periods with a positive signal.}
 
-\item{fill_negative}{The shade color that indicates the exuberance periods with positive signal}
+\item{fill_negative}{The shade color for the exuberance periods with a negative
+signal, that is, from series that do not reject the null hypothesis.}
 
-\item{fill_ongoing}{The shade color that indicates the exuberance periods that are ongoing
-the null hypothesis.}
+\item{fill_ongoing}{The shade color for the exuberance periods that are ongoing.}
 
-\item{opacity}{The opacity of the shade color aka alpha.}
+\item{opacity}{The opacity of the shade color (alpha).}
 }
 \value{
 A \link[ggplot2]{ggplot}
 }
 \description{
-\code{autoplot.radf_obj} takes \code{radf_obj} and \code{radf_cv} and returns a faceted ggplot object.
-\code{shade} is used as an input to \code{shape_opt}. \code{shade} modifies the
-geom_rect layer that demarcates the exuberance periods.
+\code{autoplot.radf_obj} takes a \code{radf_obj} and a \code{radf_cv} and
+returns a faceted ggplot object. \code{shade} is used as an input to
+\code{shade_opt}. It modifies the geom_rect layer that marks the exuberance
+periods.
 }
 \examples{
 \donttest{

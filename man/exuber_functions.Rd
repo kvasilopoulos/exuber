@@ -7,27 +7,26 @@
 exuber_functions(family = NULL)
 }
 \arguments{
-\item{family}{One of \code{"adf"} (built on the recursive-ADF core),
-\code{"test"} (a standalone hypothesis test), \code{"dating"}
-(point-estimation/model-selection, no formal test), \code{"monitor"}
-(real-time/sequential), \code{"root"} (confidence-interval inference on
-the explosive root), \code{"regression"} (point estimation, no test), or
-\code{NULL} (default) for every function. A function can belong to more
-than one family (\code{monitor()} is both \code{"adf"} and
-\code{"monitor"}).}
+\item{family}{One of \code{"adf"} (built on the recursive ADF core),
+\code{"test"} (a standalone hypothesis test), \code{"dating"} (point estimation
+or model selection, with no formal test), \code{"monitor"} (real-time or
+sequential), \code{"root"} (confidence-interval inference on the explosive root),
+\code{"regression"} (point estimation, no test) or \code{NULL} (default) for
+every function. A function can belong to more than one family: \code{monitor()}
+is both \code{"adf"} and \code{"monitor"}.}
 }
 \value{
-A tibble with columns \code{name}, \code{family}, and
-\code{description}, one row per function.
+A tibble with the columns \code{name}, \code{family} and
+\code{description}, and one row for each function.
 }
 \description{
-Naming conventions (\code{radf_}/\code{_test}/\code{dating_}/
-\code{monitor_}, see \code{vignette("naming-and-analysis")})
-are a guide, not a contract -- easy to misremember, and occasionally
-traded off deliberately (\code{monitor()} is ADF-family internally
-but named for what it does). This is the actual, queryable source of
-truth: which of the package's test/dating/monitoring/root-inference
-functions belong to which family.
+The naming conventions (\code{radf_}, \code{_test}, \code{dating_} and
+\code{monitor_}, see \code{vignette("naming-and-analysis")}) are a guide and not
+a contract. They are easy to misremember, and they are occasionally traded off
+deliberately: \code{monitor()} uses the ADF family internally but is named after
+what it does. This function is the queryable source of truth for which of the
+package's test, dating, monitoring and root-inference functions belong to which
+family.
 }
 \examples{
 exuber_functions()
@@ -36,7 +35,7 @@ exuber_functions(family = "test")
 
 }
 \seealso{
-\code{vignette("naming-and-analysis", package = "exuber")} for
-the full naming scheme and which functions plug into
-\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}.
+\code{vignette("naming-and-analysis", package = "exuber")} for the full
+naming scheme and for which functions work with \code{summary()},
+\code{\link{datestamp}}, \code{tidy} and \code{autoplot}.
 }

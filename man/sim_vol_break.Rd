@@ -12,34 +12,34 @@ sim_vol_break(n, tau = 0.5, ratio = 3, sigma = 6.79, seed = NULL)
 \item{tau}{Break fraction in (0, 1): the shift happens after observation
 \code{floor(tau * n)}.}
 
-\item{ratio}{Positive post-/pre-break standard deviation ratio;
-\code{ratio > 1} is an upward break (the case where \code{radf()}
-over-rejects most), \code{ratio < 1} a downward one.}
+\item{ratio}{Positive ratio of the post-break to the pre-break standard
+deviation. \code{ratio > 1} is an upward break, the case in which
+\code{radf()} over-rejects the most, and \code{ratio < 1} is a downward one.}
 
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-Generates i.i.d. Gaussian shocks whose standard deviation shifts
-permanently from \code{sigma} to \code{sigma * ratio} at observation
-\code{tau * n}, for use as \code{sim_psy1(..., e = sim_vol_break(...))}.
-This is the \emph{non-stationary} volatility DGP (Cavaliere & Taylor
-2007's single break) under which \code{\link{radf}}'s standard critical
-values lose size control, and the one the volatility-robust tests
-(\code{\link{radf_tt}}, \code{\link{radf_kp}}, \code{\link{radf_sbz}},
-\code{\link{radf_sign}}, \code{\link{radf_wb_cv}}) are designed for --
-unlike stationary conditional heteroskedasticity
-(\code{\link{sim_vol_garch}}), whose variance profile is asymptotically
-flat.
+Generates i.i.d. Gaussian shocks whose standard deviation shifts permanently
+from \code{sigma} to \code{sigma * ratio} at observation \code{tau * n}, for use
+as \code{sim_psy1(..., e = sim_vol_break(...))}. This is the \emph{non-stationary}
+volatility process (the single break of Cavaliere & Taylor 2007) under which the
+standard critical values of \code{\link{radf}} lose size control. The
+volatility-robust tests (\code{\link{radf_tt}}, \code{\link{radf_kp}},
+\code{\link{radf_sbz}}, \code{\link{radf_sign}} and \code{\link{radf_wb_cv}}) are
+designed for it. Stationary conditional heteroskedasticity
+(\code{\link{sim_vol_garch}}) is different, because its variance profile is
+asymptotically flat.
 }
 \examples{
 sim_vol_break(199, seed = 1) \%>\%

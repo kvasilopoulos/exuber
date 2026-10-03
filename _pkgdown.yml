@@ -48,8 +48,8 @@ reference:
 
   - title: Recursive Augmented Dickey-Fuller
     desc: >
-      Estimation & critical values -- the cornerstone of the package. Each
-      function is listed with the methods that consume its output.
+      Estimation and critical values, the core of the package. Each function
+      is listed with the methods that consume its output.
   - subtitle: radf()
     contents:
       - radf
@@ -80,7 +80,7 @@ reference:
   - title: Analysis
     desc: >
       The core workflow, in order: check which series reject the null, date
-      the explosive episodes, then quantify how fast each one is growing
+      the explosive episodes, and then measure how fast each one is growing.
   - subtitle: diagnostics()
     contents:
       - diagnostics
@@ -97,15 +97,16 @@ reference:
 
   - title: Heteroskedasticity-robust (time-transformed)
     desc: >
-      Bootstrap-free alternative to radf_wb_cv() under time-varying volatility
+      An alternative to radf_wb_cv() under time-varying volatility that needs
+      no bootstrap.
     contents:
       - radf_tt
       - radf_tt_cv
 
   - title: Volatility-robust (other routes)
     desc: >
-      Further tests robust to time-varying innovation variance; see
-      docs/volatility-robustness.md
+      Further tests that remain valid when the innovation variance changes
+      over time. See docs/volatility-robustness.md.
   - subtitle: radf_sbz()
     contents:
       - radf_sbz
@@ -132,10 +133,10 @@ reference:
 
   - title: Dating procedures
     desc: >
-      Standalone dating procedures with no critical value needed, and
-      recovery dating; see docs/dating-and-root-inference.md.
-      rootstamp() itself lives under Analysis above -- it's the last step of
-      the core workflow, not an alternative to datestamp()
+      Standalone dating procedures that need no critical value, and recovery
+      dating. See docs/dating-and-root-inference.md. rootstamp() is listed
+      under Analysis above because it is the last step of the core workflow
+      and not an alternative to datestamp().
   - subtitle: dating_pdc()
     contents:
       - dating_pdc
@@ -160,8 +161,8 @@ reference:
 
   - title: Real-time monitoring
     desc: >
-      Sequential/real-time bubble detection; see docs/monitoring.md.
-      Each monitor is listed with its static, full-sample counterpart where one
+      Sequential, real-time bubble detection. See docs/monitoring.md. Each
+      monitor is listed with its static, full-sample counterpart where one
       exists.
   - subtitle: monitor()
     contents:
@@ -186,7 +187,7 @@ reference:
 
   - title: Multivariate / panel bubble tests
     desc: >
-      Panel and cross-series tests; see docs/multivariate.md
+      Panel and cross-series tests. See docs/multivariate.md.
   - subtitle: radf_common()
     contents:
       - radf_common
@@ -211,10 +212,10 @@ reference:
       - sim_div
   - subtitle: Additional DGPs
     desc: >
-      Data-generating processes for axes exuber's original sim_*()
-      functions don't cover -- time-varying volatility, non-Gaussian
-      innovations, long memory, and distinct multi-series/branching
-      mechanisms; see docs/simulation-dgps.md
+      Data generating processes for cases that the original sim_*()
+      functions of exuber do not cover: time-varying volatility, non-Gaussian
+      innovations, long memory, and distinct multi-series and branching
+      mechanisms. See docs/simulation-dgps.md.
     contents:
       - sim_innov
       - sim_vol_break
@@ -242,25 +243,25 @@ reference:
       - scale_exuber_manual
 
 # "exuber" (vignettes/exuber.Rmd) is pkgdown's auto-detected "Get started"
-# vignette (matches the package name) -- it's linked directly from the
-# navbar and deliberately left out of the groups below to avoid listing
-# it twice.
+# vignette (it matches the package name). The navbar links to it directly,
+# and we leave it out of the groups below so that it is not listed twice.
 articles:
   - title: Core workflow
     navbar: ~
     desc: >
-      Beyond "Get started": the naming conventions, plotting, and
-      simulated data used throughout the other articles
+      Beyond "Get started": the naming conventions, plotting, and the
+      simulated data used throughout the other articles.
     contents:
       - naming-and-analysis
       - plotting
       - simulation
 
-  - title: Robustness -- alternatives to radf() itself
+  - title: Robust alternatives to radf() itself
     navbar: ~
     desc: >
-      Still answering "is there a bubble," under assumptions plain radf()
-      doesn't cover (time-varying volatility, alternative test statistics)
+      These articles still ask whether there is a bubble, under assumptions
+      that plain radf() does not cover (time-varying volatility and
+      alternative test statistics).
     contents:
       - radf-tt
       - volatility-robust-radf
@@ -270,7 +271,7 @@ articles:
     navbar: ~
     desc: >
       Beyond plain datestamp(): alternative dating procedures, real-time
-      monitoring, and how fast a detected bubble is actually growing
+      monitoring, and how fast a detected bubble is growing.
     contents:
       - dating-methods
       - monitoring
@@ -279,8 +280,8 @@ articles:
   - title: Multivariate & experimental
     navbar: ~
     desc: >
-      Cross-series relationships, and methods still below this package's
-      usual validation bar (see each article's own caveats)
+      Relationships across series, and methods that fall short of the usual
+      validation standard of this package (see the caveats in each article).
     contents:
       - co-explosivity
       - experimental-methods

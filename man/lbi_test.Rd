@@ -8,53 +8,53 @@ lbi_test(data, sig_lvl = 95)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
-\item{sig_lvl}{Significance level for the (one-sided, right-tailed --
-positive bubbles only) test, on the package-wide 0-100 scale (default
-\code{95}); any value in \code{[50, 100)} is accepted since the
-critical value is a closed-form normal quantile.}
+\item{sig_lvl}{Significance level of the one-sided, right-tailed test (positive
+bubbles only), on the 0 to 100 scale used throughout the package (default
+\code{95}). Any value in \code{[50, 100)} is accepted, because the critical
+value is a closed-form normal quantile.}
 }
 \value{
-An object of class \code{lbi_test_obj}: a list with the test
-statistic \code{stat}, the standard-normal critical value \code{crit},
-and \code{detected} (logical, \code{stat > crit}).
+An object of class \code{lbi_test_obj}: a list with the test statistic
+\code{stat}, the standard-normal critical value \code{crit} and \code{detected}
+(logical, \code{stat > crit}).
 }
 \description{
-\code{lbi_test} implements the static locally best invariant (LBI)
-test of Breitung & Diegel (2025) for a bubble known (or assumed) to
-span the entire sample: \code{LBI = (y_T - y_1) / (sigma_tilde *
-sqrt(T - 1))}, with \code{sigma_tilde^2} the sample variance of first
-differences. Heteroskedasticity-robust by construction (the
-statistic's invariance property does not depend on the exact form of
-the innovation variance), with a standard normal null distribution --
-no bootstrap, no simulation, no published table.
+\code{lbi_test} implements the static locally best invariant (LBI) test of
+Breitung & Diegel (2025) for a bubble that is known, or assumed, to span the
+entire sample: \code{LBI = (y_T - y_1) / (sigma_tilde * sqrt(T - 1))}, where
+\code{sigma_tilde^2} is the sample variance of the first differences. The test
+is robust to heteroskedasticity by construction, because the invariance property
+of the statistic does not depend on the exact form of the innovation variance.
+The null distribution is standard normal, so the test needs no bootstrap, no
+simulation and no published table.
 }
 \details{
-Only the static (single, full-sample window) test is implemented.
-Breitung & Diegel's own headline contribution is a sequential/
-exponentially-weighted extension for monitoring an unknown start
-date, whose exact weighting scheme and boundary constant are not
-pinned down here and are not implemented.
+Only the static test, which uses a single full-sample window, is implemented.
+The main contribution of Breitung & Diegel is a sequential, exponentially
+weighted extension for monitoring a series when the start date is unknown. Its
+exact weighting scheme and boundary constant are not pinned down here, so this
+function does not implement it.
 }
 \note{
-The critical value is closed-form: the standard normal
-(\code{qnorm}) quantile at \code{sig_lvl} -- no bootstrap, no
-simulation, no table needed.
+The critical value is closed-form: it is the standard normal
+(\code{qnorm}) quantile at \code{sig_lvl}, so no bootstrap, simulation or table
+is needed.
 
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own
-statistic/critical-value/detected summary -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead.
+\code{print()} shows the statistic, the critical value and whether the bubble was
+detected. See \code{vignette("naming-and-analysis", package = "exuber")} for which
+functions fit the shared pipeline and which do not.
 }
 \section{Status}{
 
@@ -78,8 +78,8 @@ invariant sequential test for explosive behavior in the presence of
 nonstationary volatility. Journal of Time Series Analysis.
 }
 \seealso{
-\code{\link{radf}} for the recursive ADF-family alternative
-this complements.
+\code{\link{radf}} for the recursive ADF-family alternative that this
+test complements.
 
 Other alternative tests:
 \code{\link[=quantile_test]{quantile_test()}}

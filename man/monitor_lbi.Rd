@@ -9,66 +9,66 @@ monitor_lbi(data, r_star = 0.5, c_bar = 0, sig_lvl = 95)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
-\item{r_star}{The end of the training window: a fraction in
-\code{(0, 1)} of the sample (default \code{0.5}), or an integer
-observation count if \code{>= 1}.}
+\item{r_star}{The end of the training window: a fraction in \code{(0, 1)} of the
+sample (default \code{0.5}), or an integer number of observations if
+\code{>= 1}.}
 
-\item{c_bar}{Exponential up-weighting parameter for later (more
-bubble-like) monitoring observations (their eq. 12), \code{>= 0}.
-\code{0} (default) is the flat-weight "mCUSUM" variant, appropriate
-when a bubble is equally likely to start at any point in the
-monitoring window; the paper's own suggested value for a moderate power
-boost when a bubble partway through is more plausible is \code{2}.
-Critical values (\code{sig_lvl}) are the same for every \code{c_bar}.}
+\item{c_bar}{Exponential up-weighting parameter for later monitoring
+observations, which are more likely to be bubble-like (their eq. 12), \code{>= 0}.
+The default \code{0} is the flat-weight "mCUSUM" variant, which is appropriate
+when a bubble is equally likely to start at any point in the monitoring window.
+For a moderate gain in power when a bubble that starts partway through the
+window is more plausible, the paper suggests \code{2}. The critical values
+(\code{sig_lvl}) are the same for every \code{c_bar}.}
 
-\item{sig_lvl}{Significance level on the package-wide 0-100 scale, one
-of \code{90}, \code{95}, \code{97.5}, \code{99}, \code{99.5} (Breitung &
-Diegel's Table 1 only tabulates these).}
+\item{sig_lvl}{Significance level on the 0 to 100 scale used throughout the
+package, one of \code{90}, \code{95}, \code{97.5}, \code{99} or \code{99.5}.
+Table 1 of Breitung & Diegel tabulates only these.}
 }
 \value{
-An object of class \code{monitor_lbi_obj}: a list with the
-monitoring-region statistic path (\code{stat}), the constant
-\code{boundary}, the training window length \code{T_star}, and
-\code{alarm}/\code{alarm_date} (the first breach, \code{NA} if none).
+An object of class \code{monitor_lbi_obj}: a list with the statistic path
+in the monitoring region (\code{stat}), the constant \code{boundary}, the length
+of the training window \code{T_star}, and \code{alarm} and \code{alarm_date} (the
+first breach, \code{NA} if there is none).
 }
 \description{
-\code{monitor_lbi} implements the sequential (constant-boundary)
-extension of \code{\link{lbi_test}}'s locally best invariant statistic,
-for monitoring a series in real time when the bubble's start date is
-unknown: after a training window \code{[1, T*]} assumed free of
-exuberance, the (optionally exponentially weighted) partial sum of
-post-training first differences is compared against a constant
-boundary, flagging the first monitoring date it is breached.
+\code{monitor_lbi} implements the sequential, constant-boundary extension of the
+locally best invariant statistic of \code{\link{lbi_test}}. It monitors a series
+in real time when the start date of the bubble is unknown. After a training
+window \code{[1, T*]} that is assumed free of exuberance, it compares the
+(optionally exponentially weighted) partial sum of the post-training first
+differences with a constant boundary and flags the first monitoring date at
+which the boundary is breached.
 }
 \details{
-Their eq. 15 shows this partial sum, normalized by the fixed monitoring
-horizon length (not \code{sqrt(t)}, unlike \code{\link{monitor_cusum}}'s
-Chu-Stinchcombe-White-style boundary), converges to a standard Brownian
-motion on \code{[0, 1]} under the null -- so a single constant boundary
-controls size uniformly across the whole monitoring window. The paper
-shows this constant-boundary detector ("mCUSUM" at \code{c_bar = 0},
-"wCUSUM" at \code{c_bar > 0}) is more powerful than the classical
-time-varying-boundary CUSUM test it is compared against.
+Their eq. 15 shows that this partial sum, normalized by the fixed length of the
+monitoring horizon, converges to a standard Brownian motion on \code{[0, 1]}
+under the null. The normalization is not \code{sqrt(t)}, which differs from the
+Chu-Stinchcombe-White-style boundary of \code{\link{monitor_cusum}}. A single
+constant boundary therefore controls size uniformly across the whole monitoring
+window. The paper shows that this constant-boundary detector ("mCUSUM" at
+\code{c_bar = 0}, "wCUSUM" at \code{c_bar > 0}) is more powerful than the
+classical CUSUM test with a time-varying boundary, to which it is compared.
 }
 \note{
-The critical value is a published constant boundary (Breitung &
-Diegel (2025)'s Table 1) -- a table lookup, no simulation.
+The critical value is the published constant boundary in Table 1 of
+Breitung & Diegel (2025), so it is a table lookup and needs no simulation.
 
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own
-boundary/alarm summary -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead.
+\code{print()} shows the boundary and the alarm. See
+\code{vignette("naming-and-analysis", package = "exuber")} for which functions fit
+the shared pipeline and which do not.
 }
 \section{Status}{
 
@@ -94,10 +94,10 @@ sequential test for explosive behavior in the presence of nonstationary
 volatility. Journal of Time Series Analysis.
 }
 \seealso{
-\code{\link{lbi_test}} for the static (known, full-sample
-bubble window) version. \code{\link{monitor_cusum}} and
-\code{\link{monitor}} for structurally different monitoring
-detectors.
+\code{\link{lbi_test}} for the static version, which assumes a known
+bubble window that spans the full sample. \code{\link{monitor_cusum}} and
+\code{\link{monitor}} are monitoring detectors with a structurally different
+construction.
 
 Other monitoring:
 \code{\link[=monitor]{monitor()}},

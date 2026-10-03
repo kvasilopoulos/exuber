@@ -20,102 +20,95 @@ coverage](https://codecov.io/gh/kvasilopoulos/exuber/graph/badge.svg)](https://a
 
 Testing for and dating periods of explosive dynamics (exuberance) in
 time series using the univariate and panel recursive unit root tests
-proposed by [Phillips et al. (2015)](https://doi.org/10.1111/iere.12132)
-and [Pavlidis et al. (2016)](https://doi.org/10.1007/s11146-015-9531-2).
-The recursive least-squares algorithm utilizes the matrix inversion
-lemma to avoid matrix inversion which results in significant speed
-improvements. Simulation of a variety of periodically-collapsing bubble
-processes.
+proposed by [Phillips et al. (2015)](https://doi.org/10.1111/iere.12132)
+and [Pavlidis et al. (2016)](https://doi.org/10.1007/s11146-015-9531-2).
+The recursive least-squares algorithm uses the matrix inversion lemma,
+so no matrix has to be inverted at each step, which makes the tests much
+faster to compute. The package also simulates a variety of periodically
+collapsing bubble processes.
 
 ### Overview
 
-Testing for explosive dynamics is comprised of two distinct parts :
+Testing for explosive dynamics has two parts:
 
-- Estimation
-- Critical Values
+- Estimation of the test statistics
+- Critical values to compare them with
 
-**Some Context:** Conventional testing techniques compute critical
-values,and p-values from a standard distribution, where the user does
-not need to specify critical values explicitly. However, the recent
-literature in explosive dynamics require the use of non-standard
-distributions, which require the use of techniques that sample empirical
-distributions in order to calculate the critical values.
+Conventional tests take their critical values and p-values from a
+standard distribution, so the user never has to supply them. The test
+statistics used for explosive dynamics follow non-standard
+distributions, so the critical values have to be obtained by simulating
+the empirical distribution.
 
 #### Estimation
 
-The cornerstone function of the package is:
+The central function of the package is:
 
-- `radf()`: Recursive Augmented Dickey-Fuller Test.
+- `radf()`: the recursive augmented Dickey-Fuller test.
 
-This function offers a vectorized estimation (i.e. single and/or
-multiple time-series) for individual and panel estimation. The
-estimation can parse data from multiple classes and handle dates as
-index.
+It accepts a single series or several, and it can estimate each series
+individually or as a panel. It reads data from several classes and uses
+dates as the index when they are available.
 
 #### Critical Values
 
-There are several options for generating critical values:
+There are several ways to generate critical values:
 
 - `radf_mc_cv()`: Monte Carlo
-- `radf_wb_cv()`, `radf_wb_ps_cv()`: Wild Bootstrap (Harvey et al. 2016;
+- `radf_wb_cv()`, `radf_wb_ps_cv()`: wild bootstrap (Harvey et al. 2016;
   Phillips & Shi 2020)
-- `radf_sb_cv()`: Sieve Bootstrap (Panel)
+- `radf_sb_cv()`: sieve bootstrap (panel)
 
 When `cv` is omitted, `exuber` uses precomputed Monte Carlo critical
-values: a shared store covering `lag = 0` to `4` and every sample size
-up to 4000, fetched once per `(n, lag)` and cached on disk.
-`radf_mc_cv()` and the bootstrap functions are the offline route, and
-the only route for other lags or larger samples.
+values. They come from a shared store that covers `lag = 0` to `4` and
+every sample size up to 4000. Each `(n, lag)` combination is fetched
+once and cached on disk. `radf_mc_cv()` and the bootstrap functions work
+offline, and they are the only option for other lags or larger samples.
 
 ### Analysis
 
-For the analysis you should include both the output from estimation
-(`object`) and critical values (`cv`). The below methods break the
-process into small simple steps:
+The analysis needs both the output of the estimation (`object`) and the
+critical values (`cv`). The following methods break it into small steps:
 
 - `summary()` summarizes the model.
-- `diagnostics()` shows which series reject the null hypothesis .
+- `diagnostics()` shows which series reject the null hypothesis.
 - `datestamp()` computes the origination, termination and duration of
-  episodes (if any).
+  episodes, if there are any.
 - `rootstamp()` estimates how fast a detected episode is growing (the
-  explosive root and its doubling time), run over every `datestamp()`
-  episode at once.
+  explosive root and its doubling time) and runs over every
+  `datestamp()` episode at once.
 
-These combined provide a comprehensive analysis on the exuberant
-behavior of the model. See `vignette("exuber")` for this workflow end to
-end and `vignette("plotting")` for the `autoplot()` methods that go with
-it.
+Together they give a full account of the exuberant behavior of the
+model. See `vignette("exuber")` for this workflow from start to finish
+and `vignette("plotting")` for the matching `autoplot()` methods.
 
 ### Beyond `radf()`
 
-The recursive ADF test is the core, but not the whole package. Each
-family below has its own vignette and its own section of the reference
-index:
+The recursive ADF test is the core of the package, but not all of it.
+Each family below has its own vignette and its own section of the
+reference index:
 
-- **Volatility-robust tests** (`radf_tt()`, `radf_sign()`, `radf_kp()`,
-  `radf_sbz()`): the same question as `radf()` under time-varying
-  innovation variance – `vignette("radf-tt")`,
+- Volatility-robust tests (`radf_tt()`, `radf_sign()`, `radf_kp()`,
+  `radf_sbz()`) ask the same question as `radf()` when the innovation
+  variance changes over time. See `vignette("radf-tt")` and
   `vignette("volatility-robust-radf")`.
-- **Dating procedures** (`dating_hls()`, `dating_knp()`, `dating_pdc()`,
-  `dating_hlw()`, `radf_recovery()`): regime-model estimates of when a
-  bubble you already believe in starts and ends, no critical value
-  needed – `vignette("dating-methods")`.
-- **Real-time monitoring** (`monitor()`, `monitor_cusum()`,
-  `monitor_lbi()`, `monitor_quantile()`): calibrate on a training
-  window, then raise an alarm as new observations arrive –
-  `vignette("monitoring")`.
-- **Root inference** (`rootstamp()`): how fast a detected episode is
-  growing – `vignette("root-inference")`.
-- **Multivariate** (`radf_common()`, `cobubble_test()`,
-  `contagion_reg()`): shared and transmitted bubbles across series –
-  `vignette("co-explosivity")`.
-- **Simulation** (`sim_*()`): the bubble processes and innovation
-  generators every test above is validated on –
+- Dating procedures (`dating_hls()`, `dating_knp()`, `dating_pdc()`,
+  `dating_hlw()`, `radf_recovery()`) use regime models to estimate when
+  a bubble that you already believe in starts and ends. They need no
+  critical value. See `vignette("dating-methods")`.
+- Real-time monitoring (`monitor()`, `monitor_cusum()`, `monitor_lbi()`,
+  `monitor_quantile()`) is calibrated on a training window and raises an
+  alarm as new observations arrive. See `vignette("monitoring")`.
+- Root inference (`rootstamp()`) measures how fast a detected episode is
+  growing. See `vignette("root-inference")`.
+- Multivariate tools (`radf_common()`, `cobubble_test()`,
+  `contagion_reg()`) look for shared and transmitted bubbles across
+  series. See `vignette("co-explosivity")`.
+- Simulation (`sim_*()`) provides the bubble processes and innovation
+  generators on which every test above is validated. See
   `vignette("simulation")`.
 
-`vignette("naming-and-analysis")` explains the naming scheme (`radf_`,
-`_test`, `dating_`, `monitor_`) and which results plug into
-`summary()`/`datestamp()`/`tidy()`/`autoplot()`.
+`vignette("naming-and-analysis")` explains the naming scheme (`radf_`, `_test`, `dating_`, `monitor_`) and which results work with `summary()`, `datestamp()`, `tidy()` and `autoplot()`.
 
 ### Installation
 
@@ -231,31 +224,31 @@ autoplot(rsim_data)
 
 ### Performance
 
-`radf()`‘s recursive least-squares algorithm (matrix inversion lemma, no
-per-window matrix inversion) is the reason `exuber` is fast. The chart
-below reproduces the full software comparison from Section 4 of the [JSS
-paper](https://doi.org/10.18637/jss.v103.i10) – R’s
+The speed of `exuber` comes from the recursive least-squares algorithm
+in `radf()`, which uses the matrix inversion lemma and never inverts a
+matrix for each window. The chart below reproduces the full software
+comparison from Section 4 of the [JSS
+paper](https://doi.org/10.18637/jss.v103.i10). It covers R's
 [`MultipleBubbles`](https://cran.r-project.org/package=MultipleBubbles)
 and
 [`psymonitor::PSY()`](https://cran.r-project.org/package=psymonitor),
-EViews’ `rtadf`, MATLAB’s `PSY.m`, and Stata – alongside both `exuber`
-as it was benchmarked at publication time and the current package
-version. Same setup throughout: `minw = 30`, `lag`/`adflag = 1`, median
-elapsed time over repeated runs on a random walk of length `n`.
+EViews' `rtadf`, MATLAB's `PSY.m` and Stata, together with `exuber` as
+it was benchmarked when the paper appeared and the current version. The
+setup is the same throughout: `minw = 30`, `lag`/`adflag = 1`, and the
+median elapsed time over repeated runs on a random walk of length `n`.
 
 ![](man/figures/benchmark-plot-1.png)<!-- -->
 
-All series except `exuber 2.0.0` are the paper’s own archived benchmark
-data rather than a re-run – MultipleBubbles/psymonitor are `O(T^2)`
-pure-R loops that already cost minutes per run at `n = 1000`, and none
-of these archived numbers depend on the current `exuber` implementation.
-`exuber 2.0.0` is faster than `0.4.1` at every sample size shown.
+All series except `exuber 2.0.0` are the archived benchmark data from
+the paper, not a new run. `MultipleBubbles` and `psymonitor` are
+`O(T^2)` loops written in pure R that already take minutes per run at `n
+= 1000`, and the archived numbers do not depend on the current `exuber`
+implementation. `exuber 2.0.0` is faster than `0.4.1` at every sample
+size shown.
 
 ### Citation
 
-`exuber` is the product of ongoing research – if it’s useful in your own
-work, please support it by citing the accompanying paper in the *Journal
-of Statistical Software*:
+`exuber` is the product of ongoing research. If it is useful in your own work, please cite the accompanying paper in the *Journal of Statistical Software*:
 
 > Vasilopoulos, K., Pavlidis, E., & Martínez-García, E. (2022). exuber:
 > Recursive Right-Tailed Unit Root Testing with R. *Journal of

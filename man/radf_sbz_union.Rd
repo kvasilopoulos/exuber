@@ -15,14 +15,14 @@ radf_sbz_union(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
@@ -32,15 +32,16 @@ not supported. When any series is padded this way, the panel statistic
 \item{kernel}{Kernel for the spot-volatility estimator (eq. 6),
 \code{"gaussian"} (default, as in the paper) or \code{"uniform"}.}
 
-\item{h}{Bandwidth for the spot-volatility estimator. Default: leave-one-out
-cross-validation over the paper's own search range.}
+\item{h}{Bandwidth for the spot-volatility estimator. The default is
+leave-one-out cross-validation over the search range of the paper.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A list with bootstrap p-values (\code{p_supDF}, \code{p_supBZ},
@@ -48,45 +49,43 @@ A list with bootstrap p-values (\code{p_supDF}, \code{p_supBZ},
 \code{U_cv}) for each series.
 }
 \description{
-\code{radf_sbz_union} performs the HLST (2016) wild bootstrap -- the same
-algorithm as \code{\link{radf_wb_cv}} -- \emph{jointly} on the classic
-sup-ADF statistic (\code{supDF}, i.e. \code{radf()}'s \code{sadf}) and the
-WLS/kernel-volatility statistic \code{supBZ} of Harvey, Leybourne & Zu
-(2019), and combines them into the paper's union-of-rejections statistic
-\code{U}. supBZ can have substantially higher power than supDF under
-many time-varying-volatility patterns, at the cost of lower power under
-others (e.g. upward volatility trends); \code{U} is designed to capture
-whichever of the two is more powerful for a given series.
+\code{radf_sbz_union} performs the HLST (2016) wild bootstrap, the same
+algorithm as \code{\link{radf_wb_cv}}, \emph{jointly} on the classic sup-ADF
+statistic (\code{supDF}, that is, the \code{sadf} of \code{radf()}) and on the
+WLS/kernel-volatility statistic \code{supBZ} of Harvey, Leybourne & Zu (2019).
+It combines them into the union-of-rejections statistic \code{U} of the paper.
+\code{supBZ} can have substantially higher power than \code{supDF} under many
+patterns of time-varying volatility, and lower power under others, for example
+upward volatility trends. \code{U} is designed to capture whichever of the two
+is more powerful for a given series.
 }
 \details{
-\code{U}'s value itself -- not just its significance -- is defined using
-a bootstrap-calibrated scaling ratio between \code{supDF} and
-\code{supBZ}'s own 95\\% critical values (the paper's Section 2.3), and
-the joint bootstrap needs \code{supDF}/\code{supBZ} computed from the
-\emph{same} resampled series each replicate for the union's size
-guarantee (the paper's Theorem 3) to hold. That coupling is why this
-stays one bundled function rather than splitting into a statistic and a
-critical-value function the way most of exuber does -- unlike \code{U},
-\code{supBZ} alone has no such coupling, so it does split that way: see
-\code{\link{radf_sbz}}/\code{\link{radf_sbz_cv}} for the supBZ-only
-route, with the usual \code{summary()}/\code{\link{datestamp}}/
-\code{tidy}/\code{autoplot} pipeline.
+The value of \code{U}, and not only its significance, is defined with a
+bootstrap-calibrated scaling ratio between the 95\\% critical values of
+\code{supDF} and \code{supBZ} (Section 2.3 of the paper). The union also keeps
+its size guarantee (Theorem 3 of the paper) only if the joint bootstrap computes
+\code{supDF} and \code{supBZ} from the \emph{same} resampled series in each
+replication. This coupling is why the function stays a single bundled function,
+and does not split into a statistic and a critical-value function as most of
+exuber does. \code{supBZ} alone has no such coupling, so it does split. See
+\code{\link{radf_sbz}} and \code{\link{radf_sbz_cv}} for the route that uses
+only \code{supBZ}, with the usual \code{summary()}, \code{\link{datestamp}},
+\code{tidy} and \code{autoplot} pipeline.
 }
 \note{
-This function bundles the statistic and its critical values in a
-single call -- there is no separate un-cv'd statistic function and no
-other critical-value function to pair it with, unlike \code{radf()}/
-\code{radf_wb_cv()} (\code{U}'s own value structurally requires the
-bootstrap, see Details).
+This function bundles the statistic and its critical values in a single
+call. Unlike \code{radf()} and \code{radf_wb_cv()}, there is no separate
+statistic function without critical values and no other critical-value function
+to pair it with, because the value of \code{U} requires the bootstrap by
+construction (see Details).
 
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own statistic/critical-value
-summary (bundles the test statistic and its critical value in one
-object); the \code{autoplot()} method is a per-series comparison of \code{supDF}/\code{supBZ}/\code{U} against
-their critical values -- see \code{vignette("naming-and-analysis",
-package = "exuber")} for the full picture of which functions do and
-don't fit the shared pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead. \code{print()} shows the test statistics together with
+their critical values, because the object bundles both. The \code{autoplot()} method
+compares \code{supDF}, \code{supBZ} and \code{U} with their critical values for
+each series. See \code{vignette("naming-and-analysis", package = "exuber")} for
+which functions fit the shared pipeline and which do not.
 }
 \section{Status}{
 
@@ -109,10 +108,11 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 38(10), 1131-1151.
 }
 \seealso{
-\code{\link{radf_wb_cv}} for the underlying (supDF-only) wild
-bootstrap, \code{\link{radf_sbz}}/\code{\link{radf_sbz_cv}} for the
-supBZ-only route with full pipeline support, and \code{\link{radf_tt}}
-for a bootstrap-free heteroskedasticity-robust alternative.
+\code{\link{radf_wb_cv}} for the underlying wild bootstrap, which uses
+\code{supDF} only, \code{\link{radf_sbz}} and \code{\link{radf_sbz_cv}} for the
+route that uses \code{supBZ} only and has full pipeline support, and
+\code{\link{radf_tt}} for a heteroskedasticity-robust alternative that needs no
+bootstrap.
 
 Other volatility-robust tests:
 \code{\link[=cusum_test]{cusum_test()}},

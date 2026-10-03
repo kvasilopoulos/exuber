@@ -2,7 +2,7 @@
 
 #' Tidy a `radf_obj` object
 #'
-#' Summarizes information about `radf_obj` object.
+#' Summarizes the information in a `radf_obj` object.
 #'
 #' @param x An object of class `radf_obj`.
 #' @param format Long or wide format (default = "wide").
@@ -69,7 +69,7 @@ tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 
 #' Tidy a `radf_cv` object
 #'
-#' Summarizes information about `radf_cv` object.
+#' Summarizes the information in a `radf_cv` object.
 #'
 #' @param x An object of class `radf_cv`.
 #' @inheritParams tidy.radf_obj
@@ -176,7 +176,7 @@ tidy_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
 
 #' Tidy a `radf_distr` object
 #'
-#' Summarizes information about `radf_distr` object.
+#' Summarizes the information in a `radf_distr` object.
 #'
 #' @param x An object of class `radf_distr`.
 #' @param ... Further arguments passed to methods. Not used.
@@ -344,9 +344,9 @@ tidy_join <- function(x, y, ...) {
 
 #' Tidy into a joint model
 #'
-#' Tidy or augment  and then join objects of class `radf_obj` and `radf_cv`. The
-#' object of reference is the `radf_cv`. For example, if panel critical values
-#' are provided the function will return the panel test statistic.
+#' Tidy or augment and then join objects of class `radf_obj` and `radf_cv`. The
+#' `radf_cv` is the object of reference. For example, if you provide panel critical
+#' values, the function returns the panel test statistic.
 #'
 #' @param x An object of class `radf_obj`.
 #' @param y An object of class `radf_cv`. The output will depend on the type of
@@ -648,8 +648,8 @@ augment_join <- function(x, y, ...) {
 #' Augment into a joint model
 #'
 #' Augment and then join the full statistic sequences of a `radf_obj` with
-#' the critical-value sequences of a `radf_cv`, one row per observation --
-#' the table \code{\link{autoplot.radf_obj}} is built on.
+#' the critical-value sequences of a `radf_cv`, with one row for each
+#' observation. This is the table \code{\link{autoplot.radf_obj}} is built on.
 #'
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
 #' @return A [tibble::tibble()]
@@ -659,7 +659,7 @@ augment_join <- function(x, y, ...) {
 #' rsim_data <- radf(sim_data, minw = 20)
 #' cv <- radf_wb_cv(sim_data, minw = 20)
 #'
-#' # Full statistic-path/critical-value-path join -- the table autoplot() is built on
+#' # Join the statistic path and the critical-value path. This is the table autoplot() is built on
 #' aj <- augment_join(rsim_data, cv)
 #' aj
 #'

@@ -8,14 +8,14 @@ radf(data, minw = NULL, lag = 0L)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
@@ -41,13 +41,12 @@ And attributes:
 \item{series_names}{The series names.}
 }
 \description{
-\code{radf} returns the recursive univariate and panel Augmented Dickey-Fuller test statistics.
+\code{radf} computes the recursive univariate and panel augmented Dickey-Fuller test statistics (ADF, SADF, GSADF and their backward sequences).
 }
 \details{
-The \code{radf()} function is vectorized, i.e., it can handle multiple series
-at once, to improve efficiency. This property also enables the computation of panel
-statistics internally as a by-product of the univariate estimations with minimal
-additional cost incurred.
+\code{radf()} is vectorized: it handles several series at once. The panel
+statistics are computed as a by-product of the univariate estimations, at
+almost no additional cost.
 }
 \examples{
 \donttest{

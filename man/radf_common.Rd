@@ -8,57 +8,55 @@ radf_common(data, minw = NULL, r = 1)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
-\item{r}{Number of principal components to extract (default 1, the
-paper's own recommendation: "sufficient... for the purpose of bubble
-identification"). Only the first is used for detection; the rest are
-returned for inspection via the \code{"prcomp"} attribute.}
+\item{r}{Number of principal components to extract (default 1, which the paper
+recommends as "sufficient... for the purpose of bubble identification"). Only the
+first is used for detection. The others are returned for inspection in the
+\code{"prcomp"} attribute.}
 }
 \value{
-A \code{radf_obj} (see \code{\link{radf}}) computed on the panel's
-first principal component, with the fitted \code{prcomp} object attached
-as an attribute (\code{attr(x, "prcomp")}).
+A \code{radf_obj} (see \code{\link{radf}}) computed on the first principal
+component of the panel, with the fitted \code{prcomp} object attached as an
+attribute (\code{attr(x, "prcomp")}).
 }
 \description{
-\code{radf_common} tests for a bubble common to a panel of series
-(Chen, Phillips & Shi, 2023): it extracts the panel's first principal
-component and runs the ordinary \code{\link{radf}} test on it -- and
-every downstream method (\code{tidy()}, \code{autoplot()},
-\code{datestamp()}, ...) works on it for free, since the output is an
-ordinary \code{radf_obj}.
+\code{radf_common} tests for a bubble that is common to a panel of series (Chen,
+Phillips & Shi, 2023). It extracts the first principal component of the panel
+and runs the ordinary \code{\link{radf}} test on it. The output is an ordinary
+\code{radf_obj}, so every downstream method (\code{tidy()}, \code{autoplot()},
+\code{datestamp()} and so on) works on it without further effort.
 }
 \details{
-The paper's own Theorem 4.3 claims the resulting statistic's null
-limiting distribution is asymptotically identical to the standard
-PSY/GSADF one, which would let \code{\link{radf_mc_cv}} apply directly.
-An independent validation found this identity does \strong{not} hold at
-practical panel widths \code{N}: the true critical value is more than
-double \code{\link{radf_mc_cv}}'s at \code{N = 100}, and the gap grows
-as \code{N} increases -- PCA on a panel of merely independent
-(non-cointegrated) I(1) series does not behave like a single random walk
-once there are more series to draw transient co-movement from. Use
-\code{\link{radf_common_cv}} for critical values, \strong{not}
-\code{\link{radf_mc_cv}}, which has no dependence on panel width and is
-badly undersized here once \code{N} grows past a handful of series.
+Theorem 4.3 of the paper claims that the null limiting distribution of the
+resulting statistic is asymptotically identical to the standard PSY/GSADF
+distribution, which would let \code{\link{radf_mc_cv}} apply directly. An
+independent validation found that this identity does \strong{not} hold at
+practical panel widths \code{N}. At \code{N = 100} the true critical value is
+more than double that of \code{\link{radf_mc_cv}}, and the gap grows as \code{N}
+increases. PCA on a panel of independent (non-cointegrated) I(1) series does not
+behave like a single random walk once there are more series from which
+transient co-movement can arise. Use \code{\link{radf_common_cv}} for the
+critical values and \strong{not} \code{\link{radf_mc_cv}}. The critical values of
+\code{\link{radf_mc_cv}} do not depend on the panel width, and they are badly
+undersized here once \code{N} grows past a handful of series.
 }
 \note{
-Returns \code{radf()}'s own output (computed on the extracted
-factor), and \code{radf_common_cv()} computes the full time-varying
-boundary alongside the scalar critical values, so the full
-\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
-pipeline works -- see \code{vignette("naming-and-analysis", package =
-"exuber")}.
+The function returns the output of \code{radf()} computed on the extracted
+factor, and \code{radf_common_cv()} computes the full time-varying boundary
+alongside the scalar critical values. The full \code{summary()},
+\code{\link{datestamp}}, \code{tidy} and \code{autoplot} pipeline therefore works
+(see \code{vignette("naming-and-analysis", package = "exuber")}).
 }
 \section{Status}{
 
@@ -72,11 +70,11 @@ x <- sim_common(n_series = 5, n = 100, seed = 123)
 res <- radf_common(x, minw = 20)
 print(res)
 
-# radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
+# radf_common_cv() is needed here and radf_mc_cv() does not apply (see Details)
 cv <- radf_common_cv(n = 100, N = ncol(x), minw = 20)
 summary(res, cv = cv)
 
-# The result is an ordinary radf_obj, so autoplot()/datestamp() work directly
+# The result is an ordinary radf_obj, so autoplot() and datestamp() work directly
 autoplot(res, cv = cv)
 datestamp(res, cv = cv)
 }
@@ -88,9 +86,9 @@ Bubble Detection in Large Dimensional Financial Systems. Journal of
 Financial Econometrics, 21(4), 989-1063.
 }
 \seealso{
-\code{\link{radf}} for the underlying (unmodified) test, and
-\code{\link{radf_common_cv}} for its (panel-width-specific) critical
-values.
+\code{\link{radf}} for the underlying test, which is unmodified, and
+\code{\link{radf_common_cv}} for its critical values, which are specific to the
+panel width.
 
 Other multivariate:
 \code{\link[=cobubble_test]{cobubble_test()}},

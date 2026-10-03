@@ -15,62 +15,60 @@ cobubble_test(
 )
 }
 \arguments{
-\item{y, x}{Numeric vectors of equal length, or objects coercible to one
-via \code{as.numeric()}. \code{x} is the (candidate) explosive-episode
-regressor; \code{y} is tested for co-explosivity with \code{x_{t-lag}}.}
+\item{y, x}{Numeric vectors of equal length, or objects that \code{as.numeric()}
+can coerce to one. \code{x} is the candidate regressor with the explosive
+episode, and \code{y} is tested for co-explosivity with \code{x_{t-lag}}.}
 
-\item{lag}{The lead/lag \code{i} in \code{x_{t-lag}}. If \code{NULL}
+\item{lag}{The lead or lag \code{i} in \code{x_{t-lag}}. If \code{NULL}
 (default), it is estimated from \code{lag_grid} by minimizing the residual
-variance (Section VI's \code{i_hat}).}
+variance (\code{i_hat} in Section VI).}
 
-\item{lag_grid}{Candidate lag values searched when \code{lag = NULL}.
-Default \code{-6:6}, as in the paper's own simulation design.}
+\item{lag_grid}{Candidate lag values searched when \code{lag = NULL}. The default
+\code{-6:6} follows the simulation design of the paper.}
 
 \item{nboot}{Number of wild bootstrap replications.}
 
-\item{sig_lvl}{Significance level, on the same 0-100 scale as
-\code{\link{datestamp}}'s \code{sig_lvl} (default \code{95}, i.e. a 5\\%
+\item{sig_lvl}{Significance level, on the same 0 to 100 scale as the
+\code{sig_lvl} of \code{\link{datestamp}} (default \code{95}, which gives a 5\\%
 upper-tail rejection region).}
 
 \item{seed}{Optional seed for the bootstrap draws.}
 }
 \value{
-An object of class \code{cobubble_test_obj}: a list with the
-observed statistic \code{S}, the (given or estimated) \code{lag}, the
-bootstrap critical value \code{cv} at \code{sig_lvl}, the bootstrap
-p-value \code{p_value}, and \code{reject} (\code{TRUE} if \code{S}
-exceeds \code{cv}, i.e. co-explosivity is rejected).
+An object of class \code{cobubble_test_obj}: a list with the observed
+statistic \code{S}, the (given or estimated) \code{lag}, the bootstrap critical
+value \code{cv} at \code{sig_lvl}, the bootstrap p-value \code{p_value} and
+\code{reject}, which is \code{TRUE} if \code{S} exceeds \code{cv}, that is, if
+co-explosivity is rejected.
 }
 \description{
-\code{cobubble_test} tests whether two series that each contain an
-explosive episode are \emph{co-explosive}: whether a linear combination
-\code{y_t - alpha - beta * x_{t-lag}} is stationary, i.e. whether the
-explosive dynamics in \code{y} and \code{x} are the same underlying
-phenomenon (possibly migrating from one series to the other with a lead
-or lag) rather than independent explosive episodes.
+\code{cobubble_test} tests whether two series that each contain an explosive
+episode are \emph{co-explosive}. That is, it tests whether the linear combination
+\code{y_t - alpha - beta * x_{t-lag}} is stationary, so that the explosive
+dynamics in \code{y} and \code{x} are the same underlying phenomenon, possibly
+migrating from one series to the other with a lead or lag, and not independent
+explosive episodes.
 }
 \details{
-Unlike \code{\link{radf}} (a right-tailed ADF-family test for the
-presence of explosiveness), this is a stationarity (KPSS-type) test:
-the null hypothesis is co-explosivity, i.e. that the residuals of
-\code{y} regressed on a constant and \code{x_{t-lag}} are I(0). Because
-the null limiting distribution of the statistic depends on the pattern
-of heteroskedasticity in the errors (Evripidou, Harvey, Leybourne &
-Sollis 2022, Theorem 1), critical values are obtained via a wild
-bootstrap that reproduces that same heteroskedasticity pattern in the
+\code{\link{radf}} is a right-tailed ADF-family test for the presence of
+explosiveness. This function is a stationarity (KPSS-type) test instead. The null
+hypothesis is co-explosivity, that is, that the residuals of \code{y} regressed on
+a constant and \code{x_{t-lag}} are I(0). The null limiting distribution of the
+statistic depends on the pattern of heteroskedasticity in the errors (Evripidou,
+Harvey, Leybourne & Sollis 2022, Theorem 1). The critical values therefore come
+from a wild bootstrap that reproduces this pattern of heteroskedasticity in the
 bootstrap samples (Theorem 2).
 }
 \note{
-The critical value is a wild bootstrap of the residuals, computed
-internally on every call (Theorem 2) -- there is no separate/reusable
-cv function for this test.
+The critical value comes from a wild bootstrap of the residuals (Theorem 2),
+which is computed internally in each call. There is no separate, reusable cv
+function for this test.
 
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own
-statistic/critical-value/p-value summary -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead. \code{print()} shows the statistic, the critical value and the p-value. See
+\code{vignette("naming-and-analysis", package = "exuber")} for which functions fit
+the shared pipeline and which do not.
 }
 \section{Status}{
 
@@ -79,19 +77,19 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-# A genuinely co-explosive pair (Evripidou et al.'s own DGP): not rejected
+# A co-explosive pair (the process of Evripidou et al.), which is not rejected
 xy <- sim_coexplosive(n = 100, seed = 123)
 res <- cobubble_test(xy$y, xy$x, nboot = 199L, seed = 1)
 print(res)
 
-# Force a specific lead/lag instead of estimating it
+# Force a specific lead or lag instead of estimating it
 res_lag0 <- cobubble_test(xy$y, xy$x, lag = 0L, nboot = 199L, seed = 1)
 print(res_lag0)
 
 # Two independent bubbles: co-explosivity correctly rejected
 cobubble_test(sim_data$psy1, sim_data$psy2, nboot = 199L, seed = 1)
 
-# Plot the two series being tested for co-explosivity
+# Plot the two series that are tested for co-explosivity
 autoplot(res)
 }
 

@@ -9,9 +9,9 @@ radf_common_cv(n, N, minw = NULL, nrep = 1000L, seed = NULL)
 \arguments{
 \item{n}{A positive integer. The sample size (number of time periods).}
 
-\item{N}{A positive integer, at least 2. The panel width (number of
-series) that \code{\link{radf_common}} will be run on -- the critical
-value depends on this, unlike \code{\link{radf_mc_cv}}.}
+\item{N}{A positive integer, at least 2. The panel width (number of series) on
+which \code{\link{radf_common}} will be run. The critical value depends on it,
+unlike that of \code{\link{radf_mc_cv}}.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
@@ -19,29 +19,30 @@ value depends on this, unlike \code{\link{radf_mc_cv}}.}
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A list with \code{adf_cv}, \code{sadf_cv}, \code{gsadf_cv},
-\code{badf_cv}, \code{bsadf_cv} -- the same shape as \code{\link{radf_mc_cv}}'s
-return value, so it can be used as a drop-in \code{cv} argument for
-\code{\link{datestamp}}/\code{tidy}/\code{autoplot} on a \code{\link{radf_common}}
-result.
+\code{badf_cv} and \code{bsadf_cv}. It has the same shape as the return value of
+\code{\link{radf_mc_cv}}, so you can use it as the \code{cv} argument of
+\code{\link{datestamp}}, \code{tidy} and \code{autoplot} on a
+\code{\link{radf_common}} result.
 }
 \description{
 \code{radf_common_cv} simulates critical values for \code{\link{radf_common}}
-under its own null (no common explosive factor): an \code{N}-column panel
-of \emph{independent} random walks, extracted to one principal component
-and tested exactly as \code{\link{radf_common}} does. Unlike
-\code{\link{radf_mc_cv}} -- which has no dependence on panel width and was
-shown by independent validation to be badly undersized as a stand-in for
-\code{radf_common}'s own null once \code{N} grows past a handful of
-series -- this null distribution does depend on \code{N}, so \code{N}
-must match the panel \code{\link{radf_common}} was actually run on.
+under its own null of no common explosive factor. The null is a panel of
+\code{N} \emph{independent} random walks, from which one principal component is
+extracted and tested exactly as in \code{\link{radf_common}}. Independent
+validation showed that \code{\link{radf_mc_cv}}, whose critical values do not
+depend on the panel width, is badly undersized as a stand-in for this null once
+\code{N} grows past a handful of series. The null distribution here does depend
+on \code{N}, so \code{N} must match the panel on which \code{\link{radf_common}}
+was run.
 }
 \section{Status}{
 

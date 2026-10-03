@@ -1,18 +1,19 @@
 #' Plotting `radf` models
 #'
-#' \code{autoplot.radf_obj} takes \code{radf_obj} and \code{radf_cv} and returns a faceted ggplot object.
-#' \code{shade} is used as an input to \code{shape_opt}. \code{shade} modifies the
-#' geom_rect layer that demarcates the exuberance periods.
+#' \code{autoplot.radf_obj} takes a \code{radf_obj} and a \code{radf_cv} and
+#' returns a faceted ggplot object. \code{shade} is used as an input to
+#' \code{shade_opt}. It modifies the geom_rect layer that marks the exuberance
+#' periods.
 #'
 #' @inheritParams datestamp.radf_obj
 #'
 #' @param sig_lvl Significance level. It could be one of 90, 95 or 99.
-#' @param option Whether to apply the "gsadf" or "sadf" methodology (default
-#' = "gsadf"). Unlike \code{\link{datestamp}}, \code{"svadf"} is not
-#' supported here -- it has no critical-value band to shade.
-#' @param nonrejected If TRUE, plot all variables regardless of rejecting the NULL at the 5 percent significance level.
-#' @param select_series 	A vector of column names or numbers specifying the series to be used in plotting.
-#' Note that the order of the series does not alter the order used in plotting.
+#' @param option Whether to apply the "gsadf" or the "sadf" methodology (default
+#' = "gsadf"). Unlike \code{\link{datestamp}}, this function does not support
+#' \code{"svadf"}, because that option has no critical-value band to shade.
+#' @param nonrejected If TRUE, plot all series, whether or not they reject the null at the 5 percent significance level.
+#' @param select_series A vector of column names or numbers that specifies the series to plot.
+#' The order of the series does not change the order used in the plot.
 #' @param shade_opt Shading options, typically set using \code{shade} function.
 #' @param ... Further arguments passed to \code{ggplot2::facet_wrap} and \code{ggplot2::geom_rect} for \code{shade}.
 #' @param trunc Whether to remove the period of the minimum window from the plot (default = TRUE).
@@ -248,12 +249,12 @@ autoplot2.radf_obj <- function(object, cv = NULL,
 
 #' @rdname autoplot.radf_obj
 #' @inheritParams datestamp
-#' @param fill The shade color that indicates the exuberance periods with positive signal
-#' @param fill_negative The shade color that indicates the exuberance periods with positive signal
-#' @param fill_ongoing The shade color that indicates the exuberance periods that are ongoing
-#' the null hypothesis.
+#' @param fill The shade color for the exuberance periods with a positive signal.
+#' @param fill_negative The shade color for the exuberance periods with a negative
+#' signal, that is, from series that do not reject the null hypothesis.
+#' @param fill_ongoing The shade color for the exuberance periods that are ongoing.
 #'
-#' @param opacity The opacity of the shade color aka alpha.
+#' @param opacity The opacity of the shade color (alpha).
 #' @export
 shade <- function(fill = "grey55", fill_negative = fill, # "yellow2",
                   fill_ongoing = NULL, opacity = 0.3, ...) { # "pink2"
@@ -472,17 +473,17 @@ autoplot_stat_bar <- function(stat, crit, detected = NULL, ylab = "statistic") {
 
 #' Exuber scale and theme functions
 #'
-#' `scale_exuber_manual` allows specifying the color, linewidth and linetype in
-#' `autoplot.radf_obj` mappings. `theme_exuber` is a complete theme which control
-#' all non-data display.
+#' `scale_exuber_manual` sets the color, linewidth and linetype in the mappings of
+#' `autoplot.radf_obj`. `theme_exuber` is a complete theme that controls all
+#' non-data display.
 #'
 #' @param color_values a set of color values to map data values to.
 #' @param linetype_values a set of linetype values to map data values to.
 #' @param linewidth_values a set of linewidth values to map data values to.
 #' @param size_values `r lifecycle::badge("deprecated")` use `linewidth_values`.
 #'
-#' @return A list of three ggplot2 scales (`scale_exuber_manual`) or a
-#'   ggplot2 theme object (`theme_exuber`), to be added to a plot with `+`.
+#' @return A list of three ggplot2 scales (`scale_exuber_manual`) or a ggplot2
+#' theme object (`theme_exuber`), which you add to a plot with `+`.
 #'
 #' @importFrom ggplot2 scale_color_manual scale_linewidth_manual scale_linetype_manual
 #' @export
@@ -542,7 +543,7 @@ theme_exuber <- function(
 
 #' Plotting a `ds_radf` object
 #'
-#' Takes a `ds_radf` object and returns a ggplot2 object, with a
+#' Takes a `ds_radf` object and returns a ggplot2 object with a
 #' \link[ggplot2]{geom_segment} layer.
 #'
 #' @name autoplot.ds_radf

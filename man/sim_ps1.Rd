@@ -44,42 +44,41 @@ sim_ps1(
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 
-\item{e}{An optional numeric vector of length \code{n - 1} of innovations
-to use in place of \code{rnorm(n - 1, sd = sigma)}. Lets the plain PSY
-equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
-sequence instead of i.i.d. Gaussian noise -- see \code{\link{sim_innov}}
-(heavy-tailed/skewed), \code{\link{sim_vol_break}} (permanent
-volatility break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
-\code{\link{sim_vol_cir}}/\code{\link{sim_vol_sv}} (stochastic volatility)
-and \code{\link{sim_fi}} (long-memory) for ready-made generators. Default
-\code{NULL} reproduces the plain i.i.d. Gaussian DGP exactly.}
+\item{e}{An optional numeric vector of length \code{n - 1} with innovations to
+use in place of \code{rnorm(n - 1, sd = sigma)}. It lets the plain PSY equation
+above be driven by a shock sequence that is non-Gaussian, heteroskedastic or
+dependent instead of i.i.d. Gaussian noise. The generators \code{\link{sim_innov}}
+(heavy-tailed or skewed), \code{\link{sim_vol_break}} (permanent volatility
+break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
+\code{\link{sim_vol_cir}} and \code{\link{sim_vol_sv}} (stochastic volatility)
+and \code{\link{sim_fi}} (long memory) produce suitable sequences. The default
+\code{NULL} reproduces the plain i.i.d. Gaussian process exactly.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-The new generating process considered here differs from the \code{sim_psy1} model in
-three respects - Phillips and Shi (2018):
-
-\emph{First, it includes an asymptotically negligible drift in the martingale
-path during normal periods. Second, the collapse process is modeled directly as
-a transient mildly integrated process that covers an explicit period of market collapse.
-Third, a market recovery date is introduced to capture the return to normal market behavior.
-}
+The process differs from the \code{sim_psy1} model in three respects (Phillips and
+Shi 2018). First, it includes an asymptotically negligible drift in the martingale
+path during normal periods. Second, the collapse is modeled directly as a
+transient mildly integrated process that covers an explicit period of market
+collapse. Third, it introduces a market recovery date to capture the return to
+normal market behavior. Three forms of collapse are available:
 \itemize{
-\item \verb{sudden:} with \code{beta = 0.1} and \code{tr =  tf + 0.01*n}
-\item \verb{disturbing:} with \code{beta = 0.5} and \code{tr =  tf + 0.1*n}
-\item \verb{smooth:} with \code{beta = 0.9} and \code{tr =  tf + 0.2*n}
+\item \verb{sudden:} with \code{beta = 0.1} and \code{tr = tf + 0.01*n}
+\item \verb{disturbing:} with \code{beta = 0.5} and \code{tr = tf + 0.1*n}
+\item \verb{smooth:} with \code{beta = 0.9} and \code{tr = tf + 0.2*n}
 }
 
-In order to provide the duration of the collapse period \code{tr} as \verb{tr = tf + 0.2n},
-you have to provide \code{tf} as well.
+To set the duration of the collapse period through \verb{tr = tf + 0.2n}, you must
+also provide \code{tf}.
 }
 \examples{
 # Disturbing collapse (default)

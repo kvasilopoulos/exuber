@@ -18,21 +18,21 @@ diagnostics(object, cv = NULL, ...)
 
 \item{option}{Whether to apply the "gsadf" or "sadf" methodology (default = "gsadf").}
 
-\item{sig_lvl}{Significance level, one of 90, 95 or 99, that decides
-whether a series counts as "positive" (rejects the null). Independent of
-\code{option}'s choice of test statistic.}
+\item{sig_lvl}{Significance level, one of 90, 95 or 99, that decides whether a
+series counts as "positive" (rejects the null). It does not depend on the test
+statistic chosen with \code{option}.}
 }
 \value{
-Returns a list with the series that reject (positive) and the series
-that do not reject (negative) the null hypothesis, and at what significance level.
+A list with the series that reject the null hypothesis (positive) and the
+series that do not (negative), together with the significance level.
 }
 \description{
-Provides information on whether the null hypothesis of a unit root is rejected
-against the alternative of explosive behaviour for each series in a dataset.
+Reports whether the null hypothesis of a unit root is rejected against the
+alternative of explosive behavior, for each series in a dataset.
 }
 \details{
-Diagnostics also stores a vector whose elements take the value of 1 when
-there is a period of explosive behaviour and 0 otherwise.
+\code{diagnostics} also stores a vector that takes the value 1 when there is a
+period of explosive behavior and 0 otherwise.
 }
 \examples{
 \donttest{

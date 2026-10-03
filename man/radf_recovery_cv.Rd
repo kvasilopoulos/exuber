@@ -15,40 +15,39 @@ radf_recovery_cv(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 
 \item{lag}{A non-negative integer. Number of lags in the auxiliary
 regression, as in \code{\link{radf}}.}
 }
 \value{
-A list of class \code{radf_cv} with a single element,
-\code{bsadf_cv}: a matrix of critical values (columns \code{90\%},
-\code{95\%}, \code{99\%}), one row per reverse-time position, aligned
-the same way \code{\link{radf_mc_cv}}'s own \code{bsadf_cv} aligns to
-\code{radf()$bsadf}.
+A list of class \code{radf_cv} with a single element, \code{bsadf_cv}. It
+is a matrix of critical values (columns \code{90\%}, \code{95\%}, \code{99\%})
+with one row for each reverse-time position, aligned in the same way as the
+\code{bsadf_cv} of \code{\link{radf_mc_cv}} is aligned to \code{radf()$bsadf}.
 }
 \description{
-Computes critical values for the reverse-regression BSADF statistic
-used by \code{\link{radf_recovery}}, calibrated to its own (Phillips &
-Shi 2014's Theorem 1) null limiting distribution rather than the
-standard forward \code{\link{radf_mc_cv}} boundary -- reversing the
-simulated null path before running the recursive computation, since
-reversal induces an endogeneity with no forward-regression analogue
-(see \code{\link{radf_recovery}}'s Details).
+Computes critical values for the reverse-regression BSADF statistic that
+\code{\link{radf_recovery}} uses. They are calibrated to the null limiting
+distribution of that statistic (Theorem 1 of Phillips & Shi 2014) and not to the
+standard forward boundary of \code{\link{radf_mc_cv}}. The simulated null path is
+reversed before the recursive computation, because reversal induces an
+endogeneity that has no analogue in the forward regression (see the Details of
+\code{\link{radf_recovery}}).
 }
 \note{
-\code{print()}/\code{tidy()} are not yet implemented for this
-object's own class (\code{recovery_cv} has no \code{tidy_radf_cv}
-method, unlike \code{radf_sign_cv()}/\code{radf_tt_cv()} which fall
-back to \code{mc_cv}'s -- that fallback does not apply here since this
-object only carries \code{bsadf_cv}, not the \code{adf_cv}/
-\code{sadf_cv}/\code{gsadf_cv} fields that method expects). Inspect
-\code{cv$bsadf_cv} directly instead of calling \code{print(cv)}/
-\code{tidy(cv)}, which currently error.
+\code{print()} and \code{tidy()} are not yet implemented for the class of
+this object. \code{recovery_cv} has no \code{tidy_radf_cv} method. The objects
+from \code{radf_sign_cv()} and \code{radf_tt_cv()} fall back to the method of
+\code{mc_cv}, but that fallback does not apply here, because this object carries
+only \code{bsadf_cv} and not the \code{adf_cv}, \code{sadf_cv} and
+\code{gsadf_cv} fields that the method expects. Inspect \code{cv$bsadf_cv}
+directly. Calling \code{print(cv)} or \code{tidy(cv)} currently gives an error.
 }
 \section{Status}{
 

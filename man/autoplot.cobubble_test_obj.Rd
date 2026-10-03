@@ -15,7 +15,7 @@
 A \link[ggplot2]{ggplot}
 }
 \description{
-Plots the two input series over the sample, with the test statistic and lag in the title.
+Plots the two input series over the sample, with the test statistic and the lag in the title.
 }
 \seealso{
 \code{\link{cobubble_test}}
