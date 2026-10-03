@@ -28,23 +28,25 @@ sim_coexplosive(
 \item{x_args, z_args}{Named lists of extra arguments passed to the \code{\link{sim_psy1}} calls generating \code{x} and (if \code{phi_z != 0}) \code{z}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A \code{data.frame} with columns \code{x} and \code{y} (length \code{n}).
 }
 \description{
-Simulation of Evripidou, Harvey, Leybourne & Sollis (2022)'s co-explosive
-DGP: an explosive series \code{x} (from \code{\link{sim_psy1}}) and a
-second series \code{y} linked to a lead/lagged copy of it (and optionally
-a third, independent explosive series \code{z}),
+Simulates the co-explosive process of Evripidou, Harvey, Leybourne & Sollis
+(2022): an explosive series \code{x} (from \code{\link{sim_psy1}}) and a second
+series \code{y} that is linked to a lead or lagged copy of it, and optionally to
+a third, independent explosive series \code{z},
 \eqn{y_t = \mu_y + \phi_x x_{t-i} + \phi_z z_t + \epsilon_{y,t}}{y[t] =
-mu_y + phi_x*x[t-i] + phi_z*z[t] + eps_y[t]}. \code{i > 0} means
-\code{x}'s explosive episode leads \code{y}'s; \code{i < 0} means it lags.
+mu_y + phi_x*x[t-i] + phi_z*z[t] + eps_y[t]}. \code{i > 0} means that the
+explosive episode of \code{x} leads that of \code{y}, and \code{i < 0} means that
+it lags.
 }
 \examples{
 x <- sim_coexplosive(n = 100, lag = 5, seed = 123)

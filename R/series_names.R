@@ -10,14 +10,14 @@
 #' rfd <- radf(sim_data)
 #' series_names(rfd)
 #'
-#' # Rename the series -- propagates through tidy()/autoplot()'s facet labels
+#' # Rename the series, which carries through to the facet labels of tidy() and autoplot()
 #' series_names(rfd) <- c("Bubble A", "Bubble B", "Bubble C", "Bubble D", "Bubble E")
 #' series_names(rfd)
 #' tidy(rfd)
 #' autoplot(rfd)
 #' }
-#' @return A character vector of series names; the replacement form returns
-#'   the modified object.
+#' @return A character vector of series names. The replacement form returns the
+#' modified object.
 #' @export
 #'
 series_names <- function(x, ...) {
@@ -26,7 +26,7 @@ series_names <- function(x, ...) {
 
 
 #' @rdname series_names
-#' @param value n ordered vector of the same length as the "index" attribute of x.
+#' @param value An ordered vector of the same length as the "index" attribute of x.
 #' @export
 `series_names<-` <- function(x, value) {
   UseMethod("series_names<-")

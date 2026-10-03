@@ -15,85 +15,82 @@ ssu_test(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
-\item{minw}{Minimum window; defaults to \code{\link{psy_minw}} for
-\code{"ssu"} and the paper's \code{floor(n * (-0.004 + 2.24/sqrt(n)))}
-for \code{"gssu"} (the values Table I is computed at).}
+\item{minw}{Minimum window. The default is \code{\link{psy_minw}} for
+\code{"ssu"} and the value of the paper, \code{floor(n * (-0.004 + 2.24/sqrt(n)))},
+for \code{"gssu"}. Table I is computed at these values.}
 
-\item{sig_lvl}{Significance level on the package-wide 0-100 scale, one
-of \code{90}, \code{95}, \code{99} (the levels Kurozumi & Nishi's Table I
-tabulates).}
+\item{sig_lvl}{Significance level on the 0 to 100 scale used throughout the
+package, one of \code{90}, \code{95} or \code{99}. Table I of Kurozumi & Nishi
+tabulates these levels.}
 
 \item{type}{\code{"ssu"} or \code{"gssu"}.}
 
-\item{union}{Logical; also run the union-of-rejections procedure with
-SADF (\code{"ssu"}) or GSADF (\code{"gssu"}).}
+\item{union}{Logical. Also run the union-of-rejections procedure with SADF
+(\code{"ssu"}) or GSADF (\code{"gssu"}).}
 
-\item{cv}{Critical values for the SADF/GSADF side of the union, as from
-\code{\link{radf_mc_cv}} for \code{lag = 0}; defaults to the precomputed
-ones (fetched on first use).}
+\item{cv}{Critical values for the SADF or GSADF side of the union, for example from
+\code{\link{radf_mc_cv}} with \code{lag = 0}. The default is the precomputed
+critical values, which are fetched on first use.}
 }
 \value{
-An object of class \code{ssu_test_obj}: a list with the
-statistic path (\code{stat}, one value per candidate end point from
-\code{minw} to \code{n}; for GSSU the sup over window starts at each
-end point), the constant \code{crit} from Table I, \code{sadf} (the
-maximum, compared against \code{crit}) and \code{detected}. With
-\code{union = TRUE} also \code{adf_stat} (SADF or GSADF),
-\code{union_stat}, \code{union_crit} and \code{union_detected}.
+An object of class \code{ssu_test_obj}: a list with the statistic path
+(\code{stat}, one value for each candidate end point from \code{minw} to \code{n}.
+For GSSU it is the sup over window starts at each end point), the constant
+\code{crit} from Table I, \code{sadf} (the maximum, which is compared with
+\code{crit}) and \code{detected}. With \code{union = TRUE} the list also contains
+\code{adf_stat} (SADF or GSADF), \code{union_stat}, \code{union_crit} and
+\code{union_detected}.
 }
 \description{
-\code{ssu_test} implements the SSU and GSSU statistics of Kurozumi &
-Nishi (2025): sup-type tests for a bubble based on testing for a
-stochastic (rather than deterministic) unit root in the \emph{squared}
-first differences, \code{(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 +
-eta_t}, bias-corrected against its dependence on the correlation
-between this regression's and the plain ADF regression's innovations.
+\code{ssu_test} implements the SSU and GSSU statistics of Kurozumi & Nishi
+(2025). They are sup-type tests for a bubble that test for a stochastic, and not
+deterministic, unit root in the \emph{squared} first differences,
+\code{(Delta y_t)^2 = mu2 + omega*y_{t-1}^2 + eta_t}. The statistic is
+bias-corrected for the dependence on the correlation between the innovations of
+this regression and those of the plain ADF regression.
 }
 \details{
-A different generalization from the rest of exuber's volatility
--robustness tests: it doesn't touch the innovation variance at all,
-but instead allows the explosive AR coefficient itself to vary
-stochastically over time, \code{1 + c1/T + a*u_t/sqrt(T)}, rather than
-the deterministic \code{1 + c/T^alpha} every recursive-ADF-family
-statistic in this package assumes.
+This test generalizes the framework differently from the other
+volatility-robustness tests in exuber. It does not touch the innovation variance
+at all. It allows the explosive AR coefficient itself to vary stochastically over
+time, \code{1 + c1/T + a*u_t/sqrt(T)}, where every recursive-ADF-family statistic
+in this package assumes the deterministic coefficient \code{1 + c/T^alpha}.
 
-\code{type = "ssu"} is the single recursion (start fixed at the
-beginning of the sample, \code{SADF}'s shape); \code{type = "gssu"}
-also takes the supremum over window starts (\code{GSADF}'s shape), with
-the paper's own minimum window \code{r0 = -0.004 + 2.24/sqrt(n)}. The
-paper finds GSSU no more powerful than SSU.
+\code{type = "ssu"} is the single recursion, with the start fixed at the
+beginning of the sample, which has the shape of \code{SADF}. \code{type = "gssu"}
+also takes the supremum over window starts, which has the shape of \code{GSADF},
+with the minimum window \code{r0 = -0.004 + 2.24/sqrt(n)} from the paper. The
+paper finds that GSSU is no more powerful than SSU.
 
-\code{union = TRUE} adds the paper's recommended union-of-rejections
-procedure: \code{UR = max(SADF / cv_sadf, SSU / cv_ssu)} (or
-\code{GUR} with GSADF/GSSU), compared with the published scaling
-constant \code{ur} (\code{gur}). Neither SADF nor SSU dominates: SSU wins
-when the explosive coefficient is genuinely stochastic, SADF when it is
-deterministic, and the union stays close to the better of the two. The
-SADF/GSADF side is \code{\link{radf}} with its default minimum window
-and \code{lag = 0}, against \code{cv} (default: the precomputed
-critical values).
+\code{union = TRUE} adds the union-of-rejections procedure that the paper
+recommends: \code{UR = max(SADF / cv_sadf, SSU / cv_ssu)} (or \code{GUR} with
+GSADF and GSSU), compared with the published scaling constant \code{ur}
+(\code{gur}). Neither SADF nor SSU dominates. SSU wins when the explosive
+coefficient is stochastic, SADF wins when it is deterministic, and the union
+stays close to the better of the two. The SADF or GSADF side is
+\code{\link{radf}} with its default minimum window and \code{lag = 0}, compared
+with \code{cv} (default: the precomputed critical values).
 }
 \note{
-The SSU/GSSU critical values and the union constants are
-published asymptotic values (Kurozumi & Nishi (2025)'s Table I) -- no
-simulation needed. The union constant is only valid at the level the
-statistic was built for.
+The SSU and GSSU critical values and the union constants are published
+asymptotic values (Table I of Kurozumi & Nishi 2025), so no simulation is
+needed. The union constant is valid only at the level for which the statistic
+was built.
 
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own
-statistic/critical-value summary -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead. \code{print()} shows the statistic and the critical value. See
+\code{vignette("naming-and-analysis", package = "exuber")} for which functions fit
+the shared pipeline and which do not.
 }
 \section{Status}{
 
@@ -102,8 +99,9 @@ picture of which functions do and don't fit that pipeline.
 
 \examples{
 \donttest{
-# A stochastically varying explosive root, rho_t = 1 + 3/n + 4 * u_t / sqrt(n):
-# the alternative ssu_test() is built for (a fixed-root DGP is lbi_test()'s)
+# A stochastically varying explosive root, rho_t = 1 + 3/n + 4 * u_t / sqrt(n).
+# This is the alternative that ssu_test() is built for, and lbi_test() is built
+# for a fixed root
 y <- sim_psy1(n = 150, te = 75, tf = 150, c = 3, alpha = 1, seed = 2001,
   coef_noise = rnorm(149), coef_a = 4)
 res <- ssu_test(y, sig_lvl = 95)
@@ -123,8 +121,8 @@ stochastically varying explosive coefficient. Journal of Time Series
 Analysis, 46(5), 945-965.
 }
 \seealso{
-\code{\link{radf}} for the deterministic-coefficient
-recursive ADF-family alternative this complements.
+\code{\link{radf}} for the recursive ADF-family alternative with a
+deterministic coefficient, which this test complements.
 
 Other volatility-robust tests:
 \code{\link[=cusum_test]{cusum_test()}},

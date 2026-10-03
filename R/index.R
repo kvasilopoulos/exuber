@@ -6,10 +6,10 @@
 #' @param ... Further arguments passed to methods.
 #' @param value An ordered vector of the same length as the `index` attribute of x.
 #'
-#' @details If the user does not specify an index for the estimation a
-#' pseudo-index is generated which is a sequential numeric series. After the estimation,
-#' the user can use `index()` to retrieve or `index<-()` to replace the index.
-#' The index can be either numeric or Date.
+#' @details If you do not specify an index for the estimation, the function
+#' generates a pseudo-index, a sequential numeric series. After the estimation you
+#' can use `index()` to retrieve the index or `index<-()` to replace it. The index
+#' can be numeric or Date.
 #'
 #' @examples
 #' \donttest{
@@ -31,8 +31,8 @@
 #' autoplot(rsim)
 #' }
 #' @return The index of the object (a \code{Date} vector when the input data
-#'   carried one, otherwise an integer sequence); the replacement form
-#'   returns the modified object.
+#' carried one, otherwise an integer sequence). The replacement form returns the
+#' modified object.
 #' @export
 #' @name index-rd
 index <- function(x, ...) {

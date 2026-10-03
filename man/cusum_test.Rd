@@ -8,49 +8,48 @@ cusum_test(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"))
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
-\item{sig_lvl}{Significance level on the package-wide 0-100 scale, one
-of \code{90}, \code{95}, \code{99}.}
+\item{sig_lvl}{Significance level on the 0 to 100 scale used throughout the
+package, one of \code{90}, \code{95} or \code{99}.}
 
-\item{type}{One of \code{"cs"}, \code{"gcs"}, \code{"cssq"},
-\code{"gcssq"}.}
+\item{type}{One of \code{"cs"}, \code{"gcs"}, \code{"cssq"} or \code{"gcssq"}.}
 }
 \value{
-An object of class \code{cusum_test_obj}: a list with the
-statistic path \code{stat} (one value per end point; for the
-generalized versions the sup over window starts), \code{stat_inf} (the
-inf path, CSSQ/GCSSQ only), the statistic \code{sup} (and \code{inf}),
-the critical value(s) \code{crit}, and \code{detected}.
+An object of class \code{cusum_test_obj}: a list with the statistic path
+\code{stat} (one value for each end point, and for the generalized versions the
+sup over window starts), \code{stat_inf} (the inf path, for CSSQ and GCSSQ only),
+the statistic \code{sup} (and \code{inf}), the critical values \code{crit} and
+\code{detected}.
 }
 \description{
-\code{cusum_test} implements the retrospective CUSUM (\code{"cs"}),
-generalized CUSUM (\code{"gcs"}), CUSUM-of-squares (\code{"cssq"}) and
-generalized CUSUM-of-squares (\code{"gcssq"}) tests of Kurozumi & Nishi
-(2025), Brown et al.'s (1975) parameter-constancy statistics applied to
-the first differences. The generalized versions take the supremum over
-every window start as well as every end point.
+\code{cusum_test} implements the retrospective CUSUM (\code{"cs"}), generalized
+CUSUM (\code{"gcs"}), CUSUM-of-squares (\code{"cssq"}) and generalized
+CUSUM-of-squares (\code{"gcssq"}) tests of Kurozumi & Nishi (2025). These are the
+parameter-constancy statistics of Brown et al. (1975), applied to the first
+differences. The generalized versions take the supremum over every window start
+as well as every end point.
 }
 \details{
-CS/GCS reject when the cumulated increments get too large (right tail).
-CSSQ/GCSSQ are two-sided: they reject when the cumulated squared
-increments drift too far above \emph{or} below their full-sample
-average, each tail at half the level. The paper finds the CUSUM-type
-tests lose almost all power once the explosive coefficient is
-genuinely stochastic, while the CUSUM-SQ type keeps it -- see
-\code{\link{ssu_test}} for the paper's more powerful statistics.
+CS and GCS reject when the cumulated increments become too large (right tail).
+CSSQ and GCSSQ are two-sided. They reject when the cumulated squared increments
+drift too far above \emph{or} below their full-sample average, with half the level
+in each tail. The paper finds that the CUSUM-type tests lose almost all their
+power once the explosive coefficient is stochastic, while the CUSUM-SQ type
+keeps it. See \code{\link{ssu_test}} for the more powerful statistics of the
+paper.
 }
 \note{
-All critical values are published asymptotic values (Kurozumi &
-Nishi (2025)'s Table I); no minimum window is needed (the paper finds
-the statistics insensitive to it).
+All critical values are published asymptotic values (Table I of Kurozumi &
+Nishi 2025). No minimum window is needed, because the paper finds the statistics
+insensitive to it.
 }
 \section{Status}{
 
@@ -74,8 +73,8 @@ the constancy of regression relationships over time. Journal of the
 Royal Statistical Society B, 37(2), 149-192.
 }
 \seealso{
-\code{\link{ssu_test}}; \code{\link{monitor_cusum}} for
-real-time CUSUM monitoring.
+\code{\link{ssu_test}}, and \code{\link{monitor_cusum}} for real-time
+CUSUM monitoring.
 
 Other volatility-robust tests:
 \code{\link[=radf_kp]{radf_kp()}},

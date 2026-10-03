@@ -164,69 +164,65 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 
 #' Bubble Contagion Regression (Greenaway-McGrevy & Phillips 2016)
 #'
-#' \code{contagion_reg} estimates the time-varying contagion coefficient
-#' of Greenaway-McGrevy & Phillips (2016): a fixed-window rolling AR(1)
-#' coefficient sequence for a "core" series and a "satellite" series
-#' \code{y}, related by a functional (Nadaraya-Watson kernel) regression
-#' at a chosen delay \code{d} -- how strongly and how (time-varying) does
-#' the core series' local persistence transmit to \code{y}, \code{d}
+#' \code{contagion_reg} estimates the time-varying contagion coefficient of
+#' Greenaway-McGrevy & Phillips (2016). It computes a fixed-window rolling AR(1)
+#' coefficient sequence for a "core" series and for a "satellite" series \code{y}
+#' and relates them with a functional (Nadaraya-Watson kernel) regression at a
+#' chosen delay \code{d}. The coefficient shows how strongly, and how it varies over
+#' time, the local persistence of the core series transmits to \code{y}, \code{d}
 #' periods later.
 #'
-#' This is the minimum-viable subset of the paper's own procedure: the
-#' fixed-window AR(1) coefficient sequence (their eq. 1), the
-#' Nadaraya-Watson regression at a single supplied \code{d} (eq. 6), and
-#' leave-one-out cross-validated bandwidth selection (eq. 7). Their eq. 8
-#' (searching over \code{d} automatically) is not implemented -- call
-#' \code{contagion_reg} once per candidate \code{d} and compare fit if
-#' an automatic search is needed.
+#' This is a minimal subset of the procedure in the paper. It contains the
+#' fixed-window AR(1) coefficient sequence (their eq. 1), the Nadaraya-Watson
+#' regression at a single supplied \code{d} (eq. 6) and leave-one-out
+#' cross-validated bandwidth selection (eq. 7). Their eq. 8, the automatic search
+#' over \code{d}, is not implemented. If you need a search, call
+#' \code{contagion_reg} once for each candidate \code{d} and compare the fit.
 #'
-#' The paper performs no formal inference (no confidence bands, no
-#' hypothesis test) on the contagion coefficient itself -- this is a
-#' point-estimation and visualization tool, not a test, matching what the
-#' source paper itself does.
+#' The paper performs no formal inference on the contagion coefficient itself, with
+#' no confidence bands and no hypothesis test. As in the paper, this function is a
+#' tool for point estimation and visualization and not a test.
 #'
-#' @note Not a hypothesis test: \code{contagion_reg} performs no formal
-#' inference (no confidence bands, no significance test) on the contagion
-#' coefficient, so there is no critical value at all for this function --
-#' don't look for one.
+#' @note The function is not a hypothesis test. It performs no formal inference on
+#' the contagion coefficient, with no confidence bands and no significance test, so
+#' there is no critical value for it.
 #'
-#' @param y Satellite (dependent) series, numeric vector.
-#' @param core Core (reference) series, numeric vector, same length as
+#' @param y Satellite (dependent) series, a numeric vector.
+#' @param core Core (reference) series, a numeric vector of the same length as
 #' \code{y}.
-#' @param S Fixed rolling-window width for the AR(1) coefficient sequence
-#' (default \code{floor(0.33 * length(y))}, the paper's own choice).
+#' @param S Fixed rolling-window width for the AR(1) coefficient sequence (default
+#' \code{floor(0.33 * length(y))}, the choice of the paper).
 #' @param d Non-negative integer delay (default \code{0}).
-#' @param h Bandwidth for the Nadaraya-Watson regression. Default
-#' \code{NULL} selects it via leave-one-out cross-validation (eq. 7).
-#' @param r_grid Evaluation points for the time-varying coefficient,
-#' as fractions of the sample (default \code{seq(0, 1, length.out = 100)}).
+#' @param h Bandwidth for the Nadaraya-Watson regression. The default \code{NULL}
+#' selects it by leave-one-out cross-validation (eq. 7).
+#' @param r_grid Evaluation points for the time-varying coefficient, as fractions
+#' of the sample (default \code{seq(0, 1, length.out = 100)}).
 #'
-#' @return An object of class \code{contagion_reg_obj}: a list with the
-#' fixed-window AR(1) coefficient sequences (\code{beta_core},
-#' \code{beta_j}), the selected/supplied bandwidth (\code{h}), and the
-#' estimated time-varying contagion coefficient (\code{delta2}, aligned
-#' with \code{r_grid}).
+#' @return An object of class \code{contagion_reg_obj}: a list with the fixed-window
+#' AR(1) coefficient sequences (\code{beta_core} and \code{beta_j}), the selected or
+#' supplied bandwidth (\code{h}) and the estimated time-varying contagion
+#' coefficient (\code{delta2}, aligned with \code{r_grid}).
 #'
 #' @references Greenaway-McGrevy, R., & Phillips, P. C. B. (2016). Hot
 #' property in New Zealand: Empirical evidence of housing bubbles in the
 #' metropolitan centres. New Zealand Economic Papers, 50(1), 88-113.
 #'
-#' @seealso \code{\link{cobubble_test}} for a different (symmetric,
-#' hypothesis-testing) bivariate bubble relationship.
+#' @seealso \code{\link{cobubble_test}} for a different, symmetric bivariate
+#' bubble relationship that uses a hypothesis test.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' coefficient-path summary (it performs no formal inference at all) --
-#' see `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the coefficient path, because the
+#' function performs no formal inference. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' \donttest{
-#' # A co-explosive pair: y's AR coefficient tracks x's almost one-for-one
+#' # A co-explosive pair: the AR coefficient of y follows that of x almost one for one
 #' xy <- sim_coexplosive(n = 100, seed = 123)
 #' res <- contagion_reg(xy$y, xy$x, d = 0L)
 #' print(res)
@@ -234,7 +230,7 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' # Plot the estimated time-varying contagion coefficient
 #' autoplot(res)
 #'
-#' # Compare a one-period lead (d = 1) against the contemporaneous case
+#' # Compare a one-period lead (d = 1) with the contemporaneous case
 #' res_d1 <- contagion_reg(xy$y, xy$x, d = 1L)
 #' autoplot(res) +
 #'   ggplot2::geom_line(data = data.frame(r = res_d1$r_grid, delta2 = res_d1$delta2),

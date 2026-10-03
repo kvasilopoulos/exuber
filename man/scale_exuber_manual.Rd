@@ -37,13 +37,13 @@ theme_exuber(
 \item{base_rect_size}{base size for rect elements}
 }
 \value{
-A list of three ggplot2 scales (\code{scale_exuber_manual}) or a
-ggplot2 theme object (\code{theme_exuber}), to be added to a plot with \code{+}.
+A list of three ggplot2 scales (\code{scale_exuber_manual}) or a ggplot2
+theme object (\code{theme_exuber}), which you add to a plot with \code{+}.
 }
 \description{
-\code{scale_exuber_manual} allows specifying the color, linewidth and linetype in
-\code{autoplot.radf_obj} mappings. \code{theme_exuber} is a complete theme which control
-all non-data display.
+\code{scale_exuber_manual} sets the color, linewidth and linetype in the mappings of
+\code{autoplot.radf_obj}. \code{theme_exuber} is a complete theme that controls all
+non-data display.
 }
 \examples{
 rsim <- radf(sim_psy1(100))

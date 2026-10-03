@@ -15,7 +15,7 @@
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-Summarizes information about \code{radf_distr} object.
+Summarizes the information in a \code{radf_distr} object.
 }
 \examples{
 \donttest{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/reg-helper.R
 \name{ps_tb}
 \alias{ps_tb}
-\title{Helper function to find \code{tb} from the Phillips and Shi (2020)}
+\title{Helper function to find \code{tb} from Phillips and Shi (2020)}
 \usage{
 ps_tb(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2)
 }
@@ -14,20 +14,20 @@ ps_tb(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2)
 \item{size}{The size to be controlled.}
 }
 \value{
-A single integer, the training-window length in observations,
-suitable for \code{\link{monitor}}'s \code{r_star}.
+A single integer, the length of the training window in observations,
+suitable for the \code{r_star} argument of \code{\link{monitor}}.
 }
 \description{
-This function helps to find the number of observations in the window
-over which size is to be controlled.
+This function finds the number of observations in the window over which size is
+to be controlled.
 }
 \examples{
-# Training window controlling size over a 2-year span of monthly data
+# Training window that controls size over a 2-year span of monthly data
 tb <- ps_tb(100, freq = "monthly", size = 2)
 tb
 
 \donttest{
-# Use it directly as monitor()'s training window
+# Use it directly as the training window of monitor()
 monitor(sim_data, r_star = tb, boundary = "kurozumi")
 }
 

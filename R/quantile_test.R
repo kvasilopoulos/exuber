@@ -58,65 +58,63 @@ quantile_test_ <- function(n, nrep, seed = NULL) {
 
 #' Quantile Unit Root Test for Bubble Detection (Global Test)
 #'
-#' \code{quantile_test} implements the "global test" of Wu, Shi & Wu
-#' (2025): a quantile-regression (QR) analogue of the Dickey-Fuller
-#' t-ratio, testing for explosive behavior at a chosen conditional
-#' quantile \code{tau} of \code{y_t} on \code{y_{t-1}} rather than at the
-#' conditional mean. A single static test, not a recursive scan (compare
-#' \code{\link{radf}}'s single-shot \code{adf} statistic, not its
-#' recursive \code{bsadf}).
+#' \code{quantile_test} implements the "global test" of Wu, Shi & Wu (2025). It is
+#' a quantile-regression (QR) analogue of the Dickey-Fuller t-ratio, and it tests
+#' for explosive behavior at a chosen conditional quantile \code{tau} of \code{y_t}
+#' given \code{y_{t-1}}, and not at the conditional mean. It is a single static
+#' test and not a recursive scan. The comparable statistic in \code{\link{radf}} is
+#' the single-shot \code{adf} statistic and not the recursive \code{bsadf}.
 #'
 #' @details
-#' \code{tau = "optimal"} (the default) selects the quantile minimizing
-#' the asymptotic variance of the QR estimator (their eq. 33) by grid
-#' search over \code{tau_grid}, excluding the extreme quantiles the paper
-#' itself recommends avoiding at practical sample sizes.
+#' \code{tau = "optimal"} (the default) selects the quantile that minimizes the
+#' asymptotic variance of the QR estimator (their eq. 33) by grid search over
+#' \code{tau_grid}. The grid excludes the extreme quantiles, which the paper itself
+#' recommends avoiding at practical sample sizes.
 #'
-#' The critical value is simulated per call (not a fixed table), and there
-#' is currently no reusable/exported cv counterpart for this function (a
-#' known, separately-tracked gap, not addressed here): the statistic's
-#' limiting null distribution is
-#' \code{sqrt(1 - delta^2) * z + delta * Q}, with \code{z ~ N(0, 1)} and
-#' \code{delta} a data-estimated correlation coefficient; \code{Q} is the
-#' standard demeaned Dickey-Fuller t-statistic distribution, simulated by
-#' the same random-walk-plus-OLS-t-stat construction used elsewhere in
-#' this package (see \code{\link{radf_mc_cv}}).
+#' The function simulates the critical value in each call and does not use a fixed
+#' table. There is currently no reusable exported cv counterpart for this function.
+#' This gap is tracked separately and is not addressed here. The limiting null
+#' distribution of the statistic is \code{sqrt(1 - delta^2) * z + delta * Q}, where
+#' \code{z ~ N(0, 1)}, \code{delta} is a correlation coefficient estimated from the
+#' data, and \code{Q} is the standard demeaned Dickey-Fuller t-statistic
+#' distribution. The function simulates \code{Q} with the same random-walk-plus-OLS
+#' t-statistic construction used elsewhere in this package (see
+#' \code{\link{radf_mc_cv}}).
 #'
 #' @inheritParams radf
-#' @param tau Quantile to test at, in \code{(0, 1)}, or \code{"optimal"}
-#' (default) to select it via eq. 33's grid search.
-#' @param tau_grid Grid searched when \code{tau = "optimal"}. Default
-#' \code{seq(0.2, 0.8, by = 0.05)}, matching the paper's own recommended
-#' practical range (excluding the extreme quantiles 0.1/0.9).
+#' @param tau Quantile to test at, in \code{(0, 1)}, or \code{"optimal"} (default)
+#' to select it with the grid search of eq. 33.
+#' @param tau_grid Grid searched when \code{tau = "optimal"}. The default
+#' \code{seq(0.2, 0.8, by = 0.05)} matches the practical range that the paper
+#' recommends, which excludes the extreme quantiles 0.1 and 0.9.
 #' @param nrep Number of Monte Carlo replications for the critical value.
 #' @param sig_lvl Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
-#' @return An object of class \code{quantile_test_obj}: a list with the
-#' test statistic \code{tstat}, the selected \code{tau}, the estimated
-#' correlation \code{delta}, the simulated \code{crit} value, and
-#' \code{detected} (logical, \code{tstat > crit}).
+#' @return An object of class \code{quantile_test_obj}: a list with the test
+#' statistic \code{tstat}, the selected \code{tau}, the estimated correlation
+#' \code{delta}, the simulated \code{crit} value and \code{detected} (logical,
+#' \code{tstat > crit}).
 #'
 #' @references Wu, R., Shi, S., & Wu, J. (2025). Quantile analysis for
 #' financial bubble detection and surveillance. Journal of Time Series
 #' Analysis, 46(5), 908-931.
 #'
-#' @seealso \code{\link{radf}} for the mean-regression (ADF/SADF/GSADF)
-#' family this complements.
+#' @seealso \code{\link{radf}} for the family of tests based on mean regression
+#' (ADF, SADF and GSADF) that this test complements.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' statistic/boundary/delta summary -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the statistic, the critical value and delta. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' \donttest{
-#' # Heavy-tailed (t3) innovations: where a quantile test earns its keep over the mean
+#' # Heavy-tailed (t3) innovations, where a quantile test is more useful than a test of the mean
 #' y <- sim_psy1(n = 100, seed = 1, e = sim_innov(99, dist = "t", df = 3))
 #' res <- quantile_test(y, nrep = 100, seed = 1)
 #' print(res)
@@ -185,7 +183,7 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
 
 #' Plot method for quantile_test() output
 #'
-#' Bar chart of the quantile-DF statistic per series against its critical value; series that exceed it are flagged as detected.
+#' Bar chart of the quantile-DF statistic for each series against its critical value. Series that exceed it are flagged as detected.
 #'
 #' @param object An object of class \code{quantile_test_obj}, the output of \code{\link{quantile_test}}.
 #' @param ... Further arguments passed to methods. Not used.

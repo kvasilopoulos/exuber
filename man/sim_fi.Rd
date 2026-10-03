@@ -9,24 +9,25 @@ sim_fi(n, d = 0.2, sigma = 1, seed = NULL)
 \arguments{
 \item{n}{Number of innovations to generate.}
 
-\item{d}{Long-memory (fractional differencing) parameter, in (0, 0.5) for
-\eqn{u_t}{u[t]} itself to be stationary.}
+\item{d}{Long-memory (fractional differencing) parameter, in (0, 0.5) so that
+\eqn{u_t}{u[t]} itself is stationary.}
 
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-Generates \eqn{u_t = \Delta^{-d}\epsilon_t}{u[t] = Delta^(-d) eps[t]},
-\eqn{\epsilon_t}{eps[t]} i.i.d. \eqn{(0, \sigma^2)}{(0, sigma^2)}, via a
+Generates \eqn{u_t = \Delta^{-d}\epsilon_t}{u[t] = Delta^(-d) eps[t]}, with
+\eqn{\epsilon_t}{eps[t]} i.i.d. \eqn{(0, \sigma^2)}{(0, sigma^2)}, through a
 truncated \eqn{MA(\infty)}{MA(Inf)} expansion of the fractional-differencing
 operator, for use as \code{sim_psy1(..., e = sim_fi(...))}.
 }
@@ -35,8 +36,9 @@ operator, for use as \code{sim_psy1(..., e = sim_fi(...))}.
 \psi_j = \psi_{j-1}\frac{j-1+d}{j}}{Delta^(-d) = sum_j psi[j] L^j, psi[0]
 = 1, psi[j] = psi[j-1] * (j-1+d)/j}
 
-truncated at \code{max(200, n)} lags with a matching burn-in (dropped
-before returning) to limit truncation bias in the early observations.
+The expansion is truncated at \code{max(200, n)} lags with a matching burn-in,
+which is dropped before the function returns, to limit the truncation bias in the
+early observations.
 }
 \examples{
 sim_fi(199, d = 0.2, seed = 1) \%>\%

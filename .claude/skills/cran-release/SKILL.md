@@ -24,9 +24,9 @@ command, mark the checklist row `[!]`, and wait.
 
 | Human gate | What Claude hands over |
 |---|---|
-| **1. DESCRIPTION check** — `Title:` and `Description:` wording (Title Case, quotes, references, acronyms) | proposed text as a diff; commit only after approval. Every other DESCRIPTION field (Version, deps, Authors@R roles, License) Claude edits directly |
-| **2. Release comments** — `cran-comments.md` (and a `## Resubmission` section if a reviewer replied) | a complete draft filled with *this* run's environments, NOTEs and revdep results; the human edits/approves before the tarball is built |
-| **3. Final submission** — `devtools::submit_cran()` (or the web form) and clicking the CRAN confirmation link; also any reply email to a CRAN reviewer | the built tarball path, the approved `cran-comments.md`, and — for a reviewer reply — a drafted email body. Never call `submit_cran()`, never send mail |
+| **1. DESCRIPTION check**: the wording of `Title:` and `Description:` (Title Case, quotes, references, acronyms) | proposed text as a diff; commit only after approval. Every other DESCRIPTION field (Version, deps, Authors@R roles, License) Claude edits directly |
+| **2. Release comments**: `cran-comments.md`, plus a `## Resubmission` section if a reviewer replied | a complete draft filled with *this* run's environments, NOTEs and revdep results; the human edits/approves before the tarball is built |
+| **3. Final submission**: `devtools::submit_cran()` (or the web form), clicking the CRAN confirmation link, and any reply email to a CRAN reviewer | the built tarball path and the approved `cran-comments.md`, and for a reviewer reply a drafted email body. Never call `submit_cran()` and never send mail |
 
 Claude owns: `usethis::use_version()`, NEWS heading, `devtools::document()`,
 all checks (local `check(cran = TRUE, …)`, `check_win_devel()` /
@@ -40,15 +40,15 @@ and the website/CHANGELOG follow-ups the repo checklist lists.
 mail, to the `cre` address in `DESCRIPTION`; the claude.ai Gmail
 connector is on that account. Use `mcp__claude_ai_Gmail__search_threads`
 (`query`, Gmail syntax), then `mcp__claude_ai_Gmail__get_thread` with
-`messageFormat: PLAIN_TEXT`. Before trusting a hit, check its
-`to_recipients` is the `cre` address — if it isn't, the connector is on a
-different account: say so and ask the user to paste the mail.
-Sender/subject shapes as actually received:
+`messageFormat: PLAIN_TEXT`. Before you trust a hit, check that its
+`to_recipients` is the `cre` address. If it is not, the connector is on a
+different account, so say so and ask the user to paste the mail.
+The table lists the sender and subject of each mail as we actually received it:
 
 | Stage | From | Subject |
 |---|---|---|
-| win-builder result (one mail per R version, ~15–20 min after upload) | `ligges@statistik.tu-dortmund.de` | `winbuilder: Package PKG_X.Y.Z.tar.gz has been checked and built` — body has `Status: OK` / `Status: 1 ERROR`, the R version, and a results URL; fetch `<url>/00check.log` with curl/WebFetch. Several uploads share one thread — match by R version and time, not by thread |
-| submission confirmation link | `cransubmit@r-project.org` | `CRAN Submission of PKG X.Y.Z - Confirmation Link` (human clicks it — gate 3) |
+| win-builder result (one mail per R version, ~15–20 min after upload) | `ligges@statistik.tu-dortmund.de` | `winbuilder: Package PKG_X.Y.Z.tar.gz has been checked and built`. The body has `Status: OK` or `Status: 1 ERROR`, the R version and a results URL, and you fetch `<url>/00check.log` with curl or WebFetch. Several uploads share one thread, so match a mail by R version and time and not by thread |
+| submission confirmation link | `cransubmit@r-project.org` | `CRAN Submission of PKG X.Y.Z - Confirmation Link` (the human clicks it, which is gate 3) |
 | submission receipt | `cransubmit@xmbombadil.wu.ac.at` (to cran-submissions, maintainer CC'd) | `CRAN Submission PKG X.Y.Z` |
 | pretest verdict | `ligges@statistik.tu-dortmund.de` | `[CRAN-pretest-publish] CRAN Submission PKG X.Y.Z` ("on its way to CRAN") or `[CRAN-pretest-archived] …` (rejected, log in body) or `[CRAN-pretest-inspect] …` (human review) |
 | reviewer comments / on CRAN | a CRAN team member / `CRAN-submissions@R-project.org` | `CRAN Submission PKG X.Y.Z` thread / `CRAN package PKG X.Y.Z published` |
@@ -62,12 +62,12 @@ PKG (from:r-project.org OR subject:"CRAN package") ("check problems" OR archived
 
 Cadence: win-builder every 15 min until the mail lands (two mails if both
 devel and release were uploaded); CRAN pretest every 30 min for the first
-4 h, then every few hours; human review can take days — check daily and
-tell the user when a reviewer reply arrives (drafting the fix and the
-`## Resubmission` section is Claude's job, the reply itself is gate 3).
-Confirm a hit's recipient matches `Authors@R`'s `cre` email before acting
-on it. Never mark a check "passed" from memory of an upload — only from
-the mail or the results page.
+4 h, then every few hours. Human review can take days, so check daily and
+tell the user when a reviewer reply arrives. Drafting the fix and the
+`## Resubmission` section is Claude's job, and sending the reply itself is
+gate 3. Confirm that the recipient of a hit matches the `cre` email in
+`Authors@R` before you act on it. Never mark a check "passed" from memory of
+an upload. Mark it only from the mail or the results page.
 
 R-hub v2 results are GitHub Actions runs, not mail: `gh run list
 --workflow=rhub.yaml`, `gh run view <id> --log-failed`.
@@ -141,9 +141,9 @@ the human sends it.
 After the "on CRAN" mail: Claude runs `usethis::use_github_release()`
 (reads `CRAN-SUBMISSION`), `usethis::use_dev_version(push = TRUE)`, then
 watches <https://cran.r-project.org/web/checks/check_results_PKG.html>
-(WebFetch) daily for a week — new flavours appear over several days; an
-ERROR there, or a "please correct" mail, → fix within the stated deadline
-or the package is archived.
+(WebFetch) daily for a week, because new flavours appear over several days.
+If an ERROR appears there, or a "please correct" mail arrives, fix it within
+the stated deadline, or the package is archived.
 
 ## Failure playbook
 

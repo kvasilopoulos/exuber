@@ -1,4 +1,4 @@
-# CRAN submission rules — reference (checked 2026-09-14)
+# CRAN submission rules: reference (checked 2026-09-14)
 
 Condensed from the CRAN Repository Policy (rev. 6875), the CRAN Cookbook
 (contributor.r-project.org/cran-cookbook, written by the CRAN team), Davis
@@ -13,22 +13,22 @@ workflow other packages (tidyverse, r-lib) follow.
 |---|---|
 | `Package` | can't clash with any current/past CRAN or current Bioconductor package; can't be renamed later. |
 | `Title` | Title Case (`tools::toTitleCase()`), ≤ 65 chars, no trailing period, no "package"/the package's own name, software names in 'single quotes'. |
-| `Description` | one paragraph, ≥ 2 sentences, what it does *and* why; not "This package…"/"Functions for…"; software/package/API names in 'single quotes' (case-sensitive; also suppresses the spell-check NOTE); expand non-obvious acronyms; cite methods as `Authors (year) <doi:10.xxx>`, `Authors (year, ISBN:…)` or `<https://…>` — no space after `doi:`/`https:`, angle brackets for auto-linking; publication titles in double quotes only. |
-| `Authors@R` | required form; exactly one `cre` who is a person (not a list) with a monitored email; a `cph` (copyright holder) — reviewers ask for it on first submission; `comment = c(ORCID = "…")` welcome. Never hand-write `Author:`/`Maintainer:` (auto-derived; mismatch = automatic rejection). Maintainer change → explain in comments, confirm from old address. |
+| `Description` | one paragraph, ≥ 2 sentences, what it does *and* why; not "This package…"/"Functions for…"; software/package/API names in 'single quotes' (case-sensitive; also suppresses the spell-check NOTE); expand non-obvious acronyms; cite methods as `Authors (year) <doi:10.xxx>`, `Authors (year, ISBN:…)` or `<https://…>`, with no space after `doi:` or `https:` and with angle brackets for auto-linking; publication titles in double quotes only. |
+| `Authors@R` | required form; exactly one `cre` who is a person (not a list) with a monitored email; a `cph` (copyright holder), which reviewers ask for on a first submission; `comment = c(ORCID = "…")` welcome. Never hand-write `Author:`/`Maintainer:` (auto-derived; mismatch = automatic rejection). For a change of maintainer, explain it in the comments and confirm it from the old address. |
 | `License` | from R's license DB (`R.home("share/licenses/license.db")`). `+ file LICENSE` only for templates that need it (MIT, BSD-2/3): file holds just `YEAR:`/`COPYRIGHT HOLDER:` and the year must be current. GPL/LGPL/Apache: no file, no `+ file LICENSE`. License change must be highlighted at update. Bundled third-party code: its license compatible and credited (`cph` or `inst/COPYRIGHTS`). |
 | `Depends` | `R (>= 4.0)` if `tools::R_user_dir()` used; otherwise only what's needed. |
 | `Imports`/`LinkingTo` | CRAN/Bioconductor only, not orphaned/archived (check <https://cran.r-project.org/web/checks/check_results_PKG.html> of each). |
 | `Suggests`/`Enhances` | used conditionally (`requireNamespace()`, `@examplesIf`, `skip_if_not_installed()`); non-CRAN ones need `Additional_repositories:` with a working repo. |
 | `SystemRequirements` | external libraries named; installation must first look for an installed version; source preferred over download; never pre-compiled binaries without CRAN agreement. |
 | `Version` | increased on every submission; no `.9000` dev suffix ("Version contains large components" NOTE). |
-| `URL`/`BugReports` | HTTPS, final destinations (no redirects), all reachable — `urlchecker`. |
+| `URL`/`BugReports` | HTTPS, final destinations (no redirects), all reachable, which `urlchecker` checks. |
 
 ## 2. Documentation (Rd)
 
 - Every `.Rd` for an exported object has `\value` describing class/structure
   and meaning; side-effect functions: `\value{No return value, called for
   side effects}`. Datasets (`\docType{data}`) are exempt. With roxygen:
-  `@return`, then `devtools::document()` — fixing `man/` by hand gets
+  `@return`, then `devtools::document()`. A fix made to `man/` by hand gets
   rejected again on resubmission.
 - Every exported function with a meaningful result has `@examples`.
   Unexported functions with examples → `@noRd` (or call via `:::`).
@@ -56,13 +56,13 @@ workflow other packages (tidyverse, r-lib) follow.
 |---|---|
 | Console output | no `print()`/`cat()`/`writeLines()` in functions except print/summary/format methods and interactive tools; use `message()`/`warning()`/`stop()` or a `verbose =` argument. |
 | State | never change `options()`, `par()`, `setwd()`, `Sys.setenv()`, `Sys.setlocale()`, RNG seed without restoring: `old <- par(...); on.exit(par(old), add = TRUE)` in functions; explicit restore lines in examples/vignettes. No `set.seed()` inside functions (offer `seed = NULL` argument). No `options(warn = -1)`. |
-| Files | write only to `tempdir()`/`tempfile()` or (R ≥ 4.0) `tools::R_user_dir(pkg, "cache"|"config"|"data")` kept small and actively managed; no default output paths in the working directory or home; clean tempdir in examples/tests (`unlink()`, `withr::local_tempfile()`) — "detritus in the temp directory" NOTE. No clipboard writes. No installing into R's own dirs. |
+| Files | write only to `tempdir()`/`tempfile()` or (R ≥ 4.0) `tools::R_user_dir(pkg, "cache"|"config"|"data")` kept small and actively managed; no default output paths in the working directory or home; clean tempdir in examples/tests (`unlink()`, `withr::local_tempfile()`), because otherwise you get the "detritus in the temp directory" NOTE. No clipboard writes. No installing into R's own dirs. |
 | Global env | no `<<-` to `.GlobalEnv`, no `assign(..., envir = globalenv())`, no `rm(list = ls())` in examples; don't touch `.Random.seed`. |
-| Packages | never `install.packages()` from code/examples/tests; no `installed.packages()` (slow) — use `requireNamespace()`; no modifying other namespaces. |
+| Packages | never `install.packages()` from code/examples/tests; no `installed.packages()` (slow), so use `requireNamespace()` instead; no modifying other namespaces. |
 | Cores | ≤ 2 threads/cores in examples, tests, vignettes (`parallel::detectCores()` default is a rejection); honour `_R_CHECK_LIMIT_CORES_`/`MC_CORES`; OpenMP/BLAS threads included. |
-| Internet | must "fail gracefully with an informative message" — a `message()`/`warning()` and a clean return, not an `stop()` that ERRORs the check when offline; HTTPS only, certificates verified, requests minimal and cached; avoid 429/403; check machines usually *have* network but the incoming test can be run offline. |
+| Internet | must "fail gracefully with an informative message": a `message()` or `warning()` and a clean return, and not a `stop()` that ERRORs the check when offline; HTTPS only, certificates verified, requests minimal and cached; avoid 429/403; check machines usually *have* network but the incoming test can be run offline. |
 | External programs | never launch viewers/browsers/PDF readers in examples/tests unless closed again; `system()` calls portable. |
-| Compiled code | no `exit()`/`abort()`/`printf` to stdout — `Rf_error()`, `Rprintf()`; compiles with `-Wall -pedantic` without warnings on gcc and clang; no disabling diagnostics or stack checking; no stripping symbols; portable (no `-march=native`, no `-O3` overrides in Makevars); registered native routines (`useDynLib(pkg, .registration = TRUE)`); passes ATLAS/MKL/OpenBLAS numeric tolerance, valgrind, ASAN/UBSAN (CRAN's "additional issues" — reproduce with R-hub containers). Static libs only on Windows/macOS. |
+| Compiled code | no `exit()`, `abort()` or `printf` to stdout (use `Rf_error()` and `Rprintf()`); compiles with `-Wall -pedantic` without warnings on gcc and clang; no disabling diagnostics or stack checking; no stripping symbols; portable (no `-march=native`, no `-O3` overrides in Makevars); registered native routines (`useDynLib(pkg, .registration = TRUE)`); passes ATLAS/MKL/OpenBLAS numeric tolerance, valgrind, ASAN/UBSAN (CRAN's "additional issues", which you can reproduce with R-hub containers). Static libs only on Windows/macOS. |
 | API | public R API only: no `.Internal()`, no `.Call()` into base packages, no `:::` into other packages, no undeclared entry points. |
 | Style asks | `TRUE`/`FALSE` not `T`/`F` (and not as variable names). |
 
@@ -88,7 +88,7 @@ workflow other packages (tidyverse, r-lib) follow.
 - Run on the *tarball* with current R-devel, `--as-cran`: 0 ERROR, 0
   WARNING, no "significant" NOTE. Acceptable NOTEs: "New submission", "New
   maintainer", installed size for a data package, "Possibly misspelled" for
-  proper names already in WORDLIST — each explained in `cran-comments.md`.
+  proper names already in WORDLIST. Explain each of them in `cran-comments.md`.
   Anything else: fix it ("almost always easier than convincing CRAN").
 - Incoming feasibility check also reports: days since last update (< 7 d
   is questioned unless CRAN asked), version format, maintainer mismatch,
@@ -101,7 +101,7 @@ workflow other packages (tidyverse, r-lib) follow.
   CRAN).
 - Platforms: at least two major OSes must work. Before submitting: local
   `devtools::check(remote = TRUE, manual = TRUE)`, `check_win_devel()` (email
-  in ~30 min), R-hub v2 `rhub_check()` — GitHub-Actions based, needs
+  in ~30 min), R-hub v2 `rhub_check()`, which is based on GitHub Actions and needs
   `rhub::rhub_setup()` once + a GitHub PAT; useful platforms: `linux`,
   `windows`, `macos`, `macos-arm64`, `atlas`, `mkl`, `nosuggests`, `valgrind`,
   `gcc-asan`/`clang-asan`, `ubuntu-next`, `clang20`. `devtools::check_mac_release()`
@@ -126,13 +126,13 @@ workflow other packages (tidyverse, r-lib) follow.
   notified ≥ 2 weeks ahead; report results in `cran-comments.md`.
 - Optional comment / `cran-comments.md` contents (tidyverse template,
   `usethis::use_cran_comments()`):
-  1. `## R CMD check results` — `0 errors | 0 warnings | 1 note` + each NOTE
-     explained; 2. `## Test environments` (local, win-builder, R-hub,
+  1. `## R CMD check results` with `0 errors | 0 warnings | 1 note` and each
+     NOTE explained; 2. `## Test environments` (local, win-builder, R-hub,
      GH Actions with R versions); 3. `## revdepcheck results` (count checked,
      new problems, or "no reverse dependencies"); 4. anything reviewers
      need: internet use, large size, license change, maintainer change,
-     acronyms, special build needs; 5. `## Resubmission` — for each
-     reviewer comment, the change made. Keep it short; reviewers read it.
+     acronyms, special build needs; 5. `## Resubmission`, which gives the change made for each
+     reviewer comment. Keep it short; reviewers read it.
 - Rejection handling: fix at the source (`R/`, not `man/`), re-document,
   bump patch, re-run all checks, resubmit with the `## Resubmission`
   section; answer the reviewer's questions by replying to the email with

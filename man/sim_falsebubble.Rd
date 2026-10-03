@@ -40,39 +40,40 @@ sim_falsebubble(
 \item{d0}{Starting (log) dividend level.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n} (the price), with
 \code{"dividend"} and \code{"technology"} attributes.
 }
 \description{
-Simulation of Chen, Chen, Huang, Li & Zhang (2026)'s false-bubble DGP: a
-hump-shaped, \emph{deterministic} technology-adoption shock embedded in
-dividend growth, engineered so a Campbell-Shiller present-value
-fundamental alone -- with \strong{no bubble component at all} -- displays a
-locally explosive-looking price path. Useful as a null (no-bubble) stress
-test distinct from a plain random walk.
+Simulates the false-bubble process of Chen, Chen, Huang, Li & Zhang (2026): a
+hump-shaped, \emph{deterministic} technology-adoption shock embedded in dividend
+growth. It is engineered so that a Campbell-Shiller present-value fundamental
+alone, with no bubble component at all, displays a price path that looks locally
+explosive. It is useful as a null (no-bubble) stress test that differs from a
+plain random walk.
 }
 \details{
 Dividends follow a random walk with drift plus the technology hump:
 \eqn{d_t = d_{t-1}+\mu+\tau_t+\eta_t}{d[t] = d[t-1] + mu + tau[t] +
-eta[t]}. The hump \eqn{\tau_t}{tau[t]} rises linearly from \code{t1} to
-\code{t1 + kappa} then falls linearly to \code{t2} (\code{shape =
-"triangular"}, the source's own worked example, eq. 4), or follows a
-Gaussian bump centered at \code{t1 + kappa} (\code{shape = "gaussian"}).
-Because \eqn{\tau_t}{tau[t]} is deterministic (known in advance), its
-contribution to the price is an exact forward-looking discounted sum,
+eta[t]}. The hump \eqn{\tau_t}{tau[t]} either rises linearly from \code{t1} to
+\code{t1 + kappa} and then falls linearly to \code{t2} (\code{shape =
+"triangular"}, the worked example of the source, eq. 4), or follows a Gaussian
+bump centered at \code{t1 + kappa} (\code{shape = "gaussian"}). Because
+\eqn{\tau_t}{tau[t]} is deterministic and known in advance, its contribution to
+the price is an exact forward-looking discounted sum,
 \eqn{T_t=\sum_{s>t}\beta^{s-t}\tau_s}{T[t] = sum_{s>t} beta^(s-t)*tau[s]}
-with \eqn{\beta=1/(1+r)}{beta = 1/(1+r)}, added to the same fundamental
-pricing formula \code{\link{sim_div}} uses. This is a simplified,
-single-shock reproduction of the source's mechanism (deterministic hump
--> hump-shaped fundamental price, no bubble), not its full DOLS/
-multiple-functional-form robustness machinery.
+with \eqn{\beta=1/(1+r)}{beta = 1/(1+r)}, which is added to the fundamental
+pricing formula that \code{\link{sim_div}} uses. This is a simplified
+single-shock reproduction of the mechanism in the source (a deterministic hump
+gives a hump-shaped fundamental price and no bubble). It does not include the
+full DOLS and multiple-functional-form robustness machinery of the source.
 }
 \examples{
 sim_falsebubble(200, seed = 123) \%>\%

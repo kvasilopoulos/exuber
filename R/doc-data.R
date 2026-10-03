@@ -21,7 +21,7 @@
 #' legend("topleft", legend = colnames(sim_data), col = 1:5, lty = 1, bty = "n")
 #'
 #' \donttest{
-#' # The usual next step: run radf() and plot with the bundled critical values
+#' # The usual next step: run radf() and plot with the default critical values
 #' autoplot(radf(sim_data))
 #' }
 "sim_data"

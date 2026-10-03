@@ -9,27 +9,28 @@ sim_vol_garch(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0, seed = NULL)
 \arguments{
 \item{n}{Number of innovations to generate.}
 
-\item{omega, alpha, beta}{Positive GARCH(1,1) parameters. Default
-(\code{omega = 0.1, alpha = 0.1, beta = 0.8}) matches Whitehouse, Harvey &
+\item{omega, alpha, beta}{Positive GARCH(1,1) parameters. The defaults
+(\code{omega = 0.1, alpha = 0.1, beta = 0.8}) match Whitehouse, Harvey &
 Leybourne (2025) and Harvey, Leybourne, Taylor & Zu (2024).}
 
-\item{gamma}{Non-negative TGARCH leverage parameter. Monschang & Wilfling
-(2021)'s NASDAQ calibration is \code{omega = 0.4387, alpha = 0, beta =
-0.9319, gamma = 0.1306}.}
+\item{gamma}{Non-negative TGARCH leverage parameter. The NASDAQ calibration of
+Monschang & Wilfling (2021) is \code{omega = 0.4387, alpha = 0, beta = 0.9319,
+gamma = 0.1306}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-Generates shocks \code{z_t = sqrt(h_t) * eps_t} under a GARCH(1,1)
-recursion, with an optional threshold (leverage) term, for use as
+Generates shocks \code{z_t = sqrt(h_t) * eps_t} from a GARCH(1,1) recursion with
+an optional threshold (leverage) term, for use as
 \code{sim_psy1(..., e = sim_vol_garch(...))}.
 }
 \details{
@@ -40,9 +41,9 @@ z[t] = sqrt(h[t]) * eps[t], h[t] = omega + alpha*z[t-1]^2 + beta*h[t-1] +
 gamma*z[t-1]^2 * 1(z[t-1] < 0)}
 
 with \eqn{\epsilon_t \sim NIID(0,1)}{eps[t] ~ NIID(0,1)} and
-\eqn{h_0 = z_0 = 0}. \code{gamma = 0} (the default) is plain GARCH(1,1);
-\code{gamma > 0} adds the TGARCH leverage effect (larger response to
-negative shocks).
+\eqn{h_0 = z_0 = 0}. \code{gamma = 0} (the default) gives plain GARCH(1,1), and
+\code{gamma > 0} adds the TGARCH leverage effect, a larger response to negative
+shocks.
 }
 \examples{
 sim_vol_garch(199, seed = 1) \%>\%

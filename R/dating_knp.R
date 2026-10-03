@@ -115,55 +115,54 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 
 #' Bias-Corrected Bubble Dating (Kejriwal, Nguyen & Perron 2025)
 #'
-#' \code{dating_knp} dates bubble episodes (origination, collapse) by
-#' minimising a residual-omission-corrected sum of squared residuals over
-#' a model of alternating regimes: unit root, explosive, unit root
-#' resuming from a shifted level after an instantaneous collapse, and so
-#' on. Plain OLS over this model is provably inconsistent -- the
-#' origination-date estimate converges to the true \emph{collapse} date,
-#' not the origination date -- which \code{omit = TRUE} (the default)
-#' fixes by dropping the squared residual at each candidate collapse date
-#' from the objective before minimising.
+#' \code{dating_knp} dates bubble episodes (origination and collapse) by minimizing
+#' a sum of squared residuals that is corrected by omitting a residual. The model
+#' has alternating regimes: a unit root, an explosive regime, and a unit root that
+#' resumes from a shifted level after an instantaneous collapse, and so on. Plain
+#' OLS over this model is provably inconsistent, because the estimate of the
+#' origination date converges to the true \emph{collapse} date and not to the
+#' origination date. The default \code{omit = TRUE} fixes this by dropping the
+#' squared residual at each candidate collapse date from the objective before
+#' minimizing.
 #'
-#' \code{breaks = 2} (the default) is the single-bubble model. More
-#' breaks use Kejriwal, Nguyen & Perron's dynamic-programming algorithm,
-#' which returns the exact global minimiser of the objective in
-#' \code{O(breaks * n^2)}. The number of breaks is taken as given, as in
-#' the paper: e.g. two per episode \code{\link{datestamp}} finds.
+#' \code{breaks = 2} (the default) is the single-bubble model. More breaks use the
+#' dynamic-programming algorithm of Kejriwal, Nguyen & Perron, which returns the
+#' exact global minimizer of the objective in \code{O(breaks * n^2)}. As in the
+#' paper, the number of breaks is taken as given, for example two for each episode
+#' that \code{\link{datestamp}} finds.
 #'
-#' @note This is a residual-sum-of-squares model-selection dating
-#' procedure, not a hypothesis test -- it needs no critical values at all.
+#' @note This is a model-selection dating procedure based on the residual sum of
+#' squares and not a hypothesis test, so it needs no critical values.
 #'
 #' @inheritParams radf
-#' @param trim Minimum fraction of the (differenced) sample required in
-#' each regime (default 0.05).
-#' @param breaks Number of break dates (the paper's \code{m}): two per
-#' bubble; an odd number lets the last bubble run to the end of the sample
-#' (its collapse is then \code{NA}).
-#' @param omit Use Kejriwal, Nguyen & Perron's consistency-restoring
-#' correction (default \code{TRUE}). \code{FALSE} gives the plain,
-#' provably inconsistent OLS estimator (their Theorem 1) -- kept mainly
-#' to demonstrate the correction's effect, not for practical dating.
+#' @param trim Minimum fraction of the (differenced) sample required in each regime
+#' (default 0.05).
+#' @param breaks Number of break dates (the paper's \code{m}), two for each bubble.
+#' An odd number lets the last bubble run to the end of the sample, and its collapse
+#' is then \code{NA}.
+#' @param omit Use the consistency-restoring correction of Kejriwal, Nguyen & Perron
+#' (default \code{TRUE}). \code{FALSE} gives the plain OLS estimator, which is
+#' provably inconsistent (their Theorem 1). It is kept mainly to demonstrate the
+#' effect of the correction and not for practical dating.
 #'
-#' @return An object of class \code{dating_knp_obj}: a list with
-#' \code{origination}, \code{collapse} (dates) and \code{delta} (the
-#' fitted explosive AR coefficient) -- named vectors (one value per series)
-#' for a single bubble, matrices (one row per bubble, one column per
-#' series) for more.
+#' @return An object of class \code{dating_knp_obj}: a list with \code{origination}
+#' and \code{collapse} (dates) and \code{delta} (the fitted explosive AR
+#' coefficient). For a single bubble these are named vectors with one value for each
+#' series, and for more bubbles they are matrices with one row for each bubble and
+#' one column for each series.
 #'
 #' @references Kejriwal, M., Nguyen, L., & Perron, P. (2025). An
 #' improved procedure for retrospectively dating the emergence and
 #' collapse of bubbles. Journal of Time Series Analysis, 46(5), 867-883.
 #'
-#' @seealso \code{\link{dating_hls}}, \code{\link{dating_pdc}} for related
+#' @seealso \code{\link{dating_hls}} and \code{\link{dating_pdc}} for related
 #' SSR-based dating approaches.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' dating table (model, origination, collapse, recovery) -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the dating table (model, origination, collapse, recovery). See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -174,8 +173,8 @@ knp_find_break <- function(y, trim = 0.05, omit = TRUE) {
 #' print(res)
 #' autoplot(res)
 #'
-#' # Compare the bias-corrected estimate against the plain (inconsistent) OLS
-#' # one, layering an extra reference line onto the internal autoplot() output
+#' # Compare the bias-corrected estimate with the plain (inconsistent) OLS one,
+#' # adding an extra reference line to the output of autoplot()
 #' res_plain <- dating_knp(sim_data$psy1, trim = 0.05, omit = FALSE)
 #' autoplot(res) +
 #'   ggplot2::geom_vline(xintercept = as.numeric(res_plain$origination), linetype = 3)

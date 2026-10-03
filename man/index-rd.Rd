@@ -19,17 +19,17 @@ index(x) <- value
 }
 \value{
 The index of the object (a \code{Date} vector when the input data
-carried one, otherwise an integer sequence); the replacement form
-returns the modified object.
+carried one, otherwise an integer sequence). The replacement form returns the
+modified object.
 }
 \description{
 Retrieve or replace the index of an object.
 }
 \details{
-If the user does not specify an index for the estimation a
-pseudo-index is generated which is a sequential numeric series. After the estimation,
-the user can use \code{index()} to retrieve or \verb{index<-()} to replace the index.
-The index can be either numeric or Date.
+If you do not specify an index for the estimation, the function
+generates a pseudo-index, a sequential numeric series. After the estimation you
+can use \code{index()} to retrieve the index or \verb{index<-()} to replace it. The index
+can be numeric or Date.
 }
 \examples{
 \donttest{

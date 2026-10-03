@@ -8,55 +8,54 @@ radf_sign_dm(data, minw = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 }
 \value{
-An object of class \code{radf_sign_dm_obj}/\code{radf_obj}: the same
-\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
-\code{\link{radf}}; pair with \code{\link{radf_sign_dm_cv}}.
+An object of class \code{radf_sign_dm_obj}/\code{radf_obj}. It is the same
+\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as for
+\code{\link{radf}}, and it pairs with \code{\link{radf_sign_dm_cv}}.
 }
 \description{
-\code{radf_sign_dm} computes Harvey, Leybourne & Zu (2020)'s second
-sign-based analogue of the recursive right-tailed unit root test,
-denoted \eqn{\bar{s}PWY}/\eqn{\bar{s}PSY} in the paper: the same
-construction as \code{\link{radf_sign}}, but built on a recursively
-(expanding-window) demeaned cumulated-sign series, \code{Ctilde_t =
-sum_{i=2}^{t} (sign(diff(y)_i) - mean(sign(diff(y)_{2:i})))}, rather
-than the raw cumulated sign \code{radf_sign} uses.
+\code{radf_sign_dm} computes the second sign-based analogue of the recursive
+right-tailed unit root test of Harvey, Leybourne & Zu (2020), which the paper
+denotes \eqn{\bar{s}PWY}/\eqn{\bar{s}PSY}. The construction is the same as in
+\code{\link{radf_sign}}, but it is built on a recursively (expanding-window)
+demeaned cumulated-sign series, \code{Ctilde_t = sum_{i=2}^{t}
+(sign(diff(y)_i) - mean(sign(diff(y)_{2:i})))}, and not on the raw cumulated
+sign that \code{radf_sign} uses.
 }
 \details{
-Harvey, Leybourne, Tatlow & Zu (2025) show this statistic shares
-\code{\link{radf_sign}}'s asymptotic level-shift robustness (see that
-function's \verb{Level-shift robustness} section) without requiring
-Assumption 2 of the underlying HLZ (2020) theory (that the innovations'
-median is zero) -- a strictly weaker requirement than
-\code{\link{radf_sign}} needs for its own invariance result. Their finite
--sample simulations also find the recursive demeaning tends to further
-reduce size distortion under level shifts relative to \code{radf_sign},
-though both are asymptotically level-shift robust under the same
-condition.
+Harvey, Leybourne, Tatlow & Zu (2025) show that this statistic shares the
+asymptotic level-shift robustness of \code{\link{radf_sign}} (see the
+\verb{Level-shift robustness} section of that function). It does not need
+Assumption 2 of the underlying HLZ (2020) theory, that the median of the
+innovations is zero, which is a strictly weaker requirement than the one
+\code{\link{radf_sign}} needs for its own invariance result. Their finite-sample
+simulations also find that the recursive demeaning tends to reduce the size
+distortion under level shifts further than \code{radf_sign} does, although both
+are asymptotically robust to level shifts under the same condition.
 }
 \note{
-Needs \code{\link{radf_sign_dm_cv}} for critical values (not
-\code{\link{radf_sign_cv}}, which is calibrated to the non-demeaned
-\code{\link{radf_sign}} statistic instead) -- pivotal like
-\code{radf_sign}, so no per-dataset bootstrap is needed.
+The test needs the critical values from \code{\link{radf_sign_dm_cv}}, and
+\code{\link{radf_sign_cv}} does not apply, because it is calibrated to the
+non-demeaned \code{\link{radf_sign}} statistic. The statistic is pivotal like
+\code{radf_sign}, so no bootstrap is needed for each dataset.
 
-Carries the \code{radf_obj} class and, as of 2026-08-18, its full
-\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
-pipeline works, the same fix as \code{\link{radf_sign}} --
-\code{radf_sign_dm_cv()} now computes \code{badf_cv}/\code{bsadf_cv}
-too, not just the three scalar critical values. See
+The result carries the \code{radf_obj} class. Since 2026-08-18 the full
+\code{summary()}, \code{\link{datestamp}}, \code{tidy} and \code{autoplot}
+pipeline works, with the same fix as for \code{\link{radf_sign}}:
+\code{radf_sign_dm_cv()} now also computes \code{badf_cv} and \code{bsadf_cv},
+and not only the three scalar critical values. See
 \code{vignette("naming-and-analysis", package = "exuber")}.
 }
 \section{Status}{
@@ -66,8 +65,9 @@ too, not just the three scalar critical values. See
 
 \examples{
 \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_sign_dm(y, minw = 20)
 print(res)

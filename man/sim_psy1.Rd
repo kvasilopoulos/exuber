@@ -32,33 +32,34 @@ sim_psy1(
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 
-\item{e}{An optional numeric vector of length \code{n - 1} of innovations
-to use in place of \code{rnorm(n - 1, sd = sigma)}. Lets the plain PSY
-equation above be driven by a non-Gaussian/heteroskedastic/dependent shock
-sequence instead of i.i.d. Gaussian noise -- see \code{\link{sim_innov}}
-(heavy-tailed/skewed), \code{\link{sim_vol_break}} (permanent
-volatility break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
-\code{\link{sim_vol_cir}}/\code{\link{sim_vol_sv}} (stochastic volatility)
-and \code{\link{sim_fi}} (long-memory) for ready-made generators. Default
-\code{NULL} reproduces the plain i.i.d. Gaussian DGP exactly.}
+\item{e}{An optional numeric vector of length \code{n - 1} with innovations to
+use in place of \code{rnorm(n - 1, sd = sigma)}. It lets the plain PSY equation
+above be driven by a shock sequence that is non-Gaussian, heteroskedastic or
+dependent instead of i.i.d. Gaussian noise. The generators \code{\link{sim_innov}}
+(heavy-tailed or skewed), \code{\link{sim_vol_break}} (permanent volatility
+break), \code{\link{sim_vol_garch}} (GARCH/TGARCH),
+\code{\link{sim_vol_cir}} and \code{\link{sim_vol_sv}} (stochastic volatility)
+and \code{\link{sim_fi}} (long memory) produce suitable sequences. The default
+\code{NULL} reproduces the plain i.i.d. Gaussian process exactly.}
 
-\item{shifts}{An optional data frame/list with integer element/column
-\code{date} (in \code{2:n}) and numeric element/column \code{size}, adding
+\item{shifts}{An optional data frame or list with an integer element or column
+\code{date} (in \code{2:n}) and a numeric element or column \code{size}. It adds
 a one-period deterministic level shift of magnitude \code{size} at each
-\code{date} -- Harvey, Leybourne, Tatlow & Zu (2025)'s level-shift DGP.
-Default \code{NULL} adds no shifts.}
+\code{date}, which is the level-shift process of Harvey, Leybourne, Tatlow & Zu
+(2025). The default \code{NULL} adds no shifts.}
 
-\item{coef_noise}{An optional numeric vector of length \code{n - 1},
-mean-zero/unit-variance, perturbing the explosive-regime coefficient as
+\item{coef_noise}{An optional numeric vector of length \code{n - 1} with zero
+mean and unit variance. It perturbs the coefficient of the explosive regime as
 \code{delta + coef_a * coef_noise[t] / sqrt(n)} instead of the fixed
-\code{delta} -- Kurozumi & Nishi (2025)'s stochastically varying explosive
-coefficient. Default \code{NULL} keeps \code{delta} fixed.}
+\code{delta}, which gives the stochastically varying explosive coefficient of
+Kurozumi & Nishi (2025). The default \code{NULL} keeps \code{delta} fixed.}
 
 \item{coef_a}{A positive scalar scaling \code{coef_noise}. Ignored if
 \code{coef_noise} is \code{NULL}.}
@@ -67,7 +68,7 @@ coefficient. Default \code{NULL} keeps \code{delta} fixed.}
 A numeric vector of length n.
 }
 \description{
-The following function generates a time series which switches from a martingale to a mildly explosive
+Generates a time series that switches from a martingale to a mildly explosive
 process and then back to a martingale.
 }
 \details{

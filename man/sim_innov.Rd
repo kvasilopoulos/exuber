@@ -25,37 +25,39 @@ sim_innov(
 \item{xi}{Skewness parameter for \code{"skew_t"} (any real; 0 = symmetric).}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-Generates a shock sequence with the same PSY-style mean equation in mind
-(\code{\link{sim_psy1}}, \code{\link{sim_psy2}}) but a non-Gaussian
-marginal, standardized to mean 0 and variance \code{sigma^2} so it drops
-straight into \code{sim_psy1(..., e = sim_innov(...))}.
+Generates a shock sequence for use with the PSY-style mean equations
+(\code{\link{sim_psy1}} and \code{\link{sim_psy2}}) but with a non-Gaussian
+marginal distribution. The sequence is standardized to mean 0 and variance
+\code{sigma^2}, so it fits directly into \code{sim_psy1(..., e = sim_innov(...))}.
 }
 \details{
-\code{dist = "t"} rescales a Student-t(\code{df}) draw to variance 1
-before scaling by \code{sigma} (exact, closed form: \code{Var(t_df) =
-df / (df - 2)}). \code{dist = "skew_t"} combines two independent
-standardized Student-t draws Azzalini-style,
+\code{dist = "t"} rescales a Student-t(\code{df}) draw to variance 1 before
+scaling by \code{sigma}. This is exact and closed form, because
+\code{Var(t_df) = df / (df - 2)}. \code{dist = "skew_t"} combines two independent
+standardized Student-t draws in the manner of Azzalini,
 \code{delta * abs(T0) + sqrt(1 - delta^2) * T1} with
-\code{delta = xi / sqrt(1 + xi^2)}, then standardizes using the closed-form
-mean/variance of that combination (via \code{E|T0|}, itself closed-form
-through the Beta function). \code{xi > 0} skews right, \code{xi < 0} skews
-left, \code{xi = 0} reduces to the symmetric \code{t} case.
+\code{delta = xi / sqrt(1 + xi^2)}, and then standardizes the result with the
+closed-form mean and variance of that combination (\code{E|T0|} is itself closed
+form through the Beta function). \code{xi > 0} skews the distribution to the
+right, \code{xi < 0} skews it to the left, and \code{xi = 0} gives the symmetric
+\code{t} case.
 }
 \examples{
 sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1) \%>\%
   autoplot()
 
-# Feed skew-t innovations into sim_psy1() instead of i.i.d. Gaussian
+# Feed skew-t innovations into sim_psy1() in place of i.i.d. Gaussian ones
 sim_psy1(n = 200, seed = 123, e = sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)) \%>\%
   autoplot()
 }

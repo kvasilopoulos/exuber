@@ -169,14 +169,13 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 
 #' Wild Bootstrap Critical Values (Phillips & Shi 2020)
 #'
-#' \code{radf_wb_ps_cv} performs the Phillips & Shi (2020) wild bootstrap
-#' re-sampling scheme -- fit a null AR model, resample its residuals --
-#' which is asymptotically robust to non-stationary volatility, to
-#' generate critical values for the recursive unit root tests.
-#' \code{radf_wb_ps_distr} computes the distribution. Unlike
-#' \code{\link{radf_wb_cv}}'s Harvey et al. (2016) non-parametric multiplier
-#' bootstrap, this one supports a training-window boundary (\code{tb}),
-#' which is what \code{\link{monitor}} uses it for.
+#' \code{radf_wb_ps_cv} generates critical values for the recursive unit root
+#' tests with the wild bootstrap of Phillips & Shi (2020). The scheme fits a null
+#' AR model and resamples its residuals, and it is asymptotically robust to
+#' non-stationary volatility. \code{radf_wb_ps_distr} computes the distribution.
+#' In contrast to the non-parametric multiplier bootstrap of Harvey et al. (2016)
+#' in \code{\link{radf_wb_cv}}, this version supports a training-window boundary
+#' (\code{tb}), which is what \code{\link{monitor}} uses it for.
 #'
 #' @inheritParams radf
 #' @inheritParams radf_mc_cv
@@ -188,9 +187,9 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' @param tb A positive integer. The simulated sample size.
 #'
 #'
-#' @return  For \code{radf_wb_ps_cv} a list that contains the critical values for the ADF,
-#' BADF, BSADF and GSADF tests. For \code{radf_wb_ps_distr} a list that
-#' contains the ADF, SADF and GSADF distributions.
+#' @return For \code{radf_wb_ps_cv}, a list with the critical values for the ADF,
+#' BADF, BSADF and GSADF tests. For \code{radf_wb_ps_distr}, a list with the ADF,
+#' SADF and GSADF distributions.
 #'
 #' @references Phillips, P. C., & Shi, S. (2020). Real time monitoring of
 #' asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42, pp. 61-80). Elsevier.
@@ -391,31 +390,31 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 
 #' Wild Bootstrap Critical Values
 #'
-#' \code{radf_wb_cv} performs the Harvey et al. (2016) wild bootstrap re-sampling
-#' scheme, which is asymptotically robust to non-stationary volatility, to
-#' generate critical values for the recursive unit root tests. \code{radf_wb_distr}
-#' computes the distribution.
+#' \code{radf_wb_cv} generates critical values for the recursive unit root tests
+#' with the wild bootstrap of Harvey et al. (2016), which is asymptotically
+#' robust to non-stationary volatility. \code{radf_wb_distr} computes the
+#' distribution.
 #'
 #' @inheritParams radf
 #' @inheritParams radf_mc_cv
 #' @param nboot A positive integer. Number of bootstraps (default = 500L).
 #' @param dist_rad Logical. If TRUE then the Rademacher distribution will be used.
-#' @param dist_skew Logical. If TRUE, use Hafner (2020)'s fixed right-skewed
-#' multiplier distribution instead of the (default) standard normal or
-#' (\code{dist_rad = TRUE}) Rademacher one -- appropriate when the series'
-#' return distribution is itself notably right-skewed (e.g. cryptocurrency
-#' returns, the paper's own application). At most one of \code{dist_rad}
-#' and \code{dist_skew} may be \code{TRUE}.
+#' @param dist_skew Logical. If TRUE, use the fixed right-skewed multiplier
+#' distribution of Hafner (2020) instead of the default standard normal or
+#' (\code{dist_rad = TRUE}) Rademacher one. It is appropriate when the return
+#' distribution of the series is itself clearly right-skewed, as for the
+#' cryptocurrency returns in the application of that paper. At most one of
+#' \code{dist_rad} and \code{dist_skew} may be \code{TRUE}.
 #'
-#' @return  For \code{radf_wb_cv} a list that contains the critical values for the ADF,
-#' BADF, BSADF and GSADF tests. For \code{radf_wb_distr} a list that
-#' contains the ADF, SADF and GSADF distributions.
+#' @return For \code{radf_wb_cv}, a list with the critical values for the ADF,
+#' BADF, BSADF and GSADF tests. For \code{radf_wb_distr}, a list with the ADF,
+#' SADF and GSADF distributions.
 #'
 #' @details
 #'
-#' This approach involves applying a wild bootstrap re-sampling scheme
-#' to construct the bootstrap analogue of the Phillips et al. (2015) test which
-#' is asymptotically robust to non-stationary volatility.
+#' The function applies a wild bootstrap re-sampling scheme to construct the
+#' bootstrap analogue of the test of Phillips et al. (2015). The bootstrap test is
+#' asymptotically robust to non-stationary volatility.
 #'
 #' @references Harvey, D. I., Leybourne, S. J., Sollis, R., & Taylor, A. M. R.
 #' (2016). Tests for explosive financial bubbles in the presence of
@@ -442,8 +441,9 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 #'
 #' @examples
 #' \donttest{
-#' # Volatility triples half-way through the sample: the non-stationary-volatility
-#' # case the wild bootstrap is built for (plain radf_mc_cv() over-rejects here)
+#' # Volatility triples half-way through the sample. This is the case of
+#' # non-stationary volatility that the wild bootstrap is built for, and plain
+#' # radf_mc_cv() over-rejects here
 #' y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 #' # Default minimum window
 #' wb <- radf_wb_cv(y)

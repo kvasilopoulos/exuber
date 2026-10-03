@@ -15,31 +15,32 @@ radf_sign_cv(n, minw = NULL, nrep = 2000L, seed = NULL)
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 An object of class \code{radf_cv}/\code{sign_cv}/\code{mc_cv} with
 the same structure as \code{\link{radf_mc_cv}}.
 }
 \description{
-Simulates the asymptotic null distribution of \code{\link{radf_sign}}'s
-statistic. Per Theorem 2 of Harvey, Leybourne & Zu (2020), this
+Simulates the asymptotic null distribution of the statistic of
+\code{\link{radf_sign}}. By Theorem 2 of Harvey, Leybourne & Zu (2020), this
 distribution does not depend on the volatility process at all (exact
-invariance) -- so, like \code{\link{radf_tt_cv}} and unlike
-\code{\link{radf_wb_cv}}, it does not need to be recomputed per
-dataset: a large \code{n} with the default \code{nrep} approximates the
-paper's own \code{T -> Inf} limit.
+invariance). Like \code{\link{radf_tt_cv}}, and unlike \code{\link{radf_wb_cv}},
+it therefore does not have to be recomputed for each dataset. A large \code{n}
+with the default \code{nrep} approximates the \code{T -> Inf} limit of the
+paper.
 }
 \details{
-\code{sadf_cv} (single-supremum, \code{r1 = 0} fixed) can be checked
-against the paper's Table 1 asymptotic (\code{T = Inf}) sPWY values:
-for \code{minw/n = 0.1}, (10\\%, 5\\%, 1\\%) = (2.410, 2.734, 3.248).
-\code{gsadf_cv} (double-supremum) corresponds to the sPSY row:
-(2.933, 3.180, 3.655).
+You can check \code{sadf_cv} (single-supremum, \code{r1 = 0} fixed) against the
+asymptotic (\code{T = Inf}) sPWY values in Table 1 of the paper. For
+\code{minw/n = 0.1}, the values at (10\\%, 5\\%, 1\\%) are (2.410, 2.734, 3.248).
+\code{gsadf_cv} (double-supremum) corresponds to the sPSY row: (2.933, 3.180,
+3.655).
 }
 \section{Status}{
 

@@ -60,60 +60,59 @@ hlw_join_runs <- function(start, end, max_gap, min_len) {
 
 #' Multi-Bubble SSR/BIC Dating (Harvey, Leybourne & Whitehouse 2020)
 #'
-#' \code{dating_hlw} extends \code{\link{dating_hls}} to series with more
-#' than one explosive episode: it first runs PSY's existing detection
-#' and dating (\code{\link{radf}}/\code{\link{datestamp}}) to locate a
-#' preliminary start/end for each episode, splits the sample into
-#' disjoint date windows around them, then re-dates each window with
-#' \code{\link{dating_hls}}-style SSR/BIC fitting (restricted to Models 2
-#' and 4 for every window but the last).
+#' \code{dating_hlw} extends \code{\link{dating_hls}} to series with more than one
+#' explosive episode. It first runs the existing detection and dating of PSY
+#' (\code{\link{radf}} and \code{\link{datestamp}}) to locate a preliminary start
+#' and end for each episode. It then splits the sample into disjoint date windows
+#' around them and dates each window again with the SSR/BIC fitting of
+#' \code{\link{dating_hls}}, restricted to Models 2 and 4 for every window except
+#' the last.
 #'
-#' When exactly one episode is detected, this reduces to
-#' \code{\link{dating_hls}} applied to the whole series -- the paper's own
-#' stated property, since the single window then runs \code{[1, n]} and
-#' fits all four models.
+#' When exactly one episode is detected, the function reduces to
+#' \code{\link{dating_hls}} applied to the whole series, which is a stated property
+#' of the paper. The single window then runs over \code{[1, n]} and fits all four
+#' models.
 #'
-#' @note The step-2 SSR/BIC dating within each window needs no critical
-#' values at all, same as \code{\link{dating_hls}}. The step-1 PSY
-#' detection/dating pass does use a wild bootstrap critical value
-#' (\code{cv}/\code{nboot}/\code{seed} below), but only to locate the
-#' preliminary episode windows, not for the dating step itself.
+#' @note The step-2 SSR/BIC dating within each window needs no critical values, as
+#' in \code{\link{dating_hls}}. The step-1 PSY detection and dating pass does use a
+#' wild bootstrap critical value (\code{cv}, \code{nboot} and \code{seed} below),
+#' but only to locate the preliminary episode windows and not for the dating
+#' step.
 #'
 #' @inheritParams dating_hls
-#' @param cv Critical values for the step-1 PSY detection/dating step,
-#' as accepted by \code{\link{datestamp}}. Default \code{NULL} computes
-#' \code{\link{radf_wb_cv}} internally.
-#' @param minw Minimum window size for the step-1 \code{\link{radf}}
-#' call. Default \code{\link{psy_minw}}.
-#' @param min_duration Minimum duration (in observations) for a step-1
-#' PSY episode to be counted. Default \code{\link{psy_ds}} (HLW's own
-#' \eqn{\ln(T)} rule).
-#' @param nboot,seed Passed to \code{\link{radf_wb_cv}} when \code{cv}
-#' is not supplied.
-#' @param join HLW's run-joining rule for fragmented step-1 detections: two
-#' explosive runs separated by at most \code{join} non-rejections, each at
-#' least \eqn{\ln(T)} long, are treated as one episode. Default 3, the
-#' paper's value; \code{0} disables joining.
+#' @param cv Critical values for the step-1 PSY detection and dating, as accepted by
+#' \code{\link{datestamp}}. The default \code{NULL} computes \code{\link{radf_wb_cv}}
+#' internally.
+#' @param minw Minimum window size for the step-1 \code{\link{radf}} call. The
+#' default is \code{\link{psy_minw}}.
+#' @param min_duration Minimum duration (in observations) for a step-1 PSY episode
+#' to be counted. The default is \code{\link{psy_ds}} (the \eqn{\ln(T)} rule of
+#' HLW).
+#' @param nboot,seed Passed to \code{\link{radf_wb_cv}} when \code{cv} is not
+#' supplied.
+#' @param join The run-joining rule of HLW for fragmented step-1 detections. Two
+#' explosive runs that are separated by at most \code{join} non-rejections and are
+#' each at least \eqn{\ln(T)} long are treated as one episode. The default is 3, the
+#' value in the paper, and \code{0} disables joining.
 #'
-#' @return An object of class \code{dating_hlw_obj}: a list, one element
-#' per series, each a data frame with one row per detected episode
-#' (\code{model}, \code{origination}, \code{collapse}, \code{recovery}).
-#' A series with no step-1 detected episode gets a zero-row data frame.
+#' @return An object of class \code{dating_hlw_obj}: a list with one element for each
+#' series. Each element is a data frame with one row for each detected episode
+#' (\code{model}, \code{origination}, \code{collapse}, \code{recovery}). A series
+#' with no step-1 detected episode gets a data frame with zero rows.
 #'
 #' @references Harvey, D. I., Leybourne, S. J., & Whitehouse, E. J.
 #' (2020). Date-stamping multiple bubble regimes. Journal of Empirical
 #' Finance, 58, 226-246.
 #'
-#' @seealso \code{\link{dating_hls}} for the single-bubble fitting this
-#' wraps, and \code{\link{datestamp}} for PSY's own multi-bubble
-#' threshold-crossing dating.
+#' @seealso \code{\link{dating_hls}} for the single-bubble fitting that this function
+#' wraps, and \code{\link{datestamp}} for the multi-bubble threshold-crossing
+#' dating of PSY.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' dating table (model, origination, collapse, recovery) -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the dating table (model, origination, collapse, recovery). See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -123,10 +122,10 @@ hlw_join_runs <- function(start, end, max_gap, min_len) {
 #' res <- dating_hlw(sim_data$psy1, trim = 0.1, nboot = 199L, seed = 1)
 #' print(res)
 #'
-#' # Plot every detected episode's breakpoints over the series
+#' # Plot the breakpoints of every detected episode over the series
 #' autoplot(res)
 #'
-#' # A two-bubble series: dating_hls() alone would only fit one bubble
+#' # A two-bubble series, for which dating_hls() alone would fit only one bubble
 #' res2 <- dating_hlw(sim_psy2(n = 200, seed = 123), trim = 0.1, nboot = 199L, seed = 1)
 #' autoplot(res2)
 #' }

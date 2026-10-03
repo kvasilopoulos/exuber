@@ -8,72 +8,71 @@ radf_sign(data, minw = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 }
 \value{
-An object of class \code{radf_sign_obj}/\code{radf_obj}: the same
-\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
-\code{\link{radf}}, computed on the sign-transformed series; pair with
+An object of class \code{radf_sign_obj}/\code{radf_obj}. It is the same
+\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as for
+\code{\link{radf}}, computed on the sign-transformed series, and it pairs with
 \code{\link{radf_sign_cv}}.
 }
 \description{
-\code{radf_sign} computes Harvey, Leybourne & Zu (2020)'s sign-based
-variant of the recursive right-tailed unit root test: instead of
-applying the (double-)supremum ADF test directly to the series, it is
-applied to the cumulated sign of its first differences,
-\code{C_t = sum(sign(diff(y)))}. Because \code{sign()} strips out all
-magnitude information, \code{C_t}'s recursive DF statistic is \emph{exactly}
-invariant to the pattern of (even time-varying) volatility in the
-innovations -- unlike \code{\link{radf}}, no wild bootstrap is needed to
-control size under heteroskedasticity; \code{\link{radf_sign_cv}}'s
-critical values are pivotal, computed once rather than per dataset.
+\code{radf_sign} computes the sign-based variant of the recursive right-tailed
+unit root test of Harvey, Leybourne & Zu (2020). Instead of applying the
+(double-)supremum ADF test to the series itself, it applies it to the cumulated
+sign of the first differences, \code{C_t = sum(sign(diff(y)))}. The \code{sign()}
+function removes all information about magnitudes, so the recursive DF statistic
+of \code{C_t} is \emph{exactly} invariant to the pattern of volatility in the
+innovations, even when volatility changes over time. Unlike \code{\link{radf}},
+the test needs no wild bootstrap to control its size under heteroskedasticity.
+The critical values in \code{\link{radf_sign_cv}} are pivotal, so they are
+computed once and not for each dataset.
 }
 \details{
-The cost of this invariance is power: the paper finds the sign-based
-test outperforms the standard PSY test for many time-varying-volatility
-and bubble specifications, but not all -- the standard test can still
-win for some. The paper's own recommended practical strategy is a
-bootstrap-based union-of-rejections combining both tests, which is
-\strong{not} implemented here (see the package's enhancement notes for
-the cost/benefit reasoning); this function provides the standalone
-sign-based test only. \code{sadf} is the single-supremum (\code{r1 = 0}
-fixed) sPWY statistic; \code{gsadf} is the double-supremum sPSY
-statistic.
+The price of this invariance is power. The paper finds that the sign-based test
+outperforms the standard PSY test for many specifications of time-varying
+volatility and bubbles, but not for all of them, and the standard test can still
+win in some. The strategy that the paper recommends in practice is a
+bootstrap-based union of rejections that combines both tests. We have not
+implemented it (see the package's enhancement notes for the cost and benefit
+considerations), and this function provides the standalone sign-based test only.
+\code{sadf} is the single-supremum sPWY statistic (\code{r1 = 0} fixed), and
+\code{gsadf} is the double-supremum sPSY statistic.
 }
 \note{
-Needs \code{\link{radf_sign_cv}} for critical values, not
-\code{\link{radf_wb_cv}} or any other bootstrap -- the statistic is
-pivotal (exactly invariant to heteroskedasticity), so its critical
-values are simulated once, not per dataset.
+The test needs the critical values from \code{\link{radf_sign_cv}}, and
+neither \code{\link{radf_wb_cv}} nor any other bootstrap applies. The statistic is
+pivotal (exactly invariant to heteroskedasticity), so its critical values are
+simulated once and not for each dataset.
 
-Carries the \code{radf_obj} class and, as of 2026-08-18, its full
-\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
-pipeline works -- \code{radf_sign_cv()} now computes the time-varying
-\code{badf_cv}/\code{bsadf_cv} boundary those last two need, not just
-the three scalar critical values \code{summary()} uses. See
+The result carries the \code{radf_obj} class. Since 2026-08-18 the full
+\code{summary()}, \code{\link{datestamp}}, \code{tidy} and \code{autoplot}
+pipeline works, because \code{radf_sign_cv()} now computes the time-varying
+\code{badf_cv} and \code{bsadf_cv} boundary that the last two need, and not only
+the three scalar critical values that \code{summary()} uses. See
 \code{vignette("naming-and-analysis", package = "exuber")}.
 }
 \section{Level-shift robustness}{
 
-Harvey, Leybourne, Tatlow & Zu (2025) show this test also retains its
-standard (no-level-shift) null distribution in the presence of
-deterministic level shifts, provided the number of shifts grows
-strictly slower than \code{sqrt(T)} -- regardless of how large the
-shifts are. This is a materially weaker requirement than the standard
-PSY test needs for its own size control, which restricts the number
-\strong{and} the magnitude of shifts jointly; in their simulations the
-standard test is never correctly sized once the number of shifts grows
-at rate \code{sqrt(T)}, while this test stays close to nominal size.
+Harvey, Leybourne, Tatlow & Zu (2025) show that this test keeps its standard
+null distribution, the one without level shifts, in the presence of
+deterministic level shifts, provided that the number of shifts grows strictly
+more slowly than \code{sqrt(T)}. The size of the shifts does not matter. This
+is a materially weaker requirement than the one the standard PSY test needs for
+size control, which restricts the number \strong{and} the magnitude of the shifts
+jointly. In their simulations the standard test is never correctly sized once
+the number of shifts grows at rate \code{sqrt(T)}, while this test stays close to
+its nominal size.
 }
 
 \section{Status}{
@@ -83,8 +82,9 @@ at rate \code{sqrt(T)}, while this test stays close to nominal size.
 
 \examples{
 \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_sign(y, minw = 20)
 print(res)
@@ -110,9 +110,9 @@ deterministic level shifts. Oxford Bulletin of Economics and Statistics,
 }
 \seealso{
 \code{\link{radf_sign_cv}} for critical values,
-\code{\link{radf_sign_dm}} for the recursively demeaned sign-based
-analogue (sharing the same level-shift robustness), and \code{\link{radf}}
-for the standard (non-invariant) test.
+\code{\link{radf_sign_dm}} for the recursively demeaned sign-based analogue,
+which has the same level-shift robustness, and \code{\link{radf}} for the
+standard test, which is not invariant.
 
 Other volatility-robust tests:
 \code{\link[=cusum_test]{cusum_test()}},

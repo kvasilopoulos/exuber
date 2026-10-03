@@ -37,36 +37,35 @@ cusum_test_path <- function(y, type) {
 
 #' CUSUM and CUSUM-of-Squares Bubble Tests (Kurozumi & Nishi 2025)
 #'
-#' \code{cusum_test} implements the retrospective CUSUM (\code{"cs"}),
-#' generalized CUSUM (\code{"gcs"}), CUSUM-of-squares (\code{"cssq"}) and
-#' generalized CUSUM-of-squares (\code{"gcssq"}) tests of Kurozumi & Nishi
-#' (2025), Brown et al.'s (1975) parameter-constancy statistics applied to
-#' the first differences. The generalized versions take the supremum over
-#' every window start as well as every end point.
+#' \code{cusum_test} implements the retrospective CUSUM (\code{"cs"}), generalized
+#' CUSUM (\code{"gcs"}), CUSUM-of-squares (\code{"cssq"}) and generalized
+#' CUSUM-of-squares (\code{"gcssq"}) tests of Kurozumi & Nishi (2025). These are the
+#' parameter-constancy statistics of Brown et al. (1975), applied to the first
+#' differences. The generalized versions take the supremum over every window start
+#' as well as every end point.
 #'
-#' CS/GCS reject when the cumulated increments get too large (right tail).
-#' CSSQ/GCSSQ are two-sided: they reject when the cumulated squared
-#' increments drift too far above \emph{or} below their full-sample
-#' average, each tail at half the level. The paper finds the CUSUM-type
-#' tests lose almost all power once the explosive coefficient is
-#' genuinely stochastic, while the CUSUM-SQ type keeps it -- see
-#' \code{\link{ssu_test}} for the paper's more powerful statistics.
+#' CS and GCS reject when the cumulated increments become too large (right tail).
+#' CSSQ and GCSSQ are two-sided. They reject when the cumulated squared increments
+#' drift too far above \emph{or} below their full-sample average, with half the level
+#' in each tail. The paper finds that the CUSUM-type tests lose almost all their
+#' power once the explosive coefficient is stochastic, while the CUSUM-SQ type
+#' keeps it. See \code{\link{ssu_test}} for the more powerful statistics of the
+#' paper.
 #'
-#' @note All critical values are published asymptotic values (Kurozumi &
-#' Nishi (2025)'s Table I); no minimum window is needed (the paper finds
-#' the statistics insensitive to it).
+#' @note All critical values are published asymptotic values (Table I of Kurozumi &
+#' Nishi 2025). No minimum window is needed, because the paper finds the statistics
+#' insensitive to it.
 #'
 #' @inheritParams radf
-#' @param sig_lvl Significance level on the package-wide 0-100 scale, one
-#' of \code{90}, \code{95}, \code{99}.
-#' @param type One of \code{"cs"}, \code{"gcs"}, \code{"cssq"},
-#' \code{"gcssq"}.
+#' @param sig_lvl Significance level on the 0 to 100 scale used throughout the
+#' package, one of \code{90}, \code{95} or \code{99}.
+#' @param type One of \code{"cs"}, \code{"gcs"}, \code{"cssq"} or \code{"gcssq"}.
 #'
-#' @return An object of class \code{cusum_test_obj}: a list with the
-#' statistic path \code{stat} (one value per end point; for the
-#' generalized versions the sup over window starts), \code{stat_inf} (the
-#' inf path, CSSQ/GCSSQ only), the statistic \code{sup} (and \code{inf}),
-#' the critical value(s) \code{crit}, and \code{detected}.
+#' @return An object of class \code{cusum_test_obj}: a list with the statistic path
+#' \code{stat} (one value for each end point, and for the generalized versions the
+#' sup over window starts), \code{stat_inf} (the inf path, for CSSQ and GCSSQ only),
+#' the statistic \code{sup} (and \code{inf}), the critical values \code{crit} and
+#' \code{detected}.
 #'
 #' @references Kurozumi, E., & Nishi, M. (2025). Bubble testing with
 #' stochastically varying explosive coefficient. Journal of Time Series
@@ -76,8 +75,8 @@ cusum_test_path <- function(y, type) {
 #' the constancy of regression relationships over time. Journal of the
 #' Royal Statistical Society B, 37(2), 149-192.
 #'
-#' @seealso \code{\link{ssu_test}}; \code{\link{monitor_cusum}} for
-#' real-time CUSUM monitoring.
+#' @seealso \code{\link{ssu_test}}, and \code{\link{monitor_cusum}} for real-time
+#' CUSUM monitoring.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -126,9 +125,9 @@ cusum_test <- function(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"
 
 #' Plot method for cusum_test() output
 #'
-#' Plots the CUSUM-type statistic path against its critical value(s), one
-#' panel per series; the two-sided CUSUM-of-squares tests show the sup path
-#' against the upper and the inf path against the lower critical value.
+#' Plots the CUSUM-type statistic path against its critical values, with one panel
+#' for each series. For the two-sided CUSUM-of-squares tests, the sup path is shown
+#' against the upper critical value and the inf path against the lower one.
 #'
 #' @param object An object of class \code{cusum_test_obj}, the output of \code{\link{cusum_test}}.
 #' @param ... Further arguments passed to methods. Not used.

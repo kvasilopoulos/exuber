@@ -16,35 +16,36 @@ sim_vol_cir(
 \arguments{
 \item{n}{Number of innovations to generate.}
 
-\item{kappa, theta, xi}{Positive CIR parameters (mean-reversion speed,
-long-run variance, vol-of-vol).}
+\item{kappa, theta, xi}{Positive CIR parameters (speed of mean reversion,
+long-run variance and volatility of volatility).}
 
 \item{sigma0_sq}{Non-negative starting variance. Defaults to \code{theta}.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
 Generates shocks driven by a Cox-Ingersoll-Ross (square-root) stochastic
-variance process, Euler-Maruyama discretized, for use as
+variance process, discretized with the Euler-Maruyama scheme, for use as
 \code{sim_psy1(..., e = sim_vol_cir(...))}.
 }
 \details{
 \deqn{d\sigma^2(r) = \kappa(\theta - \sigma^2(r))dr + \xi\sigma(r)dB(r)}{
 d sigma^2(r) = kappa*(theta - sigma^2(r))dr + xi*sigma(r)*dB(r)}
 
-discretized over \code{n} steps of \code{r} in \eqn{[0, 1]}, with variance
-reflected at zero if a step would take it negative. Default parameters
+discretized over \code{n} steps of \code{r} in \eqn{[0, 1]}. The variance is
+reflected at zero if a step would take it negative. The default parameters
 (\eqn{\kappa=0.03}{kappa=0.03}, \eqn{\theta=0.25}{theta=0.25},
-\eqn{\xi=0.1}{xi=0.1}) match Harvey, Leybourne & Zu (2019)'s robustness
-design, "representative of Bollerslev and Zhou (2002)".
+\eqn{\xi=0.1}{xi=0.1}) match the robustness design of Harvey, Leybourne & Zu
+(2019), which is "representative of Bollerslev and Zhou (2002)".
 }
 \examples{
 sim_vol_cir(199, seed = 1) \%>\%

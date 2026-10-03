@@ -15,7 +15,7 @@
 A \link[ggplot2]{ggplot}
 }
 \description{
-Plots the recursive SSU statistic path against its critical value, one panel per series.
+Plots the recursive SSU statistic path against its critical value, with one panel for each series.
 }
 \seealso{
 \code{\link{ssu_test}}

@@ -26,48 +26,48 @@
 
 #' Locally Best Invariant Test for a Bubble (Breitung & Diegel 2025)
 #'
-#' \code{lbi_test} implements the static locally best invariant (LBI)
-#' test of Breitung & Diegel (2025) for a bubble known (or assumed) to
-#' span the entire sample: \code{LBI = (y_T - y_1) / (sigma_tilde *
-#' sqrt(T - 1))}, with \code{sigma_tilde^2} the sample variance of first
-#' differences. Heteroskedasticity-robust by construction (the
-#' statistic's invariance property does not depend on the exact form of
-#' the innovation variance), with a standard normal null distribution --
-#' no bootstrap, no simulation, no published table.
+#' \code{lbi_test} implements the static locally best invariant (LBI) test of
+#' Breitung & Diegel (2025) for a bubble that is known, or assumed, to span the
+#' entire sample: \code{LBI = (y_T - y_1) / (sigma_tilde * sqrt(T - 1))}, where
+#' \code{sigma_tilde^2} is the sample variance of the first differences. The test
+#' is robust to heteroskedasticity by construction, because the invariance property
+#' of the statistic does not depend on the exact form of the innovation variance.
+#' The null distribution is standard normal, so the test needs no bootstrap, no
+#' simulation and no published table.
 #'
-#' Only the static (single, full-sample window) test is implemented.
-#' Breitung & Diegel's own headline contribution is a sequential/
-#' exponentially-weighted extension for monitoring an unknown start
-#' date, whose exact weighting scheme and boundary constant are not
-#' pinned down here and are not implemented.
+#' Only the static test, which uses a single full-sample window, is implemented.
+#' The main contribution of Breitung & Diegel is a sequential, exponentially
+#' weighted extension for monitoring a series when the start date is unknown. Its
+#' exact weighting scheme and boundary constant are not pinned down here, so this
+#' function does not implement it.
 #'
-#' @note The critical value is closed-form: the standard normal
-#' (\code{qnorm}) quantile at \code{sig_lvl} -- no bootstrap, no
-#' simulation, no table needed.
+#' @note The critical value is closed-form: it is the standard normal
+#' (\code{qnorm}) quantile at \code{sig_lvl}, so no bootstrap, simulation or table
+#' is needed.
 #'
 #' @inheritParams radf
-#' @param sig_lvl Significance level for the (one-sided, right-tailed --
-#' positive bubbles only) test, on the package-wide 0-100 scale (default
-#' \code{95}); any value in \code{[50, 100)} is accepted since the
-#' critical value is a closed-form normal quantile.
+#' @param sig_lvl Significance level of the one-sided, right-tailed test (positive
+#' bubbles only), on the 0 to 100 scale used throughout the package (default
+#' \code{95}). Any value in \code{[50, 100)} is accepted, because the critical
+#' value is a closed-form normal quantile.
 #'
-#' @return An object of class \code{lbi_test_obj}: a list with the test
-#' statistic \code{stat}, the standard-normal critical value \code{crit},
-#' and \code{detected} (logical, \code{stat > crit}).
+#' @return An object of class \code{lbi_test_obj}: a list with the test statistic
+#' \code{stat}, the standard-normal critical value \code{crit} and \code{detected}
+#' (logical, \code{stat > crit}).
 #'
 #' @references Breitung, J., & Diegel, M. (2025). A locally best
 #' invariant sequential test for explosive behavior in the presence of
 #' nonstationary volatility. Journal of Time Series Analysis.
 #'
-#' @seealso \code{\link{radf}} for the recursive ADF-family alternative
-#' this complements.
+#' @seealso \code{\link{radf}} for the recursive ADF-family alternative that this
+#' test complements.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' statistic/critical-value/detected summary -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead.
+#' `print()` shows the statistic, the critical value and whether the bubble was
+#' detected. See `vignette("naming-and-analysis", package = "exuber")` for which
+#' functions fit the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -109,7 +109,7 @@ lbi_test <- function(data, sig_lvl = 95) {
 
 #' Plot method for lbi_test() output
 #'
-#' Bar chart of the LBI statistic per series against its critical value; series that exceed it are flagged as detected.
+#' Bar chart of the LBI statistic for each series against its critical value. Series that exceed it are flagged as detected.
 #'
 #' @param object An object of class \code{lbi_test_obj}, the output of \code{\link{lbi_test}}.
 #' @param ... Further arguments passed to methods. Not used.
@@ -209,58 +209,58 @@ bd_cusum_weights <- function(T_m, c_bar) {
 #' Sequential LBI Monitoring for an Unknown Bubble Start Date (Breitung &
 #' Diegel 2025)
 #'
-#' \code{monitor_lbi} implements the sequential (constant-boundary)
-#' extension of \code{\link{lbi_test}}'s locally best invariant statistic,
-#' for monitoring a series in real time when the bubble's start date is
-#' unknown: after a training window \code{[1, T*]} assumed free of
-#' exuberance, the (optionally exponentially weighted) partial sum of
-#' post-training first differences is compared against a constant
-#' boundary, flagging the first monitoring date it is breached.
+#' \code{monitor_lbi} implements the sequential, constant-boundary extension of the
+#' locally best invariant statistic of \code{\link{lbi_test}}. It monitors a series
+#' in real time when the start date of the bubble is unknown. After a training
+#' window \code{[1, T*]} that is assumed free of exuberance, it compares the
+#' (optionally exponentially weighted) partial sum of the post-training first
+#' differences with a constant boundary and flags the first monitoring date at
+#' which the boundary is breached.
 #'
-#' Their eq. 15 shows this partial sum, normalized by the fixed monitoring
-#' horizon length (not \code{sqrt(t)}, unlike \code{\link{monitor_cusum}}'s
-#' Chu-Stinchcombe-White-style boundary), converges to a standard Brownian
-#' motion on \code{[0, 1]} under the null -- so a single constant boundary
-#' controls size uniformly across the whole monitoring window. The paper
-#' shows this constant-boundary detector ("mCUSUM" at \code{c_bar = 0},
-#' "wCUSUM" at \code{c_bar > 0}) is more powerful than the classical
-#' time-varying-boundary CUSUM test it is compared against.
+#' Their eq. 15 shows that this partial sum, normalized by the fixed length of the
+#' monitoring horizon, converges to a standard Brownian motion on \code{[0, 1]}
+#' under the null. The normalization is not \code{sqrt(t)}, which differs from the
+#' Chu-Stinchcombe-White-style boundary of \code{\link{monitor_cusum}}. A single
+#' constant boundary therefore controls size uniformly across the whole monitoring
+#' window. The paper shows that this constant-boundary detector ("mCUSUM" at
+#' \code{c_bar = 0}, "wCUSUM" at \code{c_bar > 0}) is more powerful than the
+#' classical CUSUM test with a time-varying boundary, to which it is compared.
 #'
-#' @note The critical value is a published constant boundary (Breitung &
-#' Diegel (2025)'s Table 1) -- a table lookup, no simulation.
+#' @note The critical value is the published constant boundary in Table 1 of
+#' Breitung & Diegel (2025), so it is a table lookup and needs no simulation.
 #'
 #' @inheritParams monitor_cusum
-#' @param c_bar Exponential up-weighting parameter for later (more
-#' bubble-like) monitoring observations (their eq. 12), \code{>= 0}.
-#' \code{0} (default) is the flat-weight "mCUSUM" variant, appropriate
-#' when a bubble is equally likely to start at any point in the
-#' monitoring window; the paper's own suggested value for a moderate power
-#' boost when a bubble partway through is more plausible is \code{2}.
-#' Critical values (\code{sig_lvl}) are the same for every \code{c_bar}.
-#' @param sig_lvl Significance level on the package-wide 0-100 scale, one
-#' of \code{90}, \code{95}, \code{97.5}, \code{99}, \code{99.5} (Breitung &
-#' Diegel's Table 1 only tabulates these).
+#' @param c_bar Exponential up-weighting parameter for later monitoring
+#' observations, which are more likely to be bubble-like (their eq. 12), \code{>= 0}.
+#' The default \code{0} is the flat-weight "mCUSUM" variant, which is appropriate
+#' when a bubble is equally likely to start at any point in the monitoring window.
+#' For a moderate gain in power when a bubble that starts partway through the
+#' window is more plausible, the paper suggests \code{2}. The critical values
+#' (\code{sig_lvl}) are the same for every \code{c_bar}.
+#' @param sig_lvl Significance level on the 0 to 100 scale used throughout the
+#' package, one of \code{90}, \code{95}, \code{97.5}, \code{99} or \code{99.5}.
+#' Table 1 of Breitung & Diegel tabulates only these.
 #'
-#' @return An object of class \code{monitor_lbi_obj}: a list with the
-#' monitoring-region statistic path (\code{stat}), the constant
-#' \code{boundary}, the training window length \code{T_star}, and
-#' \code{alarm}/\code{alarm_date} (the first breach, \code{NA} if none).
+#' @return An object of class \code{monitor_lbi_obj}: a list with the statistic path
+#' in the monitoring region (\code{stat}), the constant \code{boundary}, the length
+#' of the training window \code{T_star}, and \code{alarm} and \code{alarm_date} (the
+#' first breach, \code{NA} if there is none).
 #'
 #' @references Breitung, J., & Diegel, M. (2025). A locally best invariant
 #' sequential test for explosive behavior in the presence of nonstationary
 #' volatility. Journal of Time Series Analysis.
 #'
-#' @seealso \code{\link{lbi_test}} for the static (known, full-sample
-#' bubble window) version. \code{\link{monitor_cusum}} and
-#' \code{\link{monitor}} for structurally different monitoring
-#' detectors.
+#' @seealso \code{\link{lbi_test}} for the static version, which assumes a known
+#' bubble window that spans the full sample. \code{\link{monitor_cusum}} and
+#' \code{\link{monitor}} are monitoring detectors with a structurally different
+#' construction.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' boundary/alarm summary -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead.
+#' `print()` shows the boundary and the alarm. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -323,7 +323,7 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, sig_lvl = 95) {
 
 #' Plot method for monitor_lbi() output
 #'
-#' Plots the LBI CUSUM detector path against its boundary, one panel per series, with a vertical marker at the alarm date.
+#' Plots the LBI CUSUM detector path against its boundary, with one panel for each series and a vertical marker at the alarm date.
 #'
 #' @param object An object of class \code{monitor_lbi_obj}, the output of \code{\link{monitor_lbi}}.
 #' @param ... Further arguments passed to methods. Not used.

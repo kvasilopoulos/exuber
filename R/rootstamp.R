@@ -10,75 +10,76 @@
 #' Confidence Interval and Doubling Time for an Explosive Root
 #'
 #' Fits a no-intercept AR(1) regression \eqn{y_t = \rho y_{t-1} + \epsilon_t}
-#' (Phillips & Magdalinos 2007; no intercept, following their eq. 58, "to
-#' exclude the presence of a deterministically explosive component") and
-#' reports \eqn{\hat\rho} together with a confidence interval and implied
-#' \strong{doubling time} \eqn{\log(2)/\log(\hat\rho)} -- the number of
-#' periods for the series to double in magnitude at the estimated growth
-#' rate. Guo, Sun & Wang (2019) show that -- unlike the classical (stationary
-#' or unit-root) case -- the ordinary t-statistic for \eqn{\hat\rho},
-#' estimated by OLS with no intercept, is asymptotically \strong{standard
-#' normal} under i.i.d. errors (and under weakly dependent errors, with a HAC
-#' standard error). This means an ordinary-looking Wald interval,
-#' \eqn{\hat\rho \pm z_{\alpha/2}\cdot se(\hat\rho)}, is asymptotically valid
-#' here even though \eqn{\hat\rho > 1} -- despite looking identical in form to
-#' a classical (invalid, for an explosive root) normal-theory interval, the
-#' justification is different (Guo, Sun & Wang's explosive-root CLT, not the
-#' classical stationary one).
+#' (Phillips & Magdalinos 2007, who omit the intercept in their eq. 58 "to exclude
+#' the presence of a deterministically explosive component") and reports
+#' \eqn{\hat\rho} together with a confidence interval and the implied
+#' \strong{doubling time} \eqn{\log(2)/\log(\hat\rho)}, which is the number of
+#' periods the series needs to double in magnitude at the estimated growth rate.
 #'
-#' \code{type = "cauchy"} instead uses the Phillips & Magdalinos (2007)
-#' fixed-root result (their eq. 27, restating White 1958): for a genuinely
-#' explosive, non-drifting root, \eqn{\frac{\rho^n}{\rho^2-1}(\hat\rho-\rho)}
-#' converges to a standard Cauchy variate. Plugging in \eqn{\hat\rho} for the
-#' unknown \eqn{\rho} in the normalization (the usual practice for this kind
-#' of self-normalized pivot) gives \eqn{\hat\rho \pm q_{\alpha/2}\cdot
-#' (\hat\rho^2-1)/\hat\rho^n}, with \eqn{q_{\alpha/2}} a standard-Cauchy
-#' quantile. This interval assumes a \emph{fixed} explosive root (no drift,
-#' no unknown localizing rate); the default \code{"normal"} type is the safer
-#' choice when that assumption is in doubt, since Guo, Sun & Wang's result
-#' allows drift and weak dependence.
+#' Guo, Sun & Wang (2019) show that the ordinary t-statistic for \eqn{\hat\rho},
+#' estimated by OLS with no intercept, is asymptotically \strong{standard normal}
+#' under i.i.d. errors, and also under weakly dependent errors when a HAC standard
+#' error is used. This differs from the classical stationary and unit-root cases.
+#' An ordinary-looking Wald interval, \eqn{\hat\rho \pm z_{\alpha/2}\cdot
+#' se(\hat\rho)}, is therefore asymptotically valid here even though
+#' \eqn{\hat\rho > 1}. The interval has the same form as a classical normal-theory
+#' interval, which would be invalid for an explosive root, but the justification
+#' is different: it rests on the explosive-root central limit theorem of Guo, Sun
+#' & Wang and not on the classical stationary one.
 #'
-#' Two methods, for two different starting points:
+#' \code{type = "cauchy"} instead uses the fixed-root result of Phillips &
+#' Magdalinos (2007, their eq. 27, which restates White 1958). For an explosive
+#' root that does not drift, \eqn{\frac{\rho^n}{\rho^2-1}(\hat\rho-\rho)}
+#' converges to a standard Cauchy variate. We replace the unknown \eqn{\rho} in the
+#' normalization with \eqn{\hat\rho}, as is usual for this kind of self-normalized
+#' pivot, and obtain \eqn{\hat\rho \pm q_{\alpha/2}\cdot
+#' (\hat\rho^2-1)/\hat\rho^n}, where \eqn{q_{\alpha/2}} is a standard-Cauchy
+#' quantile. This interval assumes a \emph{fixed} explosive root, with no drift and
+#' no unknown localizing rate. When that assumption is in doubt, the default
+#' \code{"normal"} type is safer, because the result of Guo, Sun & Wang allows for
+#' drift and weak dependence.
+#'
+#' There are two methods, for two different starting points:
 #' \itemize{
-#'  \item \strong{Default}: \code{object} is a numeric vector -- the
-#'  sub-sample to fit (e.g. an episode already sliced out by hand, or by
-#'  position from a \code{\link{datestamp}} result:
-#'  \code{y[from:to]}). Fits once and returns one CI.
-#'  \item \strong{\code{radf_obj}}: \code{object} is the \code{radf_obj} a
-#'  \code{\link{datestamp}} result \code{ds} was computed on. Runs the
-#'  default method once per datestamped episode, per series, slicing
-#'  \code{object}'s own data itself -- no manual loop needed.
+#'  \item \strong{Default}: \code{object} is a numeric vector, the sub-sample to
+#'  fit. It can be an episode that you sliced out by hand or by position from a
+#'  \code{\link{datestamp}} result (\code{y[from:to]}). The method fits the
+#'  sub-sample once and returns one confidence interval.
+#'  \item \strong{\code{radf_obj}}: \code{object} is the \code{radf_obj} on which
+#'  a \code{\link{datestamp}} result \code{ds} was computed. The method runs the
+#'  default method once for each datestamped episode of each series and slices the
+#'  data of \code{object} itself, so no manual loop is needed.
 #' }
 #'
-#' @param object For the default method, a numeric vector (the sub-sample to
-#' fit -- already sliced to the episode of interest). For the \code{radf_obj}
-#' method, the \code{radf_obj} that \code{ds} was computed on.
+#' @param object For the default method, a numeric vector with the sub-sample to
+#' fit, already sliced to the episode of interest. For the \code{radf_obj} method,
+#' the \code{radf_obj} on which \code{ds} was computed.
 #' @param ds (\code{radf_obj} method only) A \code{\link{datestamp}} result
 #' computed on \code{object}. Root inference on a very short episode is
-#' statistically meaningless -- set \code{min_duration} in that
-#' \code{\link{datestamp}} call to exclude episodes too short for reliable
-#' root inference, rather than expecting this method to second-guess what
-#' counts as "too short".
-#' @param sig_lvl Confidence level of the interval on the package-wide 0-100
-#'   scale (default \code{95}); any value in \code{[50, 100)}.
-#' @param type \code{"normal"} (default) for Guo, Sun & Wang's normal-t
-#' interval, or \code{"cauchy"} for the Phillips-Magdalinos fixed-root
-#' Cauchy interval.
-#' @param ... further arguments passed to methods.
+#' statistically meaningless. Set \code{min_duration} in that
+#' \code{\link{datestamp}} call to exclude episodes that are too short for reliable
+#' root inference, because this method does not decide what counts as too short.
+#' @param sig_lvl Confidence level of the interval on the 0 to 100 scale used
+#' throughout the package (default \code{95}). Any value in \code{[50, 100)} is
+#' allowed.
+#' @param type \code{"normal"} (default) for the normal-t interval of Guo, Sun &
+#' Wang, or \code{"cauchy"} for the fixed-root Cauchy interval of Phillips &
+#' Magdalinos.
+#' @param ... Further arguments passed to methods.
 #'
-#' @return The default method returns a \code{rootstamp_est} object (a list
-#' with \code{rho}, \code{se}, \code{t_stat}, \code{n}, \code{rho_ci},
-#' \code{doubling_time}, \code{doubling_time_ci}, with its own \code{print()}
-#' method).
+#' @return The default method returns a \code{rootstamp_est} object, which is a
+#' list with \code{rho}, \code{se}, \code{t_stat}, \code{n}, \code{rho_ci},
+#' \code{doubling_time} and \code{doubling_time_ci} and has its own \code{print()}
+#' method.
 #'
-#' The \code{radf_obj} method returns a \code{rootstamp_episodes} object (a
-#' named list, one element per series in \code{ds}; the panel
-#' sieve-bootstrap case, whose \code{ds} entry is named \code{"panel"} and
-#' has no single corresponding series, is dropped with a warning), each a
-#' data frame with one row per datestamped episode: \code{Start}, \code{End},
-#' \code{rho}, \code{rho_lower}, \code{rho_upper}, \code{doubling_time},
-#' \code{doubling_time_lower}, \code{doubling_time_upper} -- also with its
-#' own \code{print()} method.
+#' The \code{radf_obj} method returns a \code{rootstamp_episodes} object, which is a
+#' named list with one element for each series in \code{ds}. Each element is a
+#' data frame with one row for each datestamped episode and the columns
+#' \code{Start}, \code{End}, \code{rho}, \code{rho_lower}, \code{rho_upper},
+#' \code{doubling_time}, \code{doubling_time_lower} and
+#' \code{doubling_time_upper}. The object has its own \code{print()} method. The
+#' panel sieve-bootstrap case has a \code{ds} entry named \code{"panel"} that
+#' corresponds to no single series, and it is dropped with a warning.
 #'
 #' @references Guo, G., Sun, Y., & Wang, S. (2019). Testing for moderate
 #' explosiveness. The Econometrics Journal, 22(3), 279-303.
@@ -86,19 +87,18 @@
 #' moderate deviations from a unit root. Journal of Econometrics, 136(1),
 #' 115-130.
 #'
-#' @note Neither method's return value carries the `radf_obj` class -- even
-#' the \code{radf_obj} method, which dispatches on that class for its
-#' \emph{input}, returns its own \code{rootstamp_episodes} class -- so
-#' \code{rootstamp()} does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`/`autoplot`. See
-#' `vignette("naming-and-analysis", package = "exuber")` for the full picture
-#' of which functions do and don't fit that pipeline.
+#' @note Neither method returns the `radf_obj` class. Even the \code{radf_obj}
+#' method, which dispatches on that class for its \emph{input}, returns its own
+#' \code{rootstamp_episodes} class. \code{rootstamp()} therefore does not work with
+#' `summary()`, `\link{datestamp}`, `tidy` and `autoplot`. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' that pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
 #' @examples
-#' # sim_psy1()'s own martingale -> explosive DGP, explosive through the sample end
+#' # The martingale-to-explosive process of sim_psy1(), explosive through the sample end
 #' y <- sim_psy1(n = 100, te = 60, tf = 100, seed = 2026)
 #'
 #' r <- radf(y, minw = 20)

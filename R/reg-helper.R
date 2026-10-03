@@ -2,9 +2,9 @@
 
 #' Helper functions in accordance to PSY(2015)
 #'
-#' \code{psy_minw} and \code{psy_ds} use the rules-of- thumb proposed by
-#' Phillips et al. (2015) to compute the minimum window size and the
-#' minimum duration of an episode of exuberance, respectively.
+#' \code{psy_minw} and \code{psy_ds} use the rules of thumb proposed by Phillips
+#' et al. (2015) to compute the minimum window size and the minimum duration of an
+#' episode of exuberance, respectively.
 #'
 #' @inheritParams radf_mc_cv
 #' @return \code{psy_minw}: a single integer, the minimum window length.
@@ -54,10 +54,10 @@ psy_ds <- function(n, rule = 1, delta = 1) {
   }
 }
 
-#' Helper function to find `tb` from the Phillips and Shi (2020)
+#' Helper function to find `tb` from Phillips and Shi (2020)
 #'
-#' This function helps to find the number of observations in the window
-#' over which size is to be controlled.
+#' This function finds the number of observations in the window over which size is
+#' to be controlled.
 #'
 #' @inheritParams radf_mc_cv
 #' @param freq The type of date-interval.
@@ -70,17 +70,17 @@ psy_ds <- function(n, rule = 1, delta = 1) {
 #' integrated systems: Revisiting the money-income relationship.
 #'
 #' @examples
-#' # Training window controlling size over a 2-year span of monthly data
+#' # Training window that controls size over a 2-year span of monthly data
 #' tb <- ps_tb(100, freq = "monthly", size = 2)
 #' tb
 #'
 #' \donttest{
-#' # Use it directly as monitor()'s training window
+#' # Use it directly as the training window of monitor()
 #' monitor(sim_data, r_star = tb, boundary = "kurozumi")
 #' }
 #'
-#' @return A single integer, the training-window length in observations,
-#'   suitable for \code{\link{monitor}}'s \code{r_star}.
+#' @return A single integer, the length of the training window in observations,
+#' suitable for the \code{r_star} argument of \code{\link{monitor}}.
 #' @export
 ps_tb <- function(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2) {
   if (!is_n(n)) n <- NROW(n)

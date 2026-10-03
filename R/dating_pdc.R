@@ -80,58 +80,55 @@ pdc_regime_resid <- function(y, breaks) {
 
 #' Sequential Sample-Splitting Bubble Dating (PDC/KS)
 #'
-#' \code{dating_pdc} dates a single bubble episode using the sequential
-#' sample-splitting method of Pang, Du & Chong (2021) and its 4-regime
-#' extension by Kurozumi & Skrobotov (2023): a fixed regime structure
-#' (unit-root, explosive, stationary-collapse, and optionally a final
-#' unit-root recovery regime) whose breakpoints are estimated one at a
-#' time, each a closed-form residual-sum-of-squares minimisation over a
-#' no-intercept AR(1) model, in \eqn{O(T)} via cumulative sums.
+#' \code{dating_pdc} dates a single bubble episode with the sequential
+#' sample-splitting method of Pang, Du & Chong (2021) and its four-regime extension
+#' by Kurozumi & Skrobotov (2023). The regime structure is fixed: a unit root, an
+#' explosive regime, a stationary collapse and, optionally, a final unit-root
+#' recovery regime. The breakpoints are estimated one at a time. Each is a
+#' closed-form residual-sum-of-squares minimization over a no-intercept AR(1)
+#' model, computed in \eqn{O(T)} time with cumulative sums.
 #'
-#' Unlike \code{\link{datestamp}} (which finds where the recursive BSADF
-#' statistic crosses a critical value), this fits an explicit
-#' regime-switching model directly to the series; it needs no critical
-#' values at all. PDC prove the collapse date is identified first -- its
-#' effect on the residual sum of squares dominates the origination date's
-#' -- which is what licenses estimating the breaks sequentially rather
-#' than jointly (unlike Harvey, Leybourne & Sollis's (2017) BIC-selected,
-#' jointly-fit alternative, which is not implemented here; see the
-#' package's enhancement notes for the cost/benefit reasoning).
+#' \code{\link{datestamp}} finds where the recursive BSADF statistic crosses a
+#' critical value. This function instead fits an explicit regime-switching model
+#' directly to the series, and it needs no critical values. PDC prove that the
+#' collapse date is identified first, because its effect on the residual sum of
+#' squares dominates that of the origination date. This justifies estimating the
+#' breaks sequentially and not jointly. The alternative of Harvey, Leybourne &
+#' Sollis (2017) selects among models by BIC and fits them jointly, and it is not
+#' implemented here (see the package's enhancement notes for the cost and benefit
+#' considerations).
 #'
-#' \code{type = "wls"} adds Kurozumi & Skrobotov (2023)'s time-varying-
-#' volatility correction: fit the plain (\code{"ols"}) model first, collect
-#' its fitted piecewise-regime residuals, smooth their square
-#' nonparametrically (the same Nadaraya-Watson kernel/leave-one-out
-#' bandwidth estimator exuber already uses for
-#' \code{\link{radf_sbz_cv}}/\code{\link{radf_kp}}), and re-run the same
-#' sequential break search with each squared term weighted by the inverse
-#' of the estimated spot variance. This needs no new critical-value
-#' theory -- like the OLS version, it is point estimation, not a
-#' threshold-crossing test.
+#' \code{type = "wls"} adds the correction of Kurozumi & Skrobotov (2023) for
+#' time-varying volatility. The function first fits the plain (\code{"ols"}) model
+#' and collects its fitted residuals for each regime. It then smooths their squares
+#' nonparametrically, with the same Nadaraya-Watson kernel and leave-one-out
+#' bandwidth estimator that exuber already uses in
+#' \code{\link{radf_sbz_cv}} and \code{\link{radf_kp}}. Finally it reruns the same
+#' sequential break search with each squared term weighted by the inverse of the
+#' estimated spot variance. This needs no new critical-value theory. Like the OLS
+#' version, it is a point estimate and not a threshold-crossing test.
 #'
 #' @inheritParams radf
-#' @param regimes Either \code{3} (PDC: unit-root, explosive, stationary
-#' collapse) or \code{4} (KS: adds a final unit-root recovery regime after
-#' the collapse).
-#' @param trim Minimum fraction of the (differenced) sample required on
-#' either side of each breakpoint search (default 0.05, as in KS's
-#' empirical application; PDC use 0.05-0.1 in their simulations).
-#' @param type \code{"ols"} (default) for the plain homoskedastic
-#' estimator, or \code{"wls"} for Kurozumi & Skrobotov (2023)'s
-#' volatility-corrected two-step estimator.
-#' @param kernel Kernel for the spot-volatility estimator when
-#' \code{type = "wls"}, \code{"gaussian"} (default) or \code{"uniform"}.
-#' Ignored when \code{type = "ols"}.
-#' @param h Bandwidth for the spot-volatility estimator when
-#' \code{type = "wls"}. Default: leave-one-out cross-validation. Ignored
-#' when \code{type = "ols"}.
+#' @param regimes Either \code{3} (PDC: unit root, explosive, stationary collapse)
+#' or \code{4} (KS: adds a final unit-root recovery regime after the collapse).
+#' @param trim Minimum fraction of the (differenced) sample required on either side
+#' of each breakpoint search (default 0.05, as in the empirical application of KS.
+#' PDC use 0.05 to 0.1 in their simulations).
+#' @param type \code{"ols"} (default) for the plain homoskedastic estimator, or
+#' \code{"wls"} for the volatility-corrected two-step estimator of Kurozumi &
+#' Skrobotov (2023).
+#' @param kernel Kernel for the spot-volatility estimator when \code{type = "wls"},
+#' \code{"gaussian"} (default) or \code{"uniform"}. It is ignored when
+#' \code{type = "ols"}.
+#' @param h Bandwidth for the spot-volatility estimator when \code{type = "wls"}.
+#' The default is leave-one-out cross-validation. It is ignored when
+#' \code{type = "ols"}.
 #'
-#' @return An object of class \code{dating_pdc_obj} (a \code{data.frame}
-#' with one row per series and columns
-#' \code{origination}, \code{collapse}, and (if \code{regimes = 4})
-#' \code{recovery}, giving the estimated break dates (or observation
-#' indices, if no date index is available); it has its own \code{print()}
-#' and \code{autoplot()} methods.
+#' @return An object of class \code{dating_pdc_obj}. It is a \code{data.frame} with
+#' one row for each series and the columns \code{origination}, \code{collapse} and,
+#' if \code{regimes = 4}, \code{recovery}, which give the estimated break dates (or
+#' observation indices, if no date index is available). It has its own
+#' \code{print()} and \code{autoplot()} methods.
 #'
 #' @references Pang, T., Du, L., & Chong, T. T. L. (2021). Estimating
 #' multiple breaks in the bubble regime with SSR minimization. Journal of
@@ -144,29 +141,27 @@ pdc_regime_resid <- function(y, breaks) {
 #' of bubble date estimators under time-varying volatility.
 #' arXiv:2306.02977.
 #'
-#' @seealso \code{\link{datestamp}} for the PSY threshold-crossing
-#' alternative.
+#' @seealso \code{\link{datestamp}} for the threshold-crossing alternative of PSY.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' dating table (model, origination, collapse, recovery) -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the dating table (model, origination, collapse, recovery). See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
 #'
 #' @examples
 #' \donttest{
-#' # sim_ps1()'s unit-root -> explosive -> collapse -> recovery DGP is exactly
-#' # the regime structure dating_pdc() fits (true breaks at 40, 60, 70)
+#' # The unit-root, explosive, collapse and recovery process of sim_ps1() is the
+#' # regime structure that dating_pdc() fits (true breaks at 40, 60 and 70)
 #' y <- sim_ps1(n = 100, seed = 1)
 #' res <- dating_pdc(y, regimes = 3L, trim = 0.05)
 #' print(res)
 #' autoplot(res)
 #'
-#' # 4-regime extension, adding a post-collapse recovery breakpoint
+#' # Four-regime extension, which adds a post-collapse recovery breakpoint
 #' res4 <- dating_pdc(y, regimes = 4L, trim = 0.05)
 #' autoplot(res4)
 #'
@@ -253,7 +248,7 @@ print.dating_pdc_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
 
 #' Plot method for dating_pdc() output
 #'
-#' Plots each series with vertical markers at the estimated origination, collapse and (where estimated) recovery dates.
+#' Plots each series with vertical markers at the estimated origination, collapse and, where estimated, recovery dates.
 #'
 #' @param object An object of class \code{dating_pdc_obj}, the output of \code{\link{dating_pdc}}.
 #' @param ... Further arguments passed to methods. Not used.

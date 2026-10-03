@@ -20,7 +20,7 @@ options(cli.width = 80)
 library(exuber)
 ```
 
-For our analysis we are going to use the `datasets::EuStockMarkets` dataset, which contains the daily closing prices of four major European stock indices: Germany DAX, Switzerland SMI, France CAC, and UK FTSE (see `?EuStockMarkets`). The data are sampled in business time, i.e., weekends and holidays are omitted. In this particular exercise we want to focus on weekly observations. To do so we aggregate to a weekly frequency and reduce the number of observations from 1860 to 372. 
+This vignette uses the `datasets::EuStockMarkets` data, which contain the daily closing prices of four major European stock indices: the German DAX, the Swiss SMI, the French CAC and the UK FTSE (see `?EuStockMarkets`). The data are sampled in business time, so weekends and holidays are omitted. We want weekly observations, so we aggregate to a weekly frequency, which reduces the sample from 1860 to 372 observations.
 
 ```{r dataset}
 stocks <- aggregate(EuStockMarkets, nfrequency = 52, mean)
@@ -28,7 +28,7 @@ stocks <- aggregate(EuStockMarkets, nfrequency = 52, mean)
 
 ## Estimation
 
-We estimate the above series using the recursive Augmented Dickey-Fuller test with 1 lag.
+We estimate the recursive augmented Dickey-Fuller test on these series with one lag.
 
 ```{r estimation}
 est_stocks <- radf(stocks, lag = 1)
@@ -36,7 +36,7 @@ est_stocks <- radf(stocks, lag = 1)
 
 ## Analysis
 
-The summary will print the test statistic and the critical values for 10%, 5% and 1% significance level. When `cv` is omitted, `summary()`/`diagnostics()`/`datestamp()`/`autoplot()` fetch precomputed Monte Carlo critical values for this `(n, lag)` from a shared store (lags 0-4, samples up to 4000; needs network access the first time, cached on disk after). Here we simulate them locally with `radf_mc_cv()` instead, and pass the result via `cv` to every downstream call -- the offline route, and the one to use for other lags or larger samples.
+`summary()` prints the test statistics together with the critical values at the 10%, 5% and 1% significance levels. A critical value is the threshold a statistic must exceed before we reject the null hypothesis of a unit root in favor of explosive behavior. When `cv` is omitted, `summary()`, `diagnostics()`, `datestamp()` and `autoplot()` fetch precomputed Monte Carlo critical values for the relevant `(n, lag)` from a shared store. The store covers lags 0 to 4 and samples of up to 4000 observations. The first fetch needs network access, and later calls read from the disk cache. Here we simulate the critical values locally with `radf_mc_cv()` and pass the result through `cv` to every downstream call. This offline route is also the one to use for other lags or larger samples.
 
 ```{r cv}
 cv_stocks <- radf_mc_cv(NROW(stocks), lag = 1)
@@ -46,14 +46,14 @@ cv_stocks <- radf_mc_cv(NROW(stocks), lag = 1)
 summary(est_stocks, cv = cv_stocks)
 ```
 
-It seems that all stocks exhibit exuberant behaviour but we can also verify it using `diagnostics()`. This function is particularly useful when we deal a large number of series.
+All four stocks appear to show exuberant behavior, and `diagnostics()` confirms this by reporting which series reject the null. It is most useful when there are many series.
 
 ```{r diagnostics}
 diagnostics(est_stocks, cv = cv_stocks)
 ```
 
 
-If we need to know the exact period of exuberance we can do so with the function `datestamp()`. `datestamp()` works in a similar manner with `summary()` and `diagnostics()`.
+To find out when the exuberance occurred, we use `datestamp()`, which takes the same arguments as `summary()` and `diagnostics()`.
 
 ```{r datestamp}
 # Minimum duration of an explosive period
@@ -62,32 +62,24 @@ rot = psy_ds(stocks) # log(n) ~ rule of thumb
 dstamp_stocks <- datestamp(est_stocks, cv = cv_stocks, min_duration = rot)
 dstamp_stocks
 ```
-We can extract the datestamp as a dummy variable 1 = Exuberance, 0 = No exuberance.
+We can also extract the datestamp as a dummy variable, where 1 marks exuberance and 0 marks its absence.
 
 ```{r datestamp-dummy}
 dummy <- attr(dstamp_stocks, "dummy")
 tail(dummy)
 ```
 
-`datestamp()` is not the only way to get dates out of the package, and the
-other two answer different questions rather than being alternate ways to get
-the same answer: the `dating_*()` family (`vignette("dating-methods")`) fits
-an explicit regime model to date a bubble you already believe is there,
-instead of testing whether one exists; the `monitor()`/`monitor_*()` family
-(`vignette("monitoring")`) does real-time detection, watching new
-observations one at a time rather than dating a finished sample. See
-`vignette("naming-and-analysis")` for how every function in the package
-relates to this one.
+`datestamp()` is not the only way to obtain dates, but the other two approaches answer different questions rather than the same one. The `dating_*()` family (`vignette("dating-methods")`) fits an explicit regime model to date a bubble that you already believe is there, and it does not test whether one exists. The `monitor()` and `monitor_*()` family (`vignette("monitoring")`) detects bubbles in real time by watching new observations one at a time, instead of dating a finished sample. `vignette("naming-and-analysis")` shows how every function in the package relates to `datestamp()`.
 
 ## Plotting
 
-The `autoplot` function returns a faceted ggplot2 object for all the series that reject the null hypothesis at 5% significance level.
+`autoplot()` returns a faceted ggplot2 object for all the series that reject the null hypothesis at the 5% significance level.
 
 ```{r plot-radf, fig.width = 9}
 autoplot(est_stocks, cv = cv_stocks)
 ```
 
-Finally, we can plot just the periods the periods of exuberance. Plotting datestamp object is particularly useful when we have a lot of series, and we are interested to identify explosive patterns in all of them.
+Finally, we can plot only the periods of exuberance. Plotting the datestamp object is useful when there are many series and we want to see the explosive episodes in all of them.
 
 ```{r plot-datestaemp, fig.width = 7, fig.height=2}
 datestamp(est_stocks, cv = cv_stocks) %>%

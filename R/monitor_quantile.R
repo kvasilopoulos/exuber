@@ -89,82 +89,79 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #' QPWY/QPSY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
 #'
 #' \code{monitor_quantile} implements the QPWY and QPSY real-time monitoring
-#' strategies of Wu, Shi & Wu (2025): quantile-regression (QR) analogues of
-#' PWY's and PSY's recursive ADF t-statistics, testing at a chosen
-#' conditional quantile \code{tau} rather than \code{\link{quantile_test}}'s
-#' single full-sample test. \code{type = "qpwy"} uses the expanding window
-#' \code{[1, r]} (\code{\link{radf}}'s own \code{badf} shape);
-#' \code{type = "qpsy"} takes the supremum over every window start as well
-#' (\code{bsadf}'s shape).
+#' strategies of Wu, Shi & Wu (2025). They are quantile-regression (QR) analogues
+#' of the recursive ADF t-statistics of PWY and PSY, and they test at a chosen
+#' conditional quantile \code{tau}, in contrast to the single full-sample test in
+#' \code{\link{quantile_test}}. \code{type = "qpwy"} uses the expanding window
+#' \code{[1, r]}, which has the shape of \code{badf} in \code{\link{radf}}.
+#' \code{type = "qpsy"} also takes the supremum over every window start, which has
+#' the shape of \code{bsadf}.
 #'
-#' The point statistic needs genuine QR fits (no closed-form recursive
-#' update the way OLS has): \code{O(T)} of them for QPWY, \code{O(T^2)}
-#' for QPSY, so QPSY takes seconds per series at \code{n = 200} and
-#' grows quadratically.
+#' The point statistic needs genuine QR fits, because there is no closed-form
+#' recursive update as there is for OLS. QPWY needs \code{O(T)} fits and QPSY needs
+#' \code{O(T^2)}, so QPSY takes seconds for each series at \code{n = 200} and the
+#' time grows quadratically.
 #'
-#' The critical value is simulated per call from the limiting null
-#' distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}},
-#' with \code{delta} a data-estimated correlation coefficient (as in
-#' \code{\link{quantile_test}}), \code{Q} the Dickey-Fuller t functional
-#' and \code{Z} its counterpart driven by an independent Brownian motion,
-#' both simulated for every window (no QR fits needed). A single
-#' \strong{flat} boundary is used (not one value per \code{r}): the
-#' quantile of each simulated path's own supremum, exactly how
-#' \code{\link{radf_mc_cv}}'s own \code{sadf_cv} is constructed, which
-#' controls the first-crossing false-alarm rate.
+#' The function simulates the critical value in each call from the limiting null
+#' distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}}. Here
+#' \code{delta} is a correlation coefficient estimated from the data (as in
+#' \code{\link{quantile_test}}), \code{Q} is the Dickey-Fuller t functional and
+#' \code{Z} is its counterpart driven by an independent Brownian motion. Both are
+#' simulated for every window, so no QR fits are needed. The boundary is a single
+#' \strong{flat} value and not one value for each \code{r}. It is the quantile of
+#' the supremum of each simulated path, constructed exactly like the \code{sadf_cv}
+#' of \code{\link{radf_mc_cv}}, which controls the first-crossing false-alarm
+#' rate.
 #'
 #' @section Caveats:
-#' The boundary is the asymptotic one. Near the median it is well sized in
-#' finite samples (false-alarm rate 3.5-4.0\% at a nominal 5\%, Gaussian and
-#' \eqn{t_3} innovations, \code{tau = 0.5}). Away from the median the small
-#' early windows make both statistics oversized, QPSY badly so, even with
-#' Gaussian innovations: QPSY's false-alarm rate is 35\% at \code{tau = 0.9}
-#' (Gaussian) and, with \eqn{t_3} innovations, 21\% at \code{tau = 0.8} and
-#' 44\% at \code{tau = 0.9} (\code{n = 100}). QPWY's, with \eqn{t_3}
-#' innovations, is 7.5-8.5\% at \code{tau = 0.2}/\code{0.8} and 12.5\% at
-#' \code{tau = 0.9} (\code{n = 150}).
-#' Wu, Shi & Wu advise against extreme quantiles in small samples and use
-#' bootstrap critical values for monitoring; that bootstrap is not
-#' implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5
-#' a short pointer is emitted as a message (see
-#' \code{\link{suppressMessages}}) and stored as \code{attr(x, "caveat")}.
-#' Numbers: docs/alternative-paradigms.md.
+#' The boundary is the asymptotic one. Near the median it is well sized in finite
+#' samples, with a false-alarm rate of 3.5 to 4.0\% at a nominal 5\% (Gaussian and
+#' \eqn{t_3} innovations, \code{tau = 0.5}). Away from the median the small early
+#' windows make both statistics oversized, and QPSY badly so even with Gaussian
+#' innovations. The false-alarm rate of QPSY is 35\% at \code{tau = 0.9}
+#' (Gaussian). With \eqn{t_3} innovations it is 21\% at \code{tau = 0.8} and 44\% at
+#' \code{tau = 0.9} (\code{n = 100}). With \eqn{t_3} innovations the rate for QPWY is
+#' 7.5 to 8.5\% at \code{tau = 0.2} and \code{0.8} and 12.5\% at \code{tau = 0.9}
+#' (\code{n = 150}). Wu, Shi & Wu advise against extreme quantiles in small samples
+#' and use bootstrap critical values for monitoring. That bootstrap is not
+#' implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5, the
+#' function emits a short pointer as a message (see \code{\link{suppressMessages}})
+#' and stores it as \code{attr(x, "caveat")}. The numbers are in
+#' docs/alternative-paradigms.md.
 #'
-#' @note The critical value (boundary) is simulated internally on every
-#' call (via an unexported helper, \code{quantile_boundary_sim}) -- there is
-#' currently no reusable/exported cv counterpart for this function (a
-#' known, separately-tracked gap, not addressed here).
+#' @note The function simulates the critical value (the boundary) internally in each
+#' call, with an unexported helper, \code{quantile_boundary_sim}. There is currently
+#' no reusable exported cv counterpart for this function. This gap is tracked
+#' separately and is not addressed here.
 #'
 #' @inheritParams radf
-#' @param type \code{"qpwy"} (expanding window) or \code{"qpsy"}
-#' (supremum over window starts too).
-#' @param tau Quantile to test at, in \code{(0, 1)} (fixed, unlike
-#' \code{\link{quantile_test}}'s \code{"optimal"} grid search -- WSW's own
-#' eq. 25 takes \code{tau} as a given parameter for the monitoring
-#' statistic, not re-selected at each recursion point).
+#' @param type \code{"qpwy"} (expanding window) or \code{"qpsy"} (also the supremum
+#' over window starts).
+#' @param tau Quantile to test at, in \code{(0, 1)}. It is fixed, in contrast to the
+#' \code{"optimal"} grid search in \code{\link{quantile_test}}, because eq. 25 of WSW
+#' takes \code{tau} as a given parameter of the monitoring statistic and does not
+#' reselect it at each recursion point.
 #' @param nrep Number of Monte Carlo replications for the boundary.
 #' @param sig_lvl Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
-#' @return An object of class \code{monitor_quantile_obj}: a list with the
-#' statistic path \code{stat}, the (flat) \code{boundary}, the estimated
-#' \code{delta}, and \code{alarm}/\code{alarm_date} (the first breach,
-#' \code{NA} if none).
+#' @return An object of class \code{monitor_quantile_obj}: a list with the statistic
+#' path \code{stat}, the flat \code{boundary}, the estimated \code{delta}, and
+#' \code{alarm} and \code{alarm_date} (the first breach, \code{NA} if there is
+#' none).
 #'
 #' @references Wu, R., Shi, S., & Wu, J. (2025). Quantile analysis for
 #' financial bubble detection and surveillance. Journal of Time Series
 #' Analysis, 46(5), 908-931.
 #'
-#' @seealso \code{\link{quantile_test}} for the static, full-sample
-#' version of this test. \code{\link{monitor}} for the OLS-based
-#' monitoring alternative.
+#' @seealso \code{\link{quantile_test}} for the static, full-sample version of this
+#' test, and \code{\link{monitor}} for the monitoring alternative based on OLS.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' statistic/boundary/delta summary -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the statistic, the boundary and delta. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -178,7 +175,7 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #' print(res)
 #' autoplot(res)
 #'
-#' # Upper-quantile monitoring is typically more powerful for right-tailed
+#' # Monitoring an upper quantile is typically more powerful for right-tailed
 #' # bubbles, but see the Caveats section on extreme quantiles
 #' autoplot(monitor_quantile(y, tau = 0.8, nrep = 100, seed = 1))
 #'
@@ -252,7 +249,7 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl 
 
 #' Plot method for monitor_quantile() output
 #'
-#' Plots the quantile monitoring statistic against its boundary, one panel per series, with a vertical marker at the alarm date.
+#' Plots the quantile monitoring statistic against its boundary, with one panel for each series and a vertical marker at the alarm date.
 #'
 #' @param object An object of class \code{monitor_quantile_obj}, the output of \code{\link{monitor_quantile}}.
 #' @param ... Further arguments passed to methods. Not used.
