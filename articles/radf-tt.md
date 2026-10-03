@@ -112,7 +112,6 @@ tolerance of the published numbers.
 [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
 returns the same `radf_obj` class as
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md).
-Since 2026-08-18,
 [`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
 also computes the full time-varying boundary that dating and plotting
 need, and not only the summary-level critical values. The usual pipeline

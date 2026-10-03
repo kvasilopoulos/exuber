@@ -68,12 +68,11 @@ y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 
 ## Sign-based: `radf_sign()`
 
-Since 2026-08-18
 [`radf_sign()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign.md)
-also has full pipeline support.
+has full pipeline support.
 [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
-now computes the time-varying `badf_cv` and `bsadf_cv` boundary and not
-only the scalar critical values that
+computes the time-varying `badf_cv` and `bsadf_cv` boundary and not only
+the scalar critical values that
 [`summary()`](https://rdrr.io/r/base/summary.html) needs (see
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
 for the validation):
@@ -133,7 +132,6 @@ summary(res_kp, cv = cv_kp)
 
 ## WLS + kernel volatility: `radf_sbz()`
 
-Since 2026-08-22
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
 is a statistic function of its own, separate from the union test.
 [`radf_sbz_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_cv.md)

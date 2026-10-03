@@ -182,10 +182,10 @@ Monte Carlo and finite-sample tolerance of the published numbers.</p>
 <h2 id="dating-and-plotting-a-detected-bubble">Dating and plotting a detected bubble<a class="anchor" aria-label="anchor" href="#dating-and-plotting-a-detected-bubble"></a>
 </h2>
 <p><code><a href="../reference/radf_tt.html">radf_tt()</a></code> returns the same <code>radf_obj</code> class
-as <code><a href="../reference/radf.html">radf()</a></code>. Since 2026-08-18, <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> also
-computes the full time-varying boundary that dating and plotting need,
-and not only the summary-level critical values. The usual pipeline
-therefore works unchanged:</p>
+as <code><a href="../reference/radf.html">radf()</a></code>. <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> also computes the full
+time-varying boundary that dating and plotting need, and not only the
+summary-level critical values. The usual pipeline therefore works
+unchanged:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt_cv.html">radf_tt_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>

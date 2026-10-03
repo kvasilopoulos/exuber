@@ -176,8 +176,8 @@ whichever of the two has power on a given series.</td>
 <div class="section level2">
 <h2 id="sign-based-radf_sign">Sign-based: <code>radf_sign()</code><a class="anchor" aria-label="anchor" href="#sign-based-radf_sign"></a>
 </h2>
-<p>Since 2026-08-18 <code><a href="../reference/radf_sign.html">radf_sign()</a></code> also has full pipeline
-support. <code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> now computes the time-varying
+<p><code><a href="../reference/radf_sign.html">radf_sign()</a></code> has full pipeline support.
+<code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> computes the time-varying
 <code>badf_cv</code> and <code>bsadf_cv</code> boundary and not only the
 scalar critical values that <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> needs (see
 <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the validation):</p>
@@ -230,10 +230,10 @@ simplest possible way. It needs no new critical-value code, and
 <div class="section level2">
 <h2 id="wls-kernel-volatility-radf_sbz">WLS + kernel volatility: <code>radf_sbz()</code><a class="anchor" aria-label="anchor" href="#wls-kernel-volatility-radf_sbz"></a>
 </h2>
-<p>Since 2026-08-22 <code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is a statistic function of
-its own, separate from the union test. <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code>
-computes the time-varying <code>badf_cv</code> and <code>bsadf_cv</code>
-boundary in the same way as <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and
+<p><code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> is a statistic function of its own, separate
+from the union test. <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()</a></code> computes the
+time-varying <code>badf_cv</code> and <code>bsadf_cv</code> boundary in
+the same way as <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and
 <code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> (see
 <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the validation), so it
 has full pipeline support:</p>
