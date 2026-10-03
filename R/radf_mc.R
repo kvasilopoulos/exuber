@@ -64,7 +64,7 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #'  Monte Carlo Critical Values
 #'
 #' \code{radf_mc_cv} computes Monte Carlo critical values for the recursive unit
-#' root tests. \code{radf_mc_distr} computes the distribution.
+#' root tests. \code{radf_mc_distr} computes the simulated distribution.
 #'
 #' @inheritParams radf
 #' @param n A positive integer. The sample size.
@@ -72,15 +72,16 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' @param lag A non-negative integer. Number of lags in the auxiliary
 #' regression, as in \code{\link{radf}}.
 #' @param seed An object specifying if and how the random number generator (rng)
-#' should be initialized. Either NULL or an integer will be used in a call to
-#' `set.seed` before simulation. If set, the value is saved as "seed" attribute
-#' of the returned value. The default, NULL, will not change rng state, and
-#' return .Random.seed as the "seed" attribute. Results are reproducible
-#' across the parallel and non-parallel option when the same seed is used.
+#' should be initialized. It is either NULL or an integer, which is passed to
+#' `set.seed` before the simulation. If you set it, the value is saved as the
+#' "seed" attribute of the returned value. The default, NULL, leaves the state of
+#' the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+#' reproducible across the parallel and the non-parallel option when you use the
+#' same seed.
 #'
-#' @return For \code{radf_mc_cv} a list that contains the critical values for ADF,
-#' BADF, BSADF and GSADF test statistics. For \code{radf_mc_distr} a list that
-#' contains the ADF, SADF and GSADF distributions.
+#' @return For \code{radf_mc_cv}, a list with the critical values for the ADF,
+#' BADF, BSADF and GSADF test statistics. For \code{radf_mc_distr}, a list with
+#' the ADF, SADF and GSADF distributions.
 #'
 #' @seealso \code{\link{radf_wb_cv}} for wild bootstrap critical values and
 #' \code{\link{radf_sb_cv}} for sieve bootstrap critical values

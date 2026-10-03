@@ -34,18 +34,19 @@ sim_psy2(
 \item{sigma}{A positive scalar indicating the standard deviation of the innovations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 A numeric vector of length \code{n}.
 }
 \description{
-The following data generating process is similar to  \code{\link{sim_psy1}}, with the difference that
-there are two episodes of mildly explosive dynamics.
+This data generating process is similar to \code{\link{sim_psy1}}, with the
+difference that there are two episodes of mildly explosive dynamics.
 }
 \details{
 The two-bubble data generating process is given by (see also \code{sim_psy1}):
@@ -80,7 +81,7 @@ are the origination and termination dates of the first bubble;
 are the origination and termination dates of the second bubble.
 After the collapse of the first bubble, \eqn{X_t}{X[t]} resumes a martingale path until time
 \eqn{\tau_{2e}-1}{t2e - 1}, and a second episode of exuberance begins at \eqn{\tau_{2e}}{t2e}.
-Exuberance lasts lasts until \eqn{\tau_{2f}}{t2f} at which point the process collapses to a value of
+Exuberance lasts until \eqn{\tau_{2f}}{t2f}, at which point the process collapses to a value of
 \eqn{X_{\tau_{2f}}}{X[t2f]}. The process then continues on a martingale path until the end of the
 sample period \eqn{\tau}{t}. The duration of the first bubble is assumed to be longer than
 that of the second bubble, i.e. \eqn{\tau_{1f}-\tau_{1e}>\tau_{2f}-\tau_{2e}}{t1f - t1e > t2f - t2e}.

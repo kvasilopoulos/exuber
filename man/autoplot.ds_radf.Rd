@@ -17,7 +17,7 @@
 \link[ggplot2]{ggplot}
 }
 \description{
-Takes a \code{ds_radf} object and returns a ggplot2 object, with a
+Takes a \code{ds_radf} object and returns a ggplot2 object with a
 \link[ggplot2]{geom_segment} layer.
 }
 \examples{

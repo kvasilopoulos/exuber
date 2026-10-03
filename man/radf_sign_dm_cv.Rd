@@ -15,22 +15,23 @@ radf_sign_dm_cv(n, minw = NULL, nrep = 2000L, seed = NULL)
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
 An object of class \code{radf_cv}/\code{sign_dm_cv}/\code{mc_cv}
 with the same structure as \code{\link{radf_mc_cv}}.
 }
 \description{
-Simulates the asymptotic null distribution of \code{\link{radf_sign_dm}}'s
-statistic. Like \code{\link{radf_sign_cv}}, this distribution does not
-depend on the volatility process (exact invariance, HLZ 2020's Theorem 2
-analogue for this variant), so it does not need to be recomputed per
-dataset.
+Simulates the asymptotic null distribution of the statistic of
+\code{\link{radf_sign_dm}}. As for \code{\link{radf_sign_cv}}, this distribution
+does not depend on the volatility process (exact invariance, the analogue for
+this variant of Theorem 2 of HLZ 2020), so it does not have to be recomputed for
+each dataset.
 }
 \section{Status}{
 

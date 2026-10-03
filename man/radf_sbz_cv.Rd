@@ -15,14 +15,14 @@ radf_sbz_cv(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
@@ -33,29 +33,30 @@ not supported. When any series is padded this way, the panel statistic
 Leybourne & Zu 2019), \code{"gaussian"} (default, as in the paper) or
 \code{"uniform"}.}
 
-\item{h}{Bandwidth for the spot-volatility estimator. Default: leave-one-out
-cross-validation over the paper's own search range.}
+\item{h}{Bandwidth for the spot-volatility estimator. The default is
+leave-one-out cross-validation over the search range of the paper.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
-An object of class \code{radf_cv}/\code{sbz_cv}/\code{wb_cv}: a
-list with critical values \code{adf_cv}, \code{sadf_cv}, \code{gsadf_cv}
-(one row per series) and \code{badf_cv}, \code{bsadf_cv} (one array per
-series, one row per recursion point).
+An object of class \code{radf_cv}/\code{sbz_cv}/\code{wb_cv}: a list
+with the critical values \code{adf_cv}, \code{sadf_cv} and \code{gsadf_cv} (one
+row per series) and \code{badf_cv} and \code{bsadf_cv} (one array per series,
+one row per recursion point).
 }
 \description{
-\code{radf_sbz_cv} performs the HLST (2016) wild bootstrap -- the same
-algorithm as \code{\link{radf_wb_cv}}, applied to \code{\link{radf_sbz}}'s
-WLS/kernel-volatility statistic instead of the classic \code{supDF} one --
-to generate critical values, including the time-varying
-\code{badf_cv}/\code{bsadf_cv} boundary \code{\link{datestamp}}/
-\code{autoplot} need, not just the three scalar critical values
+\code{radf_sbz_cv} performs the HLST (2016) wild bootstrap. It is the same
+algorithm as \code{\link{radf_wb_cv}}, applied to the WLS/kernel-volatility
+statistic of \code{\link{radf_sbz}} instead of the classic \code{supDF}
+statistic. It generates critical values that include the time-varying
+\code{badf_cv} and \code{bsadf_cv} boundary that \code{\link{datestamp}} and
+\code{autoplot} need, and not only the three scalar critical values that
 \code{summary()} uses.
 }
 \section{Status}{
@@ -78,11 +79,11 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 38(10), 1131-1151.
 }
 \seealso{
-\code{\link{radf_sbz}} for the statistic this pairs with, and
-\code{\link{radf_sbz_union}} for the bundled union-of-rejections test
-against the classic \code{supDF} statistic (not obtainable from this
-function and \code{\link{radf_wb_cv}} independently -- see that
-function's Details for why).
+\code{\link{radf_sbz}} for the statistic that this function pairs with,
+and \code{\link{radf_sbz_union}} for the bundled union-of-rejections test
+against the classic \code{supDF} statistic. You cannot obtain that test from
+this function and \code{\link{radf_wb_cv}} separately (see the Details of
+\code{\link{radf_sbz_union}} for why).
 
 Other critical values:
 \code{\link[=radf_common_cv]{radf_common_cv()}},

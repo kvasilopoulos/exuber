@@ -14,51 +14,49 @@
 
 #' Common-Bubble Detection via PCA + PSY
 #'
-#' \code{radf_common} tests for a bubble common to a panel of series
-#' (Chen, Phillips & Shi, 2023): it extracts the panel's first principal
-#' component and runs the ordinary \code{\link{radf}} test on it -- and
-#' every downstream method (\code{tidy()}, \code{autoplot()},
-#' \code{datestamp()}, ...) works on it for free, since the output is an
-#' ordinary \code{radf_obj}.
+#' \code{radf_common} tests for a bubble that is common to a panel of series (Chen,
+#' Phillips & Shi, 2023). It extracts the first principal component of the panel
+#' and runs the ordinary \code{\link{radf}} test on it. The output is an ordinary
+#' \code{radf_obj}, so every downstream method (\code{tidy()}, \code{autoplot()},
+#' \code{datestamp()} and so on) works on it without further effort.
 #'
 #' @details
-#' The paper's own Theorem 4.3 claims the resulting statistic's null
-#' limiting distribution is asymptotically identical to the standard
-#' PSY/GSADF one, which would let \code{\link{radf_mc_cv}} apply directly.
-#' An independent validation found this identity does \strong{not} hold at
-#' practical panel widths \code{N}: the true critical value is more than
-#' double \code{\link{radf_mc_cv}}'s at \code{N = 100}, and the gap grows
-#' as \code{N} increases -- PCA on a panel of merely independent
-#' (non-cointegrated) I(1) series does not behave like a single random walk
-#' once there are more series to draw transient co-movement from. Use
-#' \code{\link{radf_common_cv}} for critical values, \strong{not}
-#' \code{\link{radf_mc_cv}}, which has no dependence on panel width and is
-#' badly undersized here once \code{N} grows past a handful of series.
+#' Theorem 4.3 of the paper claims that the null limiting distribution of the
+#' resulting statistic is asymptotically identical to the standard PSY/GSADF
+#' distribution, which would let \code{\link{radf_mc_cv}} apply directly. An
+#' independent validation found that this identity does \strong{not} hold at
+#' practical panel widths \code{N}. At \code{N = 100} the true critical value is
+#' more than double that of \code{\link{radf_mc_cv}}, and the gap grows as \code{N}
+#' increases. PCA on a panel of independent (non-cointegrated) I(1) series does not
+#' behave like a single random walk once there are more series from which
+#' transient co-movement can arise. Use \code{\link{radf_common_cv}} for the
+#' critical values and \strong{not} \code{\link{radf_mc_cv}}. The critical values of
+#' \code{\link{radf_mc_cv}} do not depend on the panel width, and they are badly
+#' undersized here once \code{N} grows past a handful of series.
 #'
 #' @inheritParams radf
-#' @param r Number of principal components to extract (default 1, the
-#' paper's own recommendation: "sufficient... for the purpose of bubble
-#' identification"). Only the first is used for detection; the rest are
-#' returned for inspection via the \code{"prcomp"} attribute.
+#' @param r Number of principal components to extract (default 1, which the paper
+#' recommends as "sufficient... for the purpose of bubble identification"). Only the
+#' first is used for detection. The others are returned for inspection in the
+#' \code{"prcomp"} attribute.
 #'
-#' @return A \code{radf_obj} (see \code{\link{radf}}) computed on the panel's
-#' first principal component, with the fitted \code{prcomp} object attached
-#' as an attribute (\code{attr(x, "prcomp")}).
+#' @return A \code{radf_obj} (see \code{\link{radf}}) computed on the first principal
+#' component of the panel, with the fitted \code{prcomp} object attached as an
+#' attribute (\code{attr(x, "prcomp")}).
 #'
 #' @references Chen, Y., Phillips, P. C. B., & Shi, S. (2023). Common
 #' Bubble Detection in Large Dimensional Financial Systems. Journal of
 #' Financial Econometrics, 21(4), 989-1063.
 #'
-#' @seealso \code{\link{radf}} for the underlying (unmodified) test, and
-#' \code{\link{radf_common_cv}} for its (panel-width-specific) critical
-#' values.
+#' @seealso \code{\link{radf}} for the underlying test, which is unmodified, and
+#' \code{\link{radf_common_cv}} for its critical values, which are specific to the
+#' panel width.
 #'
-#' @note Returns \code{radf()}'s own output (computed on the extracted
-#' factor), and \code{radf_common_cv()} computes the full time-varying
-#' boundary alongside the scalar critical values, so the full
-#' \code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
-#' pipeline works -- see \code{vignette("naming-and-analysis", package =
-#' "exuber")}.
+#' @note The function returns the output of \code{radf()} computed on the extracted
+#' factor, and \code{radf_common_cv()} computes the full time-varying boundary
+#' alongside the scalar critical values. The full \code{summary()},
+#' \code{\link{datestamp}}, \code{tidy} and \code{autoplot} pipeline therefore works
+#' (see \code{vignette("naming-and-analysis", package = "exuber")}).
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -70,11 +68,11 @@
 #' res <- radf_common(x, minw = 20)
 #' print(res)
 #'
-#' # radf_common_cv() is needed here -- NOT radf_mc_cv(), see Details
+#' # radf_common_cv() is needed here and radf_mc_cv() does not apply (see Details)
 #' cv <- radf_common_cv(n = 100, N = ncol(x), minw = 20)
 #' summary(res, cv = cv)
 #'
-#' # The result is an ordinary radf_obj, so autoplot()/datestamp() work directly
+#' # The result is an ordinary radf_obj, so autoplot() and datestamp() work directly
 #' autoplot(res, cv = cv)
 #' datestamp(res, cv = cv)
 #' }
@@ -109,26 +107,26 @@ radf_common <- function(data, minw = NULL, r = 1) {
 #' Critical Values for the Common-Bubble (PCA + PSY) Test
 #'
 #' \code{radf_common_cv} simulates critical values for \code{\link{radf_common}}
-#' under its own null (no common explosive factor): an \code{N}-column panel
-#' of \emph{independent} random walks, extracted to one principal component
-#' and tested exactly as \code{\link{radf_common}} does. Unlike
-#' \code{\link{radf_mc_cv}} -- which has no dependence on panel width and was
-#' shown by independent validation to be badly undersized as a stand-in for
-#' \code{radf_common}'s own null once \code{N} grows past a handful of
-#' series -- this null distribution does depend on \code{N}, so \code{N}
-#' must match the panel \code{\link{radf_common}} was actually run on.
+#' under its own null of no common explosive factor. The null is a panel of
+#' \code{N} \emph{independent} random walks, from which one principal component is
+#' extracted and tested exactly as in \code{\link{radf_common}}. Independent
+#' validation showed that \code{\link{radf_mc_cv}}, whose critical values do not
+#' depend on the panel width, is badly undersized as a stand-in for this null once
+#' \code{N} grows past a handful of series. The null distribution here does depend
+#' on \code{N}, so \code{N} must match the panel on which \code{\link{radf_common}}
+#' was run.
 #'
 #' @param n A positive integer. The sample size (number of time periods).
-#' @param N A positive integer, at least 2. The panel width (number of
-#' series) that \code{\link{radf_common}} will be run on -- the critical
-#' value depends on this, unlike \code{\link{radf_mc_cv}}.
+#' @param N A positive integer, at least 2. The panel width (number of series) on
+#' which \code{\link{radf_common}} will be run. The critical value depends on it,
+#' unlike that of \code{\link{radf_mc_cv}}.
 #' @inheritParams radf_mc_cv
 #'
 #' @return A list with \code{adf_cv}, \code{sadf_cv}, \code{gsadf_cv},
-#' \code{badf_cv}, \code{bsadf_cv} -- the same shape as \code{\link{radf_mc_cv}}'s
-#' return value, so it can be used as a drop-in \code{cv} argument for
-#' \code{\link{datestamp}}/\code{tidy}/\code{autoplot} on a \code{\link{radf_common}}
-#' result.
+#' \code{badf_cv} and \code{bsadf_cv}. It has the same shape as the return value of
+#' \code{\link{radf_mc_cv}}, so you can use it as the \code{cv} argument of
+#' \code{\link{datestamp}}, \code{tidy} and \code{autoplot} on a
+#' \code{\link{radf_common}} result.
 #'
 #' @references Chen, Y., Phillips, P. C. B., & Shi, S. (2023). Common
 #' Bubble Detection in Large Dimensional Financial Systems. Journal of

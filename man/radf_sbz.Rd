@@ -8,14 +8,14 @@ radf_sbz(data, minw = NULL, kernel = c("gaussian", "uniform"), h = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
@@ -24,38 +24,37 @@ not supported. When any series is padded this way, the panel statistic
 Leybourne & Zu 2019), \code{"gaussian"} (default, as in the paper) or
 \code{"uniform"}.}
 
-\item{h}{Bandwidth for the spot-volatility estimator. Default: leave-one-out
-cross-validation over the paper's own search range.}
+\item{h}{Bandwidth for the spot-volatility estimator. The default is
+leave-one-out cross-validation over the search range of the paper.}
 }
 \value{
-An object of class \code{radf_sbz_obj}/\code{radf_obj}: a list
-with \code{adf}, \code{sadf}, \code{gsadf} (one value per series) and
-\code{badf}, \code{bsadf} (matrices, one column per series).
+An object of class \code{radf_sbz_obj}/\code{radf_obj}: a list with
+\code{adf}, \code{sadf} and \code{gsadf} (one value per series) and \code{badf}
+and \code{bsadf} (matrices, one column per series).
 }
 \description{
-\code{radf_sbz} computes the WLS (kernel-volatility-weighted) recursive
-sup-ADF statistic of Harvey, Leybourne & Zu (2019) -- \code{supBZ} in
-their own notation -- via \code{wls_dfstat_grid()} (internal),
-returning the same shape \code{\link{radf}} itself does
-(\code{adf}/\code{sadf}/\code{gsadf} scalars plus the full
-\code{badf}/\code{bsadf} recursive paths), so it carries the
-\code{radf_obj} class and the full \code{summary()}/
-\code{\link{datestamp}}/\code{tidy}/\code{autoplot} pipeline works,
-paired with \code{\link{radf_sbz_cv}}.
+\code{radf_sbz} computes the WLS (kernel-volatility-weighted) recursive sup-ADF
+statistic of Harvey, Leybourne & Zu (2019), called \code{supBZ} in their
+notation, with \code{wls_dfstat_grid()} (internal). It returns the same shape
+as \code{\link{radf}}: the scalars \code{adf}, \code{sadf} and \code{gsadf} plus
+the full recursive paths \code{badf} and \code{bsadf}. The result therefore
+carries the \code{radf_obj} class, and the full \code{summary()},
+\code{\link{datestamp}}, \code{tidy} and \code{autoplot} pipeline works with it
+when it is paired with \code{\link{radf_sbz_cv}}.
 }
 \details{
-Unlike the bundled \code{\link{radf_sbz_union}} (which combines this with
-the classic \code{supDF} statistic into a bootstrap-calibrated union
-test), \code{supBZ} alone needs no bootstrap to be \emph{defined} -- only
-to be tested -- so it splits into a statistic and a critical-value
-function the way most of exuber does.
+The bundled \code{\link{radf_sbz_union}} combines this statistic with the
+classic \code{supDF} statistic into a bootstrap-calibrated union test.
+\code{supBZ} alone needs a bootstrap only to be tested and not to be
+\emph{defined}, so it splits into a statistic and a critical-value function, as
+most of exuber does.
 }
 \note{
-Needs \code{\link{radf_sbz_cv}} for critical values, not
-\code{\link{radf_wb_cv}} or \code{\link{radf_mc_cv}} -- \code{supBZ}'s
-own null distribution depends on the WLS weighting, so it needs its own
-(data-dependent, wild-bootstrap) critical value function, same reasoning
-as \code{radf()}/\code{\link{radf_wb_cv}}.
+The test needs the critical values from \code{\link{radf_sbz_cv}}, and
+neither \code{\link{radf_wb_cv}} nor \code{\link{radf_mc_cv}} applies. The null
+distribution of \code{supBZ} depends on the WLS weighting, so it needs its own
+critical-value function, which is data-dependent and uses a wild bootstrap, for
+the same reason as \code{radf()} and \code{\link{radf_wb_cv}}.
 }
 \section{Status}{
 
@@ -65,8 +64,8 @@ as \code{radf()}/\code{\link{radf_wb_cv}}.
 \examples{
 \donttest{
 # Volatility triples at t = 100, then a strong explosive regime (rho = 1.03)
-# from t = 120 to the sample end: supBZ's kernel-volatility weighting trades
-# away enough power that sim_psy1()'s default, milder bubble doesn't clear it
+# runs from t = 120 to the sample end. The kernel-volatility weighting of supBZ
+# costs enough power that the milder default bubble of sim_psy1() does not clear it
 y <- sim_psy1(n = 200, te = 120, tf = 200, c = 0.03, alpha = 0, seed = 1,
   e = sim_vol_break(199))
 res <- radf_sbz(y, minw = 20)
@@ -87,8 +86,8 @@ explosive bubbles with time-varying volatility. Econometric Reviews,
 }
 \seealso{
 \code{\link{radf_sbz_cv}} for critical values, and
-\code{\link{radf_sbz_union}} for the paper's own headline bootstrap
-union-of-rejections test against the classic \code{supDF} statistic.
+\code{\link{radf_sbz_union}} for the main bootstrap union-of-rejections test of
+the paper, against the classic \code{supDF} statistic.
 
 Other volatility-robust tests:
 \code{\link[=cusum_test]{cusum_test()}},

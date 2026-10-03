@@ -20,32 +20,13 @@ library(exuber)
 
 ## Why another test
 
-`radf()` (the classic PSY GSADF test) assumes the innovation variance is
-constant. Real financial series usually don't have constant volatility, and
-Harvey, Leybourne, Sollis & Taylor (2016) show that when volatility is
-time-varying, `radf()`'s standard critical values no longer control size --
-`radf_wb_cv()` already addresses this in exuber via a wild bootstrap.
+`radf()`, the classic PSY GSADF test, assumes that the innovation variance is constant. Real financial series usually do not have constant volatility. Harvey, Leybourne, Sollis & Taylor (2016) show that when volatility changes over time, the standard critical values of `radf()` no longer control the size of the test. `radf_wb_cv()` addresses this in exuber with a wild bootstrap.
 
-`radf_tt()` implements a different, bootstrap-free fix from Kurozumi,
-Skrobotov & Tsarev (2024, *Journal of Financial Econometrics*): instead of
-resampling, it *time-deforms* the series using a nonparametric estimate of
-its variance profile, so that the deformed series behaves like a
-constant-volatility random walk under the null. The resulting statistic's
-null distribution is then the same (pivotal) distribution as under
-homoskedasticity, so ordinary asymptotic critical values apply -- no
-bootstrap, and no per-dataset resimulation needed.
+`radf_tt()` implements a different fix that needs no bootstrap, from Kurozumi, Skrobotov & Tsarev (2024, *Journal of Financial Econometrics*). Instead of resampling, it time-deforms the series using a nonparametric estimate of its variance profile, so that under the null the deformed series behaves like a random walk with constant volatility. The null distribution of the resulting statistic is then the same pivotal distribution as under homoskedasticity. Ordinary asymptotic critical values therefore apply, with no bootstrap and no resimulation for each dataset.
 
 ## Basic usage
 
-`radf_tt()` targets *non-stationary* volatility -- a permanent shift or
-trend in the unconditional innovation variance, the setting of Kurozumi,
-Skrobotov & Tsarev's own simulations. (Stationary conditional
-heteroskedasticity such as GARCH is not the target: its variance profile
-is asymptotically flat, so the time-deformation is close to the identity
-and plain `radf()` is already size-correct there.) `sim_vol_break()`
-generates exactly such innovations, and `sim_psy1()`'s `e` argument
-injects them into the PSY bubble DGP -- here the innovation standard
-deviation triples half-way through the sample:
+`radf_tt()` targets non-stationary volatility, meaning a permanent shift or trend in the unconditional innovation variance, which is the setting of the simulations in Kurozumi, Skrobotov & Tsarev. It does not target stationary conditional heteroskedasticity such as GARCH. In that case the variance profile is asymptotically flat, the time deformation is close to the identity, and plain `radf()` already has the correct size. `sim_vol_break()` generates innovations with a permanent volatility shift, and the `e` argument of `sim_psy1()` passes them into the PSY bubble process. Here the innovation standard deviation triples half-way through the sample:
 
 ```{r radf-tt}
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
@@ -53,49 +34,30 @@ res <- radf_tt(y)
 res
 ```
 
-`radf_tt_cv()` gives the matching (pivotal) asymptotic critical values;
-because the null distribution doesn't depend on the volatility path, one
-call with a large `n` approximates the whole family, unlike
-`radf_wb_cv()`'s per-dataset bootstrap:
+`radf_tt_cv()` returns the matching pivotal asymptotic critical values. The null distribution does not depend on the volatility path, so one call with a large `n` approximates the whole family of cases. `radf_wb_cv()`, in contrast, runs a separate bootstrap for each dataset:
 
 ```{r radf-tt-cv}
 cv <- radf_tt_cv(n = 300, minw = 30, nrep = 1000, seed = 1)
 cv$gsadf_cv
 ```
 
-## What's actually estimated
+## What is estimated
 
-Under the hood, `radf_tt()`:
+`radf_tt()` works in three steps.
 
-1. estimates the time-varying AR(1) coefficient with a local kernel
-   regression, and from its (truncated) residuals builds a monotone
-   *variance profile* `eta_hat(s)`, `s` in `[0, 1]`;
-2. inverts it and uses the inverse to resample/time-deform the series;
-3. runs a (GLS-demeaned, no-intercept) recursive sup-ADF statistic on the
-   deformed series -- the same statistic family as `radf()`, but built to
-   need no fitted intercept, matching the paper's derivation.
+1. It estimates the time-varying AR(1) coefficient with a local kernel regression. From the truncated residuals it builds a monotone variance profile `eta_hat(s)`, with `s` in `[0, 1]`.
+2. It inverts the profile and uses the inverse to resample and time-deform the series.
+3. It computes a recursive sup-ADF statistic (GLS-demeaned, with no intercept) on the deformed series. This belongs to the same family of statistics as `radf()`, but it needs no fitted intercept, which matches the derivation in the paper.
 
-`kernel` (`"uniform"`, the paper's own choice, or `"gaussian"`) and `h`
-(bandwidth; default a fixed plug-in, not the paper's full cross-validation
-search -- see the package's enhancement notes for the cost/benefit
-reasoning) can both be adjusted.
+You can adjust `kernel` (`"uniform"`, the choice of the paper, or `"gaussian"`) and `h`, the bandwidth. The default for `h` is a fixed plug-in value and not the full cross-validation search of the paper. The package's enhancement notes explain why we weighed cost against benefit this way.
 
 ## Verifying against the paper
 
-Kurozumi, Skrobotov & Tsarev's footnote 4 gives an exact published
-asymptotic critical value triple for `minw/n = 0.1`: `(2.319, 2.626,
-3.223)` at the (10%, 5%, 1%) levels -- for the **STADF** statistic (the
-single-sup, `r1 = 0` case). exuber's test suite
-(`tests/testthat/test-tt.R`) reproduces this via `radf_tt_cv()`'s own
-Monte Carlo and checks it lands within Monte Carlo/finite-sample tolerance
-of the published numbers.
+Footnote 4 of Kurozumi, Skrobotov & Tsarev gives published asymptotic critical values for `minw/n = 0.1`: `(2.319, 2.626, 3.223)` at the 10%, 5% and 1% levels. They apply to the STADF statistic, the single-sup case with `r1 = 0`. The test suite of exuber (`tests/testthat/test-tt.R`) reproduces them with the Monte Carlo in `radf_tt_cv()` and checks that they fall within the Monte Carlo and finite-sample tolerance of the published numbers.
 
 ## Dating and plotting a detected bubble
 
-`radf_tt()` keeps the same `radf_obj` class `radf()` itself uses, and (as
-of 2026-08-18) `radf_tt_cv()` computes the full time-varying boundary
-needed to date and plot episodes, not just the summary-level critical
-values -- so the usual pipeline works unchanged:
+`radf_tt()` returns the same `radf_obj` class as `radf()`. Since 2026-08-18, `radf_tt_cv()` also computes the full time-varying boundary that dating and plotting need, and not only the summary-level critical values. The usual pipeline therefore works unchanged:
 
 ```{r radf-tt-datestamp}
 res <- radf_tt(y, minw = 20)
@@ -105,5 +67,4 @@ datestamp(res, cv = cv)
 autoplot(res, cv = cv)
 ```
 
-See `vignette("naming-and-analysis")` for which other exuber functions do
-and don't plug into this pipeline, and why.
+`vignette("naming-and-analysis")` explains which other exuber functions work with this pipeline and which do not.

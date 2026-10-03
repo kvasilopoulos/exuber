@@ -19,7 +19,7 @@
 A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 \description{
-Summarizes information about \code{radf_obj} object.
+Summarizes the information in a \code{radf_obj} object.
 }
 \examples{
 \donttest{

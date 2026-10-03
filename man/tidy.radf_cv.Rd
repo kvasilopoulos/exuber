@@ -24,7 +24,7 @@ A \code{\link[tibble:tibble]{tibble::tibble()}}
 }
 }
 \description{
-Summarizes information about \code{radf_cv} object.
+Summarizes the information in a \code{radf_cv} object.
 }
 \examples{
 \donttest{

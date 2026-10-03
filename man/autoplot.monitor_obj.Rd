@@ -15,7 +15,7 @@
 A \link[ggplot2]{ggplot}
 }
 \description{
-Plots the monitoring statistic against its boundary, one panel per series, with vertical markers at the end of the training sample and at the alarm date.
+Plots the monitoring statistic against its boundary, with one panel for each series and vertical markers at the end of the training sample and at the alarm date.
 }
 \seealso{
 \code{\link{monitor}}

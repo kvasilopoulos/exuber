@@ -25,24 +25,25 @@ datestamp(object, cv = NULL, min_duration = 0L, ...)
 \item{min_duration}{The minimum duration of an explosive period for it to be
 reported (default = 0).}
 
-\item{...}{further arguments passed to methods.}
+\item{...}{Further arguments passed to methods.}
 
-\item{sig_lvl}{logical. Significance level, one of 90, 95 or 99. Ignored
-when \code{option = "svadf"}.}
+\item{sig_lvl}{Significance level, one of 90, 95 or 99. It is ignored when
+\code{option = "svadf"}.}
 
-\item{option}{one of \code{"gsadf"}/\code{"sadf"} (PWY/PSY dating against
-\code{cv}'s critical values) or \code{"svadf"} (Sarkar & Wells 2026's
-SV-ADF asymmetric-threshold dating -- \code{radf()}'s own \code{badf}
-compared against two closed-form, sample-size-only thresholds,
-\code{log(t)/10} for origination and \code{log(t)/2} for collapse; no
-\code{cv} needed). See Caveats.}
+\item{option}{One of \code{"gsadf"} or \code{"sadf"}, which date episodes
+(PWY/PSY) against the critical values in \code{cv}, or \code{"svadf"}, the SV-ADF
+asymmetric-threshold dating of Sarkar & Wells (2026). The \code{"svadf"} option
+compares the \code{badf} sequence of \code{radf()} with two closed-form
+thresholds that depend only on the sample size, \code{log(t)/10} for
+origination and \code{log(t)/2} for collapse, so it needs no \code{cv}. See
+Caveats.}
 
-\item{nonrejected}{logical. Whether to apply datestamping technique to the series
-that were not able to reject the Null hypothesis. Ignored when
+\item{nonrejected}{logical. Whether to apply the datestamping technique to the
+series that do not reject the null hypothesis. It is ignored when
 \code{option = "svadf"}.}
 }
 \value{
-Return a table with the following columns:
+A table with the following columns:
 
 \itemize{
 \item Start:
@@ -53,26 +54,27 @@ Return a table with the following columns:
 \item Ongoing:
 }
 
-Returns a list containing the estimated origination and termination
-dates of  episodes of explosive behaviour and the corresponding duration.
+A list with the estimated origination and termination dates of the
+episodes of explosive behavior and their duration.
 }
 \description{
-Computes the origination, termination and duration of
-episodes during which the time series display explosive dynamics.
+Computes the origination, termination and duration of the episodes in which a
+time series shows explosive dynamics.
 }
 \details{
-Datestamp also stores a vector whose elements take the value of 1 when there is
-a period of explosive behaviour and 0 otherwise. This output can serve as a
-dummy variable for the occurrence of exuberance.
+\code{datestamp} also stores a vector that takes the value 1 when there is a
+period of explosive behavior and 0 otherwise. You can use it as a dummy
+variable for the occurrence of exuberance.
 }
 \section{Caveats}{
 
 \code{option = "svadf"}: \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
-\code{Sarkar & Wells (2026)} is a non-peer-reviewed preprint, a different
-bar than every other source this package implements. The same note is
-emitted as a message when called with this option. Detects at most one
-origination/collapse pair per series (the paper's own procedure), not
-every recurring episode the way \code{"gsadf"}/\code{"sadf"} do.
+Sarkar & Wells (2026) is a preprint that has not been peer reviewed, which is a
+weaker standard of evidence than for every other source this package
+implements. The function emits the same note as a message when you call it with
+this option. It detects at most one origination and collapse pair per series, as
+the procedure of the paper does, and it does not find every recurring episode as
+\code{"gsadf"} and \code{"sadf"} do.
 }
 
 \examples{

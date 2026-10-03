@@ -9,8 +9,8 @@
 \arguments{
 \item{object}{A \code{radf_sbz_union} object.}
 
-\item{sig_lvl}{Significance level to plot the critical value at, one of
-\code{90}, \code{95} (default), \code{99}.}
+\item{sig_lvl}{Significance level at which to plot the critical value, one of
+\code{90}, \code{95} (default) or \code{99}.}
 
 \item{...}{Further arguments passed to methods. Not used.}
 }
@@ -18,8 +18,8 @@
 A \link[ggplot2]{ggplot}
 }
 \description{
-Plots, for each series, the supDF, supBZ and union statistics against
-their bootstrap critical values at the chosen significance level.
+Plots the supDF, supBZ and union statistics of each series against their
+bootstrap critical values at the chosen significance level.
 }
 \seealso{
 \code{\link{radf_sbz_union}}

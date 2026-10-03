@@ -23,11 +23,11 @@ series_names(x) <- value
 
 \item{...}{Further arguments passed to methods.}
 
-\item{value}{n ordered vector of the same length as the "index" attribute of x.}
+\item{value}{An ordered vector of the same length as the "index" attribute of x.}
 }
 \value{
-A character vector of series names; the replacement form returns
-the modified object.
+A character vector of series names. The replacement form returns the
+modified object.
 }
 \description{
 Retrieve or replace the series names of an object.
@@ -37,7 +37,7 @@ Retrieve or replace the series names of an object.
 rfd <- radf(sim_data)
 series_names(rfd)
 
-# Rename the series -- propagates through tidy()/autoplot()'s facet labels
+# Rename the series, which carries through to the facet labels of tidy() and autoplot()
 series_names(rfd) <- c("Bubble A", "Bubble B", "Bubble C", "Bubble D", "Bubble E")
 series_names(rfd)
 tidy(rfd)

@@ -220,73 +220,69 @@ hb_fluc_q <- function(sig_lvl, n_train, k) {
 
 #' Real-Time Monitoring for Explosive Bubbles
 #'
-#' \code{monitor} implements real-time monitoring: fix a training
-#' window \code{[1, T*]} assumed free of exuberance, calibrate a critical
-#' value on it, then compare the running recursive statistic at each
-#' subsequent point \code{T*+1, ..., T} against that fixed boundary,
-#' flagging the first date it is breached.
+#' \code{monitor} implements real-time monitoring. You fix a training window
+#' \code{[1, T*]} that is assumed free of exuberance and calibrate a critical value
+#' on it. The function then compares the running recursive statistic at each
+#' subsequent point \code{T*+1, ..., T} with that fixed boundary and flags the first
+#' date at which the boundary is breached.
 #'
-#' \code{boundary = "bootstrap"} (default) implements Phillips & Shi
-#' (2020): the boundary is a wild-bootstrap quantile of the GSADF-type
-#' statistic (\code{\link{radf_wb_ps_cv}}, its \code{tb} parameter),
-#' compared against \code{radf()}'s \code{bsadf} sequence. Deliberately
-#' calibrates on the training window \emph{only} (\code{data[1:T*]}), not
-#' the full series: \code{\link{radf_wb_ps_cv}}'s underlying null-model fit
-#' (\code{adf_res()}) uses whatever data it is given in full, with no
-#' internal truncation to \code{tb} -- passing post-\code{T*} (possibly
-#' explosive) data to it directly would leak future information into the
-#' null calibration.
+#' \code{boundary = "bootstrap"} (the default) implements Phillips & Shi (2020).
+#' The boundary is a wild-bootstrap quantile of the GSADF-type statistic (see the
+#' \code{tb} parameter of \code{\link{radf_wb_ps_cv}}), and it is compared with the
+#' \code{bsadf} sequence of \code{radf()}. The function calibrates on the training
+#' window \emph{only} (\code{data[1:T*]}) and not on the full series. The null-model
+#' fit inside \code{\link{radf_wb_ps_cv}} (\code{adf_res()}) uses all the data it
+#' is given and does not truncate them to \code{tb}, so passing data after
+#' \code{T*}, which may be explosive, directly to it would leak future information
+#' into the calibration of the null.
 #'
-#' \code{boundary = "kurozumi"} implements Kurozumi (2020)'s closed-form
-#' alternative: no bootstrap at all, just a published constant (his Table 1)
-#' compared against \code{radf()}'s \code{badf} sequence (his
-#' \code{SADF(k)} detector -- the \code{s0 = 0}, fixed-start-at-1 case,
-#' the default). Setting \code{s0} to \code{0.4} or \code{0.8} instead
-#' switches to his \code{GSADF_{s0}(k)} generalization: the window start
-#' is allowed to range over \code{[1, floor(T* * s0)]} rather than being
-#' fixed at \code{1}, compared against his \code{k}-varying (not
-#' constant) boundary function and its own published scaling constant.
-#' \code{sig_lvl} must be one of \code{90}, \code{95}, or \code{99}
-#' (the levels his table tabulates).
+#' \code{boundary = "kurozumi"} implements the closed-form alternative of Kurozumi
+#' (2020). It needs no bootstrap and compares a published constant (his Table 1)
+#' with the \code{badf} sequence of \code{radf()}. The default \code{s0 = 0} gives
+#' his \code{SADF(k)} detector, where the window start is fixed at 1. Setting
+#' \code{s0} to \code{0.4} or \code{0.8} switches to his \code{GSADF_{s0}(k)}
+#' generalization. The window start then ranges over \code{[1, floor(T* * s0)]}
+#' and is not fixed at \code{1}, and the comparison uses his boundary function,
+#' which varies with \code{k} and is not constant, together with its own published
+#' scaling constant. \code{sig_lvl} must be one of \code{90}, \code{95} or
+#' \code{99}, the levels that his table tabulates.
 #'
-#' \code{boundary = "fluc"} implements Homm & Breitung (2012)'s FLUC
-#' detector: their \code{DF_{t/n}} is likewise exactly \code{radf()}'s
-#' \code{badf} sequence, compared against a published constant from
-#' their Table 7 (no detrending case) rather than a simulated one.
-#' \code{sig_lvl} must be one of \code{90}, \code{95}, \code{99}.
+#' \code{boundary = "fluc"} implements the FLUC detector of Homm & Breitung (2012).
+#' Their \code{DF_{t/n}} is also exactly the \code{badf} sequence of \code{radf()},
+#' and it is compared with a published constant from their Table 7 (the case
+#' without detrending) and not with a simulated one. \code{sig_lvl} must be one of
+#' \code{90}, \code{95} or \code{99}.
 #'
 #' @inheritParams radf
-#' @param r_star The end of the training window: a fraction in
-#' \code{(0, 1)} of the sample (default \code{0.5}), or an integer
-#' observation count if \code{>= 1}.
-#' @param nboot Number of wild bootstrap replications for the training
-#' critical value. Ignored unless \code{boundary = "bootstrap"}.
-#' @param sig_lvl Significance level for the monitoring boundary on the
-#' package-wide 0-100 scale, one of \code{90}, \code{95} (default),
+#' @param r_star The end of the training window: a fraction in \code{(0, 1)} of the
+#' sample (default \code{0.5}), or an integer number of observations if
+#' \code{>= 1}.
+#' @param nboot Number of wild bootstrap replications for the training critical
+#' value. It is ignored unless \code{boundary = "bootstrap"}.
+#' @param sig_lvl Significance level for the monitoring boundary on the 0 to 100
+#' scale used throughout the package, one of \code{90}, \code{95} (default) or
 #' \code{99}.
-#' @param type Lag selection for the wild bootstrap DGP, passed to
-#' \code{\link{radf_wb_ps_cv}}. Ignored unless \code{boundary = "bootstrap"}.
-#' @param seed Optional seed for the bootstrap draws. Ignored unless
+#' @param type Lag selection for the wild bootstrap process, passed to
+#' \code{\link{radf_wb_ps_cv}}. It is ignored unless \code{boundary = "bootstrap"}.
+#' @param seed Optional seed for the bootstrap draws. It is ignored unless
 #' \code{boundary = "bootstrap"}.
 #' @param boundary \code{"bootstrap"} (default, Phillips & Shi 2020),
-#' \code{"kurozumi"} (Kurozumi 2020's closed-form SADF/GSADF boundary), or
-#' \code{"fluc"} (Homm & Breitung 2012's FLUC boundary).
-#' @param s0 Kurozumi (2020)'s window-start range as a fraction of the
-#' training length, only used when \code{boundary = "kurozumi"}.
-#' \code{0} (default) is the \code{SADF} case (window start fixed at
-#' \code{1}); \code{0.4} or \code{0.8} switches to the \code{GSADF_{s0}}
-#' case (window start ranges over \code{[1, floor(T* * s0)]}), the only
-#' two values his boundary function's scaling constants are tabulated
-#' for.
+#' \code{"kurozumi"} (the closed-form SADF/GSADF boundary of Kurozumi 2020) or
+#' \code{"fluc"} (the FLUC boundary of Homm & Breitung 2012).
+#' @param s0 The range of window starts of Kurozumi (2020), as a fraction of the
+#' training length. It is used only when \code{boundary = "kurozumi"}. The default
+#' \code{0} is the \code{SADF} case, with the window start fixed at \code{1}.
+#' \code{0.4} or \code{0.8} switches to the \code{GSADF_{s0}} case, where the window
+#' start ranges over \code{[1, floor(T* * s0)]}. These are the only two values for
+#' which the scaling constants of his boundary function are tabulated.
 #'
-#' @return An object of class \code{monitor_obj}: a list with the
-#' full-sample statistic path (\code{stat} -- \code{bsadf} for
-#' \code{boundary = "bootstrap"}, \code{badf} for \code{"kurozumi"}/
-#' \code{"fluc"}), the calibrated \code{boundary} (one flat value per
-#' series), the training window length \code{T_star}, and
-#' \code{alarm}/\code{alarm_date} (the first monitoring-period
-#' observation/date at which \code{stat} breaches the boundary,
-#' \code{NA} if never).
+#' @return An object of class \code{monitor_obj}: a list with the full-sample
+#' statistic path (\code{stat}, which is \code{bsadf} for
+#' \code{boundary = "bootstrap"} and \code{badf} for \code{"kurozumi"} and
+#' \code{"fluc"}), the calibrated \code{boundary} (one flat value for each series),
+#' the length of the training window \code{T_star}, and \code{alarm} and
+#' \code{alarm_date} (the first observation or date in the monitoring period at
+#' which \code{stat} breaches the boundary, \code{NA} if it never does).
 #'
 #' @references Phillips, P. C., & Shi, S. (2020). Real time monitoring of
 #' asset markets: Bubbles and crises. In Handbook of Statistics (Vol. 42,
@@ -299,17 +295,15 @@ hb_fluc_q <- function(sig_lvl, n_train, k) {
 #' bubbles in stock markets: A comparison of alternative methods.
 #' Journal of Financial Econometrics, 10(1), 198-231.
 #'
-#' @seealso \code{\link{radf_wb_ps_cv}} for the underlying wild bootstrap,
-#' and \code{\link{datestamp}} for the (non-monitoring, full-sample)
-#' origination/collapse dating that already exists.
+#' @seealso \code{\link{radf_wb_ps_cv}} for the underlying wild bootstrap, and
+#' \code{\link{datestamp}} for the existing full-sample dating of origination and
+#' collapse, which is not a monitoring procedure.
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' boundary/alarm summary (real-time monitoring output, not a
-#' per-series sup-statistic table) -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the boundary and the alarm. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -323,7 +317,7 @@ hb_fluc_q <- function(sig_lvl, n_train, k) {
 #' print(mon)
 #' autoplot(mon)
 #'
-#' # Kurozumi (2020) closed-form boundary -- no bootstrap needed
+#' # Closed-form boundary of Kurozumi (2020), which needs no bootstrap
 #' mon_kz <- monitor(y, r_star = 0.5, boundary = "kurozumi")
 #' autoplot(mon_kz)
 #'
@@ -437,7 +431,7 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
 
 #' Plot method for monitor() output
 #'
-#' Plots the monitoring statistic against its boundary, one panel per series, with vertical markers at the end of the training sample and at the alarm date.
+#' Plots the monitoring statistic against its boundary, with one panel for each series and vertical markers at the end of the training sample and at the alarm date.
 #'
 #' @param object An object of class \code{monitor_obj}, the output of \code{\link{monitor}}.
 #' @param ... Further arguments passed to methods. Not used.

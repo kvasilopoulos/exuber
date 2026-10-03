@@ -15,9 +15,9 @@ critical value.}
 \item{...}{Further arguments passed to methods. Not used.}
 }
 \description{
-Tidy or augment  and then join objects of class \code{radf_obj} and \code{radf_cv}. The
-object of reference is the \code{radf_cv}. For example, if panel critical values
-are provided the function will return the panel test statistic.
+Tidy or augment and then join objects of class \code{radf_obj} and \code{radf_cv}. The
+\code{radf_cv} is the object of reference. For example, if you provide panel critical
+values, the function returns the panel test statistic.
 }
 \details{
 \code{tidy_join} also calls \code{augment_join} when \code{cv} is of class \code{sb_cv}.

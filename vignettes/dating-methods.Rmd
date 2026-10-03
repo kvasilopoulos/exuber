@@ -20,41 +20,26 @@ library(exuber)
 
 ## Why these exist alongside `datestamp()`
 
-`datestamp()` applies PSY's own rule to a `radf()` result: a bubble runs from
-the first point the recursive statistic crosses its critical value to the
-first point it drops back below. That rule is simple and well understood,
-but it is not the only way to *date* a bubble once you already believe one is
-there. The `dating_*()` family instead fits an explicit regime model --
-unit-root, then explosive, then unit-root again -- directly to the raw
-series by minimizing residual sum of squares (SSR), and picks the break
-dates that fit that model best. They take no critical value at all: given a
-window believed to contain (at most) one bubble, they answer "where exactly
-does it start and end," not "is there one."
+`datestamp()` applies the rule of Phillips, Shi and Yu to a `radf()` result: a bubble runs from the first point at which the recursive statistic crosses its critical value to the first point at which it falls back below it. The rule is simple and well understood, but it is not the only way to date a bubble once you already believe that one exists. The `dating_*()` family fits an explicit regime model to the raw series: a unit root, then an explosive regime, then a unit root again. It chooses the break dates that minimize the residual sum of squares (SSR). These functions need no critical value. Given a window that contains at most one bubble, they tell you where the bubble starts and ends, and they do not tell you whether there is one.
 
 | Function | Paper | Idea |
 |---|---|---|
-| `dating_hls()` | Harvey, Leybourne & Sollis (2017) | Fits 4 candidate regime-dummy models (with/without a distinct collapse regime, with/without recovery) via closed-form segment SSR; BIC picks among them. |
-| `dating_knp()` | Kejriwal, Nguyen & Perron (2025) | Same model as HLS's Model 2, but proves the plain SSR minimizer is *inconsistent* -- it converges to the collapse date, not the origination date -- and fixes it by omitting one squared residual from the objective. |
-| `dating_pdc()` | Pang, Du & Chong (2021); Kurozumi & Skrobotov (2023) | Assumes a fixed 3- or 4-regime structure and finds each breakpoint *sequentially* in closed form (collapse first, since it is stochastically dominant), with no BIC step. |
-| `dating_hlw()` | Harvey, Leybourne & Whitehouse (2020) | A wrapper: runs `radf()`/`datestamp()` first to find *how many* episodes and roughly where, then applies HLS-style fitting independently within each detected window. |
+| `dating_hls()` | Harvey, Leybourne & Sollis (2017) | Fits four candidate regime-dummy models (with or without a distinct collapse regime, with or without recovery) using closed-form segment SSR, and the BIC picks among them. |
+| `dating_knp()` | Kejriwal, Nguyen & Perron (2025) | Uses the same model as Model 2 of HLS. The authors prove that the plain SSR minimizer is inconsistent, because it converges to the collapse date and not to the origination date, and they correct this by omitting one squared residual from the objective. |
+| `dating_pdc()` | Pang, Du & Chong (2021); Kurozumi & Skrobotov (2023) | Assumes a fixed structure of three or four regimes and finds each breakpoint sequentially in closed form, starting with the collapse because it is stochastically dominant. There is no BIC step. |
+| `dating_hlw()` | Harvey, Leybourne & Whitehouse (2020) | A wrapper that first runs `radf()` and `datestamp()` to find how many episodes there are and roughly where they lie, and then applies HLS-style fitting separately within each detected window. |
 
-All four take no `radf_cv`, so they don't plug into `summary()`/`tidy()`/
-`autoplot()` -- see `vignette("naming-and-analysis")` for the full pipeline
-picture. Each prints its own dating table instead.
+None of the four takes a `radf_cv` object, so they do not work with `summary()`, `tidy()` or `autoplot()`. Each prints its own dating table instead. `vignette("naming-and-analysis")` describes the full pipeline.
 
-## A single bubble, four verdicts
+## A single bubble, four estimates
 
-One simulated series from `sim_ps1()`, Phillips & Shi (2018)'s own
-single-bubble DGP: a unit-root run-up, a genuine explosive regime (true
-origination at 40), a mildly-integrated collapse regime (starting at 61) and
-a return to a unit root (recovery at 70) -- exactly the regime structure
-these estimators are built for.
+We use one series simulated with `sim_ps1()`, the single-bubble data generating process of Phillips & Shi (2018). It has a unit-root run-up, an explosive regime that starts at 40, a mildly integrated collapse regime that starts at 61, and a return to a unit root at 70. This is the regime structure that these estimators are built for.
 
 ```{r dgp}
 y <- sim_ps1(n = 100, seed = 1)
 ```
 
-True origination is 40, true collapse is 61. Running all four:
+The true origination date is 40 and the true collapse date is 61. We run all four estimators:
 
 ```{r hls}
 dating_hls(y, trim = 0.05)
@@ -72,31 +57,13 @@ dating_pdc(y, regimes = 3, trim = 0.05)
 dating_hlw(y, trim = 0.1, nboot = 199, seed = 1)
 ```
 
-On this draw, `dating_hls()` and `dating_hlw()` both select the 4-regime
-model and land within a point of every true date (39/60/70 against
-40/61/70); `dating_pdc()` is a point or two early on both (38/59).
-`dating_knp()` is the visible failure mode here: its model assumes an
-*instantaneous* collapse (unit root resuming from a shifted level), so
-`sim_ps1()`'s ten-period mildly-integrated crash (61-70) is a regime it
-has no room for, and it dates that crash as the episode instead,
-reporting 60/70 -- a real, not contrived, consequence of a model
-mismatch, not of the estimator's bias correction.
+On this draw, `dating_hls()` and `dating_hlw()` both select the four-regime model and land within one period of every true date (39, 60 and 70 against 40, 61 and 70). `dating_pdc()` is one or two periods early on both dates (38 and 59). `dating_knp()` performs worst here. Its model assumes an instantaneous collapse, with the unit root resuming from a shifted level, so it has no room for the ten-period mildly integrated crash (61 to 70) that `sim_ps1()` generates. It dates that crash as the episode instead and reports 60 and 70. This follows from the mismatch between the model and the data and not from the estimator's bias correction.
 
-The point of running all four side by side isn't that one is "correct" --
-it's that these are genuinely different estimators with different failure
-modes, and disagreement between them on real data is informative, not a bug
-to be resolved by picking a favorite.
+We run all four side by side to show that they are different estimators with different failure modes, and not to single out one as correct. When they disagree on real data, the disagreement is informative, and it should not be settled by picking a favorite.
 
 ## Which to reach for
 
-- Believe there is exactly **one** bubble in the window and want the
-  best-fitting regime model (with or without a distinct collapse/recovery
-  regime): `dating_hls()`.
-- Same setting, but origination-date accuracy matters more than
-  collapse-date accuracy (KNP's own finding: the naive estimator is biased
-  toward the collapse date): `dating_knp()`.
-- Want closed-form, no BIC model search, and are willing to fix the number
-  of regimes up front: `dating_pdc()` (add `weights` for the
-  volatility-corrected variant).
-- Don't know how many episodes there are, or want dating anchored to an
-  actual `radf()`/`datestamp()` detection first: `dating_hlw()`.
+- If you believe the window contains exactly one bubble and you want the best-fitting regime model, with or without a distinct collapse and recovery regime, use `dating_hls()`.
+- If you have the same setting but the accuracy of the origination date matters more than that of the collapse date, use `dating_knp()`. Its authors find that the naive estimator is biased toward the collapse date.
+- If you want closed-form estimates with no BIC model search and can fix the number of regimes in advance, use `dating_pdc()`. Add `weights` for the volatility-corrected variant.
+- If you do not know how many episodes there are, or you want the dating to start from an actual `radf()` and `datestamp()` detection, use `dating_hlw()`.

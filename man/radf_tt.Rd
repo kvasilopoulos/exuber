@@ -8,53 +8,54 @@ radf_tt(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NULL)
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{kernel}{Kernel used in the local variance-profile regression,
-\code{"uniform"} (default, as in the paper's simulations) or \code{"gaussian"}.}
+\code{"uniform"} (default, as in the simulations of the paper) or
+\code{"gaussian"}.}
 
-\item{h}{Bandwidth for the variance-profile kernel regression. Default
-\code{T^(-2/5)}, the midpoint (on the log scale) of the paper's
-cross-validation search range \eqn{[T^{-0.5}, T^{-0.3}]}.}
+\item{h}{Bandwidth for the variance-profile kernel regression. The default is
+\code{T^(-2/5)}, the midpoint on the log scale of the cross-validation search
+range \eqn{[T^{-0.5}, T^{-0.3}]} of the paper.}
 }
 \value{
 An object of class \code{radf_tt_obj}/\code{radf_obj}: the same
-\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as
-\code{\link{radf}}, computed on the time-transformed series, so it
-plugs into \code{summary()}/\code{datestamp()}/\code{tidy()}/\code{autoplot()}
+\code{adf}/\code{badf}/\code{sadf}/\code{bsadf}/\code{gsadf} list as for
+\code{\link{radf}}, computed on the time-transformed series. It works with
+\code{summary()}, \code{datestamp()}, \code{tidy()} and \code{autoplot()} when
 paired with \code{\link{radf_tt_cv}}.
 }
 \description{
-\code{radf_tt} computes the STADF/GSTADF test statistics of Kurozumi,
+\code{radf_tt} computes the STADF and GSTADF test statistics of Kurozumi,
 Skrobotov & Tsarev, a heteroskedasticity-robust alternative to
-\code{\link{radf}} that requires no bootstrap: the series is time-deformed
-using a nonparametric estimate of its variance profile, after which the
-usual (asymptotic, homoskedastic) recursive sup-ADF critical values apply.
+\code{\link{radf}} that needs no bootstrap. It time-deforms the series with a
+nonparametric estimate of its variance profile, after which the usual
+asymptotic recursive sup-ADF critical values for homoskedastic errors apply.
 }
 \details{
-For critical values, use \code{\link{radf_tt_cv}} as the primary
-recommendation: it is pivotal (asymptotically free of the volatility
-process), so it does not need to be recomputed per dataset, unlike a
-bootstrap. \code{\link{radf_wb_cv}} (Harvey, Leybourne, Sollis & Taylor's
-wild bootstrap) is a bootstrap-based alternative, worth considering if
-non-pivotality/finite-sample bootstrap robustness is a specific concern.
+We recommend \code{\link{radf_tt_cv}} for the critical values. They are pivotal
+(asymptotically free of the volatility process), so they do not have to be
+recomputed for each dataset, unlike a bootstrap. The wild bootstrap of Harvey,
+Leybourne, Sollis & Taylor in \code{\link{radf_wb_cv}} is a bootstrap-based
+alternative. Consider it if non-pivotality or the finite-sample robustness of
+the bootstrap is a specific concern.
 }
 \note{
-Carries the \code{radf_obj} class and, as of 2026-08-18, its full
-\code{summary()}/\code{\link{datestamp}}/\code{tidy}/\code{autoplot}
-pipeline works -- \code{radf_tt_cv()} now computes the time-varying
-\code{badf_cv}/\code{bsadf_cv} boundary those last two need, not just
-the three scalar critical values \code{summary()} uses. See
+The result carries the \code{radf_obj} class. Since 2026-08-18 the full
+\code{summary()}, \code{\link{datestamp}}, \code{tidy} and \code{autoplot}
+pipeline works, because \code{radf_tt_cv()} now computes the time-varying
+\code{badf_cv} and \code{bsadf_cv} boundary that the last two need, and not only
+the three scalar critical values that \code{summary()} uses. See
 \code{vignette("naming-and-analysis", package = "exuber")}.
 }
 \section{Status}{
@@ -64,8 +65,9 @@ the three scalar critical values \code{summary()} uses. See
 
 \examples{
 \donttest{
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_tt(y, minw = 20)
 print(res)
@@ -84,9 +86,9 @@ Test for Bubbles under Non-stationary Volatility. Journal of Financial
 Econometrics. \doi{10.1093/jjfinec/nbae026}
 }
 \seealso{
-\code{\link{radf_tt_cv}} for the (pivotal, bootstrap-free)
-asymptotic critical values, and \code{\link{radf_wb_cv}} for the
-bootstrap-based alternative (Harvey, Leybourne, Sollis & Taylor).
+\code{\link{radf_tt_cv}} for the pivotal asymptotic critical values that
+need no bootstrap, and \code{\link{radf_wb_cv}} for the bootstrap-based
+alternative (Harvey, Leybourne, Sollis & Taylor).
 
 Other volatility-robust tests:
 \code{\link[=cusum_test]{cusum_test()}},

@@ -141,67 +141,67 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 
 #' CUSUM Real-Time Monitoring for Explosive Bubbles
 #'
-#' \code{monitor_cusum} implements Homm & Breitung (2012)'s CUSUM real-time
-#' monitoring procedure: fix a training window \code{[1, T*]} assumed free
-#' of exuberance, then compare the standardized cumulative sum of
-#' post-training first differences, \code{S_t = (y_t - y_{T*}) /
-#' sigma_hat_t}, against a closed-form boundary
-#' \code{c_t * sqrt(t)}, \code{c_t = sqrt(b_alpha + log(t / T*))}, flagging
-#' the first date it is breached.
+#' \code{monitor_cusum} implements the CUSUM real-time monitoring procedure of Homm
+#' & Breitung (2012). You fix a training window \code{[1, T*]} that is assumed free
+#' of exuberance. The function then compares the standardized cumulative sum of the
+#' post-training first differences, \code{S_t = (y_t - y_{T*}) / sigma_hat_t}, with
+#' the closed-form boundary \code{c_t * sqrt(t)}, where
+#' \code{c_t = sqrt(b_alpha + log(t / T*))}, and flags the first date at which the
+#' boundary is breached.
 #'
-#' @note The boundary is closed-form throughout: a fixed asymptotic
-#' constant (\code{boundary = "asymptotic"}, \code{b_alpha = 4.6}) or a
-#' published finite-sample table lookup (\code{boundary = "finite"}, Homm
-#' & Breitung (2012)'s Table 8) -- no simulation, no separate cv function.
+#' @note The boundary is closed-form throughout. It is either a fixed asymptotic
+#' constant (\code{boundary = "asymptotic"}, \code{b_alpha = 4.6}) or a lookup in the
+#' published finite-sample table (\code{boundary = "finite"}, Table 8 of Homm &
+#' Breitung 2012). No simulation and no separate cv function is needed.
 #'
-#' Unlike \code{\link{monitor}} (Family A, a recursive ADF-family
-#' statistic requiring a wild bootstrap to calibrate its boundary), this
-#' is a structurally different statistic -- a standardized running sum,
-#' not a recursive regression -- with an asymptotic closed-form boundary
-#' (Chu, Stinchcombe & White 1996's inequality, HB's eq. 28): no
-#' bootstrap, no simulation, no dependence on the data beyond the running
-#' variance estimate itself.
+#' \code{\link{monitor}} (Family A) uses a recursive ADF-family statistic whose
+#' boundary needs a wild bootstrap for calibration. This function uses a
+#' structurally different statistic, a standardized running sum and not a recursive
+#' regression. Its boundary is an asymptotic closed form (the inequality of Chu,
+#' Stinchcombe & White 1996, eq. 28 of HB), so it needs no bootstrap and no
+#' simulation and does not depend on the data beyond the running variance estimate
+#' itself.
 #'
-#' \code{type = "kernel"} instead uses Astill, Harvey, Leybourne, Taylor &
-#' Zu (2023)'s volatility-robust modification ("CUSUMV"): each first
-#' difference is standardized by its own one-sided kernel spot-variance
-#' estimate (their eq. 6-7) instead of a single running variance, before
-#' cumulating. Their Corollary 1 establishes the \emph{same} boundary
-#' function delivers a controlled asymptotic false-alarm rate even under
-#' time-varying volatility, unlike the standard CUSUM statistic, which
-#' requires homoskedasticity for its own size-control result to hold.
+#' \code{type = "kernel"} instead uses the volatility-robust modification
+#' ("CUSUMV") of Astill, Harvey, Leybourne, Taylor & Zu (2023). Before cumulating,
+#' it standardizes each first difference by its own one-sided kernel spot-variance
+#' estimate (their eq. 6-7) and not by a single running variance. Their Corollary 1
+#' establishes that the \emph{same} boundary function gives a controlled asymptotic
+#' false-alarm rate even under time-varying volatility. The standard CUSUM
+#' statistic does not have this property, because its size-control result requires
+#' homoskedasticity.
 #'
 #' @inheritParams monitor
-#' @param b_alpha The boundary constant (HB's eq. 29). Default \code{4.6},
-#' HB's own one-sided asymptotic calibration for a 5\% significance level
-#' (their Section 3); this is an asymptotic upper bound on the false-
-#' alarm probability (Chu, Stinchcombe & White 1996), not an exact size,
-#' so it is typically conservative in finite samples. Ignored when
-#' \code{boundary = "finite"}.
-#' @param boundary \code{"asymptotic"} (default) uses \code{b_alpha}
-#' directly. \code{"finite"} instead looks up HB's own finite-sample
-#' boundary constant (their Table 8) from \code{sig_lvl} and the realized
-#' training length/monitoring-horizon ratio -- \code{sig_lvl} must then be
-#' one of \code{90}, \code{95}, \code{99}.
-#' @param sig_lvl Significance level on the package-wide 0-100 scale when
-#' \code{boundary = "finite"} (default \code{95}); ignored when
+#' @param b_alpha The boundary constant (eq. 29 of HB). The default \code{4.6} is the
+#' one-sided asymptotic calibration of HB for a 5\% significance level (their
+#' Section 3). It is an asymptotic upper bound on the false-alarm probability (Chu,
+#' Stinchcombe & White 1996) and not an exact size, so it is typically conservative
+#' in finite samples. It is ignored when \code{boundary = "finite"}.
+#' @param boundary \code{"asymptotic"} (default) uses \code{b_alpha} directly.
+#' \code{"finite"} instead looks up the finite-sample boundary constant of HB (their
+#' Table 8) from \code{sig_lvl} and the realized ratio of training length to
+#' monitoring horizon. \code{sig_lvl} must then be one of \code{90}, \code{95} or
+#' \code{99}.
+#' @param sig_lvl Significance level on the 0 to 100 scale used throughout the
+#' package when \code{boundary = "finite"} (default \code{95}). It is ignored when
 #' \code{boundary = "asymptotic"}.
-#' @param type \code{"standard"} (default) for Homm & Breitung (2012)'s
-#' original CUSUM statistic, or \code{"kernel"} for Astill, Harvey,
-#' Leybourne, Taylor & Zu (2023)'s volatility-robust "CUSUMV" variant.
-#' @param h Bandwidth/window length (AHLTZ's \code{N}) for the one-sided kernel spot-variance
-#' estimator when \code{type = "kernel"}. Default \code{20}, the authors'
-#' own empirically-recommended value (their Section 3: "setting H = 20
-#' delivered a procedure with the best trade-off" between false-alarm
-#' robustness and power). Ignored when \code{type = "standard"}.
-#' @param kernel Kernel for the spot-variance estimator when
-#' \code{type = "kernel"}, \code{"gaussian"} (default) or \code{"uniform"}.
-#' Ignored when \code{type = "standard"}.
+#' @param type \code{"standard"} (default) for the original CUSUM statistic of Homm
+#' & Breitung (2012), or \code{"kernel"} for the volatility-robust "CUSUMV" variant
+#' of Astill, Harvey, Leybourne, Taylor & Zu (2023).
+#' @param h Bandwidth (window length, \code{N} in AHLTZ) of the one-sided kernel
+#' spot-variance estimator when \code{type = "kernel"}. The default \code{20} is the
+#' value that the authors recommend from their experiments (their Section 3:
+#' "setting H = 20 delivered a procedure with the best trade-off" between
+#' robustness of the false-alarm rate and power). It is ignored when
+#' \code{type = "standard"}.
+#' @param kernel Kernel for the spot-variance estimator when \code{type = "kernel"},
+#' \code{"gaussian"} (default) or \code{"uniform"}. It is ignored when
+#' \code{type = "standard"}.
 #'
-#' @return An object of class \code{monitor_cusum_obj}: a list with the
-#' monitoring-region statistic path (\code{S}) and \code{boundary}, the
-#' training window length \code{T_star}, and \code{alarm}/\code{alarm_date}
-#' (the first breach, \code{NA} if none).
+#' @return An object of class \code{monitor_cusum_obj}: a list with the statistic
+#' path in the monitoring region (\code{S}) and \code{boundary}, the length of the
+#' training window \code{T_star}, and \code{alarm} and \code{alarm_date} (the first
+#' breach, \code{NA} if there is none).
 #'
 #' @references Homm, U., & Breitung, J. (2012). Testing for speculative
 #' bubbles in stock markets: A comparison of alternative methods. Journal
@@ -215,15 +215,14 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' in financial data in the presence of time-varying volatility. Journal
 #' of Financial Econometrics, 21(1), 187-227.
 #'
-#' @seealso \code{\link{monitor}} for the recursive-ADF (Family A)
-#' monitoring alternative.
+#' @seealso \code{\link{monitor}} for the monitoring alternative based on the
+#' recursive ADF (Family A).
 #'
-#' @note Returns its own class (not `radf_obj`), so it does not plug into
-#' `summary()`/`\link{datestamp}`/`tidy`; it has its own `print()` and
-#' `autoplot()` methods instead. Prints its own
-#' boundary/alarm summary -- see
-#' `vignette("naming-and-analysis", package = "exuber")` for the full
-#' picture of which functions do and don't fit that pipeline.
+#' @note The function returns its own class and not `radf_obj`, so it does not work
+#' with `summary()`, `\link{datestamp}` and `tidy`. It has its own `print()` and
+#' `autoplot()` methods instead. `print()` shows the boundary and the alarm. See
+#' `vignette("naming-and-analysis", package = "exuber")` for which functions fit
+#' the shared pipeline and which do not.
 #'
 #' @section Status:
 #' `r lifecycle::badge("experimental")`
@@ -237,7 +236,7 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #' autoplot(res)
 #'
 #' # Volatility-robust "CUSUMV" variant (Astill, Harvey, Leybourne, Taylor & Zu 2023):
-#' # same bubble, but volatility triples at t = 120, after the training window
+#' # the same bubble, but volatility triples at t = 120, after the training window
 #' y_vol <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
 #'   e = sim_vol_break(199, tau = 0.6))
 #' res_kernel <- monitor_cusum(y_vol, r_star = 0.5, type = "kernel")
@@ -296,7 +295,7 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
 
 #' Plot method for monitor_cusum() output
 #'
-#' Plots the CUSUM detector path against its boundary, one panel per series, with vertical markers at the end of the training sample and at the alarm date.
+#' Plots the CUSUM detector path against its boundary, with one panel for each series and vertical markers at the end of the training sample and at the alarm date.
 #'
 #' @param object An object of class \code{monitor_cusum_obj}, the output of \code{\link{monitor_cusum}}.
 #' @param ... Further arguments passed to methods. Not used.

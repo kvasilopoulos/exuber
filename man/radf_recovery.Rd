@@ -15,98 +15,94 @@ radf_recovery(
 }
 \arguments{
 \item{data}{A univariate or multivariate numeric time series object, a numeric
-vector or matrix, or a data.frame. A column may have leading and/or trailing
-\code{NA} values (an uneven/unbalanced panel where series enter or exit the
-sample at different times) -- those periods are filled with \code{NA} in
-\code{badf}/\code{bsadf} and excluded from that series' \code{adf}/\code{sadf}/
-\code{gsadf}. Interior \code{NA} values (a gap in the middle of a series) are
-not supported. When any series is padded this way, the panel statistic
-(\code{bsadf_panel}/\code{gsadf_panel}) is not available and is returned as
-\code{NA}, with a warning.}
+vector or matrix, or a data.frame. A column may have leading or trailing
+\code{NA} values, which describes an unbalanced panel in which series enter or
+exit the sample at different times. Those periods are filled with \code{NA} in
+\code{badf} and \code{bsadf} and excluded from the \code{adf}, \code{sadf} and
+\code{gsadf} of that series. Interior \code{NA} values (a gap in the middle of
+a series) are not supported. When any series is padded in this way, the panel
+statistics (\code{bsadf_panel} and \code{gsadf_panel}) are not available, and
+the function returns \code{NA} for them with a warning.}
 
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
 \item{lag}{A non-negative integer. The lag length of the Augmented Dickey-Fuller regression (default = 0L).}
 
-\item{nrep}{Number of Monte Carlo replications for
-\code{\link{radf_recovery_cv}}'s critical value.}
+\item{nrep}{Number of Monte Carlo replications for the critical value in
+\code{\link{radf_recovery_cv}}.}
 
 \item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
 \item{seed}{Optional seed for the Monte Carlo draws.}
 }
 \value{
-An object of class \code{radf_recovery_obj}: a list with
-\code{f_c}/\code{f_r} (the estimated dates, \code{NA} if not
-identified), \code{detected} (logical, whether an up-crossing was
-found at all), and \code{censored} (logical, whether \code{f_c} is
-left-censored by the start of the reverse-time sample).
+An object of class \code{radf_recovery_obj}: a list with \code{f_c} and
+\code{f_r} (the estimated dates, \code{NA} if not identified), \code{detected}
+(logical, whether an up-crossing was found at all) and \code{censored} (logical,
+whether \code{f_c} is left-censored by the start of the reverse-time sample).
 }
 \description{
-\code{radf_recovery} implements Phillips & Shi (2014)'s reverse-
-regression dating: reverses the series, runs \code{radf()}'s existing
-bsadf recursion on it, and locates the first up-crossing of a
-reversal-calibrated critical value boundary (the market recovery
-date) followed by the next down-crossing (the crisis/collapse
-origination date in the original series), then maps both back to the
-original time index.
+\code{radf_recovery} implements the reverse-regression dating of Phillips & Shi
+(2014). It reverses the series and runs the existing bsadf recursion of
+\code{radf()} on it. It then locates the first up-crossing of a critical-value
+boundary calibrated for the reversal, which is the market recovery date, and the
+next down-crossing, which is the crisis (collapse) origination date in the
+original series. Both are mapped back to the original time index.
 }
 \details{
-Two dates are returned per series: \code{f_c}, the crisis origination
-(collapse-onset) date -- a reverse-regression-derived alternative to
-the collapse date \code{\link{datestamp}} already dates from the
-forward test -- and \code{f_r}, the market recovery date, always
-\code{f_c <= f_r} by construction (the down-crossing is searched only
-after the up-crossing). If no up-crossing is found, neither date is
-identified (\code{NA}, \code{detected = FALSE}). If an up-crossing is
-found but no subsequent down-crossing occurs before the reverse-time
-sample is exhausted, \code{f_c} is \code{NA} and \code{censored = TRUE}
-(the crisis origination predates the observed sample).
+The function returns two dates for each series. \code{f_c} is the crisis
+origination (collapse-onset) date, a reverse-regression alternative to the
+collapse date that \code{\link{datestamp}} already dates from the forward test.
+\code{f_r} is the market recovery date, and \code{f_c <= f_r} always holds by
+construction, because the down-crossing is searched only after the
+up-crossing. If no up-crossing is found, neither date is identified (\code{NA},
+\code{detected = FALSE}). If an up-crossing is found but no later down-crossing
+occurs before the reverse-time sample ends, \code{f_c} is \code{NA} and
+\code{censored = TRUE}, which means that the crisis origination predates the
+observed sample.
 }
 \note{
-Returns its own class (not \code{radf_obj}), so it does not plug into
-\code{summary()}/\verb{\link{datestamp}}/\code{tidy}; it has its own \code{print()} and
-\code{autoplot()} methods instead. Prints its own
-origination/recovery date summary -- see
-\code{vignette("naming-and-analysis", package = "exuber")} for the full
-picture of which functions do and don't fit that pipeline.
+The function returns its own class and not \code{radf_obj}, so it does not work
+with \code{summary()}, \verb{\link{datestamp}} and \code{tidy}. It has its own \code{print()} and
+\code{autoplot()} methods instead.
+\code{print()} shows the origination and recovery dates. See
+\code{vignette("naming-and-analysis", package = "exuber")} for which functions fit
+the shared pipeline and which do not.
 }
 \section{Caveats}{
 
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-\strong{Validation status (2026-08-10), reported honestly rather than
-silently}: \code{f_r} (recovery date) validates well against synthetic
-collapse-then-recovery data -- bias in the same range the paper's own
-Monte Carlo reports (a few observations early). \code{f_c} (crisis
-origination date) shows a materially larger residual bias in Monte
-Carlo checks, and the empirical false-detection rate under a pure
-random-walk null (n=100, minw=20, 95\\% level) is around 29\\%, higher
-than comparable forward-test numbers elsewhere in this package. One
-real synthetic-DGP artifact (a level-jump at a regime boundary
-producing a spurious spike) was found and fixed during validation, but
-the residual \code{f_c} bias/false-detection elevation was not fully
-resolved -- plausibly genuine finite-sample noise in the paper's own
-literal first-down-crossing rule (eq. 9's \code{inf} has no
-persistence requirement, so a transient dip below the boundary is
-enough to trigger a premature \code{f_c}), but this has not been ruled
-out against a subtler implementation issue. Treat \code{f_c} and the
-overall detection rate as exploratory pending further validation; see
-docs/dating-and-root-inference.md for the full numbers.
-The same short pointer is emitted as a message when this function is
-called (see \code{\link{suppressMessages}} to silence it) and stored as
+\strong{Validation status (2026-08-10).} \code{f_r} (the recovery date)
+validates well against synthetic collapse-then-recovery data. Its bias is in the
+same range as in the Monte Carlo study of the paper, a few observations early.
+\code{f_c} (the crisis origination date) shows a materially larger residual bias
+in Monte Carlo checks. The empirical false-detection rate under a pure
+random-walk null (n = 100, minw = 20, 95\\% level) is around 29\\%, which is higher
+than the comparable numbers for the forward tests elsewhere in this package. We
+found and fixed one artifact of the synthetic process during validation, where a
+level jump at a regime boundary produced a spurious spike. The remaining bias in
+\code{f_c} and the elevated false-detection rate are not fully explained. They
+may be genuine finite-sample noise from the literal first-down-crossing rule of
+the paper. The \code{inf} in its eq. 9 has no persistence requirement, so a
+transient dip below the boundary is enough to trigger a premature \code{f_c}. We
+have not ruled out a subtler implementation issue. Treat \code{f_c} and the
+overall detection rate as exploratory until they are validated further, and see
+docs/dating-and-root-inference.md for the full numbers. The function emits the
+same short pointer as a message when it is called (use
+\code{\link{suppressMessages}} to silence it) and stores it as
 \code{attr(x, "caveat")} on the returned object.
 }
 
 \examples{
 \donttest{
-# sim_ps1()'s own expansion -> bubble -> collapse -> recovery DGP
+# The expansion, bubble, collapse and recovery process of sim_ps1()
 y <- sim_ps1(n = 100, seed = 1)
 res <- radf_recovery(y, minw = 15, nrep = 200, seed = 1)
 print(res)
 
-# Plot the series with the estimated collapse (f_c) / recovery (f_r) points
+# Plot the series with the estimated collapse (f_c) and recovery (f_r) points
 autoplot(res)
 }
 
@@ -117,8 +113,8 @@ Implosion and Reverse Regression. Cowles Foundation Discussion Paper
 No. 1967, Yale University. Published in Econometric Theory.
 }
 \seealso{
-\code{\link{datestamp}} for the (forward, non-reversed)
-origination/collapse dating this complements.
+\code{\link{datestamp}} for the forward, non-reversed dating of
+origination and collapse that this function complements.
 
 Other dating:
 \code{\link[=dating_hls]{dating_hls()}},

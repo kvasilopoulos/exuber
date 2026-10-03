@@ -24,9 +24,9 @@ See details.}
 observations.
 }
 \description{
-\code{psy_minw} and \code{psy_ds} use the rules-of- thumb proposed by
-Phillips et al. (2015) to compute the minimum window size and the
-minimum duration of an episode of exuberance, respectively.
+\code{psy_minw} and \code{psy_ds} use the rules of thumb proposed by Phillips
+et al. (2015) to compute the minimum window size and the minimum duration of an
+episode of exuberance, respectively.
 }
 \details{
 For the minimum duration period, \code{psy_ds} allows the user to choose from two rules:

@@ -15,56 +15,56 @@ radf_tt_cv(n, minw = NULL, nrep = 2000L, seed = NULL)
 \item{nrep}{A positive integer. The number of Monte Carlo simulations.}
 
 \item{seed}{An object specifying if and how the random number generator (rng)
-should be initialized. Either NULL or an integer will be used in a call to
-\code{set.seed} before simulation. If set, the value is saved as "seed" attribute
-of the returned value. The default, NULL, will not change rng state, and
-return .Random.seed as the "seed" attribute. Results are reproducible
-across the parallel and non-parallel option when the same seed is used.}
+should be initialized. It is either NULL or an integer, which is passed to
+\code{set.seed} before the simulation. If you set it, the value is saved as the
+"seed" attribute of the returned value. The default, NULL, leaves the state of
+the rng unchanged and returns .Random.seed as the "seed" attribute. Results are
+reproducible across the parallel and the non-parallel option when you use the
+same seed.}
 }
 \value{
-An object of class \code{radf_cv}/\code{tt_cv}/\code{mc_cv}: the
-same structure as \code{\link{radf_mc_cv}} (\code{adf_cv}/\code{sadf_cv}/
-\code{gsadf_cv} scalars per level plus the \code{badf_cv}/\code{bsadf_cv}
-sequences), usable wherever a \code{radf_cv} is accepted.
+An object of class \code{radf_cv}/\code{tt_cv}/\code{mc_cv} with the
+same structure as \code{\link{radf_mc_cv}}: the scalars \code{adf_cv},
+\code{sadf_cv} and \code{gsadf_cv} for each level plus the sequences
+\code{badf_cv} and \code{bsadf_cv}. You can use it wherever a \code{radf_cv}
+is accepted.
 }
 \description{
-This is the dedicated critical-value function for \code{\link{radf_tt}}.
-It simulates the asymptotic null distribution of the GLS-demeaned
-recursive sup-ADF statistic used by \code{\link{radf_tt}}. Per Theorem 1
-of Kurozumi, Skrobotov & Tsarev, this distribution is free of the
-volatility process (pivotal), so -- unlike \code{\link{radf_wb_cv}} --
-it does not need to be recomputed per dataset: a large \code{n} with
-default \code{nrep} well approximates the T -> Inf limit used in the
-paper.
+This is the dedicated critical-value function for \code{\link{radf_tt}}. It
+simulates the asymptotic null distribution of the GLS-demeaned recursive sup-ADF
+statistic that \code{\link{radf_tt}} uses. By Theorem 1 of Kurozumi, Skrobotov &
+Tsarev, this distribution is free of the volatility process (pivotal). Unlike
+\code{\link{radf_wb_cv}}, it therefore does not have to be recomputed for each
+dataset. A large \code{n} with the default \code{nrep} approximates well the
+T -> Inf limit used in the paper.
 }
 \details{
-The \code{sadf_cv} column (STADF, i.e. \code{r1 = 0} fixed) can be checked
-against Whitehouse (2019)'s published asymptotic values, quoted in
-Kurozumi, Skrobotov & Tsarev's footnote 4: for \code{minw/n = 0.1}, (10\\%,
-5\\%, 1\\%) = (2.319, 2.626, 3.223). Note this published triple is for
-STADF, not GSTADF (\code{gsadf_cv}) -- the paper's own GSTADF critical
-values are not given as literal numbers in the text, only as "easily
-computed from" the authors' R code.
+You can check the \code{sadf_cv} column (STADF, that is, \code{r1 = 0} fixed)
+against the asymptotic values of Whitehouse (2019) quoted in footnote 4 of
+Kurozumi, Skrobotov & Tsarev. For \code{minw/n = 0.1}, the values at (10\\%, 5\\%,
+1\\%) are (2.319, 2.626, 3.223). This published triple is for STADF and not for
+GSTADF (\code{gsadf_cv}). The paper gives its GSTADF critical values not as
+numbers in the text but only as "easily computed from" the code of the authors
+in R.
 }
 \note{
-As of 2026-08-18, also computes \code{badf_cv}/\code{bsadf_cv} (a
-time-varying boundary, one row per recursion point), so
-\code{\link{datestamp}}/\code{autoplot} now work on \code{\link{radf_tt}}
-results, not just \code{summary()}/\code{tidy}. Unlike
-\code{\link{radf_mc_cv}}'s own \code{bsadf_cv} (a \code{cummax()}-across-
-replicates shortcut around the base C++ engine's output shape),
-\code{gls_dfstat_grid()}'s (internal) \code{bsadf} is already the genuine
-sup-over-all-window-starts statistic at each point, so no such shortcut
-is needed here -- just the per-time-point quantile across replicates.
-Validated: \code{badf_cv}'s last row is bit-identical to \code{adf_cv}
-(a hard identity, since \code{adf} is literally \code{badf}'s last
-point, per replicate); empirical false-alarm rate under \code{H0} is
-conservative relative to nominal (3.3\\% at 5\\%, n=100, minw=20,
-nrep=2000); and detection power on a synthetic bubble matches the
-established \code{radf()}/\code{radf_mc_cv()} pipeline almost exactly
-(18\\% vs. 16\\%) on the identical series. \code{radf_sign_cv()}/
-\code{radf_sign_dm_cv()} have the same gap, not yet addressed the same
-way -- see \code{vignette("naming-and-analysis")}.
+Since 2026-08-18 the function also computes \code{badf_cv} and
+\code{bsadf_cv}, a time-varying boundary with one row for each recursion point.
+\code{\link{datestamp}} and \code{autoplot} therefore work on \code{\link{radf_tt}}
+results, and not only \code{summary()} and \code{tidy}. The \code{bsadf_cv} of
+\code{\link{radf_mc_cv}} is a \code{cummax()} across replicates, which works
+around the output shape of the base C++ engine. Here no such shortcut is
+needed, because the \code{bsadf} of \code{gls_dfstat_grid()} (internal) is already
+the sup over all window starts at each point, and the boundary is the
+per-time-point quantile across replicates. We validated the function in three
+ways. The last row of \code{badf_cv} is bit-identical to \code{adf_cv}, an exact
+identity because \code{adf} is the last point of \code{badf} in every replicate.
+The empirical false-alarm rate under \code{H0} is conservative relative to the
+nominal level (3.3\\% at 5\\%, n = 100, minw = 20, nrep = 2000). The detection
+power on a synthetic bubble matches the established \code{radf()} and
+\code{radf_mc_cv()} pipeline almost exactly (18\\% against 16\\%) on the identical
+series. \code{radf_sign_cv()} and \code{radf_sign_dm_cv()} now compute the same
+boundary (see \code{vignette("naming-and-analysis")}).
 }
 \section{Status}{
 
@@ -76,8 +76,9 @@ way -- see \code{vignette("naming-and-analysis")}.
 cv <- radf_tt_cv(n = 200, minw = 20)
 tidy(cv)
 
-# Volatility triples half-way through the sample: the non-stationary-volatility
-# case this test is built for (plain radf() over-rejects here)
+# Volatility triples half-way through the sample. This is the case of
+# non-stationary volatility that this test is built for, and plain radf()
+# over-rejects here
 y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 res <- radf_tt(y, minw = 20)
 datestamp(res, cv = cv)
