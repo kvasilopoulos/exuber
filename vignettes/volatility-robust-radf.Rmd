@@ -37,7 +37,7 @@ y <- sim_psy1(n = 200, seed = 1, e = sim_vol_break(199))
 
 ## Sign-based: `radf_sign()`
 
-Since 2026-08-18 `radf_sign()` also has full pipeline support. `radf_sign_cv()` now computes the time-varying `badf_cv` and `bsadf_cv` boundary and not only the scalar critical values that `summary()` needs (see `vignette("naming-and-analysis")` for the validation):
+`radf_sign()` has full pipeline support. `radf_sign_cv()` computes the time-varying `badf_cv` and `bsadf_cv` boundary and not only the scalar critical values that `summary()` needs (see `vignette("naming-and-analysis")` for the validation):
 
 ```{r sign}
 res <- radf_sign(y, minw = 20)
@@ -58,7 +58,7 @@ summary(res_kp, cv = cv_kp)
 
 ## WLS + kernel volatility: `radf_sbz()`
 
-Since 2026-08-22 `radf_sbz()` is a statistic function of its own, separate from the union test. `radf_sbz_cv()` computes the time-varying `badf_cv` and `bsadf_cv` boundary in the same way as `radf_tt_cv()` and `radf_sign_cv()` (see `vignette("naming-and-analysis")` for the validation), so it has full pipeline support:
+`radf_sbz()` is a statistic function of its own, separate from the union test. `radf_sbz_cv()` computes the time-varying `badf_cv` and `bsadf_cv` boundary in the same way as `radf_tt_cv()` and `radf_sign_cv()` (see `vignette("naming-and-analysis")` for the validation), so it has full pipeline support:
 
 ```{r sbz}
 res_sbz <- radf_sbz(y, minw = 20)
