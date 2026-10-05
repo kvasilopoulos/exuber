@@ -285,23 +285,18 @@ GLS-demeaned recursive Dickey-Fuller grid. It is fed the raw series for
 <code><a href="../reference/radf_tt.html">radf_tt()</a></code>, the cumulated sign of the series for
 <code><a href="../reference/radf_sign.html">radf_sign()</a></code>, and a recursively demeaned cumulated sign for
 <code><a href="../reference/radf_sign_dm.html">radf_sign_dm()</a></code>.</p>
-<p>Until 2026-08-18 the <code>_cv()</code> functions of all three had a
-gap. They computed only the three scalar critical values that
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> need and discarded the
-<code>badf</code> and <code>bsadf</code> paths that
-<code>gls_dfstat_grid()</code> already produces for each replicate. As a
-result <code><a href="../reference/datestamp.html">datestamp()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>, which need
-a time-varying boundary, always failed. We fixed all three in the same
-way. We first established the fix in <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and then
-checked that it holds for the other two. The <code>bsadf</code> that
+<p>The <code>_cv()</code> functions of all three return the time-varying
+boundaries <code>badf_cv</code> and <code>bsadf_cv</code> as well as the
+three scalar critical values, so <code><a href="../reference/datestamp.html">datestamp()</a></code> and
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> work on them. The <code>bsadf</code> that
 <code>gls_dfstat_grid()</code> returns is already the sup over all
-window starts at each point. This differs from the <code>bsadf_cv</code>
-of <code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code>, which uses a <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code> across
-replicates because of the output shape of the base C++ engine. No
-shortcut was needed here, and the boundary is the per-time-point
-quantile across replicates, the same construction
-<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> uses for its own <code>bsadf_cv</code>.</p>
-<p>We validated each function in three ways.</p>
+window starts at each point. This differs from
+<code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code>, which applies a <code><a href="https://rdrr.io/r/base/cumsum.html" class="external-link">cummax()</a></code> across
+replicates because of the output shape of the base C++ engine. Here the
+boundary is the per-time-point quantile across replicates, the same
+construction <code><a href="../reference/radf_mc_cv.html">radf_mc_cv()</a></code> uses for its own
+<code>bsadf_cv</code>.</p>
+<p>Each function is checked in three ways.</p>
 <ul>
 <li>The last row of <code>badf_cv</code> is bit-identical to
 <code>adf_cv</code>, because <code>adf</code> is the last point of
@@ -316,7 +311,7 @@ range as the 16% of the established <code><a href="../reference/radf.html">radf(
 higher nor lower (<code>radf_tt</code> 18%, <code>radf_sign</code> 20%,
 <code>radf_sign_dm</code> 8%). The sign-based tests give up power in
 exchange for invariance to heteroskedasticity, which is a documented
-finding of the source paper and not a validation problem.</li>
+finding of the source paper.</li>
 </ul>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_tt.html">radf_tt</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>

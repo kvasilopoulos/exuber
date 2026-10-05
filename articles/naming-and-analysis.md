@@ -156,30 +156,22 @@ the cumulated sign of the series for
 and a recursively demeaned cumulated sign for
 [`radf_sign_dm()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_dm.md).
 
-Until 2026-08-18 the `_cv()` functions of all three had a gap. They
-computed only the three scalar critical values that
-[`summary()`](https://rdrr.io/r/base/summary.html) and
-[`tidy()`](https://generics.r-lib.org/reference/tidy.html) need and
-discarded the `badf` and `bsadf` paths that `gls_dfstat_grid()` already
-produces for each replicate. As a result
+The `_cv()` functions of all three return the time-varying boundaries
+`badf_cv` and `bsadf_cv` as well as the three scalar critical values, so
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
 and
-[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html),
-which need a time-varying boundary, always failed. We fixed all three in
-the same way. We first established the fix in
-[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-and then checked that it holds for the other two. The `bsadf` that
-`gls_dfstat_grid()` returns is already the sup over all window starts at
-each point. This differs from the `bsadf_cv` of
+[`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+work on them. The `bsadf` that `gls_dfstat_grid()` returns is already
+the sup over all window starts at each point. This differs from
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
-which uses a [`cummax()`](https://rdrr.io/r/base/cumsum.html) across
-replicates because of the output shape of the base C++ engine. No
-shortcut was needed here, and the boundary is the per-time-point
-quantile across replicates, the same construction
+which applies a [`cummax()`](https://rdrr.io/r/base/cumsum.html) across
+replicates because of the output shape of the base C++ engine. Here the
+boundary is the per-time-point quantile across replicates, the same
+construction
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
 uses for its own `bsadf_cv`.
 
-We validated each function in three ways.
+Each function is checked in three ways.
 
 - The last row of `badf_cv` is bit-identical to `adf_cv`, because `adf`
   is the last point of `badf` in every replicate. This is an exact
@@ -195,7 +187,7 @@ We validated each function in three ways.
   baseline, and it is neither suspiciously higher nor lower (`radf_tt`
   18%, `radf_sign` 20%, `radf_sign_dm` 8%). The sign-based tests give up
   power in exchange for invariance to heteroskedasticity, which is a
-  documented finding of the source paper and not a validation problem.
+  documented finding of the source paper.
 
 ``` r
 
