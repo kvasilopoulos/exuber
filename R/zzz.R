@@ -1,4 +1,3 @@
-
 .pkgenv <- new.env(parent = emptyenv())
 .pkgenv$crit <- list() # per-session cache of parsed critical-value tables
 
@@ -17,7 +16,9 @@
     exuber.global_seed = NA
   )
   toset <- !(names(op.exuber) %in% names(op))
-  if (any(toset)) options(op.exuber[toset])
+  if (any(toset)) {
+    options(op.exuber[toset])
+  }
 
   invisible(NULL)
 }
@@ -29,17 +30,59 @@
 # Set Global Variables to avoid NOTES in cmdchecks
 if (getRversion() >= "2.15.1") {
   utils::globalVariables(
-    c("adf", "sadf", "gsadf", "badf", "bsadf", "bsadf_panel", "gsadf_panel",
-      "Distribution", ".", "crit", "i", "id", "name","sig", "key", "tstat",
-      "value", "value_x", "value_y", "stat", "pval", "panel", "End","Duration",
-      "ds_lgl", "rev_badf", "rev_bsadf", "rev_bsadf_panel", "tstat_crit", "data",
-      "Signal", "Ongoing", "Start", "reject",
+    c(
+      "adf",
+      "sadf",
+      "gsadf",
+      "badf",
+      "bsadf",
+      "bsadf_panel",
+      "gsadf_panel",
+      "Distribution",
+      ".",
+      "crit",
+      "i",
+      "id",
+      "name",
+      "sig",
+      "key",
+      "tstat",
+      "value",
+      "value_x",
+      "value_y",
+      "stat",
+      "pval",
+      "panel",
+      "End",
+      "Duration",
+      "ds_lgl",
+      "rev_badf",
+      "rev_bsadf",
+      "rev_bsadf_panel",
+      "tstat_crit",
+      "data",
+      "Signal",
+      "Ongoing",
+      "Start",
+      "reject",
       # autoplot()/tidy() column names used via NSE in the newer methods
-      "at", "label", "series", "xmin", "xmax", "mid", "r", "delta2",
-      "origination", "collapse", "recovery", "rho", "rho_lower", "rho_upper")
+      "at",
+      "label",
+      "series",
+      "xmin",
+      "xmax",
+      "mid",
+      "r",
+      "delta2",
+      "origination",
+      "collapse",
+      "recovery",
+      "rho",
+      "rho_lower",
+      "rho_upper"
+    )
   )
 }
-
 
 # citation ----------------------------------------------------------------
 

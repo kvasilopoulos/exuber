@@ -31,31 +31,40 @@ nw_spot_vol <- function(e, kernel = c("gaussian", "uniform"), h = NULL) {
   e2 <- e[-1]^2 # e_i^2 for i = 2..T, aligned with s
   t_grid <- (1:Tn) / Tn
 
-  kern <- switch(kernel,
-    gaussian = function(u) dnorm(u),
-    uniform = function(u) as.numeric(abs(u) <= 1) / 2
-  )
+  kern <- switch(kernel, gaussian = function(u) dnorm(u), uniform = function(u) {
+    as.numeric(abs(u) <= 1) / 2
+  })
 
   spot_vol_at <- function(h, drop0 = FALSE) {
-    vapply(seq_along(t_grid), function(j) {
-      w <- kern((s - t_grid[j]) / h)
-      if (drop0) {
-        self <- which(abs(s - t_grid[j]) < .Machine$double.eps^0.5)
-        w[self] <- 0
-      }
-      if (sum(w) <= 0) return(mean(e2))
-      sum(w * e2) / sum(w)
-    }, numeric(1))
+    vapply(
+      seq_along(t_grid),
+      function(j) {
+        w <- kern((s - t_grid[j]) / h)
+        if (drop0) {
+          self <- which(abs(s - t_grid[j]) < .Machine$double.eps^0.5)
+          w[self] <- 0
+        }
+        if (sum(w) <= 0) {
+          return(mean(e2))
+        }
+        sum(w * e2) / sum(w)
+      },
+      numeric(1)
+    )
   }
 
   if (is.null(h)) {
     hl <- 1 / (2 * Tn)
     hu <- 1 / 6
     grid <- exp(seq(log(hl), log(hu), length.out = 10))
-    cv <- vapply(grid, function(hh) {
-      s2_loo <- spot_vol_at(hh, drop0 = TRUE)
-      mean((e2 - s2_loo[match(s, t_grid)])^2)
-    }, numeric(1))
+    cv <- vapply(
+      grid,
+      function(hh) {
+        s2_loo <- spot_vol_at(hh, drop0 = TRUE)
+        mean((e2 - s2_loo[match(s, t_grid)])^2)
+      },
+      numeric(1)
+    )
     h <- grid[which.min(cv)]
   }
 
@@ -202,8 +211,13 @@ radf_sbz <- function(data, minw = NULL, kernel = c("gaussian", "uniform"), h = N
 
   list(adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf) %>%
     add_attr(
-      mat = x, index = index(x), series_names = snames, minw = minw,
-      n = n, lag = 0L, kernel = kernel
+      mat = x,
+      index = index(x),
+      series_names = snames,
+      minw = minw,
+      n = n,
+      lag = 0L,
+      kernel = kernel
     ) %>%
     add_class("radf_sbz_obj", "radf_obj")
 }
@@ -214,10 +228,16 @@ print.radf_sbz_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
   cat_rule(left = glue("radf_sbz (minw = {get_minw(x)}, kernel = {attr(x, 'kernel')})"))
   cat_line()
   print(
-    data.frame(series = names(x$adf), adf = x$adf, sadf = x$sadf, gsadf = x$gsadf,
+    data.frame(
+      series = names(x$adf),
+      adf = x$adf,
+      sadf = x$sadf,
+      gsadf = x$gsadf,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
   invisible(x)
@@ -264,8 +284,14 @@ print.radf_sbz_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
 #' }
 #' @family critical values
 #' @export
-radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", "uniform"),
-                         h = NULL, seed = NULL) {
+radf_sbz_cv <- function(
+  data,
+  minw = NULL,
+  nboot = 499L,
+  kernel = c("gaussian", "uniform"),
+  h = NULL,
+  seed = NULL
+) {
   kernel <- match.arg(kernel)
   x <- parse_data(data)
   assert_na(x)
@@ -305,17 +331,26 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
     adf_cv[j, ] <- quantile_narm(boot_adf, pcnt)
     sadf_cv[j, ] <- quantile_narm(boot_sadf, pcnt)
     gsadf_cv[j, ] <- quantile_narm(boot_gsadf, pcnt)
-    badf_cv[, , j] <- t(apply(boot_badf, 1, quantile_narm, probs = pcnt))
-    bsadf_cv[, , j] <- t(apply(boot_bsadf, 1, quantile_narm, probs = pcnt))
+    badf_cv[,, j] <- t(apply(boot_badf, 1, quantile_narm, probs = pcnt))
+    bsadf_cv[,, j] <- t(apply(boot_bsadf, 1, quantile_narm, probs = pcnt))
   }
 
   list(
-    adf_cv = adf_cv, sadf_cv = sadf_cv, gsadf_cv = gsadf_cv,
-    badf_cv = badf_cv, bsadf_cv = bsadf_cv
+    adf_cv = adf_cv,
+    sadf_cv = sadf_cv,
+    gsadf_cv = gsadf_cv,
+    badf_cv = badf_cv,
+    bsadf_cv = bsadf_cv
   ) %>%
     add_attr(
-      index = index(x), series_names = snames, method = "Wild Bootstrap (SBZ)",
-      n = n, minw = minw, iter = nboot, kernel = kernel, seed = get_rng_state(seed)
+      index = index(x),
+      series_names = snames,
+      method = "Wild Bootstrap (SBZ)",
+      n = n,
+      minw = minw,
+      iter = nboot,
+      kernel = kernel,
+      seed = get_rng_state(seed)
     ) %>%
     add_class("radf_cv", "sbz_cv", "wb_cv")
 }
@@ -392,8 +427,14 @@ radf_sbz_cv <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", 
 #'
 #' @family volatility-robust tests
 #' @export
-radf_sbz_union <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian", "uniform"),
-                            h = NULL, seed = NULL) {
+radf_sbz_union <- function(
+  data,
+  minw = NULL,
+  nboot = 499L,
+  kernel = c("gaussian", "uniform"),
+  h = NULL,
+  seed = NULL
+) {
   kernel <- match.arg(kernel)
   y <- parse_data(data)
   assert_na(y)
@@ -405,7 +446,12 @@ radf_sbz_union <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian
   snames <- colnames(y)
   pcnt <- c(0.9, 0.95, 0.99)
 
-  supDF_cv <- supBZ_cv <- U_cv <- matrix(NA_real_, nc, 3, dimnames = list(snames, paste0(pcnt * 100, "%")))
+  supDF_cv <- supBZ_cv <- U_cv <- matrix(
+    NA_real_,
+    nc,
+    3,
+    dimnames = list(snames, paste0(pcnt * 100, "%"))
+  )
   p_supDF <- p_supBZ <- p_U <- setNames(numeric(nc), snames)
   supDF_obs <- supBZ_obs <- U_obs <- setNames(numeric(nc), snames)
 
@@ -440,13 +486,23 @@ radf_sbz_union <- function(data, minw = NULL, nboot = 499L, kernel = c("gaussian
   }
 
   list(
-    supDF = supDF_obs, supBZ = supBZ_obs, U = U_obs,
-    supDF_cv = supDF_cv, supBZ_cv = supBZ_cv, U_cv = U_cv,
-    p_supDF = p_supDF, p_supBZ = p_supBZ, p_U = p_U
+    supDF = supDF_obs,
+    supBZ = supBZ_obs,
+    U = U_obs,
+    supDF_cv = supDF_cv,
+    supBZ_cv = supBZ_cv,
+    U_cv = U_cv,
+    p_supDF = p_supDF,
+    p_supBZ = p_supBZ,
+    p_U = p_U
   ) %>%
     add_attr(
-      series_names = snames, method = "Wild Bootstrap (SBZ)", n = nrow(y),
-      minw = minw, iter = nboot, kernel = kernel
+      series_names = snames,
+      method = "Wild Bootstrap (SBZ)",
+      n = nrow(y),
+      minw = minw,
+      iter = nboot,
+      kernel = kernel
     ) %>%
     add_class("radf_sbz_union_obj")
 }
@@ -458,10 +514,18 @@ print.radf_sbz_union_obj <- function(x, digits = max(3L, getOption("digits") - 3
   cat_line()
   print(
     data.frame(
-      series = names(x$supDF), supDF = x$supDF, supBZ = x$supBZ, U = x$U,
-      p_supDF = x$p_supDF, p_supBZ = x$p_supBZ, p_U = x$p_U, row.names = NULL
+      series = names(x$supDF),
+      supDF = x$supDF,
+      supBZ = x$supBZ,
+      U = x$U,
+      p_supDF = x$p_supDF,
+      p_supBZ = x$p_supBZ,
+      p_U = x$p_U,
+      row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }
@@ -486,8 +550,10 @@ autoplot.radf_sbz_union_obj <- function(object, sig_lvl = 95, ...) {
 
   df <- data.frame(
     series = rep(snames, 3),
-    stat = factor(rep(c("supDF", "supBZ", "U"), each = length(snames)),
-                  levels = c("U", "supBZ", "supDF")),
+    stat = factor(
+      rep(c("supDF", "supBZ", "U"), each = length(snames)),
+      levels = c("U", "supBZ", "supDF")
+    ),
     value = c(object$supDF, object$supBZ, object$U),
     crit = c(object$supDF_cv[, col], object$supBZ_cv[, col], object$U_cv[, col])
   )
@@ -500,7 +566,8 @@ autoplot.radf_sbz_union_obj <- function(object, sig_lvl = 95, ...) {
     scale_color_manual(values = c(`TRUE` = "#d7263d", `FALSE` = "#1b6ca8"), guide = "none") +
     facet_wrap(~series) +
     labs(
-      x = NULL, y = NULL,
+      x = NULL,
+      y = NULL,
       title = glue("SBZ union test (nboot = {get_iter(object)}, level = {sig_lvl}%)"),
       subtitle = "Dot = statistic, x = critical value; red = rejects, blue = does not"
     ) +

@@ -5,7 +5,8 @@ brute_cusum <- function(y, type) {
   nd <- length(d)
   sig <- sqrt(mean(d^2))
   sig_eta <- sqrt(mean(d^4) - mean(d^2)^2)
-  win <- function(j, k) { # increments j+1..k
+  win <- function(j, k) {
+    # increments j+1..k
     dd <- d[(j + 1):k]
     if (type %in% c("cs", "gcs")) {
       sum(dd) / (sig * sqrt(nd))
@@ -26,7 +27,9 @@ test_that("cusum_test's running max/min matches a brute-force double loop
     out <- cusum_test(y, type = type)
     b <- brute_cusum(y, type)
     expect_equal(unname(out$sup), b$sup, tolerance = 1e-10, info = type)
-    if (type %in% c("cssq", "gcssq")) expect_equal(unname(out$inf), b$inf, tolerance = 1e-10, info = type)
+    if (type %in% c("cssq", "gcssq")) {
+      expect_equal(unname(out$inf), b$inf, tolerance = 1e-10, info = type)
+    }
   }
 })
 
@@ -45,11 +48,19 @@ test_that("cusum_test uses Table I's critical values and the two-sided
 
 test_that("cusum_test's false-alarm rates under H0 are near nominal", {
   skip_on_cran()
-  fa <- vapply(c("cs", "gcs", "cssq", "gcssq"), function(type) {
-    mean(vapply(1:300, function(i) {
-      set.seed(i)
-      unname(cusum_test(cumsum(rnorm(200)), type = type)$detected)
-    }, logical(1)))
-  }, 0)
+  fa <- vapply(
+    c("cs", "gcs", "cssq", "gcssq"),
+    function(type) {
+      mean(vapply(
+        1:300,
+        function(i) {
+          set.seed(i)
+          unname(cusum_test(cumsum(rnorm(200)), type = type)$detected)
+        },
+        logical(1)
+      ))
+    },
+    0
+  )
   expect_true(all(fa < 0.10))
 })

@@ -172,9 +172,14 @@ pdc_regime_resid <- function(y, breaks) {
 #'
 #' @family dating
 #' @export
-dating_pdc <- function(data, regimes = 3L, trim = 0.05,
-                      type = c("ols", "wls"),
-                      kernel = c("gaussian", "uniform"), h = NULL) {
+dating_pdc <- function(
+  data,
+  regimes = 3L,
+  trim = 0.05,
+  type = c("ols", "wls"),
+  kernel = c("gaussian", "uniform"),
+  h = NULL
+) {
   regimes <- as.integer(regimes)
   if (!regimes %in% c(3L, 4L)) {
     stop_glue("Argument 'regimes' should be 3 or 4.")
@@ -193,7 +198,9 @@ dating_pdc <- function(data, regimes = 3L, trim = 0.05,
   # for "wls", by the volatility-corrected refit.
   fit_sequential <- function(y, weights_full = NULL) {
     w_left <- function(b) if (is.null(weights_full)) NULL else weights_full[1:(b - 1L)]
-    w_right <- function(b) if (is.null(weights_full)) NULL else weights_full[(b + 1L):length(weights_full)]
+    w_right <- function(b) {
+      if (is.null(weights_full)) NULL else weights_full[(b + 1L):length(weights_full)]
+    }
 
     b2 <- pdc_find_break(y, trim, weights = weights_full)$break_idx
     b1 <- pdc_find_break(y[1:b2], trim, weights = w_left(b2))$break_idx
@@ -220,27 +227,40 @@ dating_pdc <- function(data, regimes = 3L, trim = 0.05,
     }
 
     row <- list(origination = to_date(fit$b1), collapse = to_date(fit$b2))
-    if (regimes == 4L) row$recovery <- to_date(fit$b3)
+    if (regimes == 4L) {
+      row$recovery <- to_date(fit$b3)
+    }
     rows[[j]] <- row
   }
 
   out <- do.call(rbind.data.frame, rows)
   rownames(out) <- snames
   out %>%
-    add_attr(index = idx, series_names = snames, n = nrow(x), regimes = regimes, type = type, mat = x) %>%
+    add_attr(
+      index = idx,
+      series_names = snames,
+      n = nrow(x),
+      regimes = regimes,
+      type = type,
+      mat = x
+    ) %>%
     add_class("dating_pdc_obj")
 }
 
 #' @export
 print.dating_pdc_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "dating_pdc (n = {attr(x, 'n')}, regimes = {attr(x, 'regimes')}, type = {attr(x, 'type')})"
-  ))
+  cat_rule(
+    left = glue(
+      "dating_pdc (n = {attr(x, 'n')}, regimes = {attr(x, 'regimes')}, type = {attr(x, 'type')})"
+    )
+  )
   cat_line()
   print(
     cbind(series = rownames(x), as.data.frame(unclass(x))),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
   invisible(x)

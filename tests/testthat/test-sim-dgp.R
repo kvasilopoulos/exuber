@@ -5,7 +5,7 @@ context("sim-dgp")
 test_that("sim_psy1 e = NULL reproduces the original DGP exactly (formula check)", {
   n <- 80
   set.seed(42)
-  delta <- 1 + 1 * n ^ (-0.6)
+  delta <- 1 + 1 * n^(-0.6)
   te <- 0.4 * n
   tf <- 0.15 * n + te
   y <- 100
@@ -60,7 +60,7 @@ test_that("sim_psy1 'coef_noise' of all zeros is equivalent to fixed delta", {
 
 sample_skewness <- function(x) {
   m <- mean(x)
-  mean((x - m) ^ 3) / sd(x) ^ 3
+  mean((x - m)^3) / sd(x)^3
 }
 
 test_that("sim_innov standardizes each distribution to mean 0 / sd sigma", {
@@ -93,20 +93,25 @@ test_that("sim_psy1()/sim_ps1() seed covers a lazily-evaluated `e` generator", {
   a <- sim_psy1(50, seed = 1, e = sim_vol_break(49))
   b <- sim_psy1(50, seed = 1, e = sim_vol_break(49))
   expect_identical(as.numeric(a), as.numeric(b))
-  expect_identical(as.numeric(sim_ps1(50, seed = 2)),
-                   as.numeric(sim_ps1(50, seed = 2, e = rnorm(49, sd = 6.79))))
+  expect_identical(
+    as.numeric(sim_ps1(50, seed = 2)),
+    as.numeric(sim_ps1(50, seed = 2, e = rnorm(49, sd = 6.79)))
+  )
 })
 
 test_that("sim_vol_garch reproduces the GARCH(1,1) recursion exactly (formula check)", {
   set.seed(11)
   n <- 15
   eps <- rnorm(n)
-  h <- numeric(n); z <- numeric(n)
-  h_prev <- 0; z_prev <- 0
+  h <- numeric(n)
+  z <- numeric(n)
+  h_prev <- 0
+  z_prev <- 0
   for (t in seq_len(n)) {
-    h[t] <- 0.1 + 0.1 * z_prev ^ 2 + 0.8 * h_prev
+    h[t] <- 0.1 + 0.1 * z_prev^2 + 0.8 * h_prev
     z[t] <- sqrt(h[t]) * eps[t]
-    h_prev <- h[t]; z_prev <- z[t]
+    h_prev <- h[t]
+    z_prev <- z[t]
   }
   set.seed(11)
   out <- sim_vol_garch(n, seed = NULL)
@@ -190,11 +195,15 @@ test_that("sim_coexplosive recovers the true lag", {
   set.seed(21)
   d <- sim_coexplosive(300, lag = 5, phi_x = 1, sigma_y = 1, seed = 21)
   lags <- -10:10
-  ccf_vals <- vapply(lags, function(k) {
-    idx <- seq_len(nrow(d)) - k
-    valid <- idx >= 1 & idx <= nrow(d)
-    suppressWarnings(cor(d$y[valid], d$x[idx[valid]], use = "complete.obs"))
-  }, numeric(1))
+  ccf_vals <- vapply(
+    lags,
+    function(k) {
+      idx <- seq_len(nrow(d)) - k
+      valid <- idx >= 1 & idx <= nrow(d)
+      suppressWarnings(cor(d$y[valid], d$x[idx[valid]], use = "complete.obs"))
+    },
+    numeric(1)
+  )
   expect_equal(lags[which.max(abs(ccf_vals))], 5)
 })
 
@@ -216,10 +225,14 @@ test_that("sim_falsebubble reduces to the plain dividend fundamental when amplit
   n <- 100
   set.seed(2)
   eta <- rnorm(n - 1, sd = 0.05)
-  mu <- 0.02; r <- 0.05
-  d <- numeric(n); d[1] <- 0
-  for (t in 2:n) d[t] <- d[t - 1] + mu + eta[t - 1]
-  pf <- mu * (1 + r) * r ^ (-2) + d / r
+  mu <- 0.02
+  r <- 0.05
+  d <- numeric(n)
+  d[1] <- 0
+  for (t in 2:n) {
+    d[t] <- d[t - 1] + mu + eta[t - 1]
+  }
+  pf <- mu * (1 + r) * r^(-2) + d / r
 
   set.seed(2)
   p <- sim_falsebubble(n, amplitude = 0, mu = mu, sigma_d = 0.05, r = r, seed = NULL)

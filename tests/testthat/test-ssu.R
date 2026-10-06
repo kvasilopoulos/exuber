@@ -50,7 +50,11 @@ test_that("ssu_stat_path (t^{omega,c}) matches a brute-force computation
   # gssu_stat_path is the sup over window starts at each end point
   hi <- 60:70
   g <- exuber:::gssu_stat_path(ps, hi, 25)
-  brute_g <- vapply(hi, function(h) max(vapply(0:(h - 25), function(l) brute_force_stat(h, l), 0)), 0)
+  brute_g <- vapply(
+    hi,
+    function(h) max(vapply(0:(h - 25), function(l) brute_force_stat(h, l), 0)),
+    0
+  )
   expect_equal(g, brute_g, tolerance = 1e-8)
 })
 
@@ -61,10 +65,15 @@ test_that("ssu_q looks up Kurozumi & Nishi (2025) Table I exactly and
   expect_equal(exuber:::ssu_q(99), 4.20)
   expect_error(exuber:::ssu_q(93), "must be one of")
   tab <- rbind(
-    gssu = c(4.83, 5.37, 6.81), ur = c(1.16, 1.13, 1.09), gur = c(1.11, 1.10, 1.08),
-    cs = c(1.62, 1.93, 2.57), gcs = c(1.90, 2.20, 2.78),
-    cssq_sup = c(1.19, 1.32, 1.59), cssq_inf = c(-1.21, -1.34, -1.60),
-    gcssq_sup = c(1.60, 1.72, 1.98), gcssq_inf = c(-1.62, -1.72, -1.97)
+    gssu = c(4.83, 5.37, 6.81),
+    ur = c(1.16, 1.13, 1.09),
+    gur = c(1.11, 1.10, 1.08),
+    cs = c(1.62, 1.93, 2.57),
+    gcs = c(1.90, 2.20, 2.78),
+    cssq_sup = c(1.19, 1.32, 1.59),
+    cssq_inf = c(-1.21, -1.34, -1.60),
+    gcssq_sup = c(1.60, 1.72, 1.98),
+    gcssq_inf = c(-1.62, -1.72, -1.97)
   )
   for (nm in rownames(tab)) {
     expect_equal(vapply(c(90, 95, 99), exuber:::ssu_q, 0, stat = nm), tab[nm, ], info = nm)
@@ -131,11 +140,15 @@ test_that("ssu_test's empirical false-alarm rate under H0 is close to
   nrep <- 100
   n <- 150
   run <- function(sig_lvl) {
-    mean(vapply(seq_len(nrep), function(i) {
-      set.seed(1000 + i)
-      y <- cumsum(rnorm(n))
-      unname(ssu_test(y, sig_lvl = sig_lvl)$detected)
-    }, logical(1)))
+    mean(vapply(
+      seq_len(nrep),
+      function(i) {
+        set.seed(1000 + i)
+        y <- cumsum(rnorm(n))
+        unname(ssu_test(y, sig_lvl = sig_lvl)$detected)
+      },
+      logical(1)
+    ))
   }
   expect_lt(run(90), 0.25)
   expect_lt(run(95), 0.20)
@@ -162,10 +175,14 @@ test_that("ssu_test has non-trivial detection power on a stochastic
     }
     y
   }
-  rate <- mean(vapply(seq_len(nrep), function(i) {
-    set.seed(2000 + i)
-    y <- make_stochastic_bubble(n)
-    unname(ssu_test(y, sig_lvl = 95)$detected)
-  }, logical(1)))
+  rate <- mean(vapply(
+    seq_len(nrep),
+    function(i) {
+      set.seed(2000 + i)
+      y <- make_stochastic_bubble(n)
+      unname(ssu_test(y, sig_lvl = 95)$detected)
+    },
+    logical(1)
+  ))
   expect_gt(rate, 0.3)
 })

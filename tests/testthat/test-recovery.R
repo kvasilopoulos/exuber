@@ -31,7 +31,9 @@ test_that("radf_recovery never returns f_c > f_r when both dates are
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 40; n2 <- 25; n3 <- 35
+    n1 <- 40
+    n2 <- 25
+    n3 <- 35
     expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
     collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
     recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5
@@ -51,7 +53,9 @@ test_that("radf_recovery detects a genuine collapse-then-recovery episode
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 40; n2 <- 25; n3 <- 35
+    n1 <- 40
+    n2 <- 25
+    n3 <- 35
     expansion <- 100 * 1.03^(1:n1) + cumsum(rnorm(n1, sd = 1))
     collapse <- expansion[n1] * 0.5^((1:n2) / n2) + cumsum(rnorm(n2, sd = 1))
     recovery <- collapse[n2] + cumsum(rnorm(n3, sd = 1)) + (1:n3) * 0.5

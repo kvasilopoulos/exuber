@@ -1,25 +1,22 @@
-
 # defensive programming ---------------------------------------------------
 
-
-warning_glue <- function(..., .sep = "", .envir = parent.frame(),
-                         call. = FALSE, .domain = NULL) {
+warning_glue <- function(..., .sep = "", .envir = parent.frame(), call. = FALSE, .domain = NULL) {
   warning(
     glue(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
+    call. = call.,
+    domain = .domain
   )
 }
 
-stop_glue <- function(..., .sep = "", .envir = parent.frame(),
-                      call. = FALSE, .domain = NULL) {
+stop_glue <- function(..., .sep = "", .envir = parent.frame(), call. = FALSE, .domain = NULL) {
   stop(
     glue(..., .sep = .sep, .envir = .envir),
-    call. = call., domain = .domain
+    call. = call.,
+    domain = .domain
   )
 }
 
-message_glue <-  function(..., .sep = "", .envir = parent.frame(),
-                          call. = FALSE, .domain = NULL) {
+message_glue <- function(..., .sep = "", .envir = parent.frame(), call. = FALSE, .domain = NULL) {
   message(
     glue(..., .sep = .sep, .envir = .envir),
     domain = .domain
@@ -32,22 +29,23 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
   level <- deparse(substitute(arg))
   if (strictly) {
     if (arg != trunc(arg) || arg <= 0) {
-      stop(sprintf("Argument '%s' should be a positive integer", level),
-           call. = FALSE
-      )
+      stop(sprintf("Argument '%s' should be a positive integer", level), call. = FALSE)
     }
   } else {
     if (arg != trunc(arg) | arg < 0L) {
-      stop(sprintf("Argument '%s' should be a non-negative integer", level),
-           call. = FALSE)
+      stop(sprintf("Argument '%s' should be a non-negative integer", level), call. = FALSE)
     }
   }
   if (!is.null(greater_than)) {
     if (arg <= greater_than) {
-      stop(sprintf(
-        "Argument '%s' should be greater than '%d'",
-        level, greater_than
-      ), call. = FALSE)
+      stop(
+        sprintf(
+          "Argument '%s' should be greater than '%d'",
+          level,
+          greater_than
+        ),
+        call. = FALSE
+      )
     }
   }
 }
@@ -61,7 +59,9 @@ assert_sig_lvl <- function(sig_lvl, choices = c(90, 95, 99)) {
   }
   if (is.null(choices)) {
     if (sig_lvl < 50 || sig_lvl >= 100) {
-      stop_glue("Argument 'sig_lvl' is on the 0-100 scale (e.g. 95, not 0.95) and should be in [50, 100)")
+      stop_glue(
+        "Argument 'sig_lvl' is on the 0-100 scale (e.g. 95, not 0.95) and should be in [50, 100)"
+      )
     }
   } else if (!any(abs(sig_lvl - choices) < 1e-8)) {
     stop_glue("Argument 'sig_lvl' should be one of {paste(choices, collapse = ', ')}")
@@ -110,22 +110,26 @@ assert_na <- function(x) {
 # Errors on an interior NA -- a genuine gap this package doesn't interpolate
 # or skip over. Returns a 2 x ncol(x) matrix (rows "start", "end").
 na_edges <- function(x) {
-  out <- vapply(seq_len(ncol(x)), function(i) {
-    col <- x[, i]
-    valid <- unname(which(!is.na(col))) # names would otherwise leak into the start/end rownames
-    if (length(valid) == 0) {
-      stop_glue("series '{colnames(x)[i]}' is entirely NA")
-    }
-    start <- valid[1L]
-    end <- valid[length(valid)]
-    if (anyNA(col[start:end])) {
-      stop_glue(
-        "series '{colnames(x)[i]}' has an interior NA; NA values are only ",
-        "supported as leading/trailing padding (an uneven panel)"
-      )
-    }
-    c(start = start, end = end)
-  }, numeric(2))
+  out <- vapply(
+    seq_len(ncol(x)),
+    function(i) {
+      col <- x[, i]
+      valid <- unname(which(!is.na(col))) # names would otherwise leak into the start/end rownames
+      if (length(valid) == 0) {
+        stop_glue("series '{colnames(x)[i]}' is entirely NA")
+      }
+      start <- valid[1L]
+      end <- valid[length(valid)]
+      if (anyNA(col[start:end])) {
+        stop_glue(
+          "series '{colnames(x)[i]}' has an interior NA; NA values are only ",
+          "supported as leading/trailing padding (an uneven panel)"
+        )
+      }
+      c(start = start, end = end)
+    },
+    numeric(2)
+  )
   colnames(out) <- colnames(x)
   out
 }
@@ -151,7 +155,8 @@ quantile_narm <- function(x, probs, ...) {
 # Model matching ----------------------------------------------------------
 
 assert_n <- function(x) {
-  if (!is_n(x)) { # case of providiing data in 'n'
+  if (!is_n(x)) {
+    # case of providiing data in 'n'
     stop_glue("Argument 'n' should be a positive integer")
   }
 }
@@ -166,8 +171,9 @@ assert_match <- function(x, y, panel = FALSE) {
     stop_glue("sample size does not match")
   }
   if (is_sb(y)) {
-    if (attr_x$lag != attr_y$lag)
+    if (attr_x$lag != attr_y$lag) {
       stop_glue("lag value does not match")
+    }
   }
 }
 
@@ -187,4 +193,3 @@ is_n <- function(x) {
 is_identical <- function(x, y) {
   if (identical(x, y)) TRUE else FALSE
 }
-

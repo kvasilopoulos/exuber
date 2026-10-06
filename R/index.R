@@ -61,7 +61,9 @@ index.data.frame <- function(x, ...) {
 #' @export
 index.radf_obj <- function(x, trunc = FALSE, ...) {
   idx <- attr(x, "index")
-  if (trunc) idx <- idx[-c(1:(get_minw(x) + get_lag(x)))]
+  if (trunc) {
+    idx <- idx[-c(1:(get_minw(x) + get_lag(x)))]
+  }
   idx
 }
 
@@ -72,7 +74,9 @@ index.ds_radf <- index.radf_obj
 #' @export
 index.radf_cv <- function(x, trunc = FALSE, ...) {
   value <- attr(x, "index")
-  if (trunc) value <- value[-c(1:get_trunc(x))]
+  if (trunc) {
+    value <- value[-c(1:get_trunc(x))]
+  }
   value
 }
 
@@ -94,7 +98,9 @@ index_radf_cv.wb_cv <- function(x, trunc, ...) {
 #' @export
 index_radf_cv.sb_cv <- function(x, trunc, ...) {
   value <- attr(x, "index")
-  if (trunc) value <- value[-c(1:get_trunc(x))]
+  if (trunc) {
+    value <- value[-c(1:get_trunc(x))]
+  }
   value
 }
 

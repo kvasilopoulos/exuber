@@ -14,10 +14,14 @@ test_that("sign_transform() + gls_dfstat_grid() matches a brute-force
   ylag <- yc[1:n1]
 
   b_idx <- minw:n1
-  badf_brute <- vapply(b_idx, function(b) {
-    fit <- lm(dy[1:b] ~ ylag[1:b] - 1)
-    summary(fit)$coefficients[1, "t value"]
-  }, numeric(1))
+  badf_brute <- vapply(
+    b_idx,
+    function(b) {
+      fit <- lm(dy[1:b] ~ ylag[1:b] - 1)
+      summary(fit)$coefficients[1, "t value"]
+    },
+    numeric(1)
+  )
 
   expect_equal(res$badf, badf_brute, tolerance = 1e-8)
   expect_equal(res$sadf, max(badf_brute), tolerance = 1e-8)
@@ -100,7 +104,9 @@ test_that("sign_demean_transform() matches a brute-force per-i recursive
   brute <- numeric(Tn)
   for (t in seq_len(Tn)) {
     acc <- 0
-    for (i in seq_len(t)) acc <- acc + (s[i] - mean(s[seq_len(i)]))
+    for (i in seq_len(t)) {
+      acc <- acc + (s[i] - mean(s[seq_len(i)]))
+    }
     brute[t] <- acc
   }
   expect_equal(exuber:::sign_demean_transform(y), c(0, brute), tolerance = 1e-8)
@@ -153,7 +159,7 @@ test_that("radf_sign_dm correctly detects a clear mildly explosive alternative
 test_that("radf_sign_cv, radf_sign_dm_cv and radf_tt_cv objects print without
   error -- regression test for a class-tag bug where none of these three
   had a matching tidy_radf_cv method (only mc_cv/wb_cv/sb_cv did), so
-  print() unconditionally errored despite the object itself being fine",  {
+  print() unconditionally errored despite the object itself being fine", {
   cv_sign <- radf_sign_cv(60, nrep = 20, seed = 1)
   cv_sign_dm <- radf_sign_dm_cv(60, nrep = 20, seed = 1)
   cv_tt <- radf_tt_cv(60, nrep = 20, seed = 1)

@@ -7,7 +7,8 @@ test_that("pdc_find_break() matches a brute-force lm()-based RSS scan exactly", 
   res <- exuber:::pdc_find_break(y, trim)
 
   n1 <- length(y) - 1L
-  ylag <- y[1:n1]; ycur <- y[2:(n1 + 1)]
+  ylag <- y[1:n1]
+  ycur <- y[2:(n1 + 1)]
   k_min <- max(2L, ceiling(trim * n1))
   k_max <- n1 - k_min
   rss_brute <- sapply(k_min:k_max, function(k) {
@@ -45,10 +46,13 @@ test_that("3-regime dating is essentially exact in the low-noise/long-series/
   the truth as conditions improve), which finite-sample accuracy checks
   alone can't distinguish from a systematic bug", {
   set.seed(99)
-  n1_len <- 300; n2_len <- 150; n3_len <- 200
+  n1_len <- 300
+  n2_len <- 150
+  n3_len <- 200
   regime1 <- cumsum(rnorm(n1_len, sd = 1))
   regime2 <- regime1[n1_len] * 1.08^(1:n2_len) + cumsum(rnorm(n2_len, sd = 0.1))
-  peak <- regime2[n2_len]; target <- regime1[n1_len]
+  peak <- regime2[n2_len]
+  target <- regime1[n1_len]
   regime3 <- target + (peak - target) * exp(-0.2 * (1:n3_len)) + rnorm(n3_len, sd = 0.3)
   y <- c(regime1, regime2, regime3)
 
@@ -68,14 +72,19 @@ test_that("4-regime dating (KS extension, recovery = split of the
   # recovery regime, so the estimator finds a spurious break inside the
   # collapse regime instead of at the true collapse/recovery boundary.
   set.seed(3)
-  n1_len <- 200; n2_len <- 100; n3_len <- 150; n4_len <- 150
+  n1_len <- 200
+  n2_len <- 100
+  n3_len <- 150
+  n4_len <- 150
   regime1 <- cumsum(rnorm(n1_len, sd = 0.5))
   regime2 <- regime1[n1_len] * 1.08^(1:n2_len) + cumsum(rnorm(n2_len, sd = 0.1))
   peak <- regime2[n2_len]
   rho3 <- 0.5
   regime3 <- numeric(n3_len)
   regime3[1] <- rho3 * peak + rnorm(1, sd = 1)
-  for (t in 2:n3_len) regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 1)
+  for (t in 2:n3_len) {
+    regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 1)
+  }
   regime4 <- regime3[n3_len] + cumsum(rnorm(n4_len, sd = 0.5))
   y <- c(regime1, regime2, regime3, regime4)
 
@@ -98,10 +107,13 @@ test_that("finite-sample accuracy at moderate T is genuinely limited -- not
   set.seed(2000)
   errs <- t(sapply(1:20, function(s) {
     set.seed(s + 2000)
-    n1_len <- 60; n2_len <- 30; n3_len <- 40
+    n1_len <- 60
+    n2_len <- 30
+    n3_len <- 40
     regime1 <- cumsum(rnorm(n1_len, sd = 1))
     regime2 <- regime1[n1_len] * 1.04^(1:n2_len) + cumsum(rnorm(n2_len, sd = 0.3))
-    peak <- regime2[n2_len]; target <- regime1[n1_len]
+    peak <- regime2[n2_len]
+    target <- regime1[n1_len]
     regime3 <- target + (peak - target) * exp(-0.15 * (1:n3_len)) + rnorm(n3_len, sd = 0.5)
     y <- c(regime1, regime2, regime3)
     out <- dating_pdc(y, regimes = 3L, trim = 0.05)
@@ -154,14 +166,18 @@ test_that("type = 'wls' matches 'ols' closely under homoskedasticity --
   the volatility correction should cost little to nothing when there is no
   time-varying volatility to exploit", {
   set.seed(1)
-  n1_len <- 150; n2_len <- 80; n3_len <- 100
+  n1_len <- 150
+  n2_len <- 80
+  n3_len <- 100
   regime1 <- cumsum(rnorm(n1_len, sd = 0.5))
   regime2 <- regime1[n1_len] * 1.07^(1:n2_len) + cumsum(rnorm(n2_len, sd = 0.15))
   peak <- regime2[n2_len]
   rho3 <- 0.5
   regime3 <- numeric(n3_len)
   regime3[1] <- rho3 * peak + rnorm(1, sd = 0.5)
-  for (t in 2:n3_len) regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
+  for (t in 2:n3_len) {
+    regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
+  }
   y <- c(regime1, regime2, regime3)
 
   out_ols <- dating_pdc(y, regimes = 3L, trim = 0.05, type = "ols")
@@ -180,7 +196,9 @@ test_that("type = 'wls' materially improves origination-date accuracy over
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1_len <- 150; n2_len <- 80; n3_len <- 100
+    n1_len <- 150
+    n2_len <- 80
+    n3_len <- 100
     burst_len <- round(0.2 * n1_len)
     e1 <- c(rnorm(burst_len, sd = 4), rnorm(n1_len - burst_len, sd = 0.3))
     regime1 <- cumsum(e1)
@@ -189,7 +207,9 @@ test_that("type = 'wls' materially improves origination-date accuracy over
     rho3 <- 0.5
     regime3 <- numeric(n3_len)
     regime3[1] <- rho3 * peak + rnorm(1, sd = 0.5)
-    for (t in 2:n3_len) regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
+    for (t in 2:n3_len) {
+      regime3[t] <- rho3 * regime3[t - 1] + rnorm(1, sd = 0.5)
+    }
     y <- c(regime1, regime2, regime3)
     true_origination <- n1_len
 

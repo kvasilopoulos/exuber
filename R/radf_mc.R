@@ -3,8 +3,7 @@
 #' @importFrom doFuture `%dofuture%`
 #' @importFrom progressr progressor
 radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
-
-  if(!is.null(dim(n))) {
+  if (!is.null(dim(n))) {
     message_glue("Did you use `data` instead of `n`? Using `NROW(n)` instead.")
     n <- NROW(n)
   }
@@ -22,24 +21,28 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
     p <- progressor(steps = nrep)
     foreach(
       i = 1:nrep,
-      .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot"))),
+      .options.future = list(
+        seed = TRUE,
+        globals = structure(TRUE, add = c("rls_gsadf", "unroot"))
+      ),
       .inorder = FALSE
-    ) %dofuture% {
-      p()
-      y <- cumsum(rnorm(n))
-      yxmat <- unroot(y, lag = lag)
-      rls_gsadf(yxmat, min_win = minw, lag = lag)
-    }
+    ) %dofuture%
+      {
+        p()
+        y <- cumsum(rnorm(n))
+        yxmat <- unroot(y, lag = lag)
+        rls_gsadf(yxmat, min_win = minw, lag = lag)
+      }
   })
   results <- do.call(cbind, results) # bind once: .combine = "cbind" re-copied the matrix every iteration
 
   n_minw <- n - minw - lag
 
-  adf_crit   <- results[n_minw + 1, ]
-  sadf_crit  <- results[n_minw + 2, ]
+  adf_crit <- results[n_minw + 1, ]
+  sadf_crit <- results[n_minw + 2, ]
   gsadf_crit <- results[n_minw + 3, ]
 
-  badf_crit  <- results[1:n_minw, ]
+  badf_crit <- results[1:n_minw, ]
   bsadf_crit <- results[-c(1:(n_minw + 3)), ]
 
   list(
@@ -47,7 +50,8 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
     sadf = sadf_crit,
     gsadf = gsadf_crit,
     badf = badf_crit,
-    bsadf = bsadf_crit) %>%
+    bsadf = bsadf_crit
+  ) %>%
     add_attr(
       index = 1:n,
       method = "Monte Carlo",
@@ -58,7 +62,6 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
       seed = get_rng_state(seed),
       parallel = do_par
     )
-
 }
 
 #'  Monte Carlo Critical Values
@@ -114,7 +117,6 @@ radf_mc_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' autoplot(rsim_data, cv = mc2)
 #' }
 radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
-
   pcnt <- c(0.9, 0.95, 0.99)
 
   results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed, lag = lag)
@@ -124,15 +126,17 @@ radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
   gsadf_crit <- quantile_narm(results$gsadf, probs = pcnt, drop = FALSE)
 
   bsadf_crit <- apply(results$badf, 2, cummax) %>%
-    apply(1, quantile_narm, probs = pcnt) %>% t()
+    apply(1, quantile_narm, probs = pcnt) %>%
+    t()
   # values taken from PWY
   asy_adf_crit <- rep(
     c(-0.44, -0.08, 0.6),
     each = nrow(bsadf_crit)
   )
   badf_crit <- matrix(
-    asy_adf_crit, ncol = 3,
-    dimnames = list(NULL, paste0(pcnt*100, "%"))
+    asy_adf_crit,
+    ncol = 3,
+    dimnames = list(NULL, paste0(pcnt * 100, "%"))
   )
 
   list(
@@ -144,14 +148,12 @@ radf_mc_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
   ) %>%
     inherit_attrs(results) %>%
     add_class("radf_cv", "mc_cv")
-
 }
 
 #' @rdname radf_mc_cv
 #' @inheritParams radf_mc_cv
 #' @export
 radf_mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
-
   results <- radf_mc_(n, minw = minw, nrep = nrep, seed = seed, lag = lag)
 
   list(
@@ -161,5 +163,4 @@ radf_mc_distr <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
   ) %>%
     inherit_attrs(results) %>%
     add_class("radf_distr", "mc_distr")
-
 }

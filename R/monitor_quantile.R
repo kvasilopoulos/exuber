@@ -48,9 +48,13 @@ qpwy_stat_path <- function(y, tau, r_idx) {
 # starts r1 = 1, ..., r - minw (every window keeps >= minw regression
 # observations, the same floor QPWY's first window has).
 qpsy_stat_path <- function(y, tau, r_idx, minw) {
-  vapply(r_idx, function(r) {
-    max(vapply(1:(r - minw), function(r1) quantile_window_stat(y[r1:r], tau), numeric(1)))
-  }, numeric(1))
+  vapply(
+    r_idx,
+    function(r) {
+      max(vapply(1:(r - minw), function(r1) quantile_window_stat(y[r1:r], tau), numeric(1)))
+    },
+    numeric(1)
+  )
 }
 
 # Simulated null path suprema, one column per entry of `delta`: for each
@@ -185,8 +189,15 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #'
 #' @family monitoring
 #' @export
-monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl = 95, seed = NULL,
-                             type = c("qpwy", "qpsy")) {
+monitor_quantile <- function(
+  data,
+  tau = 0.5,
+  minw = NULL,
+  nrep = 500L,
+  sig_lvl = 95,
+  seed = NULL,
+  type = c("qpwy", "qpsy")
+) {
   type <- match.arg(type)
   stopifnot(tau > 0 && tau < 1)
   assert_sig_lvl(sig_lvl)
@@ -232,17 +243,31 @@ monitor_quantile <- function(data, tau = 0.5, minw = NULL, nrep = 500L, sig_lvl 
     if (length(breach) > 0L) alarm[j] <- r_idx[breach[1L]]
   }
 
-  alarm_date <- vapply(alarm, function(i) {
-    if (is.na(i)) NA_character_ else as.character(idx[i])
-  }, character(1))
+  alarm_date <- vapply(
+    alarm,
+    function(i) {
+      if (is.na(i)) NA_character_ else as.character(idx[i])
+    },
+    character(1)
+  )
 
   list(
-    stat = stat_path, boundary = boundary, delta = delta,
-    alarm = alarm, alarm_date = alarm_date
+    stat = stat_path,
+    boundary = boundary,
+    delta = delta,
+    alarm = alarm,
+    alarm_date = alarm_date
   ) %>%
     add_attr(
-      index = idx, series_names = snames, n = n, minw = minw,
-      tau = tau, sig_lvl = sig_lvl, iter = nrep, type = type, caveat = caveat
+      index = idx,
+      series_names = snames,
+      n = n,
+      minw = minw,
+      tau = tau,
+      sig_lvl = sig_lvl,
+      iter = nrep,
+      type = type,
+      caveat = caveat
     ) %>%
     add_class("monitor_quantile_obj")
 }
@@ -261,26 +286,39 @@ autoplot.monitor_quantile_obj <- function(object, ...) {
   minw <- attr(object, "minw")
   pos <- (minw + 1L):(minw + nrow(object$stat))
   snames <- colnames(object$stat)
-  vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
-  autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines, ylab = paste(toupper(attr(object, "type") %||% "qpwy"), "statistic"))
+  vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>%
+    tidyr::drop_na(at)
+  autoplot_stat_boundary(
+    pos,
+    object$stat,
+    object$boundary,
+    vlines = vlines,
+    ylab = paste(toupper(attr(object, "type") %||% "qpwy"), "statistic")
+  )
 }
 
 #' @export
 print.monitor_quantile_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "monitor_quantile ({toupper(attr(x, 'type') %||% 'qpwy')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
-    "tau = {attr(x, 'tau')}, sig_lvl = {attr(x, 'sig_lvl')}%)"
-  ))
+  cat_rule(
+    left = glue(
+      "monitor_quantile ({toupper(attr(x, 'type') %||% 'qpwy')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
+      "tau = {attr(x, 'tau')}, sig_lvl = {attr(x, 'sig_lvl')}%)"
+    )
+  )
   cat_line()
   print(
     data.frame(
-      series = names(x$alarm), delta = round(x$delta, 3),
+      series = names(x$alarm),
+      delta = round(x$delta, 3),
       boundary = round(x$boundary, 3),
-      alarm = x$alarm, alarm_date = x$alarm_date,
+      alarm = x$alarm,
+      alarm_date = x$alarm_date,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
   cat_caveat(x)

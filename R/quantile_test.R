@@ -127,8 +127,14 @@ quantile_test_ <- function(n, nrep, seed = NULL) {
 #' @importFrom stats coef dnorm lm quantile bw.nrd0 rnorm cor
 #' @family alternative tests
 #' @export
-quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0.05),
-                           nrep = 1000L, sig_lvl = 95, seed = NULL) {
+quantile_test <- function(
+  data,
+  tau = "optimal",
+  tau_grid = seq(0.2, 0.8, by = 0.05),
+  nrep = 1000L,
+  sig_lvl = 95,
+  seed = NULL
+) {
   assert_sig_lvl(sig_lvl)
   x <- parse_data(data)
   n <- nrow(x)
@@ -151,7 +157,9 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
       obj <- (tau_grid * (1 - tau_grid)) / fhats^2
       tau_j <- tau_grid[which.min(obj)]
     }
-    if (!(tau_j > 0 && tau_j < 1)) stop_glue("'tau' must be in (0, 1) or \"optimal\".")
+    if (!(tau_j > 0 && tau_j < 1)) {
+      stop_glue("'tau' must be in (0, 1) or \"optimal\".")
+    }
 
     qr_fit <- quantreg::rq(y ~ ylag, tau = tau_j, data = data.frame(y = y[-1], ylag = ylag))
     alpha_hat <- unname(stats::coef(qr_fit)["ylag"])
@@ -167,16 +175,27 @@ quantile_test <- function(data, tau = "optimal", tau_grid = seq(0.2, 0.8, by = 0
     U <- sqrt(1 - delta_j^2) * z + delta_j * Q
     crit_j <- unname(quantile_narm(U, probs = sig_lvl / 100, names = FALSE))
 
-    tstat[j] <- tstat_j; crit[j] <- crit_j; delta[j] <- delta_j
-    tau_used[j] <- tau_j; detected[j] <- tstat_j > crit_j
+    tstat[j] <- tstat_j
+    crit[j] <- crit_j
+    delta[j] <- delta_j
+    tau_used[j] <- tau_j
+    detected[j] <- tstat_j > crit_j
   }
 
   list(
-    tstat = tstat, tau = tau_used, delta = delta, crit = crit, detected = detected
+    tstat = tstat,
+    tau = tau_used,
+    delta = delta,
+    crit = crit,
+    detected = detected
   ) %>%
     add_attr(
-      index = attr(x, "index"), series_names = snames, n = n,
-      sig_lvl = sig_lvl, iter = nrep, seed = get_rng_state(seed)
+      index = attr(x, "index"),
+      series_names = snames,
+      n = n,
+      sig_lvl = sig_lvl,
+      iter = nrep,
+      seed = get_rng_state(seed)
     ) %>%
     add_class("quantile_test_obj")
 }
@@ -202,11 +221,17 @@ print.quantile_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L
   cat_line()
   print(
     data.frame(
-      series = names(x$tstat), tau = round(x$tau, 3), tstat = x$tstat,
-      crit = x$crit, delta = round(x$delta, 3), detected = x$detected,
+      series = names(x$tstat),
+      tau = round(x$tau, 3),
+      tstat = x$tstat,
+      crit = x$crit,
+      delta = round(x$delta, 3),
+      detected = x$detected,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }

@@ -38,7 +38,6 @@
 
 #' @importFrom doFuture `%dofuture%`
 radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
-
   assert_n(n)
   assert_positive_int(n, greater_than = 5)
   assert_positive_int(nrep)
@@ -53,14 +52,18 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
     p <- progressor(steps = nrep)
     foreach(
       i = 1:nrep,
-      .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot"))),
+      .options.future = list(
+        seed = TRUE,
+        globals = structure(TRUE, add = c("rls_gsadf", "unroot"))
+      ),
       .inorder = FALSE
-    ) %dofuture% {
-      p()
-      y <- rev(cumsum(rnorm(n)))
-      yxmat <- unroot(y, lag = lag)
-      rls_gsadf(yxmat, min_win = minw, lag = lag)
-    }
+    ) %dofuture%
+      {
+        p()
+        y <- rev(cumsum(rnorm(n)))
+        yxmat <- unroot(y, lag = lag)
+        rls_gsadf(yxmat, min_win = minw, lag = lag)
+      }
   })
   results <- do.call(cbind, results)
 
@@ -121,7 +124,6 @@ radf_recovery_ <- function(n, minw, nrep, seed = NULL, lag = 0) {
 #' @family critical values
 #' @export
 radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0) {
-
   pcnt <- c(0.9, 0.95, 0.99)
 
   results <- radf_recovery_(n, minw = minw, nrep = nrep, seed = seed, lag = lag)
@@ -218,8 +220,7 @@ radf_recovery_cv <- function(n, minw = NULL, nrep = 1000L, seed = NULL, lag = 0)
 #'
 #' @family dating
 #' @export
-radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
-                           sig_lvl = 95, seed = NULL) {
+radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L, sig_lvl = 95, seed = NULL) {
   caveat <- "Experimental. f_c and the overall false-detection rate are exploratory pending further validation; see ?radf_recovery, Caveats section."
   message_glue(caveat)
 
@@ -246,7 +247,9 @@ radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
   for (j in seq_len(nc)) {
     exceed <- rev_fit$bsadf[, j] > cv$bsadf_cv[, lvl_lab]
     g_e <- which(exceed)[1L]
-    if (is.na(g_e)) next
+    if (is.na(g_e)) {
+      next
+    }
     detected[j] <- TRUE
 
     after <- which(!exceed[g_e:length(exceed)])
@@ -264,16 +267,35 @@ radf_recovery <- function(data, minw = NULL, lag = 0, nrep = 1000L,
     if (!censored[j]) f_c[j] <- n + 1L - rev_pos_c
   }
 
-  f_c_date <- vapply(f_c, function(i) if (is.na(i)) NA_character_ else as.character(idx[i]), character(1))
-  f_r_date <- vapply(f_r, function(i) if (is.na(i)) NA_character_ else as.character(idx[i]), character(1))
+  f_c_date <- vapply(
+    f_c,
+    function(i) if (is.na(i)) NA_character_ else as.character(idx[i]),
+    character(1)
+  )
+  f_r_date <- vapply(
+    f_r,
+    function(i) if (is.na(i)) NA_character_ else as.character(idx[i]),
+    character(1)
+  )
 
   list(
-    f_c = f_c, f_r = f_r, f_c_date = f_c_date, f_r_date = f_r_date,
-    detected = detected, censored = censored
+    f_c = f_c,
+    f_r = f_r,
+    f_c_date = f_c_date,
+    f_r_date = f_r_date,
+    detected = detected,
+    censored = censored
   ) %>%
     add_attr(
-      index = idx, series_names = snames, minw = minw, lag = lag,
-      n = n, sig_lvl = sig_lvl, iter = nrep, caveat = caveat, mat = x
+      index = idx,
+      series_names = snames,
+      minw = minw,
+      lag = lag,
+      n = n,
+      sig_lvl = sig_lvl,
+      iter = nrep,
+      caveat = caveat,
+      mat = x
     ) %>%
     add_class("radf_recovery_obj")
 }
@@ -297,18 +319,26 @@ autoplot.radf_recovery_obj <- function(object, ...) {
 #' @export
 print.radf_recovery_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "radf_recovery (n = {attr(x, 'n')}, minw = {get_minw(x)}, ",
-    "level = {attr(x, 'sig_lvl')}%)"
-  ))
+  cat_rule(
+    left = glue(
+      "radf_recovery (n = {attr(x, 'n')}, minw = {get_minw(x)}, ",
+      "level = {attr(x, 'sig_lvl')}%)"
+    )
+  )
   cat_line()
   cat_caveat(x)
   print(
     data.frame(
-      series = names(x$f_c), f_c = x$f_c_date, f_r = x$f_r_date,
-      detected = x$detected, censored = x$censored, row.names = NULL
+      series = names(x$f_c),
+      f_c = x$f_c_date,
+      f_r = x$f_r_date,
+      detected = x$detected,
+      censored = x$censored,
+      row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }

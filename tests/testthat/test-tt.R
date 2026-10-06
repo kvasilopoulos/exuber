@@ -12,10 +12,14 @@ test_that("gls_dfstat_grid matches a brute-force no-intercept lm() fit", {
   ylag <- yc[1:n1]
 
   b_idx <- minw:n1
-  badf_brute <- vapply(b_idx, function(b) {
-    fit <- lm(dy[1:b] ~ ylag[1:b] - 1)
-    summary(fit)$coefficients[1, "t value"]
-  }, numeric(1))
+  badf_brute <- vapply(
+    b_idx,
+    function(b) {
+      fit <- lm(dy[1:b] ~ ylag[1:b] - 1)
+      summary(fit)$coefficients[1, "t value"]
+    },
+    numeric(1)
+  )
 
   expect_equal(res$badf, badf_brute, tolerance = 1e-8)
   expect_equal(res$adf, badf_brute[length(badf_brute)], tolerance = 1e-8)

@@ -31,17 +31,32 @@ parse_crit_bin <- function(path) {
   con <- xzfile(path, "rb")
   on.exit(close(con))
   hdr <- readBin(con, "integer", n = 4L, size = 4L)
-  n <- hdr[1]; minw <- hdr[2]; lag <- hdr[3]; nrows <- hdr[4]
+  n <- hdr[1]
+  minw <- hdr[2]
+  lag <- hdr[3]
+  nrows <- hdr[4]
   adf_cv <- stats::setNames(readBin(con, "double", n = 3L), pcnt_names)
   sadf_cv <- stats::setNames(readBin(con, "double", n = 3L), pcnt_names)
   gsadf_cv <- stats::setNames(readBin(con, "double", n = 3L), pcnt_names)
-  bsadf_cv <- matrix(readBin(con, "double", n = nrows * 3L), ncol = 3L, byrow = TRUE,
-                      dimnames = list(NULL, pcnt_names))
-  badf_cv <- matrix(rep(c(-0.44, -0.08, 0.6), each = nrows), ncol = 3L,
-                     dimnames = list(NULL, pcnt_names))
+  bsadf_cv <- matrix(
+    readBin(con, "double", n = nrows * 3L),
+    ncol = 3L,
+    byrow = TRUE,
+    dimnames = list(NULL, pcnt_names)
+  )
+  badf_cv <- matrix(
+    rep(c(-0.44, -0.08, 0.6), each = nrows),
+    ncol = 3L,
+    dimnames = list(NULL, pcnt_names)
+  )
 
-  list(adf_cv = adf_cv, sadf_cv = sadf_cv, gsadf_cv = gsadf_cv,
-       badf_cv = badf_cv, bsadf_cv = bsadf_cv) %>%
+  list(
+    adf_cv = adf_cv,
+    sadf_cv = sadf_cv,
+    gsadf_cv = gsadf_cv,
+    badf_cv = badf_cv,
+    bsadf_cv = bsadf_cv
+  ) %>%
     add_attr(method = "Monte Carlo", n = n, minw = minw, lag = lag, iter = 2000L) %>%
     add_class("radf_cv", "mc_cv")
 }
@@ -58,7 +73,9 @@ fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
   # Parsed once per session: summary()/datestamp()/autoplot() each call
   # retrieve_crit() and would otherwise re-read and xz-decompress the file.
   key <- sprintf("lag%d-n%d", lag, n)
-  if (!is.null(.pkgenv$crit[[key]])) return(.pkgenv$crit[[key]])
+  if (!is.null(.pkgenv$crit[[key]])) {
+    return(.pkgenv$crit[[key]])
+  }
   cache_path <- crit_cache_path(n, lag)
   if (file.exists(cache_path)) {
     cv <- suppressWarnings(tryCatch(parse_crit_bin(cache_path), error = function(e) NULL))
@@ -73,9 +90,12 @@ fetch_crit_bucket <- function(n, lag = 0, base_url = crit_bucket_base_url) {
   # the same handler serves both conditions; the status is re-read from the
   # headers because the warning's wording differs across R versions/methods.
   on_fail <- function(cnd) {
-    status <- tryCatch(attr(curlGetHeaders(url_, timeout = 30L), "status"),
-                       error = function(e) NA_integer_)
-    if (identical(status, 404L)) return(NULL)
+    status <- tryCatch(attr(curlGetHeaders(url_, timeout = 30L), "status"), error = function(e) {
+      NA_integer_
+    })
+    if (identical(status, 404L)) {
+      return(NULL)
+    }
     stop_glue(
       "Cannot reach the critical-value store ({conditionMessage(cnd)}). ",
       "Check your network connection and try again."

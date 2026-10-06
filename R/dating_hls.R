@@ -29,9 +29,12 @@ hls_prefix_sums <- function(y) {
   x <- y[1:n1]
   z <- y[2:(n1 + 1L)] - y[1:n1]
   list(
-    cx = c(0, cumsum(x)), cx2 = c(0, cumsum(x^2)),
-    cz = c(0, cumsum(z)), cz2 = c(0, cumsum(z^2)),
-    cxz = c(0, cumsum(x * z)), n1 = n1
+    cx = c(0, cumsum(x)),
+    cx2 = c(0, cumsum(x^2)),
+    cz = c(0, cumsum(z)),
+    cz2 = c(0, cumsum(z^2)),
+    cxz = c(0, cumsum(x * z)),
+    n1 = n1
   )
 }
 
@@ -103,9 +106,13 @@ hls_model23 <- function(y, ps, trim, right_fit) {
     # regime with its own endpoint), so only right_fit=TRUE (Model 3) gets
     # the second constraint.
     valid <- y[tau2 + 1L] > y[tau1 + 1L]
-    if (right_fit) valid <- valid & (y[tau2 + 1L] > y[n1 + 1L])
+    if (right_fit) {
+      valid <- valid & (y[tau2 + 1L] > y[n1 + 1L])
+    }
     tau2 <- tau2[valid]
-    if (length(tau2) == 0L) next
+    if (length(tau2) == 0L) {
+      next
+    }
     ssr <- hls_segment_ssr(ps, 0L, tau1, FALSE) +
       hls_segment_ssr(ps, tau1, tau2, TRUE) +
       hls_segment_ssr(ps, tau2, n1, right_fit)
@@ -127,13 +134,17 @@ hls_model4 <- function(y, ps, trim) {
     tau2_max <- n1 - 2L * k_min
     tau2_seq <- (tau1 + k_min):tau2_max
     for (tau2 in tau2_seq) {
-      if (y[tau2 + 1L] <= y[tau1 + 1L]) next
+      if (y[tau2 + 1L] <= y[tau1 + 1L]) {
+        next
+      }
       tau3 <- (tau2 + k_min):(n1 - k_min)
       # As in Model 3, the "peak" y_{tau2} must also exceed the endpoint
       # of the fitted collapse regime, y_{tau3} -- otherwise it is not a
       # genuine peak (see hls_model23()'s comment on the same constraint).
       tau3 <- tau3[y[tau2 + 1L] > y[tau3 + 1L]]
-      if (length(tau3) == 0L) next
+      if (length(tau3) == 0L) {
+        next
+      }
       ssr <- hls_segment_ssr(ps, 0L, tau1, FALSE) +
         hls_segment_ssr(ps, tau1, tau2, TRUE) +
         hls_segment_ssr(ps, tau2, tau3, TRUE) +
@@ -181,7 +192,8 @@ hls_fit_series <- function(y, trim, models = 1:4) {
 
   jopt <- which.min(bic)
   fit <- fits[[jopt]]
-  breaks <- switch(jopt,
+  breaks <- switch(
+    jopt,
     `1` = c(tau1 = fit$tau1),
     `2` = c(tau1 = fit$tau1, tau2 = fit$tau2),
     `3` = c(tau1 = fit$tau1, tau2 = fit$tau2),
@@ -273,13 +285,18 @@ dating_hls <- function(data, trim = 0.05) {
 
     dates <- vapply(res$breaks, function(b) as.character(idx[b + 1L]), character(1))
     origination[j] <- unname(dates["tau1"])
-    if ("tau2" %in% names(dates)) collapse[j] <- unname(dates["tau2"])
+    if ("tau2" %in% names(dates)) {
+      collapse[j] <- unname(dates["tau2"])
+    }
     if ("tau3" %in% names(dates)) recovery[j] <- unname(dates["tau3"])
   }
 
   list(
-    model = model, origination = origination, collapse = collapse,
-    recovery = recovery, bic = bic_mat
+    model = model,
+    origination = origination,
+    collapse = collapse,
+    recovery = recovery,
+    bic = bic_mat
   ) %>%
     add_attr(index = idx, series_names = snames, n = n, trim = trim, mat = x) %>%
     add_class("dating_hls_obj")
@@ -292,10 +309,16 @@ print.dating_hls_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
   cat_line()
   print(
     data.frame(
-      series = names(x$model), model = x$model, origination = x$origination,
-      collapse = x$collapse, recovery = x$recovery, row.names = NULL
+      series = names(x$model),
+      model = x$model,
+      origination = x$origination,
+      collapse = x$collapse,
+      recovery = x$recovery,
+      row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }
@@ -312,7 +335,8 @@ print.dating_hls_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
 #' @export
 autoplot.dating_hls_obj <- function(object, ...) {
   idx <- index(object)
-  breaks <- breaks_tbl(idx,
+  breaks <- breaks_tbl(
+    idx,
     origination = object$origination,
     collapse = object$collapse,
     recovery = object$recovery

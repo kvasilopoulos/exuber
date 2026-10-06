@@ -67,17 +67,25 @@ test_that("qpsy_stat_path is the sup over window starts of quantreg::rq()
   minw <- 10
   r_idx <- (minw + 1):40
   path <- exuber:::qpsy_stat_path(y, 0.7, r_idx, minw)
-  brute <- vapply(r_idx, function(r) {
-    max(vapply(1:(r - minw), function(r1) {
-      yy <- y[r1:r]
-      m <- length(yy)
-      ylag <- yy[1:(m - 1)]
-      yresp <- yy[2:m]
-      a <- unname(coef(quantreg::rq(yresp ~ ylag, tau = 0.7))["ylag"])
-      f <- exuber:::quantile_check_density(yresp - ylag, 0.7)$f_hat
-      (f / sqrt(0.7 * 0.3)) * sqrt(sum((ylag - mean(ylag))^2)) * (a - 1)
-    }, numeric(1)))
-  }, numeric(1))
+  brute <- vapply(
+    r_idx,
+    function(r) {
+      max(vapply(
+        1:(r - minw),
+        function(r1) {
+          yy <- y[r1:r]
+          m <- length(yy)
+          ylag <- yy[1:(m - 1)]
+          yresp <- yy[2:m]
+          a <- unname(coef(quantreg::rq(yresp ~ ylag, tau = 0.7))["ylag"])
+          f <- exuber:::quantile_check_density(yresp - ylag, 0.7)$f_hat
+          (f / sqrt(0.7 * 0.3)) * sqrt(sum((ylag - mean(ylag))^2)) * (a - 1)
+        },
+        numeric(1)
+      ))
+    },
+    numeric(1)
+  )
   expect_equal(path, brute, tolerance = 1e-8)
   expect_equal(path[1], exuber:::qpwy_stat_path(y, 0.7, minw + 1), tolerance = 1e-12)
 })
@@ -131,11 +139,15 @@ test_that("monitor_quantile's false-alarm rate under H0 is not wildly inflated",
   set.seed(2)
   nrep_mc <- 30
   n <- 100
-  fa <- mean(vapply(seq_len(nrep_mc), function(i) {
-    set.seed(2000 + i)
-    yy <- cumsum(rnorm(n))
-    !is.na(monitor_quantile(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
-  }, logical(1)))
+  fa <- mean(vapply(
+    seq_len(nrep_mc),
+    function(i) {
+      set.seed(2000 + i)
+      yy <- cumsum(rnorm(n))
+      !is.na(monitor_quantile(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
+    },
+    logical(1)
+  ))
   expect_lt(fa, 0.30)
 })
 
@@ -144,13 +156,17 @@ test_that("monitor_quantile has non-trivial detection power on a genuine
   skip_on_cran()
   set.seed(3)
   nrep_mc <- 20
-  det <- mean(vapply(seq_len(nrep_mc), function(i) {
-    set.seed(3000 + i)
-    n1 <- 60
-    normal_part <- cumsum(rnorm(n1))
-    expl_part <- normal_part[n1] * 1.03^(1:40) + cumsum(rnorm(40, sd = 1))
-    yy <- c(normal_part, expl_part)
-    !is.na(monitor_quantile(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
-  }, logical(1)))
+  det <- mean(vapply(
+    seq_len(nrep_mc),
+    function(i) {
+      set.seed(3000 + i)
+      n1 <- 60
+      normal_part <- cumsum(rnorm(n1))
+      expl_part <- normal_part[n1] * 1.03^(1:40) + cumsum(rnorm(40, sd = 1))
+      yy <- c(normal_part, expl_part)
+      !is.na(monitor_quantile(yy, tau = 0.5, nrep = 100, seed = i)$alarm)
+    },
+    logical(1)
+  ))
   expect_gt(det, 0.3)
 })

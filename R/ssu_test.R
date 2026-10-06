@@ -52,8 +52,14 @@ ssu_prefix_sums <- function(y) {
   mk <- function(v) c(0, cumsum(v))
   list(
     n1 = n1,
-    x1 = mk(x1), x1_2 = mk(x1^2), x1_3 = mk(x1^3), x1_4 = mk(x1^4),
-    d1 = mk(d1), d1_2 = mk(d1^2), d1_3 = mk(d1^3), d1_4 = mk(d1^4),
+    x1 = mk(x1),
+    x1_2 = mk(x1^2),
+    x1_3 = mk(x1^3),
+    x1_4 = mk(x1^4),
+    d1 = mk(d1),
+    d1_2 = mk(d1^2),
+    d1_3 = mk(d1^3),
+    d1_4 = mk(d1^4),
     d1x1 = mk(d1 * x1),
     d1_2x1_2 = mk(d1^2 * x1^2),
     d1x1_2 = mk(d1 * x1^2),
@@ -103,9 +109,15 @@ ssu_stat_path <- function(ps, hi_idx, lo = 0L) {
   Sd1x2 <- S("d1x1_2") # sum(d1*x2) = sum(d1*x1^2)
   Sx1d2 <- S("x1d1_2") # sum(x1*d2) = sum(x1*d1^2)
   Sx1x2 <- S("x1_3") # sum(x1*x2) = sum(x1^3)
-  sum_eh <- Sd1d2 - mu2_hat * Sd1 - omega_hat * Sd1x2 - mu1_hat * Sd2 +
-    L * mu1_hat * mu2_hat + mu1_hat * omega_hat * Sx2 -
-    delta_hat * Sx1d2 + delta_hat * mu2_hat * Sx1 + delta_hat * omega_hat * Sx1x2
+  sum_eh <- Sd1d2 -
+    mu2_hat * Sd1 -
+    omega_hat * Sd1x2 -
+    mu1_hat * Sd2 +
+    L * mu1_hat * mu2_hat +
+    mu1_hat * omega_hat * Sx2 -
+    delta_hat * Sx1d2 +
+    delta_hat * mu2_hat * Sx1 +
+    delta_hat * omega_hat * Sx1x2
   sigma2_epseta <- sum_eh / (L - 2)
 
   sigma_eps <- sqrt(sigma2_eps)
@@ -225,7 +237,14 @@ gssu_minw <- function(n) floor(n * (-0.004 + 2.24 / sqrt(n)))
 #'
 #' @family volatility-robust tests
 #' @export
-ssu_test <- function(data, minw = NULL, sig_lvl = 95, type = c("ssu", "gssu"), union = FALSE, cv = NULL) {
+ssu_test <- function(
+  data,
+  minw = NULL,
+  sig_lvl = 95,
+  type = c("ssu", "gssu"),
+  union = FALSE,
+  cv = NULL
+) {
   type <- match.arg(type)
   x <- parse_data(data)
   n <- nrow(x)
@@ -241,7 +260,11 @@ ssu_test <- function(data, minw = NULL, sig_lvl = 95, type = c("ssu", "gssu"), u
   stat_path <- matrix(NA_real_, length(hi_idx), nc, dimnames = list(NULL, snames))
   for (j in seq_len(nc)) {
     ps <- ssu_prefix_sums(as.numeric(x[, j]))
-    stat_path[, j] <- if (type == "ssu") ssu_stat_path(ps, hi_idx) else gssu_stat_path(ps, hi_idx, minw)
+    stat_path[, j] <- if (type == "ssu") {
+      ssu_stat_path(ps, hi_idx)
+    } else {
+      gssu_stat_path(ps, hi_idx, minw)
+    }
   }
 
   sadf <- apply(stat_path, 2, max)
@@ -256,14 +279,26 @@ ssu_test <- function(data, minw = NULL, sig_lvl = 95, type = c("ssu", "gssu"), u
     cv_adf <- if (type == "ssu") cv$sadf_cv[lvl] else cv$gsadf_cv[lvl]
     union_stat <- setNames(pmax(adf_stat / cv_adf, sadf / crit), snames)
     union_crit <- ssu_q(sig_lvl, if (type == "ssu") "ur" else "gur")
-    out <- c(out, list(
-      adf_stat = setNames(adf_stat, snames), union_stat = union_stat,
-      union_crit = union_crit, union_detected = union_stat > union_crit
-    ))
+    out <- c(
+      out,
+      list(
+        adf_stat = setNames(adf_stat, snames),
+        union_stat = union_stat,
+        union_crit = union_crit,
+        union_detected = union_stat > union_crit
+      )
+    )
   }
 
   out %>%
-    add_attr(index = idx, series_names = snames, n = n, minw = minw, sig_lvl = sig_lvl, type = type) %>%
+    add_attr(
+      index = idx,
+      series_names = snames,
+      n = n,
+      minw = minw,
+      sig_lvl = sig_lvl,
+      type = type
+    ) %>%
     add_class("ssu_test_obj")
 }
 
@@ -280,7 +315,10 @@ ssu_test <- function(data, minw = NULL, sig_lvl = 95, type = c("ssu", "gssu"), u
 autoplot.ssu_test_obj <- function(object, ...) {
   minw <- attr(object, "minw")
   pos <- minw:(minw + nrow(object$stat) - 1L)
-  autoplot_stat_boundary(pos, object$stat, object$crit,
+  autoplot_stat_boundary(
+    pos,
+    object$stat,
+    object$crit,
     ylab = paste(toupper(attr(object, "type") %||% "ssu"), "statistic")
   )
 }
@@ -321,10 +359,12 @@ ssu_q <- function(sig_lvl, stat = "ssu") {
 #' @export
 print.ssu_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "ssu_test ({toupper(attr(x, 'type') %||% 'ssu')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
-    "sig_lvl = {attr(x, 'sig_lvl')}%, crit = {x$crit})"
-  ))
+  cat_rule(
+    left = glue(
+      "ssu_test ({toupper(attr(x, 'type') %||% 'ssu')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
+      "sig_lvl = {attr(x, 'sig_lvl')}%, crit = {x$crit})"
+    )
+  )
   cat_line()
   df <- data.frame(series = names(x$sadf), sadf = x$sadf, detected = x$detected, row.names = NULL)
   if (!is.null(x$union_stat)) {
@@ -332,6 +372,8 @@ print.ssu_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
     df$union_detected <- x$union_detected
   }
   print(df, digits = digits, print.gap = 2L, row.names = FALSE)
-  if (!is.null(x$union_stat)) cat_line("union critical value: ", x$union_crit)
+  if (!is.null(x$union_stat)) {
+    cat_line("union critical value: ", x$union_crit)
+  }
   cat_line()
 }

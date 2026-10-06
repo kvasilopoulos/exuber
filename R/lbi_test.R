@@ -128,10 +128,15 @@ print.lbi_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ..
   cat_line()
   print(
     data.frame(
-      series = names(x$stat), stat = x$stat, crit = x$crit, detected = x$detected,
+      series = names(x$stat),
+      stat = x$stat,
+      crit = x$crit,
+      detected = x$detected,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }
@@ -307,16 +312,27 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, sig_lvl = 95) {
     if (length(breach) > 0L) alarm[j] <- T_star + breach[1L]
   }
 
-  alarm_date <- vapply(alarm, function(i) {
-    if (is.na(i)) NA_character_ else as.character(idx[i])
-  }, character(1))
+  alarm_date <- vapply(
+    alarm,
+    function(i) {
+      if (is.na(i)) NA_character_ else as.character(idx[i])
+    },
+    character(1)
+  )
 
   list(
-    stat = stat_path, boundary = b_alpha, T_star = T_star,
-    alarm = alarm, alarm_date = alarm_date
+    stat = stat_path,
+    boundary = b_alpha,
+    T_star = T_star,
+    alarm = alarm,
+    alarm_date = alarm_date
   ) %>%
     add_attr(
-      index = idx, series_names = snames, n = n, c_bar = c_bar, sig_lvl = sig_lvl
+      index = idx,
+      series_names = snames,
+      n = n,
+      c_bar = c_bar,
+      sig_lvl = sig_lvl
     ) %>%
     add_class("monitor_lbi_obj")
 }
@@ -333,23 +349,30 @@ monitor_lbi <- function(data, r_star = 0.5, c_bar = 0, sig_lvl = 95) {
 #' @export
 autoplot.monitor_lbi_obj <- function(object, ...) {
   pos <- object$T_star + seq_len(nrow(object$stat))
-  vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>% tidyr::drop_na(at)
+  vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>%
+    tidyr::drop_na(at)
   autoplot_stat_boundary(pos, object$stat, object$boundary, vlines = vlines, ylab = "LBI CUSUM")
 }
 
 #' @export
 print.monitor_lbi_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "monitor_lbi (T* = {x$T_star} / {attr(x, 'n')}, c_bar = {attr(x, 'c_bar')}, b_alpha = {x$boundary})"
-  ))
+  cat_rule(
+    left = glue(
+      "monitor_lbi (T* = {x$T_star} / {attr(x, 'n')}, c_bar = {attr(x, 'c_bar')}, b_alpha = {x$boundary})"
+    )
+  )
   cat_line()
   print(
     data.frame(
-      series = names(x$alarm), alarm = x$alarm, alarm_date = x$alarm_date,
+      series = names(x$alarm),
+      alarm = x$alarm,
+      alarm_date = x$alarm_date,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }

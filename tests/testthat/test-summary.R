@@ -19,7 +19,7 @@ test_that("class checks", {
 })
 
 capture_print <- function(x, msg = "Cannot reject H0") {
-   any(grepl(msg, capture.output(print(x))))
+  any(grepl(msg, capture.output(print(x))))
 }
 
 
@@ -28,7 +28,8 @@ test_that("error diagnostics", {
   expect_true(
     capture_print(
       diagnostics(radf_95, mc),
-      msg = "Rejects H0 at the")
+      msg = "Rejects H0 at the"
+    )
   )
 })
 
@@ -155,4 +156,3 @@ withr::with_options(
     expect_error(datestamp(radf_dta_lag1, wb, option = "sadf"), regexp = NA)
   })
 )
-

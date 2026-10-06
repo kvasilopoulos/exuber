@@ -10,7 +10,6 @@ deprecate_arg_warn <- function(old, new = NULL) {
 
 # Deprecated --------------------------------------------------------------
 
-
 #' @title Deprecated functions in package \pkg{exuber}.
 #'
 #' @description The functions listed below are deprecated and will be defunct in
@@ -48,23 +47,52 @@ sb_cv <- function(data, minw = NULL, nboot = 1000L, seed = NULL) {
 
 #' @rdname exuber-deprecated
 #' @export
-radf_wb_cv2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
-                        type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
+radf_wb_cv2 <- function(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+) {
   .Deprecated(new = "radf_wb_ps_cv()", package = "exuber")
-  radf_wb_ps_cv(data, minw = minw, nboot = nboot, adflag = adflag, type = type, tb = tb, seed = seed)
+  radf_wb_ps_cv(
+    data,
+    minw = minw,
+    nboot = nboot,
+    adflag = adflag,
+    type = type,
+    tb = tb,
+    seed = seed
+  )
 }
 
 #' @rdname exuber-deprecated
 #' @export
-radf_wb_distr2 <- function(data, minw = NULL, nboot = 500L, adflag = 0,
-                           type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
+radf_wb_distr2 <- function(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+) {
   .Deprecated(new = "radf_wb_ps_distr()", package = "exuber")
-  radf_wb_ps_distr(data, minw = minw, nboot = nboot, adflag = adflag, type = type, tb = tb, seed = seed)
+  radf_wb_ps_distr(
+    data,
+    minw = minw,
+    nboot = nboot,
+    adflag = adflag,
+    type = type,
+    tb = tb,
+    seed = seed
+  )
 }
 
 
 # Defunct -----------------------------------------------------------------
-
 
 #' @title Defunct functions in package \pkg{exuber}.
 #'
@@ -98,15 +126,30 @@ report <- function(x, y, panel = FALSE, ...) {
 
 #' @rdname exuber-defunct
 #' @export
-sim_dgp1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
-                     alpha = 0.6, sigma = 6.79, seed = NULL) {
+sim_dgp1 <- function(
+  n,
+  te = 0.4 * n,
+  tf = 0.15 * n + te,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+) {
   .Defunct(new = "sim_psy1()", package = "exuber")
 }
 
 #' @rdname exuber-defunct
 #' @export
-sim_dgp2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
-                     te2 = 0.6 * n, tf2 = 0.1 * n + te2,
-                     c = 1, alpha = 0.6, sigma = 6.79, seed = NULL) {
+sim_dgp2 <- function(
+  n,
+  te1 = 0.2 * n,
+  tf1 = 0.2 * n + te1,
+  te2 = 0.6 * n,
+  tf2 = 0.1 * n + te2,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+) {
   .Defunct(new = "sim_psy2()", package = "exuber")
 }

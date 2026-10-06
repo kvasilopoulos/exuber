@@ -99,7 +99,9 @@ show_pb <- function() {
 par_cluster <- function(n) {
   cl <- .pkgenv$cluster
   if (is.null(cl) || length(cl) != n) {
-    if (!is.null(cl)) parallel::stopCluster(cl)
+    if (!is.null(cl)) {
+      parallel::stopCluster(cl)
+    }
     cl <- .pkgenv$cluster <- parallel::makeCluster(n)
   }
   cl
@@ -126,7 +128,7 @@ array_to_list <- function(x, var) {
 
   out <- vector("list", length = iter)
   for (i in 1:iter) {
-    out[[i]] <- pluck(x, var)[, , i]
+    out[[i]] <- pluck(x, var)[,, i]
   }
   out
 }

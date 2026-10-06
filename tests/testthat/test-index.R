@@ -58,7 +58,5 @@ test_that("matrix", {
 })
 
 test_that("datestamp", {
-  expect_equal(radf_dta %>% datestamp(cv = mc)
-               %>% index(trunc = T), index(radf_dta, trunc = T))
+  expect_equal(radf_dta %>% datestamp(cv = mc) %>% index(trunc = T), index(radf_dta, trunc = T))
 })
-

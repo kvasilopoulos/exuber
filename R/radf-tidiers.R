@@ -66,7 +66,6 @@ tidy.radf_obj <- function(x, format = c("wide", "long"), panel = FALSE, ...) {
 
 # tidy-cv -----------------------------------------------------------------
 
-
 #' Tidy a `radf_cv` object
 #'
 #' Summarizes the information in a `radf_cv` object.
@@ -132,11 +131,13 @@ tidy_radf_cv.mc_cv <- function(x, format = c("wide", "long"), ...) {
 tidy_radf_cv.wb_cv <- function(x, format = c("wide", "long"), ...) {
   tbl_cv <- x %>%
     keep(names(.) %in% c("adf_cv", "sadf_cv", "gsadf_cv")) %>%
-    map(~ .x %>%
-      as.data.frame() %>%
-      tibble::rownames_to_column() %>%
-      as_tibble() %>%
-      gather(stat, value, -rowname)) %>%
+    map(
+      ~ .x %>%
+        as.data.frame() %>%
+        tibble::rownames_to_column() %>%
+        as_tibble() %>%
+        gather(stat, value, -rowname)
+    ) %>%
     reduce(full_join, by = c("rowname", "stat")) %>%
     set_names(c("id", "sig", "adf", "sadf", "gsadf")) %>%
     mutate(sig = gsub("%", "", sig) %>% as.factor()) %>%
@@ -172,7 +173,6 @@ tidy_radf_cv.sb_cv <- function(x, format = c("wide", "long"), ...) {
 }
 
 # tidy-distr --------------------------------------------------------------
-
 
 #' Tidy a `radf_distr` object
 #'
@@ -286,7 +286,8 @@ autoplot_radf_distr.mc_distr <- function(object, ...) {
     geom_density(alpha = 0.2) +
     theme_bw() +
     labs(
-      x = "", y = "",
+      x = "",
+      y = "",
       title = "Distributions of unit root test statistics"
     )
 }
@@ -315,8 +316,6 @@ autoplot_radf_distr.sb_distr <- function(object, ...) {
     theme_bw() +
     labs(x = "", y = "", title = "Distribution of the panel GSADF statistic")
 }
-
-
 
 
 # tidy-join ---------------------------------------------------------------
@@ -558,7 +557,6 @@ extract_cv_stat <- function(x, stat = "bsadf_cv") {
 }
 
 
-
 #' @export
 augment_radf_cv.wb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
   tbl_cv <- full_join(
@@ -598,7 +596,6 @@ extract_wb_stat <- function(x, stat = "badf_cv") {
 }
 
 
-
 #' @export
 augment_radf_cv.sb_cv <- function(x, format = c("wide", "long"), trunc = TRUE, ...) {
   tbl_cv <- extract_sb_stat(x)
@@ -630,8 +627,6 @@ extract_sb_stat <- function(x, stat = "bsadf_panel_cv") {
 
 
 # tidiers-join-radf -------------------------------------------------------
-
-
 
 #' Augment into a joint model
 #'
@@ -684,7 +679,9 @@ augment_join.radf_obj <- function(x, y = NULL, trunc = TRUE, ...) {
   is_panel <- is_sb(y)
   join_by <- if (!is_mc(y)) c("id") else NULL
   is_idx_date <- is.Date(index(x))
-  if (!is_idx_date && !is_mc(y)) join_by <- c("index", join_by)
+  if (!is_idx_date && !is_mc(y)) {
+    join_by <- c("index", join_by)
+  }
   idx_if_date <- if (is_idx_date && !is_mc(y)) "index" else NULL
   # key_if_date <- if (is_idx_date) "key"  else NULL
   id_lvls <- if (is_panel) "panel" else series_names(x)

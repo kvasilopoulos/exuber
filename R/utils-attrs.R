@@ -5,14 +5,13 @@ set_attrs <- function(x, ...) {
 }
 
 #'@importFrom rlang dots_list
-add_attr <- function(x,  ...) {
+add_attr <- function(x, ...) {
   attrs <- dots_list(...)
   attributes(x) <- c(attributes(x), attrs)
   x
 }
 
 inherit_attrs <- function(x, y) {
-
   attr_x <- attributes(x) %>% names() %||% NA_character_
   attr_y <- attributes(y) %>% names() %||% NA_character_
 
@@ -34,7 +33,6 @@ add_class <- function(x, ...) {
 }
 
 # Access attributes easily ------------------------------------------------
-
 
 get_trunc <- function(x) {
   get_minw(x) + (get_lag(x) %||% 0)
@@ -91,6 +89,3 @@ cat_caveat <- function(x) {
   cli::cat_line(cli::col_yellow(cli::symbol$info), " ", caveat)
   cli::cat_line()
 }
-
-
-

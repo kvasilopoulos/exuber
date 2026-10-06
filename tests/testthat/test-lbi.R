@@ -115,11 +115,15 @@ test_that("monitor_lbi's mCUSUM/wCUSUM false-alarm rate under H0 is
   n <- 200
   T_star <- 100
   fires <- function(c_bar) {
-    mean(vapply(seq_len(nrep), function(i) {
-      set.seed(1000 + i)
-      y <- cumsum(rnorm(n))
-      !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, sig_lvl = 95)$alarm[["series1"]])
-    }, logical(1)))
+    mean(vapply(
+      seq_len(nrep),
+      function(i) {
+        set.seed(1000 + i)
+        y <- cumsum(rnorm(n))
+        !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, sig_lvl = 95)$alarm[["series1"]])
+      },
+      logical(1)
+    ))
   }
   expect_lt(fires(0), 0.10)
   expect_lt(fires(2), 0.10)

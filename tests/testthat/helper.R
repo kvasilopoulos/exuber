@@ -9,7 +9,6 @@ options(exuber.parallel = FALSE)
 # getOption("exuber.parallel")
 # getOption("exuber.show_progress")
 
-
 sim_data_mat <- as.matrix(sim_data)
 
 # not have helpers in interactive mode (take too much to load)
@@ -51,22 +50,10 @@ suppressMessages({
 set.seed(123)
 sim_ds <- tibble::tibble(
   ongoing = sim_psy1(100, te = 80, tf = 100, seed = 123),
-  negative = -1*sim_ps1(100, te = 30, tf = 60, tr =  80, beta = 0.5),
+  negative = -1 * sim_ps1(100, te = 30, tf = 60, tr = 80, beta = 0.5),
   div = sim_div(100),
   positive = sim_psy1(100)
 )
 suppressMessages({
   radf_ds <- radf(sim_ds)
 })
-
-
-
-
-
-
-
-
-
-
-
-

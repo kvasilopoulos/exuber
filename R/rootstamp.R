@@ -153,7 +153,10 @@ rootstamp.default <- function(object, sig_lvl = 95, type = c("normal", "cauchy")
   dt <- function(rho) log(2) / log(rho)
 
   list(
-    rho = rho, se = se, t_stat = t_stat, n = n,
+    rho = rho,
+    se = se,
+    t_stat = t_stat,
+    n = n,
     rho_ci = rho_ci,
     doubling_time = dt(rho),
     doubling_time_ci = c(dt(rho_ci[2]), dt(rho_ci[1]))
@@ -180,7 +183,9 @@ rootstamp.radf_obj <- function(object, ds, sig_lvl = 95, type = c("normal", "cau
   idx <- index(object)
 
   if ("panel" %in% names(ds) && !("panel" %in% colnames(x))) {
-    warning_glue("Dropping 'panel' entry of `ds` -- root inference needs a single series, not a sieve-bootstrap panel result.")
+    warning_glue(
+      "Dropping 'panel' entry of `ds` -- root inference needs a single series, not a sieve-bootstrap panel result."
+    )
     ds <- ds[names(ds) != "panel"]
   }
 
@@ -191,7 +196,9 @@ rootstamp.radf_obj <- function(object, ds, sig_lvl = 95, type = c("normal", "cau
       to <- match(e, idx)
       ci <- rootstamp.default(y[from:to], sig_lvl = sig_lvl, type = type)
       data.frame(
-        rho = ci$rho, rho_lower = ci$rho_ci[1], rho_upper = ci$rho_ci[2],
+        rho = ci$rho,
+        rho_lower = ci$rho_ci[1],
+        rho_upper = ci$rho_ci[2],
         doubling_time = ci$doubling_time,
         doubling_time_lower = ci$doubling_time_ci[1],
         doubling_time_upper = ci$doubling_time_ci[2]
@@ -211,19 +218,27 @@ rootstamp.radf_obj <- function(object, ds, sig_lvl = 95, type = c("normal", "cau
 #' @export
 print.rootstamp_est <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cli::cat_line()
-  cli::cat_rule(left = glue(
-    "rootstamp (n = {x$n}, sig_lvl = {attr(x, 'sig_lvl')}%, type = {attr(x, 'type')})"
-  ))
+  cli::cat_rule(
+    left = glue(
+      "rootstamp (n = {x$n}, sig_lvl = {attr(x, 'sig_lvl')}%, type = {attr(x, 'type')})"
+    )
+  )
   cli::cat_line()
   print(
     data.frame(
-      rho = x$rho, se = x$se, t_stat = x$t_stat,
-      rho_lower = x$rho_ci[1], rho_upper = x$rho_ci[2],
+      rho = x$rho,
+      se = x$se,
+      t_stat = x$t_stat,
+      rho_lower = x$rho_ci[1],
+      rho_upper = x$rho_ci[2],
       doubling_time = x$doubling_time,
-      dt_lower = x$doubling_time_ci[1], dt_upper = x$doubling_time_ci[2],
+      dt_lower = x$doubling_time_ci[1],
+      dt_upper = x$doubling_time_ci[2],
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cli::cat_line()
   invisible(x)
@@ -251,10 +266,14 @@ autoplot.rootstamp_est <- function(object, ...) {
     geom_line() +
     scale_color_manual(values = c(y = "black", fitted = "red")) +
     scale_linetype_manual(values = c(y = 1, fitted = 2)) +
-    labs(title = paste0(
-      "rootstamp: rho = ", round(object$rho, 3),
-      ", doubling time = ", round(object$doubling_time, 1)
-    )) +
+    labs(
+      title = paste0(
+        "rootstamp: rho = ",
+        round(object$rho, 3),
+        ", doubling time = ",
+        round(object$doubling_time, 1)
+      )
+    ) +
     theme_exuber() +
     theme(legend.position = "bottom", legend.title = element_blank())
 }
@@ -265,9 +284,11 @@ print.rootstamp_episodes <- function(x, digits = max(3L, getOption("digits") - 3
     return(invisible(NULL))
   }
   cli::cat_line()
-  cli::cat_rule(left = glue(
-    "rootstamp (sig_lvl = {attr(x, 'sig_lvl')}%, type = {attr(x, 'type')})"
-  ))
+  cli::cat_rule(
+    left = glue(
+      "rootstamp (sig_lvl = {attr(x, 'sig_lvl')}%, type = {attr(x, 'type')})"
+    )
+  )
   cli::cat_line()
   print.listof(x, digits = digits)
   cli::cat_line()

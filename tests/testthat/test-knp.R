@@ -7,7 +7,8 @@ test_that("knp_find_break(omit = FALSE) matches a brute-force nested lm() search
   fit <- exuber:::knp_find_break(y, trim = 0.1, omit = FALSE)
 
   n1 <- n - 1L
-  x <- y[1:n1]; z <- y[2:(n1 + 1)] - y[1:n1]
+  x <- y[1:n1]
+  z <- y[2:(n1 + 1)] - y[1:n1]
   k_min <- max(2L, ceiling(0.1 * n1))
   best <- list(ssr = Inf)
   for (tau1 in k_min:(n1 - 2 * k_min)) {
@@ -32,7 +33,8 @@ test_that("knp_find_break(omit = TRUE) matches a brute-force search with
   fit <- exuber:::knp_find_break(y, trim = 0.1, omit = TRUE)
 
   n1 <- n - 1L
-  x <- y[1:n1]; z <- y[2:(n1 + 1)] - y[1:n1]
+  x <- y[1:n1]
+  z <- y[2:(n1 + 1)] - y[1:n1]
   k_min <- max(2L, ceiling(0.1 * n1))
   best <- list(ssr = Inf)
   for (tau1 in k_min:(n1 - 2 * k_min)) {
@@ -40,7 +42,8 @@ test_that("knp_find_break(omit = TRUE) matches a brute-force search with
       idx_mid <- (tau1 + 1):tau2
       ssr <- sum(z[1:tau1]^2) +
         sum(resid(lm(z[idx_mid] ~ x[idx_mid]))^2) +
-        sum(z[(tau2 + 1):n1]^2) - z[tau2 + 1]^2
+        sum(z[(tau2 + 1):n1]^2) -
+        z[tau2 + 1]^2
       if (ssr < best$ssr) best <- list(tau1 = tau1, tau2 = tau2, ssr = ssr)
     }
   }
@@ -71,10 +74,18 @@ test_that("dating_knp's omission correction reproduces Kejriwal, Nguyen &
     set.seed(seed)
     y <- numeric(T)
     y[1] <- 0
-    for (t in 2:T1) y[t] <- y[t - 1] + rnorm(1)
-    for (t in (T1 + 1):T2) y[t] <- delta * y[t - 1] + rnorm(1)
+    for (t in 2:T1) {
+      y[t] <- y[t - 1] + rnorm(1)
+    }
+    for (t in (T1 + 1):T2) {
+      y[t] <- delta * y[t - 1] + rnorm(1)
+    }
     y[T2 + 1] <- y[T1] + rnorm(1)
-    if (T2 + 2 <= T) for (t in (T2 + 2):T) y[t] <- y[t - 1] + rnorm(1)
+    if (T2 + 2 <= T) {
+      for (t in (T2 + 2):T) {
+        y[t] <- y[t - 1] + rnorm(1)
+      }
+    }
     list(y = y, T1 = T1, T2 = T2)
   }
   run <- function(seed, omit) {
@@ -107,7 +118,9 @@ knp_brute <- function(y, breaks, trim, omit) {
   k_min <- max(2L, ceiling(trim * n1))
   seg <- function(j, lo, hi) {
     k <- (lo + 1):hi
-    if (j %% 2 == 0) return(sum(resid(lm(z[k] ~ x[k]))^2))
+    if (j %% 2 == 0) {
+      return(sum(resid(lm(z[k] ~ x[k]))^2))
+    }
     sum(z[k]^2) - if (omit && j > 1) z[lo + 1]^2 else 0
   }
   best <- list(ssr = Inf)
@@ -116,12 +129,18 @@ knp_brute <- function(y, breaks, trim, omit) {
     if (j == breaks) {
       ends <- c(0, taus, n1)
       ssr <- sum(vapply(seq_len(breaks + 1), function(r) seg(r, ends[r], ends[r + 1]), 0))
-      if (ssr < best$ssr) best <<- list(tau = taus, ssr = ssr)
+      if (ssr < best$ssr) {
+        best <<- list(tau = taus, ssr = ssr)
+      }
       return(invisible())
     }
     from <- (if (j == 0) 0 else taus[j]) + k_min
     to <- n1 - (breaks - j) * k_min
-    if (from <= to) for (t in from:to) rec(c(taus, t))
+    if (from <= to) {
+      for (t in from:to) {
+        rec(c(taus, t))
+      }
+    }
   }
   rec(integer(0))
   best
