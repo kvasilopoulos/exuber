@@ -26,15 +26,17 @@ anything ggplot2 offers, such as themes, scales, extra layers and
 | [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md) | Estimated root and its confidence interval per episode |
 | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md) | Statistic against critical value for each series |
 
-The rest of this vignette covers the first three rows, which belong to
-the [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
+The rest of this page covers the first three rows, which belong to the
+[`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
 workflow, and shows how to build your own plot from the tidied tables
 when the defaults do not fit. The other methods take no options beyond
-the object. They appear in their own vignettes
-([`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md),
+the object. They are described with their own methods:
+[`vignette("monitoring")`](https://kvasilopoulos.github.io/exuber/articles/monitoring.md)
+for the monitors and
 [`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md)
 and
-[`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md)).
+[`vignette("root-inference")`](https://kvasilopoulos.github.io/exuber/articles/root-inference.md)
+for dating and root inference.
 
 ## The `radf()` plot
 
@@ -202,9 +204,8 @@ is the table that [`summary()`](https://rdrr.io/r/base/summary.html)
 prints. Calling
 [`tidy()`](https://generics.r-lib.org/reference/tidy.html) or
 [`augment()`](https://generics.r-lib.org/reference/augment.html) on
-either object alone returns the two halves before they are joined.
-[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-describes the full pipeline.
+either object alone returns the two halves before they are joined. The
+first part of this page describes the full pipeline.
 
 ## Distributions
 

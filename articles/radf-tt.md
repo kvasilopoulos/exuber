@@ -92,20 +92,7 @@ works in three steps.
 
 You can adjust `kernel` (`"uniform"`, the choice of the paper, or
 `"gaussian"`) and `h`, the bandwidth. The default for `h` is a fixed
-plug-in value and not the full cross-validation search of the paper. The
-package’s enhancement notes explain why we weighed cost against benefit
-this way.
-
-## Verifying against the paper
-
-Footnote 4 of Kurozumi, Skrobotov & Tsarev gives published asymptotic
-critical values for `minw/n = 0.1`: `(2.319, 2.626, 3.223)` at the 10%,
-5% and 1% levels. They apply to the STADF statistic, the single-sup case
-with `r1 = 0`. The test suite of exuber (`tests/testthat/test-tt.R`)
-reproduces them with the Monte Carlo in
-[`radf_tt_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt_cv.md)
-and checks that they fall within the Monte Carlo and finite-sample
-tolerance of the published numbers.
+plug-in value and not the full cross-validation search of the paper.
 
 ## Dating and plotting a detected bubble
 

@@ -157,13 +157,14 @@ of training and for the alarm</td>
 </tr>
 </tbody>
 </table>
-<p>The rest of this vignette covers the first three rows, which belong
-to the <code><a href="../reference/radf.html">radf()</a></code> workflow, and shows how to build your own
-plot from the tidied tables when the defaults do not fit. The other
-methods take no options beyond the object. They appear in their own
-vignettes (<code><a href="../articles/monitoring.html">vignette("monitoring")</a></code>,
+<p>The rest of this page covers the first three rows, which belong to
+the <code><a href="../reference/radf.html">radf()</a></code> workflow, and shows how to build your own plot
+from the tidied tables when the defaults do not fit. The other methods
+take no options beyond the object. They are described with their own
+methods: <code><a href="../articles/monitoring.html">vignette("monitoring")</a></code> for the monitors and
 <code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code> and
-<code><a href="../articles/root-inference.html">vignette("root-inference")</a></code>).</p>
+<code><a href="../articles/root-inference.html">vignette("root-inference")</a></code> for dating and root
+inference.</p>
 </div>
 <div class="section level2">
 <h2 id="the-radf-plot">The <code>radf()</code> plot<a class="anchor" aria-label="anchor" href="#the-radf-plot"></a>
@@ -275,9 +276,8 @@ statistic and significance level, which ggplot2 can use as it is:</p>
 <p><code><a href="../reference/tidy_join.html">tidy_join()</a></code> is the scalar counterpart, with one row per
 series and statistic, which is the table that <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>
 prints. Calling <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> or <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> on either
-object alone returns the two halves before they are joined.
-<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> describes the full
-pipeline.</p>
+object alone returns the two halves before they are joined. The first
+part of this page describes the full pipeline.</p>
 </div>
 <div class="section level2">
 <h2 id="distributions">Distributions<a class="anchor" aria-label="anchor" href="#distributions"></a>

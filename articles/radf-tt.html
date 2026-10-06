@@ -162,21 +162,7 @@ which matches the derivation in the paper.</li>
 <p>You can adjust <code>kernel</code> (<code>"uniform"</code>, the
 choice of the paper, or <code>"gaussian"</code>) and <code>h</code>, the
 bandwidth. The default for <code>h</code> is a fixed plug-in value and
-not the full cross-validation search of the paper. The package’s
-enhancement notes explain why we weighed cost against benefit this
-way.</p>
-</div>
-<div class="section level2">
-<h2 id="verifying-against-the-paper">Verifying against the paper<a class="anchor" aria-label="anchor" href="#verifying-against-the-paper"></a>
-</h2>
-<p>Footnote 4 of Kurozumi, Skrobotov &amp; Tsarev gives published
-asymptotic critical values for <code>minw/n = 0.1</code>:
-<code>(2.319, 2.626, 3.223)</code> at the 10%, 5% and 1% levels. They
-apply to the STADF statistic, the single-sup case with
-<code>r1 = 0</code>. The test suite of exuber
-(<code>tests/testthat/test-tt.R</code>) reproduces them with the Monte
-Carlo in <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and checks that they fall within the
-Monte Carlo and finite-sample tolerance of the published numbers.</p>
+not the full cross-validation search of the paper.</p>
 </div>
 <div class="section level2">
 <h2 id="dating-and-plotting-a-detected-bubble">Dating and plotting a detected bubble<a class="anchor" aria-label="anchor" href="#dating-and-plotting-a-detected-bubble"></a>

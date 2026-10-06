@@ -102,14 +102,13 @@ Four of the five covered below (<code><a href="../reference/radf_sign.html">radf
 support <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="../reference/datestamp.html">datestamp()</a></code>,
 <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> in the same way as plain
 <code><a href="../reference/radf.html">radf()</a></code>. <code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> shows
-how each plugs into the pipeline and how we validated it.
-<code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> is the exception. It bundles the statistic
-of <code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> and the classic <code>supDF</code> into one
-union-of-rejections call and has its own class, not
-<code>radf_obj</code>, so only its own <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and
-<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> apply. The time-deformation approach of
-<code><a href="../reference/radf_tt.html">radf_tt()</a></code> has its own vignette,
-<code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>, and this one covers the rest.</p>
+how each plugs into the pipeline. <code><a href="../reference/radf_sbz_union.html">radf_sbz_union()</a></code> is the
+exception. It bundles the statistic of <code><a href="../reference/radf_sbz.html">radf_sbz()</a></code> and the
+classic <code>supDF</code> into one union-of-rejections call and has its
+own class, not <code>radf_obj</code>, so only its own
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> apply. The
+time-deformation approach of <code><a href="../reference/radf_tt.html">radf_tt()</a></code> is described in the
+second part of this page, and the first part covers the rest.</p>
 <p>All of these functions target non-stationary volatility, meaning a
 permanent shift or trend in the unconditional innovation variance. They
 do not target stationary GARCH-type conditional heteroskedasticity,
@@ -180,7 +179,7 @@ whichever of the two has power on a given series.</td>
 <code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> computes the time-varying
 <code>badf_cv</code> and <code>bsadf_cv</code> boundary and not only the
 scalar critical values that <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> needs (see
-<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the validation):</p>
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code>):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign.html">radf_sign</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sign_cv.html">radf_sign_cv</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">200</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
@@ -235,8 +234,8 @@ from the union test. <code><a href="../reference/radf_sbz_cv.html">radf_sbz_cv()
 time-varying <code>badf_cv</code> and <code>bsadf_cv</code> boundary in
 the same way as <code><a href="../reference/radf_tt_cv.html">radf_tt_cv()</a></code> and
 <code><a href="../reference/radf_sign_cv.html">radf_sign_cv()</a></code> (see
-<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code> for the validation), so it
-has full pipeline support:</p>
+<code><a href="../articles/naming-and-analysis.html">vignette("naming-and-analysis")</a></code>), so it has full pipeline
+support:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res_sbz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz.html">radf_sbz</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="va">cv_sbz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf_sbz_cv.html">radf_sbz_cv</a></span><span class="op">(</span><span class="va">y</span>, minw <span class="op">=</span> <span class="fl">20</span>, nboot <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -335,8 +334,8 @@ only function in this group without pipeline support, because
 <code>U</code> bundles both statistics and their scalar joint critical
 value in one call and does not return a <code>radf_obj</code>.</li>
 <li>If volatility is the main concern and you prefer a time-deformation
-approach without a bootstrap, use <code><a href="../reference/radf_tt.html">radf_tt()</a></code> (see
-<code><a href="../articles/radf-tt.html">vignette("radf-tt")</a></code>).</li>
+approach without a bootstrap, use <code><a href="../reference/radf_tt.html">radf_tt()</a></code> (see the
+time-transformed test section below).</li>
 <li>If the volatility is unknown or complex and a bootstrap is
 acceptable, <code><a href="../reference/radf_wb_cv.html">radf_wb_cv()</a></code> remains the general-purpose
 choice.</li>

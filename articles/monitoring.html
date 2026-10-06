@@ -232,12 +232,10 @@ wait for a first crossing:</p>
 <span><span class="co">#&gt;    series  tau  tstat    crit  delta  detected</span></span>
 <span><span class="co">#&gt;   series1  0.5  20.25  0.5041   0.64      TRUE</span></span></code></pre></div>
 <p>Every monitor alarms within about 15 observations of the true bubble
-start (150), and none alarms before it. Each function’s own test suite
-checks the absence of alarms before <code>T*</code> (or the true start)
-under the null. The timing of the alarm differs by design. The
-ADF-family statistics in <code><a href="../reference/monitor.html">monitor()</a></code> tend to detect bubbles
-in the middle of the sample fastest, as the literature finds (for
-example Kurozumi 2020, 2021). The CUSUM-type detectors
+start (150), and none alarms before it. The timing of the alarm differs
+by design. The ADF-family statistics in <code><a href="../reference/monitor.html">monitor()</a></code> tend to
+detect bubbles in the middle of the sample fastest, as the literature
+finds (for example Kurozumi 2020, 2021). The CUSUM-type detectors
 (<code><a href="../reference/monitor_cusum.html">monitor_cusum()</a></code> and <code><a href="../reference/monitor_lbi.html">monitor_lbi()</a></code>) are
 typically slower, but they are computationally simpler and need no
 bootstrap.</p>

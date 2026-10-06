@@ -116,10 +116,8 @@ quantile_test(y, tau = 0.5)
 ```
 
 Every monitor alarms within about 15 observations of the true bubble
-start (150), and none alarms before it. Each function’s own test suite
-checks the absence of alarms before `T*` (or the true start) under the
-null. The timing of the alarm differs by design. The ADF-family
-statistics in
+start (150), and none alarms before it. The timing of the alarm differs
+by design. The ADF-family statistics in
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 tend to detect bubbles in the middle of the sample fastest, as the
 literature finds (for example Kurozumi 2020, 2021). The CUSUM-type

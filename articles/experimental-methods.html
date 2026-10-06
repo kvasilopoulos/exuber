@@ -100,10 +100,10 @@ of size, and a check of power against a true alternative.
 <code><a href="../reference/radf_recovery.html">radf_recovery()</a></code> and
 <code>datestamp(option = "svadf")</code> went through the same
 validation and both give useful results, but each has one disclosed gap
-that keeps it below the standard. For that reason they print and emit a
-caveat message when called. Treat their output as a guide to where
-episodes lie, and do not assume it is as well calibrated as the rest of
-the package.</p>
+that keeps it below the standard. For that reason they print an
+“Experimental” badge and emit a caveat message when called. Treat their
+output as a guide to where episodes lie, and do not assume it is as well
+calibrated as the rest of the package.</p>
 </div>
 <div class="section level2">
 <h2 id="radf_recovery-dating-a-collapse-and-a-recovery">
@@ -149,9 +149,8 @@ package has been, so the evidence behind this method is weaker. Its
 statistic is the <code>badf</code> sequence that <code><a href="../reference/radf.html">radf()</a></code>
 already computes, compared against two closed-form thresholds that
 depend only on the sample size and come from the applied methodology of
-the paper. No new estimation code was needed, so we added it as an
-option of <code><a href="../reference/datestamp.html">datestamp()</a></code> and not as a separate function, even
-though it is a preprint.</p>
+the paper. It is an option of <code><a href="../reference/datestamp.html">datestamp()</a></code> and not a
+separate function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/radf.html">radf</a></span><span class="op">(</span><span class="va">sim_data</span>, lag <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">res</span>, option <span class="op">=</span> <span class="st">"svadf"</span>, min_duration <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -169,8 +168,7 @@ though it is a preprint.</p>
 <span><span class="co">#&gt; 1    23   23  24        1 positive   FALSE</span></span></code></pre></div>
 <p><code>psy1</code> and <code>psy2</code> receive clear origination and
 collapse dates, while <code>evans</code>, <code>div</code> and
-<code>blan</code> never cross the threshold in this panel. We report
-this mixed result as it came out.</p>
+<code>blan</code> never cross the threshold in this panel.</p>
 </div>
 <div class="section level2">
 <h2 id="using-them-responsibly">Using them responsibly<a class="anchor" aria-label="anchor" href="#using-them-responsibly"></a>
@@ -183,9 +181,8 @@ though. When that matters, prefer <code><a href="../reference/radf.html">radf()<
 <code><a href="../reference/datestamp.html">datestamp()</a></code>, or one of the peer-reviewed alternatives in
 <code><a href="../articles/alternative-tests.html">vignette("alternative-tests")</a></code> and
 <code><a href="../articles/dating-methods.html">vignette("dating-methods")</a></code>. Treat these two methods as a
-second opinion until their caveats are resolved. The caveats are tracked
-in <code>docs/dating-and-root-inference.md</code> and
-<code>volatility-robustness.md</code>.</p>
+second opinion until their caveats are resolved. The caveats are listed
+in the replication notes for dating and volatility-robustness.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

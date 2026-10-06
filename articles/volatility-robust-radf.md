@@ -26,7 +26,7 @@ keep the `radf_obj` class and support
 the same way as plain
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md).
 [`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-shows how each plugs into the pipeline and how we validated it.
+shows how each plugs into the pipeline.
 [`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
 is the exception. It bundles the statistic of
 [`radf_sbz()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz.md)
@@ -36,9 +36,8 @@ own class, not `radf_obj`, so only its own
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
 apply. The time-deformation approach of
 [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
-has its own vignette,
-[`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md),
-and this one covers the rest.
+is described in the second part of this page, and the first part covers
+the rest.
 
 All of these functions target non-stationary volatility, meaning a
 permanent shift or trend in the unconditional innovation variance. They
@@ -74,8 +73,7 @@ has full pipeline support.
 computes the time-varying `badf_cv` and `bsadf_cv` boundary and not only
 the scalar critical values that
 [`summary()`](https://rdrr.io/r/base/summary.html) needs (see
-[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the validation):
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)):
 
 ``` r
 
@@ -141,8 +139,8 @@ way as
 and
 [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
 (see
-[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)
-for the validation), so it has full pipeline support:
+[`vignette("naming-and-analysis")`](https://kvasilopoulos.github.io/exuber/articles/naming-and-analysis.md)),
+so it has full pipeline support:
 
 ``` r
 
@@ -268,8 +266,7 @@ a `radf_obj`.
 - If volatility is the main concern and you prefer a time-deformation
   approach without a bootstrap, use
   [`radf_tt()`](https://kvasilopoulos.github.io/exuber/reference/radf_tt.md)
-  (see
-  [`vignette("radf-tt")`](https://kvasilopoulos.github.io/exuber/articles/radf-tt.md)).
+  (see the time-transformed test section below).
 - If the volatility is unknown or complex and a bootstrap is acceptable,
   [`radf_wb_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_wb_cv.md)
   remains the general-purpose choice.

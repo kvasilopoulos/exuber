@@ -15,9 +15,10 @@ power against a true alternative.
 [`radf_recovery()`](https://kvasilopoulos.github.io/exuber/reference/radf_recovery.md)
 and `datestamp(option = "svadf")` went through the same validation and
 both give useful results, but each has one disclosed gap that keeps it
-below the standard. For that reason they print and emit a caveat message
-when called. Treat their output as a guide to where episodes lie, and do
-not assume it is as well calibrated as the rest of the package.
+below the standard. For that reason they print an “Experimental” badge
+and emit a caveat message when called. Treat their output as a guide to
+where episodes lie, and do not assume it is as well calibrated as the
+rest of the package.
 
 ## `radf_recovery()`: dating a collapse and a recovery
 
@@ -64,10 +65,9 @@ been, so the evidence behind this method is weaker. Its statistic is the
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
 already computes, compared against two closed-form thresholds that
 depend only on the sample size and come from the applied methodology of
-the paper. No new estimation code was needed, so we added it as an
-option of
+the paper. It is an option of
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md)
-and not as a separate function, even though it is a preprint.
+and not a separate function.
 
 ``` r
 
@@ -88,8 +88,7 @@ datestamp(res, option = "svadf", min_duration = psy_ds(nrow(sim_data)))
 ```
 
 `psy1` and `psy2` receive clear origination and collapse dates, while
-`evans`, `div` and `blan` never cross the threshold in this panel. We
-report this mixed result as it came out.
+`evans`, `div` and `blan` never cross the threshold in this panel.
 
 ## Using them responsibly
 
@@ -105,5 +104,5 @@ or one of the peer-reviewed alternatives in
 and
 [`vignette("dating-methods")`](https://kvasilopoulos.github.io/exuber/articles/dating-methods.md).
 Treat these two methods as a second opinion until their caveats are
-resolved. The caveats are tracked in `docs/dating-and-root-inference.md`
-and `volatility-robustness.md`.
+resolved. The caveats are listed in the replication notes for dating and
+volatility-robustness.

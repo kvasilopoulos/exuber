@@ -5,20 +5,15 @@
 library(exuber)
 ```
 
-## Why this exists
+## What this page covers
 
-`exuber` started as a single test,
+The package covers more than the original test. Alongside
 [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md),
 the recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi & Yu
-(2015). Through a long research programme it grew to roughly 25
-functions that cover a dozen papers: alternative tests, dating
-procedures, monitoring schemes and root inference. Every one of them
-used to be named `radf_<something>()`. That was accurate for some and
-misleading for others, because a `radf_` prefix suggests a recursive ADF
-statistic and several of these functions are not one. This vignette
-documents the naming scheme that replaced the old one. It also explains
-which functions plug into the
-[`summary()`](https://rdrr.io/r/base/summary.html),
+(2015), it has alternative tests, dating procedures, monitoring schemes
+and root inference, about 25 functions in all. This page explains how
+the function names group them. It also says which functions plug into
+the [`summary()`](https://rdrr.io/r/base/summary.html),
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
 [`tidy()`](https://generics.r-lib.org/reference/tidy.html) and
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
@@ -83,7 +78,7 @@ and `bsadf_cv`, one critical value per recursion point) as well as the
 three scalar sup-statistic critical values (`adf_cv`, `sadf_cv` and
 `gsadf_cv`). Only functions whose result has the `radf_obj` class, and
 whose paired `_cv()` function computes that time-varying boundary, get
-the full pipeline. In practice there are three tiers.
+the full pipeline. In practice there are two tiers.
 
 ### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`, `radf_sbz()`
 
@@ -171,24 +166,6 @@ construction
 [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
 uses for its own `bsadf_cv`.
 
-Each function is checked in three ways.
-
-- The last row of `badf_cv` is bit-identical to `adf_cv`, because `adf`
-  is the last point of `badf` in every replicate. This is an exact
-  identity, and it holds whichever series feeds `gls_dfstat_grid()`.
-- The empirical false-alarm rate under `H0` is at or below the nominal
-  5% (`radf_tt` 3.3%, `radf_sign` 5.5%, `radf_sign_dm` 3.5%, with n =
-  100 and minw = 20).
-- The detection power on an identical synthetic bubble is in the same
-  range as the 16% of the established
-  [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)
-  and
-  [`radf_mc_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md)
-  baseline, and it is neither suspiciously higher nor lower (`radf_tt`
-  18%, `radf_sign` 20%, `radf_sign_dm` 8%). The sign-based tests give up
-  power in exchange for invariance to heteroskedasticity, which is a
-  documented finding of the source paper.
-
 ``` r
 
 res <- radf_tt(y, minw = 20)
@@ -271,19 +248,16 @@ is therefore built as the Monte Carlo simulation in
 and
 [`radf_sign_cv()`](https://kvasilopoulos.github.io/exuber/reference/radf_sign_cv.md)
 is, with a per-time-point quantile across replicates and no
-[`cummax()`](https://rdrr.io/r/base/cumsum.html) shortcut. We validated
-it in the same way. The last row of `badf_cv` is bit-identical to
-`adf_cv`, and the empirical false-alarm rate under `H0` is 5.0% at a
-nominal 5% (n = 100, minw = 20, 200 replications). The test also rejects
-on a sufficiently strong deterministic explosive path. Its
+[`cummax()`](https://rdrr.io/r/base/cumsum.html) shortcut. The test
+rejects on a sufficiently strong deterministic explosive path. Its
 kernel-volatility weighting costs enough power, however, that it does
 not reject the series above at nboot = 100 to 200, where the bubble is
 the milder default of
 [`sim_psy1()`](https://kvasilopoulos.github.io/exuber/reference/sim_psy1.md).
-The same trade between power and robustness is documented for the
-`supBZ` leg of
-[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md)
-below, so it is not new to this split.
+The same trade between power and robustness applies to the `supBZ` leg
+of
+[`radf_sbz_union()`](https://kvasilopoulos.github.io/exuber/reference/radf_sbz_union.md),
+described on the volatility-robustness page.
 
 ``` r
 
@@ -368,9 +342,8 @@ close a documentation gap, so each is presented by its own methods,
 shown below.
 
 [`rootstamp()`](https://kvasilopoulos.github.io/exuber/reference/rootstamp.md)
-needs one remark. The [reference
-index](https://kvasilopoulos.github.io/exuber/reference/index.md) and
-the workflow list in the README place it under Analysis, right after
+needs one remark. The function reference lists it under Analysis, right
+after
 [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md),
 because that is its position in the sequence of steps (detect, date,
 measure the growth rate). That is a position in the workflow and not an
