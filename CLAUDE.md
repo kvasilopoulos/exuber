@@ -86,7 +86,7 @@ rig default 4.6                            # the R version in rproject.toml; CI 
 rv sync                                    # install the locked packages into rv/library
 rv add <pkg>                               # add a development tool to rproject.toml and sync
 rv plan                                    # dry run of what sync would change
-pre-commit install                         # once per clone: enable the commit and push hooks
+pre-commit install                         # once per clone: enable the commit hook
 pre-commit run --all-files                 # run every hook by hand
 air format .                               # format R, tests and vignette code (air.toml)
 air format --check .                       # formatting check, as in CI
@@ -98,8 +98,8 @@ Rscript -e "devtools::check()"             # R CMD check
 ```
 
 The hooks (`.pre-commit-config.yaml`) run `air format` and `jarl check .` on
-each commit, and `devtools::test()` on each push. The suite takes several
-minutes, so it does not run on every commit. The jarl hook runs the released
+each commit. They do not run the tests, which take several minutes: run
+`devtools::test()` yourself before pushing. The jarl hook runs the released
 binary through `uvx` because the `jarl-pre-commit` package does not build on
 Windows.
 

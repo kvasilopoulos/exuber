@@ -1,4 +1,4 @@
-default_install_hook_types: [pre-commit, pre-push]
+default_install_hook_types: [pre-commit]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -22,13 +22,4 @@ repos:
         entry: uvx --from jarl-linter==0.6.0 jarl check .
         language: system
         files: \.(R|r|Rmd|rmd)$
-        pass_filenames: false
-      # The full suite takes several minutes, so it runs before a push and not
-      # on every commit.
-      - id: testthat
-        name: devtools::test()
-        stages: [pre-push]
-        # bash -c so that Windows resolves the Rscript wrapper script.
-        entry: bash -c 'Rscript -e "devtools::test(stop_on_failure = TRUE)"'
-        language: system
         pass_filenames: false
