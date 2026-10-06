@@ -115,7 +115,7 @@
 <ul><li>
 <code><a href="../reference/quantile_test.html">quantile_test()</a></code> implements the quantile-based global test of Wu, Shi &amp; Wu (2025).</li>
 <li>
-<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> implements the recursive quantile monitoring of Wu, Shi &amp; Wu (2025): QPWY (expanding window) and QPSY (<code>type = "qpsy"</code>, supremum over window starts). The asymptotic boundary is well sized near the median. Away from the median it is oversized in small samples, and QPSY is badly oversized. A caveat message at call time says so.</li>
+<code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code> implements the recursive quantile monitoring of Wu, Shi &amp; Wu (2025): QPWY (expanding window) and QPSY (<code>type = "qpsy"</code>, supremum over window starts). The default boundary is the asymptotic one. It is well sized near the median, but away from the median it is oversized in small samples, and QPSY is badly oversized, with a false-alarm rate of 20% to 47% at a nominal 5% in our checks. A caveat message at call time says so. <code>boundary = "bootstrap"</code> applies Algorithm 1 of the paper to the whole path: it resamples the centred first differences, cumulates them and recomputes the QPWY or QPSY path, and it takes the quantile of the path maxima. It follows the finite-sample distribution of the statistic and brings the false-alarm rate back to about 5% in most of our checks, at the cost of one full statistic path for each replicate.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="naming-2-0-0">Naming<a class="anchor" aria-label="anchor" href="#naming-2-0-0"></a></h4>

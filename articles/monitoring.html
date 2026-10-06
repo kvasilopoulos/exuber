@@ -153,7 +153,9 @@ statistic</td>
 <td><code><a href="../reference/monitor_quantile.html">monitor_quantile()</a></code></td>
 <td>A recursive quantile regression at <code>tau</code>
 </td>
-<td>A simulated first-crossing boundary (Wu, Shi &amp; Wu 2025)</td>
+<td>A first-crossing boundary (Wu, Shi &amp; Wu 2025), from the
+simulated limit or, with <code>boundary = "bootstrap"</code>, from their
+bootstrap</td>
 <td>
 <code><a href="../reference/quantile_test.html">quantile_test()</a></code>, the static version of the same
 statistic</td>
@@ -198,7 +200,7 @@ and leaving out the collapse:</p>
 <span><span class="co">#&gt;   series1    161         161</span></span>
 <span><span class="fu"><a href="../reference/monitor_quantile.html">monitor_quantile</a></span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span>, nrep <span class="op">=</span> <span class="fl">200</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ───────</span></span>
+<span><span class="co">#&gt; ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%, asympto</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    series  delta  boundary  alarm  alarm_date</span></span>
 <span><span class="co">#&gt;   series1   0.64     1.909    161         161</span></span>

@@ -26,7 +26,7 @@ calibrate the boundary.
 | [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md)’s own `badf`/`bsadf` recursion | `"bootstrap"` (Phillips & Shi 2020 wild-bootstrap quantile), `"kurozumi"` (closed-form, Kurozumi 2020), or `"fluc"` (closed-form, Homm & Breitung 2012) | [`radf()`](https://kvasilopoulos.github.io/exuber/reference/radf.md) and [`datestamp()`](https://kvasilopoulos.github.io/exuber/reference/datestamp.md). It is not a `_test()` function, but it uses the same recursive ADF core |
 | [`monitor_cusum()`](https://kvasilopoulos.github.io/exuber/reference/monitor_cusum.md) | A CUSUM of the training-window-standardized series | Homm & Breitung (2012)’s asymptotic (or finite-sample) constant | None. The CUSUM boundary of Homm & Breitung is a training and monitoring construction by design and has no full-sample form |
 | [`monitor_lbi()`](https://kvasilopoulos.github.io/exuber/reference/monitor_lbi.md) | Breitung & Diegel (2025)’s locally-best-invariant CUSUM (`mCUSUM`/`wCUSUM`, via `c_bar`) | Their Table 1 constant | [`lbi_test()`](https://kvasilopoulos.github.io/exuber/reference/lbi_test.md), the static version of the same statistic |
-| [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) | A recursive quantile regression at `tau` | A simulated first-crossing boundary (Wu, Shi & Wu 2025) | [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), the static version of the same statistic |
+| [`monitor_quantile()`](https://kvasilopoulos.github.io/exuber/reference/monitor_quantile.md) | A recursive quantile regression at `tau` | A first-crossing boundary (Wu, Shi & Wu 2025), from the simulated limit or, with `boundary = "bootstrap"`, from their bootstrap | [`quantile_test()`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md), the static version of the same statistic |
 
 [`monitor()`](https://kvasilopoulos.github.io/exuber/reference/monitor.md)
 reuses `badf` and `bsadf` directly, which is the same recursive ADF core
@@ -74,7 +74,7 @@ monitor_cusum(y, r_star = 0.5)
 #>   series1    161         161
 monitor_quantile(y, tau = 0.5, nrep = 200, seed = 1)
 #> 
-#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ───────
+#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%, asympto
 #> 
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1   0.64     1.909    161         161

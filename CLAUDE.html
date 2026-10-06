@@ -79,22 +79,30 @@
 </div>
 <div class="section level2">
 <h2 id="r-tooling">R tooling<a class="anchor" aria-label="anchor" href="#r-tooling"></a></h2>
-<p>R versions come from <code>rig</code>, formatting from <code>air</code>, and linting from <code>jarl</code>. <code>DESCRIPTION</code> is the only record of dependencies. The package has no lockfile, so it does not use <code>rv</code>.</p>
+<p>R versions come from <code>rig</code>, packages from <code>rv</code>, formatting from <code>air</code>, and linting from <code>jarl</code>. <code>pre-commit</code> runs the checks before each commit.</p>
+<p><code>DESCRIPTION</code> stays the source of truth for what the package needs. <code>rproject.toml</code> points rv at it (<code>{ name = "exuber", path = ".", install_suggestions = true, dependencies_only = true }</code>) and lists the development tools that are not in <code>DESCRIPTION</code> (devtools, roxygen2, pkgdown, covr, usethis, testthat, withr, rcmdcheck). <code>rv.lock</code> pins the resolved versions. <code>.Rprofile</code> activates the rv library (<code>rv/library</code>, git-ignored) in every R session started from this directory.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>rig list                                   <span class="co"># installed R versions; the default is starred</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>rig default release                        <span class="co"># use the current release (CI also tests devel and oldrel-1)</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>air format <span class="op">.</span>                               <span class="co"># format R, tests and vignette code (air.toml)</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>air format <span class="op">--</span>check <span class="op">.</span>                       <span class="co"># formatting check, as in CI</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>jarl check <span class="op">.</span>                               <span class="co"># lint (jarl.toml)</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>jarl check <span class="op">.</span> <span class="op">--</span>fix                         <span class="co"># apply safe autofixes; needs a clean git tree or --allow-dirty</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::test()"</span>              <span class="co"># tests</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::document()"</span>          <span class="co"># regenerate NAMESPACE and man/</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::check()"</span>             <span class="co"># R CMD check</span></span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>rig default <span class="dv">4.6</span>                            <span class="co"># the R version in rproject.toml; CI also tests devel and oldrel-1</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">rv</span> sync                                    <span class="co"># install the locked packages into rv/library</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">rv</span> add <span class="op">&lt;</span>pkg<span class="op">&gt;</span>                               <span class="co"># add a development tool to rproject.toml and sync</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">rv</span> plan                                    <span class="co"># dry run of what sync would change</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>pre-commit install                         <span class="co"># once per clone: enable the commit hook</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>pre-commit run <span class="op">--</span>all-files                 <span class="co"># run every hook by hand</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>air format <span class="op">.</span>                               <span class="co"># format R, tests and vignette code (air.toml)</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>air format <span class="op">--</span>check <span class="op">.</span>                       <span class="co"># formatting check, as in CI</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>jarl check <span class="op">.</span>                               <span class="co"># lint (jarl.toml)</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>jarl check <span class="op">.</span> <span class="op">--</span>fix                         <span class="co"># apply safe autofixes; needs a clean git tree or --allow-dirty</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::test()"</span>              <span class="co"># tests</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::document()"</span>          <span class="co"># regenerate NAMESPACE and man/</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::check()"</span>             <span class="co"># R CMD check</span></span></code></pre></div>
+<p>The hooks (<code>.pre-commit-config.yaml</code>) run <code>air format</code> and <code>jarl check .</code> on each commit. They do not run the tests, which take several minutes: run <code>devtools::test()</code> yourself before pushing. The jarl hook runs the released binary through <code>uvx</code> because the <code>jarl-pre-commit</code> package does not build on Windows.</p>
 <p>Rules:</p>
-<ul><li>Declare a new dependency in <code>DESCRIPTION</code> with <code>usethis::use_package()</code>. Do not call <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> or <code>renv::*</code>.</li>
-<li>Run <code>air format .</code> and then <code>jarl check .</code> before committing.</li>
+<ul><li>A new package that the code needs goes in <code>DESCRIPTION</code> (<code>usethis::use_package()</code>), then run <code>rv sync</code>. A development tool goes through <code>rv add</code>. Do not call <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> or <code>renv::*</code>.</li>
+<li>Run <code>air format .</code> and then <code>jarl check .</code> before committing. The hook does the same, so a commit that the hook rejects has to be fixed and staged again.</li>
 <li>Do not add <code># nolint</code> comments. To silence a jarl rule for one block, write <code># jarl-ignore &lt;rule&gt;: &lt;reason&gt;</code>. A rule that is wrong for the whole package belongs in <code>jarl.toml</code>.</li>
 <li>
-<code>jarl.toml</code> turns off <code>pipe_consistency</code> (the old lintr setup did too) and <code>internal_function</code> under <code>tests/</code>, because tests call unexported functions with <code>:::</code>.</li>
+<code>jarl.toml</code> turns off <code>pipe_consistency</code> (the previous linter configuration also had it off) and <code>internal_function</code> under <code>tests/</code>, because tests call unexported functions with <code>:::</code>.</li>
+<li>The editor setup is in <code>.vscode/</code> (the Air and Jarl extensions).</li>
 </ul></div>
 <div class="section level2">
 <h2 id="ci-and-quality-gates-already-wired-do-not-duplicate">CI and quality gates (already wired, do not duplicate)<a class="anchor" aria-label="anchor" href="#ci-and-quality-gates-already-wired-do-not-duplicate"></a></h2>

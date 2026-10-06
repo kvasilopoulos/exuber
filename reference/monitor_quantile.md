@@ -22,7 +22,8 @@ monitor_quantile(
   nrep = 500L,
   sig_lvl = 95,
   seed = NULL,
-  type = c("qpwy", "qpsy")
+  type = c("qpwy", "qpsy"),
+  boundary = c("asymptotic", "bootstrap")
 )
 ```
 
@@ -55,7 +56,9 @@ monitor_quantile(
 
 - nrep:
 
-  Number of Monte Carlo replications for the boundary.
+  Number of replications for the boundary: Monte Carlo draws of the
+  limit with `boundary = "asymptotic"`, bootstrap resamples with
+  `boundary = "bootstrap"`.
 
 - sig_lvl:
 
@@ -70,10 +73,16 @@ monitor_quantile(
   `"qpwy"` (expanding window) or `"qpsy"` (also the supremum over window
   starts).
 
+- boundary:
+
+  `"asymptotic"` (simulated limit, the default) or `"bootstrap"`
+  (Algorithm 1 of Wu, Shi & Wu 2025).
+
 ## Value
 
 An object of class `monitor_quantile_obj`: a list with the statistic
-path `stat`, the flat `boundary`, the estimated `delta`, and `alarm` and
+path `stat`, the flat `boundary`, the estimated `delta` (reported for
+both boundaries, used only by the asymptotic one), and `alarm` and
 `alarm_date` (the first breach, `NA` if there is none).
 
 ## Details
@@ -83,17 +92,36 @@ closed-form recursive update as there is for OLS. QPWY needs `O(T)` fits
 and QPSY needs `O(T^2)`, so QPSY takes seconds for each series at
 `n = 200` and the time grows quadratically.
 
-The function simulates the critical value in each call from the limiting
-null distribution `delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}`.
-Here `delta` is a correlation coefficient estimated from the data (as in
+The boundary is a single **flat** value and not one value for each `r`.
+It is the quantile of the supremum of each null path, constructed like
+the `sadf_cv` of
+[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
+which controls the first-crossing false-alarm rate. `boundary` chooses
+how the null paths are generated.
+
+With `boundary = "asymptotic"` (the default) the function simulates the
+limiting null distribution
+`delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}` in each call. Here
+`delta` is a correlation coefficient estimated from the data (as in
 [`quantile_test`](https://kvasilopoulos.github.io/exuber/reference/quantile_test.md)),
 `Q` is the Dickey-Fuller t functional and `Z` is its counterpart driven
 by an independent Brownian motion. Both are simulated for every window,
-so no QR fits are needed. The boundary is a single **flat** value and
-not one value for each `r`. It is the quantile of the supremum of each
-simulated path, constructed exactly like the `sadf_cv` of
-[`radf_mc_cv`](https://kvasilopoulos.github.io/exuber/reference/radf_mc_cv.md),
-which controls the first-crossing false-alarm rate.
+so no QR fits are needed and the boundary is cheap.
+
+With `boundary = "bootstrap"` the function applies Algorithm 1 of Wu,
+Shi & Wu (2025) to the whole path. It resamples the centred first
+differences of the series with replacement, cumulates them into a null
+random walk and recomputes the QPWY or QPSY path on it, `nrep` times.
+The boundary is the quantile of the `nrep` path maxima. It follows the
+finite-sample distribution of the statistic in the data at hand, so it
+removes most of the size distortion of the asymptotic boundary described
+below. Each replicate costs a full statistic path, which is `O(T)` QR
+fits for QPWY and `O(T^2)` for QPSY. The paper also discards the first
+100 draws of each resample. We omit this step because the statistic has
+an intercept, so it does not depend on the level of the series, and the
+draws are i.i.d., so the retained values already have the same
+distribution. Set `options(exuber.parallel = TRUE)` to spread the
+replicates over workers.
 
 ## Note
 
@@ -114,19 +142,22 @@ for which functions fit the shared pipeline and which do not.
 
 ## Caveats
 
-The boundary is the asymptotic one. Near the median it is well sized in
-finite samples, with a false-alarm rate of 3.5 to 4.0\\ \\t_3\\
-innovations, `tau = 0.5`). Away from the median the small early windows
-make both statistics oversized, and QPSY badly so even with Gaussian
-innovations. The false-alarm rate of QPSY is 35\\ (Gaussian). With
-\\t_3\\ innovations it is 21\\ `tau = 0.9` (`n = 100`). With \\t_3\\
-innovations the rate for QPWY is 7.5 to 8.5\\ (`n = 150`). Wu, Shi & Wu
-advise against extreme quantiles in small samples and use bootstrap
-critical values for monitoring. That bootstrap is not implemented here.
-For `type = "qpsy"` with `tau` away from 0.5, the function emits a short
-pointer as a message (see
-[`suppressMessages`](https://rdrr.io/r/base/message.html)) and stores it
-as `attr(x, "caveat")`. The numbers are in
+The asymptotic boundary is well sized near the median in finite samples,
+with a false-alarm rate of 3.5 to 4.0\\ innovations, `tau = 0.5`). Away
+from the median the small early windows make both statistics oversized,
+and QPSY badly so even with Gaussian innovations. The false-alarm rate
+of QPSY is 35\\ innovations it is 21\\ (`n = 100`). With \\t_3\\
+innovations the rate for QPWY is 7.5 to 8.5\\ `tau = 0.2` and `0.8` and
+12.5\\ Wu, Shi & Wu advise against extreme quantiles in small samples
+and use bootstrap critical values for monitoring, which is what
+`boundary = "bootstrap"` provides. With it the false-alarm rate was
+between 4.5 and 6.5\\ the cases above (`n = 100` for QPWY, `n = 60` for
+QPSY), including QPSY at `tau = 0.8` and `0.9`. The exception is QPSY
+with \\t_3\\ innovations at `tau = 0.9`, which stays at 10\\ less
+extreme `tau` help. For `type = "qpsy"` with `tau` away from 0.5 and the
+asymptotic boundary, the function emits a short pointer as a message
+(see [`suppressMessages`](https://rdrr.io/r/base/message.html)) and
+stores it as `attr(x, "caveat")`. The numbers for both boundaries are in
 docs/alternative-paradigms.md.
 
 ## Status
@@ -161,7 +192,7 @@ y <- sim_psy1(n = 200, te = 150, tf = 200, seed = 7,
 res <- monitor_quantile(y, tau = 0.5, nrep = 100, seed = 1)
 print(res)
 #> 
-#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ───────
+#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%, asympto
 #> 
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1  0.623     1.934    165         165
@@ -181,10 +212,20 @@ autoplot(monitor_quantile(y, tau = 0.8, nrep = 100, seed = 1))
 # QPSY: supremum over window starts too (O(n^2) QR fits, slower)
 monitor_quantile(y[101:200], tau = 0.5, nrep = 100, seed = 1, type = "qpsy")
 #> 
-#> ── monitor_quantile (QPSY, n = 100, minw = 19, tau = 0.5, sig_lvl = 95%) ───────
+#> ── monitor_quantile (QPSY, n = 100, minw = 19, tau = 0.5, sig_lvl = 95%, asympto
 #> 
 #>    series  delta  boundary  alarm  alarm_date
 #>   series1  0.754     2.172     53          53
+#> 
+
+# Bootstrap boundary (Algorithm 1 of Wu, Shi & Wu): one full statistic path per
+# replicate, so keep nrep small in a first run
+monitor_quantile(y, tau = 0.8, nrep = 49, seed = 1, boundary = "bootstrap")
+#> 
+#> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.8, sig_lvl = 95%, bootstr
+#> 
+#>    series  delta  boundary  alarm  alarm_date
+#>   series1  0.831     1.675    161         161
 #> 
 # }
 ```

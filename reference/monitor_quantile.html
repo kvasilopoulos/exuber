@@ -88,7 +88,8 @@ the shape of <code>bsadf</code>.</p>
 <span>  nrep <span class="op">=</span> <span class="fl">500L</span>,</span>
 <span>  sig_lvl <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"qpwy"</span>, <span class="st">"qpsy"</span><span class="op">)</span></span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"qpwy"</span>, <span class="st">"qpsy"</span><span class="op">)</span>,</span>
+<span>  boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asymptotic"</span>, <span class="st">"bootstrap"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,7 +122,9 @@ reselect it at each recursion point.</p></dd>
 
 
 <dt id="arg-nrep">nrep<a class="anchor" aria-label="anchor" href="#arg-nrep"></a></dt>
-<dd><p>Number of Monte Carlo replications for the boundary.</p></dd>
+<dd><p>Number of replications for the boundary: Monte Carlo draws of the
+limit with <code>boundary = "asymptotic"</code>, bootstrap resamples with
+<code>boundary = "bootstrap"</code>.</p></dd>
 
 
 <dt id="arg-sig-lvl">sig_lvl<a class="anchor" aria-label="anchor" href="#arg-sig-lvl"></a></dt>
@@ -136,11 +139,17 @@ reselect it at each recursion point.</p></dd>
 <dd><p><code>"qpwy"</code> (expanding window) or <code>"qpsy"</code> (also the supremum
 over window starts).</p></dd>
 
+
+<dt id="arg-boundary">boundary<a class="anchor" aria-label="anchor" href="#arg-boundary"></a></dt>
+<dd><p><code>"asymptotic"</code> (simulated limit, the default) or
+<code>"bootstrap"</code> (Algorithm 1 of Wu, Shi &amp; Wu 2025).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>monitor_quantile_obj</code>: a list with the statistic
-path <code>stat</code>, the flat <code>boundary</code>, the estimated <code>delta</code>, and
+path <code>stat</code>, the flat <code>boundary</code>, the estimated <code>delta</code> (reported for
+both boundaries, used only by the asymptotic one), and
 <code>alarm</code> and <code>alarm_date</code> (the first breach, <code>NA</code> if there is
 none).</p>
     </div>
@@ -150,16 +159,30 @@ none).</p>
 recursive update as there is for OLS. QPWY needs <code>O(T)</code> fits and QPSY needs
 <code>O(T^2)</code>, so QPSY takes seconds for each series at <code>n = 200</code> and the
 time grows quadratically.</p>
-<p>The function simulates the critical value in each call from the limiting null
-distribution <code>delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}</code>. Here
-<code>delta</code> is a correlation coefficient estimated from the data (as in
-<code><a href="quantile_test.html">quantile_test</a></code>), <code>Q</code> is the Dickey-Fuller t functional and
-<code>Z</code> is its counterpart driven by an independent Brownian motion. Both are
-simulated for every window, so no QR fits are needed. The boundary is a single
-<strong>flat</strong> value and not one value for each <code>r</code>. It is the quantile of
-the supremum of each simulated path, constructed exactly like the <code>sadf_cv</code>
-of <code><a href="radf_mc_cv.html">radf_mc_cv</a></code>, which controls the first-crossing false-alarm
-rate.</p>
+<p>The boundary is a single <strong>flat</strong> value and not one value for each <code>r</code>.
+It is the quantile of the supremum of each null path, constructed like the
+<code>sadf_cv</code> of <code><a href="radf_mc_cv.html">radf_mc_cv</a></code>, which controls the first-crossing
+false-alarm rate. <code>boundary</code> chooses how the null paths are generated.</p>
+<p>With <code>boundary = "asymptotic"</code> (the default) the function simulates the
+limiting null distribution <code>delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}</code>
+in each call. Here <code>delta</code> is a correlation coefficient estimated from the
+data (as in <code><a href="quantile_test.html">quantile_test</a></code>), <code>Q</code> is the Dickey-Fuller t
+functional and <code>Z</code> is its counterpart driven by an independent Brownian
+motion. Both are simulated for every window, so no QR fits are needed and the
+boundary is cheap.</p>
+<p>With <code>boundary = "bootstrap"</code> the function applies Algorithm 1 of Wu, Shi &amp;
+Wu (2025) to the whole path. It resamples the centred first differences of the
+series with replacement, cumulates them into a null random walk and recomputes
+the QPWY or QPSY path on it, <code>nrep</code> times. The boundary is the quantile of
+the <code>nrep</code> path maxima. It follows the finite-sample distribution of the
+statistic in the data at hand, so it removes most of the size distortion of the
+asymptotic boundary described below. Each replicate costs a full statistic path,
+which is <code>O(T)</code> QR fits for QPWY and <code>O(T^2)</code> for QPSY. The paper also
+discards the first 100 draws of each resample. We omit this step because the
+statistic has an intercept, so it does not depend on the level of the series, and
+the draws are i.i.d., so the retained values already have the same distribution.
+Set <code>options(exuber.parallel = TRUE)</code> to spread the replicates over
+workers.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -177,20 +200,24 @@ the shared pipeline and which do not.</p>
     <h2 id="caveats">Caveats<a class="anchor" aria-label="anchor" href="#caveats"></a></h2>
 
 
-<p>The boundary is the asymptotic one. Near the median it is well sized in finite
-samples, with a false-alarm rate of 3.5 to 4.0\<!-- % at a nominal 5\\% (Gaussian and -->
-\(t_3\) innovations, <code>tau = 0.5</code>). Away from the median the small early
-windows make both statistics oversized, and QPSY badly so even with Gaussian
-innovations. The false-alarm rate of QPSY is 35\<!-- % at \code{tau = 0.9} -->
-(Gaussian). With \(t_3\) innovations it is 21\<!-- % at \code{tau = 0.8} and 44\\% at -->
-<code>tau = 0.9</code> (<code>n = 100</code>). With \(t_3\) innovations the rate for QPWY is
-7.5 to 8.5\<!-- % at \code{tau = 0.2} and \code{0.8} and 12.5\\% at \code{tau = 0.9} -->
-(<code>n = 150</code>). Wu, Shi &amp; Wu advise against extreme quantiles in small samples
-and use bootstrap critical values for monitoring. That bootstrap is not
-implemented here. For <code>type = "qpsy"</code> with <code>tau</code> away from 0.5, the
-function emits a short pointer as a message (see <code><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></code>)
-and stores it as <code>attr(x, "caveat")</code>. The numbers are in
-docs/alternative-paradigms.md.</p>
+<p>The asymptotic boundary is well sized near the median in finite samples, with a
+false-alarm rate of 3.5 to 4.0\<!-- % at a nominal 5\\% (Gaussian and \eqn{t_3} -->
+innovations, <code>tau = 0.5</code>). Away from the median the small early windows make
+both statistics oversized, and QPSY badly so even with Gaussian innovations. The
+false-alarm rate of QPSY is 35\<!-- % at \code{tau = 0.9} (Gaussian). With \eqn{t_3} -->
+innovations it is 21\<!-- % at \code{tau = 0.8} and 44\\% at \code{tau = 0.9} -->
+(<code>n = 100</code>). With \(t_3\) innovations the rate for QPWY is 7.5 to 8.5\<!-- % at -->
+<code>tau = 0.2</code> and <code>0.8</code> and 12.5\<!-- % at \code{tau = 0.9} (\code{n = 150}). -->
+Wu, Shi &amp; Wu advise against extreme quantiles in small samples and use bootstrap
+critical values for monitoring, which is what <code>boundary = "bootstrap"</code>
+provides. With it the false-alarm rate was between 4.5 and 6.5\<!-- % in all but one of -->
+the cases above (<code>n = 100</code> for QPWY, <code>n = 60</code> for QPSY), including QPSY at
+<code>tau = 0.8</code> and <code>0.9</code>. The exception is QPSY with \(t_3\) innovations at
+<code>tau = 0.9</code>, which stays at 10\<!-- % when \code{nrep = 99}. A larger \code{nrep} and a -->
+less extreme <code>tau</code> help. For <code>type = "qpsy"</code> with <code>tau</code> away from 0.5 and the
+asymptotic boundary, the function emits a short pointer as a message (see
+<code><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></code>) and stores it as <code>attr(x, "caveat")</code>. The
+numbers for both boundaries are in docs/alternative-paradigms.md.</p>
     </div>
     <div class="section level2">
     <h2 id="status">Status<a class="anchor" aria-label="anchor" href="#status"></a></h2>
@@ -223,7 +250,7 @@ test, and <code><a href="monitor.html">monitor</a></code> for the monitoring alt
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">monitor_quantile</span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.5</span>, nrep <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%) ───────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.5, sig_lvl = 95%, asympto</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    series  delta  boundary  alarm  alarm_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   series1  0.623     1.934    165         165</span>
@@ -243,10 +270,20 @@ test, and <code><a href="monitor.html">monitor</a></code> for the monitoring alt
 <span class="r-in"><span><span class="co"># QPSY: supremum over window starts too (O(n^2) QR fits, slower)</span></span></span>
 <span class="r-in"><span><span class="fu">monitor_quantile</span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span><span class="op">]</span>, tau <span class="op">=</span> <span class="fl">0.5</span>, nrep <span class="op">=</span> <span class="fl">100</span>, seed <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"qpsy"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor_quantile (QPSY, n = 100, minw = 19, tau = 0.5, sig_lvl = 95%) ───────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor_quantile (QPSY, n = 100, minw = 19, tau = 0.5, sig_lvl = 95%, asympto</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    series  delta  boundary  alarm  alarm_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   series1  0.754     2.172     53          53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Bootstrap boundary (Algorithm 1 of Wu, Shi &amp; Wu): one full statistic path per</span></span></span>
+<span class="r-in"><span><span class="co"># replicate, so keep nrep small in a first run</span></span></span>
+<span class="r-in"><span><span class="fu">monitor_quantile</span><span class="op">(</span><span class="va">y</span>, tau <span class="op">=</span> <span class="fl">0.8</span>, nrep <span class="op">=</span> <span class="fl">49</span>, seed <span class="op">=</span> <span class="fl">1</span>, boundary <span class="op">=</span> <span class="st">"bootstrap"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── monitor_quantile (QPWY, n = 200, minw = 27, tau = 0.8, sig_lvl = 95%, bootstr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    series  delta  boundary  alarm  alarm_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   series1  0.831     1.675    161         161</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

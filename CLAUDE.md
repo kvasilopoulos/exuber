@@ -74,13 +74,27 @@ example or test uses it any longer, and nothing here depends on it.
 
 ## R tooling
 
-R versions come from `rig`, formatting from `air`, and linting from
-`jarl`. `DESCRIPTION` is the only record of dependencies. The package
-has no lockfile, so it does not use `rv`.
+R versions come from `rig`, packages from `rv`, formatting from `air`,
+and linting from `jarl`. `pre-commit` runs the checks before each
+commit.
+
+`DESCRIPTION` stays the source of truth for what the package needs.
+`rproject.toml` points rv at it
+(`{ name = "exuber", path = ".", install_suggestions = true, dependencies_only = true }`)
+and lists the development tools that are not in `DESCRIPTION` (devtools,
+roxygen2, pkgdown, covr, usethis, testthat, withr, rcmdcheck). `rv.lock`
+pins the resolved versions. `.Rprofile` activates the rv library
+(`rv/library`, git-ignored) in every R session started from this
+directory.
 
 ``` powershell
 rig list                                   # installed R versions; the default is starred
-rig default release                        # use the current release (CI also tests devel and oldrel-1)
+rig default 4.6                            # the R version in rproject.toml; CI also tests devel and oldrel-1
+rv sync                                    # install the locked packages into rv/library
+rv add <pkg>                               # add a development tool to rproject.toml and sync
+rv plan                                    # dry run of what sync would change
+pre-commit install                         # once per clone: enable the commit hook
+pre-commit run --all-files                 # run every hook by hand
 air format .                               # format R, tests and vignette code (air.toml)
 air format --check .                       # formatting check, as in CI
 jarl check .                               # lint (jarl.toml)
@@ -90,19 +104,29 @@ Rscript -e "devtools::document()"          # regenerate NAMESPACE and man/
 Rscript -e "devtools::check()"             # R CMD check
 ```
 
+The hooks (`.pre-commit-config.yaml`) run `air format` and
+`jarl check .` on each commit. They do not run the tests, which take
+several minutes: run `devtools::test()` yourself before pushing. The
+jarl hook runs the released binary through `uvx` because the
+`jarl-pre-commit` package does not build on Windows.
+
 Rules:
 
-- Declare a new dependency in `DESCRIPTION` with
-  `usethis::use_package()`. Do not call
+- A new package that the code needs goes in `DESCRIPTION`
+  (`usethis::use_package()`), then run `rv sync`. A development tool
+  goes through `rv add`. Do not call
   [`install.packages()`](https://rdrr.io/r/utils/install.packages.html)
   or `renv::*`.
-- Run `air format .` and then `jarl check .` before committing.
+- Run `air format .` and then `jarl check .` before committing. The hook
+  does the same, so a commit that the hook rejects has to be fixed and
+  staged again.
 - Do not add `# nolint` comments. To silence a jarl rule for one block,
   write `# jarl-ignore <rule>: <reason>`. A rule that is wrong for the
   whole package belongs in `jarl.toml`.
-- `jarl.toml` turns off `pipe_consistency` (the old lintr setup did too)
-  and `internal_function` under `tests/`, because tests call unexported
-  functions with `:::`.
+- `jarl.toml` turns off `pipe_consistency` (the previous linter
+  configuration also had it off) and `internal_function` under `tests/`,
+  because tests call unexported functions with `:::`.
+- The editor setup is in `.vscode/` (the Air and Jarl extensions).
 
 ## CI and quality gates (already wired, do not duplicate)
 

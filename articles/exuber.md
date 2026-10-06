@@ -116,7 +116,7 @@ which takes the same arguments as
 ``` r
 
 # Minimum duration of an explosive period
-rot = psy_ds(stocks) # log(n) ~ rule of thumb
+rot <- psy_ds(stocks) # log(n) ~ rule of thumb
 
 dstamp_stocks <- datestamp(est_stocks, cv = cv_stocks, min_duration = rot)
 dstamp_stocks

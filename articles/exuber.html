@@ -176,7 +176,7 @@ reject the null. It is most useful when there are many series.</p>
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="../reference/diagnostics.html">diagnostics()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Minimum duration of an explosive period</span></span>
-<span><span class="va">rot</span> <span class="op">=</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span> <span class="co"># log(n) ~ rule of thumb</span></span>
+<span><span class="va">rot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/psy_minw.html">psy_ds</a></span><span class="op">(</span><span class="va">stocks</span><span class="op">)</span> <span class="co"># log(n) ~ rule of thumb</span></span>
 <span></span>
 <span><span class="va">dstamp_stocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/datestamp.html">datestamp</a></span><span class="op">(</span><span class="va">est_stocks</span>, cv <span class="op">=</span> <span class="va">cv_stocks</span>, min_duration <span class="op">=</span> <span class="va">rot</span><span class="op">)</span></span>
 <span><span class="va">dstamp_stocks</span></span>
