@@ -40,7 +40,7 @@ This release adds new methods from the `docs/` research programme. We checked ea
 ### Alternative paradigms
 
 * `quantile_test()` implements the quantile-based global test of Wu, Shi & Wu (2025).
-* `monitor_quantile()` implements the recursive quantile monitoring of Wu, Shi & Wu (2025): QPWY (expanding window) and QPSY (`type = "qpsy"`, supremum over window starts). The asymptotic boundary is well sized near the median. Away from the median it is oversized in small samples, and QPSY is badly oversized. A caveat message at call time says so.
+* `monitor_quantile()` implements the recursive quantile monitoring of Wu, Shi & Wu (2025): QPWY (expanding window) and QPSY (`type = "qpsy"`, supremum over window starts). The default boundary is the asymptotic one. It is well sized near the median, but away from the median it is oversized in small samples, and QPSY is badly oversized, with a false-alarm rate of 20% to 47% at a nominal 5% in our checks. A caveat message at call time says so. `boundary = "bootstrap"` applies Algorithm 1 of the paper to the whole path: it resamples the centred first differences, cumulates them and recomputes the QPWY or QPSY path, and it takes the quantile of the path maxima. It follows the finite-sample distribution of the statistic and brings the false-alarm rate back to about 5% in most of our checks, at the cost of one full statistic path for each replicate.
 
 ### Naming
 

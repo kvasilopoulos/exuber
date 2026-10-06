@@ -170,3 +170,79 @@ test_that("monitor_quantile has non-trivial detection power on a genuine
   ))
   expect_gt(det, 0.3)
 })
+
+test_that("quantile_boot_max is the path maximum of quantreg::rq() window
+  t-ratios on the resampled, cumulated first differences", {
+  set.seed(8)
+  y <- cumsum(rt(30, df = 3))
+  u <- diff(y)
+  u <- u - mean(u)
+  minw <- 8
+  rq_stat <- function(yy, tau) {
+    m <- length(yy)
+    ylag <- yy[1:(m - 1)]
+    yresp <- yy[2:m]
+    a <- unname(coef(quantreg::rq(yresp ~ ylag, tau = tau))["ylag"])
+    f <- exuber:::quantile_check_density(yresp - ylag, tau)$f_hat
+    (f / sqrt(tau * (1 - tau))) * sqrt(sum((ylag - mean(ylag))^2)) * (a - 1)
+  }
+  for (type in c("qpwy", "qpsy")) {
+    set.seed(12)
+    got <- exuber:::quantile_boot_max(u, 0.7, minw, type)
+    set.seed(12)
+    ys <- cumsum(c(0, sample(u, 29, replace = TRUE)))
+    want <- max(vapply(
+      (minw + 1L):30,
+      function(r) {
+        if (type == "qpwy") {
+          rq_stat(ys[1:r], 0.7)
+        } else {
+          max(vapply(1:(r - minw), function(r1) rq_stat(ys[r1:r], 0.7), numeric(1)))
+        }
+      },
+      numeric(1)
+    ))
+    expect_equal(got, want, tolerance = 1e-8)
+  }
+})
+
+test_that("the bootstrap boundary is reproducible, does not depend on the
+  level of the series, and is the quantile of the bootstrap path maxima", {
+  set.seed(6)
+  y <- cumsum(rt(40, df = 3))
+  a <- exuber:::quantile_boundary_boot(y, 0.8, 10, 12, seed = 4)
+  b <- exuber:::quantile_boundary_boot(y + 25, 0.8, 10, 12, seed = 4)
+  expect_equal(a, b, tolerance = 1e-8)
+  expect_equal(a, exuber:::quantile_boundary_boot(y, 0.8, 10, 12, seed = 4))
+
+  res <- monitor_quantile(y, tau = 0.8, minw = 10, nrep = 12, seed = 4, boundary = "bootstrap")
+  expect_equal(unname(res$boundary), unname(quantile(a, 0.95)), tolerance = 1e-8)
+  expect_identical(attr(res, "boundary_type"), "bootstrap")
+  expect_identical(
+    attr(monitor_quantile(y, minw = 10, nrep = 20, seed = 1), "boundary_type"),
+    "asymptotic"
+  )
+})
+
+test_that("QPSY with the bootstrap boundary does not emit the asymptotic
+  caveat, and QPSY with the asymptotic boundary still does", {
+  set.seed(7)
+  y <- cumsum(rnorm(30))
+  expect_message(
+    res <- monitor_quantile(y, tau = 0.8, minw = 10, nrep = 5, seed = 1, type = "qpsy"),
+    "oversized"
+  )
+  expect_false(is.null(attr(res, "caveat")))
+  expect_no_message(
+    res_b <- monitor_quantile(
+      y,
+      tau = 0.8,
+      minw = 10,
+      nrep = 5,
+      seed = 1,
+      type = "qpsy",
+      boundary = "bootstrap"
+    )
+  )
+  expect_null(attr(res_b, "caveat"))
+})

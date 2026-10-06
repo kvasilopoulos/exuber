@@ -90,6 +90,62 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
   out
 }
 
+# Path suprema from Algorithm 1 of WSW (i.i.d. residual bootstrap): resample
+# the centred first differences with replacement, cumulate them into a null
+# random walk, and recompute the whole QPWY/QPSY path on it. The paper
+# draws T + b = T + 100 values and discards the first b to remove the
+# initialisation effect. The statistic regresses with an intercept, so it
+# does not depend on the starting level of the series, and with i.i.d.
+# draws the last T values already have the same law as any other T; the
+# burn-in would change nothing and is left out. Each replicate costs one
+# full statistic path (O(T) QR fits for QPWY, O(T^2) for QPSY).
+quantile_boot_max <- function(u, tau, minw, type) {
+  n <- length(u) + 1L
+  ystar <- cumsum(c(0, sample(u, n - 1L, replace = TRUE)))
+  r_idx <- (minw + 1L):n
+  max(
+    if (type == "qpwy") {
+      qpwy_stat_path(ystar, tau, r_idx)
+    } else {
+      qpsy_stat_path(ystar, tau, r_idx, minw)
+    }
+  )
+}
+
+quantile_boundary_boot <- function(y, tau, minw, nrep, type = "qpwy", seed = NULL) {
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+  u <- diff(y)
+  u <- u - mean(u)
+  with_backend({
+    p <- progressor(steps = nrep)
+    res <- foreach(
+      i = seq_len(nrep),
+      .options.future = list(
+        seed = TRUE,
+        globals = structure(
+          TRUE,
+          add = c(
+            "quantile_boot_max",
+            "qpwy_stat_path",
+            "qpsy_stat_path",
+            "quantile_window_stat",
+            "quantile_check_density",
+            "quantile_narm"
+          )
+        )
+      ),
+      .inorder = FALSE
+    ) %dofuture%
+      {
+        p()
+        quantile_boot_max(u, tau, minw, type)
+      }
+  })
+  unlist(res)
+}
+
 #' QPWY/QPSY Recursive Quantile Monitoring (Wu, Shi & Wu 2025)
 #'
 #' \code{monitor_quantile} implements the QPWY and QPSY real-time monitoring
@@ -106,32 +162,52 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #' \code{O(T^2)}, so QPSY takes seconds for each series at \code{n = 200} and the
 #' time grows quadratically.
 #'
-#' The function simulates the critical value in each call from the limiting null
-#' distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}}. Here
-#' \code{delta} is a correlation coefficient estimated from the data (as in
-#' \code{\link{quantile_test}}), \code{Q} is the Dickey-Fuller t functional and
-#' \code{Z} is its counterpart driven by an independent Brownian motion. Both are
-#' simulated for every window, so no QR fits are needed. The boundary is a single
-#' \strong{flat} value and not one value for each \code{r}. It is the quantile of
-#' the supremum of each simulated path, constructed exactly like the \code{sadf_cv}
-#' of \code{\link{radf_mc_cv}}, which controls the first-crossing false-alarm
-#' rate.
+#' The boundary is a single \strong{flat} value and not one value for each \code{r}.
+#' It is the quantile of the supremum of each null path, constructed like the
+#' \code{sadf_cv} of \code{\link{radf_mc_cv}}, which controls the first-crossing
+#' false-alarm rate. \code{boundary} chooses how the null paths are generated.
+#'
+#' With \code{boundary = "asymptotic"} (the default) the function simulates the
+#' limiting null distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}}
+#' in each call. Here \code{delta} is a correlation coefficient estimated from the
+#' data (as in \code{\link{quantile_test}}), \code{Q} is the Dickey-Fuller t
+#' functional and \code{Z} is its counterpart driven by an independent Brownian
+#' motion. Both are simulated for every window, so no QR fits are needed and the
+#' boundary is cheap.
+#'
+#' With \code{boundary = "bootstrap"} the function applies Algorithm 1 of Wu, Shi &
+#' Wu (2025) to the whole path. It resamples the centred first differences of the
+#' series with replacement, cumulates them into a null random walk and recomputes
+#' the QPWY or QPSY path on it, \code{nrep} times. The boundary is the quantile of
+#' the \code{nrep} path maxima. It follows the finite-sample distribution of the
+#' statistic in the data at hand, so it removes most of the size distortion of the
+#' asymptotic boundary described below. Each replicate costs a full statistic path,
+#' which is \code{O(T)} QR fits for QPWY and \code{O(T^2)} for QPSY. The paper also
+#' discards the first 100 draws of each resample. We omit this step because the
+#' statistic has an intercept, so it does not depend on the level of the series, and
+#' the draws are i.i.d., so the retained values already have the same distribution.
+#' Set \code{options(exuber.parallel = TRUE)} to spread the replicates over
+#' workers.
 #'
 #' @section Caveats:
-#' The boundary is the asymptotic one. Near the median it is well sized in finite
-#' samples, with a false-alarm rate of 3.5 to 4.0\% at a nominal 5\% (Gaussian and
-#' \eqn{t_3} innovations, \code{tau = 0.5}). Away from the median the small early
-#' windows make both statistics oversized, and QPSY badly so even with Gaussian
-#' innovations. The false-alarm rate of QPSY is 35\% at \code{tau = 0.9}
-#' (Gaussian). With \eqn{t_3} innovations it is 21\% at \code{tau = 0.8} and 44\% at
-#' \code{tau = 0.9} (\code{n = 100}). With \eqn{t_3} innovations the rate for QPWY is
-#' 7.5 to 8.5\% at \code{tau = 0.2} and \code{0.8} and 12.5\% at \code{tau = 0.9}
-#' (\code{n = 150}). Wu, Shi & Wu advise against extreme quantiles in small samples
-#' and use bootstrap critical values for monitoring. That bootstrap is not
-#' implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5, the
-#' function emits a short pointer as a message (see \code{\link{suppressMessages}})
-#' and stores it as \code{attr(x, "caveat")}. The numbers are in
-#' docs/alternative-paradigms.md.
+#' The asymptotic boundary is well sized near the median in finite samples, with a
+#' false-alarm rate of 3.5 to 4.0\% at a nominal 5\% (Gaussian and \eqn{t_3}
+#' innovations, \code{tau = 0.5}). Away from the median the small early windows make
+#' both statistics oversized, and QPSY badly so even with Gaussian innovations. The
+#' false-alarm rate of QPSY is 35\% at \code{tau = 0.9} (Gaussian). With \eqn{t_3}
+#' innovations it is 21\% at \code{tau = 0.8} and 44\% at \code{tau = 0.9}
+#' (\code{n = 100}). With \eqn{t_3} innovations the rate for QPWY is 7.5 to 8.5\% at
+#' \code{tau = 0.2} and \code{0.8} and 12.5\% at \code{tau = 0.9} (\code{n = 150}).
+#' Wu, Shi & Wu advise against extreme quantiles in small samples and use bootstrap
+#' critical values for monitoring, which is what \code{boundary = "bootstrap"}
+#' provides. With it the false-alarm rate was between 4.5 and 6.5\% in all but one of
+#' the cases above (\code{n = 100} for QPWY, \code{n = 60} for QPSY), including QPSY at
+#' \code{tau = 0.8} and \code{0.9}. The exception is QPSY with \eqn{t_3} innovations at
+#' \code{tau = 0.9}, which stays at 10\% when \code{nrep = 99}. A larger \code{nrep} and a
+#' less extreme \code{tau} help. For \code{type = "qpsy"} with \code{tau} away from 0.5 and the
+#' asymptotic boundary, the function emits a short pointer as a message (see
+#' \code{\link{suppressMessages}}) and stores it as \code{attr(x, "caveat")}. The
+#' numbers for both boundaries are in docs/alternative-paradigms.md.
 #'
 #' @note The function simulates the critical value (the boundary) internally in each
 #' call, with an unexported helper, \code{quantile_boundary_sim}. There is currently
@@ -145,12 +221,17 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #' \code{"optimal"} grid search in \code{\link{quantile_test}}, because eq. 25 of WSW
 #' takes \code{tau} as a given parameter of the monitoring statistic and does not
 #' reselect it at each recursion point.
-#' @param nrep Number of Monte Carlo replications for the boundary.
+#' @param nrep Number of replications for the boundary: Monte Carlo draws of the
+#' limit with \code{boundary = "asymptotic"}, bootstrap resamples with
+#' \code{boundary = "bootstrap"}.
+#' @param boundary \code{"asymptotic"} (simulated limit, the default) or
+#' \code{"bootstrap"} (Algorithm 1 of Wu, Shi & Wu 2025).
 #' @param sig_lvl Significance level, one of \code{90}, \code{95}, \code{99}.
 #' @param seed Optional seed for the Monte Carlo draws.
 #'
 #' @return An object of class \code{monitor_quantile_obj}: a list with the statistic
-#' path \code{stat}, the flat \code{boundary}, the estimated \code{delta}, and
+#' path \code{stat}, the flat \code{boundary}, the estimated \code{delta} (reported for
+#' both boundaries, used only by the asymptotic one), and
 #' \code{alarm} and \code{alarm_date} (the first breach, \code{NA} if there is
 #' none).
 #'
@@ -185,6 +266,10 @@ quantile_boundary_sim <- function(n, minw, nrep, delta, type = "qpwy", seed = NU
 #'
 #' # QPSY: supremum over window starts too (O(n^2) QR fits, slower)
 #' monitor_quantile(y[101:200], tau = 0.5, nrep = 100, seed = 1, type = "qpsy")
+#'
+#' # Bootstrap boundary (Algorithm 1 of Wu, Shi & Wu): one full statistic path per
+#' # replicate, so keep nrep small in a first run
+#' monitor_quantile(y, tau = 0.8, nrep = 49, seed = 1, boundary = "bootstrap")
 #' }
 #'
 #' @family monitoring
@@ -196,9 +281,11 @@ monitor_quantile <- function(
   nrep = 500L,
   sig_lvl = 95,
   seed = NULL,
-  type = c("qpwy", "qpsy")
+  type = c("qpwy", "qpsy"),
+  boundary = c("asymptotic", "bootstrap")
 ) {
   type <- match.arg(type)
+  boundary_type <- match.arg(boundary)
   stopifnot(tau > 0 && tau < 1)
   assert_sig_lvl(sig_lvl)
   x <- parse_data(data)
@@ -228,16 +315,25 @@ monitor_quantile <- function(
   }
 
   caveat <- NULL
-  if (type == "qpsy" && abs(tau - 0.5) > 0.05) {
+  if (boundary_type == "asymptotic" && type == "qpsy" && abs(tau - 0.5) > 0.05) {
     caveat <- paste(
       "QPSY's asymptotic boundary is oversized away from the median in small samples",
-      "(21% at tau = 0.8 with t3 data, n = 100, nominal 5%); see ?monitor_quantile, Caveats section."
+      "(21% at tau = 0.8 with t3 data, n = 100, nominal 5%). Use boundary = \"bootstrap\" for a boundary that follows the finite-sample distribution; see ?monitor_quantile, Caveats section."
     )
     message_glue(caveat)
   }
 
-  sup_U <- quantile_boundary_sim(n, minw, nrep, delta, type = type, seed = seed)
-  boundary <- setNames(apply(sup_U, 2, quantile_narm, probs = sig_lvl / 100, names = FALSE), snames)
+  boundary <- setNames(rep(NA_real_, nc), snames)
+  if (boundary_type == "asymptotic") {
+    sup_U <- quantile_boundary_sim(n, minw, nrep, delta, type = type, seed = seed)
+    boundary[] <- apply(sup_U, 2, quantile_narm, probs = sig_lvl / 100, names = FALSE)
+  } else {
+    set_rng(seed)
+    for (j in seq_len(nc)) {
+      sup_U <- quantile_boundary_boot(as.numeric(x[, j]), tau, minw, nrep, type = type)
+      boundary[j] <- quantile_narm(sup_U, probs = sig_lvl / 100, names = FALSE)
+    }
+  }
   for (j in seq_len(nc)) {
     breach <- which(stat_path[, j] > boundary[j])
     if (length(breach) > 0L) alarm[j] <- r_idx[breach[1L]]
@@ -267,6 +363,7 @@ monitor_quantile <- function(
       sig_lvl = sig_lvl,
       iter = nrep,
       type = type,
+      boundary_type = boundary_type,
       caveat = caveat
     ) %>%
     add_class("monitor_quantile_obj")
@@ -285,7 +382,6 @@ monitor_quantile <- function(
 autoplot.monitor_quantile_obj <- function(object, ...) {
   minw <- attr(object, "minw")
   pos <- (minw + 1L):(minw + nrow(object$stat))
-  snames <- colnames(object$stat)
   vlines <- tibble(id = names(object$alarm), label = "alarm", at = object$alarm) %>%
     tidyr::drop_na(at)
   autoplot_stat_boundary(
@@ -303,7 +399,7 @@ print.monitor_quantile_obj <- function(x, digits = max(3L, getOption("digits") -
   cat_rule(
     left = glue(
       "monitor_quantile ({toupper(attr(x, 'type') %||% 'qpwy')}, n = {attr(x, 'n')}, minw = {attr(x, 'minw')}, ",
-      "tau = {attr(x, 'tau')}, sig_lvl = {attr(x, 'sig_lvl')}%)"
+      "tau = {attr(x, 'tau')}, sig_lvl = {attr(x, 'sig_lvl')}%, {attr(x, 'boundary_type') %||% 'asymptotic'} boundary)"
     )
   )
   cat_line()

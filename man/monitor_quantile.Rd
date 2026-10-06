@@ -11,7 +11,8 @@ monitor_quantile(
   nrep = 500L,
   sig_lvl = 95,
   seed = NULL,
-  type = c("qpwy", "qpsy")
+  type = c("qpwy", "qpsy"),
+  boundary = c("asymptotic", "bootstrap")
 )
 }
 \arguments{
@@ -33,7 +34,9 @@ reselect it at each recursion point.}
 \item{minw}{A positive integer. The minimum window size (default =
 \eqn{(0.01 + 1.8/\sqrt{T})T}{(0.01 + 1.8 / sqrt(T))T}, where T denotes the sample size).}
 
-\item{nrep}{Number of Monte Carlo replications for the boundary.}
+\item{nrep}{Number of replications for the boundary: Monte Carlo draws of the
+limit with \code{boundary = "asymptotic"}, bootstrap resamples with
+\code{boundary = "bootstrap"}.}
 
 \item{sig_lvl}{Significance level, one of \code{90}, \code{95}, \code{99}.}
 
@@ -41,10 +44,14 @@ reselect it at each recursion point.}
 
 \item{type}{\code{"qpwy"} (expanding window) or \code{"qpsy"} (also the supremum
 over window starts).}
+
+\item{boundary}{\code{"asymptotic"} (simulated limit, the default) or
+\code{"bootstrap"} (Algorithm 1 of Wu, Shi & Wu 2025).}
 }
 \value{
 An object of class \code{monitor_quantile_obj}: a list with the statistic
-path \code{stat}, the flat \code{boundary}, the estimated \code{delta}, and
+path \code{stat}, the flat \code{boundary}, the estimated \code{delta} (reported for
+both boundaries, used only by the asymptotic one), and
 \code{alarm} and \code{alarm_date} (the first breach, \code{NA} if there is
 none).
 }
@@ -64,16 +71,32 @@ recursive update as there is for OLS. QPWY needs \code{O(T)} fits and QPSY needs
 \code{O(T^2)}, so QPSY takes seconds for each series at \code{n = 200} and the
 time grows quadratically.
 
-The function simulates the critical value in each call from the limiting null
-distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}}. Here
-\code{delta} is a correlation coefficient estimated from the data (as in
-\code{\link{quantile_test}}), \code{Q} is the Dickey-Fuller t functional and
-\code{Z} is its counterpart driven by an independent Brownian motion. Both are
-simulated for every window, so no QR fits are needed. The boundary is a single
-\strong{flat} value and not one value for each \code{r}. It is the quantile of
-the supremum of each simulated path, constructed exactly like the \code{sadf_cv}
-of \code{\link{radf_mc_cv}}, which controls the first-crossing false-alarm
-rate.
+The boundary is a single \strong{flat} value and not one value for each \code{r}.
+It is the quantile of the supremum of each null path, constructed like the
+\code{sadf_cv} of \code{\link{radf_mc_cv}}, which controls the first-crossing
+false-alarm rate. \code{boundary} chooses how the null paths are generated.
+
+With \code{boundary = "asymptotic"} (the default) the function simulates the
+limiting null distribution \code{delta * Q_{r1,r2} + sqrt(1 - delta^2) * Z_{r1,r2}}
+in each call. Here \code{delta} is a correlation coefficient estimated from the
+data (as in \code{\link{quantile_test}}), \code{Q} is the Dickey-Fuller t
+functional and \code{Z} is its counterpart driven by an independent Brownian
+motion. Both are simulated for every window, so no QR fits are needed and the
+boundary is cheap.
+
+With \code{boundary = "bootstrap"} the function applies Algorithm 1 of Wu, Shi &
+Wu (2025) to the whole path. It resamples the centred first differences of the
+series with replacement, cumulates them into a null random walk and recomputes
+the QPWY or QPSY path on it, \code{nrep} times. The boundary is the quantile of
+the \code{nrep} path maxima. It follows the finite-sample distribution of the
+statistic in the data at hand, so it removes most of the size distortion of the
+asymptotic boundary described below. Each replicate costs a full statistic path,
+which is \code{O(T)} QR fits for QPWY and \code{O(T^2)} for QPSY. The paper also
+discards the first 100 draws of each resample. We omit this step because the
+statistic has an intercept, so it does not depend on the level of the series, and
+the draws are i.i.d., so the retained values already have the same distribution.
+Set \code{options(exuber.parallel = TRUE)} to spread the replicates over
+workers.
 }
 \note{
 The function simulates the critical value (the boundary) internally in each
@@ -89,20 +112,24 @@ the shared pipeline and which do not.
 }
 \section{Caveats}{
 
-The boundary is the asymptotic one. Near the median it is well sized in finite
-samples, with a false-alarm rate of 3.5 to 4.0\\% at a nominal 5\\% (Gaussian and
-\eqn{t_3} innovations, \code{tau = 0.5}). Away from the median the small early
-windows make both statistics oversized, and QPSY badly so even with Gaussian
-innovations. The false-alarm rate of QPSY is 35\\% at \code{tau = 0.9}
-(Gaussian). With \eqn{t_3} innovations it is 21\\% at \code{tau = 0.8} and 44\\% at
-\code{tau = 0.9} (\code{n = 100}). With \eqn{t_3} innovations the rate for QPWY is
-7.5 to 8.5\\% at \code{tau = 0.2} and \code{0.8} and 12.5\\% at \code{tau = 0.9}
-(\code{n = 150}). Wu, Shi & Wu advise against extreme quantiles in small samples
-and use bootstrap critical values for monitoring. That bootstrap is not
-implemented here. For \code{type = "qpsy"} with \code{tau} away from 0.5, the
-function emits a short pointer as a message (see \code{\link{suppressMessages}})
-and stores it as \code{attr(x, "caveat")}. The numbers are in
-docs/alternative-paradigms.md.
+The asymptotic boundary is well sized near the median in finite samples, with a
+false-alarm rate of 3.5 to 4.0\\% at a nominal 5\\% (Gaussian and \eqn{t_3}
+innovations, \code{tau = 0.5}). Away from the median the small early windows make
+both statistics oversized, and QPSY badly so even with Gaussian innovations. The
+false-alarm rate of QPSY is 35\\% at \code{tau = 0.9} (Gaussian). With \eqn{t_3}
+innovations it is 21\\% at \code{tau = 0.8} and 44\\% at \code{tau = 0.9}
+(\code{n = 100}). With \eqn{t_3} innovations the rate for QPWY is 7.5 to 8.5\\% at
+\code{tau = 0.2} and \code{0.8} and 12.5\\% at \code{tau = 0.9} (\code{n = 150}).
+Wu, Shi & Wu advise against extreme quantiles in small samples and use bootstrap
+critical values for monitoring, which is what \code{boundary = "bootstrap"}
+provides. With it the false-alarm rate was between 4.5 and 6.5\\% in all but one of
+the cases above (\code{n = 100} for QPWY, \code{n = 60} for QPSY), including QPSY at
+\code{tau = 0.8} and \code{0.9}. The exception is QPSY with \eqn{t_3} innovations at
+\code{tau = 0.9}, which stays at 10\\% when \code{nrep = 99}. A larger \code{nrep} and a
+less extreme \code{tau} help. For \code{type = "qpsy"} with \code{tau} away from 0.5 and the
+asymptotic boundary, the function emits a short pointer as a message (see
+\code{\link{suppressMessages}}) and stores it as \code{attr(x, "caveat")}. The
+numbers for both boundaries are in docs/alternative-paradigms.md.
 }
 
 \section{Status}{
@@ -125,6 +152,10 @@ autoplot(monitor_quantile(y, tau = 0.8, nrep = 100, seed = 1))
 
 # QPSY: supremum over window starts too (O(n^2) QR fits, slower)
 monitor_quantile(y[101:200], tau = 0.5, nrep = 100, seed = 1, type = "qpsy")
+
+# Bootstrap boundary (Algorithm 1 of Wu, Shi & Wu): one full statistic path per
+# replicate, so keep nrep small in a first run
+monitor_quantile(y, tau = 0.8, nrep = 49, seed = 1, boundary = "bootstrap")
 }
 
 }
