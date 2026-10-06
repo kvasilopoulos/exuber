@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 library(exuber)
 ```
 
-## Why this exists
+## What this page covers
 
-`exuber` started as a single test, `radf()`, the recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi & Yu (2015). Through a long research programme it grew to roughly 25 functions that cover a dozen papers: alternative tests, dating procedures, monitoring schemes and root inference. Every one of them used to be named `radf_<something>()`. That was accurate for some and misleading for others, because a `radf_` prefix suggests a recursive ADF statistic and several of these functions are not one. This vignette documents the naming scheme that replaced the old one. It also explains which functions plug into the `summary()`, `datestamp()`, `tidy()` and `autoplot()` pipeline built for `radf()`, and which have differently shaped output of their own.
+The package covers more than the original test. Alongside `radf()`, the recursive ADF/SADF/GSADF/BSADF statistic of Phillips, Shi & Yu (2015), it has alternative tests, dating procedures, monitoring schemes and root inference, about 25 functions in all. This page explains how the function names group them. It also says which functions plug into the `summary()`, `datestamp()`, `tidy()` and `autoplot()` pipeline built for `radf()`, and which have differently shaped output of their own.
 
 ## The naming scheme
 
@@ -45,7 +45,7 @@ Two names look related but are not. The `dating_*()` functions above are standal
 
 ## What actually plugs into `summary()`/`datestamp()`/`tidy()`/`autoplot()`
 
-These four generics are built around one shape: a `radf_obj` (from `radf()`) paired with a `radf_cv` that carries a time-varying boundary (`badf_cv` and `bsadf_cv`, one critical value per recursion point) as well as the three scalar sup-statistic critical values (`adf_cv`, `sadf_cv` and `gsadf_cv`). Only functions whose result has the `radf_obj` class, and whose paired `_cv()` function computes that time-varying boundary, get the full pipeline. In practice there are three tiers.
+These four generics are built around one shape: a `radf_obj` (from `radf()`) paired with a `radf_cv` that carries a time-varying boundary (`badf_cv` and `bsadf_cv`, one critical value per recursion point) as well as the three scalar sup-statistic critical values (`adf_cv`, `sadf_cv` and `gsadf_cv`). Only functions whose result has the `radf_obj` class, and whose paired `_cv()` function computes that time-varying boundary, get the full pipeline. In practice there are two tiers.
 
 ### Full support: `radf_common()`, `radf_kp()`, `radf_tt()`, `radf_sign()`, `radf_sign_dm()`, `radf_sbz()`
 
@@ -69,12 +69,6 @@ The other three are different. They carry the `radf_obj` class but build their s
 
 The `_cv()` functions of all three return the time-varying boundaries `badf_cv` and `bsadf_cv` as well as the three scalar critical values, so `datestamp()` and `autoplot()` work on them. The `bsadf` that `gls_dfstat_grid()` returns is already the sup over all window starts at each point. This differs from `radf_mc_cv()`, which applies a `cummax()` across replicates because of the output shape of the base C++ engine. Here the boundary is the per-time-point quantile across replicates, the same construction `radf_mc_cv()` uses for its own `bsadf_cv`.
 
-Each function is checked in three ways.
-
-- The last row of `badf_cv` is bit-identical to `adf_cv`, because `adf` is the last point of `badf` in every replicate. This is an exact identity, and it holds whichever series feeds `gls_dfstat_grid()`.
-- The empirical false-alarm rate under `H0` is at or below the nominal 5% (`radf_tt` 3.3%, `radf_sign` 5.5%, `radf_sign_dm` 3.5%, with n = 100 and minw = 20).
-- The detection power on an identical synthetic bubble is in the same range as the 16% of the established `radf()` and `radf_mc_cv()` baseline, and it is neither suspiciously higher nor lower (`radf_tt` 18%, `radf_sign` 20%, `radf_sign_dm` 8%). The sign-based tests give up power in exchange for invariance to heteroskedasticity, which is a documented finding of the source paper.
-
 ```{r tt-full}
 res <- radf_tt(y, minw = 20)
 cv <- radf_tt_cv(n = 200, minw = 20)
@@ -95,7 +89,7 @@ tidy(res, cv = cv)
 autoplot(res, cv = cv)
 ```
 
-`radf_sbz()` is a fourth, separate case. It builds its statistic (`supBZ`) on `wls_dfstat_grid()`, a no-intercept recursive Dickey-Fuller grid weighted by WLS and kernel volatility, and not on `gls_dfstat_grid()`. The same fix applies for the same reason, since `wls_dfstat_grid()` already returns the full `badf` and `bsadf` path for each replicate. The wild bootstrap in `radf_sbz_cv()` is therefore built as the Monte Carlo simulation in `radf_tt_cv()` and `radf_sign_cv()` is, with a per-time-point quantile across replicates and no `cummax()` shortcut. We validated it in the same way. The last row of `badf_cv` is bit-identical to `adf_cv`, and the empirical false-alarm rate under `H0` is 5.0% at a nominal 5% (n = 100, minw = 20, 200 replications). The test also rejects on a sufficiently strong deterministic explosive path. Its kernel-volatility weighting costs enough power, however, that it does not reject the series above at nboot = 100 to 200, where the bubble is the milder default of `sim_psy1()`. The same trade between power and robustness is documented for the `supBZ` leg of `radf_sbz_union()` below, so it is not new to this split.
+`radf_sbz()` is a fourth, separate case. It builds its statistic (`supBZ`) on `wls_dfstat_grid()`, a no-intercept recursive Dickey-Fuller grid weighted by WLS and kernel volatility, and not on `gls_dfstat_grid()`. The same fix applies for the same reason, since `wls_dfstat_grid()` already returns the full `badf` and `bsadf` path for each replicate. The wild bootstrap in `radf_sbz_cv()` is therefore built as the Monte Carlo simulation in `radf_tt_cv()` and `radf_sign_cv()` is, with a per-time-point quantile across replicates and no `cummax()` shortcut. The test rejects on a sufficiently strong deterministic explosive path. Its kernel-volatility weighting costs enough power, however, that it does not reject the series above at nboot = 100 to 200, where the bubble is the milder default of `sim_psy1()`. The same trade between power and robustness applies to the `supBZ` leg of `radf_sbz_union()`, described on the volatility-robustness page.
 
 ```{r sbz-full}
 res <- radf_sbz(y, minw = 20)
@@ -121,7 +115,7 @@ autoplot(res2, cv = cv2)
 
 The remaining 15 or so functions return their own class, with their own `print()` and `autoplot()` methods. They are `lbi_test()`, `ssu_test()`, `quantile_test()`, `cobubble_test()`, the `dating_*()` family, the `monitor()` and `monitor_*()` family (including `monitor()` itself, despite its ADF-family internals), `contagion_reg()`, `radf_recovery()`, `rootstamp()` and `radf_sbz_union()`. Their output does not fit the `radf_obj` shape: a dating table is not a per-series sup-statistic, and a monitoring alarm is not a critical value grid. Forcing them through `summary()`, `datestamp()` and `tidy()` would not close a documentation gap, so each is presented by its own methods, shown below.
 
-`rootstamp()` needs one remark. The [reference index](../reference/index.html) and the workflow list in the README place it under Analysis, right after `datestamp()`, because that is its position in the sequence of steps (detect, date, measure the growth rate). That is a position in the workflow and not an S3-support tier. It has its own class with its own `print()` and `autoplot()` methods, like everything else in this section. See `vignette("root-inference")`.
+`rootstamp()` needs one remark. The function reference lists it under Analysis, right after `datestamp()`, because that is its position in the sequence of steps (detect, date, measure the growth rate). That is a position in the workflow and not an S3-support tier. It has its own class with its own `print()` and `autoplot()` methods, like everything else in this section. See `vignette("root-inference")`.
 
 ```{r standalone}
 dating_hls(sim_data$psy1, trim = 0.05)

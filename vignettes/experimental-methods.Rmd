@@ -20,7 +20,7 @@ library(exuber)
 
 ## What "experimental" means here
 
-Most methods in exuber implement the procedure of a peer-reviewed paper and pass the package's standard validation. That validation consists of a formula-exact check against a brute-force reimplementation, a lookup against published tables, a Monte Carlo check of size, and a check of power against a true alternative. `radf_recovery()` and `datestamp(option = "svadf")` went through the same validation and both give useful results, but each has one disclosed gap that keeps it below the standard. For that reason they print `r lifecycle::badge("experimental")` and emit a caveat message when called. Treat their output as a guide to where episodes lie, and do not assume it is as well calibrated as the rest of the package.
+Most methods in exuber implement the procedure of a peer-reviewed paper and pass the package's standard validation. That validation consists of a formula-exact check against a brute-force reimplementation, a lookup against published tables, a Monte Carlo check of size, and a check of power against a true alternative. `radf_recovery()` and `datestamp(option = "svadf")` went through the same validation and both give useful results, but each has one disclosed gap that keeps it below the standard. For that reason they print an "Experimental" badge and emit a caveat message when called. Treat their output as a guide to where episodes lie, and do not assume it is as well calibrated as the rest of the package.
 
 ## `radf_recovery()`: dating a collapse and a recovery
 
@@ -37,15 +37,15 @@ The estimate `f_c` (crisis onset, 57) falls just before the true collapse start 
 
 ## `datestamp(option = "svadf")`: a preprint
 
-This option implements Sarkar & Wells (2026), an arXiv preprint that has not been peer reviewed. Every other paper implemented in the package has been, so the evidence behind this method is weaker. Its statistic is the `badf` sequence that `radf()` already computes, compared against two closed-form thresholds that depend only on the sample size and come from the applied methodology of the paper. No new estimation code was needed, so we added it as an option of `datestamp()` and not as a separate function, even though it is a preprint.
+This option implements Sarkar & Wells (2026), an arXiv preprint that has not been peer reviewed. Every other paper implemented in the package has been, so the evidence behind this method is weaker. Its statistic is the `badf` sequence that `radf()` already computes, compared against two closed-form thresholds that depend only on the sample size and come from the applied methodology of the paper. It is an option of `datestamp()` and not a separate function.
 
 ```{r svadf}
 res <- radf(sim_data, lag = 0)
 datestamp(res, option = "svadf", min_duration = psy_ds(nrow(sim_data)))
 ```
 
-`psy1` and `psy2` receive clear origination and collapse dates, while `evans`, `div` and `blan` never cross the threshold in this panel. We report this mixed result as it came out.
+`psy1` and `psy2` receive clear origination and collapse dates, while `evans`, `div` and `blan` never cross the threshold in this panel.
 
 ## Using them responsibly
 
-Both methods are worth using. The date ordering from `radf_recovery()` and the point statistic from `datestamp(option = "svadf")` are reliable. Neither should be the only basis for a claim about false-alarm rates or exact calibration, though. When that matters, prefer `radf()` and `datestamp()`, or one of the peer-reviewed alternatives in `vignette("alternative-tests")` and `vignette("dating-methods")`. Treat these two methods as a second opinion until their caveats are resolved. The caveats are tracked in `docs/dating-and-root-inference.md` and `volatility-robustness.md`.
+Both methods are worth using. The date ordering from `radf_recovery()` and the point statistic from `datestamp(option = "svadf")` are reliable. Neither should be the only basis for a claim about false-alarm rates or exact calibration, though. When that matters, prefer `radf()` and `datestamp()`, or one of the peer-reviewed alternatives in `vignette("alternative-tests")` and `vignette("dating-methods")`. Treat these two methods as a second opinion until their caveats are resolved. The caveats are listed in the replication notes for dating and volatility-robustness.

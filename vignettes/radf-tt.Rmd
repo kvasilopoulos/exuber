@@ -49,7 +49,7 @@ cv$gsadf_cv
 2. It inverts the profile and uses the inverse to resample and time-deform the series.
 3. It computes a recursive sup-ADF statistic (GLS-demeaned, with no intercept) on the deformed series. This belongs to the same family of statistics as `radf()`, but it needs no fitted intercept, which matches the derivation in the paper.
 
-You can adjust `kernel` (`"uniform"`, the choice of the paper, or `"gaussian"`) and `h`, the bandwidth. The default for `h` is a fixed plug-in value and not the full cross-validation search of the paper. The package's enhancement notes explain why we weighed cost against benefit this way.
+You can adjust `kernel` (`"uniform"`, the choice of the paper, or `"gaussian"`) and `h`, the bandwidth. The default for `h` is a fixed plug-in value and not the full cross-validation search of the paper.
 
 ## Dating and plotting a detected bubble
 

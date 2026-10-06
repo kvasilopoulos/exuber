@@ -34,7 +34,7 @@ Every result object in the package has an `autoplot()` method. The call is alway
 | `rootstamp()` | Estimated root and its confidence interval per episode |
 | `lbi_test()`, `quantile_test()`, `radf_sbz_union()` | Statistic against critical value for each series |
 
-The rest of this vignette covers the first three rows, which belong to the `radf()` workflow, and shows how to build your own plot from the tidied tables when the defaults do not fit. The other methods take no options beyond the object. They appear in their own vignettes (`vignette("monitoring")`, `vignette("dating-methods")` and `vignette("root-inference")`).
+The rest of this page covers the first three rows, which belong to the `radf()` workflow, and shows how to build your own plot from the tidied tables when the defaults do not fit. The other methods take no options beyond the object. They are described with their own methods: `vignette("monitoring")` for the monitors and `vignette("dating-methods")` and `vignette("root-inference")` for dating and root inference.
 
 ## The `radf()` plot
 
@@ -114,7 +114,7 @@ joined %>%
   theme_exuber()
 ```
 
-`tidy_join()` is the scalar counterpart, with one row per series and statistic, which is the table that `summary()` prints. Calling `tidy()` or `augment()` on either object alone returns the two halves before they are joined. `vignette("naming-and-analysis")` describes the full pipeline.
+`tidy_join()` is the scalar counterpart, with one row per series and statistic, which is the table that `summary()` prints. Calling `tidy()` or `augment()` on either object alone returns the two halves before they are joined. The first part of this page describes the full pipeline.
 
 ## Distributions
 
