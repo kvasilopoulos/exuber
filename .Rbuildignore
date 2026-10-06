@@ -31,3 +31,5 @@
 ^CLAUDE\.md$
 ^CITATION\.cff$
 ^Rplots\.pdf$
+^air\.toml$
+^jarl\.toml$
