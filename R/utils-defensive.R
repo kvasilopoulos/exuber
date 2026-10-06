@@ -99,7 +99,7 @@ assert_class <- function(x, klass) {
 }
 
 assert_na <- function(x) {
-  if (any(is.na(x))) {
+  if (anyNA(x)) {
     stop_glue("rls estimation cannot handle NA")
   }
 }

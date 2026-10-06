@@ -42,7 +42,7 @@ test_that("regular (fully populated) data is unaffected", {
   r <- radf(dta)
   expect_false(anyNA(r$badf))
   expect_false(anyNA(r$bsadf_panel))
-  expect_equal(r$bsadf_panel, apply(r$bsadf, 1, mean))
+  expect_equal(r$bsadf_panel, rowMeans(r$bsadf))
   vr <- get_valid_range(r)
   expect_true(all(vr["start", ] == 1))
   expect_true(all(vr["end", ] == nrow(dta)))

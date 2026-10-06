@@ -77,7 +77,7 @@ is_wide <- function(index) {
   TRUE
 }
 is_duplicate <- function(x) {
-  any(duplicated(x))
+  anyDuplicated(x) > 0
 }
 
 

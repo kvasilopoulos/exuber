@@ -197,8 +197,8 @@ tidy.dg_radf <- function(x, ...) {
   sig <- gsub("%", "", x$sig)
   tibble(
     "series" = snames,
-    "positive" = ifelse(snames %in% x$positive, TRUE, FALSE),
-    "negative" = ifelse(snames %in% x$negative, TRUE, FALSE),
+    "positive" = snames %in% x$positive,
+    "negative" = snames %in% x$negative,
     "sig" = as.factor(ifelse(sig == "Reject", NA, sig))
   )
 }
@@ -654,7 +654,7 @@ add_ongoing <- function(ds, idx, cv) {
   if (is_logical(end, 0)) {
     return(data.frame(ds, Ongoing = character(0)))
   } else {
-    ongoing <- ifelse(is.na(end), TRUE, FALSE)
+    ongoing <- is.na(end)
   }
   np <- length(end)
   for (i in 1:np) {

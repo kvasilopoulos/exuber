@@ -140,7 +140,7 @@ add_key <- function(x, attr_from, trunc = FALSE) {
     key_tbl <- tibble(key = (nkey + 1):(nrow(x) + nkey))
     wkey <- add_column(x, key_tbl)
   } else {
-    key_tbl <- tibble(key = 1:nrow(x))
+    key_tbl <- tibble(key = seq_len(nrow(x)))
     wkey <- add_column(x, key_tbl)
   }
   wkey

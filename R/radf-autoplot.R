@@ -298,8 +298,8 @@ shade <- function(
     }
 
     if (!is.null(fill_ongoing)) {
-      ds_pos <- filter(ds_data, Ongoing == FALSE)
-      ds_neg <- filter(ds_data, Ongoing == FALSE)
+      ds_pos <- filter(ds_data, !Ongoing)
+      ds_neg <- filter(ds_data, !Ongoing)
     }
 
     any_pos <- nrow(ds_pos) > 0
@@ -326,7 +326,7 @@ shade <- function(
 
     if (!is.null(fill_ongoing)) {
       any_ongoing <- any(ds_data$Ongoing)
-      x3 <- filter(ds_data, Ongoing == TRUE) %>%
+      x3 <- filter(ds_data, Ongoing) %>%
         geom_rect(
           data = .,
           inherit.aes = FALSE,
@@ -686,8 +686,8 @@ geom_ds_segment <- function(
   }
 
   if (!is.null(col_ongoing)) {
-    ds_pos <- filter(ds_data, Ongoing == FALSE)
-    ds_neg <- filter(ds_data, Ongoing == FALSE)
+    ds_pos <- filter(ds_data, !Ongoing)
+    ds_neg <- filter(ds_data, !Ongoing)
   }
 
   any_pos <- any(ds_data$Signal == "positive")
@@ -710,7 +710,7 @@ geom_ds_segment <- function(
 
   if (!is.null(col_ongoing)) {
     any_ongoing <- any(ds_data$Ongoing)
-    x3 <- filter(ds_data, Ongoing == TRUE) %>%
+    x3 <- filter(ds_data, Ongoing) %>%
       geom_segment(
         data = .,
         color = col_ongoing,
