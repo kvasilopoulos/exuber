@@ -33,3 +33,9 @@
 ^Rplots\.pdf$
 ^air\.toml$
 ^jarl\.toml$
+^\.pre-commit-config\.yaml$
+^\.vscode$
+^rv$
+^rv\.lock$
+^rproject\.toml$
+^\.Rprofile$

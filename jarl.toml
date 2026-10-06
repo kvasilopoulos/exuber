@@ -1,6 +1,6 @@
 [lint]
 # Ported from .lintr. data-raw holds one-off simulation scripts.
-exclude = ["data-raw/"]
+exclude = ["data-raw/", "rv/"]
 # .lintr disabled pipe_consistency_linter, so the jarl rule is off too.
 ignore = ["pipe_consistency"]
 
