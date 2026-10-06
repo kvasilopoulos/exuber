@@ -12,7 +12,7 @@ test_that("sim_psy1 e = NULL reproduces the original DGP exactly (formula check)
   for (t in 2:n) {
     if (t < te) {
       y[t] <- y[t - 1] + rnorm(1, sd = 6.79)
-    } else if (t >= te & t <= tf) {
+    } else if (t >= te && t <= tf) {
       y[t] <- delta * y[t - 1] + rnorm(1, sd = 6.79)
     } else if (t == tf + 1) {
       y[t] <- y[te] + rnorm(1, sd = 6.79)

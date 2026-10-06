@@ -9,7 +9,7 @@ test_that("sim_evans", {
 })
 
 test_that("sim_div", {
-  expect_error(sim_div(100, log = T), regexp = NA)
+  expect_error(sim_div(100, log = TRUE), regexp = NA)
   expect_error(sim_div(100, output = "d"), regexp = NA)
 })
 

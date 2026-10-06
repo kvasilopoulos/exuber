@@ -3,13 +3,13 @@ context("lbi_test")
 test_that("Breitung & Diegel's eq. 4 telescoping identity holds exactly
   (2*sum(Delta y_t * y_{t-1}) = y_T^2 - T*sigma_tilde^2, y_1 = 0 case)", {
   set.seed(1)
-  T <- 100
-  y <- c(0, cumsum(rnorm(T)))
+  n <- 100
+  y <- c(0, cumsum(rnorm(n)))
   dy <- diff(y)
-  ylag <- y[1:T]
+  ylag <- y[1:n]
   lhs <- 2 * sum(dy * ylag)
   sigma2_tilde <- mean(dy^2)
-  rhs <- y[T + 1]^2 - T * sigma2_tilde
+  rhs <- y[n + 1]^2 - n * sigma2_tilde
   expect_equal(lhs, rhs, tolerance = 1e-8)
 })
 

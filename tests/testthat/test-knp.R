@@ -70,9 +70,9 @@ test_that("dating_knp's omission correction reproduces Kejriwal, Nguyen &
   the omission-corrected estimator is materially more accurate for the
   origination date", {
   skip_on_cran()
-  sim_knp <- function(seed, T1 = 50, T2 = 90, T = 200, delta = 1.05) {
+  sim_knp <- function(seed, T1 = 50, T2 = 90, n_obs = 200, delta = 1.05) {
     set.seed(seed)
-    y <- numeric(T)
+    y <- numeric(n_obs)
     y[1] <- 0
     for (t in 2:T1) {
       y[t] <- y[t - 1] + rnorm(1)
@@ -81,8 +81,8 @@ test_that("dating_knp's omission correction reproduces Kejriwal, Nguyen &
       y[t] <- delta * y[t - 1] + rnorm(1)
     }
     y[T2 + 1] <- y[T1] + rnorm(1)
-    if (T2 + 2 <= T) {
-      for (t in (T2 + 2):T) {
+    if (T2 + 2 <= n_obs) {
+      for (t in (T2 + 2):n_obs) {
         y[t] <- y[t - 1] + rnorm(1)
       }
     }
