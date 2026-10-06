@@ -70,12 +70,16 @@ test_that("datestamp(option = 'svadf') has a low false-alarm rate under H0
   skip_on_cran()
   set.seed(5)
   nrep <- 60
-  fa <- mean(vapply(seq_len(nrep), function(i) {
-    set.seed(1000 + i)
-    yy <- cumsum(rnorm(150))
-    r <- radf(yy, lag = 0)
-    out <- datestamp(r, option = "svadf", min_duration = psy_ds(150))
-    length(out) > 0
-  }, logical(1)))
+  fa <- mean(vapply(
+    seq_len(nrep),
+    function(i) {
+      set.seed(1000 + i)
+      yy <- cumsum(rnorm(150))
+      r <- radf(yy, lag = 0)
+      out <- datestamp(r, option = "svadf", min_duration = psy_ds(150))
+      length(out) > 0
+    },
+    logical(1)
+  ))
   expect_lt(fa, 0.20)
 })

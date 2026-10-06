@@ -146,10 +146,14 @@ radf_tt_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   set_rng(seed)
   pcnt <- c(0.9, 0.95, 0.99)
 
-  results <- replicate(nrep, {
-    y <- cumsum(rnorm(n))
-    gls_dfstat_grid(y, minw)
-  }, simplify = FALSE)
+  results <- replicate(
+    nrep,
+    {
+      y <- cumsum(rnorm(n))
+      gls_dfstat_grid(y, minw)
+    },
+    simplify = FALSE
+  )
 
   adf <- vapply(results, `[[`, numeric(1), "adf")
   sadf <- vapply(results, `[[`, numeric(1), "sadf")
@@ -194,10 +198,9 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
   ylag <- yc[1:Tn]
 
   h <- h %||% Tn^(-2 / 5)
-  kern <- switch(kernel,
-    uniform = function(u) as.numeric(abs(u) <= 1),
-    gaussian = function(u) dnorm(u)
-  )
+  kern <- switch(kernel, uniform = function(u) as.numeric(abs(u) <= 1), gaussian = function(u) {
+    dnorm(u)
+  })
 
   delta <- numeric(Tn)
   eps <- numeric(Tn)
@@ -213,9 +216,16 @@ variance_profile <- function(y, kernel = c("uniform", "gaussian"), h = NULL) {
   # Truncation threshold psi_T (footnote 6): max local-window residual sd.
   win <- max(2L, round(0.1 * Tn))
   starts <- seq_len(max(1L, round(0.9 * Tn)))
-  cbar <- max(vapply(starts, function(a) {
-    stats::sd(eps[a:min(a + win, Tn)])
-  }, numeric(1)), na.rm = TRUE)
+  cbar <- max(
+    vapply(
+      starts,
+      function(a) {
+        stats::sd(eps[a:min(a + win, Tn)])
+      },
+      numeric(1)
+    ),
+    na.rm = TRUE
+  )
   psi_T <- cbar * Tn^(1 / 7)
 
   eps_star <- eps
@@ -316,8 +326,12 @@ radf_tt <- function(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NU
     vp <- variance_profile(y, kernel = kernel, h = h)
     g_of_s <- function(s) {
       # generalised inverse of the (monotone, piecewise-linear) eta_hat
-      approx(vp$eta_grid, seq(0, 1, length.out = vp$Tn + 1), xout = pmin(pmax(s, 0), 1),
-        ties = "ordered", rule = 2
+      approx(
+        vp$eta_grid,
+        seq(0, 1, length.out = vp$Tn + 1),
+        xout = pmin(pmax(s, 0), 1),
+        ties = "ordered",
+        rule = 2
       )$y
     }
     tgrid <- seq(0, 1, length.out = vp$Tn + 1)
@@ -337,10 +351,20 @@ radf_tt <- function(data, minw = NULL, kernel = c("uniform", "gaussian"), h = NU
   colnames(badf) <- colnames(bsadf) <- snames
 
   list(
-    adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
+    adf = adf,
+    badf = badf,
+    sadf = sadf,
+    bsadf = bsadf,
+    gsadf = gsadf
   ) %>%
     add_attr(
-      mat = x, index = index(x), series_names = snames, minw = minw, n = nrow(x), kernel = kernel, lag = 0L
+      mat = x,
+      index = index(x),
+      series_names = snames,
+      minw = minw,
+      n = nrow(x),
+      kernel = kernel,
+      lag = 0L
     ) %>%
     add_class("radf_tt_obj", "radf_obj")
 }
@@ -351,10 +375,16 @@ print.radf_tt_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...
   cat_rule(left = glue("radf_tt (minw = {get_minw(x)}, kernel = {attr(x, 'kernel')})"))
   cat_line()
   print(
-    data.frame(series = names(x$adf), adf = x$adf, sadf = x$sadf, gsadf = x$gsadf,
+    data.frame(
+      series = names(x$adf),
+      adf = x$adf,
+      sadf = x$sadf,
+      gsadf = x$gsadf,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }

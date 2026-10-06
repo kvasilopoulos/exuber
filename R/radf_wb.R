@@ -1,36 +1,32 @@
-
-
 # DGP_PS ------------------------------------------------------------------
-
 
 #' @importFrom stats coefficients residuals
 adf_res <- function(x, adflag = 0, type = c("fixed", "aic", "bic")) {
   x <- as.matrix(x)
   type <- match.arg(type)
-  if(type != "fixed") {
+  if (type != "fixed") {
     adflag <- lag_select(x, criterion = type, max_lag = adflag)
   }
   yxmat <- as.data.frame(unroot_adf_null(x, adflag))
-  reg <- lm(dy ~ ., data = yxmat[,-2, drop = FALSE])
+  reg <- lm(dy ~ ., data = yxmat[, -2, drop = FALSE])
   list(beta = coefficients(reg), res = residuals(reg))
 }
 
 radf_wb_dgp_ps <- function(y, adflag = 0, type = "fixed", tb = NULL) {
-
   result <- adf_res(y, adflag = adflag, type)
-  beta   <- result$beta
-  eps    <- result$res
+  beta <- result$beta
+  eps <- result$res
 
   dy <- diff(y)
   nr <- length(dy)
-  if(!is.null(tb)) {
+  if (!is.null(tb)) {
     nr <- tb - 1
   }
 
-  rN <- sample(1:(nr-adflag), replace = TRUE)
+  rN <- sample(1:(nr - adflag), replace = TRUE)
   wn <- rnorm(nr)
 
-  dyb <- vector("numeric",  nr)
+  dyb <- vector("numeric", nr)
   dyb[1:adflag] <- dy[1:adflag]
 
   if (adflag == 0) {
@@ -40,10 +36,10 @@ radf_wb_dgp_ps <- function(y, adflag = 0, type = "fixed", tb = NULL) {
   } else if (adflag > 0) {
     x <- matrix(0, nrow = nr - 1, ncol = adflag)
     for (i in (adflag + 1):(nr - 1)) {
-      for( k in 1:adflag){
-        x[i, k] <- dyb[i-k]
+      for (k in 1:adflag) {
+        x[i, k] <- dyb[i - k]
       }
-      dyb[i] <- x[i,] %*% beta[-1] + wn[i - adflag] * eps[rN[i - adflag]]
+      dyb[i] <- x[i, ] %*% beta[-1] + wn[i - adflag] * eps[rN[i - adflag]]
     }
   }
   yb <- cumsum(c(y[1], dyb))
@@ -54,8 +50,10 @@ radf_wb_dgp_ps <- function(y, adflag = 0, type = "fixed", tb = NULL) {
 lag_select <- function(data, criterion = c("aic", "bic"), max_lag = 8) {
   criterion <- match.arg(criterion)
   if (max_lag == 0) {
-    message_glue("Please increase `max_lag` to a number higher than 0 when using criterion selection.")
-    return (0)
+    message_glue(
+      "Please increase `max_lag` to a number higher than 0 when using criterion selection."
+    )
+    return(0)
   }
 
   tbl <- lag_select_table(data, max_lag)
@@ -78,7 +76,7 @@ lag_select_table <- function(data, max_lag) {
   for (i in 1:nc) {
     for (l in 0:max_lag) {
       yxmat <- unroot_adf(x, lag = l)
-      reg <- lm(dy ~ ., data = as.data.frame(yxmat[,-2]))
+      reg <- lm(dy ~ ., data = as.data.frame(yxmat[, -2]))
       aic[l + 1] <- AIC(reg)
       bic[l + 1] <- BIC(reg)
     }
@@ -101,7 +99,6 @@ lag_select_table <- function(data, max_lag) {
 # radf_wb_ps_cv(sim_data, minw, nboot, lag, tb = NULL)
 
 radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) {
-
   y <- parse_data(data)
   assert_na(y)
   minw <- minw %||% psy_minw(data)
@@ -111,7 +108,7 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 
   nc <- ncol(y)
   nr <- nrow(y)
-  if(!is.null(tb)) {
+  if (!is.null(tb)) {
     assert_positive_int(tb, greater_than = minw)
     nr <- tb
   }
@@ -131,21 +128,25 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
     for (j in 1:nc) {
       results <- foreach(
         i = 1:nboot,
-          .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_ps"))),
+        .options.future = list(
+          seed = TRUE,
+          globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_ps"))
+        ),
         .inorder = FALSE
-      ) %dofuture% {
-        p()
-        ystar <- radf_wb_dgp_ps(y[, j, drop = TRUE], adflag, tb = tb, type = type)
-        yxmat <- unroot(ystar)
-        rls_gsadf(yxmat, min_win = minw)
-      }
+      ) %dofuture%
+        {
+          p()
+          ystar <- radf_wb_dgp_ps(y[, j, drop = TRUE], adflag, tb = tb, type = type)
+          yxmat <- unroot(ystar)
+          rls_gsadf(yxmat, min_win = minw)
+        }
       results <- do.call(cbind, results)
       adf_crit[, j] <- results[pointer + 1, ]
       sadf_crit[, j] <- results[pointer + 2, ]
       gsadf_crit[, j] <- results[pointer + 3, ]
 
-      badf_crit[, , j] <- results[1:pointer, ]
-      bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
+      badf_crit[,, j] <- results[1:pointer, ]
+      bsadf_crit[,, j] <- results[-c(1:(pointer + 3)), ]
     }
   })
 
@@ -154,7 +155,8 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
     sadf = sadf_crit,
     gsadf = gsadf_crit,
     badf = badf_crit,
-    bsadf = bsadf_crit) %>%
+    bsadf = bsadf_crit
+  ) %>%
     add_attr(
       index = attr(y, "index"),
       series_names = snames,
@@ -231,36 +233,52 @@ radf_wb_ps <- function(data, minw, nboot, adflag, type, tb = NULL, seed = NULL) 
 #' rsim_data <- radf(sim_data, minw = 20)
 #' autoplot(rsim_data, cv = wb2)
 #' }
-radf_wb_ps_cv <- function(data, minw = NULL, nboot = 500L, adflag = 0,
-                        type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
-
+radf_wb_ps_cv <- function(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+) {
   type <- match.arg(type)
-  results <- radf_wb_ps(data, minw = minw, nboot = nboot, adflag = adflag,
-                        type = type, tb = tb, seed = seed)
+  results <- radf_wb_ps(
+    data,
+    minw = minw,
+    nboot = nboot,
+    adflag = adflag,
+    type = type,
+    tb = tb,
+    seed = seed
+  )
 
   pcnt <- c(0.9, 0.95, 0.99)
-  adf_crit   <- apply(results$adf, 2, quantile, probs = pcnt) %>% t()
-  sadf_crit  <- apply(results$sadf, 2, quantile, probs = pcnt) %>% t()
+  adf_crit <- apply(results$adf, 2, quantile, probs = pcnt) %>% t()
+  sadf_crit <- apply(results$sadf, 2, quantile, probs = pcnt) %>% t()
   gsadf_crit <- apply(results$gsadf, 2, quantile, probs = pcnt) %>% t()
 
-  badf_crit  <- apply(results$badf, c(1,3), quantile, probs = pcnt) %>%
-    apply(c(1,3), t)
-  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, probs = pcnt) %>%
-    apply(c(1,3), t)
+  badf_crit <- apply(results$badf, c(1, 3), quantile, probs = pcnt) %>%
+    apply(c(1, 3), t)
+  bsadf_crit <- apply(results$bsadf, c(1, 3), quantile, probs = pcnt) %>%
+    apply(c(1, 3), t)
 
-  if(!is.null(tb)) {
+  if (!is.null(tb)) {
     y <- parse_data(data)
     minw <- minw %||% psy_minw(data)
     nc <- ncol(y)
     nr <- nrow(y)
     pointer <- nr - minw
     snames <- colnames(y)
-    badf_crit <- bsadf_crit <- array(NA, dim = c(pointer, 3, nc),
-                        dimnames = list(NULL, c("90%", "95%", "99%"), snames))
-    for(i in 1:nc) {
-      for(j in 1:3) {
-        badf_crit[,j,i] <- rep(sadf_crit[i,j], pointer)
-        bsadf_crit[,j,i] <- rep(gsadf_crit[i,j], pointer)
+    badf_crit <- bsadf_crit <- array(
+      NA,
+      dim = c(pointer, 3, nc),
+      dimnames = list(NULL, c("90%", "95%", "99%"), snames)
+    )
+    for (i in 1:nc) {
+      for (j in 1:3) {
+        badf_crit[, j, i] <- rep(sadf_crit[i, j], pointer)
+        bsadf_crit[, j, i] <- rep(gsadf_crit[i, j], pointer)
       }
     }
   }
@@ -274,18 +292,30 @@ radf_wb_ps_cv <- function(data, minw = NULL, nboot = 500L, adflag = 0,
   ) %>%
     inherit_attrs(results) %>%
     add_class("radf_cv", "wb_cv")
-
 }
 
 
 #' @rdname radf_wb_ps_cv
 #' @inheritParams radf_wb_cv
 #' @export
-radf_wb_ps_distr <- function(data, minw = NULL, nboot = 500L, adflag = 0,
-                           type = c("fixed", "aic", "bic"), tb = NULL, seed = NULL) {
-
-  results <- radf_wb_ps(data, minw = minw, nboot = nboot,
-                        adflag = adflag, type = type, tb = tb, seed = seed)
+radf_wb_ps_distr <- function(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  adflag = 0,
+  type = c("fixed", "aic", "bic"),
+  tb = NULL,
+  seed = NULL
+) {
+  results <- radf_wb_ps(
+    data,
+    minw = minw,
+    nboot = nboot,
+    adflag = adflag,
+    type = type,
+    tb = tb,
+    seed = seed
+  )
 
   list(
     adf_distr = results$adf,
@@ -314,14 +344,13 @@ radf_wb_dgp_hlst <- function(y, dist_rad, dist_skew = FALSE) {
   } else {
     w <- rnorm(nr, 0, 1)
   }
-  estar <- cumsum(w*dy)
+  estar <- cumsum(w * dy)
   ystar <- c(0, estar)
   ystar
 }
 
 
 radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE, seed = NULL) {
-
   y <- parse_data(data)
   assert_na(y)
   minw <- minw %||% psy_minw(data)
@@ -350,22 +379,26 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
     for (j in 1:nc) {
       results <- foreach(
         i = 1:nboot,
-          .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_hlst"))),
+        .options.future = list(
+          seed = TRUE,
+          globals = structure(TRUE, add = c("rls_gsadf", "unroot", "radf_wb_dgp_hlst"))
+        ),
         .inorder = FALSE
-      ) %dofuture% {
-        p()
-        ystar <- radf_wb_dgp_hlst(y[, j], dist_rad, dist_skew)
-        yxmat <- unroot(ystar)
-        rls_gsadf(yxmat, min_win = minw)
-      }
+      ) %dofuture%
+        {
+          p()
+          ystar <- radf_wb_dgp_hlst(y[, j], dist_rad, dist_skew)
+          yxmat <- unroot(ystar)
+          rls_gsadf(yxmat, min_win = minw)
+        }
       results <- do.call(cbind, results)
 
       adf_crit[, j] <- results[pointer + 1, ]
       sadf_crit[, j] <- results[pointer + 2, ]
       gsadf_crit[, j] <- results[pointer + 3, ]
 
-      badf_crit[, , j] <- results[1:pointer, ]
-      bsadf_crit[, , j] <- results[-c(1:(pointer + 3)), ]
+      badf_crit[,, j] <- results[1:pointer, ]
+      bsadf_crit[,, j] <- results[-c(1:(pointer + 3)), ]
     }
   })
 
@@ -374,7 +407,8 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
     sadf = sadf_crit,
     gsadf = gsadf_crit,
     badf = badf_crit,
-    bsadf = bsadf_crit) %>%
+    bsadf = bsadf_crit
+  ) %>%
     add_attr(
       index = attr(y, "index"),
       series_names = snames,
@@ -464,22 +498,33 @@ radf_wb_hlst <- function(data, minw, nboot, dist_rad = FALSE, dist_skew = FALSE,
 #' rsim_data <- radf(y, minw = 20)
 #' autoplot(rsim_data, cv = wb2)
 #' }
-radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
-                        dist_skew = FALSE, seed = NULL) {
-
-  results <- radf_wb_hlst(data, minw = minw, nboot = nboot,
-                          dist_rad = dist_rad, dist_skew = dist_skew, seed = seed)
+radf_wb_cv <- function(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  dist_rad = FALSE,
+  dist_skew = FALSE,
+  seed = NULL
+) {
+  results <- radf_wb_hlst(
+    data,
+    minw = minw,
+    nboot = nboot,
+    dist_rad = dist_rad,
+    dist_skew = dist_skew,
+    seed = seed
+  )
 
   pcnt <- c(0.9, 0.95, 0.99)
 
-  adf_crit   <- apply(results$adf, 2, quantile, probs = pcnt) %>% t()
-  sadf_crit  <- apply(results$sadf, 2, quantile, probs = pcnt) %>% t()
+  adf_crit <- apply(results$adf, 2, quantile, probs = pcnt) %>% t()
+  sadf_crit <- apply(results$sadf, 2, quantile, probs = pcnt) %>% t()
   gsadf_crit <- apply(results$gsadf, 2, quantile, probs = pcnt) %>% t()
 
-  badf_crit  <- apply(results$badf, c(1,3), quantile, probs = pcnt) %>%
-    apply(c(1,3), t)
-  bsadf_crit <- apply(results$bsadf, c(1,3), quantile, probs = pcnt) %>%
-    apply(c(1,3), t)
+  badf_crit <- apply(results$badf, c(1, 3), quantile, probs = pcnt) %>%
+    apply(c(1, 3), t)
+  bsadf_crit <- apply(results$bsadf, c(1, 3), quantile, probs = pcnt) %>%
+    apply(c(1, 3), t)
 
   list(
     adf_cv = adf_crit,
@@ -490,17 +535,27 @@ radf_wb_cv <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
   ) %>%
     inherit_attrs(results) %>%
     add_class("radf_cv", "wb_cv")
-
 }
 
 #' @rdname radf_wb_cv
 #' @inheritParams radf_wb_cv
 #' @export
-radf_wb_distr <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
-                           dist_skew = FALSE, seed = NULL) {
-
-  results <- radf_wb_hlst(data, minw = minw, nboot = nboot,
-                          dist_rad = dist_rad, dist_skew = dist_skew, seed = seed)
+radf_wb_distr <- function(
+  data,
+  minw = NULL,
+  nboot = 500L,
+  dist_rad = FALSE,
+  dist_skew = FALSE,
+  seed = NULL
+) {
+  results <- radf_wb_hlst(
+    data,
+    minw = minw,
+    nboot = nboot,
+    dist_rad = dist_rad,
+    dist_skew = dist_skew,
+    seed = seed
+  )
 
   list(
     adf_distr = results$adf,
@@ -510,4 +565,3 @@ radf_wb_distr <- function(data, minw = NULL, nboot = 500L, dist_rad = FALSE,
     inherit_attrs(results) %>%
     add_class("radf_distr", "wb_distr")
 }
-

@@ -34,7 +34,6 @@ series_names <- function(x, ...) {
 
 # Methods -----------------------------------------------------------------
 
-
 #' @export
 series_names.default <- function(x, ...) {
   attr(x, "series_names")

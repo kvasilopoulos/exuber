@@ -5,10 +5,12 @@ test_that("hls_segment_ssr matches a brute-force lm() SSR for fixed segments", {
   y <- cumsum(rnorm(40))
   ps <- exuber:::hls_prefix_sums(y)
   n1 <- length(y) - 1L
-  x_all <- y[1:n1]; z_all <- y[2:(n1 + 1)] - y[1:n1]
+  x_all <- y[1:n1]
+  z_all <- y[2:(n1 + 1)] - y[1:n1]
 
   for (seg in list(c(1, 10), c(11, 25), c(5, 39))) {
-    lo <- seg[1] - 1; hi <- seg[2]
+    lo <- seg[1] - 1
+    hi <- seg[2]
     manual <- exuber:::hls_segment_ssr(ps, lo, hi, TRUE)
     idx <- (lo + 1):hi
     brute <- sum(resid(lm(z_all[idx] ~ x_all[idx]))^2)
@@ -26,11 +28,14 @@ test_that("hls_model1's grid search matches a brute-force nested lm() search
   m1 <- exuber:::hls_model1(y, ps, trim = 0.1)
 
   n1 <- n - 1L
-  x <- y[1:n1]; z <- y[2:(n1 + 1)] - y[1:n1]
+  x <- y[1:n1]
+  z <- y[2:(n1 + 1)] - y[1:n1]
   k_min <- max(2L, ceiling(0.1 * n1))
   best <- list(ssr = Inf)
   for (tau1 in k_min:(n1 - k_min)) {
-    if (y[n1 + 1] <= y[tau1 + 1]) next
+    if (y[n1 + 1] <= y[tau1 + 1]) {
+      next
+    }
     idx_right <- (tau1 + 1):n1
     ssr <- sum(z[1:tau1]^2) + sum(resid(lm(z[idx_right] ~ x[idx_right]))^2)
     if (ssr < best$ssr) best <- list(tau1 = tau1, ssr = ssr)
@@ -50,14 +55,19 @@ test_that("hls_model4's joint 3-breakpoint grid search matches a brute-force
   m4 <- exuber:::hls_model4(y, ps, trim = 0.1)
 
   n1 <- n - 1L
-  x <- y[1:n1]; z <- y[2:(n1 + 1)] - y[1:n1]
+  x <- y[1:n1]
+  z <- y[2:(n1 + 1)] - y[1:n1]
   k_min <- max(2L, ceiling(0.1 * n1))
   best <- list(ssr = Inf)
   for (tau1 in k_min:(n1 - 3 * k_min)) {
     for (tau2 in (tau1 + k_min):(n1 - 2 * k_min)) {
-      if (y[tau2 + 1] <= y[tau1 + 1]) next
+      if (y[tau2 + 1] <= y[tau1 + 1]) {
+        next
+      }
       for (tau3 in (tau2 + k_min):(n1 - k_min)) {
-        if (y[tau2 + 1] <= y[tau3 + 1]) next
+        if (y[tau2 + 1] <= y[tau3 + 1]) {
+          next
+        }
         ssr <- sum(z[1:tau1]^2) +
           sum(resid(lm(z[(tau1 + 1):tau2] ~ x[(tau1 + 1):tau2]))^2) +
           sum(resid(lm(z[(tau2 + 1):tau3] ~ x[(tau2 + 1):tau3]))^2) +
@@ -80,15 +90,20 @@ test_that("hls_model23's grid search matches a brute-force nested lm()
   y <- cumsum(rnorm(n))
   ps <- exuber:::hls_prefix_sums(y)
   n1 <- n - 1L
-  x <- y[1:n1]; z <- y[2:(n1 + 1)] - y[1:n1]
+  x <- y[1:n1]
+  z <- y[2:(n1 + 1)] - y[1:n1]
   k_min <- max(2L, ceiling(0.1 * n1))
 
   brute <- function(right_fit) {
     best <- list(ssr = Inf)
     for (tau1 in k_min:(n1 - 2 * k_min)) {
       for (tau2 in (tau1 + k_min):(n1 - k_min)) {
-        if (y[tau2 + 1] <= y[tau1 + 1]) next
-        if (right_fit && y[tau2 + 1] <= y[n1 + 1]) next
+        if (y[tau2 + 1] <= y[tau1 + 1]) {
+          next
+        }
+        if (right_fit && y[tau2 + 1] <= y[n1 + 1]) {
+          next
+        }
         idx_mid <- (tau1 + 1):tau2
         ssr_mid <- sum(resid(lm(z[idx_mid] ~ x[idx_mid]))^2)
         ssr_right <- if (right_fit) {
@@ -146,15 +161,16 @@ test_that("dating_hls recovers a genuine 4-regime bubble episode with
   Model 3/4 (a distinct collapse regime) over the more parsimonious
   Model 1/2 when the collapse is genuinely a different regime", {
   skip_on_cran()
-  sim_model4 <- function(seed, n1 = 60, n2 = 25, n3 = 25, n4 = 40,
-                          base = 100, c_bubble = 1.05) {
+  sim_model4 <- function(seed, n1 = 60, n2 = 25, n3 = 25, n4 = 40, base = 100, c_bubble = 1.05) {
     set.seed(seed)
     unit1 <- base + cumsum(rnorm(n1))
     bubble <- unit1[n1] * c_bubble^(1:n2) + cumsum(rnorm(n2))
     target <- bubble[n2] * 0.5
     collapse <- numeric(n3)
     collapse[1] <- bubble[n2] + rnorm(1)
-    for (k in 2:n3) collapse[k] <- target + 0.85 * (collapse[k - 1] - target) + rnorm(1)
+    for (k in 2:n3) {
+      collapse[k] <- target + 0.85 * (collapse[k - 1] - target) + rnorm(1)
+    }
     recovery <- collapse[n3] + cumsum(rnorm(n4))
     list(y = c(unit1, bubble, collapse, recovery), true_tau1 = n1, true_tau2 = n1 + n2)
   }

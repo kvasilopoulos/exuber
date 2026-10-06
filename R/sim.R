@@ -88,9 +88,19 @@
 #' # Same DGP, with two deterministic level shifts
 #' sim_psy1(n = 200, seed = 123, shifts = list(date = c(50, 150), size = c(20, -20))) %>%
 #'   autoplot()
-sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
-                     alpha = 0.6, sigma = 6.79, seed = NULL,
-                     e = NULL, shifts = NULL, coef_noise = NULL, coef_a = 1) {
+sim_psy1 <- function(
+  n,
+  te = 0.4 * n,
+  tf = 0.15 * n + te,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL,
+  e = NULL,
+  shifts = NULL,
+  coef_noise = NULL,
+  coef_a = 1
+) {
   assert_positive_int(n)
   assert_between(te, 0, n)
   assert_between(tf, te, n)
@@ -109,7 +119,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
     stop_glue("Argument 'coef_noise' should have length n - 1")
   }
 
-  delta <- 1 + c * n ^ (-alpha)
+  delta <- 1 + c * n^(-alpha)
   eps <- e %||% rnorm(n - 1, sd = sigma)
 
   shift_at <- numeric(n)
@@ -127,7 +137,7 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
     }
     if (t < te) {
       y[t] <- y[t - 1] + eps[t - 1] + shift_at[t]
-    } else if (t >= te & t <= tf) {
+    } else if (t >= te && t <= tf) {
       y[t] <- delta_t * y[t - 1] + eps[t - 1] + shift_at[t]
     } else if (t == tf + 1) {
       y[t] <- y[te] + eps[t - 1] + shift_at[t]
@@ -183,28 +193,30 @@ sim_psy1 <- function(n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #' # Feed skew-t innovations into sim_psy1() in place of i.i.d. Gaussian ones
 #' sim_psy1(n = 200, seed = 123, e = sim_innov(199, dist = "skew_t", df = 3, xi = -0.75, seed = 1)) %>%
 #'   autoplot()
-sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
-                      df = 5, xi = 0, seed = NULL) {
+sim_innov <- function(
+  n,
+  dist = c("normal", "t", "skew_t"),
+  sigma = 6.79,
+  df = 5,
+  xi = 0,
+  seed = NULL
+) {
   dist <- match.arg(dist)
   assert_positive_int(n)
   stopifnot(sigma >= 0, df > 2)
 
   set_rng(seed)
 
-  z <- switch(dist,
-    normal = rnorm(n),
-    t = rt(n, df) / sqrt(df / (df - 2)),
-    skew_t = {
-      delta <- xi / sqrt(1 + xi ^ 2)
-      t0 <- rt(n, df) / sqrt(df / (df - 2))
-      t1 <- rt(n, df) / sqrt(df / (df - 2))
-      raw <- delta * abs(t0) + sqrt(1 - delta ^ 2) * t1
-      e_abs_t0 <- (2 * sqrt(df) / ((df - 1) * beta(df / 2, 0.5))) / sqrt(df / (df - 2))
-      mean_raw <- delta * e_abs_t0
-      sd_raw <- sqrt(max(1 - delta ^ 2 * e_abs_t0 ^ 2, .Machine$double.eps))
-      (raw - mean_raw) / sd_raw
-    }
-  )
+  z <- switch(dist, normal = rnorm(n), t = rt(n, df) / sqrt(df / (df - 2)), skew_t = {
+    delta <- xi / sqrt(1 + xi^2)
+    t0 <- rt(n, df) / sqrt(df / (df - 2))
+    t1 <- rt(n, df) / sqrt(df / (df - 2))
+    raw <- delta * abs(t0) + sqrt(1 - delta^2) * t1
+    e_abs_t0 <- (2 * sqrt(df) / ((df - 1) * beta(df / 2, 0.5))) / sqrt(df / (df - 2))
+    mean_raw <- delta * e_abs_t0
+    sd_raw <- sqrt(max(1 - delta^2 * e_abs_t0^2, .Machine$double.eps))
+    (raw - mean_raw) / sd_raw
+  })
 
   (z * sigma) %>%
     add_attr(seed = get_rng_state(seed)) %>%
@@ -253,8 +265,7 @@ sim_innov <- function(n, dist = c("normal", "t", "skew_t"), sigma = 6.79,
 #' # NASDAQ-calibrated TGARCH (Monschang & Wilfling 2021)
 #' sim_vol_garch(199, omega = 0.4387, alpha = 0, beta = 0.9319, gamma = 0.1306, seed = 1) %>%
 #'   autoplot()
-sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0,
-                          seed = NULL) {
+sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0, seed = NULL) {
   assert_positive_int(n)
   stopifnot(omega > 0, alpha >= 0, beta >= 0, gamma >= 0)
 
@@ -266,8 +277,7 @@ sim_vol_garch <- function(n, omega = 0.1, alpha = 0.1, beta = 0.8, gamma = 0,
   h_prev <- 0
   z_prev <- 0
   for (t in seq_len(n)) {
-    h[t] <- omega + alpha * z_prev ^ 2 + beta * h_prev +
-      gamma * z_prev ^ 2 * (z_prev < 0)
+    h[t] <- omega + alpha * z_prev^2 + beta * h_prev + gamma * z_prev^2 * (z_prev < 0)
     z[t] <- sqrt(h[t]) * eps[t]
     h_prev <- h[t]
     z_prev <- z[t]
@@ -363,8 +373,7 @@ sim_vol_break <- function(n, tau = 0.5, ratio = 3, sigma = 6.79, seed = NULL) {
 #' @examples
 #' sim_vol_cir(199, seed = 1) %>%
 #'   autoplot()
-sim_vol_cir <- function(n, kappa = 0.03, theta = 0.25, xi = 0.1,
-                        sigma0_sq = theta, seed = NULL) {
+sim_vol_cir <- function(n, kappa = 0.03, theta = 0.25, xi = 0.1, sigma0_sq = theta, seed = NULL) {
   assert_positive_int(n)
   stopifnot(kappa > 0, theta > 0, xi > 0, sigma0_sq >= 0)
 
@@ -415,8 +424,7 @@ sim_vol_cir <- function(n, kappa = 0.03, theta = 0.25, xi = 0.1,
 #' @examples
 #' sim_vol_sv(199, seed = 1) %>%
 #'   autoplot()
-sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0,
-                       seed = NULL) {
+sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0, seed = NULL) {
   assert_positive_int(n)
   assert_between(phi, 0, 1)
   stopifnot(tau > 0)
@@ -427,7 +435,9 @@ sim_vol_sv <- function(n, phi = 0.98, tau = 0.1, log_sigma0_sq = 0,
   log_sig2[1] <- log_sigma0_sq
   if (n > 1) {
     eta <- rnorm(n - 1, sd = tau)
-    for (i in 2:n) log_sig2[i] <- phi * log_sig2[i - 1] + eta[i - 1]
+    for (i in 2:n) {
+      log_sig2[i] <- phi * log_sig2[i - 1] + eta[i - 1]
+    }
   }
 
   (exp(log_sig2 / 2) * rnorm(n)) %>%
@@ -482,7 +492,9 @@ sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
   eps <- rnorm(n + m, sd = sigma)
   psi <- numeric(m + 1)
   psi[1] <- 1
-  for (j in 2:(m + 1)) psi[j] <- psi[j - 1] * (j - 2 + d) / (j - 1)
+  for (j in 2:(m + 1)) {
+    psi[j] <- psi[j - 1] * (j - 2 + d) / (j - 1)
+  }
   u <- vapply(seq_len(n), function(k) sum(psi * rev(eps[k:(k + m)])), numeric(1))
 
   u %>%
@@ -559,9 +571,17 @@ sim_fi <- function(n, d = 0.2, sigma = 1, seed = NULL) {
 #' # 200 periods with bubble origination dates 40/120 and termination dates 80/140
 #' sim_psy2(n = 200, seed = 123) %>%
 #'   autoplot()
-sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
-                     te2 = 0.6 * n, tf2 = 0.1 * n + te2,
-                     c = 1, alpha = 0.6, sigma = 6.79, seed = NULL) {
+sim_psy2 <- function(
+  n,
+  te1 = 0.2 * n,
+  tf1 = 0.2 * n + te1,
+  te2 = 0.6 * n,
+  tf2 = 0.1 * n + te2,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  seed = NULL
+) {
   assert_positive_int(n)
   assert_between(te1, 0, n)
   assert_between(tf1, te1, n)
@@ -572,19 +592,19 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 
   set_rng(seed)
 
-  delta <- 1 + c * n ^ (-alpha)
+  delta <- 1 + c * n^(-alpha)
   y <- 100
 
   for (i in 2:n) {
     if (i < te1) {
       y[i] <- y[i - 1] + rnorm(1, sd = sigma)
-    } else if (i >= te1 & i <= tf1) {
+    } else if (i >= te1 && i <= tf1) {
       y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
     } else if (i == tf1 + 1) {
       y[i] <- y[te1] + rnorm(1, sd = sigma)
-    } else if (i > tf1 + 1 & i < te2) {
+    } else if (i > tf1 + 1 && i < te2) {
       y[i] <- y[i - 1] + rnorm(1, sd = sigma)
-    } else if (i >= te2 & i <= tf2) {
+    } else if (i >= te2 && i <= tf2) {
       y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
     } else if (i == tf2 + 1) {
       y[i] <- y[te2] + rnorm(1, sd = sigma)
@@ -642,10 +662,21 @@ sim_psy2 <- function(n, te1 = 0.2 * n, tf1 = 0.2 * n + te1,
 #' sudden <- sim_ps1(100, te = 40, tf= 60, tr = 61, beta = 0.1)
 #' autoplot(sudden)
 #'
-sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
-                    c = 1, c1 = 1, c2 = 1, eta = 0.6, alpha = 0.6, beta = 0.5,
-                    sigma = 6.79, seed = NULL, e = NULL) {
-
+sim_ps1 <- function(
+  n,
+  te = 0.4 * n,
+  tf = te + 0.2 * n,
+  tr = tf + 0.1 * n,
+  c = 1,
+  c1 = 1,
+  c2 = 1,
+  eta = 0.6,
+  alpha = 0.6,
+  beta = 0.5,
+  sigma = 6.79,
+  seed = NULL,
+  e = NULL
+) {
   assert_positive_int(n)
   assert_between(te, 0, n)
   assert_between(tf, te, n)
@@ -662,7 +693,7 @@ sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
     stop_glue("Argument 'e' should have length n - 1")
   }
   eps <- e %||% rnorm(n - 1, sd = sigma)
-  drift <- c*n^(-eta)
+  drift <- c * n^(-eta)
   delta <- 1 + c1 * n^(-alpha)
   gamma <- 1 - c2 * n^(-beta)
   y <- 100
@@ -670,9 +701,9 @@ sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
   for (t in 2:n) {
     if (t < te) {
       y[t] <- drift + y[t - 1] + eps[t - 1]
-    } else if (t >= te & t <= tf) {
+    } else if (t >= te && t <= tf) {
       y[t] <- delta * y[t - 1] + eps[t - 1]
-    } else if (t > tf & t <= tr ) {
+    } else if (t > tf && t <= tr) {
       y[t] <- gamma * y[t - 1] + eps[t - 1]
     } else {
       y[t] <- drift + y[t - 1] + eps[t - 1]
@@ -682,62 +713,6 @@ sim_ps1 <- function(n, te = 0.4 * n, tf = te + 0.2 * n , tr = tf + 0.1*n,
     add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
 }
-
-
-sim_ps2 <- function(n,
-                    te1 = 0.2 * n, tf1 = te1 + 0.2 * n , tr1 = tf1 + 0.1*n,
-                    te2 = 0.6 * n, tf2 = te2 + 0.15 * n , tr2 = tf2 + 0.1*n,
-                    c = 1, c1 = 1, c2 = 1, eta = 0.6, alpha = 0.6, beta = 0.5,
-                    sigma = 6.79, seed = NULL, e = NULL) {
-
-  assert_positive_int(n)
-  assert_between(te1, 0, n)
-  assert_between(tf1, te1, n)
-  assert_between(tr1, tf1, n)
-  assert_between(te2, tf1, n)
-  assert_between(tf2, te2, n)
-  assert_between(tr2, tf2, n)
-  assert_between(alpha, 0, 1)
-  stopifnot(c > 0)
-  stopifnot(c1 > 0)
-  stopifnot(c2 > 0)
-  assert_between(alpha, 0, 1)
-  assert_between(beta, 0, 1)
-  stopifnot(eta > 0.5, sigma >= 0)
-
-  set_rng(seed)
-  if (!is.null(e) && length(e) != n - 1) {
-    stop_glue("Argument 'e' should have length n - 1")
-  }
-  eps <- e %||% rnorm(n - 1, sd = sigma)
-  drift <- c*n^(-eta)
-  delta <- 1 + c1 * n^(-alpha)
-  gamma <- 1 - c2 * n^(-beta)
-  y <- 100
-
-  for (t in 2:n) {
-    if (t < te1) {
-      y[t] <- drift + y[t - 1] + eps[t - 1] # normal
-    } else if (t >= te1 & t <= tf1) {
-      y[t] <- delta * y[t - 1] + eps[t - 1] # bubble1
-    } else if (t > tf1 & t <= tr1 ) {
-      y[t] <- gamma * y[t - 1] + eps[t - 1] # collapse 1
-    }  else if (t > tr1 + 1 & t < te2) {
-      y[t] <- drift + y[t - 1] + eps[t - 1] # normal 2
-    }  else if (t >= te2 + 1 & t <= tf2) {
-      y[t] <- delta * y[t - 1] + eps[t - 1] # bubble 2
-    }  else if (t > tf2 + 1 & t <= tr2) {
-      y[t] <- gamma * y[t - 1] + eps[t - 1] # collapse 2
-    } else {
-      y[t] <- drift + y[t - 1] + eps[t - 1] # normal 3
-    }
-  }
-  y %>%
-    add_attr(seed = get_rng_state(seed)) %>%
-    add_class("sim")
-}
-
-
 
 
 #' Simulation of a Blanchard (1979) / Rotermann-Wilfling (2018) bubble process
@@ -802,9 +777,17 @@ sim_ps2 <- function(n,
 #'
 #' sim_blan(n = 250, type = "rotermann_wilfling", delta = 0.984, seed = 123) %>%
 #'   autoplot()
-sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
-                     type = c("blanchard", "rotermann_wilfling"),
-                     delta = 0.984, rw_sigma = 0.05, seed = NULL) {
+sim_blan <- function(
+  n,
+  pi = 0.7,
+  sigma = 0.03,
+  r = 0.05,
+  b0 = 0.1,
+  type = c("blanchard", "rotermann_wilfling"),
+  delta = 0.984,
+  rw_sigma = 0.05,
+  seed = NULL
+) {
   type <- match.arg(type)
   assert_positive_int(n)
   assert_between(pi, 0, 1)
@@ -833,7 +816,7 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
     assert_between(delta, 0, 1)
     stopifnot(rw_sigma > 0)
     theta <- rbinom(n - 1, 1, pi)
-    u <- rlnorm(n - 1, meanlog = -rw_sigma ^ 2 / 2, sdlog = rw_sigma)
+    u <- rlnorm(n - 1, meanlog = -rw_sigma^2 / 2, sdlog = rw_sigma)
     b <- b0
     for (i in seq_len(n - 1)) {
       b[i + 1] <- if (theta[i] == 1) {
@@ -892,13 +875,20 @@ sim_blan <- function(n, pi = 0.7, sigma = 0.03, r = 0.05, b0 = 0.1,
 #' @examples
 #' sim_evans(100, seed = 123) %>%
 #'   autoplot()
-sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
-                      r = 0.05, b1 = delta, seed = NULL) {
-
+sim_evans <- function(
+  n,
+  alpha = 1,
+  delta = 0.5,
+  tau = 0.05,
+  pi = 0.7,
+  r = 0.05,
+  b1 = delta,
+  seed = NULL
+) {
   # checks here
   assert_positive_int(n)
   stopifnot(alpha > 0)
-  if (delta < 0 | delta > (1 + r) * alpha) {
+  if (delta < 0 || delta > (1 + r) * alpha) {
     stop_glue("alpha and delta should satisfy: 0 < delta < (1+r)*alpha")
   }
   assert_between(pi, 0, 1)
@@ -907,7 +897,7 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
   set_rng(seed)
 
   y <- rnorm(n, 0, tau)
-  u <- exp(y - tau ^ 2 / 2)
+  u <- exp(y - tau^2 / 2)
   theta <- rbinom(n, 1, pi)
   b <- b1
 
@@ -915,8 +905,13 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
     if (b[i] <= alpha) {
       b[i + 1] <- (1 + r) * b[i] * u[i + 1]
     } else {
-      b[i + 1] <- (delta + pi ^ (-1) * (1 + r) * theta[i + 1] * (b[i] -
-        (1 + r) ^ (-1) * delta)) * u[i + 1]
+      b[i + 1] <- (delta +
+        pi^(-1) *
+          (1 + r) *
+          theta[i + 1] *
+          (b[i] -
+            (1 + r)^(-1) * delta)) *
+        u[i + 1]
     }
   }
 
@@ -974,12 +969,15 @@ sim_evans <- function(n, alpha = 1, delta = 0.5, tau = 0.05, pi = 0.7,
 #' p <- pf + 20 * pb
 #'
 #' autoplot(p)
-sim_div <- function(n, mu, sigma, r = 0.05,
-                    log = FALSE, output = c("pf", "d"), seed = NULL) {
+sim_div <- function(n, mu, sigma, r = 0.05, log = FALSE, output = c("pf", "d"), seed = NULL) {
   initval <- 1.3
   # Values obtained from West(1988, p53)
-  if (missing(mu)) if (log) mu <- 0.013 else mu <- 0.0373
-  if (missing(sigma)) if (log) sigma <- sqrt(0.16) else sigma <- sqrt(0.1574)
+  if (missing(mu)) {
+    if (log) mu <- 0.013 else mu <- 0.0373
+  }
+  if (missing(sigma)) {
+    if (log) sigma <- sqrt(0.16) else sigma <- sqrt(0.1574)
+  }
 
   assert_positive_int(n)
   stopifnot(sigma >= 0)
@@ -988,17 +986,19 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   return <- match.arg(output)
 
   set_rng(seed)
-  d <- stats::filter(mu + c(initval, rnorm(n - 1, 0, sigma)),
+  d <- stats::filter(
+    mu + c(initval, rnorm(n - 1, 0, sigma)),
     c(1),
-    init = 1.3, method = "recursive"
+    init = 1.3,
+    method = "recursive"
   ) %>%
     as.numeric() # filter coerces to time-series
 
   if (log) {
-    g <- exp(mu + sigma ^ 2 / 2) - 1
+    g <- exp(mu + sigma^2 / 2) - 1
     pf <- (1 + g) * d / (r - g)
   } else {
-    pf <- mu * (1 + r) * r ^ (-2) + d / r
+    pf <- mu * (1 + r) * r^(-2) + d / r
   }
 
   out <- if (return == "pf") pf else d
@@ -1006,7 +1006,6 @@ sim_div <- function(n, mu, sigma, r = 0.05,
   out %>%
     add_attr(seed = get_rng_state(seed)) %>%
     add_class("sim")
-
 }
 
 #' Simulation of a stochastic branching-tree bubble
@@ -1058,8 +1057,16 @@ sim_div <- function(n, mu, sigma, r = 0.05,
 #' @examples
 #' sim_tree(100, seed = 123) %>%
 #'   autoplot()
-sim_tree <- function(n, a = 0.95, eta = 1, mu = -1, rho = 0.7, sigma = 4,
-                     y0 = eta / (1 - a), seed = NULL) {
+sim_tree <- function(
+  n,
+  a = 0.95,
+  eta = 1,
+  mu = -1,
+  rho = 0.7,
+  sigma = 4,
+  y0 = eta / (1 - a),
+  seed = NULL
+) {
   assert_positive_int(n)
   assert_between(a, 0, 1)
   stopifnot(eta > 0, sigma > 0)
@@ -1071,7 +1078,9 @@ sim_tree <- function(n, a = 0.95, eta = 1, mu = -1, rho = 0.7, sigma = 4,
   x[1] <- mu
   if (n > 1) {
     u <- rnorm(n - 1)
-    for (t in 2:n) x[t] <- mu + rho * (x[t - 1] - mu) + sigma * sqrt(1 - rho ^ 2) * u[t - 1]
+    for (t in 2:n) {
+      x[t] <- mu + rho * (x[t - 1] - mu) + sigma * sqrt(1 - rho^2) * u[t - 1]
+    }
   }
   # clip away from the exact 0/1 floating-point floor/ceiling -- an
   # unclipped p can round to exactly 0 or 1 in a long series' tail, making
@@ -1084,7 +1093,11 @@ sim_tree <- function(n, a = 0.95, eta = 1, mu = -1, rho = 0.7, sigma = 4,
 
   y <- numeric(n)
   y[1] <- y0
-  if (n > 1) for (t in 2:n) y[t] <- xi1[t] * y[t - 1] + eps[t]
+  if (n > 1) {
+    for (t in 2:n) {
+      y[t] <- xi1[t] * y[t - 1] + eps[t]
+    }
+  }
 
   y %>%
     add_attr(seed = get_rng_state(seed)) %>%
@@ -1129,8 +1142,15 @@ sim_tree <- function(n, a = 0.95, eta = 1, mu = -1, rho = 0.7, sigma = 4,
 #' @examples
 #' sim_mar(200, seed = 123) %>%
 #'   autoplot()
-sim_mar <- function(n, phi1 = 0.7, psi1 = 0.7, dist = c("cauchy", "t"),
-                    df = 2, burn = 100, seed = NULL) {
+sim_mar <- function(
+  n,
+  phi1 = 0.7,
+  psi1 = 0.7,
+  dist = c("cauchy", "t"),
+  df = 2,
+  burn = 100,
+  seed = NULL
+) {
   dist <- match.arg(dist)
   assert_positive_int(n)
   assert_between(phi1, 0, 1)
@@ -1143,12 +1163,16 @@ sim_mar <- function(n, phi1 = 0.7, psi1 = 0.7, dist = c("cauchy", "t"),
   eps <- if (dist == "cauchy") rcauchy(m) else rt(m, df)
 
   u <- numeric(m + 1)
-  for (t in m:1) u[t] <- psi1 * u[t + 1] + eps[t]
+  for (t in m:1) {
+    u[t] <- psi1 * u[t + 1] + eps[t]
+  }
   u <- u[1:m]
 
   y <- numeric(m)
   y[1] <- u[1]
-  for (t in 2:m) y[t] <- phi1 * y[t - 1] + u[t]
+  for (t in 2:m) {
+    y[t] <- phi1 * y[t - 1] + u[t]
+  }
 
   y[(burn + 1):(burn + n)] %>%
     add_attr(seed = get_rng_state(seed)) %>%
@@ -1190,8 +1214,17 @@ sim_mar <- function(n, phi1 = 0.7, psi1 = 0.7, dist = c("cauchy", "t"),
 #' lines(attr(x, "factor"), col = "red", lwd = 2)
 #' legend("topleft", legend = c("observed series", "latent factor"),
 #'   col = c("grey60", "red"), lty = 1, bty = "n")
-sim_common <- function(n_series, n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
-                       alpha = 0.6, sigma = 6.79, sigma_e = 0.1, seed = NULL) {
+sim_common <- function(
+  n_series,
+  n,
+  te = 0.4 * n,
+  tf = 0.15 * n + te,
+  c = 1,
+  alpha = 0.6,
+  sigma = 6.79,
+  sigma_e = 0.1,
+  seed = NULL
+) {
   assert_positive_int(n_series)
   stopifnot(sigma_e >= 0)
 
@@ -1241,9 +1274,17 @@ sim_common <- function(n_series, n, te = 0.4 * n, tf = 0.15 * n + te, c = 1,
 #'   xlab = "t", ylab = "value", main = "sim_coexplosive(): x leads y by 5 periods")
 #' legend("topleft", legend = c("x", "y"), col = c("steelblue", "tomato"),
 #'   lty = 1, bty = "n")
-sim_coexplosive <- function(n, lag = 0, phi_x = 1, phi_z = 0, mu_y = 0,
-                            sigma_y = 6.79, x_args = list(), z_args = list(),
-                            seed = NULL) {
+sim_coexplosive <- function(
+  n,
+  lag = 0,
+  phi_x = 1,
+  phi_z = 0,
+  mu_y = 0,
+  sigma_y = 6.79,
+  x_args = list(),
+  z_args = list(),
+  seed = NULL
+) {
   assert_positive_int(n)
   stopifnot(sigma_y >= 0)
 
@@ -1305,9 +1346,17 @@ sim_coexplosive <- function(n, lag = 0, phi_x = 1, phi_z = 0, mu_y = 0,
 #' @examples
 #' sim_msbubble(200, seed = 123) %>%
 #'   autoplot()
-sim_msbubble <- function(n, p11 = 0.98, p22 = 0.90, lambda1 = 0.98,
-                         lambda2 = 1.03, sigma_b = 0.05, b0 = 0, s0 = 1L,
-                         seed = NULL) {
+sim_msbubble <- function(
+  n,
+  p11 = 0.98,
+  p22 = 0.90,
+  lambda1 = 0.98,
+  lambda2 = 1.03,
+  sigma_b = 0.05,
+  b0 = 0,
+  s0 = 1L,
+  seed = NULL
+) {
   assert_positive_int(n)
   assert_between(p11, 0, 1)
   assert_between(p22, 0, 1)
@@ -1333,7 +1382,9 @@ sim_msbubble <- function(n, p11 = 0.98, p22 = 0.90, lambda1 = 0.98,
   b[1] <- b0
   if (n > 1) {
     eps <- rnorm(n - 1, sd = sigma_b)
-    for (t in 2:n) b[t] <- (1 / lambda[t]) * b[t - 1] + eps[t - 1]
+    for (t in 2:n) {
+      b[t] <- (1 / lambda[t]) * b[t - 1] + eps[t - 1]
+    }
   }
 
   b %>%
@@ -1390,11 +1441,19 @@ sim_msbubble <- function(n, p11 = 0.98, p22 = 0.90, lambda1 = 0.98,
 #' @examples
 #' sim_falsebubble(200, seed = 123) %>%
 #'   autoplot()
-sim_falsebubble <- function(n, t1 = floor(0.3 * n), t2 = floor(0.7 * n),
-                            kappa = floor((t2 - t1) / 2),
-                            shape = c("triangular", "gaussian"),
-                            amplitude = 1, mu = 0.02, sigma_d = 0.05,
-                            r = 0.05, d0 = 0, seed = NULL) {
+sim_falsebubble <- function(
+  n,
+  t1 = floor(0.3 * n),
+  t2 = floor(0.7 * n),
+  kappa = floor((t2 - t1) / 2),
+  shape = c("triangular", "gaussian"),
+  amplitude = 1,
+  mu = 0.02,
+  sigma_d = 0.05,
+  r = 0.05,
+  d0 = 0,
+  seed = NULL
+) {
   shape <- match.arg(shape)
   assert_positive_int(n)
   assert_between(t1, 1, n)
@@ -1413,7 +1472,7 @@ sim_falsebubble <- function(n, t1 = floor(0.3 * n), t2 = floor(0.7 * n),
   } else {
     peak <- t1 + kappa
     width <- (t2 - t1) / 4
-    tau <- exp(-0.5 * ((tt - peak) / width) ^ 2)
+    tau <- exp(-0.5 * ((tt - peak) / width)^2)
     tau[tt < t1 | tt > t2] <- 0
   }
   tau <- amplitude * tau
@@ -1422,17 +1481,19 @@ sim_falsebubble <- function(n, t1 = floor(0.3 * n), t2 = floor(0.7 * n),
   d[1] <- d0
   if (n > 1) {
     eta <- rnorm(n - 1, sd = sigma_d)
-    for (t in 2:n) d[t] <- d[t - 1] + mu + tau[t] + eta[t - 1]
+    for (t in 2:n) {
+      d[t] <- d[t - 1] + mu + tau[t] + eta[t - 1]
+    }
   }
 
   beta <- 1 / (1 + r)
   bigt <- numeric(n)
   for (t in seq_len(n)) {
     future <- if (t < n) (t + 1):n else integer(0)
-    if (length(future) > 0) bigt[t] <- sum(beta ^ (future - t) * tau[future])
+    if (length(future) > 0) bigt[t] <- sum(beta^(future - t) * tau[future])
   }
 
-  pf <- mu * (1 + r) * r ^ (-2) + d / r
+  pf <- mu * (1 + r) * r^(-2) + d / r
   p <- pf + bigt / r
 
   p %>%
@@ -1442,7 +1503,6 @@ sim_falsebubble <- function(n, t1 = floor(0.3 * n), t2 = floor(0.7 * n),
 
 
 # Methods -----------------------------------------------------------------
-
 
 #' @export
 print.sim <- function(x, ...) {

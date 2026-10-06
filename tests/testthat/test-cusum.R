@@ -36,7 +36,8 @@ test_that("an alarm, when raised, always falls strictly after T_star", {
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
@@ -74,7 +75,8 @@ test_that("monitor_cusum detects at least some genuine post-training bubbles,
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
@@ -96,7 +98,8 @@ test_that("one_sided_kernel_spot_vol() matches an independent brute-force
   N <- 10
   res <- exuber:::one_sided_kernel_spot_vol(dy, N = N, kernel = "gaussian")
 
-  w_full <- dnorm((0:N) / N); w_full <- w_full / sum(w_full)
+  w_full <- dnorm((0:N) / N)
+  w_full <- w_full / sum(w_full)
   sigma2_brute <- numeric(n)
   for (j in seq_len(n)) {
     if (j <= N) {
@@ -206,7 +209,8 @@ test_that("boundary = 'finite' gives a false-alarm rate closer to nominal
   }
   run_detect <- function(seed, boundary) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)

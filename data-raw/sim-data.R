@@ -12,7 +12,7 @@ sim_data <- tibble(
   blan = sim_blan(100)
 )
 
-usethis::use_data(sim_data, overwrite = TRUE , compress = "xz")
+usethis::use_data(sim_data, overwrite = TRUE, compress = "xz")
 
 # sim-date-wdate ----------------------------------------------------------
 
@@ -21,5 +21,4 @@ sim_data_wdate <- tibble(
   date = seq(as.Date("2000-01-01"), by = "month", length.out = 100)
 )
 
-usethis::use_data(sim_data_wdate, overwrite = TRUE , compress = "xz")
-
+usethis::use_data(sim_data_wdate, overwrite = TRUE, compress = "xz")

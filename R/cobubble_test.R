@@ -127,8 +127,15 @@ coexplosive_select_lag <- function(y, x, lags) {
 #'
 #' @family multivariate
 #' @export
-cobubble_test <- function(y, x, lag = NULL, lag_grid = -6:6, nboot = 499L,
-                           sig_lvl = 95, seed = NULL) {
+cobubble_test <- function(
+  y,
+  x,
+  lag = NULL,
+  lag_grid = -6:6,
+  nboot = 499L,
+  sig_lvl = 95,
+  seed = NULL
+) {
   assert_sig_lvl(sig_lvl)
   y <- as.numeric(y)
   x <- as.numeric(x)
@@ -161,7 +168,11 @@ cobubble_test <- function(y, x, lag = NULL, lag_grid = -6:6, nboot = 499L,
   p_value <- mean(boot_S > fit$S)
 
   list(
-    S = fit$S, lag = lag, cv = cv, p_value = p_value, reject = fit$S > cv
+    S = fit$S,
+    lag = lag,
+    cv = cv,
+    p_value = p_value,
+    reject = fit$S > cv
   ) %>%
     add_attr(sig_lvl = sig_lvl, iter = nboot, lag_grid = lag_grid, mat = cbind(y = y, x = x)) %>%
     add_class("cobubble_test_obj")
@@ -199,7 +210,8 @@ print.cobubble_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L
     "p-value = {format(x$p_value, digits = digits)}"
   ))
   cat_line(glue(
-    "Co-explosivity ", if (x$reject) "rejected" else "not rejected",
+    "Co-explosivity ",
+    if (x$reject) "rejected" else "not rejected",
     " at the {100 - attr(x, 'sig_lvl')}% level."
   ))
   cat_line()

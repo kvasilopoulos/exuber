@@ -27,7 +27,8 @@ cusum_test_path <- function(y, type) {
     p <- c(0, cumsum(d2) - seq_len(nd) / nd * sum(d2)) / sqrt((mean(d2^2) - mean(d2)^2) * nd)
   }
   k <- 2:(nd + 1L) # p[k] <-> k - 1 increments summed; p[1] = 0 is the start
-  switch(type,
+  switch(
+    type,
     cs = list(sup = p[k]),
     gcs = list(sup = p[k] - cummin(p)[k - 1L]),
     cssq = list(sup = p[k], inf = p[k]),
@@ -112,7 +113,10 @@ cusum_test <- function(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"
   out <- list(stat = stat, sup = sup, crit = crit)
   if (two_sided) {
     inf <- apply(stat_inf, 2, min)
-    out <- c(out, list(stat_inf = stat_inf, inf = inf, detected = sup >= crit["sup"] | inf <= crit["inf"]))
+    out <- c(
+      out,
+      list(stat_inf = stat_inf, inf = inf, detected = sup >= crit["sup"] | inf <= crit["inf"])
+    )
   } else {
     out$detected <- sup > crit
   }
@@ -144,7 +148,8 @@ autoplot.cusum_test_obj <- function(object, ...) {
   }
   snames <- colnames(object$stat_inf)
   lower <- tibble(
-    index = rep(pos, length(snames)), id = factor(rep(snames, each = length(pos)), levels = snames),
+    index = rep(pos, length(snames)),
+    id = factor(rep(snames, each = length(pos)), levels = snames),
     value = c(object$stat_inf)
   )
   gg +
@@ -155,13 +160,17 @@ autoplot.cusum_test_obj <- function(object, ...) {
 #' @export
 print.cusum_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "cusum_test ({toupper(attr(x, 'type'))}, n = {attr(x, 'n')}, ",
-    "sig_lvl = {attr(x, 'sig_lvl')}%, crit = {paste(x$crit, collapse = ' / ')})"
-  ))
+  cat_rule(
+    left = glue(
+      "cusum_test ({toupper(attr(x, 'type'))}, n = {attr(x, 'n')}, ",
+      "sig_lvl = {attr(x, 'sig_lvl')}%, crit = {paste(x$crit, collapse = ' / ')})"
+    )
+  )
   cat_line()
   df <- data.frame(series = names(x$sup), sup = x$sup, row.names = NULL)
-  if (!is.null(x$inf)) df$inf <- x$inf
+  if (!is.null(x$inf)) {
+    df$inf <- x$inf
+  }
   df$detected <- x$detected
   print(df, digits = digits, print.gap = 2L, row.names = FALSE)
   cat_line()

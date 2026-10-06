@@ -59,19 +59,22 @@ load(file.path(paper_dir, "performance-comparison.RData"), envir = paper_bench_e
 paper_bench <- paper_bench_env$bench
 stopifnot(length(paper_bench) == length(sample_size))
 
-r_pkg_medians <- do.call(rbind, lapply(seq_along(paper_bench), function(i) {
-  d <- as.data.frame(paper_bench[[i]])
-  med <- tapply(d$time, d$expr, median) / 1e6 # ns -> ms
-  data.frame(
-    n = sample_size[i],
-    software = c("MultipleBubbles", "psymonitor", "exuber 0.4.1 (JSS paper)"),
-    time_ms = c(
-      unname(med[grepl("mb_mod", names(med))]),
-      unname(med[grepl("psymonitor", names(med))]),
-      unname(med[grepl("^exuber", names(med))])
+r_pkg_medians <- do.call(
+  rbind,
+  lapply(seq_along(paper_bench), function(i) {
+    d <- as.data.frame(paper_bench[[i]])
+    med <- tapply(d$time, d$expr, median) / 1e6 # ns -> ms
+    data.frame(
+      n = sample_size[i],
+      software = c("MultipleBubbles", "psymonitor", "exuber 0.4.1 (JSS paper)"),
+      time_ms = c(
+        unname(med[grepl("mb_mod", names(med))]),
+        unname(med[grepl("psymonitor", names(med))]),
+        unname(med[grepl("^exuber", names(med))])
+      )
     )
-  )
-}))
+  })
+)
 
 # --- EViews / MATLAB / Stata, read verbatim from other-software/ ----------
 # Each file is 100 replications (rows) x 10 sample sizes (columns,
@@ -84,15 +87,18 @@ read_other_software_ms <- function(path, name, reader) {
 }
 
 eviews <- read_other_software_ms(
-  file.path(paper_dir, "other-software/eviews/elapsed-eviews.xlsx"), "EViews (rtadf)",
+  file.path(paper_dir, "other-software/eviews/elapsed-eviews.xlsx"),
+  "EViews (rtadf)",
   function(p) read_excel(p)
 )
 matlab <- read_other_software_ms(
-  file.path(paper_dir, "other-software/matlab/elapsed-matlab3.txt"), "MATLAB (PSY)",
+  file.path(paper_dir, "other-software/matlab/elapsed-matlab3.txt"),
+  "MATLAB (PSY)",
   function(p) read_csv(p, col_names = FALSE, show_col_types = FALSE)
 )
 stata <- read_other_software_ms(
-  file.path(paper_dir, "other-software/stata/elapsed-stata.txt"), "Stata",
+  file.path(paper_dir, "other-software/stata/elapsed-stata.txt"),
+  "Stata",
   function(p) read_csv(p, col_names = FALSE, show_col_types = FALSE)
 )
 
@@ -104,22 +110,31 @@ stata <- read_other_software_ms(
 # medians across 5 independent blocks damps that down substantially
 # (each block already discards its own outliers via the median).
 
-exuber_medians <- do.call(rbind, lapply(sample_size, function(n) {
-  set.seed(123)
-  rw <- cumsum(rnorm(n))
-  block_medians <- replicate(5, {
-    median(microbenchmark(
-      exuber::radf(rw, minw = minw, lag = 1),
-      unit = "ms", times = 300L
-    )$time) / 1e6
+exuber_medians <- do.call(
+  rbind,
+  lapply(sample_size, function(n) {
+    set.seed(123)
+    rw <- cumsum(rnorm(n))
+    block_medians <- replicate(5, {
+      median(
+        microbenchmark(
+          exuber::radf(rw, minw = minw, lag = 1),
+          unit = "ms",
+          times = 300L
+        )$time
+      ) /
+        1e6
+    })
+    t <- median(block_medians)
+    message(sprintf(
+      "n = %4d   exuber 2.0.0 = %7.3f ms  (5 blocks: %s)",
+      n,
+      t,
+      paste(sprintf("%.3f", block_medians), collapse = ", ")
+    ))
+    data.frame(n = n, software = "exuber 2.0.0", time_ms = t)
   })
-  t <- median(block_medians)
-  message(sprintf(
-    "n = %4d   exuber 2.0.0 = %7.3f ms  (5 blocks: %s)",
-    n, t, paste(sprintf("%.3f", block_medians), collapse = ", ")
-  ))
-  data.frame(n = n, software = "exuber 2.0.0", time_ms = t)
-}))
+)
 
 bench_tbl <- rbind(r_pkg_medians, eviews, matlab, stata, exuber_medians)
 rownames(bench_tbl) <- NULL

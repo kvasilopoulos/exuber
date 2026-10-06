@@ -14,7 +14,8 @@ test_that("Right output", {
 
 test_that("lag check", {
   expect_error(
-    radf(dta, lag = -1), "Argument 'lag' should be a non-negative integer"
+    radf(dta, lag = -1),
+    "Argument 'lag' should be a non-negative integer"
   )
   expect_equal(get_lag(radf_dta), 0)
   expect_equal(get_lag(radf_dta_lag1), 1)
@@ -28,7 +29,7 @@ test_that("minw check radf", {
   expect_error(radf(dta, minw = 1), msg)
   expect_equal(
     get_minw(radf_dta),
-    floor( (0.01 + 1.8 / sqrt(NROW(dta))) * NROW(dta))
+    floor((0.01 + 1.8 / sqrt(NROW(dta))) * NROW(dta))
   )
 })
 
@@ -70,7 +71,9 @@ adf_t_lm <- function(y, r1, r2, lag) {
   ylag <- yw[-length(yw)]
   X <- cbind(1, ylag)
   if (lag > 0) {
-    for (j in seq_len(lag)) X <- cbind(X, c(rep(NA, j), dy[seq_len(length(dy) - j)]))
+    for (j in seq_len(lag)) {
+      X <- cbind(X, c(rep(NA, j), dy[seq_len(length(dy) - j)]))
+    }
   }
   keep <- (lag + 1):length(dy)
   fit <- lm.fit(X[keep, , drop = FALSE], dy[keep])
@@ -87,9 +90,13 @@ test_that("radf() statistics match a brute-force lm() recursion (lag 0 and 1)", 
     res <- radf(y, minw = minw, lag = lag)
     ends <- (minw + lag + 1):60
     badf <- vapply(ends, function(r2) adf_t_lm(y, 1, r2, lag), numeric(1))
-    bsadf <- vapply(ends, function(r2) {
-      max(vapply(1:(r2 - minw - lag), function(r1) adf_t_lm(y, r1, r2, lag), numeric(1)))
-    }, numeric(1))
+    bsadf <- vapply(
+      ends,
+      function(r2) {
+        max(vapply(1:(r2 - minw - lag), function(r1) adf_t_lm(y, r1, r2, lag), numeric(1)))
+      },
+      numeric(1)
+    )
     expect_equal(unname(res$badf[, 1]), badf, tolerance = 1e-8)
     expect_equal(unname(res$bsadf[, 1]), bsadf, tolerance = 1e-8)
     expect_equal(unname(res$adf), adf_t_lm(y, 1, 60, lag), tolerance = 1e-8)

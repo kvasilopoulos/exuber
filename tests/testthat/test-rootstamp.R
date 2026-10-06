@@ -19,7 +19,9 @@ test_that("rootstamp.default recovers a known rho on a simulated explosive AR(1)
   n <- 150
   y <- numeric(n)
   e <- rnorm(n)
-  for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
+  for (t in 2:n) {
+    y[t] <- rho_true * y[t - 1] + e[t]
+  }
 
   ci <- rootstamp(y)
   expect_equal(ci$rho, rho_true, tolerance = 0.01)
@@ -33,7 +35,9 @@ test_that("rootstamp.default's doubling time is consistent with its own rho esti
   n <- 150
   y <- numeric(n)
   e <- rnorm(n)
-  for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
+  for (t in 2:n) {
+    y[t] <- rho_true * y[t - 1] + e[t]
+  }
 
   ci <- rootstamp(y)
   expect_equal(ci$doubling_time, log(2) / log(ci$rho))
@@ -53,7 +57,9 @@ test_that("rootstamp.default empirical coverage is in a plausible range at T = 1
   covered <- replicate(500, {
     y <- numeric(n)
     e <- rnorm(n)
-    for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
+    for (t in 2:n) {
+      y[t] <- rho_true * y[t - 1] + e[t]
+    }
     ci <- rootstamp(y)
     ci$rho_ci[1] <= rho_true && rho_true <= ci$rho_ci[2]
   })
@@ -70,7 +76,9 @@ test_that("rootstamp.default(type = 'cauchy') brackets the point estimate and ma
   n <- 150
   y <- numeric(n)
   e <- rnorm(n)
-  for (t in 2:n) y[t] <- rho_true * y[t - 1] + e[t]
+  for (t in 2:n) {
+    y[t] <- rho_true * y[t - 1] + e[t]
+  }
 
   ci <- rootstamp(y, type = "cauchy")
 

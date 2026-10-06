@@ -159,14 +159,14 @@ print.radf_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   )
   cat_line()
 
-  print(format(as.data.frame(tidy(x)),
-    digits = digits
-  ), print.gap = 2L, row.names = FALSE)
+  print(format(as.data.frame(tidy(x)), digits = digits), print.gap = 2L, row.names = FALSE)
   cat_line()
 
-  print(format(as.data.frame(tidy(x, panel = TRUE)),
-    digits = digits
-  ), print.gap = 2L, row.names = FALSE)
+  print(
+    format(as.data.frame(tidy(x, panel = TRUE)), digits = digits),
+    print.gap = 2L,
+    row.names = FALSE
+  )
   cat_line()
 }
 
@@ -180,8 +180,6 @@ print.radf_cv <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   )
   cat_line()
 
-  print(format(as.data.frame(tidy(x)),
-    digits = digits
-  ), print.gap = 2L, row.names = FALSE)
+  print(format(as.data.frame(tidy(x)), digits = digits), print.gap = 2L, row.names = FALSE)
   cat_line()
 }

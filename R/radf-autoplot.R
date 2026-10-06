@@ -79,18 +79,22 @@
 #'   theme(legend.position = "right")
 #' }
 autoplot.radf_obj <- function(
-    object, cv = NULL,
-    sig_lvl = 95,
-    option = c("gsadf", "sadf"),
-    min_duration = 0L,
-    select_series = NULL,
-    nonrejected = FALSE,
-    shade_opt = shade(),
-    trunc = TRUE,
-    include_negative = "DEPRECATED",
-    ...) {
+  object,
+  cv = NULL,
+  sig_lvl = 95,
+  option = c("gsadf", "sadf"),
+  min_duration = 0L,
+  select_series = NULL,
+  nonrejected = FALSE,
+  shade_opt = shade(),
+  trunc = TRUE,
+  include_negative = "DEPRECATED",
+  ...
+) {
   deprecate_arg_warn(include_negative, nonrejected)
-  if (!identical(include_negative, "DEPRECATED")) nonrejected <- include_negative
+  if (!identical(include_negative, "DEPRECATED")) {
+    nonrejected <- include_negative
+  }
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   snames <- series_names(object)
@@ -140,12 +144,19 @@ autoplot.radf_obj <- function(
     scale_exuber_manual() +
     theme_exuber()
 
-  gg <- gg + na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
+  gg <- gg +
+    na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
 
   all_negative <- all(series %in% diagnostics(object, cv, sig_lvl = sig_lvl)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, sig_lvl = sig_lvl, option = option, nonrejected = nonrejected)) %>%
+    ds_data <- tidy(datestamp(
+      object,
+      cv,
+      sig_lvl = sig_lvl,
+      option = option,
+      nonrejected = nonrejected
+    )) %>%
       filter(id %in% series)
     gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
@@ -169,14 +180,18 @@ autoplot.radf_obj <- function(
 
 #' @rdname autoplot.radf_obj
 #' @export
-autoplot2.radf_obj <- function(object, cv = NULL,
-                               sig_lvl = 95,
-                               option = c("gsadf", "sadf"),
-                               min_duration = 0L,
-                               select_series = NULL,
-                               nonrejected = FALSE,
-                               trunc = TRUE,
-                               shade_opt = shade(), ...) {
+autoplot2.radf_obj <- function(
+  object,
+  cv = NULL,
+  sig_lvl = 95,
+  option = c("gsadf", "sadf"),
+  min_duration = 0L,
+  select_series = NULL,
+  nonrejected = FALSE,
+  trunc = TRUE,
+  shade_opt = shade(),
+  ...
+) {
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
   snames <- series_names(object)
@@ -224,12 +239,19 @@ autoplot2.radf_obj <- function(object, cv = NULL,
     scale_exuber_manual() +
     theme_exuber()
 
-  gg <- gg + na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
+  gg <- gg +
+    na_pad_layer(na_pad_rects(get_valid_range(object), index(object, trunc = FALSE), series))
 
   all_negative <- all(series %in% diagnostics(object, cv, sig_lvl = sig_lvl)$negative)
   idx <- index(object)
   if (!is.null(shade_opt) && !all_negative) {
-    ds_data <- tidy(datestamp(object, cv, sig_lvl = sig_lvl, option = option, nonrejected = nonrejected)) %>%
+    ds_data <- tidy(datestamp(
+      object,
+      cv,
+      sig_lvl = sig_lvl,
+      option = option,
+      nonrejected = nonrejected
+    )) %>%
       filter(id %in% series)
     gg <- gg + shade_opt(ds_data, min_duration, is_sb(cv))
   }
@@ -256,8 +278,14 @@ autoplot2.radf_obj <- function(object, cv = NULL,
 #'
 #' @param opacity The opacity of the shade color (alpha).
 #' @export
-shade <- function(fill = "grey55", fill_negative = fill, # "yellow2",
-                  fill_ongoing = NULL, opacity = 0.3, ...) { # "pink2"
+shade <- function(
+  fill = "grey55",
+  fill_negative = fill, # "yellow2",
+  fill_ongoing = NULL,
+  opacity = 0.3,
+  ...
+) {
+  # "pink2"
   function(ds_data, min_duration, is_panel) {
     ds_data <- filter(ds_data, Duration >= min_duration)
 
@@ -270,30 +298,42 @@ shade <- function(fill = "grey55", fill_negative = fill, # "yellow2",
     }
 
     if (!is.null(fill_ongoing)) {
-      ds_pos <- filter(ds_data, Ongoing == FALSE)
-      ds_neg <- filter(ds_data, Ongoing == FALSE)
+      ds_pos <- filter(ds_data, !Ongoing)
+      ds_neg <- filter(ds_data, !Ongoing)
     }
 
     any_pos <- nrow(ds_pos) > 0
     x1 <- ds_pos %>%
       geom_rect(
-        data = ., inherit.aes = FALSE, fill = fill, alpha = opacity,
-        aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf), ...
+        data = .,
+        inherit.aes = FALSE,
+        fill = fill,
+        alpha = opacity,
+        aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf),
+        ...
       )
 
     any_neg <- nrow(ds_neg) > 0
     x2 <- ds_neg %>%
       geom_rect(
-        data = ., inherit.aes = FALSE, fill = fill_negative, alpha = opacity,
-        aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf), ...
+        data = .,
+        inherit.aes = FALSE,
+        fill = fill_negative,
+        alpha = opacity,
+        aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf),
+        ...
       )
 
     if (!is.null(fill_ongoing)) {
       any_ongoing <- any(ds_data$Ongoing)
-      x3 <- filter(ds_data, Ongoing == TRUE) %>%
+      x3 <- filter(ds_data, Ongoing) %>%
         geom_rect(
-          data = ., inherit.aes = FALSE, fill = fill_ongoing, alpha = opacity,
-          aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf), ...
+          data = .,
+          inherit.aes = FALSE,
+          fill = fill_ongoing,
+          alpha = opacity,
+          aes(xmin = Start, xmax = End, ymin = -Inf, ymax = +Inf),
+          ...
         )
     } else {
       any_ongoing <- x3 <- NULL
@@ -305,10 +345,6 @@ shade <- function(fill = "grey55", fill_negative = fill, # "yellow2",
       any_ongoing %NULL% x3
     )
   }
-}
-
-null_color <- function() {
-  "#ffffff00"
 }
 
 # Rectangles marking each series' leading/trailing NA-padded region (an
@@ -347,7 +383,10 @@ na_pad_layer <- function(pad_rects) {
     return(NULL)
   }
   geom_rect(
-    data = pad_rects, inherit.aes = FALSE, fill = "grey80", alpha = 0.4,
+    data = pad_rects,
+    inherit.aes = FALSE,
+    fill = "grey80",
+    alpha = 0.4,
     aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf)
   )
 }
@@ -368,7 +407,8 @@ breaks_tbl <- function(idx, ...) {
   is_date <- lubridate::is.Date(idx)
   purrr::imap_dfr(dots, function(vals, label) {
     tibble(
-      id = names(vals), label = label,
+      id = names(vals),
+      label = label,
       at = if (is_date) as.Date(unname(vals)) else as.numeric(unname(vals))
     )
   }) %>%
@@ -409,13 +449,21 @@ autoplot_series_breaks <- function(mat, idx, breaks = NULL, title = NULL) {
 # monitor_quantile_obj/monitor_lbi_obj/ssu_test_obj.
 autoplot_stat_boundary <- function(pos, stat, boundary, vlines = NULL, ylab = "statistic") {
   snames <- colnames(stat)
-  df <- tibble(index = rep(pos, length(snames)), id = rep(snames, each = length(pos)), stat = c(stat)) %>%
+  df <- tibble(
+    index = rep(pos, length(snames)),
+    id = rep(snames, each = length(pos)),
+    stat = c(stat)
+  ) %>%
     mutate(id = factor(id, levels = snames))
 
   if (is.matrix(boundary)) {
     df$boundary <- c(boundary)
   } else if (!is.null(names(boundary))) {
-    df <- full_join(df, tibble(id = factor(names(boundary), levels = snames), boundary = unname(boundary)), by = "id")
+    df <- full_join(
+      df,
+      tibble(id = factor(names(boundary), levels = snames), boundary = unname(boundary)),
+      by = "id"
+    )
   } else {
     # A scalar (one flat value for every series) or a length(pos) vector (one
     # value per time step, shared identically across every series' block) --
@@ -436,7 +484,13 @@ autoplot_stat_boundary <- function(pos, stat, boundary, vlines = NULL, ylab = "s
 
   if (!is.null(vlines) && nrow(vlines) > 0) {
     vlines <- mutate(vlines, id = factor(id, levels = snames))
-    gg <- gg + geom_vline(data = vlines, aes(xintercept = at, linetype = label), color = "grey40", show.legend = FALSE)
+    gg <- gg +
+      geom_vline(
+        data = vlines,
+        aes(xintercept = at, linetype = label),
+        color = "grey40",
+        show.legend = FALSE
+      )
   }
 
   if (length(snames) > 1) {
@@ -464,10 +518,15 @@ autoplot_stat_bar <- function(stat, crit, detected = NULL, ylab = "statistic") {
   if (length(crit) == 1) {
     gg + geom_hline(yintercept = crit, color = "red", linetype = 2)
   } else {
-    gg + geom_point(
-      data = tibble(id = factor(snames, levels = snames), crit = unname(crit)),
-      aes(id, crit), inherit.aes = FALSE, color = "red", shape = 4, size = 3
-    )
+    gg +
+      geom_point(
+        data = tibble(id = factor(snames, levels = snames), crit = unname(crit)),
+        aes(id, crit),
+        inherit.aes = FALSE,
+        color = "red",
+        shape = 4,
+        size = 3
+      )
   }
 }
 
@@ -493,10 +552,15 @@ autoplot_stat_bar <- function(stat, crit, detected = NULL, ylab = "statistic") {
 #'   scale_exuber_manual(color_values = c("black", "black")) +
 #'   theme_exuber(base_size = 9)
 scale_exuber_manual <- function(
-    color_values = c("red", "blue"), linetype_values = c(2, 1),
-    linewidth_values = c(0.8, 0.7), size_values = "DEPRECATED") {
+  color_values = c("red", "blue"),
+  linetype_values = c(2, 1),
+  linewidth_values = c(0.8, 0.7),
+  size_values = "DEPRECATED"
+) {
   deprecate_arg_warn(size_values, linewidth_values)
-  if (!identical(size_values, "DEPRECATED")) linewidth_values <- size_values
+  if (!identical(size_values, "DEPRECATED")) {
+    linewidth_values <- size_values
+  }
   list(
     scale_color_manual(values = color_values),
     scale_linewidth_manual(values = linewidth_values),
@@ -509,8 +573,11 @@ scale_exuber_manual <- function(
 #' @importFrom ggplot2 `%+replace%`
 #' @export
 theme_exuber <- function(
-    base_size = 11, base_family = "", base_line_size = base_size / 22,
-    base_rect_size = base_size / 22) {
+  base_size = 11,
+  base_family = "",
+  base_line_size = base_size / 22,
+  base_rect_size = base_size / 22
+) {
   half_line <- base_size / 2
   theme_grey(
     base_size = base_size,
@@ -532,14 +599,15 @@ theme_exuber <- function(
       panel.grid = element_line(colour = "grey92"),
       panel.grid.major = element_line(linetype = "dashed", linewidth = 0.7),
       strip.text.x = element_text(
-        size = rel(1.5), hjust = 0,
-        vjust = 1, margin = margin(b = half_line)
-      ),
+        size = rel(1.5),
+        hjust = 0,
+        vjust = 1,
+        margin = margin(b = half_line)
+      )
     )
 }
 
 # datestamp ---------------------------------------------------------------
-
 
 #' Plotting a `ds_radf` object
 #'
@@ -590,9 +658,14 @@ autoplot.ds_radf <- function(object, trunc = TRUE, ...) {
     )
 }
 
-geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
-                            linewidth = 3, col_negative = col, # "yellow2",
-                            col_ongoing = NULL) {
+geom_ds_segment <- function(
+  object,
+  trunc = TRUE,
+  col = "grey75",
+  linewidth = 3,
+  col_negative = col, # "yellow2",
+  col_ongoing = NULL
+) {
   is_panel <- get_panel(object)
   idx <- index(object, trunc = trunc)
   scale_custom <- if (lubridate::is.Date(idx)) scale_x_date else scale_x_continuous
@@ -609,29 +682,35 @@ geom_ds_segment <- function(object, trunc = TRUE, col = "grey75",
   }
 
   if (!is.null(col_ongoing)) {
-    ds_pos <- filter(ds_data, Ongoing == FALSE)
-    ds_neg <- filter(ds_data, Ongoing == FALSE)
+    ds_pos <- filter(ds_data, !Ongoing)
+    ds_neg <- filter(ds_data, !Ongoing)
   }
 
   any_pos <- any(ds_data$Signal == "positive")
   x1 <- filter(ds_data, Signal == "positive") %>%
     geom_segment(
-      data = ., linewidth = linewidth, color = col,
+      data = .,
+      linewidth = linewidth,
+      color = col,
       aes(x = Start, xend = End, y = id, yend = id)
     )
 
   any_neg <- any(ds_data$Signal == "negative")
   x2 <- filter(ds_data, Signal == "negative") %>%
     geom_segment(
-      data = ., linewidth = linewidth, color = col_negative,
+      data = .,
+      linewidth = linewidth,
+      color = col_negative,
       aes(x = Start, xend = End, y = id, yend = id)
     )
 
   if (!is.null(col_ongoing)) {
     any_ongoing <- any(ds_data$Ongoing)
-    x3 <- filter(ds_data, Ongoing == TRUE) %>%
+    x3 <- filter(ds_data, Ongoing) %>%
       geom_segment(
-        data = ., color = col_ongoing, linewidth = linewidth,
+        data = .,
+        color = col_ongoing,
+        linewidth = linewidth,
         aes(x = Start, xend = End, y = id, yend = id)
       )
   } else {

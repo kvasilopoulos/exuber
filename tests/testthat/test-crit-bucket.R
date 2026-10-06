@@ -46,7 +46,9 @@ test_that("fetch_crit_bucket: live store serves lag 0 n > 600 and 404s to NULL",
 test_that("fetch_crit_bucket serves a cached file without the network and memoises it", {
   withr::local_envvar(R_USER_CACHE_DIR = withr::local_tempdir())
   .pkgenv$crit <- list()
-  withr::defer(.pkgenv$crit <- list())
+  withr::defer({
+    .pkgenv$crit <- list()
+  })
   write_synthetic_crit(crit_cache_path(20, 2), n = 20L, minw = 5L, lag = 2L)
   cv <- fetch_crit_bucket(20, lag = 2, base_url = "http://127.0.0.1:9/crit2")
   expect_equal(attr(cv, "n"), 20L)
@@ -59,7 +61,9 @@ test_that("fetch_crit_bucket serves a cached file without the network and memois
 test_that("fetch_crit_bucket discards a corrupt cache file and refetches", {
   withr::local_envvar(R_USER_CACHE_DIR = withr::local_tempdir())
   .pkgenv$crit <- list()
-  withr::defer(.pkgenv$crit <- list())
+  withr::defer({
+    .pkgenv$crit <- list()
+  })
   writeLines("not xz", crit_cache_path(21, 2))
   expect_error(
     fetch_crit_bucket(21, lag = 2, base_url = "http://127.0.0.1:9/crit2"),

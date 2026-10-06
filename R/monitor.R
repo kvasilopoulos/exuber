@@ -49,11 +49,11 @@
 # for completeness/future use (q04_df, q08_df for GSADF_{s0}, q025_cs/
 # q045_cs for HB's CS/CUSUM detector at gamma = 0.25/0.45).
 kurozumi_table1 <- data.frame(
-  sbar    = c(1, 1, 1, 3, 3, 3, 5, 5, 5),
-  beta    = c(0.10, 0.05, 0.01, 0.10, 0.05, 0.01, 0.10, 0.05, 0.01),
-  q0_df   = c(0.6946, 1.0381, 1.6474, 1.0299, 1.3330, 1.8978, 1.1308, 1.4255, 1.9735),
-  q04_df  = c(1.3969, 1.8081, 2.5927, 1.7088, 2.0737, 2.7677, 1.7988, 2.1480, 2.8276),
-  q08_df  = c(1.9369, 2.3330, 3.0941, 2.1315, 2.4944, 3.2136, 2.1794, 2.5369, 3.2616),
+  sbar = c(1, 1, 1, 3, 3, 3, 5, 5, 5),
+  beta = c(0.10, 0.05, 0.01, 0.10, 0.05, 0.01, 0.10, 0.05, 0.01),
+  q0_df = c(0.6946, 1.0381, 1.6474, 1.0299, 1.3330, 1.8978, 1.1308, 1.4255, 1.9735),
+  q04_df = c(1.3969, 1.8081, 2.5927, 1.7088, 2.0737, 2.7677, 1.7988, 2.1480, 2.8276),
+  q08_df = c(1.9369, 2.3330, 3.0941, 2.1315, 2.4944, 3.2136, 2.1794, 2.5369, 3.2616),
   q025_cs = c(1.5071, 1.7646, 2.2405, 1.6772, 1.9619, 2.4955, 1.7326, 2.0182, 2.5884),
   q045_cs = c(2.1300, 2.3948, 2.9265, 2.1958, 2.4638, 3.0163, 2.2057, 2.4844, 3.0476)
 )
@@ -107,9 +107,9 @@ kurozumi_gsadf_q <- function(sig_lvl, s_bar, s0) {
 # + b_{s0} * log(c_{s0} + k/m)) -- confirmed via rendered PDF page.
 kurozumi_gsadf_abc <- data.frame(
   s0 = c(0.4, 0.8),
-  a  = c(0.76, 0.73),
-  b  = c(0.02, 0.03),
-  c  = c(0.34, 0.90)
+  a = c(0.76, 0.73),
+  b = c(0.02, 0.03),
+  c = c(0.34, 0.90)
 )
 
 # Closed-form GSADF_{s0}(k) statistic path for a single series: max over
@@ -187,7 +187,7 @@ hb_fluc_table <- local({
     c(7.30, 8.11, 8.43, 8.82, 8.86, 9.25, 9.49), # n=50,  alpha=0.01
     c(2.49, 3.12, 3.44, 3.65, 3.78, 3.99, 4.12), # n=20,  alpha=0.10
     c(3.88, 4.56, 4.86, 5.06, 5.19, 5.38, 5.52), # n=20,  alpha=0.05
-    c(7.00, 7.84, 8.26, 8.49, 8.66, 9.12, 9.19)  # n=20,  alpha=0.01
+    c(7.00, 7.84, 8.26, 8.49, 8.66, 9.12, 9.19) # n=20,  alpha=0.01
   )
   tbl <- data.frame(n = rep(n_grid, each = 3), alpha = rep(alpha_grid, times = 3), q)
   colnames(tbl) <- c("n", "alpha", paste0("k", k_grid))
@@ -327,11 +327,18 @@ hb_fluc_q <- function(sig_lvl, n_train, k) {
 #'
 #' @family monitoring
 #' @export
-monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
-                     sig_lvl = 95, lag = 0L,
-                     type = c("fixed", "aic", "bic"), seed = NULL,
-                     boundary = c("bootstrap", "kurozumi", "fluc"),
-                     s0 = 0) {
+monitor <- function(
+  data,
+  r_star = 0.5,
+  minw = NULL,
+  nboot = 500L,
+  sig_lvl = 95,
+  lag = 0L,
+  type = c("fixed", "aic", "bic"),
+  seed = NULL,
+  boundary = c("bootstrap", "kurozumi", "fluc"),
+  s0 = 0
+) {
   type <- match.arg(type)
   boundary <- match.arg(boundary)
   x <- parse_data(data)
@@ -362,19 +369,34 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
       breach <- which(stat_path[, j] > boundary_path)
       if (length(breach) > 0L) alarm[j] <- T_star + breach[1L]
     }
-    alarm_date <- vapply(alarm, function(i) {
-      if (is.na(i)) NA_character_ else as.character(idx[i])
-    }, character(1))
+    alarm_date <- vapply(
+      alarm,
+      function(i) {
+        if (is.na(i)) NA_character_ else as.character(idx[i])
+      },
+      character(1)
+    )
 
     return(
       list(
-        stat = stat_path, boundary = boundary_path, T_star = T_star,
-        alarm = alarm, alarm_date = alarm_date
+        stat = stat_path,
+        boundary = boundary_path,
+        T_star = T_star,
+        alarm = alarm,
+        alarm_date = alarm_date
       ) %>%
         add_attr(
-          index = idx, series_names = snames, minw = minw, lag = lag,
-          n = n, sig_lvl = sig_lvl, iter = NA_integer_, boundary_type = "kurozumi",
-          s0 = s0, q = q, stat_offset = T_star
+          index = idx,
+          series_names = snames,
+          minw = minw,
+          lag = lag,
+          n = n,
+          sig_lvl = sig_lvl,
+          iter = NA_integer_,
+          boundary_type = "kurozumi",
+          s0 = s0,
+          q = q,
+          stat_offset = T_star
         ) %>%
         add_class("monitor_obj")
     )
@@ -399,8 +421,15 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
   } else {
     assert_sig_lvl(sig_lvl)
     lvl_lab <- paste0(sig_lvl, "%")
-    cv <- radf_wb_ps_cv(x[1:T_star, , drop = FALSE], minw = minw, nboot = nboot,
-                       adflag = lag, type = type, tb = T_star, seed = seed)
+    cv <- radf_wb_ps_cv(
+      x[1:T_star, , drop = FALSE],
+      minw = minw,
+      nboot = nboot,
+      adflag = lag,
+      type = type,
+      tb = T_star,
+      seed = seed
+    )
     boundary_vec <- setNames(cv$gsadf_cv[, lvl_lab], snames)
     stat_path <- full$bsadf
     iter <- nboot
@@ -413,17 +442,31 @@ monitor <- function(data, r_star = 0.5, minw = NULL, nboot = 500L,
       alarm[j] <- mon_rows[breach[1L]] + minw + lag
     }
   }
-  alarm_date <- vapply(alarm, function(i) {
-    if (is.na(i)) NA_character_ else as.character(idx[i])
-  }, character(1))
+  alarm_date <- vapply(
+    alarm,
+    function(i) {
+      if (is.na(i)) NA_character_ else as.character(idx[i])
+    },
+    character(1)
+  )
 
   list(
-    stat = stat_path, boundary = boundary_vec, T_star = T_star,
-    alarm = alarm, alarm_date = alarm_date
+    stat = stat_path,
+    boundary = boundary_vec,
+    T_star = T_star,
+    alarm = alarm,
+    alarm_date = alarm_date
   ) %>%
     add_attr(
-      index = idx, series_names = snames, minw = minw, lag = lag,
-      n = n, sig_lvl = sig_lvl, iter = iter, boundary_type = boundary, s0 = 0,
+      index = idx,
+      series_names = snames,
+      minw = minw,
+      lag = lag,
+      n = n,
+      sig_lvl = sig_lvl,
+      iter = iter,
+      boundary_type = boundary,
+      s0 = 0,
       stat_offset = minw + lag
     ) %>%
     add_class("monitor_obj")
@@ -471,18 +514,27 @@ print.monitor_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...
   if (s0 > 0) {
     print(
       data.frame(
-        series = names(x$alarm), alarm = x$alarm, alarm_date = x$alarm_date,
+        series = names(x$alarm),
+        alarm = x$alarm,
+        alarm_date = x$alarm_date,
         row.names = NULL
       ),
-      digits = digits, print.gap = 2L, row.names = FALSE
+      digits = digits,
+      print.gap = 2L,
+      row.names = FALSE
     )
   } else {
     print(
       data.frame(
-        series = names(x$boundary), boundary = x$boundary,
-        alarm = x$alarm, alarm_date = x$alarm_date, row.names = NULL
+        series = names(x$boundary),
+        boundary = x$boundary,
+        alarm = x$alarm,
+        alarm_date = x$alarm_date,
+        row.names = NULL
       ),
-      digits = digits, print.gap = 2L, row.names = FALSE
+      digits = digits,
+      print.gap = 2L,
+      row.names = FALSE
     )
   }
   cat_line()

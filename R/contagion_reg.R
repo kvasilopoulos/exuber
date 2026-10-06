@@ -58,8 +58,11 @@ contagion_ar1_prefix_sums <- function(y) {
   x <- y[1:n1]
   z <- y[2:(n1 + 1L)]
   list(
-    cx = c(0, cumsum(x)), cx2 = c(0, cumsum(x^2)),
-    cz = c(0, cumsum(z)), cxz = c(0, cumsum(x * z)), n1 = n1
+    cx = c(0, cumsum(x)),
+    cx2 = c(0, cumsum(x^2)),
+    cz = c(0, cumsum(z)),
+    cxz = c(0, cumsum(x * z)),
+    n1 = n1
   )
 }
 
@@ -156,9 +159,14 @@ contagion_loocv_sse <- function(h, beta_core, beta_j, T_len, d) {
 contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
   m <- length(beta_j)
   H_T <- c(m^(-1 / 2), m^(-1 / 10))
-  opt <- stats::optimize(contagion_loocv_sse, interval = H_T,
-                          beta_core = beta_core, beta_j = beta_j,
-                          T_len = T_len, d = d)
+  opt <- stats::optimize(
+    contagion_loocv_sse,
+    interval = H_T,
+    beta_core = beta_core,
+    beta_j = beta_j,
+    T_len = T_len,
+    d = d
+  )
   opt$minimum
 }
 
@@ -240,8 +248,14 @@ contagion_bandwidth_cv <- function(beta_core, beta_j, T_len, d) {
 #' @importFrom stats dnorm optimize
 #' @family multivariate
 #' @export
-contagion_reg <- function(y, core, S = NULL, d = 0L, h = NULL,
-                            r_grid = seq(0, 1, length.out = 100)) {
+contagion_reg <- function(
+  y,
+  core,
+  S = NULL,
+  d = 0L,
+  h = NULL,
+  r_grid = seq(0, 1, length.out = 100)
+) {
   y <- as.numeric(y)
   core <- as.numeric(core)
   if (length(y) != length(core)) {
@@ -261,8 +275,12 @@ contagion_reg <- function(y, core, S = NULL, d = 0L, h = NULL,
   delta2 <- contagion_nw_delta2(beta_core, beta_j, T_len, r_grid, h, d)
 
   list(
-    beta_core = beta_core, beta_j = beta_j, h = h, d = d,
-    r_grid = r_grid, delta2 = delta2
+    beta_core = beta_core,
+    beta_j = beta_j,
+    h = h,
+    d = d,
+    r_grid = r_grid,
+    delta2 = delta2
   ) %>%
     add_attr(n = T_len, S = S) %>%
     add_class("contagion_reg_obj")
@@ -283,18 +301,23 @@ autoplot.contagion_reg_obj <- function(object, ...) {
     ggplot(aes(r, delta2)) +
     geom_line() +
     geom_hline(yintercept = 0, color = "grey60", linetype = 3) +
-    labs(x = "r (fraction of sample)", y = expression(delta[2](r)),
-      title = "contagion_reg(): time-varying contagion") +
+    labs(
+      x = "r (fraction of sample)",
+      y = expression(delta[2](r)),
+      title = "contagion_reg(): time-varying contagion"
+    ) +
     theme_exuber()
 }
 
 #' @export
 print.contagion_reg_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "contagion_reg (n = {attr(x, 'n')}, S = {attr(x, 'S')}, d = {x$d}, ",
-    "h = {round(x$h, 4)})"
-  ))
+  cat_rule(
+    left = glue(
+      "contagion_reg (n = {attr(x, 'n')}, S = {attr(x, 'S')}, d = {x$d}, ",
+      "h = {round(x$h, 4)})"
+    )
+  )
   cat_line()
   cat(glue("delta_2(r) range: [{round(min(x$delta2), 3)}, {round(max(x$delta2), 3)}]"), "\n")
   cat_line()

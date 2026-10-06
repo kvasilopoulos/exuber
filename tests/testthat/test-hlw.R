@@ -10,13 +10,18 @@ test_that("hlw_local_to_global maps a window-local breakpoint to the
 test_that("dating_hlw runs end to end and returns a well-formed object", {
   skip_on_cran()
   set.seed(11)
-  n1 <- 60; n2 <- 25; n3 <- 25; n4 <- 40
+  n1 <- 60
+  n2 <- 25
+  n3 <- 25
+  n4 <- 40
   unit1 <- 100 + cumsum(rnorm(n1))
   bubble <- unit1[n1] * 1.05^(1:n2) + cumsum(rnorm(n2))
   target <- bubble[n2] * 0.5
   collapse <- numeric(n3)
   collapse[1] <- bubble[n2] + rnorm(1)
-  for (k in 2:n3) collapse[k] <- target + 0.85 * (collapse[k - 1] - target) + rnorm(1)
+  for (k in 2:n3) {
+    collapse[k] <- target + 0.85 * (collapse[k - 1] - target) + rnorm(1)
+  }
   recovery <- collapse[n3] + cumsum(rnorm(n4))
   y <- c(unit1, bubble, collapse, recovery)
 
@@ -32,13 +37,18 @@ test_that("dating_hlw's final window, on a single clean bubble episode,
   matches standalone dating_hls() applied to the whole series", {
   skip_on_cran()
   set.seed(11)
-  n1 <- 60; n2 <- 25; n3 <- 25; n4 <- 40
+  n1 <- 60
+  n2 <- 25
+  n3 <- 25
+  n4 <- 40
   unit1 <- 100 + cumsum(rnorm(n1))
   bubble <- unit1[n1] * 1.05^(1:n2) + cumsum(rnorm(n2))
   target <- bubble[n2] * 0.5
   collapse <- numeric(n3)
   collapse[1] <- bubble[n2] + rnorm(1)
-  for (k in 2:n3) collapse[k] <- target + 0.85 * (collapse[k - 1] - target) + rnorm(1)
+  for (k in 2:n3) {
+    collapse[k] <- target + 0.85 * (collapse[k - 1] - target) + rnorm(1)
+  }
   recovery <- collapse[n3] + cumsum(rnorm(n4))
   y <- c(unit1, bubble, collapse, recovery)
 
@@ -73,11 +83,21 @@ test_that("dating_hlw recovers two genuine, well-separated bubble episodes
     b2 <- e2[n1b] * 1.05^(1:n2b) + cumsum(rnorm(n2b))
     u2 <- b2[n2b] + cumsum(rnorm(n3b))
     y <- c(e1, b1, u1, e2, b2, u2)
-    list(y = y, true1 = c(n1a, n1a + n2a), true2 = c(n1a + n2a + n3a + n1b, n1a + n2a + n3a + n1b + n2b))
+    list(
+      y = y,
+      true1 = c(n1a, n1a + n2a),
+      true2 = c(n1a + n2a + n3a + n1b, n1a + n2a + n3a + n1b + n2b)
+    )
   }
   run_once <- function(seed) {
     sim <- sim_two_bubbles(seed)
-    out <- dating_hlw(sim$y, trim = 0.1, min_duration = psy_ds(length(sim$y)), nboot = 199, seed = 1)
+    out <- dating_hlw(
+      sim$y,
+      trim = 0.1,
+      min_duration = psy_ds(length(sim$y)),
+      nboot = 199,
+      seed = 1
+    )
     df <- out[["series1"]]
     list(df = df, true1 = sim$true1, true2 = sim$true2)
   }
@@ -90,7 +110,9 @@ test_that("dating_hlw recovers two genuine, well-separated bubble episodes
   expect_true(mean(abs(orig1_bias)) < 10)
   expect_true(mean(abs(orig2_bias)) < 10)
 
-  ordered <- sapply(two_win, function(r) as.numeric(r$df$origination[1]) < as.numeric(r$df$origination[2]))
+  ordered <- sapply(two_win, function(r) {
+    as.numeric(r$df$origination[1]) < as.numeric(r$df$origination[2])
+  })
   expect_true(all(ordered))
 })
 
@@ -103,8 +125,7 @@ test_that("hlw_join_runs() joins runs split by <= max_gap non-rejections (HLW's 
   # both sides must last at least min_len
   expect_equal(hlw_join_runs(c(10L, 22L), c(20L, 25L), 3L, 5)$start, c(10L, 22L))
   # chains of fragments collapse into one run
-  expect_equal(hlw_join_runs(c(1L, 12L, 23L), c(10L, 21L, 30L), 3L, 5),
-               list(start = 1L, end = 30L))
+  expect_equal(hlw_join_runs(c(1L, 12L, 23L), c(10L, 21L, 30L), 3L, 5), list(start = 1L, end = 30L))
   # join = 0 disables
   expect_equal(hlw_join_runs(c(10L, 22L), c(20L, 30L), 0L, 5)$start, c(10L, 22L))
 })

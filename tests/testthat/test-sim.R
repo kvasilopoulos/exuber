@@ -9,7 +9,7 @@ test_that("sim_evans", {
 })
 
 test_that("sim_div", {
-  expect_error(sim_div(100, log = T), regexp = NA)
+  expect_error(sim_div(100, log = TRUE), regexp = NA)
   expect_error(sim_div(100, output = "d"), regexp = NA)
 })
 
@@ -39,7 +39,7 @@ test_that("sim_psy2", {
   )
 })
 
-test_that("sim_ps1",{
+test_that("sim_ps1", {
   expect_error(
     sim_ps1(100),
     regexp = NA
@@ -48,5 +48,4 @@ test_that("sim_ps1",{
     autoplot(sim_ps1(100)),
     regexp = NA
   )
-
 })

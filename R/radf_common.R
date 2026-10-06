@@ -165,14 +165,21 @@ radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
     p <- progressor(steps = nrep)
     foreach(
       i = 1:nrep,
-      .options.future = list(seed = TRUE, globals = structure(TRUE, add = c("radf_common", "radf", "rls_gsadf", "unroot", "parse_data"))),
+      .options.future = list(
+        seed = TRUE,
+        globals = structure(
+          TRUE,
+          add = c("radf_common", "radf", "rls_gsadf", "unroot", "parse_data")
+        )
+      ),
       .inorder = FALSE
-    ) %dofuture% {
-      p()
-      panel <- matrix(cumsum(rnorm(n * N)), nrow = n, ncol = N)
-      res <- radf_common(panel, minw = minw)
-      c(res$adf, res$sadf, res$gsadf, res$badf, res$bsadf)
-    }
+    ) %dofuture%
+      {
+        p()
+        panel <- matrix(cumsum(rnorm(n * N)), nrow = n, ncol = N)
+        res <- radf_common(panel, minw = minw)
+        c(res$adf, res$sadf, res$gsadf, res$badf, res$bsadf)
+      }
   })
   results <- do.call(cbind, results)
 
@@ -185,10 +192,12 @@ radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
   bsadf_mat <- results[3 + n_minw + seq_len(n_minw), , drop = FALSE]
 
   bsadf_crit <- apply(bsadf_mat, 2, cummax) %>%
-    apply(1, quantile_narm, probs = pcnt) %>% t()
+    apply(1, quantile_narm, probs = pcnt) %>%
+    t()
   asy_adf_crit <- rep(c(-0.44, -0.08, 0.6), each = nrow(bsadf_crit))
   badf_crit <- matrix(
-    asy_adf_crit, ncol = 3,
+    asy_adf_crit,
+    ncol = 3,
     dimnames = list(NULL, paste0(pcnt * 100, "%"))
   )
 

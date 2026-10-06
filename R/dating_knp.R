@@ -55,7 +55,9 @@ knp_dp <- function(y, breaks, trim = 0.05, omit = TRUE) {
       return(hls_segment_ssr(ps, lo, hi, TRUE))
     }
     ssr <- hls_segment_ssr(ps, lo, hi, FALSE)
-    if (omit && j > 1L) ssr <- ssr - (ps$cz2[lo + 2L] - ps$cz2[lo + 1L])
+    if (omit && j > 1L) {
+      ssr <- ssr - (ps$cz2[lo + 2L] - ps$cz2[lo + 1L])
+    }
     ssr
   }
   # V[j, hi + 1]: best SSR of the first j regimes ending at pair hi;
@@ -206,13 +208,17 @@ dating_knp <- function(data, trim = 0.05, omit = TRUE, breaks = 2L) {
     } else {
       knp_dp(y, breaks, trim, omit)$tau
     }
-    if (anyNA(tau)) next
+    if (anyNA(tau)) {
+      next
+    }
     ends <- c(tau, ps$n1)
     for (b in seq_len(nb)) {
       t1 <- ends[2L * b - 1L]
       t2 <- ends[2L * b]
       origination[b, j] <- as.character(idx[t1 + 1L])
-      if (2L * b <= breaks) collapse[b, j] <- as.character(idx[t2 + 1L])
+      if (2L * b <= breaks) {
+        collapse[b, j] <- as.character(idx[t2 + 1L])
+      }
       delta[b, j] <- unname(hls_segment_coef(ps, t1, t2)["slope"]) + 1
     }
   }
@@ -223,7 +229,15 @@ dating_knp <- function(data, trim = 0.05, omit = TRUE, breaks = 2L) {
   }
 
   list(origination = origination, collapse = collapse, delta = delta) %>%
-    add_attr(index = idx, series_names = snames, n = n, trim = trim, omit = omit, breaks = breaks, mat = x) %>%
+    add_attr(
+      index = idx,
+      series_names = snames,
+      n = n,
+      trim = trim,
+      omit = omit,
+      breaks = breaks,
+      mat = x
+    ) %>%
     add_class("dating_knp_obj")
 }
 
@@ -240,17 +254,23 @@ dating_knp <- function(data, trim = 0.05, omit = TRUE, breaks = 2L) {
 autoplot.dating_knp_obj <- function(object, ...) {
   idx <- index(object)
   flat <- function(m) if (is.matrix(m)) setNames(c(m), rep(colnames(m), each = nrow(m))) else m
-  breaks <- breaks_tbl(idx, origination = flat(object$origination), collapse = flat(object$collapse))
+  breaks <- breaks_tbl(
+    idx,
+    origination = flat(object$origination),
+    collapse = flat(object$collapse)
+  )
   autoplot_series_breaks(mat(object), idx, breaks)
 }
 
 #' @export
 print.dating_knp_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "dating_knp (n = {attr(x, 'n')}, trim = {attr(x, 'trim')}, omit = {attr(x, 'omit')}, ",
-    "breaks = {attr(x, 'breaks') %||% 2}"
-  ))
+  cat_rule(
+    left = glue(
+      "dating_knp (n = {attr(x, 'n')}, trim = {attr(x, 'trim')}, omit = {attr(x, 'omit')}, ",
+      "breaks = {attr(x, 'breaks') %||% 2}"
+    )
+  )
   cat_line()
   m <- function(v) if (is.matrix(v)) v else t(v)
   o <- m(x$origination)
@@ -258,10 +278,14 @@ print.dating_knp_obj <- function(x, digits = max(3L, getOption("digits") - 3L), 
     data.frame(
       series = rep(colnames(o) %||% names(x$origination), each = nrow(o)),
       bubble = rep(seq_len(nrow(o)), ncol(o)),
-      origination = c(o), collapse = c(m(x$collapse)), delta = c(m(x$delta)),
+      origination = c(o),
+      collapse = c(m(x$collapse)),
+      delta = c(m(x$delta)),
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }

@@ -3,13 +3,13 @@ context("lbi_test")
 test_that("Breitung & Diegel's eq. 4 telescoping identity holds exactly
   (2*sum(Delta y_t * y_{t-1}) = y_T^2 - T*sigma_tilde^2, y_1 = 0 case)", {
   set.seed(1)
-  T <- 100
-  y <- c(0, cumsum(rnorm(T)))
+  n <- 100
+  y <- c(0, cumsum(rnorm(n)))
   dy <- diff(y)
-  ylag <- y[1:T]
+  ylag <- y[1:n]
   lhs <- 2 * sum(dy * ylag)
   sigma2_tilde <- mean(dy^2)
-  rhs <- y[T + 1]^2 - T * sigma2_tilde
+  rhs <- y[n + 1]^2 - n * sigma2_tilde
   expect_equal(lhs, rhs, tolerance = 1e-8)
 })
 
@@ -115,11 +115,15 @@ test_that("monitor_lbi's mCUSUM/wCUSUM false-alarm rate under H0 is
   n <- 200
   T_star <- 100
   fires <- function(c_bar) {
-    mean(vapply(seq_len(nrep), function(i) {
-      set.seed(1000 + i)
-      y <- cumsum(rnorm(n))
-      !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, sig_lvl = 95)$alarm[["series1"]])
-    }, logical(1)))
+    mean(vapply(
+      seq_len(nrep),
+      function(i) {
+        set.seed(1000 + i)
+        y <- cumsum(rnorm(n))
+        !is.na(monitor_lbi(y, r_star = T_star, c_bar = c_bar, sig_lvl = 95)$alarm[["series1"]])
+      },
+      logical(1)
+    ))
   }
   expect_lt(fires(0), 0.10)
   expect_lt(fires(2), 0.10)

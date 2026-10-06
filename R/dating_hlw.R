@@ -40,7 +40,9 @@ hlw_local_to_global <- function(local_tau, s) {
 # datestamp()'s convention (End = first non-explosive observation), so the
 # gap is start[k] - end[k - 1] and a run's length is end - start.
 hlw_join_runs <- function(start, end, max_gap, min_len) {
-  if (length(start) < 2L || max_gap <= 0L) return(list(start = start, end = end))
+  if (length(start) < 2L || max_gap <= 0L) {
+    return(list(start = start, end = end))
+  }
   out_s <- out_e <- integer(0)
   s <- start[1L]
   e <- end[1L]
@@ -132,9 +134,16 @@ hlw_join_runs <- function(start, end, max_gap, min_len) {
 #'
 #' @family dating
 #' @export
-dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
-                      min_duration = NULL, nboot = 199L, seed = NULL,
-                      join = 3L) {
+dating_hlw <- function(
+  data,
+  cv = NULL,
+  minw = NULL,
+  trim = 0.1,
+  min_duration = NULL,
+  nboot = 199L,
+  seed = NULL,
+  join = 3L
+) {
   x <- parse_data(data)
   n <- nrow(x)
   snames <- colnames(x)
@@ -160,15 +169,17 @@ dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
 
     if (is.null(regimes) || nrow(regimes) == 0L) {
       results[[j]] <- data.frame(
-        model = integer(0), origination = character(0),
-        collapse = character(0), recovery = character(0)
+        model = integer(0),
+        origination = character(0),
+        collapse = character(0),
+        recovery = character(0)
       )
       next
     }
 
     tau1_psy <- match(regimes$Start, idx)
     tau2_psy <- match(regimes$End, idx)
-    tau2_psy[is.na(tau2_psy)] <- n  # an episode still running at the sample end
+    tau2_psy[is.na(tau2_psy)] <- n # an episode still running at the sample end
     runs <- hlw_join_runs(tau1_psy, tau2_psy, join, log(n))
     tau1_psy <- runs$start
     tau2_psy <- runs$end
@@ -198,8 +209,12 @@ dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
 
       glb <- lapply(res$breaks, hlw_local_to_global, s = s)
       origination[jj] <- as.character(idx[glb$tau1$position])
-      if (!is.null(glb$tau2)) collapse[jj] <- as.character(idx[glb$tau2$position])
-      if (!is.null(glb$tau3)) recovery[jj] <- as.character(idx[glb$tau3$position])
+      if (!is.null(glb$tau2)) {
+        collapse[jj] <- as.character(idx[glb$tau2$position])
+      }
+      if (!is.null(glb$tau3)) {
+        recovery[jj] <- as.character(idx[glb$tau3$position])
+      }
 
       if (jj < nhat) {
         s <- if (res$model == 2L) {
@@ -211,8 +226,10 @@ dating_hlw <- function(data, cv = NULL, minw = NULL, trim = 0.1,
     }
 
     results[[j]] <- data.frame(
-      model = model, origination = origination,
-      collapse = collapse, recovery = recovery
+      model = model,
+      origination = origination,
+      collapse = collapse,
+      recovery = recovery
     )
   }
 

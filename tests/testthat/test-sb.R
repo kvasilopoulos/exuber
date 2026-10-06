@@ -33,11 +33,15 @@ test_that("radf_sb_cv(type = 'bic') mostly selects a small lag on
   several independent draws rather than asserting exactly 0 on one draw,
   since BIC can pick a nonzero lag by chance in any single finite sample", {
   skip_on_cran()
-  lags <- vapply(1:8, function(s) {
-    set.seed(s)
-    y <- cumsum(rnorm(100))
-    attr(radf_sb_cv(y, type = "bic", max_lag = 6, nboot = 20, seed = 9), "lag")
-  }, integer(1))
+  lags <- vapply(
+    1:8,
+    function(s) {
+      set.seed(s)
+      y <- cumsum(rnorm(100))
+      attr(radf_sb_cv(y, type = "bic", max_lag = 6, nboot = 20, seed = 9), "lag")
+    },
+    integer(1)
+  )
   expect_equal(as.integer(names(sort(table(lags), decreasing = TRUE))[1]), 0L)
 })
 
@@ -77,7 +81,9 @@ test_that("bsadf_panel_cv has the full (nr - minw - lag) rows for lag > 0", {
 
 test_that("the panel sieve-bootstrap test is correctly sized under H0", {
   skip_on_cran()
-  set.seed(4); n <- 100; nc <- 5
+  set.seed(4)
+  n <- 100
+  nc <- 5
   rej <- replicate(100, {
     p <- replicate(nc, cumsum(rnorm(n)))
     radf(p)$gsadf_panel > radf_sb_cv(p, nboot = 99)$gsadf_panel_cv["95%"]

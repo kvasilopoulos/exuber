@@ -76,7 +76,9 @@ test_that("contagion_loocv_sse (eq. 7) matches a manual double loop
     num <- 0
     den <- 0
     for (p in seq_len(m)) {
-      if (p == i) next
+      if (p == i) {
+        next
+      }
       w <- dnorm((s2[p] / n - r_i) / h_test) / h_test
       num <- num + w * bjc2[p] * csh2[p]
       den <- den + w * csh2[p]^2

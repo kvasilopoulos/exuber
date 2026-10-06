@@ -1,0 +1,9 @@
+[lint]
+# Ported from .lintr. data-raw holds one-off simulation scripts.
+exclude = ["data-raw/"]
+# .lintr disabled pipe_consistency_linter, so the jarl rule is off too.
+ignore = ["pipe_consistency"]
+
+[lint.per-file-ignores]
+# Tests call unexported functions with exuber:::.
+"tests/" = ["internal_function"]

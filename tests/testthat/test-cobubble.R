@@ -98,7 +98,9 @@ test_that("coexplosive_select_lag() recovers a known true lag", {
   expl <- ex[Te] * 1.06^(1:(Tn - Te)) + cumsum(rnorm(Tn - Te, sd = 0.3))
   x <- c(ex, expl)
   y <- rep(NA_real_, Tn)
-  for (t in (true_lag + 1):Tn) y[t] <- 1 + 0.8 * x[t - true_lag] + rnorm(1, sd = 0.5)
+  for (t in (true_lag + 1):Tn) {
+    y[t] <- 1 + 0.8 * x[t - true_lag] + rnorm(1, sd = 0.5)
+  }
   y[1:true_lag] <- x[1:true_lag] + rnorm(true_lag, sd = 0.5)
 
   est_lag <- exuber:::coexplosive_select_lag(y, x, lags = -6:6)

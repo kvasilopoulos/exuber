@@ -83,16 +83,13 @@ psy_ds <- function(n, rule = 1, delta = 1) {
 #' suitable for the \code{r_star} argument of \code{\link{monitor}}.
 #' @export
 ps_tb <- function(n, freq = c("monthly", "quarterly", "annual", "weekly"), size = 2) {
-  if (!is_n(n)) n <- NROW(n)
+  if (!is_n(n)) {
+    n <- NROW(n)
+  }
   minw <- psy_minw(n)
   freq <- match.arg(freq)
   assert_positive_int(size)
-  multi <- switch(freq,
-    weekly = 52,
-    monthly = 12,
-    quarterly = 4,
-    annual = 1
-  )
+  multi <- switch(freq, weekly = 52, monthly = 12, quarterly = 4, annual = 1)
   tb <- size * multi
   minw + tb - 1 # is it +1 or minus 1
 }

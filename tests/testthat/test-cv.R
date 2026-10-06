@@ -58,15 +58,21 @@ test_that("NA handling", {
 })
 
 test_that("distribution_rad works", {
-  expect_error(invisible(capture.output(
-    radf_wb_cv(dta, nboot = 10, dist_rad = TRUE)
-  )), regexp = NA)
+  expect_error(
+    invisible(capture.output(
+      radf_wb_cv(dta, nboot = 10, dist_rad = TRUE)
+    )),
+    regexp = NA
+  )
 })
 
 test_that("dist_skew (Hafner 2020) works and only one of dist_rad/dist_skew may be TRUE", {
-  expect_error(invisible(capture.output(
-    radf_wb_cv(dta, nboot = 10, dist_skew = TRUE)
-  )), regexp = NA)
+  expect_error(
+    invisible(capture.output(
+      radf_wb_cv(dta, nboot = 10, dist_skew = TRUE)
+    )),
+    regexp = NA
+  )
   expect_error(
     radf_wb_cv(dta, nboot = 10, dist_rad = TRUE, dist_skew = TRUE),
     "Only one of 'dist_rad' and 'dist_skew'"
@@ -77,7 +83,8 @@ test_that("dist_skew's multiplier w = u/sqrt(2) + (v^2-1)/2 has the moments
   Hafner (2020) claims by construction: E[w]=0, E[w^2]=1, E[w^3]=1", {
   set.seed(1)
   n <- 500000
-  u <- rnorm(n); v <- rnorm(n)
+  u <- rnorm(n)
+  v <- rnorm(n)
   w <- u / sqrt(2) + (v^2 - 1) / 2
   expect_equal(mean(w), 0, tolerance = 0.01)
   expect_equal(mean(w^2), 1, tolerance = 0.01)
@@ -115,7 +122,6 @@ test_that("dist_skew = TRUE bootstrap correctly detects a clear mildly
   expect_gt(power, 0.5)
 })
 
-
 # test_that("show_progress", {
 #   options(exuber.show_progress = TRUE)
 #   expect_error(capture.output(mc_cv(100, nrep = 10)), NA)
@@ -136,7 +142,6 @@ test_that("dist_skew = TRUE bootstrap correctly detects a clear mildly
 #     invisible(capture.output(
 #       wb_cv(dta, nboot = 10, parallel = FALSE, ncores = 3))), msg)
 # })
-
 
 # with_parallel <- function(code) {
 #   skip_on_cran()

@@ -14,10 +14,14 @@ test_that("wls_dfstat_grid matches a brute-force weighted no-intercept fit", {
   w <- 1 / sigma2
 
   b_idx <- minw:n1
-  badf_brute <- vapply(b_idx, function(b) {
-    idx <- 1:b
-    sum(w[idx] * ylag[idx] * dy[idx]) / sqrt(sum(w[idx] * ylag[idx]^2))
-  }, numeric(1))
+  badf_brute <- vapply(
+    b_idx,
+    function(b) {
+      idx <- 1:b
+      sum(w[idx] * ylag[idx] * dy[idx]) / sqrt(sum(w[idx] * ylag[idx]^2))
+    },
+    numeric(1)
+  )
 
   expect_equal(res$badf, badf_brute, tolerance = 1e-10)
   expect_equal(res$sadf, max(badf_brute), tolerance = 1e-10)

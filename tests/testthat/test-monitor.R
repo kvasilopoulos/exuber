@@ -25,7 +25,8 @@ test_that("an alarm, when raised, always falls strictly after the
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
@@ -43,7 +44,8 @@ test_that("monitor detects a clear bubble starting strictly after the
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
@@ -101,7 +103,8 @@ test_that("boundary = 'kurozumi' alarms never fire before T_star", {
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)
@@ -187,11 +190,15 @@ test_that("boundary = 'kurozumi', s0 = 0.4 false-alarm rate under H0 is close
   nrep <- 100
   n <- 150
   T_star <- 75
-  fa <- mean(vapply(seq_len(nrep), function(i) {
-    set.seed(1000 + i)
-    y <- cumsum(rnorm(n))
-    !is.na(monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4, sig_lvl = 95)$alarm)
-  }, logical(1)))
+  fa <- mean(vapply(
+    seq_len(nrep),
+    function(i) {
+      set.seed(1000 + i)
+      y <- cumsum(rnorm(n))
+      !is.na(monitor(y, r_star = T_star, boundary = "kurozumi", s0 = 0.4, sig_lvl = 95)$alarm)
+    },
+    logical(1)
+  ))
   expect_lt(fa, 0.15)
 
   make_bubble_series <- function(n, T_star, bstart, rho = 1.03) {
@@ -257,7 +264,8 @@ test_that("boundary = 'fluc' alarms never fire before T_star", {
   skip_on_cran()
   run_once <- function(seed) {
     set.seed(seed)
-    n1 <- 75; n2 <- 40
+    n1 <- 75
+    n2 <- 40
     normal_part <- cumsum(rnorm(n1))
     expl_part <- normal_part[n1] * 1.05^(1:n2) + cumsum(rnorm(n2, sd = 0.3))
     y <- c(normal_part, expl_part)

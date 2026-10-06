@@ -52,4 +52,3 @@ test_that("dates", {
   # pds <- radf_dta %>% datestamp() %>% autoplot()
   # expect_true(pds$data$Start %>% is.Date())
 })
-

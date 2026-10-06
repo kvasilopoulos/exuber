@@ -169,10 +169,19 @@ radf_sign <- function(data, minw = NULL) {
   colnames(badf) <- colnames(bsadf) <- snames
 
   list(
-    adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
+    adf = adf,
+    badf = badf,
+    sadf = sadf,
+    bsadf = bsadf,
+    gsadf = gsadf
   ) %>%
     add_attr(
-      mat = x, index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
+      mat = x,
+      index = index(x),
+      series_names = snames,
+      minw = minw,
+      n = nrow(x),
+      lag = 0L
     ) %>%
     add_class("radf_sign_obj", "radf_obj")
 }
@@ -183,10 +192,16 @@ print.radf_sign_obj <- function(x, digits = max(3L, getOption("digits") - 3L), .
   cat_rule(left = glue("radf_sign (minw = {get_minw(x)})"))
   cat_line()
   print(
-    data.frame(series = names(x$adf), adf = x$adf, sadf = x$sadf, gsadf = x$gsadf,
+    data.frame(
+      series = names(x$adf),
+      adf = x$adf,
+      sadf = x$sadf,
+      gsadf = x$gsadf,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }
@@ -237,10 +252,14 @@ radf_sign_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   set_rng(seed)
   pcnt <- c(0.9, 0.95, 0.99)
 
-  results <- replicate(nrep, {
-    y <- cumsum(rnorm(n))
-    gls_dfstat_grid(sign_transform(y), minw)
-  }, simplify = FALSE)
+  results <- replicate(
+    nrep,
+    {
+      y <- cumsum(rnorm(n))
+      gls_dfstat_grid(sign_transform(y), minw)
+    },
+    simplify = FALSE
+  )
 
   adf <- vapply(results, `[[`, numeric(1), "adf")
   sadf <- vapply(results, `[[`, numeric(1), "sadf")
@@ -365,10 +384,19 @@ radf_sign_dm <- function(data, minw = NULL) {
   colnames(badf) <- colnames(bsadf) <- snames
 
   list(
-    adf = adf, badf = badf, sadf = sadf, bsadf = bsadf, gsadf = gsadf
+    adf = adf,
+    badf = badf,
+    sadf = sadf,
+    bsadf = bsadf,
+    gsadf = gsadf
   ) %>%
     add_attr(
-      mat = x, index = index(x), series_names = snames, minw = minw, n = nrow(x), lag = 0L
+      mat = x,
+      index = index(x),
+      series_names = snames,
+      minw = minw,
+      n = nrow(x),
+      lag = 0L
     ) %>%
     add_class("radf_sign_dm_obj", "radf_obj")
 }
@@ -379,10 +407,16 @@ print.radf_sign_dm_obj <- function(x, digits = max(3L, getOption("digits") - 3L)
   cat_rule(left = glue("radf_sign_dm (minw = {get_minw(x)})"))
   cat_line()
   print(
-    data.frame(series = names(x$adf), adf = x$adf, sadf = x$sadf, gsadf = x$gsadf,
+    data.frame(
+      series = names(x$adf),
+      adf = x$adf,
+      sadf = x$sadf,
+      gsadf = x$gsadf,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }
@@ -425,10 +459,14 @@ radf_sign_dm_cv <- function(n, minw = NULL, nrep = 2000L, seed = NULL) {
   set_rng(seed)
   pcnt <- c(0.9, 0.95, 0.99)
 
-  results <- replicate(nrep, {
-    y <- cumsum(rnorm(n))
-    gls_dfstat_grid(sign_demean_transform(y), minw)
-  }, simplify = FALSE)
+  results <- replicate(
+    nrep,
+    {
+      y <- cumsum(rnorm(n))
+      gls_dfstat_grid(sign_demean_transform(y), minw)
+    },
+    simplify = FALSE
+  )
 
   adf <- vapply(results, `[[`, numeric(1), "adf")
   sadf <- vapply(results, `[[`, numeric(1), "sadf")

@@ -131,8 +131,13 @@ diagnostics <- function(object, cv = NULL, ...) {
 #' # Gate on the 90% critical value instead of the 95% default
 #' diagnostics(rsim_data, sig_lvl = 90)
 #' }
-diagnostics.radf_obj <- function(object, cv = NULL,
-                                 option = c("gsadf", "sadf"), sig_lvl = 95, ...) {
+diagnostics.radf_obj <- function(
+  object,
+  cv = NULL,
+  option = c("gsadf", "sadf"),
+  sig_lvl = 95,
+  ...
+) {
   # assert_class(object, "radf")
   cv <- cv %||% retrieve_crit(object)
   assert_class(cv, "radf_cv")
@@ -181,7 +186,7 @@ diagnostics.radf_obj <- function(object, cv = NULL,
       series_names = if (!is_sb(cv)) snames,
       method = get_method(cv),
       option = option,
-      sig_lvl = sig_lvl,
+      sig_lvl = sig_lvl
     ) %>%
     add_class("dg_radf")
 }
@@ -192,8 +197,8 @@ tidy.dg_radf <- function(x, ...) {
   sig <- gsub("%", "", x$sig)
   tibble(
     "series" = snames,
-    "positive" = ifelse(snames %in% x$positive, TRUE, FALSE),
-    "negative" = ifelse(snames %in% x$negative, TRUE, FALSE),
+    "positive" = snames %in% x$positive,
+    "negative" = snames %in% x$negative,
     "sig" = as.factor(ifelse(sig == "Reject", NA, sig))
   )
 }
@@ -246,8 +251,6 @@ print.dg_radf <- function(x, ...) {
 }
 
 # datestamp ---------------------------------------------------------------
-
-
 
 #' Date-stamping periods of mildly explosive behavior
 #'
@@ -334,8 +337,15 @@ datestamp <- function(object, cv = NULL, min_duration = 0L, ...) {
 #'
 #' autoplot(ds_data)
 #' }
-datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 95,
-                               option = c("gsadf", "sadf", "svadf"), nonrejected = FALSE, ...) {
+datestamp.radf_obj <- function(
+  object,
+  cv = NULL,
+  min_duration = 0L,
+  sig_lvl = 95,
+  option = c("gsadf", "sadf", "svadf"),
+  nonrejected = FALSE,
+  ...
+) {
   option <- match.arg(option)
   assert_positive_int(min_duration, strictly = FALSE)
 
@@ -363,9 +373,12 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
     filter(sig == sig_lvl, stat %in% filter_option) %>% # either {bsadf, badf} or bsadf_panel
     mutate(ds_lgl = tstat > crit)
 
-  ds_basic <- map(pos, ~ filter(ds_tbl, id == .x) %>%
-    pull(ds_lgl) %>%
-    which())
+  ds_basic <- map(
+    pos,
+    ~ filter(ds_tbl, id == .x) %>%
+      pull(ds_lgl) %>%
+      which()
+  )
   ds_stamp <- map(ds_basic, ~ stamp(.x) %>% as.matrix())
 
   if (!is_panel) {
@@ -410,7 +423,9 @@ datestamp.radf_obj <- function(object, cv = NULL, min_duration = 0L, sig_lvl = 9
       if (nm %in% colnames(valid_range)) {
         start <- valid_range["start", nm]
         end <- valid_range["end", nm]
-        if (start > 1) dummy[1:(start - 1), z] <- NA_real_
+        if (start > 1) {
+          dummy[1:(start - 1), z] <- NA_real_
+        }
         if (end < length(idx)) dummy[(end + 1):length(idx), z] <- NA_real_
       }
     }
@@ -455,7 +470,12 @@ datestamp_svadf <- function(object, min_duration) {
   orig_thresh <- svadf_threshold(t_idx, "origination")
   coll_thresh <- svadf_threshold(t_idx, "collapse")
 
-  no_episode <- matrix(numeric(0), nrow = 0, ncol = 3, dimnames = list(NULL, c("Start", "End", "Duration")))
+  no_episode <- matrix(
+    numeric(0),
+    nrow = 0,
+    ncol = 3,
+    dimnames = list(NULL, c("Start", "End", "Duration"))
+  )
   ds_basic <- ds_stamp <- vector("list", length(pos))
   for (j in seq_along(pos)) {
     above_idx <- which(badf[, j] > orig_thresh)
@@ -488,8 +508,10 @@ datestamp_svadf <- function(object, min_duration) {
     }
 
     ds_basic[[j]] <- start_row:(end_row - 1L)
-    ds_stamp[[j]] <- matrix(c(start_row, end_row, end_row - start_row),
-      nrow = 1, dimnames = list(NULL, c("Start", "End", "Duration"))
+    ds_stamp[[j]] <- matrix(
+      c(start_row, end_row, end_row - start_row),
+      nrow = 1,
+      dimnames = list(NULL, c("Start", "End", "Duration"))
     )
   }
 
@@ -524,7 +546,9 @@ datestamp_svadf <- function(object, min_duration) {
       if (nm %in% colnames(valid_range)) {
         start <- valid_range["start", nm]
         end <- valid_range["end", nm]
-        if (start > 1) dummy[1:(start - 1), z] <- NA_real_
+        if (start > 1) {
+          dummy[1:(start - 1), z] <- NA_real_
+        }
         if (end < length(idx)) dummy[(end + 1):length(idx), z] <- NA_real_
       }
     }
@@ -630,7 +654,7 @@ add_ongoing <- function(ds, idx, cv) {
   if (is_logical(end, 0)) {
     return(data.frame(ds, Ongoing = character(0)))
   } else {
-    ongoing <- ifelse(is.na(end), TRUE, FALSE)
+    ongoing <- is.na(end)
   }
   np <- length(end)
   for (i in 1:np) {

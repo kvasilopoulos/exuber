@@ -1,0 +1,27 @@
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+name: lint.yaml
+
+permissions: read-all
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: posit-dev/setup-air@v1
+        with:
+          version: "0.12.0"
+
+      - name: Check formatting
+        run: air format --check .
+
+      - uses: etiennebacher/setup-jarl@v0.1.1
+        with:
+          version: "0.6.0"
+          args: check .

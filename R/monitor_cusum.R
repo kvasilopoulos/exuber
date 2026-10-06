@@ -40,7 +40,7 @@ hb_cusum_finite_table <- local({
     c(2.85, 3.87, 4.25, 4.77, 5.03, 5.47, 5.94), # n=50,  alpha=0.01
     c(0.81, 1.18, 1.43, 1.61, 1.75, 1.91, 2.02), # n=20,  alpha=0.10
     c(1.27, 1.96, 2.35, 2.53, 2.72, 3.00, 3.13), # n=20,  alpha=0.05
-    c(2.61, 3.91, 4.49, 4.97, 5.16, 5.52, 5.74)  # n=20,  alpha=0.01
+    c(2.61, 3.91, 4.49, 4.97, 5.16, 5.52, 5.74) # n=20,  alpha=0.01
   )
   tbl <- data.frame(n = rep(n_grid, each = 3), alpha = rep(alpha_grid, times = 3), q)
   colnames(tbl) <- c("n", "alpha", paste0("k", k_grid))
@@ -63,7 +63,9 @@ hb_cusum_finite_q <- function(sig_lvl, n_train, k) {
   k_grid <- c(2, 3, 4, 5, 6, 8, 10)
   n_snap <- n_grid[which.min(abs(n_train - n_grid))]
   k_snap <- k_grid[which.min(abs(k - k_grid))]
-  row <- hb_cusum_finite_table[hb_cusum_finite_table$n == n_snap & abs(hb_cusum_finite_table$alpha - beta) < 1e-8, ]
+  row <- hb_cusum_finite_table[
+    hb_cusum_finite_table$n == n_snap & abs(hb_cusum_finite_table$alpha - beta) < 1e-8,
+  ]
   row[[paste0("k", k_snap)]]
 }
 
@@ -105,10 +107,9 @@ cusum_stat_path <- function(y, T_star, b_alpha) {
 # observations of a much longer series).
 one_sided_kernel_spot_vol <- function(dy, N = 20, kernel = c("gaussian", "uniform")) {
   kernel <- match.arg(kernel)
-  kern <- switch(kernel,
-    gaussian = function(u) dnorm(u),
-    uniform = function(u) as.numeric(abs(u) <= 1) / 2
-  )
+  kern <- switch(kernel, gaussian = function(u) dnorm(u), uniform = function(u) {
+    as.numeric(abs(u) <= 1) / 2
+  })
   w <- kern((0:N) / N)
   w <- w / sum(w)
   sigma2 <- as.numeric(stats::filter(dy^2, filter = w, sides = 1))
@@ -245,10 +246,16 @@ cusum_stat_path_kernel <- function(y, T_star, b_alpha, N, kernel) {
 #'
 #' @family monitoring
 #' @export
-monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
-                        boundary = c("asymptotic", "finite"), sig_lvl = 95,
-                        type = c("standard", "kernel"), h = 20,
-                        kernel = c("gaussian", "uniform")) {
+monitor_cusum <- function(
+  data,
+  r_star = 0.5,
+  b_alpha = 4.6,
+  boundary = c("asymptotic", "finite"),
+  sig_lvl = 95,
+  type = c("standard", "kernel"),
+  h = 20,
+  kernel = c("gaussian", "uniform")
+) {
   type <- match.arg(type)
   kernel <- match.arg(kernel)
   boundary <- match.arg(boundary)
@@ -279,16 +286,26 @@ monitor_cusum <- function(data, r_star = 0.5, b_alpha = 4.6,
     if (length(breach) > 0L) alarm[j] <- path$t[breach[1L]]
   }
 
-  alarm_date <- vapply(alarm, function(i) {
-    if (is.na(i)) NA_character_ else as.character(idx[i])
-  }, character(1))
+  alarm_date <- vapply(
+    alarm,
+    function(i) {
+      if (is.na(i)) NA_character_ else as.character(idx[i])
+    },
+    character(1)
+  )
 
   list(
-    S = S_path, boundary = boundary_path, T_star = T_star,
-    alarm = alarm, alarm_date = alarm_date
+    S = S_path,
+    boundary = boundary_path,
+    T_star = T_star,
+    alarm = alarm,
+    alarm_date = alarm_date
   ) %>%
     add_attr(
-      index = idx, series_names = snames, n = n, b_alpha = b_alpha
+      index = idx,
+      series_names = snames,
+      n = n,
+      b_alpha = b_alpha
     ) %>%
     add_class("monitor_cusum_obj")
 }
@@ -316,16 +333,22 @@ autoplot.monitor_cusum_obj <- function(object, ...) {
 #' @export
 print.monitor_cusum_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   cat_line()
-  cat_rule(left = glue(
-    "monitor_cusum (T* = {x$T_star} / {attr(x, 'n')}, b_alpha = {attr(x, 'b_alpha')})"
-  ))
+  cat_rule(
+    left = glue(
+      "monitor_cusum (T* = {x$T_star} / {attr(x, 'n')}, b_alpha = {attr(x, 'b_alpha')})"
+    )
+  )
   cat_line()
   print(
     data.frame(
-      series = names(x$alarm), alarm = x$alarm, alarm_date = x$alarm_date,
+      series = names(x$alarm),
+      alarm = x$alarm,
+      alarm_date = x$alarm_date,
       row.names = NULL
     ),
-    digits = digits, print.gap = 2L, row.names = FALSE
+    digits = digits,
+    print.gap = 2L,
+    row.names = FALSE
   )
   cat_line()
 }
