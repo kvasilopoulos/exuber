@@ -712,7 +712,6 @@ print.ds_radf <- function(x, ...) {
 #' @export
 tidy.ds_radf <- function(x, ...) {
   fct_lvls <- if (attr(x, "panel")) "panel" else series_names(x)
-  nlevels <- length(fct_lvls)
   ds <- bind_rows(!!!x, .id = "id") %>%
     as_tibble() %>%
     mutate(id = factor(id, levels = fct_lvls))

@@ -63,14 +63,13 @@ lag_select <- function(data, criterion = c("aic", "bic"), max_lag = 8) {
   }
   min_idx <- which.min(criterion_vec)
   # as.integer(criterion_vec[min_idx])
-  return(min_idx - 1)
+  min_idx - 1
 }
 
 #' @importFrom stats AIC BIC
 lag_select_table <- function(data, max_lag) {
   x <- parse_data(data)
   nc <- ncol(x)
-  snames <- series_names(x)
   # min_criterion <- matrix(NA, nrow = nc, ncol = 2)
   aic <- bic <- vector("numeric", max_lag + 1)
   for (i in 1:nc) {

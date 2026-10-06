@@ -188,7 +188,6 @@ radf_common_cv <- function(n, N, minw = NULL, nrep = 1000L, seed = NULL) {
   sadf_crit <- quantile_narm(results[2, ], probs = pcnt, drop = FALSE)
   gsadf_crit <- quantile_narm(results[3, ], probs = pcnt, drop = FALSE)
 
-  badf_mat <- results[3 + seq_len(n_minw), , drop = FALSE]
   bsadf_mat <- results[3 + n_minw + seq_len(n_minw), , drop = FALSE]
 
   bsadf_crit <- apply(bsadf_mat, 2, cummax) %>%

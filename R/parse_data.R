@@ -46,7 +46,6 @@ parse_dt.data.frame <- function(x) {
 #' @export
 parse_dt.ts <- function(x) {
   sim_index <- idx_seq(x)
-  vec_time <- as.vector(time(x))
   if (identical(time(x), sim_index)) {
     index <- sim_index
   } else {

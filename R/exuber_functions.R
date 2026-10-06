@@ -90,7 +90,9 @@ exuber_functions <- function(family = NULL) {
   }
   valid <- c("adf", "test", "dating", "monitor", "root", "regression")
   if (!family %in% valid) {
-    stop_glue("'family' must be one of {paste(valid, collapse = ', ')}, not '{family}'.")
+    stop_glue(
+      "'family' must be one of {paste(valid, collapse = ', ')}, not '{family}'."
+    )
   }
   reg[grepl(family, reg$family, fixed = TRUE), ]
 }

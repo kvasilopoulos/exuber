@@ -24,7 +24,8 @@ cusum_test_path <- function(y, type) {
     p <- c(0, cumsum(d)) / sqrt(mean(d^2) * nd)
   } else {
     d2 <- d^2
-    p <- c(0, cumsum(d2) - seq_len(nd) / nd * sum(d2)) / sqrt((mean(d2^2) - mean(d2)^2) * nd)
+    p <- c(0, cumsum(d2) - seq_len(nd) / nd * sum(d2)) /
+      sqrt((mean(d2^2) - mean(d2)^2) * nd)
   }
   k <- 2:(nd + 1L) # p[k] <-> k - 1 increments summed; p[1] = 0 is the start
   switch(
@@ -90,7 +91,11 @@ cusum_test_path <- function(y, type) {
 #'
 #' @family volatility-robust tests
 #' @export
-cusum_test <- function(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq")) {
+cusum_test <- function(
+  data,
+  sig_lvl = 95,
+  type = c("cs", "gcs", "cssq", "gcssq")
+) {
   type <- match.arg(type)
   x <- parse_data(data)
   n <- nrow(x)
@@ -98,12 +103,20 @@ cusum_test <- function(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"
   nc <- ncol(x)
   two_sided <- type %in% c("cssq", "gcssq")
   crit <- if (two_sided) {
-    c(sup = ssu_q(sig_lvl, paste0(type, "_sup")), inf = ssu_q(sig_lvl, paste0(type, "_inf")))
+    c(
+      sup = ssu_q(sig_lvl, paste0(type, "_sup")),
+      inf = ssu_q(sig_lvl, paste0(type, "_inf"))
+    )
   } else {
     ssu_q(sig_lvl, type)
   }
 
-  stat <- stat_inf <- matrix(NA_real_, n - 1L, nc, dimnames = list(NULL, snames))
+  stat <- stat_inf <- matrix(
+    NA_real_,
+    n - 1L,
+    nc,
+    dimnames = list(NULL, snames)
+  )
   for (j in seq_len(nc)) {
     p <- cusum_test_path(as.numeric(x[, j]), type)
     stat[, j] <- p$sup
@@ -115,7 +128,11 @@ cusum_test <- function(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"
     inf <- apply(stat_inf, 2, min)
     out <- c(
       out,
-      list(stat_inf = stat_inf, inf = inf, detected = sup >= crit["sup"] | inf <= crit["inf"])
+      list(
+        stat_inf = stat_inf,
+        inf = inf,
+        detected = sup >= crit["sup"] | inf <= crit["inf"]
+      )
     )
   } else {
     out$detected <- sup > crit
@@ -123,7 +140,13 @@ cusum_test <- function(data, sig_lvl = 95, type = c("cs", "gcs", "cssq", "gcssq"
   out$detected <- setNames(out$detected, snames)
 
   out %>%
-    add_attr(index = index(x), series_names = snames, n = n, sig_lvl = sig_lvl, type = type) %>%
+    add_attr(
+      index = index(x),
+      series_names = snames,
+      n = n,
+      sig_lvl = sig_lvl,
+      type = type
+    ) %>%
     add_class("cusum_test_obj")
 }
 
@@ -153,12 +176,21 @@ autoplot.cusum_test_obj <- function(object, ...) {
     value = c(object$stat_inf)
   )
   gg +
-    geom_line(data = lower, aes(index, value), inherit.aes = FALSE, color = "grey40") +
+    geom_line(
+      data = lower,
+      aes(index, value),
+      inherit.aes = FALSE,
+      color = "grey40"
+    ) +
     geom_hline(yintercept = object$crit["inf"], color = "red", linetype = 2)
 }
 
 #' @export
-print.cusum_test_obj <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
+print.cusum_test_obj <- function(
+  x,
+  digits = max(3L, getOption("digits") - 3L),
+  ...
+) {
   cat_line()
   cat_rule(
     left = glue(
