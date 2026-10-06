@@ -36,8 +36,6 @@ Rscript -e "devtools::load_all()"          # iterate without installing
 Rscript -e "devtools::document()"          # regenerate NAMESPACE/man from roxygen comments
 Rscript -e "devtools::test()"              # testthat suite
 Rscript -e "devtools::check()"             # full R CMD check (quality gate)
-Rscript -e "styler::style_pkg()"           # reformat
-Rscript -e "lintr::lint_package()"         # static checks (no .lintr config yet, so lintr defaults apply)
 Rscript -e "covr::package_coverage()"      # coverage, mirrors test-coverage.yaml
 ```
 
@@ -74,6 +72,38 @@ the repository, and you should delete it.
 `exuberdata` is a separate drat-hosted data package. No vignette,
 example or test uses it any longer, and nothing here depends on it.
 
+## R tooling
+
+R versions come from `rig`, formatting from `air`, and linting from
+`jarl`. `DESCRIPTION` is the only record of dependencies. The package
+has no lockfile, so it does not use `rv`.
+
+``` powershell
+rig list                                   # installed R versions; the default is starred
+rig default release                        # use the current release (CI also tests devel and oldrel-1)
+air format .                               # format R, tests and vignette code (air.toml)
+air format --check .                       # formatting check, as in CI
+jarl check .                               # lint (jarl.toml)
+jarl check . --fix                         # apply safe autofixes; needs a clean git tree or --allow-dirty
+Rscript -e "devtools::test()"              # tests
+Rscript -e "devtools::document()"          # regenerate NAMESPACE and man/
+Rscript -e "devtools::check()"             # R CMD check
+```
+
+Rules:
+
+- Declare a new dependency in `DESCRIPTION` with
+  `usethis::use_package()`. Do not call
+  [`install.packages()`](https://rdrr.io/r/utils/install.packages.html)
+  or `renv::*`.
+- Run `air format .` and then `jarl check .` before committing.
+- Do not add `# nolint` comments. To silence a jarl rule for one block,
+  write `# jarl-ignore <rule>: <reason>`. A rule that is wrong for the
+  whole package belongs in `jarl.toml`.
+- `jarl.toml` turns off `pipe_consistency` (the old lintr setup did too)
+  and `internal_function` under `tests/`, because tests call unexported
+  functions with `:::`.
+
 ## CI and quality gates (already wired, do not duplicate)
 
 - `.github/workflows/R-CMD-check.yaml` runs R CMD check on macOS,
@@ -82,14 +112,16 @@ example or test uses it any longer, and nothing here depends on it.
   Codecov.
 - `.github/workflows/pkgdown.yaml` builds and deploys the documentation
   site.
+- `.github/workflows/lint.yaml` runs `air format --check .` and
+  `jarl check .` with pinned tool versions.
 - `.github/workflows/rhub.yaml` runs the R-hub CRAN-platform checks
   manually.
 - `.github/workflows/html-5-check.yaml` validates the Rd and HTML5
   output.
 
 These are the gates that CRAN cares about. Match them locally with
-`devtools::check()` before you push, and do not invent new lint or CI
-configuration.
+`devtools::check()` before you push, and do not add lint or CI
+configuration beyond `lint.yaml`.
 
 ## Release process (CRAN)
 

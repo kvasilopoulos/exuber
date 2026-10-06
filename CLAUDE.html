@@ -70,15 +70,32 @@
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::document()"</span>          <span class="co"># regenerate NAMESPACE/man from roxygen comments</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::test()"</span>              <span class="co"># testthat suite</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::check()"</span>             <span class="co"># full R CMD check (quality gate)</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"styler::style_pkg()"</span>           <span class="co"># reformat</span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"lintr::lint_package()"</span>         <span class="co"># static checks (no .lintr config yet, so lintr defaults apply)</span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"covr::package_coverage()"</span>      <span class="co"># coverage, mirrors test-coverage.yaml</span></span></code></pre></div>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"covr::package_coverage()"</span>      <span class="co"># coverage, mirrors test-coverage.yaml</span></span></code></pre></div>
 <p>The <code>Makefile</code> wraps some of these (<code>make check</code>, <code>make build_site</code> and so on), but it still calls <code>Rscript</code>, so run it from PowerShell as well. From a plain cmd or bash shell, <code>make</code> cannot resolve R correctly without the shim rule above.</p>
 <p>After you change a roxygen <code>#'</code> comment or an <code>@export</code>, run <code>devtools::document()</code> before <code>check()</code>. NAMESPACE and <code>man/*.Rd</code> are generated and are not maintained by hand.</p>
 <p><code>DESCRIPTION</code> carries <code>Config/roxygen2/version: 8.1.0</code>, committed in 2026-09, which matches the roxygen2 installed here. <code>document()</code> therefore no longer rewrites <code>DESCRIPTION</code>. Still diff <code>NAMESPACE</code> and <code>man/*.Rd</code> after you run it, and revert any change that does not come from a roxygen-comment edit you made. Never run <code>git checkout -- DESCRIPTION</code> blindly, because it also reverts intentional edits made in the same pass, such as a version bump or a dependency floor.</p>
 <p><strong>Concurrency.</strong> <code>devtools::load_all()</code>, <code>run_examples()</code>, <code>covr</code> and <code>pkgdown</code> all compile in place in <code>src/</code>. If two of them run at the same time in the same tree, they corrupt <code>src/*.o</code> and <code>exuber.dll</code>. The symptoms are a linker error “symbol not defined” or a segfault on load. Run one R process against the tree at a time. If it does happen, run <code>rm src/*.o src/*.dll</code> and call <code>load_all()</code> again. <code><a href="https://pkgdown.r-lib.org/reference/check_pkgdown.html" class="external-link">pkgdown::check_pkgdown()</a></code> from <code>Rscript</code> needs <code>Sys.setenv(RSTUDIO_PANDOC = "C:/Program Files/RStudio/resources/app/bin/quarto/bin/tools")</code>. <code>build_reference_index()</code> writes an untracked <code>pkgdown/favicon/</code> into the repository, and you should delete it.</p>
 <p><code>exuberdata</code> is a separate drat-hosted data package. No vignette, example or test uses it any longer, and nothing here depends on it.</p>
 </div>
+<div class="section level2">
+<h2 id="r-tooling">R tooling<a class="anchor" aria-label="anchor" href="#r-tooling"></a></h2>
+<p>R versions come from <code>rig</code>, formatting from <code>air</code>, and linting from <code>jarl</code>. <code>DESCRIPTION</code> is the only record of dependencies. The package has no lockfile, so it does not use <code>rv</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>rig list                                   <span class="co"># installed R versions; the default is starred</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>rig default release                        <span class="co"># use the current release (CI also tests devel and oldrel-1)</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>air format <span class="op">.</span>                               <span class="co"># format R, tests and vignette code (air.toml)</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>air format <span class="op">--</span>check <span class="op">.</span>                       <span class="co"># formatting check, as in CI</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>jarl check <span class="op">.</span>                               <span class="co"># lint (jarl.toml)</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>jarl check <span class="op">.</span> <span class="op">--</span>fix                         <span class="co"># apply safe autofixes; needs a clean git tree or --allow-dirty</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::test()"</span>              <span class="co"># tests</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::document()"</span>          <span class="co"># regenerate NAMESPACE and man/</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::check()"</span>             <span class="co"># R CMD check</span></span></code></pre></div>
+<p>Rules:</p>
+<ul><li>Declare a new dependency in <code>DESCRIPTION</code> with <code>usethis::use_package()</code>. Do not call <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code> or <code>renv::*</code>.</li>
+<li>Run <code>air format .</code> and then <code>jarl check .</code> before committing.</li>
+<li>Do not add <code># nolint</code> comments. To silence a jarl rule for one block, write <code># jarl-ignore &lt;rule&gt;: &lt;reason&gt;</code>. A rule that is wrong for the whole package belongs in <code>jarl.toml</code>.</li>
+<li>
+<code>jarl.toml</code> turns off <code>pipe_consistency</code> (the old lintr setup did too) and <code>internal_function</code> under <code>tests/</code>, because tests call unexported functions with <code>:::</code>.</li>
+</ul></div>
 <div class="section level2">
 <h2 id="ci-and-quality-gates-already-wired-do-not-duplicate">CI and quality gates (already wired, do not duplicate)<a class="anchor" aria-label="anchor" href="#ci-and-quality-gates-already-wired-do-not-duplicate"></a></h2>
 <ul><li>
@@ -88,10 +105,12 @@
 <li>
 <code>.github/workflows/pkgdown.yaml</code> builds and deploys the documentation site.</li>
 <li>
+<code>.github/workflows/lint.yaml</code> runs <code>air format --check .</code> and <code>jarl check .</code> with pinned tool versions.</li>
+<li>
 <code>.github/workflows/rhub.yaml</code> runs the R-hub CRAN-platform checks manually.</li>
 <li>
 <code>.github/workflows/html-5-check.yaml</code> validates the Rd and HTML5 output.</li>
-</ul><p>These are the gates that CRAN cares about. Match them locally with <code>devtools::check()</code> before you push, and do not invent new lint or CI configuration.</p>
+</ul><p>These are the gates that CRAN cares about. Match them locally with <code>devtools::check()</code> before you push, and do not add lint or CI configuration beyond <code>lint.yaml</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="release-process-cran">Release process (CRAN)<a class="anchor" aria-label="anchor" href="#release-process-cran"></a></h2>
@@ -166,7 +185,7 @@
 </div>
 <div class="section level3">
 <h3 id="commit-workflow">Commit workflow<a class="anchor" aria-label="anchor" href="#commit-workflow"></a></h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::document()"</span>        <span class="co"># regenerate NAMESPACE/man</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Rscript <span class="op">-</span>e <span class="st">"devtools::document()"</span>        <span class="co"># regenerate NAMESPACE/man</span></span></code></pre></div>
 <p>Then, from Bash or PowerShell in this directory:</p>
 <pre><code>git status --short                       # confirm only intended files changed
 git add &lt;intended files only&gt;            # never `git add -A`; leave unrelated untracked
