@@ -32,7 +32,7 @@ assert_positive_int <- function(arg, strictly = TRUE, greater_than = NULL) {
       stop(sprintf("Argument '%s' should be a positive integer", level), call. = FALSE)
     }
   } else {
-    if (arg != trunc(arg) | arg < 0L) {
+    if (arg != trunc(arg) || arg < 0L) {
       stop(sprintf("Argument '%s' should be a non-negative integer", level), call. = FALSE)
     }
   }
@@ -188,8 +188,4 @@ assert_match <- function(x, y, panel = FALSE) {
 #' @importFrom rlang is_bare_numeric
 is_n <- function(x) {
   is_scalar_atomic(x) && is_bare_numeric(x) && x == trunc(x) && x > 0
-}
-
-is_identical <- function(x, y) {
-  if (identical(x, y)) TRUE else FALSE
 }

@@ -347,10 +347,6 @@ shade <- function(
   }
 }
 
-null_color <- function() {
-  "#ffffff00"
-}
-
 # Rectangles marking each series' leading/trailing NA-padded region (an
 # uneven panel, see na_edges()) for background shading in autoplot.
 # NULL if there is no padding (the common case) or no valid_range info.
@@ -607,7 +603,7 @@ theme_exuber <- function(
         hjust = 0,
         vjust = 1,
         margin = margin(b = half_line)
-      ),
+      )
     )
 }
 

@@ -1,9 +1,3 @@
-set_attrs <- function(x, ...) {
-  attrs <- dots_list(...)
-  attributes(x) <- attrs
-  x
-}
-
 #'@importFrom rlang dots_list
 add_attr <- function(x, ...) {
   attrs <- dots_list(...)
@@ -19,11 +13,6 @@ inherit_attrs <- function(x, y) {
   attributes(y)[remove_x] <- NULL # remove duplicates
 
   attributes(x) <- c(attributes(x), attributes(y))
-  x
-}
-
-set_class <- function(x, nm) {
-  class(x) <- nm
   x
 }
 

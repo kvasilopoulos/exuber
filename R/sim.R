@@ -137,7 +137,7 @@ sim_psy1 <- function(
     }
     if (t < te) {
       y[t] <- y[t - 1] + eps[t - 1] + shift_at[t]
-    } else if (t >= te & t <= tf) {
+    } else if (t >= te && t <= tf) {
       y[t] <- delta_t * y[t - 1] + eps[t - 1] + shift_at[t]
     } else if (t == tf + 1) {
       y[t] <- y[te] + eps[t - 1] + shift_at[t]
@@ -598,13 +598,13 @@ sim_psy2 <- function(
   for (i in 2:n) {
     if (i < te1) {
       y[i] <- y[i - 1] + rnorm(1, sd = sigma)
-    } else if (i >= te1 & i <= tf1) {
+    } else if (i >= te1 && i <= tf1) {
       y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
     } else if (i == tf1 + 1) {
       y[i] <- y[te1] + rnorm(1, sd = sigma)
-    } else if (i > tf1 + 1 & i < te2) {
+    } else if (i > tf1 + 1 && i < te2) {
       y[i] <- y[i - 1] + rnorm(1, sd = sigma)
-    } else if (i >= te2 & i <= tf2) {
+    } else if (i >= te2 && i <= tf2) {
       y[i] <- delta * y[i - 1] + rnorm(1, sd = sigma)
     } else if (i == tf2 + 1) {
       y[i] <- y[te2] + rnorm(1, sd = sigma)
@@ -701,78 +701,12 @@ sim_ps1 <- function(
   for (t in 2:n) {
     if (t < te) {
       y[t] <- drift + y[t - 1] + eps[t - 1]
-    } else if (t >= te & t <= tf) {
+    } else if (t >= te && t <= tf) {
       y[t] <- delta * y[t - 1] + eps[t - 1]
-    } else if (t > tf & t <= tr) {
+    } else if (t > tf && t <= tr) {
       y[t] <- gamma * y[t - 1] + eps[t - 1]
     } else {
       y[t] <- drift + y[t - 1] + eps[t - 1]
-    }
-  }
-  y %>%
-    add_attr(seed = get_rng_state(seed)) %>%
-    add_class("sim")
-}
-
-
-sim_ps2 <- function(
-  n,
-  te1 = 0.2 * n,
-  tf1 = te1 + 0.2 * n,
-  tr1 = tf1 + 0.1 * n,
-  te2 = 0.6 * n,
-  tf2 = te2 + 0.15 * n,
-  tr2 = tf2 + 0.1 * n,
-  c = 1,
-  c1 = 1,
-  c2 = 1,
-  eta = 0.6,
-  alpha = 0.6,
-  beta = 0.5,
-  sigma = 6.79,
-  seed = NULL,
-  e = NULL
-) {
-  assert_positive_int(n)
-  assert_between(te1, 0, n)
-  assert_between(tf1, te1, n)
-  assert_between(tr1, tf1, n)
-  assert_between(te2, tf1, n)
-  assert_between(tf2, te2, n)
-  assert_between(tr2, tf2, n)
-  assert_between(alpha, 0, 1)
-  stopifnot(c > 0)
-  stopifnot(c1 > 0)
-  stopifnot(c2 > 0)
-  assert_between(alpha, 0, 1)
-  assert_between(beta, 0, 1)
-  stopifnot(eta > 0.5, sigma >= 0)
-
-  set_rng(seed)
-  if (!is.null(e) && length(e) != n - 1) {
-    stop_glue("Argument 'e' should have length n - 1")
-  }
-  eps <- e %||% rnorm(n - 1, sd = sigma)
-  drift <- c * n^(-eta)
-  delta <- 1 + c1 * n^(-alpha)
-  gamma <- 1 - c2 * n^(-beta)
-  y <- 100
-
-  for (t in 2:n) {
-    if (t < te1) {
-      y[t] <- drift + y[t - 1] + eps[t - 1] # normal
-    } else if (t >= te1 & t <= tf1) {
-      y[t] <- delta * y[t - 1] + eps[t - 1] # bubble1
-    } else if (t > tf1 & t <= tr1) {
-      y[t] <- gamma * y[t - 1] + eps[t - 1] # collapse 1
-    } else if (t > tr1 + 1 & t < te2) {
-      y[t] <- drift + y[t - 1] + eps[t - 1] # normal 2
-    } else if (t >= te2 + 1 & t <= tf2) {
-      y[t] <- delta * y[t - 1] + eps[t - 1] # bubble 2
-    } else if (t > tf2 + 1 & t <= tr2) {
-      y[t] <- gamma * y[t - 1] + eps[t - 1] # collapse 2
-    } else {
-      y[t] <- drift + y[t - 1] + eps[t - 1] # normal 3
     }
   }
   y %>%
@@ -954,7 +888,7 @@ sim_evans <- function(
   # checks here
   assert_positive_int(n)
   stopifnot(alpha > 0)
-  if (delta < 0 | delta > (1 + r) * alpha) {
+  if (delta < 0 || delta > (1 + r) * alpha) {
     stop_glue("alpha and delta should satisfy: 0 < delta < (1+r)*alpha")
   }
   assert_between(pi, 0, 1)

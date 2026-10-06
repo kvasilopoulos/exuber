@@ -481,7 +481,7 @@ extract_obj_stat <- function(x, stat) {
 extract_obj_mat <- function(x) {
   mat(x) %>%
     as_tibble() %>%
-    add_key(x, F) %>%
+    add_key(x, FALSE) %>%
     mutate(index = index(x, trunc = FALSE)) %>%
     pivot_longer(
       cols = -c(key, index),

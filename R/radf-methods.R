@@ -186,7 +186,7 @@ diagnostics.radf_obj <- function(
       series_names = if (!is_sb(cv)) snames,
       method = get_method(cv),
       option = option,
-      sig_lvl = sig_lvl,
+      sig_lvl = sig_lvl
     ) %>%
     add_class("dg_radf")
 }
