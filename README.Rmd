@@ -96,6 +96,14 @@ devtools::install_github("kvasilopoulos/exuber")
 If you encounter a clear bug, please file a reproducible example on [GitHub](https://github.com/kvasilopoulos/exuber/issues).
 
 
+### Development
+
+Development uses [rig](https://github.com/r-lib/rig) for R versions,
+[rv](https://github.com/A2-ai/rv) for packages, [air](https://posit-dev.github.io/air/)
+for formatting and [jarl](https://jarl.etiennebacher.com/) for linting. After
+cloning, run `rv sync` and `pre-commit install`. The commands are listed in
+`CLAUDE.md`.
+
 ### Usage
 
 
