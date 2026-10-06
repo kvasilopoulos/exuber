@@ -139,7 +139,11 @@ a question, Claude drafts the reply (CC `cran-submissions@r-project.org`);
 the human sends it.
 
 After the "on CRAN" mail: Claude runs `usethis::use_github_release()`
-(reads `CRAN-SUBMISSION`), `usethis::use_dev_version(push = TRUE)`, then
+(reads `CRAN-SUBMISSION`), then checks that the tag `vX.Y.Z` exists on
+GitHub and points at the commit recorded in `CRAN-SUBMISSION` (`git ls-remote
+--tags origin`). If it is missing or on the wrong commit, tag that commit with
+`git tag -a vX.Y.Z <sha> -m "exuber X.Y.Z (CRAN <date>)"` and push the tag.
+Then `usethis::use_dev_version(push = TRUE)`, then
 watches <https://cran.r-project.org/web/checks/check_results_PKG.html>
 (WebFetch) daily for a week, because new flavours appear over several days.
 If an ERROR appears there, or a "please correct" mail arrives, fix it within

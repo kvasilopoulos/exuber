@@ -43,7 +43,7 @@ Status column: `[x]` done and verified this release, `[ ]` pending,
 
 | # | Item | Status | Notes |
 |---|------|--------|-------|
-| 3.1 | `usethis::use_github_release()` (tag `v2.0.0`, notes from NEWS) | [ ] | |
+| 3.1 | `usethis::use_github_release()` (tag `v2.0.0`, notes from NEWS); confirm the tag is on GitHub at the `CRAN-SUBMISSION` commit, else tag and push it | [ ] | |
 | 3.2 | `usethis::use_dev_version(push = TRUE)` → `2.0.0.9000`, NEWS heading back to `# exuber (development version)` | [ ] | |
 | 3.3 | Update `website/` critical-values/suite pages if they quote the CRAN version | [ ] | |
 
